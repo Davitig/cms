@@ -61,7 +61,7 @@ class GalleryRequest extends Request
             $input['web_sort'] = null;
         }
 
-        $input['visible'] = (int) $this->$this->boolifyInput($input, ['visible']);
+        $this->boolifyInput($input, ['visible']);
 
         return $input;
     }

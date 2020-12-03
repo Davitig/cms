@@ -30,7 +30,7 @@ class EventRequest extends Request
 
         $this->slugifyInput($input, 'slug', ['title']);
 
-        $input['visible'] = (int) $this->$this->boolifyInput($input, ['visible']);
+        $this->boolifyInput($input, ['visible']);
 
         return $input;
     }

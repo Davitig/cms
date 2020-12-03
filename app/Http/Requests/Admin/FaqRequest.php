@@ -25,7 +25,7 @@ class FaqRequest extends Request
     {
         $input = parent::all();
 
-        $input['visible'] = (int) $this->$this->boolifyInput($input, ['visible']);
+        $this->boolifyInput($input, ['visible']);
 
         return $input;
     }
