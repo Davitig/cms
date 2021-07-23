@@ -1,12 +1,15 @@
 {
-    "name": "laravel/laravel",
+    "name": "gvriti/laravel-cms",
     "type": "project",
-    "description": "The Laravel Framework.",
-    "keywords": [
-        "framework",
-        "laravel"
-    ],
+    "description": "Content Management System based on Laravel Framework.",
+    "keywords": ["cms", "framework", "laravel"],
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Davit Gvritishvili",
+            "email": "davit.gvriti@gmail.com"
+        }
+    ],
     "require": {
         "php": "^7.2",
         "fideloper/proxy": "^4.0",
