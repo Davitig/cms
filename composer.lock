@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dc28913d5b03e7e05810caa3388b9946",
+    "content-hash": "90d7d469b1df5dfd0d09894619393b98",
     "packages": [
         {
             "name": "barryvdh/elfinder-flysystem-driver",
@@ -2554,16 +2554,16 @@
         },
         {
             "name": "studio-42/elfinder",
-            "version": "2.1.57",
+            "version": "2.1.59",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Studio-42/elFinder.git",
-                "reference": "087524b1d7a4d76cfd848dee2093cd8daf987f78"
+                "reference": "06ada3132cefd057e1d89cb016f8c82473d420d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Studio-42/elFinder/zipball/087524b1d7a4d76cfd848dee2093cd8daf987f78",
-                "reference": "087524b1d7a4d76cfd848dee2093cd8daf987f78",
+                "url": "https://api.github.com/repos/Studio-42/elFinder/zipball/06ada3132cefd057e1d89cb016f8c82473d420d4",
+                "reference": "06ada3132cefd057e1d89cb016f8c82473d420d4",
                 "shasum": ""
             },
             "require": {
@@ -2610,9 +2610,9 @@
             "homepage": "http://elfinder.org",
             "support": {
                 "issues": "https://github.com/Studio-42/elFinder/issues",
-                "source": "https://github.com/Studio-42/elFinder/tree/2.1"
+                "source": "https://github.com/Studio-42/elFinder/tree/2.1.59"
             },
-            "time": "2020-06-05T08:06:57+00:00"
+            "time": "2021-06-13T15:04:24+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -7152,5 +7152,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }
