@@ -1,5 +1,5 @@
 {
-    "name": "gvriti/laravel-cms",
+    "name": "Davitg/laravel-cms",
     "type": "project",
     "description": "Content Management System based on Laravel Framework.",
     "keywords": ["cms", "framework", "laravel"],
@@ -7,7 +7,7 @@
     "authors": [
         {
             "name": "Davit Gvritishvili",
-            "email": "davit.gvriti@gmail.com"
+            "email": "gvritishvili.davit@gmail.com"
         }
     ],
     "require": {
