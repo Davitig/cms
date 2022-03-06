@@ -1,5 +1,5 @@
 {
-    "name": "Davitg/laravel-cms",
+    "name": "davitg/laravel-cms",
     "type": "project",
     "description": "Content Management System based on Laravel Framework.",
     "keywords": ["cms", "framework", "laravel"],
