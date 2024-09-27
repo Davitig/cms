@@ -119,6 +119,8 @@ class AdminPagesController extends Controller
             ->where('id', $id)
             ->getOrFail();
 
+        $data['current'] = $data['items']->first();
+
         $data['types'] = cms_pages('types');
 
         $data['listableTypes'] = $this->getListableTypes($data['items']->first()->type);

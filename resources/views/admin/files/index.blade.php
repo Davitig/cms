@@ -24,7 +24,7 @@
         </div>
     </div>
     <div class="clearfix">
-        <ul class="nav nav-tabs col-xs-8">
+        <ul class="nav nav-tabs col-xs-6">
             <li>
                 <a href="{{ cms_route($routeName . '.edit', $foreignModel->routeParams) }}">
                     <span class="visible-xs"><i class="fa fa-home"></i></span>
@@ -34,7 +34,7 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav nav-tabs col-xs-4 right-aligned">
+        <ul class="nav nav-tabs col-xs-6 right-aligned">
             <li class="active">
                 <a href="#" data-toggle="tab">
                     <span class="visible-xs"><i class="{{$icon}}"></i></span>

@@ -103,6 +103,8 @@ class AdminArticlesController extends Controller
             ->where('id', $id)
             ->getOrFail();
 
+        $data['current'] = $data['items']->first();
+
         return view('admin.collections.articles.edit', $data);
     }
 

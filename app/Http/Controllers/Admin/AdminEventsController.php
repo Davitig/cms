@@ -103,6 +103,8 @@ class AdminEventsController extends Controller
             ->where('id', $id)
             ->getOrFail();
 
+        $data['current'] = $data['items']->first();
+
         return view('admin.collections.events.edit', $data);
     }
 

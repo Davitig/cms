@@ -24,27 +24,7 @@
     </div>
 </div>
 <ul class="nav nav-tabs">
-@if (is_multilanguage())
-    @foreach ($items as $current)
-        <li{!!language() != $current->language ? '' : ' class="active"'!!}>
-            <a href="#item-{{$current->language}}" data-toggle="tab">
-                <span class="visible-xs">{{$current->language}}</span>
-                <span class="hidden-xs">{{language($current->language)}}</span>
-            </a>
-        </li>
-    @endforeach
-@else
-    @foreach ($items as $current)
-        <li class="active">
-            <a href="#item-{{$current->language}}" data-toggle="tab">
-                <span class="visible-xs"><i class="fa fa-home"></i></span>
-                <span class="hidden-xs">
-                    <i class="fa fa-home"></i> General
-                </span>
-            </a>
-        </li>
-    @endforeach
-@endif
+    @include('admin._partials.items.lang')
 </ul>
 <div class="panel panel-default">
     <div class="panel-heading">

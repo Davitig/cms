@@ -24,30 +24,8 @@
     </div>
 </div>
 <div class="clearfix">
-    <ul class="nav nav-tabs col-xs-8">
-@if (is_multilanguage())
-    @foreach ($items as $current)
-        <li{!!language() != $current->language ? '' : ' class="active"'!!}>
-            <a href="#item-{{$current->language}}" data-toggle="tab">
-                <span class="visible-xs">{{$current->language}}</span>
-                <span class="hidden-xs">{{language($current->language)}}</span>
-            </a>
-        </li>
-    @endforeach
-@else
-    @foreach ($items as $current)
-        <li class="active">
-            <a href="#item-{{$current->language}}" data-toggle="tab">
-                <span class="visible-xs"><i class="fa fa-home"></i></span>
-                <span class="hidden-xs">
-                    <i class="fa fa-home"></i> General
-                </span>
-            </a>
-        </li>
-    @endforeach
-@endif
-    </ul>
-    <ul class="nav nav-tabs col-xs-4 right-aligned">
+    @include('admin._partials.items.lang')
+    <ul class="nav nav-tabs col-xs-6 right-aligned">
         <li>
             <a href="{{cms_route('files.index', ['events', $current->id])}}">
                 <span class="visible-xs"><i class="{{$iconFiles = icon_type('files')}}"></i></span>
