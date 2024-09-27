@@ -102,6 +102,30 @@ class Page extends Model
     }
 
     /**
+     * Determine if the model has a sub page.
+     *
+     * @return bool
+     */
+    public function hasSubPage()
+    {
+        return $this->parentId($this->getKey())->exists();
+    }
+
+    /**
+     * Determine if the model has a parent page.
+     *
+     * @return bool
+     */
+    public function hasSiblingPage()
+    {
+        if (! $this->parent_id) {
+            return false;
+        }
+
+        return $this->parentId($this->parent_id)->exists();
+    }
+
+    /**
      * Add a query, which is valid for routing.
      *
      * @param  string  $slug
