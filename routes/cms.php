@@ -124,5 +124,8 @@ $router->group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($
         $router->put('settings', ['as' => 'settings.update', 'uses' => 'AdminSettingsController@update']);
         $router->get('web-settings', ['as' => 'webSettings.index', 'uses' => 'AdminWebSettingsController@index']);
         $router->put('web-settings', ['as' => 'webSettings.update', 'uses' => 'AdminWebSettingsController@update']);
+
+        // sitemap xml
+        $router->get('sitemap/xml/store', ['as' => 'sitemap.xml.store', 'uses' => 'AdminSitemapXmlController@store']);
     });
 });

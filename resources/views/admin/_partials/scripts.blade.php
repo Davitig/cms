@@ -122,7 +122,7 @@ $(function() {
             $('.sm-date', notifications).html('{{date('d F Y')}}');
             $('.sm-time', notifications).html('{{date('H:i')}}');
             $('.sm-status', target).html('Update now!');
-            toastr['success']('Sitemap has been saved successfully');
+            toastr['success']('Task has been completed successfully');
         }, 'json').fail(function(xhr) {
             alert(xhr.responseText);
         });

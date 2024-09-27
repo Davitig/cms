@@ -29,6 +29,7 @@ class AdminUserPanelEventListener
     {
         $events->listen([
                 'composing: admin._partials.user',
+                'composing: admin._partials.horizontal_menu'
             ],
             'App\Listeners\Admin\AdminUserPanelEventListener@onUserPanelComposer'
         );
