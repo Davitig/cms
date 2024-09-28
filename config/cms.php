@@ -40,7 +40,11 @@ return [
             'feedback' => 'Feedback',
             'search' => 'Search'
         ],
-        'templates' => [],
+        'templates' => [
+            // 'page' => [
+            //     'template_name' => 'Template Name'
+            // ]
+        ],
         'listable' => [
             'collections'
         ],
