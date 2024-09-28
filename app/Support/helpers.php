@@ -323,7 +323,7 @@ function model_path($name)
  *
  * @throws \InvalidArgumentException
  */
-function make_model_tree($items, $slug = null, $parentId = 0, $parentKey = 'parent_id', $key = 'id')
+function make_model_sub_items($items, $slug = null, $parentId = 0, $parentKey = 'parent_id', $key = 'id')
 {
     if (! $items instanceof Collection && ! is_array($items)) {
         throw new InvalidArgumentException(
@@ -331,7 +331,7 @@ function make_model_tree($items, $slug = null, $parentId = 0, $parentKey = 'pare
         );
     }
 
-    $tree = [];
+    $data = [];
 
     $prevSlug = $slug;
 
@@ -352,12 +352,12 @@ function make_model_tree($items, $slug = null, $parentId = 0, $parentKey = 'pare
             $item->slug = $slug;
         }
 
-        $item->sub_items = make_model_tree($items, $slug, $item->$key, $parentKey, $key);
+        $item->sub_items = make_model_sub_items($items, $slug, $item->$key, $parentKey, $key);
 
-        $tree[] = $item;
+        $data[] = $item;
     }
 
-    return new Collection($tree);
+    return new Collection($data);
 }
 
 /**
@@ -366,7 +366,7 @@ function make_model_tree($items, $slug = null, $parentId = 0, $parentKey = 'pare
  * @param  mixed  $item
  * @return bool
  */
-function has_model_tree($item)
+function has_model_sub_items($item)
 {
     return $item instanceof Model
         && $item->sub_items instanceof Collection

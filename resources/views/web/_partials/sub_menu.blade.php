@@ -1,4 +1,4 @@
-@if (isset($item) && has_model_tree($item))
+@if (isset($item) && has_model_sub_items($item))
     <ul class="dropdown-menu">
         @foreach ($item->sub_items as $item)
             <li{!!$current->slug == $item->slug ? ' class="active"' : ''!!}>

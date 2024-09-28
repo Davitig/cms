@@ -85,7 +85,7 @@
                                         <span class="fa fa-edit"></span>
                                     </a>
                                     {!! Form::open(['method' => 'delete', 'url' => cms_route('pages.destroy', [$menu->id, $item->id]), 'class' => 'form-delete']) !!}
-                                        <button type="submit" class="btn btn-danger" title="{{trans('general.delete')}}"{{has_model_tree($item) ? ' disabled' : ''}}>
+                                        <button type="submit" class="btn btn-danger" title="{{trans('general.delete')}}"{{has_model_sub_items($item) ? ' disabled' : ''}}>
                                             <span class="fa fa-trash"></span>
                                         </button>
                                     {!! Form::close() !!}

@@ -80,7 +80,7 @@ class WebMainData
                 ->get();
         }
 
-        $this->app->instance('pagesTree', make_model_tree($pages, ''));
+        $this->app->instance('pagesTree', make_model_sub_items($pages, ''));
     }
 
     /**
