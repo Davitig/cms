@@ -61,20 +61,6 @@ class Page extends Model
     ];
 
     /**
-     * Get the Collection instance.
-     *
-     * @param  int  $id
-     * @return \Models\Collection|
-     *         \Models\Builder\Builder
-     */
-    public function collection($id = null)
-    {
-        $model = new Collection;
-
-        return is_null($id) ? $model : $model->where('id', $id);
-    }
-
-    /**
      * Build an admin query.
      *
      * @param  int  $id
