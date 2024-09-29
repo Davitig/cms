@@ -88,6 +88,12 @@ return [
 
     'collections' => [
         'types' => [
+            'articles' => 'Articles',
+            'events' => 'Events',
+            'galleries' => 'Galleries',
+            'faq' => 'FAQ'
+        ],
+        'models' => [
             'articles' => \Models\Article::class,
             'events' => \Models\Event::class,
             'galleries' => \Models\Gallery::class,
@@ -167,7 +173,7 @@ return [
     | File Routes
     |--------------------------------------------------------------------------
     |
-    | The array of file route names, that has an access to the attached files.
+    | The array of file route names, that has access to the attached files.
     | Route names can also contain a foreign key.
     |
     */
