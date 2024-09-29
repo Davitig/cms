@@ -54,7 +54,7 @@ class WebArticlesController extends Controller
     {
         $data['parent'] = $page;
 
-        $data['current'] = $this->model->bySlug($slug)->firstOrFail();
+        $data['current'] = $this->model->byCollectionSlug($page->type_id, $slug)->firstOrFail();
 
         $data['files'] = $data['current']->getFiles();
 

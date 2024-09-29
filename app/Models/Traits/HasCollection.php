@@ -101,6 +101,19 @@ trait HasCollection
     }
 
     /**
+     * Build a query based on the collection id and slug.
+     *
+     * @param  int $collectionId
+     * @param  string  $slug
+     * @param  int|null  $id
+     * @return \Models\Builder\Builder
+     */
+    public function byCollectionSlug($collectionId, $slug, $id = null)
+    {
+        return $this->collectionId($collectionId)->bySlug($slug, $id);
+    }
+
+    /**
      * Add a where "collection_id" clause to the query.
      *
      * @param  int  $id
