@@ -100,21 +100,19 @@ trait NestableTrait
     }
 
     /**
-     * Get model's full slug.
+     * Get model full slug.
      *
+     * @param  int|null  $value
+     * @param  string|null  $column
      * @return string|null
      */
-    public function getFullSlug()
+    public function getFullSlug($value = null, $column = null)
     {
-        if (is_null($model = $this->first(['slug', 'parent_id']))) {
-            return null;
-        }
-
-        return $model->fullSlug()->slug;
+        return $this->fullSlug($value, $column)->slug;
     }
 
     /**
-     * Concatenate current model slug to its parent models slug.
+     * Set model full slug.
      *
      * @param  int|null  $value
      * @param  string|null  $column
@@ -122,12 +120,12 @@ trait NestableTrait
      */
     public function fullSlug($value = null, $column = null)
     {
-        if (is_null($column)) {
-            $column = $this->getKeyName();
-        }
-
         if (! ($value = (is_null($value) ? $this->parent_id : $value))) {
             return $this;
+        }
+
+        if (is_null($column)) {
+            $column = $this->getKeyName();
         }
 
         $model = (new static)->where($column, $value)->first(['slug', 'parent_id']);
@@ -136,7 +134,7 @@ trait NestableTrait
             return $this;
         }
 
-        $this->slug = trim($model->slug . '/' . $this->slug, '/');
+        $this->slug = $model->slug . '/' . $this->slug;
 
         return $this->fullSlug($model->parent_id);
     }

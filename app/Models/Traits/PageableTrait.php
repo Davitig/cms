@@ -30,7 +30,19 @@ trait PageableTrait
     }
 
     /**
-     * Concatenate current model slug to its parent pages slug recursively.
+     * Get model full slug.
+     *
+     * @param  int|null  $value
+     * @param  string|null  $column
+     * @return string|null
+     */
+    public function getFullSlug($value = null, $column = null)
+    {
+        return $this->fullSlug($value, $column)->slug;
+    }
+
+    /**
+     * Set model full slug
      *
      * @param  int|null  $value
      * @param  string|null  $column
@@ -39,10 +51,12 @@ trait PageableTrait
     public function fullSlug($value = null, $column = null)
     {
         if (is_null($column)) {
-            $column = $this->getKeyName();
+            $column = is_null($value) && $this->collection_id
+                ? 'type_id'
+                : $this->getKeyName();
         }
 
-        if (! ($value = (is_null($value) ? $this->parent_id : $value))) {
+        if (! ($value = (is_null($value) ? $this->collection_id : $value))) {
             return $this;
         }
 
@@ -52,9 +66,7 @@ trait PageableTrait
             return $this;
         }
 
-        $model->fullSlug();
-
-        $this->parent_slug = trim($model->slug . '/' . $this->parent_slug, '/');
+        $this->slug = $model->getFullSlug() . '/' . $this->slug;
 
         return $this;
     }
