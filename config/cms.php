@@ -88,10 +88,10 @@ return [
 
     'collections' => [
         'types' => [
-            'articles' => 'Articles',
-            'events' => 'Events',
-            'galleries' => 'Galleries',
-            'faq' => 'FAQ'
+            'articles' => \Models\Article::class,
+            'events' => \Models\Event::class,
+            'galleries' => \Models\Gallery::class,
+            'faq' => \Models\Faq::class
         ],
         'order_by' => [
             'position' => 'Position',
