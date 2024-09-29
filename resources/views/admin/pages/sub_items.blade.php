@@ -27,7 +27,7 @@
                                     <span class="{{icon_type('files')}}"></span>
                                 </a>
                                 <span title="{{ucfirst($type = $item->collection_type ?: $item->type)}}">
-                                    <a href="{{$typeUrl = (array_key_exists($item->type, config('cms.pages.explicit')) ? cms_route($item->type . '.index') : (array_key_exists($item->type, config('cms.pages.implicit')) ? cms_route($item->collection_type . '.index', [$item->type_id]) : '#'))}}" class="btn btn-{{$typeUrl == '#' ? 'white disabled' : 'info'}}">
+                                    <a href="{{$typeUrl = (array_key_exists($item->type, cms_config('pages.explicit')) ? cms_route($item->type . '.index') : (array_key_exists($item->type, cms_config('pages.implicit')) ? cms_route($item->collection_type . '.index', [$item->type_id]) : '#'))}}" class="btn btn-{{$typeUrl == '#' ? 'white disabled' : 'info'}}">
                                         <span class="{{icon_type($type, 'fa fa-file-text-o')}}"></span>
                                     </a>
                                 </span>

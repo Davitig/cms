@@ -74,10 +74,10 @@ function cms_is_booted()
 function cms_slug($path = null)
 {
     if (is_null($path)) {
-        return config('cms.slug');
+        return cms_config('slug');
     }
 
-    return trim(config('cms.slug') . '/' . $path, '/');
+    return cms_config('slug') . '/' . $path;
 }
 
 /**
@@ -421,23 +421,23 @@ function fill_db_data($key, array $parameters = [])
 }
 
 /**
- * Get the CMS User role(s).
+ * Get the cms config.
  *
  * @param  string|null  $key
  * @param  mixed  $default
  * @return string|array
  */
-function user_roles($key = null, $default = null)
+function cms_config($key = null, $default = [])
 {
     if (! is_null($key)) {
-        return config('cms.user_roles.' . $key, $default);
+        return config('cms.' . $key, $default);
     }
 
-    return config('cms.user_roles', $default);
+    return config('cms', $default);
 }
 
 /**
- * Get the pages config.
+ * Get the cms pages config.
  *
  * @param  string|null  $key
  * @param  mixed  $default
@@ -446,14 +446,14 @@ function user_roles($key = null, $default = null)
 function cms_pages($key = null, $default = [])
 {
     if (! is_null($key)) {
-        return config('cms.pages.' . $key, $default);
+        return cms_config('pages.' . $key, $default);
     }
 
-    return config('cms.pages', $default);
+    return cms_config('pages', $default);
 }
 
 /**
- * Get the collections config.
+ * Get the cms collections config.
  *
  * @param  string|null  $key
  * @param  mixed  $default
@@ -462,14 +462,14 @@ function cms_pages($key = null, $default = [])
 function cms_collections($key = null, $default = [])
 {
     if (! is_null($key)) {
-        return config('cms.collections.' . $key, $default);
+        return cms_config('collections.' . $key, $default);
     }
 
-    return config('cms.collections', $default);
+    return cms_config('collections', $default);
 }
 
 /**
- * Get the deep collection config.
+ * Get the cms deep collections config.
  *
  * @param  string|null  $key
  * @param  mixed  $default
@@ -478,14 +478,14 @@ function cms_collections($key = null, $default = [])
 function deep_collection($key = null, $default = [])
 {
     if (! is_null($key)) {
-        return config('cms.deep_collections.' . $key, $default);
+        return cms_config('deep_collections.' . $key, $default);
     }
 
-    return config('cms.deep_collections', $default);
+    return cms_config('deep_collections', $default);
 }
 
 /**
- * Get the files config.
+ * Get the cms files config.
  *
  * @param  string|null  $key
  * @param  mixed  $default
@@ -494,14 +494,30 @@ function deep_collection($key = null, $default = [])
 function cms_files($key = null, $default = [])
 {
     if (! is_null($key)) {
-        return config('cms.files.' . $key, $default);
+        return cms_config('files.' . $key, $default);
     }
 
-    return config('cms.files', $default);
+    return cms_config('files', $default);
 }
 
 /**
- * Get the icon name.
+ * Get the cms user role(s).
+ *
+ * @param  string|null  $key
+ * @param  mixed  $default
+ * @return string|array
+ */
+function user_roles($key = null, $default = null)
+{
+    if (! is_null($key)) {
+        return cms_config('user_roles.' . $key, $default);
+    }
+
+    return cms_config('user_roles', $default);
+}
+
+/**
+ * Get the cms icon name.
  *
  * @param  string  $key
  * @param  mixed  $default
@@ -509,7 +525,7 @@ function cms_files($key = null, $default = [])
  */
 function icon_type($key, $default = null)
 {
-    return config('cms.icons.' . $key, $default);
+    return cms_config('icons.' . $key, $default);
 }
 
 /**
@@ -521,13 +537,11 @@ function icon_type($key, $default = null)
  */
 function glide($path, $type)
 {
-    $config = config();
-
-    $files = (array) $config['elfinder.dir'];
+    $files = (array) config('elfinder.dir');
     $files = current($files) . '/';
 
     if (($pos = strpos($path, $files)) !== false) {
-        $baseUrl = '/' . $config['web.glide_base_url'] . '/';
+        $baseUrl = '/' . config('web.glide_base_url') . '/';
 
         $query = '?type=' . $type;
 

@@ -49,7 +49,7 @@ class AdminTranslationsController extends Controller
     {
         $data['current'] = $this->model;
 
-        $data['transTypes'] = (array) config('cms.trans_types');
+        $data['transTypes'] = (array) cms_config('trans_types');
 
         return view('admin.translations.create', $data);
     }
@@ -90,7 +90,7 @@ class AdminTranslationsController extends Controller
             ->where('id', $id)
             ->getOrFail();
 
-        $data['transTypes'] = (array) config('cms.trans_types');
+        $data['transTypes'] = (array) cms_config('trans_types');
 
         return view('admin.translations.edit', $data);
     }
@@ -154,7 +154,7 @@ class AdminTranslationsController extends Controller
             $form = 'edit';
         }
 
-        $data['transTypes'] = (array) config('cms.trans_types');
+        $data['transTypes'] = (array) cms_config('trans_types');
 
         return view('admin.translations.modal.' . $form, $data);
     }

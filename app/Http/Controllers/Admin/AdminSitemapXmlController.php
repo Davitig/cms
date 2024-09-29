@@ -163,7 +163,7 @@ class AdminSitemapXmlController extends Controller
             ->find($page->type_id);
 
         if (! is_null($implicitModel)) {
-            $model = config('cms.collections.types.' . $implicitModel->type);
+            $model = cms_config('collections.types.' . $implicitModel->type);
 
             $items = (new $model)->where(
                 Str::singular($implicitModel->getTable()) . '_id',

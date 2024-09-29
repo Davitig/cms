@@ -7,7 +7,7 @@
     <meta name="description" content="cms">
     <meta name="author" content="David Gvritishvili <gvritishvili.david@gmail.com>">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="version" content="{{config('cms.version')}}">
+    <meta name="version" content="{{cms_config('version')}}">
     <title>CMS - Login</title>
     <link rel="shortcut icon" href="{{ asset('assets/libs/images/favicon.ico') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/css/bootstrap.css') }}">
@@ -104,7 +104,7 @@ $(function() {
             $this.addClass('is-focused');
         }
     });
-    
+
     // Validation
     $("form#login").validate({
         rules: {
