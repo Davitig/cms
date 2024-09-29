@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\EventRequest;
 use App\Support\Admin\AdminDestroy;
-use Models\Event;
 use Models\Collection;
+use Models\Event;
 
 class AdminEventsController extends Controller
 {
@@ -43,7 +43,7 @@ class AdminEventsController extends Controller
 
         $data['items'] = $this->model->hasFile()->getAdminCollection($data['parent']);
 
-        $data['parentSimilar'] = $this->model->byType()->get();
+        $data['parentSimilar'] = (new Collection)->byType($this->model::TYPE)->get();
 
         return view('admin.collections.events.index', $data);
     }

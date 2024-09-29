@@ -44,7 +44,7 @@ class AdminGalleriesController extends Controller
 
         $data['items'] = $this->model->getAdminCollection($data['parent']);
 
-        $data['parentSimilar'] = $this->model->byType()->get();
+        $data['parentSimilar'] = (new Collection)->byType($this->model::TYPE)->get();
 
         return view('admin.galleries.index', $data);
     }

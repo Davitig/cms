@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PhotoRequest;
 use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
+use Models\Collection;
 use Models\Gallery;
 use Models\Photo;
 
@@ -55,7 +56,7 @@ class AdminPhotosController extends Controller
 
         $data['items'] = $this->model->getAdminGallery($data['parent']);
 
-        $data['parentSimilar'] = $this->model->byType()->get();
+        $data['parentSimilar'] = (new Collection)->byType($this->model::TYPE)->get();
 
         return view('admin.galleries.photos.index', $data);
     }

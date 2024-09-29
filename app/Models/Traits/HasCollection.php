@@ -101,19 +101,6 @@ trait HasCollection
     }
 
     /**
-     * Get the same type collection instance.
-     *
-     * @param  string|null  $type
-     * @return \Models\Builder\Builder
-     */
-    public function byType($type = null)
-    {
-        return (new Collection)->where(
-            'type', is_null($type) ? static::TYPE : $type
-        );
-    }
-
-    /**
      * Add a where "collection_id" clause to the query.
      *
      * @param  int  $id

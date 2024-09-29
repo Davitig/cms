@@ -43,7 +43,7 @@ class AdminArticlesController extends Controller
 
         $data['items'] = $this->model->hasFile()->getAdminCollection($data['parent']);
 
-        $data['parentSimilar'] = $this->model->byType()->get();
+        $data['parentSimilar'] = (new Collection)->byType($this->model::TYPE)->get();
 
         return view('admin.collections.articles.index', $data);
     }

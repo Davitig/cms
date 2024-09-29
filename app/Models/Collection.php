@@ -31,4 +31,15 @@ class Collection extends Model
     protected $notUpdatable = [
         'type'
     ];
+
+    /**
+     * Get the same type collection instance.
+     *
+     * @param  string  $type
+     * @return \Models\Collection
+     */
+    public function byType($type)
+    {
+        return $this->where('type', $type);
+    }
 }
