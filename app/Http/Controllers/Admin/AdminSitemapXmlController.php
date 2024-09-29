@@ -113,7 +113,7 @@ class AdminSitemapXmlController extends Controller
 
         foreach ($pages as $page) {
             $value = ['url' => ['loc' => web_url(
-                $page->full_slug = $page->fullSlug()->slug, [], $this->hasManyLanguage
+                $page->full_slug = $page->getFullSlug(), [], $this->hasManyLanguage
                 ? $this->mainLanguage
                 : null
             )]];
