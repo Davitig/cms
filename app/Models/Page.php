@@ -118,7 +118,7 @@ class Page extends Model
      * @param  int     $parentId
      * @return \Models\Builder\Builder
      */
-    public function byRoute($slug, $parentId)
+    public function bySlugRoute($slug, $parentId)
     {
         return $this->forPublic()->where('slug', $slug)->parentId($parentId);
     }
