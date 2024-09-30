@@ -26,6 +26,8 @@ class AdminMainData
 
         $this->shareCalendar();
 
+        $this->shareRouteMatches();
+
         return $next($request);
     }
 
@@ -84,6 +86,49 @@ class AdminMainData
         ], function($view) use ($calendar) {
             $view->with('calendarEvents', $calendar);
         });
+    }
+
+    /**
+     * Share route matches.
+     *
+     * @return string
+     */
+    protected function shareRouteMatches()
+    {
+        $currentRouteName = app('router')->current()->getName();
+        $currentRouteParams = app('router')->current()->parameters();
+
+        $callback = function ($values) use ($currentRouteName) {
+            foreach ($values as $value) {
+                if (str_contains($currentRouteName, $value . '.')) {
+                    return $value;
+                }
+            }
+        };
+
+        $replaceStr = $callback(resource_names('')) . '.' . cms_slug();
+
+        $currentRouteName = str_replace($replaceStr, '', $currentRouteName);
+
+        view()->composer('admin._partials.menu',
+            function($view) use ($currentRouteName, $currentRouteParams) {
+                $view->with('routeMatches', function (
+                    $routeNames, $routeParam = null
+                ) use ($currentRouteName, $currentRouteParams) {
+                    foreach ((array) $routeNames as $routeName) {
+                        if (! $routeParam
+                            && $routeName == $currentRouteName
+                            || $routeParam == current($currentRouteParams)
+                            && $routeName == $currentRouteName
+                        ) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                });
+            }
+        );
     }
 
     /**
