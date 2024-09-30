@@ -105,7 +105,7 @@ trait LanguageTrait
             function ($q) use ($table, $languageTable, $language) {
                 return $q->on("{$table}.id", "{$languageTable}.{$this->getForeignKey()}")
                     ->when($language === true, function ($q) use ($languageTable) {
-                        return $q->where("{$this->getLanguageTable()}.language", language());
+                        return $q->where("{$languageTable}.language", language());
                     }, function ($q) use ($languageTable, $language) {
                         if (is_string($language)) {
                             return $q->where("{$languageTable}.language", $language);
