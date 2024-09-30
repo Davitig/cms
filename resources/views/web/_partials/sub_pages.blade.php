@@ -3,7 +3,7 @@
         @foreach ($item->sub_items as $item)
             <li{!!$current->slug == $item->slug ? ' class="active"' : ''!!}>
                 <a href="{{web_url($item->slug)}}">{{$item->short_title}}</a>
-                @include('web._partials.sub_menu')
+                @include('web._partials.sub_pages')
             </li>
         @endforeach
     </ul>

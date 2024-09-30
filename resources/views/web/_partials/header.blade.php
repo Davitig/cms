@@ -11,7 +11,7 @@
             </div>
             <!-- .navbar-header -->
             <div id="navbar" class="navbar-collapse collapse">
-                @include('web._partials.menu')
+                @include('web._partials.pages')
             @if (is_multilanguage())
                 <ul class="nav navbar-nav navbar-right text-uppercase">
                 @php

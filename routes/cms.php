@@ -56,7 +56,7 @@ $router->group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($
             'except' => ['show']
         ]);
         // routes from config
-        foreach ((array) $this->app['config']->get('cms.routes') as $prefix => $routes) {
+        foreach ((array) cms_config('routes') as $prefix => $routes) {
             foreach ((array) $routes as $route => $controller) {
                 $router->post($route . '/{id}/visibility', [
                     'as' => $route . '.visibility',

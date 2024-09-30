@@ -315,7 +315,7 @@ function model_path($name)
  * Make a nestable eloquent models tree.
  *
  * @param  \Illuminate\Support\Collection|array  $items
- * @param  string|null  $slug
+ * @param  string  $slug
  * @param  int  $parentId
  * @param  string  $parentKey
  * @param  string  $key
@@ -323,7 +323,7 @@ function model_path($name)
  *
  * @throws \InvalidArgumentException
  */
-function make_model_sub_items($items, $slug = null, $parentId = 0, $parentKey = 'parent_id', $key = 'id')
+function make_model_sub_items($items, $slug = '', $parentId = 0, $parentKey = 'parent_id', $key = 'id')
 {
     if (! $items instanceof Collection && ! is_array($items)) {
         throw new InvalidArgumentException(
@@ -344,13 +344,11 @@ function make_model_sub_items($items, $slug = null, $parentId = 0, $parentKey = 
             continue;
         }
 
-        if (! is_null($slug)) {
-            $slug = $prevSlug ? $prevSlug . '/' . $item->slug : $item->slug;
+        $slug = $prevSlug ? $prevSlug . '/' . $item->slug : $item->slug;
 
-            $item->original_slug = $item->slug;
+        $item->original_slug = $item->slug;
 
-            $item->slug = $slug;
-        }
+        $item->slug = $slug;
 
         $item->sub_items = make_model_sub_items($items, $slug, $item->$key, $parentKey, $key);
 
