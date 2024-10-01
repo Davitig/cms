@@ -190,22 +190,12 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Set the specific route by URL segments.
+     * Set pages.
      *
      * @return void
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    protected function setRoute()
+    protected function setPages()
     {
-        if (! $this->segmentsCount) {
-            $this->router->get($this->uriPrefix, [
-                'uses' => $this->homeController
-            ]);
-
-            return;
-        }
-
         $parentId = 0;
 
         for ($i = 0; $i < $this->segmentsCount; $i++) {
@@ -224,7 +214,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
                 break;
             }
 
-            $page->original_slug = $page->slug;
+        $page->original_slug = $page->slug;
 
             if ($i > 0) {
                 $page->parent_slug = $this->pages[$i - 1]->slug;
@@ -236,16 +226,32 @@ final class DynamicRouteServiceProvider extends ServiceProvider
 
             $this->pages[$i] = $page;
         }
+    }
+
+    /**
+     * Set route by URL segments.
+     *
+     * @return void
+     */
+    protected function setRoute()
+    {
+        if (! $this->segmentsCount) {
+            $this->router->get($this->uriPrefix, [
+                'uses' => $this->homeController
+            ]);
+
+            return;
+        }
+
+        $this->setPages();
 
         $this->detectRoute();
     }
 
     /**
-     * Detect the route by URL segments.
+     * Detect route by URL segments.
      *
      * @return void
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     protected function detectRoute()
     {
@@ -363,8 +369,6 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      * @param  string|null  $defaultMethod
      * @param  int  $fakeBind
      * @return bool
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     protected function setCurrentRoute($type, array $parameters = [], $defaultMethod = null, $fakeBind = 0)
     {
