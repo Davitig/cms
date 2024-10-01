@@ -38,7 +38,7 @@ class AdminNotesController extends Controller
     }
 
     /**
-     * Display a listing of the .
+     * Display a listing of the resource.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -50,7 +50,7 @@ class AdminNotesController extends Controller
     }
 
     /**
-     * insert/update on the .
+     * Create or update the resource.
      *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
@@ -74,7 +74,7 @@ class AdminNotesController extends Controller
     }
 
     /**
-     * Move note into the calendar.
+     * Move resource into the calendar.
      *
      * @param  \Models\Calendar  $calendar
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
@@ -103,7 +103,7 @@ class AdminNotesController extends Controller
     }
 
     /**
-     * Remove the specified .
+     * Remove the specified resource.
      *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */

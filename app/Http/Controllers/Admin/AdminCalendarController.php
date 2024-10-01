@@ -49,9 +49,9 @@ class AdminCalendarController extends Controller
     }
 
     /**
-     * Get all of the events.
+     * Get all events.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Http\JsonResponse
      */
     public function events()
     {
@@ -63,7 +63,7 @@ class AdminCalendarController extends Controller
     }
 
     /**
-     * Create or update a event.
+     * Create or update the resource.
      *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
@@ -94,7 +94,7 @@ class AdminCalendarController extends Controller
     }
 
     /**
-     * Remove the specified event.
+     * Remove the specified calendar event.
      *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
