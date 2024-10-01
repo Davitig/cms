@@ -134,7 +134,7 @@ trait NestableTrait
             return $this;
         }
 
-        $this->slug = $model->slug . '/' . $this->slug;
+        $this->slug = trim($model->slug . '/' . $this->slug, '/');
 
         return $this->fullSlug($model->parent_id);
     }

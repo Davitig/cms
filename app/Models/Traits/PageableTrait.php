@@ -66,7 +66,7 @@ trait PageableTrait
             return $this;
         }
 
-        $this->slug = $model->getFullSlug() . '/' . $this->slug;
+        $this->slug = trim($model->getFullSlug() . '/' . $this->slug, '/');
 
         return $this;
     }
