@@ -92,12 +92,12 @@ trait HasCollection
      * Build a query based on the slug.
      *
      * @param  string  $slug
-     * @param  int|null  $id
+     * @param  int|null  $collectionId
      * @return \Models\Builder\Builder
      */
-    public function bySlug($slug, $id = null)
+    public function bySlug($slug, $collectionId = null)
     {
-        return $this->where('slug', $slug)->forPublic($id);
+        return $this->where('slug', $slug)->forPublic($collectionId);
     }
 
     /**
