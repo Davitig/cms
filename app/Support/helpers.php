@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 use Models\Abstracts\Model;
 
 /**
- * Get the application default language.
+ * Get the application language.
  *
  * @param  string|null  $key
  * @param  string  $value
@@ -19,10 +19,10 @@ function language($key = null, $value = 'full_name')
     }
 
     if (! is_null($value)) {
-        $value = '.full_name';
+        $value = '.' . $value;
     }
 
-    return config("app.languages.{$key}{$value}");
+    return config('app.languages.' . $key . $value);
 }
 
 /**
