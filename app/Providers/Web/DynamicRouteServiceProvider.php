@@ -344,21 +344,23 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     /**
      * Set the deep implicit route.
      *
-     * @param  \Models\Abstracts\Model  $model
+     * @param  \Models\Abstracts\Model  $implicitModel
      * @param  string  $slug
      * @return bool
      */
-    protected function setDeepImplicitRoute($model, $slug)
+    protected function setDeepImplicitRoute($implicitModel, $slug)
     {
-        $model = new $this->implicitTypes[$model->type];
+        $model = new $this->implicitTypes[$implicitModel->type];
 
         if (! method_exists($model, 'bySlug')) {
             return false;
         }
 
-        $model = $model->bySlug($slug, $model->id)->firstOrFail();
+        $model = $model->bySlug($slug, $implicitModel->id)->firstOrFail();
 
-        return $this->setCurrentRoute($model->type, [$model], 'index');
+        return $this->setCurrentRoute($model->type, [
+            $model, $implicitModel
+        ], 'index');
     }
 
     /**
