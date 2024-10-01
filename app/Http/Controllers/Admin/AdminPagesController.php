@@ -53,8 +53,6 @@ class AdminPagesController extends Controller
 
         $data['items'] = make_model_sub_items($this->model->forAdmin($menuId)->get());
 
-        $data['url'] = web_url('/');
-
         return view('admin.pages.index', $data);
     }
 

@@ -127,27 +127,15 @@ function cms_route($name, $parameters = [], $language = null, $absolute = true)
 /**
  * Generate a CMS URL.
  *
- * @param  string|null  $path
+ * @param  string|array  $path
  * @param  array  $parameters
  * @param  mixed  $language
  * @param  bool|null  $secure
  * @return \Illuminate\Contracts\Routing\UrlGenerator|string
  */
-function cms_url($path = null, array $parameters = [], $language = null, $secure = null)
+function cms_url($path = '', array $parameters = [], $language = null, $secure = null)
 {
-    if (is_array($path)) {
-        $path = implode('/', array_filter($path));
-    }
-
-    $url = url(add_language(cms_slug($path), $language), [], $secure);
-
-    if (is_null($path)) {
-        return $url;
-    }
-
-    return trim($url, '?') . query_string(
-            $parameters, parse_url($url, PHP_URL_QUERY) ? '&' : '?'
-        );
+    return web_url(cms_slug($path), $parameters, $language, $secure);
 }
 
 /**
@@ -167,23 +155,21 @@ function web_route($name, $parameters = [], $language = null, $absolute = true)
 /**
  * Generate a web URL.
  *
- * @param  string|null  $path
+ * @param  string|array  $path
  * @param  array  $parameters
  * @param  mixed  $language
  * @param  bool|null  $secure
- * @return \Illuminate\Contracts\Routing\UrlGenerator|string
+ * @return string
  */
-function web_url($path = null, array $parameters = [], $language = null, $secure = null)
+function web_url($path = '', array $parameters = [], $language = null, $secure = null)
 {
     if (is_array($path)) {
         $path = implode('/', array_filter($path));
+    } elseif (! is_string($path)) {
+        $path = '';
     }
 
     $url = url(add_language($path, $language), [], $secure);
-
-    if (is_null($path)) {
-        return $url;
-    }
 
     return trim($url, '?') . query_string(
             $parameters, parse_url($url, PHP_URL_QUERY) ? '&' : '?'
@@ -253,9 +239,7 @@ function add_language($url, $language = null, $hasLanguage = false)
         return $url;
     }
 
-    if (! ($withLanguage = ! empty($language))
-        && ($hasLanguage || ! language_isset())
-    ) {
+    if (! ($withLanguage = ! empty($language)) && ($hasLanguage || ! language_isset())) {
         return trim($url, '/');
     }
 

@@ -12,7 +12,7 @@
                         <div class="col-sm-5 col-xs-2">
                             <div class="btn-action togglable pull-right">
                                 <div class="btn btn-gray item-id disabled">#{{$item->id}}</div>
-                                <a href="{{$webUrl = $url . '/' . $item->slug}}" class="link btn btn-white" title="Go to page" data-slug="{{$item->slug}}" target="_blank">
+                                <a href="{{web_url($item->slug)}}" class="link btn btn-white" title="Go to page" data-slug="{{$item->slug}}" target="_blank">
                                     <span class="fa fa-link"></span>
                                 </a>
                                 <a href="#" class="transfer btn btn-white" title="Transfer to another menu" data-id="{{$item->id}}">
@@ -49,7 +49,7 @@
                         </div>
                     </div>
                 </div>
-                @include('admin.pages.sub_items', ['url' => $webUrl])
+                @include('admin.pages.sub_items')
             </li>
         @endforeach
     </ul>
