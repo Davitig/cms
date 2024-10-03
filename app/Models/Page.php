@@ -63,13 +63,13 @@ class Page extends Model
     /**
      * Build an admin query.
      *
-     * @param  int  $id
+     * @param  int  $menuId
      * @return \Models\Builder\Builder
      */
-    public function forAdmin($id = null)
+    public function forAdmin($menuId = null)
     {
-        return $this->when(! is_null($id), function ($q) use ($id) {
-            return $q->menuId($id);
+        return $this->when(! is_null($menuId), function ($q) use ($menuId) {
+            return $q->menuId($menuId);
         })->joinLanguage()
             ->joinCollection()
             ->hasFile()
@@ -120,7 +120,7 @@ class Page extends Model
      */
     public function bySlugRoute($slug, $parentId)
     {
-        return $this->forPublic()->where('slug', $slug)->parentId($parentId);
+        return $this->parentId($parentId)->where('slug', $slug)->forPublic();
     }
 
     /**
