@@ -50,13 +50,11 @@ class WebMainData
 
         $transCollection = new TranslationCollection;
 
-        if ($trans->count() <= (int) cms_config('trans_limit')) {
+        if ($trans->count() <= (int) cms_config('trans_query_limit')) {
             $transCollection->setCollection(
                 $trans->joinLanguage(true)->pluck('value', 'code')
             );
         }
-
-        app()->instance('trans', $transCollection);
 
         view()->share('trans', $transCollection);
     }

@@ -143,7 +143,7 @@ return [
     | This array used to specify types with methods, that will allow to
     | send a specific requests.
     |
-    | For example: "post", "put", "delete".
+    | For example, "post", "put", "delete".
     |
     */
 
@@ -223,12 +223,11 @@ return [
     | Translation Query Limit
     |--------------------------------------------------------------------------
     |
-    | The limit of the translation query results. Query will be executed
-    | one by one, if translation rows will be more than the specified limit.
+    | The limit of the translation query.
     |
     */
 
-    'trans_limit' => 80,
+    'trans_query_limit' => 80,
 
     /*
     |--------------------------------------------------------------------------
