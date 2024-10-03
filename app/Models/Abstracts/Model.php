@@ -3,6 +3,7 @@
 namespace Models\Abstracts;
 
 use Illuminate\Database\Eloquent\Model as BaseModel;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Models\Builder\Builder;
@@ -111,7 +112,7 @@ abstract class Model extends BaseModel
      * Find a model by its query or return new static.
      *
      * @param  array  $columns
-     * @return \Illuminate\Support\Collection|static
+     * @return static
      */
     public function firstNew($columns = ['*'])
     {
@@ -152,7 +153,7 @@ abstract class Model extends BaseModel
     public function firstAttrOrFail($attribute, $value = null, $column = null)
     {
         if (is_null($attribute = $this->firstAttr($attribute, $value, $column))) {
-            abort(404);
+            throw (new ModelNotFoundException)->setModel(get_class($this));
         }
 
         return $attribute;
@@ -165,7 +166,7 @@ abstract class Model extends BaseModel
     {
         $model = parent::create($attributes);
 
-        // Create language model if it's exists in this model.
+        // Create a language model if it exists in this model.
         if (method_exists(get_called_class(), 'createLanguage')) {
             $model->createLanguage($attributes);
         }
