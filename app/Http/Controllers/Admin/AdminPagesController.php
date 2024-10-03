@@ -112,9 +112,8 @@ class AdminPagesController extends Controller
      */
     public function edit($menuId, $id)
     {
-        $data['items'] = $this->model->joinLanguage(false)
-            ->joinCollection()
-            ->where('id', $id)
+        $data['items'] = $this->model->where('id', $id)
+            ->forAdmin(null, false)
             ->getOrFail();
 
         $data['current'] = $data['items']->first();

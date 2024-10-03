@@ -91,27 +91,26 @@ trait LanguageTrait
     /**
      * Add a "*_languages" join to the query.
      *
-     * @param  mixed  $language
+     * @param  mixed  $currentLang
      * @param  array  $columns
      * @return \Models\Builder\Builder
      */
-    public function joinLanguage($language = true, array $columns = [])
+    public function joinLanguage($currentLang = true, array $columns = [])
     {
         $table = $this->getTable();
         $languageTable = $this->getLanguageTable();
         $languageKey = Str::singular($languageTable) . '_id';
 
         return $this->leftJoin($languageTable,
-            function ($q) use ($table, $languageTable, $language) {
+            function ($q) use ($table, $languageTable, $currentLang) {
                 return $q->on("{$table}.id", "{$languageTable}.{$this->getForeignKey()}")
-                    ->when($language === true, function ($q) use ($languageTable) {
+                    ->when($currentLang === true, function ($q) use ($languageTable) {
                         return $q->where("{$languageTable}.language", language());
-                    }, function ($q) use ($languageTable, $language) {
-                        if (is_string($language)) {
-                            return $q->where("{$languageTable}.language", $language);
-                        }
-
-                        return $q;
+                    }, function ($q) use ($languageTable, $currentLang) {
+                        return $q->when(is_string($currentLang),
+                            function ($q) use ($languageTable, $currentLang) {
+                                return $q->where("{$languageTable}.language", $currentLang);
+                            });
                     });
             })->addSelect(array_merge($columns ?: ["{$languageTable}.*"], [
             "{$languageTable}.id as {$languageKey}", "{$table}.*"

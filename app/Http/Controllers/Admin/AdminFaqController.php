@@ -109,8 +109,8 @@ class AdminFaqController extends Controller
      */
     public function edit($collectionId, $id)
     {
-        $data['items'] = $this->model->joinLanguage(false)
-            ->where('id', $id)
+        $data['items'] = $this->model->where('id', $id)
+            ->forAdmin(null, false)
             ->getOrFail();
 
         return view('admin.faq.edit', $data);

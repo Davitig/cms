@@ -66,11 +66,11 @@ class Page extends Model
      * @param  int  $menuId
      * @return \Models\Builder\Builder
      */
-    public function forAdmin($menuId = null)
+    public function forAdmin($menuId = null, $currentLang = true)
     {
         return $this->when(! is_null($menuId), function ($q) use ($menuId) {
             return $q->menuId($menuId);
-        })->joinLanguage()
+        })->joinLanguage($currentLang)
             ->joinCollection()
             ->hasFile()
             ->positionAsc();
@@ -79,12 +79,12 @@ class Page extends Model
     /**
      * Build a public query.
      *
-     * @param  mixed  $language
+     * @param  mixed  $currentLang
      * @return \Models\Builder\Builder
      */
-    public function forPublic($language = true)
+    public function forPublic($currentLang = true)
     {
-        return $this->joinLanguage($language)->whereVisible();
+        return $this->joinLanguage($currentLang)->whereVisible();
     }
 
     /**

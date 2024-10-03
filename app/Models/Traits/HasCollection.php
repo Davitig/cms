@@ -62,30 +62,30 @@ trait HasCollection
      * Build an admin query.
      *
      * @param  int|null  $collectionId
-     * @param  mixed  $language
+     * @param  mixed  $currentLang
      * @param  array  $columns
      * @return \Models\Builder\Builder
      */
-    public function forAdmin($collectionId = null, $language = true, array $columns = [])
+    public function forAdmin($collectionId = null, $currentLang = true, array $columns = [])
     {
         return $this->when(! is_null($collectionId), function ($q) use ($collectionId) {
             return $q->collectionId($collectionId);
-        })->joinLanguage($language, $columns);
+        })->joinLanguage($currentLang, $columns);
     }
 
     /**
      * Build a public query.
      *
      * @param  int|null  $collectionId
-     * @param  mixed  $language
+     * @param  mixed  $currentLang
      * @param  array  $columns
      * @return \Models\Builder\Builder
      */
-    public function forPublic($collectionId = null, $language = true, array $columns = [])
+    public function forPublic($collectionId = null, $currentLang = true, array $columns = [])
     {
         return $this->when(! is_null($collectionId), function ($q) use ($collectionId) {
             return $q->collectionId($collectionId);
-        })->joinLanguage($language, $columns)->whereVisible();
+        })->joinLanguage($currentLang, $columns)->whereVisible();
     }
 
     /**
