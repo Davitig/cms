@@ -38,6 +38,6 @@ class WebVideosController extends Controller
 
         $data['items'] = $this->model->getPublicGallery($gallery);
 
-        return view('web.video', $data);
+        return view('web.videos', $data);
     }
 }
