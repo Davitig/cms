@@ -57,7 +57,7 @@
                 <ul class="dropdown-menu notifications">
                     <li class="top">
                         <p class="small">
-                            Update the XML sitemap when you change the URL or add a new data.
+                            Update the XML sitemap when you change the URLs.
                         </p>
                     </li>
                     <li>
@@ -79,10 +79,15 @@
                         </ul>
                     </li>
                     <li class="external">
-                        <a href="{{cms_route('sitemap.xml.store')}}">
-                            <span class="fa fa-sitemap padr"></span>
-                            <span class="sm-status">{{$sitemapXmlTime ? 'Update' : 'Create'}} now!</span>
-                        </a>
+                        <form action="{{cms_route('sitemap.xml.store')}}" method="POST">
+                            {{csrf_field()}}
+                            <button type="submit" class="btn btn-link w-100">
+                                <a class="external-btn">
+                                    <span class="fa fa-sitemap padr"></span>
+                                    <span class="sm-status">{{$sitemapXmlTime ? 'Update' : 'Create'}} now!</span>
+                                </a>
+                            </button>
+                        </form>
                     </li>
                 </ul>
             </li>

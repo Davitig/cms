@@ -56,7 +56,9 @@ class Builder extends EloquentBuilder
     {
         parent::addSelect($column);
 
-        $this->getQuery()->columns = array_unique($this->getQuery()->columns, SORT_REGULAR);
+        if (! empty($this->getQuery()->columns)) {
+            $this->getQuery()->columns = array_unique($this->getQuery()->columns, SORT_REGULAR);
+        }
 
         return $this;
     }

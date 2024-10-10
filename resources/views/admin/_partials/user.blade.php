@@ -13,7 +13,7 @@
             <ul class="dropdown-menu notifications">
                 <li class="top">
                     <p class="small">
-                        Update the XML sitemap when you change the URL or add a new data.
+                        Update the XML sitemap when you change the URLs.
                     </p>
                 </li>
                 <li>
@@ -35,10 +35,15 @@
                     </ul>
                 </li>
                 <li class="external">
-                    <a href="{{cms_route('sitemap.xml.store')}}">
-                        <span class="fa fa-sitemap padr"></span>
-                        <span class="sm-status">{{$sitemapXmlTime ? 'Update' : 'Create'}} now!</span>
-                    </a>
+                    <form action="{{cms_route('sitemap.xml.store')}}" method="POST">
+                        {{csrf_field()}}
+                        <button type="submit" class="btn btn-link w-100">
+                            <a class="external-btn">
+                                <span class="fa fa-sitemap padr"></span>
+                                <span class="sm-status">{{$sitemapXmlTime ? 'Update' : 'Create'}} now!</span>
+                            </a>
+                        </button>
+                    </form>
                 </li>
             </ul>
         </li>
@@ -63,15 +68,15 @@
                                     <a href="{{cms_route('calendar.index', ['gotoDate' => $item->start])}}">
                                         <i class="fa fa-calendar-o icon-color-{{$item->color}}"></i>
                                         <span class="line">
-                  <strong>{{$item->title}}</strong>
-                </span>
+                                            <strong>{{$item->title}}</strong>
+                                        </span>
                                         <span class="line small time">
-                  Date: {{$date}}
-                </span>
+                                            Date: {{$date}}
+                                        </span>
                                         @if ($item->time_start)
                                             <span class="line small time">
-                  Time: {{date('H:i', strtotime($date))}}
-                </span>
+                                                Time: {{date('H:i', strtotime($date))}}
+                                            </span>
                                         @endif
                                     </a>
                                 </li>
@@ -123,9 +128,9 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <img src="{{ Auth::guard('cms')->user()->photo }}" alt="user-image" class="img-circle img-inline userpic-32" width="28" />
                 <span>
-          {{Auth::guard('cms')->user()->first_name}} {{Auth::guard('cms')->user()->last_name}}
-          <i class="fa fa-angle-down"></i>
-        </span>
+                    {{Auth::guard('cms')->user()->first_name}} {{Auth::guard('cms')->user()->last_name}}
+                    <i class="fa fa-angle-down"></i>
+                </span>
             </a>
             <ul class="dropdown-menu user-profile-menu list-unstyled">
                 <li>

@@ -88,7 +88,7 @@ class Page extends Model
     }
 
     /**
-     * Determine if the model has a sub page.
+     * Determine if the model has a subpage.
      *
      * @return bool
      */
