@@ -6,9 +6,6 @@
 <script src="{{ asset('assets/libs/js/xenon-api.js') }}"></script>
 <script src="{{ asset('assets/libs/js/xenon-toggles.js') }}"></script>
 
-<!-- tinymce scripts -->
-<script src="{{ asset('assets/libs/js/tinymce/tinymce.min.js') }}"></script>
-
 <!-- datatables scripts -->
 <script src="{{ asset('assets/libs/js/datatables/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('assets/libs/js/datatables/dataTables.bootstrap.js') }}"></script>
@@ -26,114 +23,71 @@
 <script src="{{ asset('assets/libs/js/xenon-custom.js') }}"></script>
 <script src="{{ asset('assets/libs/js/custom.js') }}"></script>
 <script type="text/javascript">
-$(function() {
-    // Initialize tinymce
-    tinymce.init({
-        selector: ".text-editor",
-        theme: "modern",
-        relative_urls: false,
-        remove_script_host: false,
-        plugins: [
-            "advlist autolink link image lists charmap print preview hr anchor pagebreak",
-            "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-            "save table contextmenu directionality emoticons template paste textcolor"
-        ],
-        toolbar: "insertfile undo redo | styleselect fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor | fullscreen",
-        fontsize_formats: '10px 12px 14px 16px 18px 20px 22px 24px 26px 30px 36px',
-        image_advtab: true,
-
-        file_browser_callback : elFinderBrowser,
-
-        setup: function(ed) {
-            ed.on("init", function() {
-                $(this.contentAreaContainer.parentElement).find("div.mce-toolbar-grp").hide();
-            });
-            ed.on('focus blur', function(e) {
-                if (e.type === 'focus') {
-                    $(this.contentAreaContainer.parentElement).find("div.mce-toolbar-grp").show();
+    $(function() {
+        // Fancybox click event handler
+        $(document).on('click', '.popup', function(e){
+            e.preventDefault();
+            var id = $(this).data('browse');
+            $.fancybox({
+                width    : 900,
+                height   : 600,
+                type     : 'iframe',
+                href     : '{{ cms_url('filemanager/popup') }}/' + id + '?iframe=1',
+                autoSize : false,
+                helpers: {
+                    overlay: {
+                        locked: false
+                    }
                 }
-                // Add "table" class to all table tags
-                tinymce.activeEditor.dom.addClass(tinymce.activeEditor.dom.select('table'), 'table');
             });
-            ed.on('change', function() {
-                tinymce.triggerSave();
+        });
+
+        // Initialize stacktable
+        $('.stacktable').stacktable();
+
+        // toast notification options
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "positionClass": "toast-{{$cmsSettings->get('alert_position', 'top-right')}}",
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "4000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
+        var notifications = $('.notifications');
+        $(notifications).on('click', '.external button', function(e) {
+            e.preventDefault();
+        });
+        $(notifications).on('click', '.external .external-btn', function(e) {
+            e.preventDefault();
+            var target = $(this);
+            target.removeClass('external-btn');
+            var form = $(this).closest('form');
+            $.post(form.attr('action'), form.serialize(), function() {
+                $('.sm-date', notifications).html('{{date('d F Y')}}');
+                $('.sm-time', notifications).html('{{date('H:i')}}');
+                $('.sm-status', form).html('Update now!');
+                toastr['success']('Task has been completed successfully');
+            }, 'json').done(function() {
+                target.addClass('external-btn');
+            }).fail(function(xhr) {
+                alert(xhr.responseText);
             });
-        }
-    });
-
-    // elFinder callback for tinymce
-    function elFinderBrowser(field_name, url, type, win) {
-        tinymce.activeEditor.windowManager.open({
-            file: '{{ cms_route('filemanager.tinymce4') . '?iframe=1' }}', // use an absolute path!
-            title: 'elFinder 2.1',
-            width: 900,
-            height: 600
-            // resizable: 'yes'
-        }, {
-            setUrl: function(url) {
-                win.$('#' + field_name).val(url);
-            }
         });
-        return false;
-    }
+        @if (session()->has('alert'))
 
-    // Fancybox click event handler
-    $(document).on('click', '.popup', function(e){
-        e.preventDefault();
-        var id = $(this).data('browse');
-        $.fancybox({
-            width    : 900,
-            height   : 600,
-            type     : 'iframe',
-            href     : '{{ cms_url('filemanager/popup') }}/' + id + '?iframe=1',
-            autoSize : false,
-            helpers: {
-                overlay: {
-                    locked: false
-                }
-            }
-        });
+            toastr["{{session('alert.result')}}"]("{{session('alert.message')}}");
+        @endif
+        @if (! session()->has('includeLockscreen') && $cmsSettings->get('lockscreen'))
+
+        lockscreen('{{$cmsSettings->get('lockscreen')}}', '{{cms_route('lockscreen')}}');
+        @endif
     });
-
-    // Initialize stacktable
-    $('.stacktable').stacktable();
-
-    // toast notification options
-    toastr.options = {
-        "closeButton": true,
-        "debug": false,
-        "positionClass": "toast-{{$cmsSettings->get('alert_position', 'top-right')}}",
-        "onclick": null,
-        "showDuration": "300",
-        "hideDuration": "1000",
-        "timeOut": "4000",
-        "extendedTimeOut": "1000",
-        "showEasing": "swing",
-        "hideEasing": "linear",
-        "showMethod": "fadeIn",
-        "hideMethod": "fadeOut"
-    };
-
-    var notifications = $('.notifications');
-    $('.external a', notifications).on('click', function(e) {
-        e.preventDefault();
-        var target = $(this);
-        $.get($(this).attr('href'), {}, function() {
-            $('.sm-date', notifications).html('{{date('d F Y')}}');
-            $('.sm-time', notifications).html('{{date('H:i')}}');
-            $('.sm-status', target).html('Update now!');
-            toastr['success']('Task has been completed successfully');
-        }, 'json').fail(function(xhr) {
-            alert(xhr.responseText);
-        });
-    });
-@if (session()->has('alert'))
-
-    toastr["{{session('alert.result')}}"]("{{session('alert.message')}}");
-@endif
-@if (! session()->has('includeLockscreen') && $cmsSettings->get('lockscreen'))
-
-    lockscreen('{{$cmsSettings->get('lockscreen')}}', '{{cms_route('lockscreen')}}');
-@endif
-});
 </script>
