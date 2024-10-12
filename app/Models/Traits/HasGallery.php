@@ -117,7 +117,7 @@ trait HasGallery
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function create(array $attributes = [])
     {

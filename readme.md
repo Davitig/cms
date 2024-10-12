@@ -2,8 +2,10 @@
 
 ## About
 
-Description will be added...
+Description will be added.
+
+See [Laravel Framework](https://github.com/laravel/laravel)
 
 ## License
 
-Released under the MIT License, see [LICENSE](LICENSE).
+The software licensed under the [MIT license](https://opensource.org/licenses/MIT).

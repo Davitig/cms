@@ -26,7 +26,7 @@ class CollectionRequest extends Request
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function all($keys = null)
     {

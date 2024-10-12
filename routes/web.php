@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,7 +13,9 @@
 |
 */
 
-$router->group(['namespace' => 'Web'], function ($router) {
+Route::group(['namespace' => 'Web'], function ($router) {
+    // web routes
+
     // glide server
     $router->get(
         $this->app['config']->get('web.glide_base_url', '!img') . '/{path}',

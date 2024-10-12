@@ -2,10 +2,10 @@
 
 namespace App\Exceptions;
 
-use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -36,32 +36,32 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Exception  $exception
+     * @param  \Throwable  $e
      * @return void
+     *
+     * @throws \Throwable
      */
-    public function report(Exception $exception)
+    public function report(Throwable $e)
     {
-        parent::report($exception);
+        parent::report($e);
     }
 
     /**
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @param  \Throwable  $e
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Throwable
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $e)
     {
-        return parent::render($request, $exception);
+        return parent::render($request, $e);
     }
 
     /**
-     * Convert an authentication exception into an unauthenticated response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Auth\AuthenticationException  $exception
-     * @return \Illuminate\Http\Response
+     * {@inheritDoc}
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
@@ -73,33 +73,33 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function renderHttpException(HttpExceptionInterface $exception)
+    protected function renderHttpException(HttpExceptionInterface $e)
     {
-        $status = $exception->getStatusCode();
+        $status = $e->getStatusCode();
 
         if (request()->expectsJson()) {
             if (($trans = trans('http.' . $status)) !== 'http.' . $status) {
                 return response($trans, $status);
             } else {
-                return response($exception->getMessage(), $status);
+                return response($e->getMessage(), $status);
             }
         }
 
-        if ($view = $this->getExceptionView($status, $exception)) {
+        if ($view = $this->getExceptionView($status, $e)) {
             return $view;
         }
 
-        return $this->convertExceptionToResponse($exception, true);
+        return $this->convertExceptionToResponse($e, true);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function convertExceptionToResponse(Exception $exception, $viewChecked = false)
+    protected function convertExceptionToResponse(Throwable $e, $viewChecked = false)
     {
-        $response = parent::convertExceptionToResponse($exception);
+        $response = parent::convertExceptionToResponse($e);
 
         $status = $response->getStatusCode();
 
@@ -108,18 +108,18 @@ class Handler extends ExceptionHandler
         if (request()->expectsJson()) {
             if ($debug) {
                 return response()->make(
-                    $exception->getMessage() . ' in ' . $exception->getFile() . ' line ' . $exception->getLine(), $status
+                    $e->getMessage() . ' in ' . $e->getFile() . ' line ' . $e->getLine(), $status
                 );
             }
 
             if (($trans = trans('http.' . $status)) !== 'http.' . $status) {
                 return response($trans, $status);
             } else {
-                return response($exception->getMessage(), $status);
+                return response($e->getMessage(), $status);
             }
         }
 
-        if (! $debug && ! $viewChecked && ($view = $this->getExceptionView($status, $exception))) {
+        if (! $debug && ! $viewChecked && ($view = $this->getExceptionView($status, $e))) {
             return $view;
         }
 
@@ -130,15 +130,15 @@ class Handler extends ExceptionHandler
      * Get the view for the given exception.
      *
      * @param  string  $status
-     * @param  \Exception  $exception
+     * @param  \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface  $e
      * @return \Illuminate\Http\Response|bool
      */
-    protected function getExceptionView($status, $exception)
+    protected function getExceptionView($status, HttpExceptionInterface $e)
     {
         $dir = cms_is_booted() ? 'admin' : 'web';
 
         if (view()->exists($dir . ".errors.{$status}")) {
-            return response()->view($dir . ".errors.{$status}", ['exception' => $exception], $status);
+            return response()->view($dir . ".errors.{$status}", ['exception' => $e], $status);
         }
 
         return false;

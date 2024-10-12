@@ -37,7 +37,7 @@ require __DIR__.'/../vendor/autoload.php';
 
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
-// Override public path (For production)
+// Override public path
 // $app->bind('path.public', function () {
 //     return __DIR__;
 // });

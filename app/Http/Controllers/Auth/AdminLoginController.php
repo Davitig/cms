@@ -19,7 +19,7 @@ class AdminLoginController extends Controller
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function showLoginForm()
     {
@@ -27,7 +27,7 @@ class AdminLoginController extends Controller
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function logout(Request $request)
     {
@@ -41,7 +41,7 @@ class AdminLoginController extends Controller
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function guard()
     {
@@ -49,7 +49,7 @@ class AdminLoginController extends Controller
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function redirectPath()
     {

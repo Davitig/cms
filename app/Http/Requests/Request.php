@@ -18,7 +18,7 @@ abstract class Request extends FormRequest
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function getValidatorInstance()
     {

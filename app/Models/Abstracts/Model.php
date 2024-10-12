@@ -80,7 +80,7 @@ abstract class Model extends BaseModel
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function newEloquentBuilder($builder)
     {
@@ -160,7 +160,7 @@ abstract class Model extends BaseModel
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function create(array $attributes = [])
     {
@@ -234,7 +234,7 @@ abstract class Model extends BaseModel
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function __get($key)
     {
@@ -242,7 +242,7 @@ abstract class Model extends BaseModel
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function offsetGet($offset)
     {
@@ -250,7 +250,7 @@ abstract class Model extends BaseModel
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function offsetSet($offset, $value)
     {

@@ -136,7 +136,7 @@ trait HasCollection
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function create(array $attributes = [])
     {

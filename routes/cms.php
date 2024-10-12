@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | CMS Routes
@@ -11,7 +13,7 @@
 |
 */
 
-$router->group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($router) {
+Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($router) {
     // authentication
     $router->group(['namespace' => 'Auth'], function ($router) {
         // login

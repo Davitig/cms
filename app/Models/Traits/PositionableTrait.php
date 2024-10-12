@@ -130,7 +130,7 @@ trait PositionableTrait
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function create(array $attributes = [])
     {

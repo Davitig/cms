@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -26,31 +26,15 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
-     * The maximum number of login attempts for delaying further attempts.
+     * Create a new controller instance.
      *
-     * @return int
+     * @return void
      */
-    protected $maxLoginAttempts = 3;
-
-    /**
-     * The number of minutes to delay further login attempts.
-     *
-     * @return int
-     */
-    protected $lockoutTime = 2;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function hasTooManyLoginAttempts(Request $request)
+    public function __construct()
     {
-        return $this->limiter()->tooManyAttempts(
-            $this->throttleKey($request),
-            $this->maxLoginAttempts,
-            $this->lockoutTime
-        );
+        $this->middleware('guest')->except('logout');
     }
 }

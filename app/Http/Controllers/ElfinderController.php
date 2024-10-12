@@ -18,7 +18,7 @@ use Illuminate\Filesystem\FilesystemAdapter;
 class ElfinderController extends Elfinder
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function showConnector()
     {

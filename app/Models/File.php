@@ -193,7 +193,7 @@ class File extends Model
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function create(array $attributes = [], $tableName = null, $tableId = null)
     {

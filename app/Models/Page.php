@@ -178,7 +178,7 @@ class Page extends Model
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function create(array $attributes = [])
     {

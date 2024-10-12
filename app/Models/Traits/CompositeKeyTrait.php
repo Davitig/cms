@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 trait CompositeKeyTrait
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function setKeysForSaveQuery(Builder $query)
     {

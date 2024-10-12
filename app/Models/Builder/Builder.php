@@ -135,7 +135,7 @@ class Builder extends EloquentBuilder
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
@@ -195,7 +195,7 @@ class Builder extends EloquentBuilder
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function get($columns = ['*'])
     {
@@ -378,7 +378,7 @@ class Builder extends EloquentBuilder
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      * @throws \ReflectionException
      */
     public function __call($method, $parameters)
