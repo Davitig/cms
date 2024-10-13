@@ -61,7 +61,7 @@
                 }
             }
 
-            // Get the templates list
+            // Get the template list
             function getTemplates(value) {
                 if (["{!!implode('","', array_keys((array) cms_pages('templates')))!!}"].indexOf(value) >= 0) {
                     $.get('{{cms_route('pages.templates')}}', {"type": value}, function (data) {

@@ -43,40 +43,18 @@ class WebGlideServerController extends Controller
      *
      * @param  \Illuminate\Contracts\Config\Repository $config
      * @param  string $path
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|mixed
+     * @return void
      */
     public function show(Config $config, $path)
     {
-        $source = (array) $config['elfinder.public'];
-        $source = key($source);
-
-        $fullPath = $source . '/' . $path;
-
         $settings = $config['web.glide.' . $this->request->get('type')];
 
         if (! is_array($settings)) {
-            return redirect($fullPath);
+            abort(404);
         }
 
         try {
             $this->server->outputImage($path, $settings);
-        } catch (Exception $e) {
-            return $this->getDefaultPhotoResponse($fullPath);
-        }
-    }
-
-    /**
-     * Get the default photo response.
-     *
-     * @param  string $path
-     * @return mixed
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     */
-    protected function getDefaultPhotoResponse($path)
-    {
-        try {
-            return response()->file(public_path($path));
         } catch (Exception $e) {
             abort(404);
         }

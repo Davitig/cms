@@ -19,14 +19,12 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^2.4",
         "barryvdh/laravel-elfinder": "0.4.*",
-        "cocur/slugify": "4.1.*",
-        "laravelcollective/html": "6.1.*",
-        "league/glide": "1.6.*",
-        "mews/captcha": "3.1.*",
-        "php-curl-class/php-curl-class": "8.8.*",
-        "sabre/xml": "4.0.*",
-        "ext-dom": "*",
-        "ext-json": "*"
+        "cocur/slugify": "4.4.0",
+        "laravelcollective/html": "^6.4",
+        "league/glide": "^1.7",
+        "mews/captcha": "3.3.*",
+        "php-curl-class/php-curl-class": "11.0.*",
+        "sabre/xml": "4.0.*"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

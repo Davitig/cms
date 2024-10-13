@@ -140,18 +140,30 @@ class AdminPagesController extends Controller
         $this->model->findOrFail($id)->update($input = $request->all());
 
         if ($request->expectsJson()) {
-            if (in_array($request->get('type'), (array) cms_pages('listable'))) {
-                $input['typeHtml'] = view(
-                    'admin.pages.listable_type', ['input' => $input]
-                )->render();
+            if (array_key_exists(
+                $type = $request->get('type'), (array) cms_pages('implicit')
+            )) {
+                $typeId = $request->get('type_id');
+
+                $explicitModel = cms_pages('implicit.' . $type);
+
+                if ($explicitModel) {
+                    $explicitModelType = (new $explicitModel)->firstAttr('type', $typeId);
+
+                    $input['page_type'] = $explicitModelType;
+
+                    $input['typeHtml'] = view(
+                        'admin.pages._implicit_type', ['input' => $input]
+                    )->render();
+                }
             } elseif (
-            array_key_exists(
-                $request->get('type'),
-                (array) cms_pages('explicit')
-            )
+                array_key_exists(
+                    $request->get('type'),
+                    (array) cms_pages('explicit')
+                )
             ) {
                 $input['typeHtml'] = view(
-                    'admin.pages.module_type', ['input' => $input]
+                    'admin.pages._module_type', ['input' => $input]
                 )->render();
             }
 
