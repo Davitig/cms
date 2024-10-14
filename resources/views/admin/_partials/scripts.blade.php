@@ -91,3 +91,4 @@
         @endif
     });
 </script>
+@include('admin._scripts.tinymce')

@@ -43,25 +43,23 @@
             <input type="hidden" name="role" value="{{$role}}">
         @endif
             <div class="dib vam padr mrgb">
-                <input type="text" name="name" class="form-control" placeholder="სახელი ან/და გვარი" value="{{request('name')}}">
+                <input type="text" name="name" class="form-control" placeholder="First name / Last Name" value="{{request('name')}}">
             </div>
             <div class="dib vam padr mrgb">
-                <input type="text" name="email" class="form-control" placeholder="ელ.ფოსტა" value="{{request('email')}}">
+                <input type="text" name="email" class="form-control" placeholder="Email" value="{{request('email')}}">
             </div>
             <div class="dib vam padr mrgb">
-                {!! Form::select('blocked', [
+                {{ html()->select('blocked', [
                     '' => '-- Block --',
                     '1' => 'Blocked',
                     '0' => 'Non-Blocked'
-                ], request('blocked'), [
-                    'class' => 'form-control',
-                ]) !!}
+                ], request('blocked'))->class('form-control') }}
             </div>
             <button type="submit" class="btn btn-secondary vat">Search</button>
             <a href="{{cms_route('cmsUsers.index', request()->only(['role']))}}" class="btn btn-black vat">Reset</a>
         </form>
     </div>
-    @if (Auth::guard('cms')->user()->isAdmin())
+    @if (auth('cms')->user()->isAdmin())
         <a href="{{cms_route('permissions.index', ['role' => $role])}}" class="btn btn-orange pull-right">Permissions</a>
     @endif
     <table class="table stacktable table-hover members-table middle-align">
@@ -83,7 +81,7 @@
                 @endif
                 </td>
                 <td class="user-name">
-                    <a href="{{cms_route('cmsUsers.edit', [$item->id])}}" class="name{{Auth::guard('cms')->id() == $item->id ? ' active' : ''}}">{{$item->first_name}} {{$item->last_name}}</a>
+                    <a href="{{cms_route('cmsUsers.edit', [$item->id])}}" class="name{{auth('cms')->id() == $item->id ? ' active' : ''}}">{{$item->first_name}} {{$item->last_name}}</a>
                     <span>{{$item->role_text}}</span>
                 </td>
                 <td>
@@ -97,19 +95,19 @@
                         <i class="fa fa-user"></i>
                         Profile
                     </a>
-                @if (Auth::guard('cms')->user()->isAdmin() || Auth::guard('cms')->id() == $item->id)
+                @if (auth('cms')->user()->isAdmin() || auth('cms')->id() == $item->id)
                     <a href="{{cms_route('cmsUsers.edit', [$item->id])}}" class="edit">
                         <i class="fa fa-pencil"></i>
                         Edit Profile
                     </a>
                 @endif
-                @if (Auth::guard('cms')->user()->isAdmin() && Auth::guard('cms')->id() != $item->id)
-                    {!! Form::open(['method' => 'delete', 'url' => cms_route('cmsUsers.destroy', [$item->id]), 'class' => 'form-delete', 'data-id' => $item->id]) !!}
+                @if (auth('cms')->user()->isAdmin() && auth('cms')->id() != $item->id)
+                    {{ html()->open(['method' => 'delete', 'url' => cms_route('cmsUsers.destroy', [$item->id]), 'class' => 'form-delete', 'data-id' => $item->id]) }}
                         <a href="#" class="delete">
                             <i class="fa fa-user-times"></i>
                             Delete
                         </a>
-                    {!! Form::close() !!}
+                    {{ html()->form()->close() }}
                 @endif
                 </td>
             </tr>

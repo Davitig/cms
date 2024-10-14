@@ -17,10 +17,7 @@ class CreateWebSettingsTable extends Migration
             $table->tinyInteger('id', true);
             $table->string('email')->nullable();
             $table->string('phone', 32)->nullable();
-            $table->string('facebook')->nullable();
-            $table->string('twitter')->nullable();
-            $table->string('google_plus')->nullable();
-            $table->string('map', 800)->nullable();
+            $table->string('address')->nullable();
             $table->timestamps();
         });
 

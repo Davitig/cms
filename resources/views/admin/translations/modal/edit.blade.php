@@ -14,15 +14,12 @@
             <div class="tab-content">
             @foreach ($items as $current)
                 <div class="tab-pane{{language() != $current->language ? '' : ' active'}}" id="item-{{$current->language}}">
-                    {!! Form::model($current, [
-                        'method' => 'post',
-                        'url'    => cms_route('translations.popup', [], count(languages()) > 1 ? $current->language : null),
-                        'class'  => 'form-horizontal',
-                        'data-lang'  => $current->language
-                    ]) !!}
+                    {{ html()->modelForm($current,
+                        'post', cms_route('translations.popup', [], count(languages()) > 1 ? $current->language : null)
+                    )->class('form-horizontal')->data('lang', 1)->open() }}
                         <input type="hidden" name="id" value="{{$current->id}}">
                         @include('admin.translations.modal.form')
-                    {!! Form::close() !!}
+                    {{ html()->form()->close() }}
                 </div>
             @endforeach
             </div>

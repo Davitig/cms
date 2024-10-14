@@ -31,17 +31,15 @@
         </div>
     </div>
     <div class="panel-body">
-        {!! Form::model($current, [
-            'method' => 'put',
-            'url'    => cms_route('menus.update', [$current->id]),
-            'class'  => 'form-horizontal '.$cmsSettings->get('ajax_form')
-        ]) !!}
+        {{ html()->modelForm($current,
+            'put', cms_route('menus.update', [$current->id])
+        )->class('form-horizontal ' . $cmsSettings->get('ajax_form'))->open() }}
             @include('admin.menus.form', [
                 'submit'        => trans('general.update'),
                 'submitAndBack' => trans('general.update_n_back'),
                 'icon'          => 'save'
             ])
-        {!! Form::close() !!}
+        {{ html()->form()->close() }}
     </div>
 </div>
 @endsection

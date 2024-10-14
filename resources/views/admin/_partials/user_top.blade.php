@@ -7,19 +7,19 @@
       <div class="col-md-4">
         <div class="user-info">
           <div class="user-image">
-            <a href="{{cms_route('cmsUsers.show', [Auth::guard('cms')->id()])}}">
-              <img src="{{Auth::guard('cms')->user()->photo}}" width="128" class="img-circle" />
+            <a href="{{cms_route('cmsUsers.show', [auth('cms')->id()])}}">
+              <img src="{{auth('cms')->user()->photo}}" width="128" class="img-circle" />
             </a>
           </div>
           <div class="user-details">
             <h3>
-              <a href="{{cms_route('cmsUsers.show', [Auth::guard('cms')->id()])}}">{{Auth::guard('cms')->user()->first_name}} {{Auth::guard('cms')->user()->last_name}}</a>
+              <a href="{{cms_route('cmsUsers.show', [auth('cms')->id()])}}">{{auth('cms')->user()->first_name}} {{auth('cms')->user()->last_name}}</a>
               <!-- Available statuses: is-online, is-idle, is-busy and is-offline -->
               <span class="user-status is-online"></span>
             </h3>
-            <p class="user-title">{{user_roles(Auth::guard('cms')->user()->role)}}</p>
+            <p class="user-title">{{user_roles(auth('cms')->user()->role)}}</p>
             <div class="user-links">
-              <a href="{{cms_route('cmsUsers.edit', [Auth::guard('cms')->id()])}}" class="btn btn-primary">Edit Profile</a>
+              <a href="{{cms_route('cmsUsers.edit', [auth('cms')->id()])}}" class="btn btn-primary">Edit Profile</a>
             </div>
           </div>
         </div>

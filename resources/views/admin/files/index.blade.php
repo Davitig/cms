@@ -98,7 +98,7 @@
                                 <a href="#" class="thumb" data-modal="edit">
                                     @if (in_array($ext = pathinfo($item->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
                                         <img src="{{$item->file}}" class="img-responsive" alt="{{$item->title}}" />
-                                    @elseif( ! empty($ext))
+                                    @elseif(! empty($ext))
                                         <img src="{{asset('assets/libs/images/file-ext-icons/'.$ext.'.png')}}" class="img-responsive" alt="{{$item->title}}" />
                                     @else
                                         <img src="{{asset('assets/libs/images/file-ext-icons/www.png')}}" class="img-responsive" alt="{{$item->title}}" />
@@ -128,19 +128,16 @@
         </div>
     </section>
     @push('body.bottom')
-    <script type="text/javascript">
-        $(function() {
-            var routeCreate = '{!!cms_route('files.create', [$routeName, $foreignModel->id, 'sort' => 'desc', 'page' => $items->currentPage(), 'lastPage' => $items->lastPage()])!!}';
-            var routeIndex = '{{cms_route('files.index', [$routeName, $foreignModel->id])}}';
-            var routePosition = '{{cms_route('files.updatePosition')}}';
-            var sort = 'desc';
-            var page = '{{request('page', 1)}}';
-            var hasMorePages = '{{$items->hasMorePages()}}';
-            @include('admin._scripts.album')
-        });
-    </script>
-    <script src="{{ asset('assets/libs/js/jquery-ui/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('assets/libs/js/uikit/js/uikit.min.js') }}"></script>
-    <script src="{{ asset('assets/libs/js/uikit/js/addons/nestable.min.js') }}"></script>
+        @include('admin._scripts.album', [
+            'routeCreate' => cms_route('files.create', [$routeName, $foreignModel->id, 'sort' => 'desc', 'page' => $items->currentPage(), 'lastPage' => $items->lastPage()]),
+            'routeIndex' => cms_route('files.index', [$routeName, $foreignModel->id]),
+            'routePosition' => cms_route('files.updatePosition'),
+            'sort' => 'desc',
+            'page' => request('page', 1),
+            'hasMorePages' => $items->hasMorePages()
+        ])
+        <script src="{{ asset('assets/libs/js/jquery-ui/jquery-ui.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/js/uikit/js/uikit.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/js/uikit/js/addons/nestable.min.js') }}"></script>
     @endpush
 @endsection

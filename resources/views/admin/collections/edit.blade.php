@@ -32,18 +32,16 @@
         <a href="{{cms_route('collections.create')}}" class="pull-right padr">Add more</a>
     </div>
     <div class="panel-body">
-        {!! Form::model($current, [
-            'method' => 'put',
-            'url'  => cms_route('collections.update', [$current->id]),
-            'class'  => 'form-horizontal '.$cmsSettings->get('ajax_form')
-        ]) !!}
-            {!! Form::hidden('type', null) !!}
+        {{ html()->modelForm($current,
+            'put', cms_route('collections.update', [$current->id])
+        )->class('form-horizontal ' . $cmsSettings->get('ajax_form'))->open() }}
+            {{ html()->hidden('type') }}
             @include('admin.collections.form', [
                 'submit'        => trans('general.update'),
                 'submitAndBack' => trans('general.update_n_back'),
                 'icon'          => 'save'
             ])
-        {!! Form::close() !!}
+        {{ html()->form()->close() }}
     </div>
 </div>
 @endsection

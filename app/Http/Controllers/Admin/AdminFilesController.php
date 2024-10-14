@@ -70,9 +70,10 @@ class AdminFilesController extends Controller
         if ($this->request->expectsJson()) {
             $data['current'] = $this->model;
 
-            $view = view('admin.files.create', $data)->render();
-
-            return response()->json(['result' => true, 'view' => $view]);
+            return response()->json([
+                'result' => true,
+                'view' => view('admin.files.create', $data)->render()
+            ]);
         }
 
         return redirect(cms_route('files.index', [$routeName, $routeId]));
@@ -130,9 +131,10 @@ class AdminFilesController extends Controller
                 ->where('id', $id)
                 ->getOrFail();
 
-            $view = view('admin.files.edit', $data)->render();
-
-            return response()->json(['result' => true, 'view' => $view]);
+            return response()->json([
+                'result' => true,
+                'view' => view('admin.files.edit', $data)->render()
+            ]);
         }
 
         return redirect(cms_route('files.index', [$routeName, $routeId]));

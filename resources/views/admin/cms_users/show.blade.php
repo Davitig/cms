@@ -38,7 +38,7 @@
                 <span class="btn-block text-center">
                     <strong>{{user_roles($current->role)}}</strong>
                 </span>
-            @if (Auth::guard('cms')->user()->isAdmin() || Auth::guard('cms')->id() == $current->id)
+            @if (auth('cms')->user()->isAdmin() || auth('cms')->id() == $current->id)
                 <a href="{{cms_route('cmsUsers.edit', [$current->id])}}" class="btn-block text-center">{{trans('general.edit')}}</a>
             @endif
                 <hr />

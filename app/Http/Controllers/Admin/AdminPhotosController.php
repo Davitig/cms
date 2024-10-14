@@ -73,9 +73,10 @@ class AdminPhotosController extends Controller
             $data['current'] = $this->model;
             $data['current']['gallery_id'] = $galleryId;
 
-            $view = view('admin.galleries.photos.create', $data)->render();
-
-            return response()->json(['result' => true, 'view' => $view]);
+            return response()->json([
+                'result' => true,
+                'view' => view('admin.galleries.photos.create', $data)->render()
+            ]);
         }
 
         return redirect(cms_route('photos.index', [$galleryId]));
@@ -135,9 +136,10 @@ class AdminPhotosController extends Controller
             $data['items'] = $model->joinLanguage(false)->where('id', $id)
                 ->getOrFail();
 
-            $view = view('admin.galleries.photos.edit', $data)->render();
-
-            return response()->json(['result' => true, 'view' => $view]);
+            return response()->json([
+                'result' => true,
+                'view' => view('admin.galleries.photos.edit', $data)->render()
+            ]);
         }
 
         return redirect(cms_route('photos.index', [$galleryId]));

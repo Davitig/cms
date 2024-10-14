@@ -201,10 +201,9 @@ return [
         /*
          * Package Service Providers...
          */
-        Laravel\Tinker\TinkerServiceProvider::class,
-        Collective\Html\HtmlServiceProvider::class,
         Cocur\Slugify\Bridge\Laravel\SlugifyServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
+        Spatie\Html\HtmlServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -274,7 +273,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         // Package Facades
-        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Spatie\Html\Facades\Html::class,
 
     ],
 

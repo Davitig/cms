@@ -28,17 +28,15 @@
         <h2 class="panel-title">Create a new event</h2>
     </div>
     <div class="panel-body">
-        {!! Form::model($current, [
-            'method' => 'post',
-            'url'    => cms_route('events.store', [$current->collection_id]),
-            'class'  => 'form-horizontal'
-        ]) !!}
+        {{ html()->modelForm($current,
+            'post', cms_route('events.store', [$current->collection_id])
+       )->class('form-horizontal')->open() }}
             @include('admin.collections.events.form', [
                 'submit'        => trans('general.create'),
                 'submitAndBack' => trans('general.create_n_close'),
                 'icon'          => 'save'
             ])
-        {!! Form::close() !!}
+        {{ html()->form()->close() }}
     </div>
 </div>
 @endsection

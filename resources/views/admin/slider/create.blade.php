@@ -5,22 +5,21 @@
                 <div class="modal-gallery-image">
                     <img src="{{$current->file ?: $current->file_default}}" class="img-responsive" />
                 </div>
-                {!! Form::model($current, [
-                    'url'   => cms_route('slider.store'),
-                    'class' => 'form-create form-horizontal'
-                ]) !!}
+                {{ html()->modelForm($current,
+                    'post', cms_route('slider.store')
+                )->class('form-create form-horizontal')->open() }}
                 <div class="modal-body">
                     <div class="row">
                         @include('admin.slider.form')
                     </div>
                 </div>
-                {!!Form::close()!!}
+                {{ html()->form()->close() }}
             </div>
         </div>
         <script type="text/javascript">
-            var formSelector = '#form-modal .form-create';
+            var formSelector = $('#form-modal').find('.form-create');
 
-            $(formSelector).on('submit', function(e) {
+            formSelector.on('submit', function(e) {
                 e.preventDefault();
 
                 var form = $(this);
@@ -54,9 +53,18 @@
                 });
             });
 
-            $(formSelector + ' #file').on('fileSet', function() {
-                $('.modal-gallery-image img').attr('src', $(this).val());
+            formSelector.find('[name="file"]').on('fileSet', function() {
+                var fileValue = $(this).val();
+                var result = getFileImage(fileValue);
+
+                var photoSelector = $('.modal-gallery-image img');
+                photoSelector.removeClass('not-photo');
+                if (! result.isPhoto) {
+                    photoSelector.addClass('not-photo');
+                }
+                photoSelector.attr('src', result.file);
             });
         </script>
+        @include('admin._scripts.get_file_func')
     </div>
 @endif

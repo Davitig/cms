@@ -5,16 +5,15 @@
                 <div class="modal-gallery-image">
                     <img src="{{$current->file ?: $current->file_default}}" class="img-responsive" />
                 </div>
-                {!! Form::model($current, [
-                    'url'   => cms_route('photos.store', [$current->gallery_id]),
-                    'class' => 'form-create form-horizontal'
-                ]) !!}
+                {{ html()->modelForm($current,
+                    'post', cms_route('photos.store', [$current->gallery_id])
+                )->class('form-create form-horizontal')->open() }}
                 <div class="modal-body">
                     <div class="row">
                         @include('admin.galleries.photos.form')
                     </div>
                 </div>
-                {!!Form::close()!!}
+                {{ html()->form()->close() }}
             </div>
         </div>
         <script type="text/javascript">
@@ -61,9 +60,18 @@
                 });
             });
 
-            $('#file', formSelector).on('fileSet', function() {
-                $('.modal-gallery-image img').attr('src', $(this).val());
+            formSelector.find('[name="file"]').on('fileSet', function() {
+                var fileValue = $(this).val();
+                var result = getFileImage(fileValue);
+
+                var photoSelector = $('.modal-gallery-image img');
+                photoSelector.removeClass('not-photo');
+                if (! result.isPhoto) {
+                    photoSelector.addClass('not-photo');
+                }
+                photoSelector.attr('src', result.file);
             });
         </script>
+        @include('admin._scripts.get_file_func')
     </div>
 @endif

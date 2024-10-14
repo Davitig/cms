@@ -150,15 +150,15 @@
             </li>
             <li class="dropdown user-profile">
                 <a href="#" data-toggle="dropdown">
-                    <img src="{{ Auth::guard('cms')->user()->photo }}" alt="user-image" class="img-circle img-inline userpic-32" width="28" />
+                    <img src="{{ auth('cms')->user()->photo }}" alt="user-image" class="img-circle img-inline userpic-32" width="28" />
                     <span>
-                        {{Auth::guard('cms')->user()->first_name}} {{Auth::guard('cms')->user()->last_name}}
+                        {{auth('cms')->user()->first_name}} {{auth('cms')->user()->last_name}}
                         <i class="fa fa-angle-down"></i>
                     </span>
                 </a>
                 <ul class="dropdown-menu user-profile-menu list-unstyled">
                     <li>
-                        <a href="{{cms_route('cmsUsers.show', [$userId = Auth::guard('cms')->id()])}}">
+                        <a href="{{cms_route('cmsUsers.show', [$userId = auth('cms')->id()])}}">
                             <i class="{{icon_type('cmsUsers')}}"></i>
                             Profile
                         </a>

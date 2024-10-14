@@ -18,11 +18,11 @@
                                 <a href="#" class="transfer btn btn-white" title="Transfer to another menu" data-id="{{$item->id}}">
                                     <span class="{{icon_type('menus')}}"></span>
                                 </a>
-                                {!! Form::open(['method' => 'post', 'url' => cms_route('pages.visibility', [$item->id]), 'class' => 'visibility', 'id' => 'visibility' . $item->id]) !!}
+                                {{ html()->form('post', cms_route('pages.visibility', [$item->id]))->id('visibility' . $item->id)->class('visibility')->open() }}
                                 <button type="submit" class="btn btn-{{$item->visible ? 'white' : 'gray'}}" title="{{trans('general.visibility')}}">
                                     <span class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></span>
                                 </button>
-                                {!! Form::close() !!}
+                                {{ html()->form()->close() }}
                                 <a href="{{ cms_route('files.index', ['pages', $item->id]) }}" class="btn btn-{{$item->has_file ? 'turquoise' : 'white'}}" title="{{trans('general.files')}}">
                                     <span class="{{icon_type('files')}}"></span>
                                 </a>
@@ -37,11 +37,11 @@
                                 <a href="{{ $editUrl }}" class="btn btn-orange" title="{{trans('general.edit')}}">
                                     <span class="fa fa-edit"></span>
                                 </a>
-                                {!! Form::open(['method' => 'delete', 'url' => cms_route('pages.destroy', [$menu->id, $item->id]), 'class' => 'form-delete']) !!}
+                                {{ html()->form('delete', cms_route('pages.destroy', [$menu->id, $item->id]))->class('form-delete')->open() }}
                                 <button type="submit" class="btn btn-danger" title="{{trans('general.delete')}}"{{has_model_sub_items($item) ? ' disabled' : ''}}>
                                     <span class="fa fa-trash"></span>
                                 </button>
-                                {!! Form::close() !!}
+                                {{ html()->form()->close() }}
                             </div>
                             <a href="#" class="btn btn-primary btn-toggle pull-right">
                                 <span class="fa fa-toggle-left"></span>

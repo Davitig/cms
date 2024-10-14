@@ -3,11 +3,7 @@
         <label class="control-label required">Title:</label>
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-header"></i></span>
-            {!! Form::text('title', null, [
-                'id' => 'title' . $current->language,
-                'class' => 'form-control',
-                'autofocus'
-            ]) !!}
+            {{ html()->text('title')->id('title' . $current->language)->class('form-control')->autofocus() }}
         </div>
     </div>
 </div>
@@ -16,47 +12,33 @@
         <label class="control-label required">Image:</label>
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-image"></i></span>
-            {!! Form::text('file', null, [
-                'id' => 'file' . $current->language,
-                'class' => 'form-control',
-                'data-lang' => 1
-            ]) !!}
+            {{ html()->text('file')->id('file' . $current->language)->class('form-control')->data('lang', 1) }}
             <div class="input-group-btn popup" data-browse="file{{$current->language}}">
                 <span class="btn btn-info">Browse</span>
             </div>
         </div>
     </div>
-</div><div class="col-md-12">
+</div>
+<div class="col-md-12">
     <div class="form-group">
         <label class="control-label">Link:</label>
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-link"></i></span>
-            {!! Form::text('link', null, [
-                'id' => 'link' . $current->language,
-                'class' => 'form-control',
-                'autofocus'
-            ]) !!}
+            {{ html()->text('link')->id('link' . $current->language)->class('form-control') }}
         </div>
     </div>
 </div>
 <div class="col-md-12">
     <div class="form-group">
         <label class="control-label">Short description:</label>
-        {!! Form::textarea('description', null, [
-            'id' => 'description' . $current->language,
-            'class' => 'form-control',
-            'rows' => '2'
-        ]) !!}
+        {{ html()->textarea('description')->id('description' . $current->language)->class('form-control')->rows(2) }}
     </div>
 </div>
 <div class="col-md-12">
     <div class="form-group">
         <label class="control-label">Visible:</label>
-        {!! Form::checkbox('visible', null, null, [
-            'id' => 'visible' . $current->language,
-            'class' => 'iswitch iswitch-secondary',
-            'data-lang' => 1
-        ]) !!}
+        {{ html()->checkbox('visible')->id('visible' . $current->language)
+        ->class('iswitch iswitch-secondary')->data('lang', 1) }}
     </div>
 </div>
 <button type="button" class="btn btn-md btn-white" data-dismiss="modal">{{trans('general.close')}}</button>

@@ -3,10 +3,7 @@
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-header"></i></span>
-            {!! Form::text('title', null, [
-                'id' => 'title' . $current->language,
-                'class' => 'form-control',
-            ]) !!}
+            {{ html()->text('title')->id('title')->class('form-control') }}
         </div>
         @if ($error)
             <span class="text-danger">{{$error}}</span>
@@ -21,10 +18,10 @@
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-ellipsis-h"></i></span>
-            {!! Form::select('type', cms_collections('types'), null, [
-                'id' => 'type',
-                'class' => 'form-control select',
-            ] + ($current->id ? ['disabled' => 'disabled'] : [])) !!}
+            {{ html()->select('type', cms_collections('types'))->id('type')->class('form-control select')
+            ->ifNotNull($current->id, function ($html) {
+                return $html->attribute('disabled');
+            }) }}
         </div>
         @if ($error)
         <span class="text-danger">{{$error}}</span>
@@ -41,10 +38,8 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-list-ol"></i></span>
-                    {!! Form::select('admin_order_by', $orderBy = cms_collections('order_by'), null, [
-                        'id' => 'admin_order_by',
-                        'class' => 'form-control select',
-                    ]) !!}
+                    {{ html()->select('admin_order_by', $orderBy = cms_collections('order_by'))
+                    ->id('admin_order_by')->class('form-control select') }}
                 </div>
                 @if ($error)
                 <span class="text-danger">{{$error}}</span>
@@ -58,10 +53,7 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-list-ol"></i></span>
-                    {!! Form::select('web_order_by', $orderBy, null, [
-                        'id' => 'web_order_by',
-                        'class' => 'form-control select',
-                    ]) !!}
+                    {{ html()->select('web_order_by', $orderBy)->id('web_order_by')->class('form-control select') }}
                 </div>
                 @if ($error)
                 <span class="text-danger">{{$error}}</span>
@@ -80,10 +72,7 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-sort"></i></span>
-                    {!! Form::select('admin_sort', cms_collections('sort'), null, [
-                        'id' => 'admin_sort',
-                        'class' => 'form-control select',
-                    ]) !!}
+                    {{ html()->select('admin_sort', cms_collections('sort'))->id('admin_sort')->class('form-control select') }}
                 </div>
                 @if ($error)
                 <span class="text-danger">{{$error}}</span>
@@ -97,10 +86,7 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-sort"></i></span>
-                    {!! Form::select('web_sort', cms_collections('sort'), null, [
-                        'id' => 'web_sort',
-                        'class' => 'form-control select',
-                    ]) !!}
+                    {{ html()->select('web_sort', cms_collections('sort'))->class('form-control select') }}
                 </div>
                 @if ($error)
                 <span class="text-danger">{{$error}}</span>
@@ -121,10 +107,7 @@
                     <div class="input-group-btn">
                         <span class="btn btn-info" data-type="decrement">-</span>
                     </div>
-                    {!! Form::text('admin_per_page', null, [
-                        'class' => 'form-control text-center',
-                        'readonly' => 1
-                    ]) !!}
+                    {{ html()->text('admin_per_page')->class('form-control text-center')->readonly(1) }}
                     <div class="input-group-btn">
                         <span class="btn btn-info" data-type="increment">+</span>
                     </div>
@@ -143,10 +126,7 @@
                     <div class="input-group-btn">
                         <span class="btn btn-info" data-type="decrement">-</span>
                     </div>
-                    {!! Form::text('web_per_page', null, [
-                        'class' => 'form-control text-center',
-                        'readonly' => 1
-                    ]) !!}
+                    {{ html()->text('web_per_page')->class('form-control text-center')->readonly(1) }}
                     <div class="input-group-btn">
                         <span class="btn btn-info" data-type="increment">+</span>
                     </div>
@@ -164,7 +144,7 @@
 <div class="form-group">
     <label class="col-sm-2 control-label">Description:</label>
     <div class="col-sm-10">
-        {!! Form::textarea('description', null, ['class' => 'form-control', 'rows' => '3', 'placeholder' => 'Short description']) !!}
+        {{ html()->textarea('description')->class('form-control')->rows(3)->placeholder('Short description') }}
     </div>
 </div>
 
@@ -191,7 +171,7 @@
 @push('body.bottom')
 <script type="text/javascript">
 $(function() {
-    $('.select').select2({
+    $('select.select').select2({
         placeholder: 'Select type...',
         allowClear: true
     }).on('select2-open', function() {

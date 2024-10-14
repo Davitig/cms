@@ -28,18 +28,16 @@
         <h2 class="panel-title">Create a new page</h2>
     </div>
     <div class="panel-body">
-        {!! Form::model($current, [
-            'method' => 'post',
-            'url'    => cms_route('pages.store', [$current->menu_id]),
-            'class'  => 'form-horizontal'
-        ]) !!}
-            {!! Form::hidden('parent_id', null) !!}
+        {{ html()->modelForm($current,
+            'post', cms_route('pages.store', [$current->menu_id])
+        )->class('form-horizontal')->open() }}
+            {{ html()->hidden('parent_id') }}
             @include('admin.pages.form', [
                 'submit'        => trans('general.create'),
                 'submitAndBack' => trans('general.create_n_close'),
                 'icon'          => 'save'
             ])
-        {!! Form::close() !!}
+        {{ html()->form()->close() }}
     </div>
 </div>
 @include('admin.pages.scripts')

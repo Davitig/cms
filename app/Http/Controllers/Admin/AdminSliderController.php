@@ -62,9 +62,10 @@ class AdminSliderController extends Controller
         if ($this->request->expectsJson()) {
             $data['current'] = $this->model;
 
-            $view = view('admin.slider.create', $data)->render();
-
-            return response()->json(['result' => true, 'view' => $view]);
+            return response()->json([
+                'result' => true,
+                'view' => view('admin.slider.create', $data)->render()
+            ]);
         }
 
         return redirect(cms_route('slider.index'));
@@ -118,9 +119,10 @@ class AdminSliderController extends Controller
                 ->forAdmin(false)
                 ->getOrFail();
 
-            $view = view('admin.slider.edit', $data)->render();
-
-            return response()->json(['result' => true, 'view' => $view]);
+            return response()->json([
+                'result' => true,
+                'view' => view('admin.slider.edit', $data)->render()
+            ]);
         }
 
         return redirect(cms_route('slider.index'));

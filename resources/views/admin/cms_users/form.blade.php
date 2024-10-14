@@ -4,10 +4,7 @@
         <div class="col-sm-10">
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-at"></i></span>
-                {!! Form::text('email', null, [
-                    'id' => 'email',
-                    'class' => 'form-control',
-                ]) !!}
+                {{ html()->text('email')->id('email')->class('form-control') }}
             </div>
             @if ($error)
             <span class="text-danger">{{$error}}</span>
@@ -22,10 +19,7 @@
                 <div class="col-sm-8">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-user-secret"></i></span>
-                        {!! Form::text('first_name', null, [
-                            'id' => 'first_name',
-                            'class' => 'form-control',
-                        ]) !!}
+                        {{ html()->text('first_name')->id('first_name')->class('form-control') }}
                     </div>
                     @if ($error)
                     <span class="text-danger">{{$error}}</span>
@@ -39,10 +33,7 @@
                 <div class="col-sm-8">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-user-secret"></i></span>
-                        {!! Form::text('last_name', null, [
-                            'id' => 'last_name',
-                            'class' => 'form-control',
-                        ]) !!}
+                        {{ html()->text('last_name')->id('last_name')->class('form-control') }}
                     </div>
                     @if ($error)
                     <span class="text-danger">{{$error}}</span>
@@ -52,23 +43,20 @@
         </div>
     </div>
 
-    @if (Auth::guard('cms')->user()->isAdmin() && Auth::guard('cms')->id() != $current->id)
+    @if (auth('cms')->user()->isAdmin() && auth('cms')->id() != $current->id)
         <div class="form-group-separator"></div>
 
         <div class="form-group{{($error = $errors->first('role')) ? ' validate-has-error' : '' }}">
             <label class="col-sm-2 control-label text-left required">Role:</label>
             <div class="col-sm-10">
-                {!! Form::select('role', $roles, null, [
-                    'id' => 'role',
-                    'class' => 'form-control',
-                ]) !!}
+                {{ html()->select('role', $roles)->id('role')->class('form-control') }}
                 @if ($error)
                     <span class="text-danger">{{$error}}</span>
                 @endif
             </div>
         </div>
     @else
-        {!! Form::hidden('role', null) !!}
+        {{ html()->hidden('role') }}
     @endif
 
     <div class="row">
@@ -78,10 +66,7 @@
                 <div class="col-sm-8">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-                        {!! Form::text('phone', null, [
-                            'id' => 'phone',
-                            'class' => 'form-control',
-                        ]) !!}
+                        {{ html()->text('phone')->id('phone')->class('form-control') }}
                     </div>
                     @if ($error)
                         <span class="text-danger">{{$error}}</span>
@@ -95,10 +80,7 @@
                 <div class="col-sm-8">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-building-o"></i></span>
-                        {!! Form::text('address', null, [
-                            'id' => 'address',
-                            'class' => 'form-control',
-                        ]) !!}
+                        {{ html()->text('address')->id('address')->class('form-control') }}
                     </div>
                     @if ($error)
                         <span class="text-danger">{{$error}}</span>
@@ -110,14 +92,11 @@
 
     <div class="form-group-separator"></div>
 
-@if (Auth::guard('cms')->id() != $current->id)
+@if (auth('cms')->id() != $current->id)
     <div class="form-group">
         <label class="col-sm-2 control-label text-left">Block:</label>
         <div class="col-sm-10">
-            {!! Form::checkbox('blocked', null, null, [
-                'id' => 'blocked',
-                'class' => 'iswitch iswitch-secondary'
-            ]) !!}
+            {{ html()->checkbox('blocked')->id('blocked')->class('form-control') }}
         </div>
     </div>
 
@@ -129,10 +108,7 @@
         <div class="col-sm-6">
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-image"></i></span>
-                {!! Form::text('photo', null, [
-                    'id' => 'photo',
-                    'class' => 'form-control'
-                ]) !!}
+                {{ html()->text('photo')->id('photo')->class('form-control') }}
                 <div class="input-group-btn popup" data-browse="photo">
                     <span class="btn btn-info">Browse</span>
                 </div>

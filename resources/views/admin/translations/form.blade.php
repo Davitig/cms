@@ -1,11 +1,7 @@
 <div class="form-group{{($error = $errors->first('title')) ? ' validate-has-error' : '' }}">
     <label class="col-sm-2 control-label required">Title:</label>
     <div class="col-sm-6">
-        {!! Form::text('title', null, [
-            'id' => 'title' . $current->language,
-            'class' => 'form-control',
-            'data-lang' => 1
-        ]) !!}
+        {{ html()->text('title')->id('title' . $current->language)->class('form-control')->data('lang', 1) }}
         @if ($error)
         <span class="text-danger">{{$error}}</span>
         @endif
@@ -18,11 +14,11 @@
 <div class="form-group{{($error = $errors->first('code')) ? ' validate-has-error' : '' }}">
     <label class="col-sm-2 control-label required">Code:</label>
     <div class="col-sm-6">
-        {!! Form::text('code', null, [
-            'id' => 'code' . $current->language,
-            'class' => 'form-control',
-            'data-lang' => 1
-        ] + ($current->code ? ['readonly'] : [])) !!}
+        {{ html()->text('code')->id('code' . $current->language)
+        ->class('form-control')
+        ->ifNotNull($current->code, function ($html) {
+            return $html->readonly();
+        }) }}
         @if ($error)
             <span class="text-danger">{{$error}}</span>
         @endif
@@ -35,10 +31,7 @@
 <div class="form-group{{($error = $errors->first('value')) ? ' validate-has-error' : '' }}">
     <label class="col-sm-2 control-label required">Value:</label>
     <div class="col-sm-6">
-        {!! Form::text('value', null, [
-            'id' => 'value' . $current->language,
-            'class' => 'form-control',
-        ]) !!}
+        {{ html()->text('value')->id('value' . $current->language)->class('form-control') }}
         @if ($error)
         <span class="text-danger">{{$error}}</span>
         @endif
@@ -51,11 +44,8 @@
 <div class="form-group">
     <label class="col-sm-2 control-label">Type:</label>
     <div class="col-sm-6">
-        {!! Form::select('type', ['' => 'Global'] + $transTypes, null, [
-            'id' => 'type' . $current->language,
-            'class' => 'form-control',
-            'data-lang' => 1
-        ]) !!}
+        {{ html()->select('type', ['' => 'Global'] + $transTypes)
+        ->id('type' . $current->language)->class('form-control')->data('lang', 1) }}
         <div class="desc">The type that will separate translations.</div>
     </div>
 </div>

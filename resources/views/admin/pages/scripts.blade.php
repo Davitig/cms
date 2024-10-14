@@ -5,7 +5,7 @@
 @push('body.bottom')
     <script type="text/javascript">
         $(function() {
-            $('.select').select2({
+            $('select.select').select2({
                 placeholder: 'Select item',
                 allowClear: true
             }).on('select2-open', function() {

@@ -63,11 +63,11 @@
                             <a href="{{ cms_route('collections.edit', [$item->id]) }}" class="btn btn-orange" title="{{trans('general.edit')}}">
                                 <span class="fa fa-edit"></span>
                             </a>
-                            {!! Form::open(['method' => 'delete', 'url' => cms_route('collections.destroy', $item->id), 'class' => 'form-delete']) !!}
+                            {{ html()->form('delete', cms_route('collections.destroy', $item->id))->class('form-delete')->open() }}
                             <button type="submit" class="btn btn-danger" title="{{trans('general.delete')}}">
                                 <span class="fa fa-trash"></span>
                             </button>
-                            {!! Form::close() !!}
+                            {{ html()->form()->close() }}
                         </div>
                     </td>
                 </tr>

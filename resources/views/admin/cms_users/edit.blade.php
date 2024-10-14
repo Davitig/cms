@@ -22,11 +22,9 @@
 </div>
 <div class="panel panel-headerless">
     <div class="panel-body">
-        {!! Form::model($current, [
-            'method' => 'put',
-            'url'    => cms_route('cmsUsers.update', [$current->id]),
-            'class'  => 'form-horizontal '.$cmsSettings->get('ajax_form')
-        ]) !!}
+        {{ html()->modelForm($current,
+            'put', cms_route('cmsUsers.update', [$current->id])
+        )->class('form-horizontal ' . $cmsSettings->get('ajax_form'))->open() }}
             <div class="member-form-add-header">
                 <div class="row">
                     <div class="col-md-2 col-sm-4 pull-right-sm">
@@ -54,7 +52,7 @@
                 'submitAndBack' => trans('general.update_n_back'),
                 'icon'          => 'save'
             ])
-        {!! Form::close() !!}
+        {{ html()->form()->close() }}
     </div>
 </div>
 @push('body.bottom')

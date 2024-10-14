@@ -109,7 +109,7 @@
             <div class="gallery-sidebar">
                 <a href="{{cms_route('galleries.create', [$parent->collection_id, 'type' => $parent->type])}}" class="btn btn-block btn-secondary btn-icon btn-icon-standalone btn-icon-standalone-right">
                     <i class="{{$icon}}"></i>
-                    <span>ალბომის დამატება</span>
+                    <span>Add gallery</span>
                 </a>
                 <ul class="list-unstyled">
                 @foreach ($parentSimilar as $item)
@@ -126,17 +126,14 @@
     </div>
 </section>
 @push('body.bottom')
-<script type="text/javascript">
-$(function() {
-    var routeCreate = '{!!cms_route('videos.create', [$parent->id, 'sort' => $parent->admin_sort, 'page' => $items->currentPage(), 'lastPage' => $items->lastPage()])!!}';
-    var routeIndex = '{{cms_route('videos.index', [$parent->id])}}';
-    var routePosition = '{{cms_route('videos.updatePosition')}}';
-    var sort = '{{$parent->admin_sort}}';
-    var page = '{{request('page', 1)}}';
-    var hasMorePages = '{{$items->hasMorePages()}}';
-    @include('admin._scripts.album', ['orderBy' => $parent->admin_order_by, 'sort' => $parent->admin_sort])
-});
-</script>
+@include('admin._scripts.album', [
+    'routeCreate' => cms_route('videos.create', [$parent->id, 'sort' => $parent->admin_sort, 'page' => $items->currentPage(), 'lastPage' => $items->lastPage()]),
+    'routeIndex' => cms_route('videos.index', [$parent->id]),
+    'routePosition' => cms_route('videos.updatePosition'),
+    'sort' => $parent->admin_sort,
+    'page' => request('page', 1),
+    'hasMorePages' => $items->hasMorePages()
+])
 <script src="{{ asset('assets/libs/js/jquery-ui/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('assets/libs/js/uikit/js/uikit.min.js') }}"></script>
 <script src="{{ asset('assets/libs/js/uikit/js/addons/nestable.min.js') }}"></script>

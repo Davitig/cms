@@ -22,17 +22,15 @@
 </div>
 <div class="panel panel-headerless">
     <div class="panel-body">
-        {!! Form::model($current, [
-            'method' => 'post',
-            'url'    => cms_route('cmsUsers.store'),
-            'class'  => 'form-horizontal'
-        ]) !!}
+        {{ html()->modelForm($current,
+            'post', cms_route('cmsUsers.store')
+        )->class('form-horizontal')->open() }}
             @include('admin.cms_users.form', [
                 'submit'        => trans('general.create'),
                 'submitAndBack' => trans('general.create_n_close'),
                 'icon'          => 'save'
             ])
-        {!! Form::close() !!}
+        {{ html()->form()->close() }}
     </div>
 </div>
 @endsection

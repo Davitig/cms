@@ -13,7 +13,7 @@
         $(function () {
             $('#elfinder').elfinder({
                 // set your elFinder options here
-                customData: { 
+                customData: {
                     _token: '{{ csrf_token() }}'
                 },
                 url: '{{ cms_route('filemanager.connector', ['hide_disks' => 1]) }}',  // connector URL

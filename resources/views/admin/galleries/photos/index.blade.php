@@ -82,7 +82,13 @@
                 <li id="item{{$item->id}}" data-id="{{$item->id}}" data-pos="{{$item->position}}" data-url="{{cms_route('photos.edit', [$parent->id, $item->id])}}" class="item col-lg-3 col-md-4 col-sm-4 col-xs-6">
                     <div class="album-image">
                         <a href="#" class="thumb" data-modal="edit">
-                            <img src="{{$item->file ?: $item->file_default}}" class="img-responsive" alt="{{$item->title}}" />
+                            @if (in_array($ext = pathinfo($item->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
+                                <img src="{{$item->file}}" class="img-responsive" alt="{{$item->title}}" />
+                            @elseif(! empty($ext))
+                                <img src="{{asset('assets/libs/images/file-ext-icons/'.$ext.'.png')}}" class="img-responsive" alt="{{$item->title}}" />
+                            @else
+                                <img src="{{asset('assets/libs/images/file-ext-icons/www.png')}}" class="img-responsive" alt="{{$item->title}}" />
+                            @endif
                         </a>
                         <a href="#" class="name">
                             <span class="title">{{$item->title}}</span>
@@ -109,7 +115,7 @@
             <div class="gallery-sidebar">
                 <a href="{{cms_route('galleries.create', [$parent->collection_id, 'type' => $parent->type])}}" class="btn btn-block btn-secondary btn-icon btn-icon-standalone btn-icon-standalone-right">
                     <i class="{{$icon}}"></i>
-                    <span>ალბომის დამატება</span>
+                    <span>Add gallery</span>
                 </a>
                 <ul class="list-unstyled">
                 @foreach ($parentSimilar as $item)
@@ -126,17 +132,14 @@
     </div>
 </section>
 @push('body.bottom')
-<script type="text/javascript">
-$(function() {
-    var routeCreate = '{!!cms_route('photos.create', [$parent->id, 'sort' => $parent->admin_sort, 'page' => $items->currentPage(), 'lastPage' => $items->lastPage()])!!}';
-    var routeIndex = '{{cms_route('photos.index', [$parent->id])}}';
-    var routePosition = '{{cms_route('photos.updatePosition')}}';
-    var sort = '{{$parent->admin_sort}}';
-    var page = '{{request('page', 1)}}';
-    var hasMorePages = '{{$items->hasMorePages()}}';
-    @include('admin._scripts.album')
-});
-</script>
+@include('admin._scripts.album', [
+    'routeCreate' => cms_route('photos.create', [$parent->id, 'sort' => $parent->admin_sort, 'page' => $items->currentPage(), 'lastPage' => $items->lastPage()]),
+    'routeIndex' => cms_route('photos.index', [$parent->id]),
+    'routePosition' => cms_route('photos.updatePosition'),
+    'sort' => $parent->admin_sort,
+    'page' => request('page', 1),
+    'hasMorePages' => $items->hasMorePages()
+])
 <script src="{{ asset('assets/libs/js/jquery-ui/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('assets/libs/js/uikit/js/uikit.min.js') }}"></script>
 <script src="{{ asset('assets/libs/js/uikit/js/addons/nestable.min.js') }}"></script>

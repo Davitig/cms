@@ -8,18 +8,18 @@
                             <div class="modal-gallery-image embed-responsive embed-responsive-16by9">
                                 <iframe src="{{get_youtube_embed($current->file)}}" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe>
                             </div>
-                            {!! Form::model($current, [
-                                'method' => 'put',
-                                'url'    => cms_route('videos.update', [$current->gallery_id, $current->id], is_multilanguage() ? $current->language : null),
-                                'class'  => 'form-horizontal '.$cmsSettings->get('ajax_form'),
-                                'data-lang' => $current->language
-                            ]) !!}
+                            {{ html()->modelForm($current,
+                                'put', cms_route('videos.update', [
+                                    $current->gallery_id, $current->id
+                                ], is_multilanguage() ? $current->language : null)
+                            )->class('form-horizontal ' . $cmsSettings->get('ajax_form'))
+                            ->data('lang', $current->language)->open() }}
                             <div class="modal-body">
                                 <div class="row">
                                     @include('admin.galleries.videos.form')
                                 </div>
                             </div>
-                            {!!Form::close()!!}
+                            {{ html()->form()->close() }}
                         </div>
                     @endforeach
                 </div>
@@ -39,20 +39,19 @@
         </div>
         <script type="text/javascript">
             var currentLang = '{{language()}}';
-            var formSelector = '#form-modal .ajax-form';
-            $(formSelector).on('ajaxFormSuccess', function(e, data) {
+            var formSelector = $('#form-modal').find('.{{$cmsSettings->get('ajax_form')}}');
+
+            formSelector.on('ajaxFormSuccess', function(e, data) {
                 var lang = $(this).data('lang');
                 if (lang === currentLang) {
-                    var item = $(formSelector + '[data-lang="'+lang+'"]');
+                    var title   = $('[name="title"]', this).val();
+                    // var file    = $('[name="file"]', this).val();
+                    var visible = $('[name="visible"]', this).prop('checked');
 
-                    var title   = $('[name="title"]', item).val();
-                    // var file    = $('[name="file"]', item).val();
-                    var visible = $('[name="visible"]', item).prop('checked');
-
-                    item = $('.gallery-env #item{{$current->id}}');
+                    var item = $('.gallery-env #item{{$current->id}}');
                     $('.title', item).text(title);
-                    $('.thumb iframe', item).attr('src', data.youtube);
-                    $('#form-modal').find('iframe').attr('src', data.youtube);
+                    $('.thumb iframe', item).attr('src', data.input.youtube);
+                    $('#form-modal').find('iframe').attr('src', data.input.youtube);
 
                     var icon = (visible ? 'fa fa-eye' : 'fa fa-eye-slash');
                     $('.visibility i', item).attr('class', icon);

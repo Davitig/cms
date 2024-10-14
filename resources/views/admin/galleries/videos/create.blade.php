@@ -5,16 +5,15 @@
                 <div class="modal-gallery-image embed-responsive embed-responsive-16by9">
                     <iframe width="600" height="315" src="" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe>
                 </div>
-                {!! Form::model($current, [
-                    'url'   => cms_route('videos.store', [$current->gallery_id]),
-                    'class' => 'form-create form-horizontal'
-                ]) !!}
+                {{ html()->modelForm($current,
+                    'post', cms_route('videos.store', [$current->gallery_id])
+                )->class('form-create form-horizontal')->open() }}
                 <div class="modal-body">
                     <div class="row">
                         @include('admin.galleries.videos.form')
                     </div>
                 </div>
-                {!!Form::close()!!}
+                {{ html()->form()->close() }}
             </div>
         </div>
         <script type="text/javascript">

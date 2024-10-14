@@ -37,36 +37,30 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                {!! Form::text('name', null, [
-                                    'class' => 'form-control',
-                                    'placeholder' => $trans->get('name', 'სახელი'),
-                                    'data-trans' => 'name',
-                                    'data-trans-attr' => 'placeholder',
-                                ]) !!}
+                                {{ html()->text('name')->class('form-control')
+                                    ->placeholder($trans->get('name', 'Name'))
+                                    ->data('trans', 'name')
+                                    ->data('trans-attr', 'placeholder') }}
                                 @if ($error = $errors->first('name'))
                                     <div class="text-danger">{{$error}}</div>
                                 @endif
                             </div>
                             <!-- .form-group -->
                             <div class="form-group">
-                                {!! Form::text('email', null, [
-                                    'class' => 'form-control',
-                                    'placeholder' => $trans->get('email', 'ელ.ფოსტა'),
-                                    'data-trans' => 'email',
-                                    'data-trans-attr' => 'placeholder',
-                                ]) !!}
+                                {{ html()->text('email')->class('form-control')
+                                    ->placeholder($trans->get('email', 'Email'))
+                                    ->data('trans', 'email')
+                                    ->data('trans-attr', 'placeholder') }}
                                 @if ($error = $errors->first('email'))
                                     <div class="text-danger">{{$error}}</div>
                                 @endif
                             </div>
                             <!-- .form-group -->
                             <div class="form-group">
-                                {!! Form::text('phone', null, [
-                                    'class' => 'form-control',
-                                    'placeholder' => $trans->get('phone', 'ტელეფონი'),
-                                    'data-trans' => 'phone',
-                                    'data-trans-attr' => 'placeholder',
-                                ]) !!}
+                                {{ html()->text('phone')->class('form-control')
+                                    ->placeholder($trans->get('phone', 'Phone'))
+                                    ->data('trans', 'phone')
+                                    ->data('trans-attr', 'placeholder') }}
                                 @if ($error = $errors->first('phone'))
                                     <div class="text-danger">{{$error}}</div>
                                 @endif
@@ -75,7 +69,7 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <input type="text" name="captcha" autocomplete="off" class="form-control" placeholder="{{$trans->get('enter_code', 'შეიყვანეთ კოდი')}}" data-trans="enter_code" data-trans-attr="placeholder">
+                                        <input type="text" name="captcha" autocomplete="off" class="form-control" placeholder="{{$trans->get('enter_code', 'Enter the code')}}" data-trans="enter_code" data-trans-attr="placeholder">
                                         @if ($error = $errors->first('captcha'))
                                             <span class="text-danger">{{$error}}</span>
                                         @endif
@@ -91,11 +85,10 @@
                         <!-- .col-md-6 -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                {!! Form::textarea('text', null, [
-                                    'class' => 'form-control',
-                                    'placeholder' => $trans->get('text', 'ტექსტი'),
-                                    'data-trans' => 'text',
-                                ]) !!}
+                                {{ html()->textarea('text')->class('form-control')
+                                    ->placeholder($trans->get('text', 'Text'))
+                                    ->data('trans', 'text')
+                                    ->rows(8) }}
                                 @if ($error = $errors->first('text'))
                                     <span class="text-danger">{{$error}}</span>
                                 @endif
@@ -106,7 +99,7 @@
                     </div>
                     <!-- .row -->
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary" data-trans="send">{{$trans->get('send', 'გაგზავნა')}}</button>
+                        <button type="submit" class="btn btn-primary" data-trans="send">{{$trans->get('send', 'Send')}}</button>
                     </div>
                     <!-- .form-group -->
                 </form>

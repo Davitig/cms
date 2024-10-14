@@ -72,18 +72,18 @@
         <div class="tab-content">
         @foreach ($items as $current)
             <div class="tab-pane{{language() != $current->language ? '' : ' active'}}" id="item-{{$current->language}}">
-                {!! Form::model($current, [
-                    'method'    => 'put',
-                    'url'       => cms_route('pages.update', [$current->menu_id, $current->id], is_multilanguage() ? $current->language : null),
-                    'class'     => 'form-horizontal '.$cmsSettings->get('ajax_form'),
-                    'data-lang' => $current->language
-                ]) !!}
+                {{ html()->modelForm($current,
+                    'put', cms_route('pages.update', [
+                        $current->menu_id, $current->id
+                    ], is_multilanguage() ? $current->language : null)
+                )->class('form-horizontal ' . $cmsSettings->get('ajax_form'))
+                ->data('lang', $current->language)->open() }}
                     @include('admin.pages.form', [
                         'submit'        => trans('general.update'),
                         'submitAndBack' => trans('general.update_n_back'),
                         'icon'          => 'save'
                     ])
-                {!! Form::close() !!}
+                {{ html()->form()->close() }}
             </div>
         @endforeach
         </div>

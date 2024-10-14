@@ -70,7 +70,13 @@
                 <li id="item{{$item->id}}" data-id="{{$item->id}}" data-pos="{{$item->position}}" data-url="{{cms_route('slider.edit', [$item->id])}}" class="item col-lg-3 col-md-4 col-sm-4 col-xs-6">
                     <div class="album-image">
                         <a href="#" class="thumb" data-modal="edit">
-                            <img src="{{$item->file ?: $item->file_default}}" class="img-responsive" alt="{{$item->title}}" />
+                            @if (in_array($ext = pathinfo($item->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
+                                <img src="{{$item->file}}" class="img-responsive" alt="{{$item->title}}" />
+                            @elseif(! empty($ext))
+                                <img src="{{asset('assets/libs/images/file-ext-icons/'.$ext.'.png')}}" class="img-responsive" alt="{{$item->title}}" />
+                            @else
+                                <img src="{{asset('assets/libs/images/file-ext-icons/www.png')}}" class="img-responsive" alt="{{$item->title}}" />
+                            @endif
                         </a>
                         <a href="#" class="name">
                             <span class="title">{{$item->title}}</span>
@@ -95,17 +101,14 @@
     </div>
 </section>
 @push('body.bottom')
-<script type="text/javascript">
-$(function() {
-    var routeCreate = '{{cms_route('slider.create')}}';
-    var routeIndex = '{{cms_route('slider.index')}}';
-    var routePosition = '{{cms_route('slider.updatePosition')}}';
-    var sort = 'desc';
-    var page = 0;
-    var hasMorePages = '';
-    @include('admin._scripts.album')
-});
-</script>
+@include('admin._scripts.album', [
+    'routeCreate' => cms_route('slider.create'),
+    'routeIndex' => cms_route('slider.index'),
+    'routePosition' => cms_route('slider.updatePosition'),
+    'sort' => 'desc',
+    'page' => 0,
+    'hasMorePages' => ''
+])
 <script src="{{ asset('assets/libs/js/jquery-ui/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('assets/libs/js/uikit/js/uikit.min.js') }}"></script>
 <script src="{{ asset('assets/libs/js/uikit/js/addons/nestable.min.js') }}"></script>

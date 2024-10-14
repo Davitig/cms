@@ -34,17 +34,13 @@
         </div>
     </div>
     <div class="panel-body">
-        {!! Form::model($current, [
-            'method' => 'post',
-            'url'    => cms_route('menus.store'),
-            'class'  => 'form-horizontal'
-        ]) !!}
+        {{ html()->modelForm($current, 'post', cms_route('menus.store'))->class('form-horizontal')->open() }}
             @include('admin.menus.form', [
                 'submit'        => trans('general.create'),
                 'submitAndBack' => trans('general.create_n_close'),
                 'icon'          => 'save'
             ])
-        {!! Form::close() !!}
+        {{ html()->form()->close() }}
     </div>
 </div>
 @endsection

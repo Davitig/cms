@@ -3,10 +3,7 @@
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-header"></i></span>
-            {!! Form::text('title', null, [
-                'id' => 'title' . $current->language,
-                'class' => 'form-control',
-            ]) !!}
+            {{ html()->text('title')->id('title' . $current->language)->class('form-control') }}
         </div>
         @if ($error)
             <span class="text-danger">{{$error}}</span>
@@ -19,11 +16,8 @@
 <div class="form-group">
     <label class="col-sm-2 control-label">Description:</label>
     <div class="col-sm-10">
-        {!! Form::textarea('description', null, [
-            'id' => 'description' . $current->language,
-            'class' => 'form-control text-editor',
-            'rows' => '10'
-        ]) !!}
+        {{ html()->textarea('description')->id('description' . $current->language)
+        ->class('form-control text-editor')->rows(10) }}
     </div>
 </div>
 
@@ -34,11 +28,8 @@
         <div class="form-group">
             <label class="col-sm-6 control-label">Visible:</label>
             <div class="col-sm-6">
-                {!! Form::checkbox('visible', null, null, [
-                    'id' => 'visible' . $current->language,
-                    'class' => 'iswitch iswitch-secondary',
-                    'data-lang' => 1
-                ]) !!}
+                {{ html()->checkbox('visible', null, null)->id('visible' . $current->language)
+                ->class('iswitch iswitch-secondary')->data('lang', 1) }}
             </div>
         </div>
     </div>

@@ -3,10 +3,7 @@
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-header"></i></span>
-            {!! Form::text('title', null, [
-                'id' => 'title' . $current->language,
-                'class' => 'form-control',
-            ]) !!}
+            {{ html()->text('title')->id('title' . $current->language)->class('form-control') }}
         </div>
         @if ($error)
             <span class="text-danger">{{$error}}</span>
@@ -21,11 +18,7 @@
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-link"></i></span>
-            {!! Form::text('slug', null, [
-                'id' => 'slug' . $current->language,
-                'class' => 'form-control',
-                'data-lang' => 1,
-            ]) !!}
+            {{ html()->text('slug')->id('slug' . $current->language)->class('form-control')->data('lang', 1) }}
         </div>
         @if ($error)
         <span class="text-danger">{{$error}}</span>
@@ -40,10 +33,11 @@
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-ellipsis-h"></i></span>
-            {!! Form::select('type', deep_collection('galleries.types'), null, [
-                'id' => 'type' . $current->language,
-                'class' => 'form-control select',
-            ] + ($current->id ? ['disabled' => 'disabled'] : [])) !!}
+            {{ html()->select('type', deep_collection('galleries.types'))
+            ->id('type' . $current->language)->class('form-control select')
+            ->ifNotNull($current->id, function ($html) {
+                return $html->attribute('disabled');
+            }) }}
         </div>
         @if ($error)
         <span class="text-danger">{{$error}}</span>
@@ -60,10 +54,8 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-list-ol"></i></span>
-                    {!! Form::select('admin_order_by', deep_collection('galleries.order_by'), null, [
-                        'id' => 'admin_order_by',
-                        'class' => 'form-control select',
-                    ]) !!}
+                    {{ html()->select('admin_order_by', deep_collection('galleries.order_by'))
+                    ->id('admin_order_by')->class('form-control select') }}
                 </div>
                 @if ($error)
                 <span class="text-danger">{{$error}}</span>
@@ -78,10 +70,8 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-list-ol"></i></span>
-                    {!! Form::select('web_order_by', deep_collection('galleries.order_by'), null, [
-                        'id' => 'web_order_by',
-                        'class' => 'form-control select',
-                    ]) !!}
+                    {{ html()->select('web_order_by', deep_collection('galleries.order_by'))
+                    ->id('web_order_by')->class('form-control select') }}
                 </div>
                 @if ($error)
                 <span class="text-danger">{{$error}}</span>
@@ -100,11 +90,8 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-sort"></i></span>
-                    {!! Form::select('admin_sort', deep_collection('galleries.sort'), null, [
-                        'id' => 'admin_sort' . $current->language,
-                        'class' => 'form-control select',
-                        'data-lang' => 1
-                    ]) !!}
+                    {{ html()->select('admin_sort', deep_collection('galleries.sort'))
+                    ->id('admin_sort' . $current->language)->class('form-control select')->data('lang', 1) }}
                 </div>
                 @if ($error)
                 <span class="text-danger">{{$error}}</span>
@@ -119,11 +106,8 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-sort"></i></span>
-                    {!! Form::select('web_sort', deep_collection('galleries.sort'), null, [
-                        'id' => 'web_sort' . $current->language,
-                        'class' => 'form-control select',
-                        'data-lang' => 1
-                    ]) !!}
+                    {{ html()->select('web_sort', deep_collection('galleries.sort'))
+                    ->id('web_sort' . $current->language)->class('form-control select')->data('lang', 1) }}
                 </div>
                 @if ($error)
                 <span class="text-danger">{{$error}}</span>
@@ -144,10 +128,7 @@
                     <div class="input-group-btn">
                         <span class="btn btn-info" data-type="decrement">-</span>
                     </div>
-                    {!! Form::text('admin_per_page', null, [
-                        'class' => 'admin_per_page form-control text-center',
-                        'readonly' => 1,
-                    ]) !!}
+                    {{ html()->text('admin_per_page')->class('form-control text-center')->readonly() }}
                     <div class="input-group-btn">
                         <span class="btn btn-info" data-type="increment">+</span>
                     </div>
@@ -167,10 +148,7 @@
                     <div class="input-group-btn">
                         <span class="btn btn-info" data-type="decrement">-</span>
                     </div>
-                    {!! Form::text('web_per_page', null, [
-                        'class' => 'web_per_page form-control text-center',
-                        'readonly' => 1
-                    ]) !!}
+                    {{ html()->text('web_per_page')->class('form-control text-center')->readonly() }}
                     <div class="input-group-btn">
                         <span class="btn btn-info" data-type="increment">+</span>
                     </div>
@@ -190,11 +168,7 @@
     <div class="col-sm-6">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-image"></i></span>
-            {!! Form::text('image', null, [
-                'id' => 'image' . $current->language,
-                'class' => 'form-control',
-                'data-lang' => 1
-            ]) !!}
+            {{ html()->text('image')->id('image' . $current->language)->class('form-control')->data('lang', 1) }}
             <div class="input-group-btn popup" data-browse="image{{$current->language}}">
                 <span class="btn btn-info">Browse</span>
             </div>
@@ -207,11 +181,7 @@
 <div class="form-group">
     <label class="col-sm-2 control-label">Description:</label>
     <div class="col-sm-10">
-        {!! Form::textarea('description', null, [
-            'id' => 'description' . $current->language,
-            'class' => 'form-control',
-            'rows' => '5'
-        ]) !!}
+        {{ html()->textarea('description')->id('description' . $current->language)->class('form-control')->rows(5) }}
     </div>
 </div>
 
@@ -220,10 +190,7 @@
 <div class="form-group">
     <label class="col-sm-2 control-label">Meta Title:</label>
     <div class="col-sm-10">
-        {!! Form::text('meta_title', null, [
-            'id' => 'meta_title' . $current->language,
-            'class' => 'form-control',
-        ]) !!}
+        {{ html()->text('meta_title')->id('meta_title' . $current->language)->class('form-control') }}
         <div class="desc">Title for search engines. It is best to keep meta title less then 150 or 160 characters.</div>
     </div>
 </div>
@@ -233,10 +200,7 @@
 <div class="form-group">
     <label class="col-sm-2 control-label">Meta Description:</label>
     <div class="col-sm-10">
-        {!! Form::text('meta_desc', null, [
-            'id' => 'meta_desc' . $current->language,
-            'class' => 'form-control',
-        ]) !!}
+        {{ html()->text('meta_desc')->id('meta_desc' . $current->language)->class('form-control') }}
         <div class="desc">Description for search engines. It is best to keep meta descriptions less then 150 or 160 characters.</div>
     </div>
 </div>
@@ -248,11 +212,8 @@
         <div class="form-group">
             <label class="col-sm-6 control-label">Visible:</label>
             <div class="col-sm-6">
-                {!! Form::checkbox('visible', null, null, [
-                    'id' => 'visible' . $current->language,
-                    'class' => 'iswitch iswitch-secondary',
-                    'data-lang' => 1
-                ]) !!}
+                {{ html()->checkbox('visible')->id('visible' . $current->language)
+                ->class('iswitch iswitch-secondary')->data('lang', 1) }}
             </div>
         </div>
     </div>

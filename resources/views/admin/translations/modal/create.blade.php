@@ -5,13 +5,11 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Translation</h4>
             </div>
-            {!! Form::model($current, [
-                'method' => 'post',
-                'url'    => cms_route('translations.popup'),
-                'class'  => 'form-horizontal'
-            ]) !!}
+            {{ html()->modelForm($current,
+                'post', cms_route('translations.popup')
+            )->class('form-horizontal')->open() }}
                 @include('admin.translations.modal.form')
-            {!! Form::close() !!}
+            {{ html()->form()->close() }}
         </div>
     </div>
     @include('admin.translations.modal.scripts')
