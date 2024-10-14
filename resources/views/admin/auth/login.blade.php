@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="cms">
-    <meta name="author" content="David Gvritishvili <gvritishvili.david@gmail.com>">
+    <meta name="author" content="Davit Gvritishvili <gvritishvili.davit@gmail.com>">
     <meta name="robots" content="noindex, nofollow">
     <meta name="version" content="{{cms_config('version')}}">
     <title>CMS - Login</title>
