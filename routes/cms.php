@@ -31,21 +31,18 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($router) {
     // login
-    $router->get('login', [AdminLoginController::class, 'showLoginForm'])->name('login');
-    $router->post('login', [AdminLoginController::class, 'login'])->name('login');
-    $router->post('logout', [AdminLoginController::class, 'logout'])->name('logout');
+    $router->controller(AdminLoginController::class)->group(function ($router) {
+        $router->get('login', 'showLoginForm')->name('login');
+        $router->post('login', 'login')->name('login');
+        $router->post('logout', 'logout')->name('logout');
 
-    // lockscreen
-    $router->group(['middleware' => ['cms.lockscreen']], function ($router) {
-        $router->get('lockscreen', [
-            AdminLoginController::class, 'getLockscreen'
-        ])->name('lockscreen');
-        $router->post('lockscreen', [
-            AdminLoginController::class, 'postLockscreen'
-        ])->name('lockscreen')->middleware('throttle:3,2');
-        $router->put('lockscreen', [
-            AdminLoginController::class, 'setLockscreen'
-        ])->name('lockscreen');
+        // lockscreen
+        $router->group(['middleware' => ['cms.lockscreen']], function ($router) {
+            $router->get('lockscreen', 'getLockscreen')->name('lockscreen');
+            $router->post('lockscreen', 'postLockscreen')->name('lockscreen')
+                ->middleware('throttle:3,2');
+            $router->put('lockscreen', 'setLockscreen')->name('lockscreen');
+        });
     });
 
     // CMS
@@ -62,27 +59,23 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
             ->except(['show']);
 
         // pages
-        $router->post('pages/{id}/visibility', [
-            AdminPagesController::class, 'visibility'
-        ])->name('pages.visibility');
-        $router->put('pages/position', [
-            AdminPagesController::class, 'updatePosition'
-        ])->name('pages.updatePosition');
-        $router->get('pages/templates', [
-            AdminPagesController::class, 'getTemplates'
-        ])->name('pages.templates');
-        $router->get('pages/listable-types', [
-            AdminPagesController::class, 'getListableTypes'
-        ])->name('pages.listableTypes');
-        $router->put('pages/transfer/{menuId}', [
-            AdminPagesController::class, 'transfer'
-        ])->name('pages.transfer');
-        $router->put('pages/collapse', [
-            AdminPagesController::class, 'collapse'
-        ])->name('pages.collapse');
-        $router->resource('menus.pages', AdminPagesController::class)
-            ->names(resource_names('pages'))
-            ->except(['show']);
+        $router->controller(AdminPagesController::class)->group(function ($router) {
+            $router->post('pages/{id}/visibility', 'visibility')
+                ->name('pages.visibility');
+            $router->put('pages/position', 'updatePosition')
+                ->name('pages.updatePosition');
+            $router->get('pages/templates', 'getTemplates')
+                ->name('pages.templates');
+            $router->get('pages/listable-types', 'getListableTypes')
+                ->name('pages.listableTypes');
+            $router->put('pages/transfer/{menuId}', 'transfer')
+                ->name('pages.transfer');
+            $router->put('pages/collapse', 'collapse')
+                ->name('pages.collapse');
+            $router->resource('menus.pages', AdminPagesController::class)
+                ->names(resource_names('pages'))
+                ->except(['show']);
+        });
 
         // collections
         $router->resource('collections', AdminCollectionsController::class)
@@ -154,32 +147,20 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
             ->except(['show']);
 
         // notes
-        $router->get('notes', [
-            AdminNotesController::class, 'index'
-        ])->name('notes.index');
-        $router->put('notes', [
-            AdminNotesController::class, 'save'
-        ])->name('notes.save');
-        $router->post('notes', [
-            AdminNotesController::class, 'destroy'
-        ])->name('notes.destroy');
-        $router->post('notes-calendar', [
-            AdminNotesController::class, 'calendar'
-        ])->name('notes.calendar');
+        $router->controller(AdminNotesController::class)->group(function ($router) {
+            $router->get('notes', 'index')->name('notes.index');
+            $router->put('notes', 'save')->name('notes.save');
+            $router->post('notes', 'destroy')->name('notes.destroy');
+            $router->post('notes-calendar', 'calendar')->name('notes.calendar');
+        });
 
         // calendar
-        $router->get('calendar', [
-            AdminCalendarController::class, 'index'
-        ])->name('calendar.index');
-        $router->post('calendar/events', [
-            AdminCalendarController::class, 'events'
-        ])->name('calendar.events');
-        $router->put('calendar', [
-            AdminCalendarController::class, 'save'
-        ])->name('calendar.save');
-        $router->post('calendar', [
-            AdminCalendarController::class, 'destroy'
-        ])->name('calendar.destroy');
+        $router->controller(AdminCalendarController::class)->group(function ($router) {
+            $router->get('calendar', 'index')->name('calendar.index');
+            $router->post('calendar/events', 'events')->name('calendar.events');
+            $router->put('calendar', 'save')->name('calendar.save');
+            $router->post('calendar', 'destroy')->name('calendar.destroy');
+        });
 
         // cms settings
         $router->get('settings', [
@@ -197,7 +178,7 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
         ])->name('webSettings.update');
 
         // sitemap xml
-        $router->get('sitemap/xml/store', [
+        $router->post('sitemap/xml/store', [
             AdminSitemapXmlController::class, 'store'
         ])->name('sitemap.xml.store');
     });
