@@ -1,5 +1,21 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminCalendarController;
+use App\Http\Controllers\Admin\AdminCmsUsersController;
+use App\Http\Controllers\Admin\AdminCollectionsController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminFilemanagerController;
+use App\Http\Controllers\Admin\AdminFilesController;
+use App\Http\Controllers\Admin\AdminMenusController;
+use App\Http\Controllers\Admin\AdminNotesController;
+use App\Http\Controllers\Admin\AdminPagesController;
+use App\Http\Controllers\Admin\AdminPermissionsController;
+use App\Http\Controllers\Admin\AdminSettingsController;
+use App\Http\Controllers\Admin\AdminSitemapXmlController;
+use App\Http\Controllers\Admin\AdminSliderController;
+use App\Http\Controllers\Admin\AdminTranslationsController;
+use App\Http\Controllers\Admin\AdminWebSettingsController;
+use App\Http\Controllers\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,120 +30,175 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($router) {
-    // authentication
-    $router->group(['namespace' => 'Auth'], function ($router) {
-        // login
-        $router->get('login', ['as' => 'login', 'uses' => 'AdminLoginController@showLoginForm']);
-        $router->post('login', ['as' => 'login', 'uses' => 'AdminLoginController@login']);
-        $router->post('logout', ['as' => 'logout', 'uses' => 'AdminLoginController@logout']);
+    // login
+    $router->get('login', [AdminLoginController::class, 'showLoginForm'])->name('login');
+    $router->post('login', [AdminLoginController::class, 'login'])->name('login');
+    $router->post('logout', [AdminLoginController::class, 'logout'])->name('logout');
 
-        // lockscreen
-        $router->group(['middleware' => ['cms.lockscreen']], function ($router) {
-            $router->get('lockscreen', ['as' => 'lockscreen', 'uses' => 'AdminLoginController@getLockscreen']);
-            $router->post('lockscreen', [
-                'middleware' => 'throttle:3,2', 'as' => 'lockscreen', 'uses' => 'AdminLoginController@postLockscreen'
-            ]);
-            $router->put('lockscreen', ['as' => 'lockscreen', 'uses' => 'AdminLoginController@setLockscreen']);
-        });
+    // lockscreen
+    $router->group(['middleware' => ['cms.lockscreen']], function ($router) {
+        $router->get('lockscreen', [
+            AdminLoginController::class, 'getLockscreen'
+        ])->name('lockscreen');
+        $router->post('lockscreen', [
+            AdminLoginController::class, 'postLockscreen'
+        ])->name('lockscreen')->middleware('throttle:3,2');
+        $router->put('lockscreen', [
+            AdminLoginController::class, 'setLockscreen'
+        ])->name('lockscreen');
     });
 
     // CMS
-    $router->group(['middleware' => ['cms.auth'], 'namespace' => 'Admin'], function ($router) {
+    $router->group(['middleware' => ['cms.auth']], function ($router) {
         // dashboard
-        $router->get('/', ['as' => 'dashboard', 'uses' => 'AdminDashboardController@index']);
+        $router->get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
         // menus
-        $router->post('menus/set-main', ['as' => 'menus.setMain', 'uses' => 'AdminMenusController@setMain']);
-        $router->resource('menus', 'AdminMenusController', ['names' => resource_names('menus'),
-            'except' => ['show']
-        ]);
+        $router->post('menus/set-main', [
+            AdminMenusController::class, 'setMain'
+        ])->name('menus.setMain');
+        $router->resource('menus', AdminMenusController::class)
+            ->names(resource_names('menus'))
+            ->except(['show']);
 
         // pages
-        $router->post('pages/{id}/visibility', ['as' => 'pages.visibility', 'uses' => 'AdminPagesController@visibility']);
-        $router->put('pages/position', ['as' => 'pages.updatePosition', 'uses' => 'AdminPagesController@updatePosition']);
-        $router->get('pages/templates', ['as' => 'pages.templates', 'uses' => 'AdminPagesController@getTemplates']);
-        $router->get('pages/listable-types', ['as' => 'pages.listableTypes', 'uses' => 'AdminPagesController@getListableTypes']);
-        $router->put('pages/transfer/{menuId}', ['as' => 'pages.transfer', 'uses' => 'AdminPagesController@transfer']);
-        $router->put('pages/collapse', ['as' => 'pages.collapse', 'uses' => 'AdminPagesController@collapse']);
-        $router->resource('menus.pages', 'AdminPagesController', ['names' => resource_names('pages'),
-            'except' => ['show']
-        ]);
+        $router->post('pages/{id}/visibility', [
+            AdminPagesController::class, 'visibility'
+        ])->name('pages.visibility');
+        $router->put('pages/position', [
+            AdminPagesController::class, 'updatePosition'
+        ])->name('pages.updatePosition');
+        $router->get('pages/templates', [
+            AdminPagesController::class, 'getTemplates'
+        ])->name('pages.templates');
+        $router->get('pages/listable-types', [
+            AdminPagesController::class, 'getListableTypes'
+        ])->name('pages.listableTypes');
+        $router->put('pages/transfer/{menuId}', [
+            AdminPagesController::class, 'transfer'
+        ])->name('pages.transfer');
+        $router->put('pages/collapse', [
+            AdminPagesController::class, 'collapse'
+        ])->name('pages.collapse');
+        $router->resource('menus.pages', AdminPagesController::class)
+            ->names(resource_names('pages'))
+            ->except(['show']);
 
         // collections
-        $router->resource('collections', 'AdminCollectionsController', ['names' => resource_names('collections'),
-            'except' => ['show']
-        ]);
+        $router->resource('collections', AdminCollectionsController::class)
+            ->names(resource_names('collections'))
+            ->except(['show']);
         // routes from config
         foreach ((array) cms_config('routes') as $prefix => $routes) {
             foreach ((array) $routes as $route => $controller) {
-                $router->post($route . '/{id}/visibility', [
-                    'as' => $route . '.visibility',
-                    'uses' => $controller . '@visibility'
-                ]);
-                $router->put($route . '/position', [
-                    'as' => $route . '.updatePosition',
-                    'uses' => $controller . '@updatePosition'
-                ]);
-                $router->put($route . '/transfer/{id}', [
-                    'as' => $route . '.transfer',
-                    'uses' => $controller . '@transfer'
-                ]);
-                $router->resource($prefix . '.' . $route, $controller, ['names' => resource_names($route),
-                    'except' => ['show']
-                ]);
+                $router->post($route . '/{id}/visibility', [$controller, 'visibility'])
+                    ->name($route . '.visibility');
+                $router->put($route . '/position', [$controller, 'updatePosition'])
+                    ->name($route . '.updatePosition');
+                $router->put($route . '/transfer/{id}', [$controller, 'transfer'])
+                    ->name($route . '.transfer');
+                $router->resource($prefix . '.' . $route, $controller)
+                    ->names(resource_names($route))
+                    ->except(['show']);
             }
         }
 
         // permissions
-        $router->get('permissions', ['as' => 'permissions.index', 'uses' => 'AdminPermissionsController@index']);
-        $router->post('permissions', ['as' => 'permissions.store', 'uses' => 'AdminPermissionsController@store']);
+        $router->get('permissions', [
+            AdminPermissionsController::class, 'index'
+        ])->name('permissions.index');
+        $router->post('permissions', [
+            AdminPermissionsController::class, 'store'
+        ])->name('permissions.store');
 
         // cms users
-        $router->resource('cms-users', 'AdminCmsUsersController', ['names' => resource_names('cmsUsers')]);
+        $router->resource('cms-users', AdminCmsUsersController::class)
+            ->names(resource_names('cmsUsers'));
 
         // file manager
-        $router->get('filemanager', ['as' => 'filemanager', 'uses' => 'AdminFilemanagerController@index']);
+        $router->get('filemanager', [
+            AdminFilemanagerController::class, 'index'
+        ])->name('filemanager');
 
         // files
-        $router->post('files/{id}/visibility', ['as' => 'files.visibility', 'uses' => 'AdminFilesController@visibility']);
-        $router->put('files/position', ['as' => 'files.updatePosition', 'uses' => 'AdminFilesController@updatePosition']);
-        $router->resource('{routeName}/{routeId}/files', 'AdminFilesController', ['names' => resource_names('files'),
-            'except' => ['show']
-        ]);
+        $router->post('files/{id}/visibility', [
+            AdminFilesController::class, 'visibility'
+        ])->name('files.visibility');
+        $router->put('files/position', [
+            AdminFilesController::class, 'updatePosition'
+        ])->name('files.updatePosition');
+        $router->resource('{routeName}/{routeId}/files', AdminFilesController::class)
+            ->names(resource_names('files'))
+            ->except(['show']);
 
         // slider
-        $router->post('slider/{id}/visibility', ['as' => 'slider.visibility', 'uses' => 'AdminSliderController@visibility']);
-        $router->put('slider/position', ['as' => 'slider.updatePosition', 'uses' => 'AdminSliderController@updatePosition']);
-        $router->resource('slider', 'AdminSliderController', ['names' => resource_names('slider'),
-            'except' => ['show']
-        ]);
+        $router->post('slider/{id}/visibility', [
+            AdminSliderController::class, 'visibility'
+        ])->name('slider.visibility');
+        $router->put('slider/position', [
+            AdminSliderController::class, 'updatePosition'
+        ])->name('slider.updatePosition');
+        $router->resource('slider', AdminSliderController::class)
+            ->names(resource_names('slider'))
+            ->except(['show']);
 
         // translations
-        $router->get('translations/form', ['as' => 'translations.popup', 'uses' => 'AdminTranslationsController@getModal']);
-        $router->post('translations/form', ['as' => 'translations.popup', 'uses' => 'AdminTranslationsController@postData']);
-        $router->resource('translations', 'AdminTranslationsController', ['names' => resource_names('translations'),
-            'except' => ['show']
-        ]);
+        $router->get('translations/form', [
+            AdminTranslationsController::class, 'getModal'
+        ])->name('translations.popup');
+        $router->post('translations/form', [
+            AdminTranslationsController::class, 'postData'
+        ])->name('translations.popup');
+        $router->resource('translations', AdminTranslationsController::class)
+            ->names(resource_names('translations'))
+            ->except(['show']);
 
         // notes
-        $router->get('notes', ['as' => 'notes.index', 'uses' => 'AdminNotesController@index']);
-        $router->put('notes', ['as' => 'notes.save', 'uses' => 'AdminNotesController@save']);
-        $router->post('notes', ['as' => 'notes.destroy', 'uses' => 'AdminNotesController@destroy']);
-        $router->post('notes-calendar', ['as' => 'notes.calendar', 'uses' => 'AdminNotesController@calendar']);
+        $router->get('notes', [
+            AdminNotesController::class, 'index'
+        ])->name('notes.index');
+        $router->put('notes', [
+            AdminNotesController::class, 'save'
+        ])->name('notes.save');
+        $router->post('notes', [
+            AdminNotesController::class, 'destroy'
+        ])->name('notes.destroy');
+        $router->post('notes-calendar', [
+            AdminNotesController::class, 'calendar'
+        ])->name('notes.calendar');
 
         // calendar
-        $router->get('calendar', ['as' => 'calendar.index', 'uses' => 'AdminCalendarController@index']);
-        $router->post('calendar/events', ['as' => 'calendar.events', 'uses' => 'AdminCalendarController@events']);
-        $router->put('calendar', ['as' => 'calendar.save', 'uses' => 'AdminCalendarController@save']);
-        $router->post('calendar', ['as' => 'calendar.destroy', 'uses' => 'AdminCalendarController@destroy']);
+        $router->get('calendar', [
+            AdminCalendarController::class, 'index'
+        ])->name('calendar.index');
+        $router->post('calendar/events', [
+            AdminCalendarController::class, 'events'
+        ])->name('calendar.events');
+        $router->put('calendar', [
+            AdminCalendarController::class, 'save'
+        ])->name('calendar.save');
+        $router->post('calendar', [
+            AdminCalendarController::class, 'destroy'
+        ])->name('calendar.destroy');
 
-        // settings
-        $router->get('settings', ['as' => 'settings.index', 'uses' => 'AdminSettingsController@index']);
-        $router->put('settings', ['as' => 'settings.update', 'uses' => 'AdminSettingsController@update']);
-        $router->get('web-settings', ['as' => 'webSettings.index', 'uses' => 'AdminWebSettingsController@index']);
-        $router->put('web-settings', ['as' => 'webSettings.update', 'uses' => 'AdminWebSettingsController@update']);
+        // cms settings
+        $router->get('settings', [
+            AdminSettingsController::class, 'index'
+        ])->name('settings.index');
+        $router->put('settings', [
+            AdminSettingsController::class, 'update'
+        ])->name('settings.update');
+        // web settings
+        $router->get('web-settings', [
+            AdminWebSettingsController::class, 'index'
+        ])->name('webSettings.index');
+        $router->put('web-settings', [
+            AdminWebSettingsController::class, 'update'
+        ])->name('webSettings.update');
 
         // sitemap xml
-        $router->get('sitemap/xml/store', ['as' => 'sitemap.xml.store', 'uses' => 'AdminSitemapXmlController@store']);
+        $router->get('sitemap/xml/store', [
+            AdminSitemapXmlController::class, 'store'
+        ])->name('sitemap.xml.store');
     });
 });

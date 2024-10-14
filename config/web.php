@@ -14,7 +14,7 @@ return [
     'glide_base_url' => '!img',
 
     'glide' => [
-        // 'type' => ['w' => 300, 'h' => 200, 'fit' => 'crop'],
+        // 'type_name' => ['w' => 300, 'h' => 200, 'fit' => 'crop'],
     ],
 
     'glide_crop' => [

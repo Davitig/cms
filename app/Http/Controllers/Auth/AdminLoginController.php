@@ -60,7 +60,7 @@ class AdminLoginController extends Controller
      * Get the lockscreen response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function getLockscreen(Request $request)
     {
@@ -73,7 +73,7 @@ class AdminLoginController extends Controller
      * Set the lockscreen.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function setLockscreen(Request $request)
     {

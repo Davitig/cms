@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Support\Facades\DB;
 
 class CmsUsersTableSeeder extends DatabaseSeeder

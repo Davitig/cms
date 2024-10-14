@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Support\Facades\DB;
 
 class NotesTableSeeder extends DatabaseSeeder
@@ -15,9 +17,9 @@ class NotesTableSeeder extends DatabaseSeeder
 
         DB::table('notes')->insert([
             [
-                'title'       => 'სათაური',
-                'description' => 'მოკლე აღწერა',
-                'content'     => "სათაური\nმოკლე აღწერა\nვრცელი ტექსტი...",
+                'title'       => 'Title',
+                'description' => 'Short description',
+                'content'     => 'Full content description',
                 'created_at'  => date('Y-m-d H:i:s')
             ]
         ]);

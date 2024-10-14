@@ -1,5 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminArticlesController;
+use App\Http\Controllers\Admin\AdminEventsController;
+use App\Http\Controllers\Admin\AdminFaqController;
+use App\Http\Controllers\Admin\AdminGalleriesController;
+use App\Http\Controllers\Admin\AdminPhotosController;
+use App\Http\Controllers\Admin\AdminVideosController;
+
 return [
 
     /*
@@ -66,14 +73,14 @@ return [
 
     'routes' => [
         'collections' => [
-            'articles' => 'AdminArticlesController',
-            'events' => 'AdminEventsController',
-            'galleries' => 'AdminGalleriesController',
-            'faq' => 'AdminFaqController'
+            'articles' => AdminArticlesController::class,
+            'events' => AdminEventsController::class,
+            'galleries' => AdminGalleriesController::class,
+            'faq' => AdminFaqController::class
         ],
         'galleries' => [
-            'photos' => 'AdminPhotosController',
-            'videos' => 'AdminVideosController'
+            'photos' => AdminPhotosController::class,
+            'videos' => AdminVideosController::class
         ]
     ],
 

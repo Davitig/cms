@@ -33,10 +33,7 @@ class AdminAuthenticate
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @return \Illuminate\Http\JsonResponse|
-     *          \Illuminate\Http\RedirectResponse|
-     *          \Illuminate\Routing\Redirector|
-     *          mixed
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|mixed
      */
     public function handle($request, Closure $next)
     {
@@ -53,7 +50,11 @@ class AdminAuthenticate
         }
 
         if ($this->guard->user()->hasLockScreen()) {
-            return redirect(cms_route('lockscreen'));
+            $redirect = redirect();
+
+            $redirect->setIntendedUrl($request->fullUrl());
+
+            return $redirect->to(cms_route('lockscreen'));
         }
 
         $this->checkRoutePermission($request);

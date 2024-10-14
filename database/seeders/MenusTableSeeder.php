@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Support\Facades\DB;
 
 class MenusTableSeeder extends DatabaseSeeder
@@ -16,8 +18,8 @@ class MenusTableSeeder extends DatabaseSeeder
         DB::table('menus')->insert([
             [
                 'main'        => 1,
-                'title'       => 'მთავარი გვერდები',
-                'description' => 'მთავარი გვერდების სია',
+                'title'       => 'Main Pages',
+                'description' => 'List of main pages',
                 'created_at'  => date('Y-m-d H:i:s')
             ]
         ]);
