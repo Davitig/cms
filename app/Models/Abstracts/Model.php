@@ -244,7 +244,7 @@ abstract class Model extends BaseModel
     /**
      * {@inheritDoc}
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->getAttributeValue($offset);
     }
@@ -252,7 +252,7 @@ abstract class Model extends BaseModel
     /**
      * {@inheritDoc}
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->setAttribute($offset, $value);
     }

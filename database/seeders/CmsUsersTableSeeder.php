@@ -19,7 +19,7 @@ class CmsUsersTableSeeder extends DatabaseSeeder
 
         DB::table('cms_users')->insert([
             [
-                'email' => 'admin@sample.com',
+                'email' => 'admin@example.com',
                 'first_name' => 'admin',
                 'last_name' => 'Admin',
                 'role' => 'admin',

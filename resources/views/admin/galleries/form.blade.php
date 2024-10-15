@@ -128,7 +128,7 @@
                     <div class="input-group-btn">
                         <span class="btn btn-info" data-type="decrement">-</span>
                     </div>
-                    {{ html()->text('admin_per_page')->class('form-control text-center')->readonly() }}
+                    {{ html()->text('admin_per_page')->class('form-control text-center')->isReadonly() }}
                     <div class="input-group-btn">
                         <span class="btn btn-info" data-type="increment">+</span>
                     </div>
@@ -148,7 +148,7 @@
                     <div class="input-group-btn">
                         <span class="btn btn-info" data-type="decrement">-</span>
                     </div>
-                    {{ html()->text('web_per_page')->class('form-control text-center')->readonly() }}
+                    {{ html()->text('web_per_page')->class('form-control text-center')->isReadonly() }}
                     <div class="input-group-btn">
                         <span class="btn btn-info" data-type="increment">+</span>
                     </div>

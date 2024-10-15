@@ -17,7 +17,7 @@
         {{ html()->text('code')->id('code' . $current->language)
         ->class('form-control')
         ->ifNotNull($current->code, function ($html) {
-            return $html->readonly();
+            return $html->isReadonly();
         }) }}
         @if ($error)
             <span class="text-danger">{{$error}}</span>
