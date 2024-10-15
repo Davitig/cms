@@ -161,7 +161,7 @@ trait LanguageTrait
         $attributes[$this->getForeignKey()] = $this->getKey();
 
         foreach($languages as $key => $value) {
-            $this->setLanguage($this);
+            $this->setLanguage();
 
             $attributes['language'] = $key;
 

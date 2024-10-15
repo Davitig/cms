@@ -31,7 +31,7 @@ class PageRequest extends Request
      * @param  \Illuminate\Contracts\Validation\Validator  $validator
      * @return void
      */
-    protected function before(Validator $validator)
+    protected function beforeValidation(Validator $validator)
     {
         $validator->sometimes('type_id', 'required', function ($input) {
             return in_array($input->type, cms_pages('listable'));

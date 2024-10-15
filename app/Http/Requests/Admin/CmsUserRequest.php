@@ -55,7 +55,7 @@ class CmsUserRequest extends Request
      *
      * @return void
      */
-    protected function after()
+    protected function afterValidation()
     {
         if (! $this->filled('password')) {
             $this->offsetUnset('password');

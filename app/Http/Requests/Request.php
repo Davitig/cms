@@ -22,14 +22,10 @@ abstract class Request extends FormRequest
      */
     protected function getValidatorInstance()
     {
-        $validator = parent::getValidatorInstance()->after(function ($validator) {
-            if (method_exists($this, 'after')) {
-                $this->after($validator);
-            }
-        });
+        $validator = parent::getValidatorInstance();
 
-        if (method_exists($this, 'before')) {
-            $this->before($validator);
+        if (method_exists($this, 'beforeValidation')) {
+            $this->beforeValidation($validator);
         }
 
         return $validator;

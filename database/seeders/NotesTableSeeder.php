@@ -11,7 +11,7 @@ class NotesTableSeeder extends DatabaseSeeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         DB::table('notes')->truncate();
 

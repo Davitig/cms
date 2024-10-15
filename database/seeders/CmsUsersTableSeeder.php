@@ -8,10 +8,8 @@ class CmsUsersTableSeeder extends DatabaseSeeder
 {
     /**
      * Run cms_users table seeder.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $currentDate = date('Y-m-d H:i:s');
 

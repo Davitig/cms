@@ -15,13 +15,13 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-//        Registered::class => [
-//            SendEmailVerificationNotification::class,
-//        ],
+        // Registered::class => [
+        //     SendEmailVerificationNotification::class,
+        // ],
     ];
 
     /**
-     * The subscriber classes to register.
+     * The subscribers to register.
      *
      * @var array<int, class-string|string>
      */
@@ -35,22 +35,17 @@ class EventServiceProvider extends ServiceProvider
 
     /**
      * Register any events for your application.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         //
     }
 
     /**
      * Determine if events and listeners should be automatically discovered.
-     *
-     * @return bool
      */
-    public function shouldDiscoverEvents()
+    public function shouldDiscoverEvents(): bool
     {
         return false;
-
     }
 }

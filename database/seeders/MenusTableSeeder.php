@@ -8,10 +8,8 @@ class MenusTableSeeder extends DatabaseSeeder
 {
     /**
      * Run menus table seeder.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         DB::table('menus')->truncate();
 
