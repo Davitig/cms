@@ -18,29 +18,21 @@ use App\Http\Controllers\Admin\AdminWebSettingsController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| CMS Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application CMS.
-| These routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($router) {
     // login
     $router->controller(AdminLoginController::class)->group(function ($router) {
-        $router->get('login', 'showLoginForm')->name('login');
-        $router->post('login', 'login')->name('login');
+        $router->get('login', 'showLoginForm')->name('login')
+            ->middleware('cms.guest');
+        $router->post('login', 'login')->name('login')
+            ->middleware('cms.guest');
         $router->post('logout', 'logout')->name('logout');
 
         // lockscreen
         $router->group(['middleware' => ['cms.lockscreen']], function ($router) {
-            $router->get('lockscreen', 'getLockscreen')->name('lockscreen');
+            $router->get('lockscreen', 'getLockscreen')->name('lockscreen')
+                ->middleware('cms.guest');
             $router->post('lockscreen', 'postLockscreen')->name('lockscreen')
-                ->middleware('throttle:3,2');
+                ->middleware(['cms.guest', 'throttle:3,2']);
             $router->put('lockscreen', 'setLockscreen')->name('lockscreen');
         });
     });

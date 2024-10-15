@@ -4,8 +4,10 @@ namespace App\Http\Middleware\Web;
 
 use App\Support\TranslationCollection;
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Models\Translation;
+use Symfony\Component\HttpFoundation\Response;
 
 class WebMainData
 {
@@ -16,7 +18,7 @@ class WebMainData
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         $this->shareSettings();
 

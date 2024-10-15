@@ -51,14 +51,15 @@ class CmsUserRequest extends Request
     }
 
     /**
-     * Run after validation is completed.
+     * Handle a passed validation attempt.
      *
      * @return void
      */
-    protected function afterValidation()
+    protected function passedValidation()
     {
         if (! $this->filled('password')) {
             $this->offsetUnset('password');
+            $this->offsetUnset('password_confirmation');
         }
     }
 }

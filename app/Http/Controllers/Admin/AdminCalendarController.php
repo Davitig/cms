@@ -69,7 +69,7 @@ class AdminCalendarController extends Controller
      */
     public function save()
     {
-        $this->validate($this->request, [
+        $this->request->validate([
             'title' => 'required|min:3'
         ]);
 

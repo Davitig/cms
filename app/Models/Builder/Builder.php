@@ -137,12 +137,12 @@ class Builder extends EloquentBuilder
     /**
      * {@inheritDoc}
      */
-    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
+    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null, $total = null)
     {
         $this->prefixColumnsOnJoin($columns);
 
         if (! $this->paginationColumnCallbacks) {
-            return parent::paginate($perPage, $columns, $pageName, $page);
+            return parent::paginate($perPage, $columns, $pageName, $page, $total);
         }
 
         $columnsBackup = $this->query->columns;
@@ -152,7 +152,7 @@ class Builder extends EloquentBuilder
         $this->query->bindings['select'] = [];
 
         $results = $this->query->selectRaw('count(*) as aggregate')
-            ->when((array) $this->paginationColumnCallbacks, function ($q, $values) {
+            ->when($this->paginationColumnCallbacks, function ($q, $values) {
                 foreach ($values as $callback) {
                     $callback($q);
                 }
@@ -177,7 +177,7 @@ class Builder extends EloquentBuilder
             $results = $this->forPage(
                 $page = $page ?: Paginator::resolveCurrentPage($pageName),
                 $perPage = $perPage ?: $this->model->getPerPage()
-            )->when((array) $this->paginationColumnCallbacks, function ($q, $values) {
+            )->when($this->paginationColumnCallbacks, function ($q, $values) {
                 foreach ($values as $callback) {
                     $callback($q);
                 }

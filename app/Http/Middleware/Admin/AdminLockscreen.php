@@ -3,7 +3,9 @@
 namespace App\Http\Middleware\Admin;
 
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminLockscreen
 {
@@ -12,9 +14,9 @@ class AdminLockscreen
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @return mixed
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         if (Auth::guard('cms')->guest()) {
             if ($request->expectsJson()) {
