@@ -28,12 +28,8 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->configureRateLimiting();
 
-        $this->mapApiRoutes($router = $this->app[Router::class]);
-
-        $this->mapWebRoutes($router);
-
-        $this->app->booted(function ($app) use ($router) {
-            $this->filterRoutes($router, $app['config']);
+        $this->app->booted(function ($app) {
+            $this->filterRoutes($app['router'], $app['config']);
         });
 
         //
@@ -47,40 +43,6 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
-    }
-
-    /**
-     * Define the "web" routes for the application.
-     *
-     * These routes all receive session state, CSRF protection, etc.
-     *
-     * @param  \Illuminate\Routing\Router  $router
-     * @return void
-     */
-    protected function mapWebRoutes(Router $router)
-    {
-        $router->middleware('web')
-            ->namespace($this->namespace)
-            ->group(function ($router) {
-                require base_path('routes/web.php');
-                require base_path('routes/cms.php');
-            });
-    }
-
-    /**
-     * Define the "api" routes for the application.
-     *
-     * These routes are typically stateless.
-     *
-     * @param  \Illuminate\Routing\Router  $router
-     * @return void
-     */
-    protected function mapApiRoutes(Router $router)
-    {
-        $router->prefix('api')
-            ->middleware('api')
-            ->namespace($this->namespace)
-            ->group(base_path('routes/api.php'));
     }
 
     /**

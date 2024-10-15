@@ -28,7 +28,9 @@
     </div>
     <div class="col-sm-3 calendar-left">
         <div class="calendar-sidebar">
-            <form method="post" id="add-calendar-event">
+            <form method="post" action="{{cms_route('calendar.save')}}" id="add-calendar-event">
+                @method('PUT')
+                @csrf
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Add new event..." />
                     <div class="input-group-btn">
@@ -92,10 +94,10 @@
 <script type="text/javascript">
 // Calendar Initialization
 $(document).ready(function($) {
-    var eventsList = $("#events-list");
+    var eventsList = $('#events-list');
 
     // Form to add new event
-    $("#add-calendar-event").on('submit', function(e) {
+    $('#add-calendar-event').on('submit', function(e) {
         e.preventDefault();
 
         var $event = $(this).find('.form-control'),

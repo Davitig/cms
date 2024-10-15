@@ -12,11 +12,11 @@ use Models\Traits\LanguageTrait;
 abstract class Model extends BaseModel
 {
     /**
-     * The Eloquent builder instance.
+     * The Eloquent query builder class to use for the model.
      *
-     * @var \Models\Builder\Builder|null
+     * @var class-string<\Models\Builder\Builder<*>>
      */
-    protected $builder;
+    protected static string $builder = Builder::class;
 
     /**
      * Indicates if the model has a languages.

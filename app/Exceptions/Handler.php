@@ -76,82 +76,30 @@ class Handler extends ExceptionHandler
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        if ($request->expectsJson()) {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
-        }
-
-        return redirect()->guest('/');
+        return $this->shouldReturnJson($request, $exception)
+            ? response()->json(['message' => $exception->getMessage()], 401)
+            : redirect()->guest($exception->redirectTo($request));
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function renderHttpException(HttpExceptionInterface $e)
-    {
-        $status = $e->getStatusCode();
-
-        if (request()->expectsJson()) {
-            if (($trans = trans('http.' . $status)) !== 'http.' . $status) {
-                return response($trans, $status);
-            } else {
-                return response($e->getMessage(), $status);
-            }
-        }
-
-        if ($view = $this->getExceptionView($status, $e)) {
-            return $view;
-        }
-
-        return $this->convertExceptionToResponse($e, true);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function convertExceptionToResponse(Throwable $e, $viewChecked = false)
-    {
-        $response = parent::convertExceptionToResponse($e);
-
-        $status = $response->getStatusCode();
-
-        $debug = config('app.debug');
-
-        if (request()->expectsJson()) {
-            if ($debug) {
-                return response()->make(
-                    $e->getMessage() . ' in ' . $e->getFile() . ' line ' . $e->getLine(), $status
-                );
-            }
-
-            if (($trans = trans('http.' . $status)) !== 'http.' . $status) {
-                return response($trans, $status);
-            } else {
-                return response($e->getMessage(), $status);
-            }
-        }
-
-        if (! $debug && ! $viewChecked && ($view = $this->getExceptionView($status, $e))) {
-            return $view;
-        }
-
-        return $response;
-    }
-
-    /**
-     * Get the view for the given exception.
-     *
-     * @param  string  $status
-     * @param  \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface  $e
-     * @return \Illuminate\Http\Response|bool
-     */
-    protected function getExceptionView($status, HttpExceptionInterface $e)
+    protected function getHttpExceptionView(HttpExceptionInterface $e)
     {
         $dir = cms_is_booted() ? 'admin' : 'web';
 
-        if (view()->exists($dir . ".errors.{$status}")) {
-            return response()->view($dir . ".errors.{$status}", ['exception' => $e], $status);
+        $view = 'errors::' . $dir . '.' .$e->getStatusCode();
+
+        if (view()->exists($view)) {
+            return $view;
         }
 
-        return false;
+        $view = substr($view, 0, -2).'xx';
+
+        if (view()->exists($view)) {
+            return $view;
+        }
+
+        return null;
     }
 }

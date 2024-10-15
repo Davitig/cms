@@ -9,16 +9,6 @@ use Illuminate\Support\Facades\Auth;
 class AdminLoginController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('cms.guest')->except(['logout', 'setLockscreen']);
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function showLoginForm()
