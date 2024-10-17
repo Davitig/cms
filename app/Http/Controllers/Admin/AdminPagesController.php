@@ -11,7 +11,7 @@ use Models\Page;
 
 class AdminPagesController extends Controller
 {
-    use Positionable, VisibilityTrait, Transferable;
+    use Positionable, VisibilityTrait, Transferable, ClonableLanguage;
 
     /**
      * The Page instance.
@@ -233,7 +233,7 @@ class AdminPagesController extends Controller
     /**
      * Collapse specified page.
      *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Foundation\Application|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     public function collapse()
     {

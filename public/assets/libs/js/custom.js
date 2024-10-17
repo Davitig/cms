@@ -56,6 +56,10 @@ $(function () {
             dataType: 'json',
             data: form.serialize(),
             success: function (data) {
+                if (data?.input?.redirect) {
+                    window.location.href = data.input.redirect;
+                }
+
                 form.trigger('deleteFormSuccess', [data]);
 
                 if (data) {

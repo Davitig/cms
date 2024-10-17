@@ -11,7 +11,7 @@ use Models\Gallery;
 
 class AdminGalleriesController extends Controller
 {
-    use Positionable, VisibilityTrait, Transferable;
+    use Positionable, VisibilityTrait, Transferable, ClonableLanguage;
 
     /**
      * The Gallery instance.
@@ -107,6 +107,8 @@ class AdminGalleriesController extends Controller
         $data['items'] = $this->model->where('id', $id)
             ->forAdmin(null, false)
             ->getOrFail();
+
+        $data['current'] = $data['items']->first();
 
         return view('admin.galleries.edit', $data);
     }

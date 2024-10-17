@@ -33,7 +33,7 @@ return new class extends Migration
         Schema::create('gallery_languages', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('gallery_id');
-            $table->char('language', 2);
+            $table->unsignedTinyInteger('language_id');
             $table->string('title');
             $table->string('description', 800)->nullable();
             $table->string('meta_title')->nullable();
@@ -41,6 +41,8 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('gallery_id')->references('id')->on('galleries')->onDelete('cascade');
+            $table->foreign('language_id')->references('id')->on('languages');
+            $table->unique(['gallery_id', 'language_id']);
         });
     }
 

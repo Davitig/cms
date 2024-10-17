@@ -10,7 +10,7 @@ use Models\Event;
 
 class AdminEventsController extends Controller
 {
-    use Positionable, VisibilityTrait, Transferable;
+    use Positionable, VisibilityTrait, Transferable, ClonableLanguage;
 
     /**
      * The Event instance.

@@ -18,9 +18,9 @@ class Photo extends Model
     const TYPE = 'photos';
 
     /**
-     * The database table used by the model.
+     * The table associated with the model.
      *
-     * @var string
+     * @var string|null
      */
     protected $table = 'photos';
 
@@ -55,7 +55,7 @@ class Photo extends Model
      * @var array
      */
     protected $languageFillable = [
-        'photo_id', 'language', 'title'
+        'photo_id', 'language_id', 'title'
     ];
 
     /**
@@ -64,7 +64,7 @@ class Photo extends Model
      * @var array
      */
     protected $languageNotUpdatable = [
-        'photo_id', 'language'
+        'photo_id', 'language_id'
     ];
 
     /**

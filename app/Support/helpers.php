@@ -8,14 +8,20 @@ use Models\Abstracts\Model;
 /**
  * Get the application language.
  *
- * @param  string|null  $key
- * @param  string  $value
- * @return string
+ * @param  string|bool|null  $key
+ * @param  string|null  $value
+ * @return string|array
  */
-function language($key = null, $value = 'full_name')
+function language($key = null, $value = null)
 {
+    $lang = (string) config('app.language');
+
     if (is_null($key)) {
-        return (string) config('app.language');
+        return $lang;
+    }
+
+    if ($key === true) {
+        $key = $lang;
     }
 
     if (! is_null($value)) {
@@ -40,9 +46,9 @@ function languages()
  *
  * @return bool
  */
-function language_isset()
+function language_in_url()
 {
-    return config('language_isset', false);
+    return config('language_in_url', false);
 }
 
 /**
@@ -66,7 +72,7 @@ function cms_is_booted()
 }
 
 /**
- * Get the cms slug
+ * Get the CMS slug
  *
  * @param  string|null  $path
  * @return string
@@ -121,7 +127,7 @@ function cms_route_name($name)
  */
 function cms_route($name, $parameters = [], $language = null, $absolute = true)
 {
-    return add_language(route(cms_route_name($name), $parameters, $absolute), $language, true);
+    return language_to_url(route(cms_route_name($name), $parameters, $absolute), $language);
 }
 
 /**
@@ -149,7 +155,7 @@ function cms_url($path = '', array $parameters = [], $language = null, $secure =
  */
 function web_route($name, $parameters = [], $language = null, $absolute = true)
 {
-    return add_language(route($name, $parameters, $absolute), $language);
+    return language_to_url(route($name, $parameters, $absolute), $language);
 }
 
 /**
@@ -169,7 +175,7 @@ function web_url($path = '', array $parameters = [], $language = null, $secure =
         $path = '';
     }
 
-    $url = url(add_language($path, $language), [], $secure);
+    $url = url(language_to_url($path, $language), [], $secure);
 
     return trim($url, '?') . query_string(
             $parameters, parse_url($url, PHP_URL_QUERY) ? '&' : '?'
@@ -216,7 +222,7 @@ function language_prefix($path, $language = null)
     if (is_string($language)) {
         $path = $language . '/' . $path;
     } elseif ($language !== false
-        && ($language === true || language_isset())
+        && ($language === true || language_in_url())
         && count(languages()) > 1
     ) {
         $path = language() . '/' . $path;
@@ -230,26 +236,21 @@ function language_prefix($path, $language = null)
  *
  * @param  string  $url
  * @param  string|null  $language
- * @param  bool  $hasLanguage
  * @return string
  */
-function add_language($url, $language = null, $hasLanguage = false)
+function language_to_url($url, $language = null)
 {
     if (is_null($url)) {
-        return $url;
+        return null;
     }
 
-    if (! ($withLanguage = ! empty($language)) && ($hasLanguage || ! language_isset())) {
+    if (! ($withLanguage = ! empty($language)) && ! language_in_url()) {
         return trim($url, '/');
     }
 
     $segments = parse_url($url);
 
-    if (isset($segments['path'])) {
-        $path = $segments['path'];
-    } else {
-        $path = '';
-    }
+    $path = $segments['path'] ?? '';
 
     $query = isset($segments['query']) ? '?' . $segments['query'] : '';
 
@@ -259,7 +260,7 @@ function add_language($url, $language = null, $hasLanguage = false)
 
     $baseUrl = $schemeAndHttpHost = '';
 
-    if (isset($segments['scheme']) && isset($segments['host'])) {
+    if (isset($segments['scheme'])) {
         $schemeAndHttpHost = $segments['scheme'] . '://' . $segments['host'];
     }
 
@@ -374,7 +375,7 @@ function app_instance($instance, $default = null)
 }
 
 /**
- * Fill array with data.
+ * Fill an array with data.
  *
  * @param  string  $result
  * @param  string|null  $message
@@ -403,7 +404,7 @@ function fill_db_data($key, array $parameters = [])
 }
 
 /**
- * Get the cms config.
+ * Get the CMS config.
  *
  * @param  string|null  $key
  * @param  mixed  $default
@@ -419,7 +420,7 @@ function cms_config($key = null, $default = [])
 }
 
 /**
- * Get the cms pages config.
+ * Get the CMS pages config.
  *
  * @param  string|null  $key
  * @param  mixed  $default
@@ -435,7 +436,7 @@ function cms_pages($key = null, $default = [])
 }
 
 /**
- * Get the cms collections config.
+ * Get the CMS collections config.
  *
  * @param  string|null  $key
  * @param  mixed  $default
@@ -451,7 +452,7 @@ function cms_collections($key = null, $default = [])
 }
 
 /**
- * Get the cms deep collections config.
+ * Get the CMS deep collections config.
  *
  * @param  string|null  $key
  * @param  mixed  $default
@@ -467,7 +468,7 @@ function deep_collection($key = null, $default = [])
 }
 
 /**
- * Get the cms files config.
+ * Get the CMS files config.
  *
  * @param  string|null  $key
  * @param  mixed  $default
@@ -483,7 +484,7 @@ function cms_files($key = null, $default = [])
 }
 
 /**
- * Get the cms user role(s).
+ * Get the CMS user role(s).
  *
  * @param  string|null  $key
  * @param  mixed  $default
@@ -499,7 +500,7 @@ function user_roles($key = null, $default = null)
 }
 
 /**
- * Get the cms icon name.
+ * Get the CMS icon name.
  *
  * @param  string  $key
  * @param  mixed  $default

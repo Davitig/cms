@@ -79,7 +79,7 @@ class AdminDestroy
     }
 
     /**
-     * Determine if this Model is  deletable.
+     * Determine if this Model is deletable.
      *
      * @return bool
      */

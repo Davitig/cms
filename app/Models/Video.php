@@ -18,9 +18,9 @@ class Video extends Model
     const TYPE = 'videos';
 
     /**
-     * The database table used by the model.
+     * The table associated with the model.
      *
-     * @var string
+     * @var string|null
      */
     protected $table = 'videos';
 
@@ -55,7 +55,7 @@ class Video extends Model
      * @var array
      */
     protected $languageFillable = [
-        'video_id', 'language', 'title'
+        'video_id', 'language_id', 'title'
     ];
 
     /**
@@ -64,6 +64,6 @@ class Video extends Model
      * @var array
      */
     protected $languageNotUpdatable = [
-        'video_id', 'language'
+        'video_id', 'language_id'
     ];
 }

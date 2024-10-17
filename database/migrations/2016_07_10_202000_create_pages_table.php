@@ -31,7 +31,7 @@ return new class extends Migration
         Schema::create('page_languages', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('page_id');
-            $table->char('language', 2);
+            $table->unsignedTinyInteger('language_id');
             $table->string('title');
             $table->string('short_title');
             $table->text('description')->nullable();
@@ -41,6 +41,8 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('page_id')->references('id')->on('pages')->onDelete('cascade');
+            $table->foreign('language_id')->references('id')->on('languages');
+            $table->unique(['page_id', 'language_id']);
         });
     }
 

@@ -3,7 +3,7 @@
 <div class="page-title">
     <div class="title-env">
         <h1 class="title">
-            <i class="fa fa-language"></i>
+            <i class="{{$icon = icon_type('translations')}}"></i>
             Translations
         </h1>
         <p class="description">Management of the translations</p>
@@ -14,7 +14,7 @@
                 <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
             </li>
             <li class="active">
-                <i class="fa fa-language"></i>
+                <i class="{{$icon}}"></i>
                 <strong>Translations</strong>
             </li>
         </ol>
