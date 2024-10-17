@@ -26,7 +26,7 @@ return new class extends Migration
         Schema::create('event_languages', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('event_id');
-            $table->char('language', 2);
+            $table->unsignedTinyInteger('language_id');
             $table->string('title');
             $table->text('description')->nullable();
             $table->mediumText('content')->nullable();
@@ -35,6 +35,8 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
+            $table->foreign('language_id')->references('id')->on('languages');
+            $table->unique(['event_id', 'language_id']);
         });
     }
 

@@ -23,12 +23,14 @@ return new class extends Migration
         Schema::create('file_languages', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('file_id');
-            $table->char('language', 2);
+            $table->unsignedTinyInteger('language_id');
             $table->string('title');
             $table->string('file');
             $table->timestamps();
 
             $table->foreign('file_id')->references('id')->on('files')->onDelete('cascade');
+            $table->foreign('language_id')->references('id')->on('languages');
+            $table->unique(['file_id', 'language_id']);
         });
     }
 

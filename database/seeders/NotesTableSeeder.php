@@ -17,10 +17,10 @@ class NotesTableSeeder extends DatabaseSeeder
 
         DB::table('notes')->insert([
             [
-                'title'       => 'Title',
+                'title' => 'Title',
                 'description' => 'Short description',
-                'content'     => 'Full content description',
-                'created_at'  => date('Y-m-d H:i:s')
+                'content' => 'Full content description',
+                'created_at' => date('Y-m-d H:i:s')
             ]
         ]);
     }

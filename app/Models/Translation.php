@@ -10,9 +10,9 @@ class Translation extends Model
     use LanguageTrait;
 
     /**
-     * The database table used by the model.
+     * The table associated with the model.
      *
-     * @var string
+     * @var string|null
      */
     protected $table = 'translations';
 
@@ -47,7 +47,7 @@ class Translation extends Model
      * @var array
      */
     protected $languageFillable = [
-        'translation_id', 'language', 'value'
+        'translation_id', 'language_id', 'value'
     ];
 
     /**
@@ -56,7 +56,7 @@ class Translation extends Model
      * @var array
      */
     protected $languageNotUpdatable = [
-        'translation_id', 'language'
+        'translation_id', 'language_id'
     ];
 
     /**

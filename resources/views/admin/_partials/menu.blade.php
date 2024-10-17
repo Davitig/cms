@@ -54,7 +54,7 @@
         </li>
     </ul>
 </li>
-<li{!! $hasRouteMatch = $routeMatches(['settings', 'webSettings', 'translations']) ? ' class="has-sub expanded"' : '' !!}>
+<li{!! $hasRouteMatch = $routeMatches(['settings', 'webSettings', 'languages', 'translations']) ? ' class="has-sub expanded"' : '' !!}>
     <a href="{{ $url = cms_route('settings.index') }}">
         <i class="fa fa-gears" title="Settings"></i>
         <span class="title">Settings</span>
@@ -70,6 +70,12 @@
             <a href="{{ cms_route('webSettings.index') }}"{!! $routeMatches(['webSettings']) ? ' class="active"' : '' !!}>
                 <i class="fa fa-gear" title="Web Settings"></i>
                 <span class="title">Web Settings</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ cms_route('languages.index') }}"{!! $routeMatches(['languages']) ? ' class="active"' : '' !!}>
+                <i class="{{icon_type('languages')}}" title="Languages"></i>
+                <span class="title">Languages</span>
             </a>
         </li>
         <li>

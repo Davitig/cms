@@ -68,7 +68,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $language = null;
 
-        if ($config->get('language_isset')) {
+        if ($config->get('language_in_url')) {
             $language = $config->get('app.language');
         }
 
