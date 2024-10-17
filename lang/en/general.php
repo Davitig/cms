@@ -38,6 +38,7 @@ return [
     'success' => 'success',
     'created' => 'created successfully',
     'updated' => 'updated successfully',
+    'deleted' => 'deleted successfully.',
     'saved' => 'saved successfully',
     'sent' => 'sent successfully',
 

@@ -11,7 +11,7 @@ use Models\Faq;
 
 class AdminFaqController extends Controller
 {
-    use Positionable, VisibilityTrait, Transferable;
+    use Positionable, VisibilityTrait, Transferable, ClonableLanguage;
 
     /**
      * The Faq instance.
@@ -55,7 +55,7 @@ class AdminFaqController extends Controller
 
         $data['parentSimilar'] = (new Collection)->byType($this->model::TYPE)->get();
 
-        return view('admin.faq.index', $data);
+        return view('admin.collections.faq.index', $data);
     }
 
     /**
@@ -69,7 +69,7 @@ class AdminFaqController extends Controller
         $data['current'] = $this->model;
         $data['current']->collection_id = $collectionId;
 
-        return view('admin.faq.create', $data);
+        return view('admin.collections.faq.create', $data);
     }
 
     /**
@@ -113,7 +113,9 @@ class AdminFaqController extends Controller
             ->forAdmin(null, false)
             ->getOrFail();
 
-        return view('admin.faq.edit', $data);
+        $data['current'] = $data['items']->first();
+
+        return view('admin.collections.faq.edit', $data);
     }
 
     /**

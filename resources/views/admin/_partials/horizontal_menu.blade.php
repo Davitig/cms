@@ -36,13 +36,13 @@
                 <!-- Added in v1.2 -->
                 <li class="dropdown hover-line language-switcher">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="{{ asset('assets/libs/images/flags/flag-'.language().'.png') }}" alt="flag-{{language()}}" />
+                        <img src="{{ asset('assets/libs/images/flags/'.language().'.png') }}" width="30" alt="{{language(true, 'full_name')}} flag" />
                     </a>
                     <ul class="dropdown-menu languages">
                         @foreach ($languages as $key => $value)
                             <li>
                                 <a href="{{$value['url']}}">
-                                    <img src="{{ asset('assets/libs/images/flags/flag-'.$key.'.png') }}" alt="flag-{{$key}}" />
+                                    <img src="{{ asset('assets/libs/images/flags/'.$key.'.png') }}" width="30" alt="{{$value['full_name']}} flag" />
                                     {{ $value['full_name'] }}
                                 </a>
                             </li>

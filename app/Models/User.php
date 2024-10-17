@@ -7,9 +7,9 @@ use Models\Abstracts\User as Model;
 class User extends Model
 {
     /**
-     * The database table used by the model.
+     * The table associated with the model.
      *
-     * @var string
+     * @var string|null
      */
     protected $table = 'users';
 

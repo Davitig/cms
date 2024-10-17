@@ -11,9 +11,9 @@ class Slider extends Model
     use LanguageTrait, PositionableTrait;
 
     /**
-     * The database table used by the model.
+     * The table associated with the model.
      *
-     * @var string
+     * @var string|null
      */
     protected $table = 'slider';
 
@@ -46,7 +46,7 @@ class Slider extends Model
      * @var array
      */
     protected $languageFillable = [
-        'slider_id', 'language', 'title', 'description'
+        'slider_id', 'language_id', 'title', 'description'
     ];
 
     /**
@@ -55,7 +55,7 @@ class Slider extends Model
      * @var array
      */
     protected $languageNotUpdatable = [
-        'slider_id', 'language'
+        'slider_id', 'language_id'
     ];
 
     /**

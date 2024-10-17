@@ -19,9 +19,9 @@ class Article extends Model
     const TYPE = 'articles';
 
     /**
-     * The database table used by the model.
+     * The table associated with the model.
      *
-     * @var string
+     * @var string|null
      */
     protected $table = 'articles';
 
@@ -54,7 +54,7 @@ class Article extends Model
      * @var array
      */
     protected $languageFillable = [
-        'article_id', 'language', 'title', 'description', 'content', 'meta_title', 'meta_desc'
+        'article_id', 'language_id', 'title', 'description', 'content', 'meta_title', 'meta_desc'
     ];
 
     /**
@@ -63,6 +63,6 @@ class Article extends Model
      * @var array
      */
     protected $languageNotUpdatable = [
-        'article_id', 'language'
+        'article_id', 'language_id'
     ];
 }

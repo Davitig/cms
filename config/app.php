@@ -86,37 +86,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Application default language
-    |--------------------------------------------------------------------------
-    |
-    | Application default language, that can be changed in runtime by user
-    |
-    */
-
-    'language' => 'en',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Application languages
-    |--------------------------------------------------------------------------
-    |
-    | Here you can specify the array of languages for the application.
-    |
-    */
-
-    'languages' => [
-        'en' => [
-            'short_name' => 'en',
-            'full_name' => 'English'
-        ],
-        'ka' => [
-            'short_name' => 'ge',
-            'full_name' => 'Georgian'
-        ]
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Encryption Key
     |--------------------------------------------------------------------------
     |

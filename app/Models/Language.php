@@ -1,0 +1,31 @@
+<?php
+
+namespace Models;
+
+use Models\Abstracts\Model;
+
+class Language extends Model
+{
+    /**
+     * The table associated with the model.
+     *
+     * @var string|null
+     */
+    protected $table = 'languages';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'language', 'main', 'short_name', 'full_name'
+    ];
+
+    /**
+     * The attributes that are not updatable.
+     *
+     * @var array
+     */
+    protected $notUpdatable = [];
+}

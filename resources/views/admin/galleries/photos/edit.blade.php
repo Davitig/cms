@@ -35,7 +35,7 @@
                             <li{!!language() != $current->language ? '' : ' class="active"'!!}>
                                 <a href="#modal-item-{{$current->language}}" data-toggle="tab">
                                     <span class="visible-xs">{{$current->language}}</span>
-                                    <span class="hidden-xs">{{language($current->language)}}</span>
+                                    <span class="hidden-xs">{{language($current->language, 'full_name')}}</span>
                                 </a>
                             </li>
                         @endforeach

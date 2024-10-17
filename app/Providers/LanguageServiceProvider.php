@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
+use Models\Language;
 
 class LanguageServiceProvider extends ServiceProvider
 {
@@ -45,6 +46,10 @@ class LanguageServiceProvider extends ServiceProvider
      */
     public function boot(Request $request, Config $config)
     {
+        if ($this->app->runningInConsole()) {
+            return;
+        }
+
         $this->setLanguageConfig($request, $config);
 
         $this->makeLanguageUrls($request, $config);
@@ -63,21 +68,30 @@ class LanguageServiceProvider extends ServiceProvider
 
         $firstSegment = (string) current($this->segments);
 
-        $this->languagesCount = count($this->languages = $config->get('app.languages'));
+        $languages = [];
 
-        // Set current application language dynamically
+        foreach ((new Language)->orderByDesc('main')->get() as $language) {
+            $languages[strtolower($language->language)] = $language->getAttributes();
+        }
+
+        $config->set(['app.language' => key($languages)]);
+        $config->set(['app.languages' => $this->languages = $languages]);
+
+        $this->languagesCount = count($languages);
+
+        // Set the current application language
         if ($this->languagesCount > 1 && array_key_exists($firstSegment, $this->languages)) {
             $config->set(['app.language' => $firstSegment]);
-            $config->set(['language_isset' => true]);
+            $config->set(['language_in_url' => true]);
 
             $this->segmentsCount--;
 
             array_shift($this->segments);
         } else {
-            $config->set(['language_isset' => false]);
+            $config->set(['language_in_url' => false]);
         }
 
-        // Set URL segments and its count, without language segment
+        // Set URL segments and its count, without a language segment
         $config->set(['url_path_segments' => $this->segments]);
         $config->set(['url_path_segments_count' => $this->segmentsCount]);
 

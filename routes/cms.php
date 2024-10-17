@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminCollectionsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminFilemanagerController;
 use App\Http\Controllers\Admin\AdminFilesController;
+use App\Http\Controllers\Admin\AdminLanguagesController;
 use App\Http\Controllers\Admin\AdminMenusController;
 use App\Http\Controllers\Admin\AdminNotesController;
 use App\Http\Controllers\Admin\AdminPagesController;
@@ -42,6 +43,14 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
         // dashboard
         $router->get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
+        // languages
+        $router->post('languages/set-main', [
+            AdminLanguagesController::class, 'setMain'
+        ])->name('languages.setMain');
+        $router->resource('languages', AdminLanguagesController::class)
+            ->names(resource_names('languages'))
+            ->except(['show']);
+
         // menus
         $router->post('menus/set-main', [
             AdminMenusController::class, 'setMain'
@@ -64,6 +73,8 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
                 ->name('pages.transfer');
             $router->put('pages/collapse', 'collapse')
                 ->name('pages.collapse');
+            $router->post('pages/{id}/clone-language', 'cloneLanguage')
+                ->name('pages.cloneLanguage');
             $router->resource('menus.pages', AdminPagesController::class)
                 ->names(resource_names('pages'))
                 ->except(['show']);
@@ -82,6 +93,8 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
                     ->name($route . '.updatePosition');
                 $router->put($route . '/transfer/{id}', [$controller, 'transfer'])
                     ->name($route . '.transfer');
+                $router->post($route . '/{id}/clone-language', [$controller, 'cloneLanguage'])
+                    ->name($route . '.cloneLanguage');
                 $router->resource($prefix . '.' . $route, $controller)
                     ->names(resource_names($route))
                     ->except(['show']);
@@ -128,15 +141,15 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
             ->except(['show']);
 
         // translations
-        $router->get('translations/form', [
-            AdminTranslationsController::class, 'getModal'
-        ])->name('translations.popup');
-        $router->post('translations/form', [
-            AdminTranslationsController::class, 'postData'
-        ])->name('translations.popup');
-        $router->resource('translations', AdminTranslationsController::class)
-            ->names(resource_names('translations'))
-            ->except(['show']);
+        $router->controller(AdminTranslationsController::class)->group(function ($router) {
+            $router->get('translations/form', 'getForm')->name('translations.form');
+            $router->post('translations/form', 'setData')->name('translations.form.post');
+            $router->post('translations/{id}/clone-language', 'cloneLanguage')
+                ->name('translations.cloneLanguage');
+            $router->resource('translations', AdminTranslationsController::class)
+                ->names(resource_names('translations'))
+                ->except(['show']);
+        });
 
         // notes
         $router->controller(AdminNotesController::class)->group(function ($router) {

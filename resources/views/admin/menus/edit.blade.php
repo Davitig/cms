@@ -29,6 +29,7 @@
                 <span class="expand-icon">+</span>
             </a>
         </div>
+        <a href="{{cms_route('menus.create')}}" class="pull-right padr">Add more</a>
     </div>
     <div class="panel-body">
         {{ html()->modelForm($current,

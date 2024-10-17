@@ -3,7 +3,7 @@
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-header"></i></span>
-            {{ html()->text('title')->id('title' . $current->language)->class('form-control') }}
+            {{ html()->text('title')->id('title')->class('form-control') }}
         </div>
         @if ($error)
             <span class="text-danger">{{$error}}</span>
@@ -15,7 +15,6 @@
 
 <div class="form-group">
     <label class="col-sm-2 control-label">Description:</label>
-
     <div class="col-lg-6 col-sm-10">
         {{ html()->textarea('description')->class('form-control')->rows(3) }}
     </div>

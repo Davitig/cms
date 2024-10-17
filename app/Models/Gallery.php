@@ -18,9 +18,9 @@ class Gallery extends Model
     const TYPE = 'galleries';
 
     /**
-     * The database table used by the model.
+     * The table associated with the model.
      *
-     * @var string
+     * @var string|null
      */
     protected $table = 'galleries';
 
@@ -56,7 +56,7 @@ class Gallery extends Model
      * @var array
      */
     protected $languageFillable = [
-        'gallery_id', 'language', 'title', 'description', 'meta_title', 'meta_desc'
+        'gallery_id', 'language_id', 'title', 'description', 'meta_title', 'meta_desc'
     ];
 
     /**
@@ -65,6 +65,6 @@ class Gallery extends Model
      * @var array
      */
     protected $languageNotUpdatable = [
-        'gallery_id', 'language'
+        'gallery_id', 'language_id'
     ];
 }

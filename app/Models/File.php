@@ -14,9 +14,9 @@ class File extends Model
     use LanguageTrait, PositionableTrait;
 
     /**
-     * The database table used by the model.
+     * The table associated with the model.
      *
-     * @var string
+     * @var string|null
      */
     protected $table = 'files';
 
@@ -51,7 +51,7 @@ class File extends Model
      * @var array
      */
     protected $languageFillable = [
-        'file_id', 'language', 'title', 'file'
+        'file_id', 'language_id', 'title', 'file'
     ];
 
     /**
@@ -60,7 +60,7 @@ class File extends Model
      * @var array
      */
     protected $languageNotUpdatable = [
-        'file_id', 'language'
+        'file_id', 'language_id'
     ];
 
     /**

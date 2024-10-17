@@ -13,9 +13,9 @@ class Page extends Model
     use LanguageTrait, PositionableTrait, FileableTrait, NestableTrait;
 
     /**
-     * The database table used by the model.
+     * The table associated with the model.
      *
-     * @var string
+     * @var string|null
      */
     protected $table = 'pages';
 
@@ -48,7 +48,7 @@ class Page extends Model
      * @var array
      */
     protected $languageFillable = [
-        'page_id', 'language', 'title', 'short_title', 'description', 'content', 'meta_title', 'meta_desc'
+        'page_id', 'language_id', 'title', 'short_title', 'description', 'content', 'meta_title', 'meta_desc'
     ];
 
     /**
@@ -57,7 +57,7 @@ class Page extends Model
      * @var array
      */
     protected $languageNotUpdatable = [
-        'page_id', 'language'
+        'page_id', 'language_id'
     ];
 
     /**

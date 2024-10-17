@@ -19,9 +19,9 @@ class Event extends Model
     const TYPE = 'events';
 
     /**
-     * The database table used by the model.
+     * The table associated with the model.
      *
-     * @var string
+     * @var string|null
      */
     protected $table = 'events';
 
@@ -54,7 +54,7 @@ class Event extends Model
      * @var array
      */
     protected $languageFillable = [
-        'event_id', 'language', 'title', 'description', 'content', 'meta_title', 'meta_desc'
+        'event_id', 'language_id', 'title', 'description', 'content', 'meta_title', 'meta_desc'
     ];
 
     /**
@@ -63,6 +63,6 @@ class Event extends Model
      * @var array
      */
     protected $languageNotUpdatable = [
-        'event_id', 'language'
+        'event_id', 'language_id'
     ];
 }

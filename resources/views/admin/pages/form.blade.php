@@ -77,7 +77,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12 template{{($templates = cms_pages('templates.' . $current->type, [])) ? '' : ' hidden'}}">
+            <div class="col-lg-12 template{{($templates = cms_pages('templates.' . $current->type)) ? '' : ' hidden'}}">
                 <div class="form-group">
                     <label class="col-lg-3 col-sm-2 control-label">Template:</label>
                     <div class="col-lg-9 col-sm-10">

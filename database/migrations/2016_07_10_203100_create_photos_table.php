@@ -25,11 +25,13 @@ return new class extends Migration
         Schema::create('photo_languages', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('photo_id');
-            $table->char('language', 2);
+            $table->unsignedTinyInteger('language_id');
             $table->string('title');
             $table->timestamps();
 
             $table->foreign('photo_id')->references('id')->on('photos')->onDelete('cascade');
+            $table->foreign('language_id')->references('id')->on('languages');
+            $table->unique(['photo_id', 'language_id']);
         });
     }
 

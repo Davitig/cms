@@ -2,6 +2,7 @@
 
 namespace App\Providers\Web;
 
+use App\Http\Controllers\Web\WebHomeController;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -21,7 +22,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $homeController = 'WebHomeController@index';
+    protected $homeController = WebHomeController::class;
 
     /**
      * The Request instance.
@@ -129,7 +130,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
 
                 $this->router = $app['router'];
 
-                if ($this->config->get('language_isset')) {
+                if ($this->config->get('language_in_url')) {
                     $this->uriPrefix = $this->config->get('app.language') . '/';
                 }
 
@@ -236,9 +237,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     protected function setRoute()
     {
         if (! $this->segmentsCount) {
-            $this->router->get($this->uriPrefix, [
-                'uses' => $this->homeController
-            ]);
+            $this->router->get($this->uriPrefix, [$this->homeController, 'index']);
 
             return;
         }

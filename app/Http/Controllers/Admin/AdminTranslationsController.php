@@ -10,6 +10,8 @@ use Models\Translation;
 
 class AdminTranslationsController extends Controller
 {
+    use ClonableLanguage;
+
     /**
      * The Translation instance.
      *

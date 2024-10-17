@@ -10,7 +10,7 @@ use Models\Collection;
 
 class AdminArticlesController extends Controller
 {
-    use Positionable, VisibilityTrait, Transferable;
+    use Positionable, VisibilityTrait, Transferable, ClonableLanguage;
 
     /**
      * The Article instance.

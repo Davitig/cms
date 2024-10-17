@@ -22,7 +22,7 @@ return new class extends Migration
         Schema::create('translation_languages', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('translation_id');
-            $table->char('language', 2);
+            $table->unsignedTinyInteger('language_id');
             $table->string('value');
             $table->timestamps();
 
@@ -30,6 +30,8 @@ return new class extends Migration
                 ->references('id')
                 ->on('translations')
                 ->onDelete('cascade');
+            $table->foreign('language_id')->references('id')->on('languages');
+            $table->unique(['translation_id', 'language_id']);
         });
     }
 

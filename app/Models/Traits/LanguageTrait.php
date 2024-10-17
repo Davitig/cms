@@ -104,17 +104,19 @@ trait LanguageTrait
         return $this->leftJoin($languageTable,
             function ($q) use ($table, $languageTable, $currentLang) {
                 return $q->on("{$table}.id", "{$languageTable}.{$this->getForeignKey()}")
-                    ->when($currentLang === true, function ($q) use ($languageTable) {
-                        return $q->where("{$languageTable}.language", language());
-                    }, function ($q) use ($languageTable, $currentLang) {
-                        return $q->when(is_string($currentLang),
-                            function ($q) use ($languageTable, $currentLang) {
-                                return $q->where("{$languageTable}.language", $currentLang);
-                            });
+                    ->when($currentLang !== false, function ($q) use ($languageTable, $currentLang) {
+                        return $q->where(
+                            "{$languageTable}.language_id",
+                            language($currentLang)['id'] ?? $currentLang
+                        );
                     });
             })->addSelect(array_merge($columns ?: ["{$languageTable}.*"], [
             "{$languageTable}.id as {$languageKey}", "{$table}.*"
-        ]));
+        ]))->selectSub(function ($q) use ($languageTable) {
+            return $q->from('languages')
+                ->whereColumn('languages.id', $languageTable . '.language_id')
+                ->select('language');
+        }, 'language');
     }
 
     /**
@@ -124,7 +126,7 @@ trait LanguageTrait
      */
     public function currentLanguage()
     {
-        return $this->where("{$this->getLanguageTable()}.language", language());
+        return $this->where("{$this->getLanguageTable()}.language_id", language(true, 'id'));
     }
 
     /**
@@ -142,7 +144,7 @@ trait LanguageTrait
         $attributes = $this->getLanguageUpdatable($attributes, $exclude);
 
         return $this->languageModel->where($this->getForeignKey(), $this->getKey())
-            ->where('language', language())
+            ->where('language_id', language(true, 'id'))
             ->update($attributes);
     }
 
@@ -156,14 +158,12 @@ trait LanguageTrait
     {
         $newLanguages = [];
 
-        $languages = languages();
-
         $attributes[$this->getForeignKey()] = $this->getKey();
 
-        foreach($languages as $key => $value) {
+        foreach(languages() as $value) {
             $this->setLanguage();
 
-            $attributes['language'] = $key;
+            $attributes['language_id'] = $value['id'];
 
             $newLanguages[] = $this->languageModel->fill($attributes)->save();
         }

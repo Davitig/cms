@@ -32,7 +32,7 @@ class CmsUsersTableSeeder extends DatabaseSeeder
         DB::table('cms_settings')->insert([
             [
                 'cms_user_id' => 1,
-                'created_at'  => $currentDate
+                'created_at' => $currentDate
             ]
         ]);
     }
