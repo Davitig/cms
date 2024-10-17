@@ -23,39 +23,37 @@
             </ol>
         </div>
     </div>
-    <div class="clearfix">
+    <ul id="form-tabs" class="nav nav-tabs nav-tabs-justified">
         @include('admin._partials.items.lang')
-        <ul id="listable-types" class="nav nav-tabs col-xs-6 right-aligned">
-            @if ($current->collection_type)
-                <li class="listable">
-                    <a href="{{cms_route($current->collection_type.'.index', [$current->type_id])}}">
-                        <span class="visible-xs"><i class="{{$iconType = icon_type($current->collection_type)}}"></i></span>
-                        <div class="hidden-xs">
-                            <i class="{{$iconType}}"></i> {{ucfirst($current->collection_type)}}
-                        </div>
-                    </a>
-                </li>
-            @endif
-            @if (array_key_exists($current->type, cms_pages('explicit')))
-                <li class="modules">
-                    <a href="{{cms_route($current->type.'.index')}}">
-                        <span class="visible-xs"><i class="{{$iconType = icon_type($current->type)}}"></i></span>
-                        <div class="hidden-xs">
-                            <i class="{{$iconType}}"></i> {{ucfirst($current->type)}}
-                        </div>
-                    </a>
-                </li>
-            @endif
-            <li>
-                <a href="{{cms_route('files.index', ['pages', $current->id])}}">
-                    <span class="visible-xs"><i class="{{$iconFiles = icon_type('files')}}"></i></span>
+        <li>
+            <a href="{{cms_route('files.index', ['pages', $current->id])}}">
+                <span class="visible-xs"><i class="{{$iconFiles = icon_type('files')}}"></i></span>
+                <div class="hidden-xs">
+                    <i class="{{$iconFiles}}"></i> {{trans('general.files')}}
+                </div>
+            </a>
+        </li>
+        @if ($current->collection_type)
+            <li class="listable">
+                <a href="{{cms_route($current->collection_type.'.index', [$current->type_id])}}">
+                    <span class="visible-xs"><i class="{{$iconType = icon_type($current->collection_type)}}"></i></span>
                     <div class="hidden-xs">
-                        <i class="{{$iconFiles}}"></i> {{trans('general.files')}}
+                        <i class="{{$iconType}}"></i> {{ucfirst($current->collection_type)}}
                     </div>
                 </a>
             </li>
-        </ul>
-    </div>
+        @endif
+        @if (array_key_exists($current->type, cms_pages('explicit')))
+            <li class="modules">
+                <a href="{{cms_route($current->type.'.index')}}">
+                    <span class="visible-xs"><i class="{{$iconType = icon_type($current->type)}}"></i></span>
+                    <div class="hidden-xs">
+                        <i class="{{$iconType}}"></i> {{ucfirst($current->type)}}
+                    </div>
+                </a>
+            </li>
+        @endif
+    </ul>
     <div class="panel panel-default">
         <div class="panel-heading">
             <h2 class="panel-title">Edit page</h2>
@@ -105,12 +103,12 @@
     @push('body.bottom')
         <script type="text/javascript">
             $('form.ajax-form').on('ajaxFormSuccess', function (form, data) {
-                var listableTypes = $('#listable-types');
+                var listableTypes = $('#form-tabs');
                 $('.listable', listableTypes).remove();
                 $('.modules', listableTypes).remove();
 
                 if (data.input.typeHtml !== undefined) {
-                    listableTypes.prepend(data.input.typeHtml);
+                    listableTypes.append(data.input.typeHtml);
                 }
             });
         </script>
