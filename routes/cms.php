@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminCollectionsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminFilemanagerController;
 use App\Http\Controllers\Admin\AdminFilesController;
+use App\Http\Controllers\Admin\AdminLanguagesController;
 use App\Http\Controllers\Admin\AdminMenusController;
 use App\Http\Controllers\Admin\AdminNotesController;
 use App\Http\Controllers\Admin\AdminPagesController;
@@ -42,6 +43,14 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
         // dashboard
         $router->get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
+        // languages
+        $router->post('languages/set-main', [
+            AdminLanguagesController::class, 'setMain'
+        ])->name('languages.setMain');
+        $router->resource('languages', AdminLanguagesController::class)
+            ->names(resource_names('languages'))
+            ->except(['show']);
+
         // menus
         $router->post('menus/set-main', [
             AdminMenusController::class, 'setMain'
@@ -64,6 +73,8 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
                 ->name('pages.transfer');
             $router->put('pages/collapse', 'collapse')
                 ->name('pages.collapse');
+            $router->post('pages/{id}/clone-language', 'cloneLanguage')
+                ->name('pages.cloneLanguage');
             $router->resource('menus.pages', AdminPagesController::class)
                 ->names(resource_names('pages'))
                 ->except(['show']);

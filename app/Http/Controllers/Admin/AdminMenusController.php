@@ -124,7 +124,7 @@ class AdminMenusController extends Controller
      * Set the specified menu to main.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     public function setMain(Request $request)
     {

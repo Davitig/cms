@@ -15,10 +15,10 @@ class MenusTableSeeder extends DatabaseSeeder
 
         DB::table('menus')->insert([
             [
-                'main'        => 1,
-                'title'       => 'Main Pages',
+                'main' => 1,
+                'title' => 'Main Pages',
                 'description' => 'List of main pages',
-                'created_at'  => date('Y-m-d H:i:s')
+                'created_at' => date('Y-m-d H:i:s')
             ]
         ]);
     }

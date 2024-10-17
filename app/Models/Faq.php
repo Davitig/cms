@@ -18,9 +18,9 @@ class Faq extends Model
     const TYPE = 'faq';
 
     /**
-     * The database table used by the model.
+     * The table associated with the model.
      *
-     * @var string
+     * @var string|null
      */
     protected $table = 'faq';
 
@@ -53,7 +53,7 @@ class Faq extends Model
      * @var array
      */
     protected $languageFillable = [
-        'faq_id', 'language', 'title', 'description'
+        'faq_id', 'language_id', 'title', 'description'
     ];
 
     /**
@@ -62,6 +62,6 @@ class Faq extends Model
      * @var array
      */
     protected $languageNotUpdatable = [
-        'faq_id', 'language'
+        'faq_id', 'language_id'
     ];
 }

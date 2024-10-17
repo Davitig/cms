@@ -80,6 +80,19 @@ abstract class Model extends BaseModel
     }
 
     /**
+     * Get all the current fillable attributes on the model.
+     *
+     * @param  array  $fillable
+     * @return array
+     */
+    public function getRefillAttributes(array $fillable = [])
+    {
+        $fillable = array_merge($this->fillable, $fillable);
+
+        return array_intersect_key($this->getAttributes(), array_flip($fillable));
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function newEloquentBuilder($builder)

@@ -248,6 +248,8 @@ return [
     'icons' => [
         'dashboard' => 'fa fa-dashboard',
 
+        'languages' => 'fa fa-sort-alpha-asc',
+
         'menus' => 'fa fa-list',
         'pages' => 'fa fa-indent',
 

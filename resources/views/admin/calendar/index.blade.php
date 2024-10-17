@@ -103,7 +103,7 @@ $(document).ready(function($) {
         var $event = $(this).find('.form-control'),
             title = $event.val().trim();
 
-        if (title.length >= 3) {
+        if (title.length >= 2) {
             var input = {'title':title, '_method':'put', '_token':"{{$csrfToken}}"};
 
             $.post("{{cms_route('calendar.save')}}", input, function(data) {
