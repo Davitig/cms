@@ -34,6 +34,7 @@ class ElfinderServiceProvider extends ServiceProvider
         }
 
         $config['namespace'] = 'App\Http\Controllers';
+        $config['as'] = cms_slug() . '.';
 
         $router->group($config, function($router) {
             $router->get('index', ['as' => 'filemanager.index', 'uses' => 'ElfinderController@showIndex']);
