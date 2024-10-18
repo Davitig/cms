@@ -26,7 +26,7 @@
     <ul id="form-tabs" class="nav nav-tabs nav-tabs-justified">
         @include('admin._partials.items.lang')
         <li>
-            <a href="{{cms_route('files.index', ['pages', $current->id])}}">
+            <a href="{{cms_route('pages.files.index', $current->id)}}">
                 <span class="visible-xs"><i class="{{$iconFiles = icon_type('files')}}"></i></span>
                 <div class="hidden-xs">
                     <i class="{{$iconFiles}}"></i> {{trans('general.files')}}
@@ -87,7 +87,7 @@
                     @unset($languages[$current->language])
                 @endforeach
                 @foreach ($languages as $value)
-                    <div class="tab-pane" id="item-{{$value['language']}}">
+                    <div class="tab-pane{{language() != $value['language'] ? '' : ' active'}}" id="item-{{$value['language']}}">
                         {{ html()->form('post', cms_route('pages.cloneLanguage', [$current->id], $value['language']))
                             ->class('form-horizontal')->data('lang', $value['language'])->open() }}
                         <button class="btn btn-info btn-icon btn-icon-standalone btn-lg">

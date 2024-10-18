@@ -23,11 +23,13 @@
                                     <span class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></span>
                                 </button>
                                 {{ html()->form()->close() }}
-                                <a href="{{ cms_route('files.index', ['pages', $item->id]) }}" class="btn btn-{{$item->has_file ? 'turquoise' : 'white'}}" title="{{trans('general.files')}}">
+                                <a href="{{ cms_route('pages.files.index', [$item->id]) }}" class="btn btn-{{$item->has_file ? 'turquoise' : 'white'}}" title="{{trans('general.files')}}">
                                     <span class="{{icon_type('files')}}"></span>
                                 </a>
                                 <span title="{{ucfirst($type = $item->collection_type ?: $item->type)}}">
-                                    <a href="{{$typeUrl = (array_key_exists($item->type, cms_config('pages.explicit')) ? cms_route($item->type . '.index') : (array_key_exists($item->type, cms_config('pages.implicit')) ? cms_route($item->collection_type . '.index', [$item->type_id]) : '#'))}}" class="btn btn-{{$typeUrl == '#' ? 'white disabled' : 'info'}}">
+                                    <a href="{{$typeUrl = (array_key_exists($item->type, cms_config('pages.explicit'))
+                                    ? cms_route($item->type . '.index') : (array_key_exists($item->type, cms_config('pages.implicit'))
+                                    ? cms_route($item->collection_type . '.index', [$item->type_id]) : '#'))}}" class="btn btn-{{$typeUrl == '#' ? 'white disabled' : 'info'}}">
                                         <span class="{{icon_type($type, 'fa fa-file-text-o')}}"></span>
                                     </a>
                                 </span>

@@ -26,7 +26,7 @@
     <ul class="nav nav-tabs nav-tabs-justified">
         @include('admin._partials.items.lang')
         <li>
-            <a href="{{cms_route('files.index', ['articles', $current->id])}}">
+            <a href="{{cms_route('articles.files.index', [$current->id])}}">
                 <span class="visible-xs"><i class="{{$iconFiles = icon_type('files')}}"></i></span>
                 <div class="hidden-xs">
                     <i class="{{$iconFiles}}"></i> {{trans('general.files')}}

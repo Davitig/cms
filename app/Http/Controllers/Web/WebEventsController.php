@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use Models\Event;
 use Models\Collection;
+use Models\Event;
+use Models\EventFile;
 use Models\Page;
 
 class WebEventsController extends Controller
@@ -56,7 +57,7 @@ class WebEventsController extends Controller
 
         $data['current'] = $this->model->byCollectionSlug($page->type_id, $slug)->firstOrFail();
 
-        $data['files'] = $data['current']->getFiles();
+        $data['files'] = (new EventFile)->getFiles($data['current']->id);
 
         return view('web.event', $data);
     }

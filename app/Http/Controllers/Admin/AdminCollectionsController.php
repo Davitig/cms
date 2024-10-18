@@ -123,6 +123,6 @@ class AdminCollectionsController extends Controller
      */
     public function destroy($id)
     {
-        return (new AdminDestroy($this->model, $id, false))->handle();
+        return (new AdminDestroy($this->model, $id))->handle();
     }
 }

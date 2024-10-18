@@ -145,6 +145,6 @@ class AdminGalleriesController extends Controller
      */
     public function destroy($collectionId, $id)
     {
-        return (new AdminDestroy($this->model, $id, false))->handle();
+        return (new AdminDestroy($this->model, $id))->handle();
     }
 }

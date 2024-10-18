@@ -191,7 +191,7 @@ class AdminCmsUsersController extends Controller
             $this->model = null;
         }
 
-        return (new AdminDestroy($this->model, $id, false))->handle();
+        return (new AdminDestroy($this->model, $id))->handle();
     }
 
     /**

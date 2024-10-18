@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use Models\Page;
+use Models\PageFile;
 
 class WebPageController extends Controller
 {
@@ -17,7 +18,7 @@ class WebPageController extends Controller
     {
         $data['current'] = $page;
 
-        $data['files'] = $page->getFiles();
+        $data['files'] = (new PageFile)->getFiles($page->id);
 
         return view('web.page', $data);
     }

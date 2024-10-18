@@ -11,26 +11,29 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('files', function (Blueprint $table) {
+        Schema::create('article_files', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('table_name', 64)->index();
-            $table->unsignedBigInteger('table_id')->index();
+            $table->unsignedBigInteger('article_id');
             $table->boolean('visible')->default(1);
             $table->unsignedSmallInteger('position')->default(1);
             $table->timestamps();
+
+            $table->foreign('article_id')->references('id')
+                ->on('articles')->onDelete('cascade');
         });
 
-        Schema::create('file_languages', function (Blueprint $table) {
+        Schema::create('article_file_languages', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('file_id');
+            $table->unsignedBigInteger('article_file_id');
             $table->unsignedTinyInteger('language_id');
             $table->string('title');
             $table->string('file');
             $table->timestamps();
 
-            $table->foreign('file_id')->references('id')->on('files')->onDelete('cascade');
+            $table->foreign('article_file_id')->references('id')
+                ->on('article_files')->onDelete('cascade');
             $table->foreign('language_id')->references('id')->on('languages');
-            $table->unique(['file_id', 'language_id']);
+            $table->unique(['article_file_id', 'language_id']);
         });
     }
 
@@ -39,8 +42,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('file_languages');
+        Schema::dropIfExists('article_file_languages');
 
-        Schema::dropIfExists('files');
+        Schema::dropIfExists('article_files');
     }
 };

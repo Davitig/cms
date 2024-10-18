@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminArticleFilesController;
 use App\Http\Controllers\Admin\AdminArticlesController;
+use App\Http\Controllers\Admin\AdminEventFilesController;
 use App\Http\Controllers\Admin\AdminEventsController;
 use App\Http\Controllers\Admin\AdminFaqController;
 use App\Http\Controllers\Admin\AdminGalleriesController;
+use App\Http\Controllers\Admin\AdminPageFilesController;
 use App\Http\Controllers\Admin\AdminPhotosController;
 use App\Http\Controllers\Admin\AdminVideosController;
 
@@ -64,14 +67,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | CMS Resource Routes
+    | CMS Type Routes
     |--------------------------------------------------------------------------
     |
-    | Here you can specify routes, which will also obtain additional routes.
+    | Here you can specify routes, which will also get additional routes.
+    | Additional routes: "visibility", "position", "transfer"
     |
     */
 
-    'routes' => [
+    'type_routes' => [
         'collections' => [
             'articles' => AdminArticlesController::class,
             'events' => AdminEventsController::class,
@@ -82,6 +86,22 @@ return [
             'photos' => AdminPhotosController::class,
             'videos' => AdminVideosController::class
         ]
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | CMS File Routes
+    |--------------------------------------------------------------------------
+    |
+    | Here you can specify file routes, which will also get additional routes.
+    | Additional routes: "visibility", "position"
+    |
+    */
+
+    'file_routes' => [
+        'pages' => AdminPageFilesController::class,
+        'articles' => AdminArticleFilesController::class,
+        'events' => AdminEventFilesController::class
     ],
 
     /*
@@ -174,31 +194,6 @@ return [
     */
 
     'tabs' => [],
-
-    /*
-    |--------------------------------------------------------------------------
-    | File Routes
-    |--------------------------------------------------------------------------
-    |
-    | The array of file route names, that has access to the attached files.
-    | Route names can also contain a foreign key.
-    |
-    */
-
-    'files' => [
-        'pages' => [
-            'model' => \Models\Page::class,
-            'foreign_key' => 'menu_id'
-        ],
-        'articles' => [
-            'model' => \Models\Article::class,
-            'foreign_key' => 'collection_id'
-        ],
-        'events' => [
-            'model' => \Models\Event::class,
-            'foreign_key' => 'collection_id'
-        ]
-    ],
 
     /*
     |--------------------------------------------------------------------------

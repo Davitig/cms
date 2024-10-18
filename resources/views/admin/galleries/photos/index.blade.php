@@ -133,7 +133,7 @@
 </section>
 @push('body.bottom')
 @include('admin._scripts.album', [
-    'routeCreate' => cms_route('photos.create', [$parent->id, 'sort' => $parent->admin_sort, 'page' => $items->currentPage(), 'lastPage' => $items->lastPage()]),
+    'routeCreate' => cms_route('photos.create', [$parent->id, 'sort' => $parent->admin_sort, 'page_val' => $items->currentPage(), 'lastPage' => $items->lastPage()]),
     'routeIndex' => cms_route('photos.index', [$parent->id]),
     'routePosition' => cms_route('photos.updatePosition'),
     'sort' => $parent->admin_sort,

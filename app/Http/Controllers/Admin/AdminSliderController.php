@@ -158,6 +158,6 @@ class AdminSliderController extends Controller
     {
         $id = $this->request->get('ids');
 
-        return (new AdminDestroy($this->model, $id, false))->handle();
+        return (new AdminDestroy($this->model, $id))->handle();
     }
 }

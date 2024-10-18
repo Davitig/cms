@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use Models\Article;
+use Models\ArticleFile;
 use Models\Collection;
 use Models\Page;
 
@@ -56,7 +57,7 @@ class WebArticlesController extends Controller
 
         $data['current'] = $this->model->byCollectionSlug($page->type_id, $slug)->firstOrFail();
 
-        $data['files'] = $data['current']->getFiles();
+        $data['files'] = (new ArticleFile)->getFiles($data['current']->id);
 
         return view('web.article', $data);
     }

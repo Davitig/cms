@@ -245,28 +245,4 @@ abstract class Model extends BaseModel
 
         throw new HttpResponseException($response);
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function __get($key)
-    {
-        return $this->getAttributeValue($key);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function offsetGet($offset): mixed
-    {
-        return $this->getAttributeValue($offset);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function offsetSet($offset, $value): void
-    {
-        $this->setAttribute($offset, $value);
-    }
 }

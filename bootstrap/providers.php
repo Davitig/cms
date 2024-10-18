@@ -10,7 +10,7 @@ return [
     App\Providers\LanguageServiceProvider::class,
     App\Providers\EventServiceProvider::class,
     App\Providers\ExceptionHandlerServiceProvider::class,
-    App\Providers\RouteServiceProvider::class,
+    // App\Providers\RouteServiceProvider::class,
 
     App\Providers\GlideServiceProvider::class,
     // Admin Service Providers

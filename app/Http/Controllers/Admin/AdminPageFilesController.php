@@ -6,16 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FileRequest;
 use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
-use Models\File;
+use Models\Page;
+use Models\PageFile;
 
-class AdminFilesController extends Controller
+class AdminPageFilesController extends Controller
 {
     use Positionable, VisibilityTrait;
 
     /**
-     * The File instance.
+     * The PageFile instance.
      *
-     * @var \Models\File
+     * @var \Models\PageFile
      */
     protected $model;
 
@@ -29,11 +30,11 @@ class AdminFilesController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\File  $model
+     * @param  \Models\PageFile  $model
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    public function __construct(File $model, Request $request)
+    public function __construct(PageFile $model, Request $request)
     {
         $this->model = $model;
 
@@ -43,56 +44,60 @@ class AdminFilesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  string  $routeName
-     * @param  int  $routeId
+     * @param  int  $pageId
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($routeName, $routeId)
+    public function index($pageId)
     {
-        $data['foreignModel'] = $this->model->getForeignModel();
+        $data['foreignModels'] = (new Page)->where('id', $pageId)
+            ->joinLanguage(false)
+            ->joinCollection()
+            ->getOrFail();
 
-        $data['items'] = $this->model->getByForeign();
+        $data['foreignModel'] = $data['foreignModels']->first();
 
-        $data['routeName'] = $routeName;
+        $data['items'] = $this->model->forAdmin($pageId)->paginate(20);
 
-        return view('admin.files.index', $data);
+        return view('admin.pages.files.index', $data);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @param  string  $routeName
-     * @param  int  $routeId
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param  int  $pageId
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function create($routeName, $routeId)
+    public function create($pageId)
     {
         if ($this->request->expectsJson()) {
             $data['current'] = $this->model;
+            $data['current']->page_id = $pageId;
 
             return response()->json([
                 'result' => true,
-                'view' => view('admin.files.create', $data)->render()
+                'view' => view('admin.pages.files.create', $data)->render()
             ]);
         }
 
-        return redirect(cms_route('files.index', [$routeName, $routeId]));
+        return redirect(cms_route('pages.files.index', [$pageId]));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\Admin\FileRequest  $request
-     * @param  string  $routeName
-     * @param  int  $routeId
+     * @param  int  $pageId
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(FileRequest $request, $routeName, $routeId)
+    public function store(FileRequest $request, $pageId)
     {
-        $model = $this->model->create($input = $request->all());
+        $input = $request->all();
+        $input['page_id'] = $pageId;
+
+        $model = $this->model->create($input);
 
         if ($request->expectsJson()) {
-            $view = view('admin.files.item', [
+            $view = view('admin.pages.files.item', [
                 'item' => $model,
                 'itemInput' => $input
             ])->render();
@@ -103,7 +108,7 @@ class AdminFilesController extends Controller
             );
         }
 
-        return redirect(cms_route('files.index', [$routeName, $routeId]));
+        return redirect(cms_route('pages.files.index', [$pageId]));
     }
 
     /**
@@ -119,12 +124,11 @@ class AdminFilesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  string  $routeName
-     * @param  int  $routeId
+     * @param  int  $pageId
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function edit($routeName, $routeId, $id)
+    public function edit($pageId, $id)
     {
         if ($this->request->expectsJson()) {
             $data['items'] = $this->model->joinLanguage(false)
@@ -133,23 +137,22 @@ class AdminFilesController extends Controller
 
             return response()->json([
                 'result' => true,
-                'view' => view('admin.files.edit', $data)->render()
+                'view' => view('admin.pages.files.edit', $data)->render()
             ]);
         }
 
-        return redirect(cms_route('files.index', [$routeName, $routeId]));
+        return redirect(cms_route('pages.files.index', [$pageId]));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\Admin\FileRequest  $request
-     * @param  string  $routeName
-     * @param  int  $routeId
+     * @param  int  $pageId
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(FileRequest $request, $routeName, $routeId, $id)
+    public function update(FileRequest $request, $pageId, $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -159,18 +162,17 @@ class AdminFilesController extends Controller
             ));
         }
 
-        return redirect(cms_route('files.index', [$routeName, $routeId]));
+        return redirect(cms_route('pages.files.index', [$pageId]));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string  $routeName
-     * @param  int  $routeId
+     * @param  int  $pageId
      * @param  int  $id
      * @return mixed
      */
-    public function destroy($routeName, $routeId, $id)
+    public function destroy($pageId, $id)
     {
         $id = $this->request->get('ids');
 
@@ -178,6 +180,6 @@ class AdminFilesController extends Controller
             $id = $id[0];
         }
 
-        return (new AdminDestroy($this->model, $id, false))->handle();
+        return (new AdminDestroy($this->model, $id))->handle();
     }
 }

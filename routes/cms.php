@@ -5,7 +5,6 @@ use App\Http\Controllers\Admin\AdminCmsUsersController;
 use App\Http\Controllers\Admin\AdminCollectionsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminFilemanagerController;
-use App\Http\Controllers\Admin\AdminFilesController;
 use App\Http\Controllers\Admin\AdminLanguagesController;
 use App\Http\Controllers\Admin\AdminMenusController;
 use App\Http\Controllers\Admin\AdminNotesController;
@@ -19,62 +18,55 @@ use App\Http\Controllers\Admin\AdminWebSettingsController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($router) {
+$language = language_in_url() ? language() . '/' : '';
+
+// CMS
+Route::group([
+    'middleware' => 'cms.data', 'prefix' => $language . cms_slug(), 'as' => cms_slug() . '.'
+], function ($router) {
     // login
     $router->controller(AdminLoginController::class)->group(function ($router) {
-        $router->get('login', 'showLoginForm')->name('login')
-            ->middleware('cms.guest');
-        $router->post('login', 'login')->name('login')
-            ->middleware('cms.guest');
+        $router->get('login', 'showLoginForm')->name('login')->middleware('cms.guest');
+        $router->post('login', 'login')->name('login.post')->middleware('cms.guest');
         $router->post('logout', 'logout')->name('logout');
 
         // lockscreen
-        $router->group(['middleware' => ['cms.lockscreen']], function ($router) {
+        $router->middleware('cms.lockscreen')->group(function ($router) {
             $router->get('lockscreen', 'getLockscreen')->name('lockscreen')
                 ->middleware('cms.guest');
-            $router->post('lockscreen', 'postLockscreen')->name('lockscreen')
+            $router->post('lockscreen', 'postLockscreen')->name('lockscreen.post')
                 ->middleware(['cms.guest', 'throttle:3,2']);
-            $router->put('lockscreen', 'setLockscreen')->name('lockscreen');
+            $router->put('lockscreen', 'setLockscreen')->name('lockscreen.put');
         });
     });
 
-    // CMS
-    $router->group(['middleware' => ['cms.auth']], function ($router) {
+    // Authentication
+    $router->middleware('cms.auth')->group(function ($router) {
         // dashboard
         $router->get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
         // languages
-        $router->post('languages/set-main', [
-            AdminLanguagesController::class, 'setMain'
-        ])->name('languages.setMain');
+        $router->post('languages/set-main', [AdminLanguagesController::class, 'setMain' ])
+            ->name('languages.setMain');
         $router->resource('languages', AdminLanguagesController::class)
             ->names(resource_names('languages'))
             ->except(['show']);
 
         // menus
-        $router->post('menus/set-main', [
-            AdminMenusController::class, 'setMain'
-        ])->name('menus.setMain');
+        $router->post('menus/set-main', [AdminMenusController::class, 'setMain'])->name('menus.setMain');
         $router->resource('menus', AdminMenusController::class)
             ->names(resource_names('menus'))
             ->except(['show']);
 
         // pages
         $router->controller(AdminPagesController::class)->group(function ($router) {
-            $router->post('pages/{id}/visibility', 'visibility')
-                ->name('pages.visibility');
-            $router->put('pages/position', 'updatePosition')
-                ->name('pages.updatePosition');
-            $router->get('pages/templates', 'getTemplates')
-                ->name('pages.templates');
-            $router->get('pages/listable-types', 'getListableTypes')
-                ->name('pages.listableTypes');
-            $router->put('pages/transfer/{menuId}', 'transfer')
-                ->name('pages.transfer');
-            $router->put('pages/collapse', 'collapse')
-                ->name('pages.collapse');
-            $router->post('pages/{id}/clone-language', 'cloneLanguage')
-                ->name('pages.cloneLanguage');
+            $router->post('pages/{id}/visibility', 'visibility')->name('pages.visibility');
+            $router->put('pages/position', 'updatePosition')->name('pages.updatePosition');
+            $router->get('pages/templates', 'getTemplates')->name('pages.templates');
+            $router->get('pages/listable-types', 'getListableTypes')->name('pages.listableTypes');
+            $router->put('pages/transfer/{menuId}', 'transfer')->name('pages.transfer');
+            $router->put('pages/collapse', 'collapse')->name('pages.collapse');
+            $router->post('pages/{id}/clone-language', 'cloneLanguage')->name('pages.cloneLanguage');
             $router->resource('menus.pages', AdminPagesController::class)
                 ->names(resource_names('pages'))
                 ->except(['show']);
@@ -84,8 +76,9 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
         $router->resource('collections', AdminCollectionsController::class)
             ->names(resource_names('collections'))
             ->except(['show']);
-        // routes from config
-        foreach ((array) cms_config('routes') as $prefix => $routes) {
+
+        // type routes from config
+        foreach ((array) cms_config('type_routes') as $prefix => $routes) {
             foreach ((array) $routes as $route => $controller) {
                 $router->post($route . '/{id}/visibility', [$controller, 'visibility'])
                     ->name($route . '.visibility');
@@ -101,41 +94,35 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
             }
         }
 
-        // permissions
-        $router->get('permissions', [
-            AdminPermissionsController::class, 'index'
-        ])->name('permissions.index');
-        $router->post('permissions', [
-            AdminPermissionsController::class, 'store'
-        ])->name('permissions.store');
+        // file routes from config
+        foreach ((array) cms_config('file_routes') as $route => $controller) {
+            $router->post($route . '/files/{id}/visibility', [$controller, 'visibility'])
+                ->name($route . '.files.visibility');
+            $router->put($route . '/files/position', [$controller, 'updatePosition'])
+                ->name($route . '.files.updatePosition');
+            $router->resource($route . '.files', $controller)
+                ->names(resource_names($route . '.files'))
+                ->except(['show']);
+        }
 
-        // cms users
+        // permissions
+        $router->get('permissions', [AdminPermissionsController::class, 'index'])
+            ->name('permissions.index');
+        $router->post('permissions', [AdminPermissionsController::class, 'store'])
+            ->name('permissions.store');
+
+        // CMS users
         $router->resource('cms-users', AdminCmsUsersController::class)
             ->names(resource_names('cmsUsers'));
 
         // file manager
-        $router->get('filemanager', [
-            AdminFilemanagerController::class, 'index'
-        ])->name('filemanager');
-
-        // files
-        $router->post('files/{id}/visibility', [
-            AdminFilesController::class, 'visibility'
-        ])->name('files.visibility');
-        $router->put('files/position', [
-            AdminFilesController::class, 'updatePosition'
-        ])->name('files.updatePosition');
-        $router->resource('{routeName}/{routeId}/files', AdminFilesController::class)
-            ->names(resource_names('files'))
-            ->except(['show']);
+        $router->get('filemanager', [AdminFilemanagerController::class, 'index'])->name('filemanager');
 
         // slider
-        $router->post('slider/{id}/visibility', [
-            AdminSliderController::class, 'visibility'
-        ])->name('slider.visibility');
-        $router->put('slider/position', [
-            AdminSliderController::class, 'updatePosition'
-        ])->name('slider.updatePosition');
+        $router->post('slider/{id}/visibility', [AdminSliderController::class, 'visibility'])
+            ->name('slider.visibility');
+        $router->put('slider/position', [AdminSliderController::class, 'updatePosition'])
+            ->name('slider.updatePosition');
         $router->resource('slider', AdminSliderController::class)
             ->names(resource_names('slider'))
             ->except(['show']);
@@ -167,24 +154,17 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
             $router->post('calendar', 'destroy')->name('calendar.destroy');
         });
 
-        // cms settings
-        $router->get('settings', [
-            AdminSettingsController::class, 'index'
-        ])->name('settings.index');
-        $router->put('settings', [
-            AdminSettingsController::class, 'update'
-        ])->name('settings.update');
+        // CMS settings
+        $router->get('settings', [AdminSettingsController::class, 'index'])->name('settings.index');
+        $router->put('settings', [AdminSettingsController::class, 'update'])->name('settings.update');
         // web settings
-        $router->get('web-settings', [
-            AdminWebSettingsController::class, 'index'
-        ])->name('webSettings.index');
-        $router->put('web-settings', [
-            AdminWebSettingsController::class, 'update'
-        ])->name('webSettings.update');
+        $router->get('web-settings', [AdminWebSettingsController::class, 'index'])
+            ->name('webSettings.index');
+        $router->put('web-settings', [AdminWebSettingsController::class, 'update'])
+            ->name('webSettings.update');
 
-        // sitemap xml
-        $router->post('sitemap/xml/store', [
-            AdminSitemapXmlController::class, 'store'
-        ])->name('sitemap.xml.store');
+        // sitemap XML
+        $router->post('sitemap/xml/store', [AdminSitemapXmlController::class, 'store'])
+            ->name('sitemap.xml.store');
     });
 });

@@ -18,8 +18,8 @@
         </div>
         <script type="text/javascript">
             var sort = '{{request('sort', 'desc')}}';
-            var currentPage = '{{request('page', 1)}}';
-            var creationPage = sort === 'desc' ? 1 : '{{request('lastPage', 1)}}';
+            var currentPage = '{{request('page_val', '1')}}';
+            var creationPage = sort === 'desc' ? '1' : '{{request('lastPage', '1')}}';
             var formSelector = $('#form-modal').find('.form-create');
 
             formSelector.on('submit', function(e) {

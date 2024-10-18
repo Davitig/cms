@@ -113,7 +113,7 @@
     <!-- Right links for user info navbar -->
     <ul class="user-info-menu right-links list-inline list-unstyled">
         <li>
-            <form method="post" action="{{cms_route('lockscreen')}}" id="set-lockscreen">
+            <form method="post" action="{{cms_route('lockscreen.put')}}" id="set-lockscreen">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="_method" value="put">
                 <button type="submit" class="btn btn-link" title="Lockscreen">

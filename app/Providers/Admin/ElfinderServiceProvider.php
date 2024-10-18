@@ -29,11 +29,14 @@ class ElfinderServiceProvider extends ServiceProvider
 
         $config = $this->app['config']->get('elfinder.route', []);
 
-        if (isset($config['prefix'])) {
-            $config['prefix'] = cms_slug($config['prefix']);
+        $config['prefix'] = isset($config['prefix']) ? cms_slug($config['prefix']) : cms_slug();
+
+        if (language_in_url()) {
+            $config['prefix'] = language() . '/' . $config['prefix'];
         }
 
         $config['namespace'] = 'App\Http\Controllers';
+        $config['as'] = cms_slug() . '.';
 
         $router->group($config, function($router) {
             $router->get('index', ['as' => 'filemanager.index', 'uses' => 'ElfinderController@showIndex']);

@@ -468,22 +468,6 @@ function deep_collection($key = null, $default = [])
 }
 
 /**
- * Get the CMS files config.
- *
- * @param  string|null  $key
- * @param  mixed  $default
- * @return string|array
- */
-function cms_files($key = null, $default = [])
-{
-    if (! is_null($key)) {
-        return cms_config('files.' . $key, $default);
-    }
-
-    return cms_config('files', $default);
-}
-
-/**
  * Get the CMS user role(s).
  *
  * @param  string|null  $key

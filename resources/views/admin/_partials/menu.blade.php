@@ -4,7 +4,7 @@
         <span class="title">Home</span>
     </a>
 </li>
-<li{!! ($hasRouteMatch = $routeMatches(['menus', 'pages'])) ? ' class="has-sub expanded"' : '' !!}>
+<li{!! ($hasRouteMatch = $routeMatches(['menus', 'pages', 'pages.files'])) ? ' class="has-sub expanded"' : '' !!}>
     <a href="{{ $url = cms_route('menus.index') }}">
         <i class="fa fa-sitemap" title="Site Map"></i>
         <span class="title">Site Map</span>

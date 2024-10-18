@@ -4,7 +4,6 @@ namespace App\Support\Admin;
 
 use Illuminate\Filesystem\Filesystem;
 use Models\Abstracts\Model;
-use Models\File;
 
 class AdminDestroy
 {
@@ -23,13 +22,6 @@ class AdminDestroy
     protected $id;
 
     /**
-     * Indicates if the model has an attached files.
-     *
-     * @return bool
-     */
-    protected $hasFiles;
-
-    /**
      * Recursively deletable directories.
      *
      * @var string
@@ -41,17 +33,14 @@ class AdminDestroy
      *
      * @param  \Models\Abstracts\Model  $model
      * @param  int  $id
-     * @param  bool  $hasFiles
      * @param  null|string  $deleteDirs
      * @return void
      */
-    public function __construct($model, $id, $hasFiles = true, $deleteDirs = null)
+    public function __construct($model, $id, $deleteDirs = null)
     {
         $this->model = $model;
 
         $this->id = $id;
-
-        $this->hasFiles = $hasFiles;
 
         $this->deleteDirs = $deleteDirs;
     }
@@ -99,10 +88,6 @@ class AdminDestroy
      */
     protected function performDelete()
     {
-        if ($this->hasFiles) {
-            (new File)->byForeign($this->model->getTable(), $this->id)->delete();
-        }
-
         if (is_array($this->id)) {
             return (bool) $this->model->destroy($this->id);
         }

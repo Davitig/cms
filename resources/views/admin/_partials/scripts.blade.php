@@ -87,7 +87,7 @@
         @endif
         @if (! session()->has('includeLockscreen') && $cmsSettings->get('lockscreen'))
 
-        lockscreen('{{$cmsSettings->get('lockscreen')}}', '{{cms_route('lockscreen')}}');
+        lockscreen('{{$cmsSettings->get('lockscreen')}}', '{{cms_route('lockscreen.post')}}');
         @endif
     });
 </script>
