@@ -6,9 +6,9 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Models\Calendar;
-use Models\Menu;
-use Models\Permission;
+use App\Models\Calendar;
+use App\Models\Menu;
+use App\Models\Permission;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminMainData
@@ -40,7 +40,9 @@ class AdminMainData
      */
     protected function shareSettings()
     {
-        $settings = app('db')->table('cms_settings')->where('cms_user_id', Auth::guard('cms')->id())->first();
+        $settings = app('db')->table('cms_settings')
+            ->where('cms_user_id', Auth::guard('cms')->id())
+            ->first();
 
         if (! is_null($settings)) {
             $settings->body = "$settings->sidebar_direction $settings->layout_boxed $settings->skin_sidebar $settings->skin_user_menu $settings->skin_horizontal";

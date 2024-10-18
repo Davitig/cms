@@ -6,7 +6,7 @@ use App\Http\Controllers\Web\WebHomeController;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use Models\Page;
+use App\Models\Page;
 
 final class DynamicRouteServiceProvider extends ServiceProvider
 {
@@ -282,7 +282,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     /**
      * Set the page route.
      *
-     * @param  \Models\Page  $page
+     * @param  \App\Models\Page  $page
      * @return bool
      */
     protected function setPageRoute(Page $page)
@@ -299,7 +299,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     /**
      * Set the explicit route.
      *
-     * @param  \Models\Page  $page
+     * @param  \App\Models\Page  $page
      * @param  string  $slug
      * @return bool
      */
@@ -315,7 +315,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     /**
      * Set the implicit route.
      *
-     * @param  \Models\Page  $page
+     * @param  \App\Models\Page  $page
      * @param  string  $slug
      * @return bool
      */
@@ -343,7 +343,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     /**
      * Set the deep implicit route.
      *
-     * @param  \Models\Abstracts\Model  $implicitModel
+     * @param  \App\Models\Abstracts\Model  $implicitModel
      * @param  string  $slug
      * @return bool
      */

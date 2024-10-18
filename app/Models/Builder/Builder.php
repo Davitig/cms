@@ -1,6 +1,6 @@
 <?php
 
-namespace Models\Builder;
+namespace App\Models\Builder;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
@@ -9,7 +9,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use InvalidArgumentException;
-use Models\Abstracts\Model;
+use App\Models\Abstracts\Model;
 use ReflectionMethod;
 
 class Builder extends EloquentBuilder
@@ -17,7 +17,7 @@ class Builder extends EloquentBuilder
     /**
      * The Model instance.
      *
-     * @var \Models\Abstracts\Model
+     * @var \App\Models\Abstracts\Model
      */
     protected $model;
 
@@ -39,7 +39,7 @@ class Builder extends EloquentBuilder
      * Create a new Eloquent query builder instance.
      *
      * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  \Models\Abstracts\Model  $model
+     * @param  \App\Models\Abstracts\Model  $model
      * @return void
      */
     public function __construct(QueryBuilder $query, Model $model)
@@ -311,7 +311,7 @@ class Builder extends EloquentBuilder
      * Add an "order by" primary key asc clause to the query.
      *
      * @param  mixed  $table
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function orderAsc($table = null)
     {
@@ -322,7 +322,7 @@ class Builder extends EloquentBuilder
      * Add an "order by" primary key desc clause to the query.
      *
      * @param  string|null  $table
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function orderDesc($table = null)
     {
@@ -333,7 +333,7 @@ class Builder extends EloquentBuilder
      * Add an "order by" created at asc clause to the query.
      *
      * @param  string|null  $table
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function createdAsc($table = null)
     {
@@ -344,7 +344,7 @@ class Builder extends EloquentBuilder
      * Add an "order by" created at desc clause to the query.
      *
      * @param  string|null  $table
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function createdDesc($table = null)
     {

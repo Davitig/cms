@@ -6,21 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CollectionRequest;
 use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
-use Models\Collection;
+use App\Models\Collection;
 
 class AdminCollectionsController extends Controller
 {
     /**
      * The Collection instance.
      *
-     * @var \Models\Collection
+     * @var \App\Models\Collection
      */
     protected $model;
 
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Collection  $model
+     * @param  \App\Models\Collection  $model
      * @return void
      */
     public function __construct(Collection $model)

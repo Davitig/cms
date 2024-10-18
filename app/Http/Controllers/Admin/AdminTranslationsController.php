@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TranslationRequest;
 use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
-use Models\Translation;
+use App\Models\Translation;
 
 class AdminTranslationsController extends Controller
 {
@@ -15,14 +15,14 @@ class AdminTranslationsController extends Controller
     /**
      * The Translation instance.
      *
-     * @var \Models\Translation
+     * @var \App\Models\Translation
      */
     protected $model;
 
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Translation  $model
+     * @param  \App\Models\Translation  $model
      * @return void
      */
     public function __construct(Translation $model)

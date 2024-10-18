@@ -6,21 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\MenuRequest;
 use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
-use Models\Menu;
+use App\Models\Menu;
 
 class AdminMenusController extends Controller
 {
     /**
      * The Menu instance.
      *
-     * @var \Models\Menu
+     * @var \App\Models\Menu
      */
     protected $model;
 
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Menu  $model
+     * @param  \App\Models\Menu  $model
      * @return void
      */
     public function __construct(Menu $model)

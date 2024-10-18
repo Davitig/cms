@@ -1,6 +1,6 @@
 <?php
 
-namespace Models\Traits;
+namespace App\Models\Traits;
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
@@ -84,7 +84,7 @@ trait SettingsFileTrait
     /**
      * Build a query based on the admin collection.
      *
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function adminSettings()
     {
@@ -97,7 +97,7 @@ trait SettingsFileTrait
     /**
      * Build a query based on the public collection.
      *
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function publicSettings()
     {

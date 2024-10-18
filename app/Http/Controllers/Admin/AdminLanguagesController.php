@@ -6,21 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\LanguageRequest;
 use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
-use Models\Language;
+use App\Models\Language;
 
 class AdminLanguagesController extends Controller
 {
     /**
      * The Language instance.
      *
-     * @var \Models\Language
+     * @var \App\Models\Language
      */
     protected $model;
 
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Language  $model
+     * @param  \App\Models\Language  $model
      * @return void
      */
     public function __construct(Language $model)

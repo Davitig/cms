@@ -1,6 +1,6 @@
 <?php
 
-namespace Models\Abstracts;
+namespace App\Models\Abstracts;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;

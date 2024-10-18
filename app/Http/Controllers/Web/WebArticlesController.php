@@ -3,24 +3,24 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use Models\Article;
-use Models\ArticleFile;
-use Models\Collection;
-use Models\Page;
+use App\Models\Article;
+use App\Models\ArticleFile;
+use App\Models\Collection;
+use App\Models\Page;
 
 class WebArticlesController extends Controller
 {
     /**
      * The Article instance.
      *
-     * @var \Models\Article
+     * @var \App\Models\Article
      */
     protected $model;
 
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Article  $model
+     * @param  \App\Models\Article  $model
      * @return void
      */
     public function __construct(Article $model)
@@ -31,8 +31,8 @@ class WebArticlesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Models\Page  $page
-     * @param  \Models\Collection  $collection
+     * @param  \App\Models\Page  $page
+     * @param  \App\Models\Collection  $collection
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Page $page, Collection $collection)
@@ -47,7 +47,7 @@ class WebArticlesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Models\Page  $page
+     * @param  \App\Models\Page  $page
      * @param  string  $slug
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */

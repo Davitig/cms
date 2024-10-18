@@ -4,15 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Models\Calendar;
-use Models\Note;
+use App\Models\Calendar;
+use App\Models\Note;
 
 class AdminNotesController extends Controller
 {
     /**
      * The Note instance.
      *
-     * @var \Models\Note
+     * @var \App\Models\Note
      */
     protected $model;
 
@@ -26,7 +26,7 @@ class AdminNotesController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Note  $model
+     * @param  \App\Models\Note  $model
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */
@@ -76,7 +76,7 @@ class AdminNotesController extends Controller
     /**
      * Move resource into the calendar.
      *
-     * @param  \Models\Calendar  $calendar
+     * @param  \App\Models\Calendar  $calendar
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function calendar(Calendar $calendar)

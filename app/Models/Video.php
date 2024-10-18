@@ -1,10 +1,10 @@
 <?php
 
-namespace Models;
+namespace App\Models;
 
-use Models\Abstracts\Model;
-use Models\Traits\HasGallery;
-use Models\Traits\LanguageTrait;
+use App\Models\Abstracts\Model;
+use App\Models\Traits\HasGallery;
+use App\Models\Traits\LanguageTrait;
 
 class Video extends Model
 {

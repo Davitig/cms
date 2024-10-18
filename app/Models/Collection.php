@@ -1,8 +1,8 @@
 <?php
 
-namespace Models;
+namespace App\Models;
 
-use Models\Abstracts\Model;
+use App\Models\Abstracts\Model;
 
 class Collection extends Model
 {
@@ -36,7 +36,7 @@ class Collection extends Model
      * Get the same type collection instance.
      *
      * @param  string  $type
-     * @return \Models\Collection
+     * @return \App\Models\Collection
      */
     public function byType($type)
     {

@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FileRequest;
 use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
-use Models\Event;
-use Models\EventFile;
+use App\Models\Event;
+use App\Models\EventFile;
 
 class AdminEventFilesController extends Controller
 {
@@ -16,7 +16,7 @@ class AdminEventFilesController extends Controller
     /**
      * The EventFile instance.
      *
-     * @var \Models\EventFile
+     * @var \App\Models\EventFile
      */
     protected $model;
 
@@ -30,7 +30,7 @@ class AdminEventFilesController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\EventFile  $model
+     * @param  \App\Models\EventFile  $model
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */

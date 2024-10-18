@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SliderRequest;
 use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
-use Models\Slider;
+use App\Models\Slider;
 
 class AdminSliderController extends Controller
 {
@@ -15,7 +15,7 @@ class AdminSliderController extends Controller
     /**
      * The Slider instance.
      *
-     * @var \Models\Slider
+     * @var \App\Models\Slider
      */
     protected $model;
 
@@ -29,7 +29,7 @@ class AdminSliderController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Slider  $model
+     * @param  \App\Models\Slider  $model
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */

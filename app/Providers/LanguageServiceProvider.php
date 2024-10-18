@@ -5,7 +5,7 @@ namespace App\Providers;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
-use Models\Language;
+use App\Models\Language;
 
 class LanguageServiceProvider extends ServiceProvider
 {

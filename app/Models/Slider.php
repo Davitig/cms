@@ -1,10 +1,10 @@
 <?php
 
-namespace Models;
+namespace App\Models;
 
-use Models\Abstracts\Model;
-use Models\Traits\LanguageTrait;
-use Models\Traits\PositionableTrait;
+use App\Models\Abstracts\Model;
+use App\Models\Traits\LanguageTrait;
+use App\Models\Traits\PositionableTrait;
 
 class Slider extends Model
 {
@@ -74,7 +74,7 @@ class Slider extends Model
      *
      * @param  mixed  $currentLang
      * @param  array  $columns
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function forAdmin($currentLang = true, array $columns = [])
     {
@@ -86,7 +86,7 @@ class Slider extends Model
      *
      * @param  mixed  $currentLang
      * @param  array  $columns
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function forPublic($currentLang = true, array $columns = [])
     {

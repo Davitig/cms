@@ -1,11 +1,11 @@
 <?php
 
-namespace Models;
+namespace App\Models;
 
-use Models\Abstracts\Model;
-use Models\Traits\FileableTrait;
-use Models\Traits\HasCollection;
-use Models\Traits\LanguageTrait;
+use App\Models\Abstracts\Model;
+use App\Models\Traits\FileableTrait;
+use App\Models\Traits\HasCollection;
+use App\Models\Traits\LanguageTrait;
 
 class Article extends Model
 {

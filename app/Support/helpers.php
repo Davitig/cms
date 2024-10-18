@@ -3,7 +3,7 @@
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Models\Abstracts\Model;
+use App\Models\Abstracts\Model;
 
 /**
  * Get the application language.
@@ -113,7 +113,7 @@ function resource_names($name)
  */
 function cms_route_name($name)
 {
-    return $name . '.' . cms_slug();
+    return cms_slug() . '.' . $name;
 }
 
 /**

@@ -6,7 +6,7 @@ use App\Support\TranslationCollection;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Models\Translation;
+use App\Models\Translation;
 use Symfony\Component\HttpFoundation\Response;
 
 class WebMainData

@@ -1,16 +1,16 @@
 <?php
 
-namespace Models\Traits;
+namespace App\Models\Traits;
 
 use Illuminate\Support\Str;
-use Models\_Language;
+use App\Models\_Language;
 
 trait LanguageTrait
 {
     /**
      * The _Language instance.
      *
-     * @var \Models\_Language
+     * @var \App\Models\_Language
      */
     protected $languageModel;
 
@@ -29,7 +29,7 @@ trait LanguageTrait
     /**
      * Get the language instance, related to this model.
      *
-     * @return \Models\_Language
+     * @return \App\Models\_Language
      */
     public function getLanguage()
     {
@@ -93,7 +93,7 @@ trait LanguageTrait
      *
      * @param  mixed  $currentLang
      * @param  array  $columns
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function joinLanguage($currentLang = true, array $columns = [])
     {
@@ -122,7 +122,7 @@ trait LanguageTrait
     /**
      * Add a where "language" clause to the query.
      *
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function currentLanguage()
     {

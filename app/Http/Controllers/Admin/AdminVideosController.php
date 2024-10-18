@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\VideoRequest;
 use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
-use Models\Collection;
-use Models\Gallery;
-use Models\Video;
+use App\Models\Collection;
+use App\Models\Gallery;
+use App\Models\Video;
 
 class AdminVideosController extends Controller
 {
@@ -17,7 +17,7 @@ class AdminVideosController extends Controller
     /**
      * The Video instance.
      *
-     * @var \Models\Video
+     * @var \App\Models\Video
      */
     protected $model;
 
@@ -31,7 +31,7 @@ class AdminVideosController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Video  $model
+     * @param  \App\Models\Video  $model
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */

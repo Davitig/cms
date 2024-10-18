@@ -3,22 +3,22 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use Models\Gallery;
-use Models\Video;
+use App\Models\Gallery;
+use App\Models\Video;
 
 class WebVideosController extends Controller
 {
     /**
      * The Video instance.
      *
-     * @var \Models\Video
+     * @var \App\Models\Video
      */
     protected $model;
 
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Video  $model
+     * @param  \App\Models\Video  $model
      * @return void
      */
     public function __construct(Video $model)
@@ -29,7 +29,7 @@ class WebVideosController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Models\Gallery  $gallery
+     * @param  \App\Models\Gallery  $gallery
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Gallery $gallery)

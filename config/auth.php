@@ -68,7 +68,7 @@ return [
     'providers' => [
         'cms_users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', Models\CmsUser::class),
+            'model' => env('AUTH_MODEL', App\Models\CmsUser::class),
         ],
 
         // 'cms_users' => [

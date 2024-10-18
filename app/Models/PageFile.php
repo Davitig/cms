@@ -1,9 +1,9 @@
 <?php
 
-namespace Models;
+namespace App\Models;
 
-use Models\Abstracts\Model;
-use Models\Traits\FileTrait;
+use App\Models\Abstracts\Model;
+use App\Models\Traits\FileTrait;
 
 class PageFile extends Model
 {
@@ -74,7 +74,7 @@ class PageFile extends Model
      * Add a where foreign id clause to the query.
      *
      * @param  int  $foreignId
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function byForeign($foreignId)
     {

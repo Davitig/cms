@@ -2,8 +2,8 @@
 
 namespace App\Listeners\Web;
 
-use Models\Menu;
-use Models\Page;
+use App\Models\Menu;
+use App\Models\Page;
 
 class WebPagesEventListener
 {

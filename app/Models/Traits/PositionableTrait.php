@@ -1,6 +1,6 @@
 <?php
 
-namespace Models\Traits;
+namespace App\Models\Traits;
 
 use Exception;
 
@@ -112,7 +112,7 @@ trait PositionableTrait
     /**
      * Add an "order by" position asc clause to the query.
      *
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function positionAsc()
     {
@@ -122,7 +122,7 @@ trait PositionableTrait
     /**
      * Add an "order by" position desc clause to the query.
      *
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function positionDesc()
     {

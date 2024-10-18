@@ -1,9 +1,9 @@
 <?php
 
-namespace Models;
+namespace App\Models;
 
-use Models\Abstracts\Model;
-use Models\Traits\LanguageTrait;
+use App\Models\Abstracts\Model;
+use App\Models\Traits\LanguageTrait;
 
 class Translation extends Model
 {
@@ -64,7 +64,7 @@ class Translation extends Model
      *
      * @param  string  $code
      * @param  mixed  $currentLang
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function byCode($code, $currentLang = true)
     {

@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\GalleryRequest;
 use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
-use Models\Collection;
-use Models\Gallery;
+use App\Models\Collection;
+use App\Models\Gallery;
 
 class AdminGalleriesController extends Controller
 {
@@ -16,14 +16,14 @@ class AdminGalleriesController extends Controller
     /**
      * The Gallery instance.
      *
-     * @var \Models\Gallery
+     * @var \App\Models\Gallery
      */
     protected $model;
 
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Gallery  $model
+     * @param  \App\Models\Gallery  $model
      * @return void
      */
     public function __construct(Gallery $model)

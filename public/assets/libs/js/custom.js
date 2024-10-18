@@ -62,22 +62,22 @@ $(function () {
 
                 form.trigger('deleteFormSuccess', [data]);
 
-                if (data) {
-                    // toastr alert message
-                    if (typeof toastr === 'object') {
-                        toastr[data.result](data.message);
-                    }
-                    // delete action
-                    if (data.result === 'success') {
-                        form.closest('.item').fadeOut(600, function () {
-                            if ($(this).data('parent') === 1) {
-                                $(this).closest('.uk-parent').removeClass('uk-parent');
-                                disableParentDeletion();
-                            }
+                if (! data) return;
 
-                            $(this).remove();
-                        });
-                    }
+                // toastr alert message
+                if (typeof toastr === 'object') {
+                    toastr[data.result](data.message);
+                }
+                // delete action
+                if (data.result === 'success') {
+                    form.closest('.item').fadeOut(600, function () {
+                        if ($(this).data('parent') === 1) {
+                            $(this).closest('.uk-parent').removeClass('uk-parent');
+                            disableParentDeletion();
+                        }
+
+                        $(this).remove();
+                    });
                 }
             },
             error: function (xhr) {
@@ -109,65 +109,69 @@ $(function () {
                 if (typeof toastr === 'object') {
                     toastr[data.result](data.message);
                 }
-                // fill form inputs
-                if (data.input && typeof data.input === 'object') {
-                    $.each(data.input, function (index, element) {
-                        var item = $('#' + index + lang, form);
-
-                        if (item.data('lang')) {
-                            var inputGeneral = $(ajaxFormSelector + ' [name="' + index + '"]');
-                            $(inputGeneral).each(function (i, e) {
-                                item = $(e);
-                                if (item.val() !== element) {
-                                    item.val(element);
-                                    if (item.is(':checkbox')) {
-                                        var bool = element === 1;
-                                        item.prop('checked', bool);
-                                    }
-                                    if (item.is('select')) {
-                                        item.trigger('change');
-                                    }
-                                }
-                            });
-                        } else if (item.val() !== element) {
-                            item.val(element);
-                        }
-                    });
-                }
 
                 $('.form-group', form).removeClass('validate-has-error');
+
+                // fill form inputs
+                if (! data.input || typeof data.input !== 'object') {
+                    return;
+                }
+
+                $.each(data.input, function (index, element) {
+                    var item = $('#' + index + lang, form);
+
+                    if (item.data('lang')) {
+                        var inputGeneral = $(ajaxFormSelector + ' [name="' + index + '"]');
+                        $(inputGeneral).each(function (i, e) {
+                            item = $(e);
+                            if (item.val() !== element) {
+                                item.val(element);
+                                if (item.is(':checkbox')) {
+                                    var bool = element === 1;
+                                    item.prop('checked', bool);
+                                }
+                                if (item.is('select')) {
+                                    item.trigger('change');
+                                }
+                            }
+                        });
+                    } else if (item.val() !== element) {
+                        item.val(element);
+                    }
+                });
             },
             error: function (xhr) {
-                if (xhr.responseJSON !== undefined && xhr.responseJSON.errors !== undefined) {
-                    $.each(xhr.responseJSON.errors, function (index, element) {
-                        var field;
-                        var arrayField = index.substr(0, index.indexOf('.'));
-                        if (arrayField) {
-                            field = $('.' + arrayField + lang, form).first();
-                        } else {
-                            field = $('#' + index + lang, form);
-                        }
-                        field.closest('.form-group').addClass('validate-has-error');
-
-                        var errorMsg = '<div class="text-danger">'+element+'</div>';
-                        if (! field.parent().hasClass('input-group')) {
-                            field.after(errorMsg);
-                        } else {
-                            field.parent().after(errorMsg);
-                        }
-                    });
-
-                    var errorField = form.find('.validate-has-error').first();
-                    if (errorField) {
-                        var errorOffset = errorField.offset();
-                        if (errorOffset) {
-                            $('html, body').animate({
-                                scrollTop: errorField.offset().top - 100
-                            }, 400);
-                        }
-                    }
-                } else {
+                if (xhr.responseJSON.errors === undefined) {
                     alert(xhr.responseText);
+
+                    return;
+                }
+                $.each(xhr.responseJSON.errors, function (index, element) {
+                    var field;
+                    var arrayField = index.substr(0, index.indexOf('.'));
+                    if (arrayField) {
+                        field = $('.' + arrayField + lang, form).first();
+                    } else {
+                        field = $('#' + index + lang, form);
+                    }
+                    field.closest('.form-group').addClass('validate-has-error');
+
+                    var errorMsg = '<div class="text-danger">'+element+'</div>';
+                    if (! field.parent().hasClass('input-group')) {
+                        field.after(errorMsg);
+                    } else {
+                        field.parent().after(errorMsg);
+                    }
+                });
+
+                var errorField = form.find('.validate-has-error').first();
+                if (errorField) {
+                    var errorOffset = errorField.offset();
+                    if (errorOffset) {
+                        $('html, body').animate({
+                            scrollTop: errorField.offset().top - 100
+                        }, 400);
+                    }
                 }
             },
             complete: function () {

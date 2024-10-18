@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use Models\Abstracts\Model;
+use App\Models\Abstracts\Model;
 use RuntimeException;
 
 trait VisibilityTrait

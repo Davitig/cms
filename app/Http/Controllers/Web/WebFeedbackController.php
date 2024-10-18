@@ -7,7 +7,7 @@ use App\Http\Requests\Web\FeedbackRequest;
 use Exception;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Http\Request;
-use Models\Page;
+use App\Models\Page;
 
 class WebFeedbackController extends Controller
 {
@@ -32,7 +32,7 @@ class WebFeedbackController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Models\Page  $page
+     * @param  \App\Models\Page  $page
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Page $page)

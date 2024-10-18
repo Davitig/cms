@@ -1,9 +1,9 @@
 <?php
 
-namespace Models;
+namespace App\Models;
 
 use Illuminate\Http\Request;
-use Models\Abstracts\Model;
+use App\Models\Abstracts\Model;
 
 class Calendar extends Model
 {

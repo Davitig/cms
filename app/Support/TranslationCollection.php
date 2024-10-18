@@ -3,7 +3,7 @@
 namespace App\Support;
 
 use Illuminate\Support\Collection;
-use Models\Translation;
+use App\Models\Translation;
 
 class TranslationCollection
 {

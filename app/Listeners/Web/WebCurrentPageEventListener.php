@@ -3,7 +3,7 @@
 namespace App\Listeners\Web;
 
 use App\Support\TranslationCollection;
-use Models\Abstracts\Model;
+use App\Models\Abstracts\Model;
 
 class WebCurrentPageEventListener
 {

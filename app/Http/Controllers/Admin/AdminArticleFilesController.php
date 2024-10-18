@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FileRequest;
 use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
-use Models\Article;
-use Models\ArticleFile;
+use App\Models\Article;
+use App\Models\ArticleFile;
 
 class AdminArticleFilesController extends Controller
 {
@@ -16,7 +16,7 @@ class AdminArticleFilesController extends Controller
     /**
      * The ArticleFile instance.
      *
-     * @var \Models\ArticleFile
+     * @var \App\Models\ArticleFile
      */
     protected $model;
 
@@ -30,7 +30,7 @@ class AdminArticleFilesController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\ArticleFile  $model
+     * @param  \App\Models\ArticleFile  $model
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */

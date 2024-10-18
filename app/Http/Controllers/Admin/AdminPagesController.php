@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PageRequest;
 use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
-use Models\Menu;
-use Models\Page;
+use App\Models\Menu;
+use App\Models\Page;
 
 class AdminPagesController extends Controller
 {
@@ -16,7 +16,7 @@ class AdminPagesController extends Controller
     /**
      * The Page instance.
      *
-     * @var \Models\Page
+     * @var \App\Models\Page
      */
     protected $model;
 
@@ -30,7 +30,7 @@ class AdminPagesController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Page  $model
+     * @param  \App\Models\Page  $model
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */

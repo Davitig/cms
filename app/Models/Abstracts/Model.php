@@ -1,20 +1,20 @@
 <?php
 
-namespace Models\Abstracts;
+namespace App\Models\Abstracts;
 
 use Illuminate\Database\Eloquent\Model as BaseModel;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Models\Builder\Builder;
-use Models\Traits\LanguageTrait;
+use App\Models\Builder\Builder;
+use App\Models\Traits\LanguageTrait;
 
 abstract class Model extends BaseModel
 {
     /**
      * The Eloquent query builder class to use for the model.
      *
-     * @var class-string<\Models\Builder\Builder<*>>
+     * @var class-string<\App\Models\Builder\Builder<*>>
      */
     protected static string $builder = Builder::class;
 
@@ -111,7 +111,7 @@ abstract class Model extends BaseModel
     /**
      * Set the Eloquent query builder instance.
      *
-     * @param  \Models\Builder\Builder  $builder
+     * @param  \App\Models\Builder\Builder  $builder
      * @return $this
      */
     public function setEloquentBuilder(Builder $builder)

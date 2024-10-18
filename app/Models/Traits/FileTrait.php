@@ -1,6 +1,6 @@
 <?php
 
-namespace Models\Traits;
+namespace App\Models\Traits;
 
 use Exception;
 use Illuminate\Filesystem\Filesystem;
@@ -52,7 +52,7 @@ trait FileTrait
      *
      * @param  int  $forignId
      * @param  mixed  $currentLang
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function forAdmin($forignId, $currentLang = true)
     {
@@ -66,7 +66,7 @@ trait FileTrait
      *
      * @param  int  $forignId
      * @param  mixed  $currentLang
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function forPublic($forignId, $currentLang = true)
     {
@@ -80,7 +80,7 @@ trait FileTrait
      * Add a where "visible" clause to the query.
      *
      * @param  int  $value
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function whereVisible($value = 1)
     {

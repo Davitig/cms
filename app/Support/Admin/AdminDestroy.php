@@ -3,7 +3,7 @@
 namespace App\Support\Admin;
 
 use Illuminate\Filesystem\Filesystem;
-use Models\Abstracts\Model;
+use App\Models\Abstracts\Model;
 
 class AdminDestroy
 {
@@ -31,7 +31,7 @@ class AdminDestroy
     /**
      * Create a new job instance.
      *
-     * @param  \Models\Abstracts\Model  $model
+     * @param  \App\Models\Abstracts\Model  $model
      * @param  int  $id
      * @param  null|string  $deleteDirs
      * @return void

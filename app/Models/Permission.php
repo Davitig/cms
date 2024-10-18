@@ -1,8 +1,8 @@
 <?php
 
-namespace Models;
+namespace App\Models;
 
-use Models\Abstracts\Model;
+use App\Models\Abstracts\Model;
 
 class Permission extends Model
 {
@@ -54,7 +54,7 @@ class Permission extends Model
      * Get the list of permissions by user id.
      *
      * @param  string  $value
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function role($value)
     {

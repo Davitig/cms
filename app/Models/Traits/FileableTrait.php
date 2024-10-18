@@ -1,15 +1,15 @@
 <?php
 
-namespace Models\Traits;
+namespace App\Models\Traits;
 
-use Models\File;
+use App\Models\File;
 
 trait FileableTrait
 {
     /**
      * Add a files count to the query.
      *
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function countFiles()
     {
@@ -25,7 +25,7 @@ trait FileableTrait
     /**
      * Determine if the model has a file(s).
      *
-    * @return \Models\Builder\Builder
+    * @return \App\Models\Builder\Builder
      */
     public function hasFile()
     {
@@ -41,7 +41,7 @@ trait FileableTrait
      * Add a query where a file exists or not.
      *
      * @param  bool  $exists
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function whereFileExists($exists = true)
     {

@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use DOMDocument;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Models\Abstracts\Model;
-use Models\Page;
+use App\Models\Abstracts\Model;
+use App\Models\Page;
 use Sabre\Xml\Service as XmlService;
 
 class AdminSitemapXmlController extends Controller
@@ -148,7 +148,7 @@ class AdminSitemapXmlController extends Controller
     /**
      * Set an implicit models to the xml data.
      *
-     * @param  \Models\Page $page
+     * @param  \App\Models\Page $page
      * @return void
      */
     protected function setImplicitModels(Model $page)
@@ -183,7 +183,7 @@ class AdminSitemapXmlController extends Controller
     /**
      * Set an explicit models to the xml data.
      *
-     * @param  \Models\Page $page
+     * @param  \App\Models\Page $page
      * @return void
      */
     protected function setExplicitModels(Model $page)
@@ -206,8 +206,8 @@ class AdminSitemapXmlController extends Controller
     /**
      * Get the urls.
      *
-     * @param  \Models\Page $page
-     * @param  \Models\Abstracts\Model $page
+     * @param  \App\Models\Page $page
+     * @param  \App\Models\Abstracts\Model $page
      * @return array
      */
     protected function getUrls(Page $page, Model $item)
@@ -234,7 +234,7 @@ class AdminSitemapXmlController extends Controller
     /**
      * Get an array of xml language links.
      *
-     * @param  \Models\Page $page
+     * @param  \App\Models\Page $page
      * @param  string|null $slug
      * @param  string $langKey
      * @return array
