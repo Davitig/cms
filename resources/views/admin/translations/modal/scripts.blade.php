@@ -5,8 +5,7 @@ $(function () {
     $('form', modalSelector).on('submit', function (e) {
         e.preventDefault();
         var form = $(this);
-        var lang = form.data('lang');
-        lang = lang ? lang : '';
+        var lang = form.data('lang') ?? '';
         $('.form-group', form).find('.text-danger').remove();
 
         $.ajax({
@@ -22,7 +21,7 @@ $(function () {
                 ).fadeIn(300);
 
                 if (! lang || lang === '{{$currentLang = language()}}') {
-                    var trans = $('[data-trans="'+data.name+'"]');
+                    var trans = $('[data-trans="'+data.code+'"]');
                     var attrName = trans.data('trans-attr');
                     if (! attrName) {
                         trans.text(data.value);
@@ -35,7 +34,7 @@ $(function () {
                     modalSelector.removeClass('fade');
                     var ev = jQuery.Event('click');
                     ev.f2 = true;
-                    $('[data-trans="'+data.name+'"]').trigger(ev);
+                    $('[data-trans="'+data.code+'"]').trigger(ev);
                 @endif
                     modalSelector.modal('hide');
                 } else {
@@ -48,17 +47,19 @@ $(function () {
                 }
             },
             error: function (xhr) {
-                if (xhr.status === 422) {
-                    var data = xhr.responseJSON;
-
-                    $.each(data, function (index, element) {
-                        var field = $('#' + index + lang, form);
-                        var errorMsg = '<div class="text-danger">'+element+'</div>';
-                        field.after(errorMsg);
-                    });
-                } else {
+                if (xhr.status !== 422) {
                     alert(xhr.responseText);
+                    return;
                 }
+                if (xhr.responseJSON.errors === undefined) {
+                    return;
+                }
+                var errors = xhr.responseJSON.errors;
+                $.each(errors, function (index, element) {
+                    var field = $('#' + index + lang, form);
+                    var errorMsg = '<div class="text-danger">'+element+'</div>';
+                    field.after(errorMsg);
+                });
             }
         });
     });
@@ -67,7 +68,7 @@ $(function () {
         var lang = $(this).closest('form').data('lang');
 
         if (! lang || lang === '{{$currentLang}}') {
-            var trans = $('[data-trans="{{$current->name}}"]');
+            var trans = $('[data-trans="{{$current->code}}"]');
             var attrName = trans.data('trans-attr');
             if (! attrName) {
                 trans.text($(this).val());
