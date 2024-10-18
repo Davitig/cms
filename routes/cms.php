@@ -23,16 +23,16 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
     // login
     $router->controller(AdminLoginController::class)->group(function ($router) {
         $router->get('login', 'showLoginForm')->name('login')->middleware('cms.guest');
-        $router->post('login', 'login')->name('login')->middleware('cms.guest');
+        $router->post('login', 'login')->name('login.post')->middleware('cms.guest');
         $router->post('logout', 'logout')->name('logout');
 
         // lockscreen
         $router->middleware('cms.lockscreen')->group(function ($router) {
             $router->get('lockscreen', 'getLockscreen')->name('lockscreen')
                 ->middleware('cms.guest');
-            $router->post('lockscreen', 'postLockscreen')->name('lockscreen')
+            $router->post('lockscreen', 'postLockscreen')->name('lockscreen.post')
                 ->middleware(['cms.guest', 'throttle:3,2']);
-            $router->put('lockscreen', 'setLockscreen')->name('lockscreen');
+            $router->put('lockscreen', 'setLockscreen')->name('lockscreen.put');
         });
     });
 
@@ -122,10 +122,10 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
             ->except(['show']);
 
         // translations
-        $router->get('translations/form', [AdminTranslationsController::class, 'getModal'])
-            ->name('translations.popup');
-        $router->post('translations/form', [AdminTranslationsController::class, 'postData'])
-            ->name('translations.popup');
+        $router->get('translations/form', [AdminTranslationsController::class, 'getForm'])
+            ->name('translations.form');
+        $router->post('translations/form', [AdminTranslationsController::class, 'setData'])
+            ->name('translations.form.post');
         $router->resource('translations', AdminTranslationsController::class)
             ->names(resource_names('translations'))
             ->except(['show']);

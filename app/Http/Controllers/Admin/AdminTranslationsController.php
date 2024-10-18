@@ -137,7 +137,7 @@ class AdminTranslationsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
-    public function getModal(Request $request)
+    public function getForm(Request $request)
     {
         if (! ($name = $request->get('code'))) {
             return response('Invalid code.', 422);
@@ -165,7 +165,7 @@ class AdminTranslationsController extends Controller
      * @param  \App\Http\Requests\Admin\TranslationRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function postData(TranslationRequest $request)
+    public function setData(TranslationRequest $request)
     {
         $input = $request->all('id', 'code', 'title', 'value', 'type');
 
