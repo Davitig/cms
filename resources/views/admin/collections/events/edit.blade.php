@@ -53,7 +53,7 @@
                             'put', cms_route('events.update', [
                                 $current->collection_id, $current->id
                             ], is_multilanguage() ? $current->language : null)
-                        )->class('form-horizontal ' . $cmsSettings->get('ajax_form'))->data('lang', 1)->open() }}
+                        )->class('form-horizontal ' . $cmsSettings->get('ajax_form'))->data('lang', $current->language)->open() }}
                         @include('admin.collections.events.form', [
                             'submit'        => trans('general.update'),
                             'submitAndBack' => trans('general.update_n_back'),

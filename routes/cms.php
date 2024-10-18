@@ -18,17 +18,16 @@ use App\Http\Controllers\Admin\AdminWebSettingsController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
 
+// CMS
 Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($router) {
     // login
     $router->controller(AdminLoginController::class)->group(function ($router) {
-        $router->get('login', 'showLoginForm')->name('login')
-            ->middleware('cms.guest');
-        $router->post('login', 'login')->name('login')
-            ->middleware('cms.guest');
+        $router->get('login', 'showLoginForm')->name('login')->middleware('cms.guest');
+        $router->post('login', 'login')->name('login')->middleware('cms.guest');
         $router->post('logout', 'logout')->name('logout');
 
         // lockscreen
-        $router->group(['middleware' => ['cms.lockscreen']], function ($router) {
+        $router->middleware('cms.lockscreen')->group(function ($router) {
             $router->get('lockscreen', 'getLockscreen')->name('lockscreen')
                 ->middleware('cms.guest');
             $router->post('lockscreen', 'postLockscreen')->name('lockscreen')
@@ -37,23 +36,20 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
         });
     });
 
-    // CMS
-    $router->group(['middleware' => ['cms.auth']], function ($router) {
+    // Authentication
+    $router->middleware('cms.auth')->group(function ($router) {
         // dashboard
         $router->get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
         // languages
-        $router->post('languages/set-main', [
-            AdminLanguagesController::class, 'setMain'
-        ])->name('languages.setMain');
+        $router->post('languages/set-main', [AdminLanguagesController::class, 'setMain' ])
+            ->name('languages.setMain');
         $router->resource('languages', AdminLanguagesController::class)
             ->names(resource_names('languages'))
             ->except(['show']);
 
         // menus
-        $router->post('menus/set-main', [
-            AdminMenusController::class, 'setMain'
-        ])->name('menus.setMain');
+        $router->post('menus/set-main', [AdminMenusController::class, 'setMain'])->name('menus.setMain');
         $router->resource('menus', AdminMenusController::class)
             ->names(resource_names('menus'))
             ->except(['show']);
@@ -104,40 +100,32 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
         }
 
         // permissions
-        $router->get('permissions', [
-            AdminPermissionsController::class, 'index'
-        ])->name('permissions.index');
-        $router->post('permissions', [
-            AdminPermissionsController::class, 'store'
-        ])->name('permissions.store');
+        $router->get('permissions', [AdminPermissionsController::class, 'index'])
+            ->name('permissions.index');
+        $router->post('permissions', [AdminPermissionsController::class, 'store'])
+            ->name('permissions.store');
 
         // CMS users
         $router->resource('cms-users', AdminCmsUsersController::class)
             ->names(resource_names('cmsUsers'));
 
         // file manager
-        $router->get('filemanager', [
-            AdminFilemanagerController::class, 'index'
-        ])->name('filemanager');
+        $router->get('filemanager', [AdminFilemanagerController::class, 'index'])->name('filemanager');
 
         // slider
-        $router->post('slider/{id}/visibility', [
-            AdminSliderController::class, 'visibility'
-        ])->name('slider.visibility');
-        $router->put('slider/position', [
-            AdminSliderController::class, 'updatePosition'
-        ])->name('slider.updatePosition');
+        $router->post('slider/{id}/visibility', [AdminSliderController::class, 'visibility'])
+            ->name('slider.visibility');
+        $router->put('slider/position', [AdminSliderController::class, 'updatePosition'])
+            ->name('slider.updatePosition');
         $router->resource('slider', AdminSliderController::class)
             ->names(resource_names('slider'))
             ->except(['show']);
 
         // translations
-        $router->get('translations/form', [
-            AdminTranslationsController::class, 'getModal'
-        ])->name('translations.popup');
-        $router->post('translations/form', [
-            AdminTranslationsController::class, 'postData'
-        ])->name('translations.popup');
+        $router->get('translations/form', [AdminTranslationsController::class, 'getModal'])
+            ->name('translations.popup');
+        $router->post('translations/form', [AdminTranslationsController::class, 'postData'])
+            ->name('translations.popup');
         $router->resource('translations', AdminTranslationsController::class)
             ->names(resource_names('translations'))
             ->except(['show']);
@@ -159,23 +147,16 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
         });
 
         // CMS settings
-        $router->get('settings', [
-            AdminSettingsController::class, 'index'
-        ])->name('settings.index');
-        $router->put('settings', [
-            AdminSettingsController::class, 'update'
-        ])->name('settings.update');
+        $router->get('settings', [AdminSettingsController::class, 'index'])->name('settings.index');
+        $router->put('settings', [AdminSettingsController::class, 'update'])->name('settings.update');
         // web settings
-        $router->get('web-settings', [
-            AdminWebSettingsController::class, 'index'
-        ])->name('webSettings.index');
-        $router->put('web-settings', [
-            AdminWebSettingsController::class, 'update'
-        ])->name('webSettings.update');
+        $router->get('web-settings', [AdminWebSettingsController::class, 'index'])
+            ->name('webSettings.index');
+        $router->put('web-settings', [AdminWebSettingsController::class, 'update'])
+            ->name('webSettings.update');
 
         // sitemap XML
-        $router->post('sitemap/xml/store', [
-            AdminSitemapXmlController::class, 'store'
-        ])->name('sitemap.xml.store');
+        $router->post('sitemap/xml/store', [AdminSitemapXmlController::class, 'store'])
+            ->name('sitemap.xml.store');
     });
 });
