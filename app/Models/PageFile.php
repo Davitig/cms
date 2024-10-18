@@ -3,26 +3,18 @@
 namespace Models;
 
 use Models\Abstracts\Model;
-use Models\Traits\LanguageTrait;
-use Models\Traits\HasGallery;
+use Models\Traits\FileTrait;
 
-class Photo extends Model
+class PageFile extends Model
 {
-    use HasGallery, LanguageTrait;
-
-    /**
-     * Type of the gallery.
-     *
-     * @var string
-     */
-    const TYPE = 'photos';
+    use FileTrait;
 
     /**
      * The table associated with the model.
      *
      * @var string|null
      */
-    protected $table = 'photos';
+    protected $table = 'page_files';
 
     /**
      * The attributes that are mass assignable.
@@ -30,7 +22,7 @@ class Photo extends Model
      * @var array
      */
     protected $fillable = [
-        'gallery_id', 'position', 'visible', 'file'
+        'page_id', 'position', 'visible'
     ];
 
     /**
@@ -39,7 +31,7 @@ class Photo extends Model
      * @var array
      */
     protected $notUpdatable = [
-        'gallery_id'
+        'page_id'
     ];
 
     /**
@@ -47,7 +39,7 @@ class Photo extends Model
      *
      * @var string
      */
-    protected $languageTable = 'photo_languages';
+    protected $languageTable = 'page_file_languages';
 
     /**
      * The attributes that are mass assignable for the Language model.
@@ -55,7 +47,7 @@ class Photo extends Model
      * @var array
      */
     protected $languageFillable = [
-        'photo_id', 'language_id', 'title'
+        'page_file_id', 'language_id', 'title', 'file'
     ];
 
     /**
@@ -64,11 +56,11 @@ class Photo extends Model
      * @var array
      */
     protected $languageNotUpdatable = [
-        'photo_id', 'language_id'
+        'page_file_id', 'language_id'
     ];
 
     /**
-     * Get the mutated file attribute.
+     * Get the mutated file default attribute.
      *
      * @param  string  $value
      * @return string
@@ -76,5 +68,16 @@ class Photo extends Model
     public function getFileDefaultAttribute($value)
     {
         return $value ?: asset('assets/libs/images/image-1.jpg');
+    }
+
+    /**
+     * Add a where foreign id clause to the query.
+     *
+     * @param  int  $foreignId
+     * @return \Models\Builder\Builder
+     */
+    public function byForeign($foreignId)
+    {
+        return $this->where('page_id', $foreignId);
     }
 }

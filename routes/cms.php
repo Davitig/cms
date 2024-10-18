@@ -5,7 +5,6 @@ use App\Http\Controllers\Admin\AdminCmsUsersController;
 use App\Http\Controllers\Admin\AdminCollectionsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminFilemanagerController;
-use App\Http\Controllers\Admin\AdminFilesController;
 use App\Http\Controllers\Admin\AdminLanguagesController;
 use App\Http\Controllers\Admin\AdminMenusController;
 use App\Http\Controllers\Admin\AdminNotesController;
@@ -61,20 +60,13 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
 
         // pages
         $router->controller(AdminPagesController::class)->group(function ($router) {
-            $router->post('pages/{id}/visibility', 'visibility')
-                ->name('pages.visibility');
-            $router->put('pages/position', 'updatePosition')
-                ->name('pages.updatePosition');
-            $router->get('pages/templates', 'getTemplates')
-                ->name('pages.templates');
-            $router->get('pages/listable-types', 'getListableTypes')
-                ->name('pages.listableTypes');
-            $router->put('pages/transfer/{menuId}', 'transfer')
-                ->name('pages.transfer');
-            $router->put('pages/collapse', 'collapse')
-                ->name('pages.collapse');
-            $router->post('pages/{id}/clone-language', 'cloneLanguage')
-                ->name('pages.cloneLanguage');
+            $router->post('pages/{id}/visibility', 'visibility')->name('pages.visibility');
+            $router->put('pages/position', 'updatePosition')->name('pages.updatePosition');
+            $router->get('pages/templates', 'getTemplates')->name('pages.templates');
+            $router->get('pages/listable-types', 'getListableTypes')->name('pages.listableTypes');
+            $router->put('pages/transfer/{menuId}', 'transfer')->name('pages.transfer');
+            $router->put('pages/collapse', 'collapse')->name('pages.collapse');
+            $router->post('pages/{id}/clone-language', 'cloneLanguage')->name('pages.cloneLanguage');
             $router->resource('menus.pages', AdminPagesController::class)
                 ->names(resource_names('pages'))
                 ->except(['show']);
@@ -84,8 +76,9 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
         $router->resource('collections', AdminCollectionsController::class)
             ->names(resource_names('collections'))
             ->except(['show']);
-        // routes from config
-        foreach ((array) cms_config('routes') as $prefix => $routes) {
+
+        // type routes from config
+        foreach ((array) cms_config('type_routes') as $prefix => $routes) {
             foreach ((array) $routes as $route => $controller) {
                 $router->post($route . '/{id}/visibility', [$controller, 'visibility'])
                     ->name($route . '.visibility');
@@ -99,6 +92,17 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
             }
         }
 
+        // file routes from config
+        foreach ((array) cms_config('file_routes') as $route => $controller) {
+            $router->post($route . '/files/{id}/visibility', [$controller, 'visibility'])
+                ->name($route . '.files.visibility');
+            $router->put($route . '/files/position', [$controller, 'updatePosition'])
+                ->name($route . '.files.updatePosition');
+            $router->resource($route . '.files', $controller)
+                ->names(resource_names($route . '.files'))
+                ->except(['show']);
+        }
+
         // permissions
         $router->get('permissions', [
             AdminPermissionsController::class, 'index'
@@ -107,7 +111,7 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
             AdminPermissionsController::class, 'store'
         ])->name('permissions.store');
 
-        // cms users
+        // CMS users
         $router->resource('cms-users', AdminCmsUsersController::class)
             ->names(resource_names('cmsUsers'));
 
@@ -115,17 +119,6 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
         $router->get('filemanager', [
             AdminFilemanagerController::class, 'index'
         ])->name('filemanager');
-
-        // files
-        $router->post('files/{id}/visibility', [
-            AdminFilesController::class, 'visibility'
-        ])->name('files.visibility');
-        $router->put('files/position', [
-            AdminFilesController::class, 'updatePosition'
-        ])->name('files.updatePosition');
-        $router->resource('{routeName}/{routeId}/files', AdminFilesController::class)
-            ->names(resource_names('files'))
-            ->except(['show']);
 
         // slider
         $router->post('slider/{id}/visibility', [
@@ -165,7 +158,7 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
             $router->post('calendar', 'destroy')->name('calendar.destroy');
         });
 
-        // cms settings
+        // CMS settings
         $router->get('settings', [
             AdminSettingsController::class, 'index'
         ])->name('settings.index');
@@ -180,7 +173,7 @@ Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($ro
             AdminWebSettingsController::class, 'update'
         ])->name('webSettings.update');
 
-        // sitemap xml
+        // sitemap XML
         $router->post('sitemap/xml/store', [
             AdminSitemapXmlController::class, 'store'
         ])->name('sitemap.xml.store');
