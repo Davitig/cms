@@ -32,7 +32,7 @@
                     <span class="text-danger">{{$error}}</span>
                 </div>
             @endif
-                <form action="{{cms_route('login')}}" method="POST" role="form" id="login" class="login-form fade-in-effect">
+                <form action="{{cms_route('login.post')}}" method="POST" role="form" id="login" class="login-form fade-in-effect">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="login-header">
                         <p>{{trans('auth.login_msg')}}</p>

@@ -2,7 +2,9 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
                 <ul class="nav nav-tabs">
                 @foreach ($items as $current)
                     <li{!!language() != $current->language ? '' : ' class="active"'!!}>
@@ -15,8 +17,8 @@
             @foreach ($items as $current)
                 <div class="tab-pane{{language() != $current->language ? '' : ' active'}}" id="item-{{$current->language}}">
                     {{ html()->modelForm($current,
-                        'post', cms_route('translations.popup', [], count(languages()) > 1 ? $current->language : null)
-                    )->class('form-horizontal')->data('lang', 1)->open() }}
+                        'post', cms_route('translations.form.post', [], count(languages()) > 1 ? $current->language : null)
+                    )->class('form-horizontal')->data('lang', $current->language)->open() }}
                         <input type="hidden" name="id" value="{{$current->id}}">
                         @include('admin.translations.modal.form')
                     {{ html()->form()->close() }}

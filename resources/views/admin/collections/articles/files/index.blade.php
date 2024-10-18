@@ -14,7 +14,9 @@
                     <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
                 </li>
                 <li>
-                    <a href="{{ cms_route($routeName . '.edit', $foreignModel->routeParams) }}"><i class="{{icon_type($routeName)}}"></i>{{$type = Str::singular($name = $foreignModel->getTable())}}</a>
+                    <a href="{{ cms_route('articles.edit', [$foreignModel->collection_id, $foreignModel->id]) }}">
+                        <i class="{{$foreignIcon = icon_type('articles')}}"></i> Article
+                    </a>
                 </li>
                 <li class="active">
                     <i class="{{$icon}}"></i>
@@ -23,28 +25,21 @@
             </ol>
         </div>
     </div>
-    <div class="clearfix">
-        <ul class="nav nav-tabs col-xs-6">
-            <li>
-                <a href="{{ cms_route($routeName . '.edit', $foreignModel->routeParams) }}">
-                    <span class="visible-xs"><i class="fa fa-home"></i></span>
-                    <span class="hidden-xs">
-                        <i class="{{icon_type($name)}}"></i> Back to {{$type}}
-                    </span>
-                </a>
-            </li>
-        </ul>
-        <ul class="nav nav-tabs col-xs-6 right-aligned">
-            <li class="active">
-                <a href="#" data-toggle="tab">
-                    <span class="visible-xs"><i class="{{$icon}}"></i></span>
-                    <div class="hidden-xs">
-                        <i class="{{$icon}}"></i> {{trans('general.files')}}
-                    </div>
-                </a>
-            </li>
-        </ul>
-    </div>
+    <ul class="nav nav-tabs nav-tabs-justified">
+        @include('admin._partials.items.lang-linked', [
+            'items' => $foreignModels, 'routeName' => 'articles.edit', 'params' => [
+                $foreignModel->collection_id, $foreignModel->id
+            ]
+        ])
+        <li class="active">
+            <a href="#" data-toggle="tab">
+                <span class="visible-xs"><i class="{{$icon}}"></i></span>
+                <div class="hidden-xs">
+                    <i class="{{$icon}}"></i> {{trans('general.files')}}
+                </div>
+            </a>
+        </li>
+    </ul>
     <section class="gallery-env files">
         <div class="row">
             <div class="col-sm-12 gallery-right">
@@ -93,7 +88,7 @@
                 </div>
                 <ul id="nestable-list" class="album-images list-unstyled row" data-insert="prepend" data-uk-nestable="{maxDepth:1}" id="items">
                     @foreach($items as $item)
-                        <li id="item{{$item->id}}" data-id="{{$item->id}}" data-pos="{{$item->position}}" data-url="{{cms_route('files.edit', [$routeName, $item->table_id, $item->id])}}" class="item col-md-2 col-sm-4 col-xs-6">
+                        <li id="item{{$item->id}}" data-id="{{$item->id}}" data-pos="{{$item->position}}" data-url="{{cms_route('articles.files.edit', [$item->article_id, $item->id])}}" class="item col-md-2 col-sm-4 col-xs-6">
                             <div class="album-image">
                                 <a href="#" class="thumb" data-modal="edit">
                                     @if (in_array($ext = pathinfo($item->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
@@ -112,7 +107,7 @@
                                     <div class="select-item dib">
                                         <input type="checkbox" data-id="{{$item->id}}" class="cbr" />
                                     </div>
-                                    <a href="#" data-url="{{cms_route('files.visibility', [$item->id])}}" class="visibility" title="{{trans('general.visibility')}}">
+                                    <a href="#" data-url="{{cms_route('articles.files.visibility', [$item->id])}}" class="visibility" title="{{trans('general.visibility')}}">
                                         <i class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></i>
                                     </a>
                                     <a href="#" data-modal="edit" title="{{trans('general.edit')}}"><i class="fa fa-pencil"></i></a>
@@ -129,9 +124,9 @@
     </section>
     @push('body.bottom')
         @include('admin._scripts.album', [
-            'routeCreate' => cms_route('files.create', [$routeName, $foreignModel->id, 'sort' => 'desc', 'page' => $items->currentPage(), 'lastPage' => $items->lastPage()]),
-            'routeIndex' => cms_route('files.index', [$routeName, $foreignModel->id]),
-            'routePosition' => cms_route('files.updatePosition'),
+            'routeCreate' => cms_route('articles.files.create', [$foreignModel->id, 'sort' => 'desc', 'page_val' => $items->currentPage(), 'lastPage' => $items->lastPage()]),
+            'routeIndex' => cms_route('articles.files.index', [$foreignModel->id]),
+            'routePosition' => cms_route('articles.files.updatePosition'),
             'sort' => 'desc',
             'page' => request('page', 1),
             'hasMorePages' => $items->hasMorePages()

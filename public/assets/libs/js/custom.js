@@ -95,8 +95,7 @@ $(function () {
         e.preventDefault();
         var form = $(this);
         form.find('.text-danger').remove();
-        var lang = form.data('lang');
-        lang = lang ? lang : '';
+        var lang = form.data('lang') ?? '';
 
         $.ajax({
             type: 'POST',

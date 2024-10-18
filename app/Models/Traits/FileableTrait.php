@@ -7,47 +7,6 @@ use Models\File;
 trait FileableTrait
 {
     /**
-     * Get the model files.
-     *
-     * @param  bool  $separated
-     * @param  array|mixed  $columns
-     * @return \Illuminate\Support\Collection
-     */
-    public function getFiles($separated = true, $columns = ['*'])
-    {
-        $imageExt = ['png', 'jpg', 'jpeg', 'gif', 'bmp'];
-
-        $files = (new File)->joinLanguage()
-            ->byForeign($this->getTable(), $this->getKey())
-            ->whereVisible()
-            ->positionDesc()
-            ->get($columns);
-
-        if (! $separated) {
-            return $files;
-        }
-
-        $images = $mixed = [];
-
-        if (! $files->isEmpty()) {
-            foreach ($files as $key => $value) {
-                $item = $files->pull($key);
-
-                if (in_array(strtolower(pathinfo($item->file, PATHINFO_EXTENSION)), $imageExt)) {
-                    $images[] = $item;
-                } else {
-                    $mixed[] = $item;
-                }
-            }
-        }
-
-        $files->put('images', $images);
-        $files->put('mixed', $mixed);
-
-        return $files;
-    }
-
-    /**
      * Add a files count to the query.
      *
      * @return \Models\Builder\Builder
@@ -57,9 +16,8 @@ trait FileableTrait
         return $this->selectSub(function ($q) {
             $tableId = ($table = $this->getTable()).'.'.$this->getKeyName();
 
-            return $q->from((new File)->getTable())
-                ->whereColumn('table_id', $tableId)
-                ->where('table_name',  $table)
+            return $q->from(($table = str($table)->singular()) . '_files')
+                ->whereColumn($table . '_id', $tableId)
                 ->selectRaw('count(*)');
         }, 'files_count');
     }
@@ -74,14 +32,13 @@ trait FileableTrait
         return $this->selectExists(function ($q) {
             $tableId = ($table = $this->getTable()).'.'.$this->getKeyName();
 
-            return $q->from((new File)->getTable())
-                ->whereColumn('table_id', $tableId)
-                ->where('table_name', $table);
+            return $q->from(($table = str($table)->singular()) . '_files')
+                ->whereColumn($table . '_id', $tableId);
         }, 'has_file');
     }
 
     /**
-     * Add query where file exists or not.
+     * Add a query where a file exists or not.
      *
      * @param  bool  $exists
      * @return \Models\Builder\Builder
@@ -91,9 +48,8 @@ trait FileableTrait
         return $this->whereExists(function ($q) {
             $tableId = ($table = $this->getTable()).'.'.$this->getKeyName();
 
-            return $q->from((new File)->getTable())
-                ->whereColumn('table_id', $tableId)
-                ->where('table_name', $table);
+            return $q->from(($table = str($table)->singular()) . '_files')
+                ->whereColumn($table . '_id', $tableId);
         }, 'and', ! $exists);
     }
 }

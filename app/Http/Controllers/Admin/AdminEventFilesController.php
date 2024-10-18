@@ -6,16 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FileRequest;
 use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
-use Models\File;
+use Models\Event;
+use Models\EventFile;
 
-class AdminFilesController extends Controller
+class AdminEventFilesController extends Controller
 {
     use Positionable, VisibilityTrait;
 
     /**
-     * The File instance.
+     * The EventFile instance.
      *
-     * @var \Models\File
+     * @var \Models\EventFile
      */
     protected $model;
 
@@ -29,11 +30,11 @@ class AdminFilesController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\File  $model
+     * @param  \Models\EventFile  $model
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    public function __construct(File $model, Request $request)
+    public function __construct(EventFile $model, Request $request)
     {
         $this->model = $model;
 
@@ -43,56 +44,59 @@ class AdminFilesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  string  $routeName
-     * @param  int  $routeId
+     * @param  int  $eventId
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($routeName, $routeId)
+    public function index($eventId)
     {
-        $data['foreignModel'] = $this->model->getForeignModel();
+        $data['foreignModels'] = (new Event)->where('id', $eventId)
+            ->joinLanguage(false)
+            ->getOrFail();
 
-        $data['items'] = $this->model->getByForeign();
+        $data['foreignModel'] = $data['foreignModels']->first();
 
-        $data['routeName'] = $routeName;
+        $data['items'] = $this->model->forAdmin($eventId)->paginate(20);
 
-        return view('admin.files.index', $data);
+        return view('admin.collections.events.files.index', $data);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @param  string  $routeName
-     * @param  int  $routeId
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param  int  $eventId
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function create($routeName, $routeId)
+    public function create($eventId)
     {
         if ($this->request->expectsJson()) {
             $data['current'] = $this->model;
+            $data['current']->event_id = $eventId;
 
             return response()->json([
                 'result' => true,
-                'view' => view('admin.files.create', $data)->render()
+                'view' => view('admin.collections.events.files.create', $data)->render()
             ]);
         }
 
-        return redirect(cms_route('files.index', [$routeName, $routeId]));
+        return redirect(cms_route('events.files.index', [$eventId]));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\Admin\FileRequest  $request
-     * @param  string  $routeName
-     * @param  int  $routeId
+     * @param  int  $eventId
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(FileRequest $request, $routeName, $routeId)
+    public function store(FileRequest $request, $eventId)
     {
-        $model = $this->model->create($input = $request->all());
+        $input = $request->all();
+        $input['event_id'] = $eventId;
+
+        $model = $this->model->create($input);
 
         if ($request->expectsJson()) {
-            $view = view('admin.files.item', [
+            $view = view('admin.collections.events.files.item', [
                 'item' => $model,
                 'itemInput' => $input
             ])->render();
@@ -103,7 +107,7 @@ class AdminFilesController extends Controller
             );
         }
 
-        return redirect(cms_route('files.index', [$routeName, $routeId]));
+        return redirect(cms_route('events.files.index', [$eventId]));
     }
 
     /**
@@ -119,12 +123,11 @@ class AdminFilesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  string  $routeName
-     * @param  int  $routeId
+     * @param  int  $eventId
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function edit($routeName, $routeId, $id)
+    public function edit($eventId, $id)
     {
         if ($this->request->expectsJson()) {
             $data['items'] = $this->model->joinLanguage(false)
@@ -133,23 +136,22 @@ class AdminFilesController extends Controller
 
             return response()->json([
                 'result' => true,
-                'view' => view('admin.files.edit', $data)->render()
+                'view' => view('admin.collections.events.files.edit', $data)->render()
             ]);
         }
 
-        return redirect(cms_route('files.index', [$routeName, $routeId]));
+        return redirect(cms_route('events.files.index', [$eventId]));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\Admin\FileRequest  $request
-     * @param  string  $routeName
-     * @param  int  $routeId
+     * @param  int  $eventId
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(FileRequest $request, $routeName, $routeId, $id)
+    public function update(FileRequest $request, $eventId, $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -159,18 +161,17 @@ class AdminFilesController extends Controller
             ));
         }
 
-        return redirect(cms_route('files.index', [$routeName, $routeId]));
+        return redirect(cms_route('events.files.index', [$eventId]));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string  $routeName
-     * @param  int  $routeId
+     * @param  int  $eventId
      * @param  int  $id
      * @return mixed
      */
-    public function destroy($routeName, $routeId, $id)
+    public function destroy($eventId, $id)
     {
         $id = $this->request->get('ids');
 
