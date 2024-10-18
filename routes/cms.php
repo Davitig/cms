@@ -18,8 +18,12 @@ use App\Http\Controllers\Admin\AdminWebSettingsController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
 
+$language = language_in_url() ? language() . '/' : '';
+
 // CMS
-Route::group(['middleware' => 'cms.data', 'prefix' => cms_slug()], function ($router) {
+Route::group([
+    'middleware' => 'cms.data', 'prefix' => $language . cms_slug(), 'as' => cms_slug() . '.'
+], function ($router) {
     // login
     $router->controller(AdminLoginController::class)->group(function ($router) {
         $router->get('login', 'showLoginForm')->name('login')->middleware('cms.guest');
