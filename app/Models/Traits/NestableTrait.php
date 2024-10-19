@@ -1,6 +1,6 @@
 <?php
 
-namespace Models\Traits;
+namespace App\Models\Traits;
 
 use Closure;
 
@@ -10,7 +10,7 @@ trait NestableTrait
      * Add a where "parent_id" clause to the query.
      *
      * @param  int  $id
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function parentId($id)
     {

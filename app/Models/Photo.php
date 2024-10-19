@@ -1,10 +1,10 @@
 <?php
 
-namespace Models;
+namespace App\Models;
 
-use Models\Abstracts\Model;
-use Models\Traits\LanguageTrait;
-use Models\Traits\HasGallery;
+use App\Models\Abstracts\Model;
+use App\Models\Traits\LanguageTrait;
+use App\Models\Traits\HasGallery;
 
 class Photo extends Model
 {

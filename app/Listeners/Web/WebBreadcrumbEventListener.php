@@ -3,7 +3,7 @@
 namespace App\Listeners\Web;
 
 use Illuminate\Support\Collection;
-use Models\Abstracts\Model;
+use App\Models\Abstracts\Model;
 
 class WebBreadcrumbEventListener
 {

@@ -3,7 +3,7 @@
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Models\Abstracts\Model;
+use App\Models\Abstracts\Model;
 
 /**
  * Get the application language.

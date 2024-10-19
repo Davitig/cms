@@ -5,7 +5,7 @@ namespace App\Http\Middleware\Admin;
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
-use Models\Permission;
+use App\Models\Permission;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\Response;
 

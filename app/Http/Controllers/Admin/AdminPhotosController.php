@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PhotoRequest;
 use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
-use Models\Collection;
-use Models\Gallery;
-use Models\Photo;
+use App\Models\Collection;
+use App\Models\Gallery;
+use App\Models\Photo;
 
 class AdminPhotosController extends Controller
 {
@@ -17,7 +17,7 @@ class AdminPhotosController extends Controller
     /**
      * The Photo instance.
      *
-     * @var \Models\Photo
+     * @var \App\Models\Photo
      */
     protected $model;
 
@@ -31,7 +31,7 @@ class AdminPhotosController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Photo  $model
+     * @param  \App\Models\Photo  $model
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */

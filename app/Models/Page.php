@@ -1,12 +1,12 @@
 <?php
 
-namespace Models;
+namespace App\Models;
 
-use Models\Abstracts\Model;
-use Models\Traits\FileableTrait;
-use Models\Traits\LanguageTrait;
-use Models\Traits\NestableTrait;
-use Models\Traits\PositionableTrait;
+use App\Models\Abstracts\Model;
+use App\Models\Traits\FileableTrait;
+use App\Models\Traits\LanguageTrait;
+use App\Models\Traits\NestableTrait;
+use App\Models\Traits\PositionableTrait;
 
 class Page extends Model
 {
@@ -64,7 +64,7 @@ class Page extends Model
      * Build an admin query.
      *
      * @param  int  $menuId
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function forAdmin($menuId = null, $currentLang = true)
     {
@@ -80,7 +80,7 @@ class Page extends Model
      * Build a public query.
      *
      * @param  mixed  $currentLang
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function forPublic($currentLang = true)
     {
@@ -116,7 +116,7 @@ class Page extends Model
      *
      * @param  string  $slug
      * @param  int     $parentId
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function bySlugRoute($slug, $parentId)
     {
@@ -127,7 +127,7 @@ class Page extends Model
      * Add a where "menu_id" clause to the query.
      *
      * @param  int  $id
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function menuId($id)
     {
@@ -139,7 +139,7 @@ class Page extends Model
      *
      * @param  int     $id
      * @param  string  $operator
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function typeId($id, $operator = '=')
     {
@@ -150,7 +150,7 @@ class Page extends Model
      * Add a where "visible" clause to the query.
      *
      * @param  int  $value
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function whereVisible($value = 1)
     {
@@ -160,7 +160,7 @@ class Page extends Model
     /**
      * Add a "collection" join to the query.
      *
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function joinCollection()
     {

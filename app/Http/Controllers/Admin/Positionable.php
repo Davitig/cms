@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Models\Abstracts\Model;
+use App\Models\Abstracts\Model;
 
 trait Positionable
 {

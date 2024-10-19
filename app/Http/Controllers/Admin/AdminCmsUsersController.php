@@ -7,7 +7,7 @@ use App\Http\Requests\Admin\CmsUserRequest;
 use App\Support\Admin\AdminDestroy;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
-use Models\CmsUser;
+use App\Models\CmsUser;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class AdminCmsUsersController extends Controller
@@ -15,7 +15,7 @@ class AdminCmsUsersController extends Controller
     /**
      * The CmsUser instance.
      *
-     * @var \Models\CmsUser
+     * @var \App\Models\CmsUser
      */
     protected $model;
 
@@ -29,7 +29,7 @@ class AdminCmsUsersController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\CmsUser  $model
+     * @param  \App\Models\CmsUser  $model
      * @param  \Illuminate\Contracts\Auth\Guard  $guard
      * @return void
      */

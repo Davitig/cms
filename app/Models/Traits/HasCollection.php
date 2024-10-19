@@ -1,8 +1,8 @@
 <?php
 
-namespace Models\Traits;
+namespace App\Models\Traits;
 
-use Models\Collection;
+use App\Models\Collection;
 
 trait HasCollection
 {
@@ -11,7 +11,7 @@ trait HasCollection
     /**
      * Get the data based on the admin collection.
      *
-     * @param  \Models\Collection  $collection
+     * @param  \App\Models\Collection  $collection
      * @param  array  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
@@ -24,7 +24,7 @@ trait HasCollection
     /**
      * Get the data based on the public collection.
      *
-     * @param  \Models\Collection  $collection
+     * @param  \App\Models\Collection  $collection
      * @param  array  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
@@ -37,8 +37,8 @@ trait HasCollection
     /**
      * Build a query based on the admin collection.
      *
-     * @param  \Models\Collection  $collection
-     * @return \Models\Builder\Builder
+     * @param  \App\Models\Collection  $collection
+     * @return \App\Models\Builder\Builder
      */
     public function adminCollection(Collection $collection)
     {
@@ -49,8 +49,8 @@ trait HasCollection
     /**
      * Build a query based on the public collection.
      *
-     * @param  \Models\Collection  $collection
-     * @return \Models\Builder\Builder
+     * @param  \App\Models\Collection  $collection
+     * @return \App\Models\Builder\Builder
      */
     public function publicCollection(Collection $collection)
     {
@@ -64,7 +64,7 @@ trait HasCollection
      * @param  int|null  $collectionId
      * @param  mixed  $currentLang
      * @param  array  $columns
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function forAdmin($collectionId = null, $currentLang = true, array $columns = [])
     {
@@ -79,7 +79,7 @@ trait HasCollection
      * @param  int|null  $collectionId
      * @param  mixed  $currentLang
      * @param  array  $columns
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function forPublic($collectionId = null, $currentLang = true, array $columns = [])
     {
@@ -93,7 +93,7 @@ trait HasCollection
      *
      * @param  string  $slug
      * @param  int|null  $collectionId
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function bySlug($slug, $collectionId = null)
     {
@@ -106,7 +106,7 @@ trait HasCollection
      * @param  int $collectionId
      * @param  string  $slug
      * @param  int|null  $id
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function byCollectionSlug($collectionId, $slug, $id = null)
     {
@@ -117,7 +117,7 @@ trait HasCollection
      * Add a where "collection_id" clause to the query.
      *
      * @param  int  $id
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function collectionId($id)
     {
@@ -128,7 +128,7 @@ trait HasCollection
      * Add a where "visible" clause to the query.
      *
      * @param  int  $value
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function whereVisible($value = 1)
     {

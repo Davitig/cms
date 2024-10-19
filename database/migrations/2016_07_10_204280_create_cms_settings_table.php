@@ -31,7 +31,8 @@ return new class extends Migration
             $table->string('lockscreen')->default('0');
             $table->timestamps();
 
-            $table->foreign('cms_user_id')->references('id')->on('cms_users')->onDelete('cascade');
+            $table->foreign('cms_user_id')->references('id')
+                ->on('cms_users')->onDelete('cascade');
         });
     }
 

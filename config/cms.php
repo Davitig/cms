@@ -59,8 +59,8 @@ return [
             'collections'
         ],
         'implicit' => [
-            'collections' => Models\Collection::class,
-            'galleries' => Models\Gallery::class
+            'collections' => App\Models\Collection::class,
+            'galleries' => App\Models\Gallery::class
         ],
         'explicit' => []
     ],
@@ -121,10 +121,10 @@ return [
             'faq' => 'FAQ'
         ],
         'models' => [
-            'articles' => \Models\Article::class,
-            'events' => \Models\Event::class,
-            'galleries' => \Models\Gallery::class,
-            'faq' => \Models\Faq::class
+            'articles' => \App\Models\Article::class,
+            'events' => \App\Models\Event::class,
+            'galleries' => \App\Models\Gallery::class,
+            'faq' => \App\Models\Faq::class
         ],
         'order_by' => [
             'position' => 'Position',

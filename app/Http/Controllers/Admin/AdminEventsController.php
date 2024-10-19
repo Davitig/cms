@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\EventRequest;
 use App\Support\Admin\AdminDestroy;
-use Models\Collection;
-use Models\Event;
+use App\Models\Collection;
+use App\Models\Event;
 
 class AdminEventsController extends Controller
 {
@@ -15,14 +15,14 @@ class AdminEventsController extends Controller
     /**
      * The Event instance.
      *
-     * @var \Models\Event
+     * @var \App\Models\Event
      */
     protected $model;
 
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Event  $model
+     * @param  \App\Models\Event  $model
      * @return void
      */
     public function __construct(Event $model)

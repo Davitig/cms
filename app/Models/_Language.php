@@ -1,8 +1,8 @@
 <?php
 
-namespace Models;
+namespace App\Models;
 
-use Models\Abstracts\Model;
+use App\Models\Abstracts\Model;
 
 class _Language extends Model
 {
@@ -16,7 +16,7 @@ class _Language extends Model
     /**
      * Create a new Language model instance.
      *
-     * @param  \Models\Abstracts\Model|null  $model
+     * @param  \App\Models\Abstracts\Model|null  $model
      * @param  array  $attributes
      * @return void
      */

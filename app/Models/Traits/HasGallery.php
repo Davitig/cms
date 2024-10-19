@@ -1,8 +1,8 @@
 <?php
 
-namespace Models\Traits;
+namespace App\Models\Traits;
 
-use Models\Gallery;
+use App\Models\Gallery;
 
 trait HasGallery
 {
@@ -11,7 +11,7 @@ trait HasGallery
     /**
      * Get the data based on the admin gallery.
      *
-     * @param  \Models\Gallery  $gallery
+     * @param  \App\Models\Gallery  $gallery
      * @param  array  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
@@ -24,7 +24,7 @@ trait HasGallery
     /**
      * Get the data based on the public gallery.
      *
-     * @param  \Models\Gallery  $gallery
+     * @param  \App\Models\Gallery  $gallery
      * @param  array  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
@@ -37,8 +37,8 @@ trait HasGallery
     /**
      * Build a query based on the admin gallery.
      *
-     * @param  \Models\Gallery  $gallery
-     * @return \Models\Builder\Builder
+     * @param  \App\Models\Gallery  $gallery
+     * @return \App\Models\Builder\Builder
      */
     public function adminGallery(Gallery $gallery)
     {
@@ -49,8 +49,8 @@ trait HasGallery
     /**
      * Build a query based on the public gallery.
      *
-     * @param  \Models\Gallery  $gallery
-     * @return \Models\Builder\Builder
+     * @param  \App\Models\Gallery  $gallery
+     * @return \App\Models\Builder\Builder
      */
     public function publicGallery(Gallery $gallery)
     {
@@ -64,7 +64,7 @@ trait HasGallery
      * Build a query based on the gallery.
      *
      * @param  int  $id
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function byGallery($id)
     {
@@ -75,7 +75,7 @@ trait HasGallery
      * Get the same type gallery instance.
      *
      * @param  string|null  $type
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function byType($type = null)
     {
@@ -87,7 +87,7 @@ trait HasGallery
     /**
      * Add a where "file" is not empty clause to the query.
      *
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function hasFile()
     {
@@ -98,7 +98,7 @@ trait HasGallery
      * Add a where "gallery_id" clause to the query.
      *
      * @param  mixed  $id
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function galleryId($id)
     {
@@ -109,7 +109,7 @@ trait HasGallery
      * Add a where "visible" clause to the query.
      *
      * @param  int  $value
-     * @return \Models\Builder\Builder
+     * @return \App\Models\Builder\Builder
      */
     public function whereVisible($value = 1)
     {

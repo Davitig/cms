@@ -3,24 +3,24 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use Models\Collection;
-use Models\Event;
-use Models\EventFile;
-use Models\Page;
+use App\Models\Collection;
+use App\Models\Event;
+use App\Models\EventFile;
+use App\Models\Page;
 
 class WebEventsController extends Controller
 {
     /**
      * The Event instance.
      *
-     * @var \Models\Event
+     * @var \App\Models\Event
      */
     protected $model;
 
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Event  $model
+     * @param  \App\Models\Event  $model
      * @return void
      */
     public function __construct(Event $model)
@@ -31,8 +31,8 @@ class WebEventsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Models\Page  $page
-     * @param  \Models\Collection  $collection
+     * @param  \App\Models\Page  $page
+     * @param  \App\Models\Collection  $collection
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Page $page, Collection $collection)
@@ -47,7 +47,7 @@ class WebEventsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Models\Page  $page
+     * @param  \App\Models\Page  $page
      * @param  string  $slug
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */

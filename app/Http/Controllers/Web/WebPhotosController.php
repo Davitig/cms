@@ -3,22 +3,22 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use Models\Gallery;
-use Models\Photo;
+use App\Models\Gallery;
+use App\Models\Photo;
 
 class WebPhotosController extends Controller
 {
     /**
      * The Photo instance.
      *
-     * @var \Models\Photo
+     * @var \App\Models\Photo
      */
     protected $model;
 
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Photo  $model
+     * @param  \App\Models\Photo  $model
      * @return void
      */
     public function __construct(Photo $model)
@@ -29,7 +29,7 @@ class WebPhotosController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Models\Gallery  $gallery
+     * @param  \App\Models\Gallery  $gallery
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Gallery $gallery)

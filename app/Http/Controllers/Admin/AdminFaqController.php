@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FaqRequest;
 use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
-use Models\Collection;
-use Models\Faq;
+use App\Models\Collection;
+use App\Models\Faq;
 
 class AdminFaqController extends Controller
 {
@@ -16,7 +16,7 @@ class AdminFaqController extends Controller
     /**
      * The Faq instance.
      *
-     * @var \Models\Faq
+     * @var \App\Models\Faq
      */
     protected $model;
 
@@ -30,7 +30,7 @@ class AdminFaqController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Faq  $model
+     * @param  \App\Models\Faq  $model
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */

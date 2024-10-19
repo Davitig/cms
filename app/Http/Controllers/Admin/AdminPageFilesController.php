@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FileRequest;
 use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
-use Models\Page;
-use Models\PageFile;
+use App\Models\Page;
+use App\Models\PageFile;
 
 class AdminPageFilesController extends Controller
 {
@@ -16,7 +16,7 @@ class AdminPageFilesController extends Controller
     /**
      * The PageFile instance.
      *
-     * @var \Models\PageFile
+     * @var \App\Models\PageFile
      */
     protected $model;
 
@@ -30,7 +30,7 @@ class AdminPageFilesController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\PageFile  $model
+     * @param  \App\Models\PageFile  $model
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */

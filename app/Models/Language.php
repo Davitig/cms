@@ -1,8 +1,8 @@
 <?php
 
-namespace Models;
+namespace App\Models;
 
-use Models\Abstracts\Model;
+use App\Models\Abstracts\Model;
 
 class Language extends Model
 {

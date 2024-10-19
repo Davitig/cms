@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ArticleRequest;
 use App\Support\Admin\AdminDestroy;
-use Models\Article;
-use Models\Collection;
+use App\Models\Article;
+use App\Models\Collection;
 
 class AdminArticlesController extends Controller
 {
@@ -15,14 +15,14 @@ class AdminArticlesController extends Controller
     /**
      * The Article instance.
      *
-     * @var \Models\Article
+     * @var \App\Models\Article
      */
     protected $model;
 
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Article  $model
+     * @param  \App\Models\Article  $model
      * @return void
      */
     public function __construct(Article $model)

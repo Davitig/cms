@@ -3,23 +3,23 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use Models\Collection;
-use Models\Faq;
-use Models\Page;
+use App\Models\Collection;
+use App\Models\Faq;
+use App\Models\Page;
 
 class WebFaqController extends Controller
 {
     /**
      * The Faq instance.
      *
-     * @var \Models\Faq
+     * @var \App\Models\Faq
      */
     protected $model;
 
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Faq  $model
+     * @param  \App\Models\Faq  $model
      * @return void
      */
     public function __construct(Faq $model)
@@ -30,8 +30,8 @@ class WebFaqController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Models\Page  $page
-     * @param  \Models\Collection  $collection
+     * @param  \App\Models\Page  $page
+     * @param  \App\Models\Collection  $collection
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Page $page, Collection $collection)

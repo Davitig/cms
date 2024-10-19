@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Models\_Language;
-use Models\Page;
+use App\Models\_Language;
+use App\Models\Page;
 
 trait ClonableLanguage
 {

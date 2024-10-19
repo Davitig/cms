@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Models\Calendar;
+use App\Models\Calendar;
 
 class AdminCalendarController extends Controller
 {
     /**
      * The Calendar instance.
      *
-     * @var \Models\Calendar
+     * @var \App\Models\Calendar
      */
     protected $model;
 
@@ -25,7 +25,7 @@ class AdminCalendarController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  \Models\Calendar  $model
+     * @param  \App\Models\Calendar  $model
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */
