@@ -127,7 +127,7 @@ class Page extends Model
      * Add a where "menu_id" clause to the query.
      *
      * @param  int  $id
-     * @return \App\Models\Builder\Builder
+     * @return $this
      */
     public function menuId($id)
     {
@@ -139,7 +139,7 @@ class Page extends Model
      *
      * @param  int     $id
      * @param  string  $operator
-     * @return \App\Models\Builder\Builder
+     * @return $this
      */
     public function typeId($id, $operator = '=')
     {
@@ -150,7 +150,7 @@ class Page extends Model
      * Add a where "visible" clause to the query.
      *
      * @param  int  $value
-     * @return \App\Models\Builder\Builder
+     * @return $this
      */
     public function whereVisible($value = 1)
     {
@@ -160,7 +160,7 @@ class Page extends Model
     /**
      * Add a "collection" join to the query.
      *
-     * @return \App\Models\Builder\Builder
+     * @return $this
      */
     public function joinCollection()
     {

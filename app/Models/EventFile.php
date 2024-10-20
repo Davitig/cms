@@ -74,7 +74,7 @@ class EventFile extends Model
      * Add a where foreign id clause to the query.
      *
      * @param  int  $foreignId
-     * @return \App\Models\Builder\Builder
+     * @return $this
      */
     public function byForeign($foreignId)
     {

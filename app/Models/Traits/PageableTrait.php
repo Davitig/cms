@@ -38,7 +38,7 @@ trait PageableTrait
      */
     public function getFullSlug($value = null, $column = null)
     {
-        return $this->fullSlug($value, $column)->slug;
+        return $this->fullSlug($value, $column)->full_slug;
     }
 
     /**
@@ -50,6 +50,8 @@ trait PageableTrait
      */
     public function fullSlug($value = null, $column = null)
     {
+        $this->full_slug ??= $this->slug;
+
         if (is_null($column)) {
             $column = is_null($value) && $this->collection_id
                 ? 'type_id'
@@ -66,7 +68,7 @@ trait PageableTrait
             return $this;
         }
 
-        $this->slug = trim($model->getFullSlug() . '/' . $this->slug, '/');
+        $this->full_slug = trim($model->getFullSlug() . '/' . $this->full_slug,'/');
 
         return $this;
     }

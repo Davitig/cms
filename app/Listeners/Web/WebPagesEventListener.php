@@ -21,7 +21,7 @@ class WebPagesEventListener
 
         if (! is_null($menu)) {
             $pages = (new Page)->forPublic()
-                ->where('menu_id', $menu->id)
+                ->menuId($menu->id)
                 ->positionAsc()
                 ->get();
         }

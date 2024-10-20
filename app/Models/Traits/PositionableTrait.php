@@ -67,11 +67,11 @@ trait PositionableTrait
         if ($params['move'] == 'next') {
             if ($params['orderBy'] == 'desc') {
                 $posFunc = function (&$value) {
-                    return $value['pos'] += 1;
+                    return $value['pos']++;
                 };
             } else {
                 $posFunc = function (&$value) {
-                    return $value['pos'] -= 1;
+                    return $value['pos']--;
                 };
             }
 
@@ -79,11 +79,11 @@ trait PositionableTrait
         } else {
             if ($params['orderBy'] == 'asc') {
                 $posFunc = function (&$value) {
-                    return $value['pos'] += 1;
+                    return $value['pos']++;
                 };
             } else {
                 $posFunc = function (&$value) {
-                    return $value['pos'] -= 1;
+                    return $value['pos']--;
                 };
             }
 

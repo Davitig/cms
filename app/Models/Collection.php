@@ -36,7 +36,7 @@ class Collection extends Model
      * Get the same type collection instance.
      *
      * @param  string  $type
-     * @return \App\Models\Collection
+     * @return $this
      */
     public function byType($type)
     {

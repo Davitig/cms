@@ -170,7 +170,7 @@ return [
     | This array used to specify types with methods, that will allow to
     | send a specific requests.
     |
-    | For example, "post", "put", "delete".
+    | E.g. "post", "put", "delete".
     |
     */
 

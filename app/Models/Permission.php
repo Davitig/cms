@@ -54,7 +54,7 @@ class Permission extends Model
      * Get the list of permissions by user id.
      *
      * @param  string  $value
-     * @return \App\Models\Builder\Builder
+     * @return $this
      */
     public function role($value)
     {

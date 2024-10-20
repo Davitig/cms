@@ -81,21 +81,21 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     protected $pagesCount = 0;
 
     /**
-     * The array of the listable types of the Page.
+     * The array of the listable types.
      *
      * @var array
      */
     protected $listableTypes = [];
 
     /**
-     * The array of the implicit types of the Page.
+     * The array of the implicit types.
      *
      * @var array
      */
     protected $implicitTypes = [];
 
     /**
-     * The array of the explicit types of the Page.
+     * The array of the explicit types.
      *
      * @var array
      */
@@ -215,12 +215,12 @@ final class DynamicRouteServiceProvider extends ServiceProvider
                 break;
             }
 
-        $page->original_slug = $page->slug;
-
             if ($i > 0) {
-                $page->parent_slug = $this->pages[$i - 1]->slug;
+                $page->parent_slug = $this->pages[$i - 1]->full_slug;
 
-                $page->slug = $page->parent_slug . '/' . $page->slug;
+                $page->full_slug = $page->parent_slug . '/' . $page->slug;
+            } else {
+                $page->full_slug = $page->slug;
             }
 
             $parentId = $page->id;

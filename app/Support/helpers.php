@@ -329,13 +329,9 @@ function make_model_sub_items($items, $slug = '', $parentId = 0, $parentKey = 'p
             continue;
         }
 
-        $slug = $prevSlug ? $prevSlug . '/' . $item->slug : $item->slug;
+        $item->full_slug = $prevSlug ? $prevSlug . '/' . $item->slug : $item->slug;
 
-        $item->original_slug = $item->slug;
-
-        $item->slug = $slug;
-
-        $item->sub_items = make_model_sub_items($items, $slug, $item->$key, $parentKey, $key);
+        $item->sub_items = make_model_sub_items($items, $item->full_slug, $item->$key, $parentKey, $key);
 
         $data[] = $item;
     }
