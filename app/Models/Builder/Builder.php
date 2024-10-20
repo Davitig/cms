@@ -22,7 +22,7 @@ class Builder extends EloquentBuilder
     protected $model;
 
     /**
-     * The columns callbacks that must also be added to the pagination count query.
+     * The column callbacks that must also be added to the pagination count query.
      *
      * @var array
      */
@@ -132,7 +132,7 @@ class Builder extends EloquentBuilder
     public function getFullSlug($value = null, $column = null, $currentLang = true)
     {
         if ($result = $this->fullSlug($value, $column, $currentLang)) {
-            return $result->slug;
+            return $result->full_slug;
         }
     }
 

@@ -91,7 +91,7 @@ trait NestableTrait
         )->positionAsc()->get($columns);
 
         if (is_int($recursive) && $recursive > 0) {
-            $recursive -= 1;
+            $recursive--;
         }
 
         return $recursive ? $models->each(function ($item) use ($columns, $recursive) {
@@ -108,7 +108,7 @@ trait NestableTrait
      */
     public function getFullSlug($value = null, $column = null)
     {
-        return $this->fullSlug($value, $column)->slug;
+        return $this->fullSlug($value, $column)->full_slug;
     }
 
     /**
@@ -120,6 +120,8 @@ trait NestableTrait
      */
     public function fullSlug($value = null, $column = null)
     {
+        $this->full_slug ??= $this->slug;
+
         if (! ($value = (is_null($value) ? $this->parent_id : $value))) {
             return $this;
         }
@@ -134,8 +136,10 @@ trait NestableTrait
             return $this;
         }
 
-        $this->slug = trim($model->slug . '/' . $this->slug, '/');
+        $this->full_slug = trim(
+            $model->slug . '/' . $this->full_slug, '/'
+        );
 
-        return $this->fullSlug($model->parent_id);
+        return $this->fullSlug($model->parent_id, $column);
     }
 }
