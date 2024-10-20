@@ -122,7 +122,37 @@ class Builder extends EloquentBuilder
     }
 
     /**
-     * Add a new select to the paginate count query.
+     * Get model full slug.
+     *
+     * @param  int|null  $value
+     * @param  string|null  $column
+     * @param  mixed  $currentLang
+     * @return mixed
+     */
+    public function getFullSlug($value = null, $column = null, $currentLang = true)
+    {
+        if ($result = $this->fullSlug($value, $column, $currentLang)) {
+            return $result->slug;
+        }
+    }
+
+    /**
+     * Set model full slug.
+     *
+     * @param  int|null  $value
+     * @param  string|null  $column
+     * @param  mixed  $currentLang
+     * @return mixed
+     */
+    public function fullSlug($value = null, $column = null, $currentLang = true)
+    {
+        if ($result = $this->first()) {
+            return $result->fullSlug($value, $column, $currentLang);
+        }
+    }
+
+    /**
+     * Add new select to the paginate count query.
      *
      * @param  \Closure  $callback
      * @return $this
