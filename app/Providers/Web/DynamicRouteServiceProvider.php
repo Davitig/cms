@@ -25,6 +25,13 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     protected $homeController = WebHomeController::class;
 
     /**
+     * The config repository instance.
+     *
+     * @var \Illuminate\Contracts\Config\Repository
+     */
+    protected $config;
+
+    /**
      * The Request instance.
      *
      * @var \Illuminate\Http\Request
@@ -39,46 +46,46 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     protected $router;
 
     /**
-     * The config repository instance.
+     * The list of router binders.
      *
-     * @var \Illuminate\Contracts\Config\Repository
+     * @var array
      */
-    protected $config;
+    protected $binders = [];
 
     /**
-     * The prefix of the routes URI.
+     * The unbinder keyword.
      *
      * @var string
      */
-    protected $uriPrefix = '/';
+    protected $unbinder = '{{unbind}}';
+
+    /**
+     * The prefix of the route path.
+     *
+     * @var string|null
+     */
+    protected $pathPrefix = null;
 
     /**
      * The list of URL segments.
      *
      * @var array
      */
-    protected $segments = [], $segmentsLeft = [];
+    protected $segments = [];
 
     /**
      * The number of total URL segments.
      *
      * @var int
      */
-    protected $segmentsCount = 0, $segmentsLeftCount = 0;
+    protected $segmentsCount = 0;
 
     /**
-     * The array of page instances.
+     * The array of model items.
      *
      * @var array
      */
-    protected $pages = [];
-
-    /**
-     * The number of total page instances.
-     *
-     * @var int
-     */
-    protected $pagesCount = 0;
+    protected $items = [];
 
     /**
      * The array of the listable types.
@@ -109,14 +116,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     protected $requestMethods = [];
 
     /**
-     * The array of the types with an additional URIs.
-     *
-     * @var array
-     */
-    protected $tabs = [];
-
-    /**
-     * Define a dynamic routes.
+     * Define a dynamic route.
      *
      * @return void
      */
@@ -131,7 +131,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
                 $this->router = $app['router'];
 
                 if ($this->config->get('language_in_url')) {
-                    $this->uriPrefix = $this->config->get('app.language') . '/';
+                    $this->pathPrefix = $this->config->get('app.language') . '/';
                 }
 
                 $routeMatches = 0;
@@ -152,7 +152,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Set router configuration.
+     * Set route configuration.
      *
      * @return void
      */
@@ -169,12 +169,10 @@ final class DynamicRouteServiceProvider extends ServiceProvider
         $this->explicitTypes = (array) $this->config->get('cms.pages.explicit', []);
 
         $this->requestMethods = (array) $this->config->get('cms.methods', []);
-
-        $this->tabs = (array) $this->config->get('cms.tabs', []);
     }
 
     /**
-     * Build a new routes.
+     * Build a new route.
      *
      * @return void
      */
@@ -203,10 +201,9 @@ final class DynamicRouteServiceProvider extends ServiceProvider
             $page = (new Page)->bySlugRoute($this->segments[$i], $parentId)->first();
 
             if (is_null($page)) {
-                if (count($this->pages) < 1
-                    || (! in_array($type = $this->pages[$i - 1]->type, $this->listableTypes)
+                if (count($this->items) < 1
+                    || (! in_array($type = $this->items[$i - 1]->type, $this->listableTypes)
                         && ! array_key_exists($type, $this->explicitTypes)
-                        && ! array_key_exists($type, $this->tabs)
                     )
                 ) {
                     return;
@@ -216,7 +213,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
             }
 
             if ($i > 0) {
-                $page->parent_slug = $this->pages[$i - 1]->full_slug;
+                $page->parent_slug = $this->items[$i - 1]->full_slug;
 
                 $page->full_slug = $page->parent_slug . '/' . $page->slug;
             } else {
@@ -225,58 +222,54 @@ final class DynamicRouteServiceProvider extends ServiceProvider
 
             $parentId = $page->id;
 
-            $this->pages[$i] = $page;
+            $this->items[$i] = $page;
         }
     }
 
     /**
-     * Set route by URL segments.
+     * Set a dynamic route.
      *
      * @return void
      */
     protected function setRoute()
     {
         if (! $this->segmentsCount) {
-            $this->router->get($this->uriPrefix, [$this->homeController, 'index']);
+            $this->router->get($this->pathPrefix, [$this->homeController, 'index']);
 
             return;
         }
 
         $this->setPages();
 
-        $this->detectRoute();
+        if ($this->detectRoute()) {
+            $this->setInstances();
+        }
     }
 
     /**
-     * Detect route by URL segments.
+     * Detect dynamic route.
      *
-     * @return void
+     * @return bool
      */
     protected function detectRoute()
     {
-        if (empty($page = end($this->pages))) {
-            return;
-        }
-
-        $this->segmentsLeft = array_slice(
-            $this->segments, $this->pagesCount = count($this->pages)
-        );
-
-        if (($this->segmentsLeftCount = count($this->segmentsLeft)) > 2) {
-            return;
+        if (empty($page = end($this->items))) {
+            return false;
         }
 
         if ($this->setPageRoute($page)) {
-            return;
+            return true;
         }
 
-        $slug = current($this->segmentsLeft);
-
-        if ($this->setExplicitRoute($page, $slug)) {
-            return;
+        if ($this->setExplicitRoute($page)) {
+            return true;
         }
 
-        $this->setImplicitRoute($page, $slug);
+        if ($this->setImplicitRoute($page)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -287,67 +280,81 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      */
     protected function setPageRoute(Page $page)
     {
-        if (! array_key_exists($page->type, $this->implicitTypes)
-            && ! $this->segmentsLeftCount
+        if (array_key_exists($page->type, $this->implicitTypes)
+            || $this->segmentsCount > ($itemsCount = count($this->items))
         ) {
-            return $this->setCurrentRoute($page->type, [$page], 'index');
+            return false;
         }
 
-        return false;
+        $this->binders = array_fill(0, $itemsCount, $this->unbinder);
+
+        $this->binders[array_key_last($this->binders)] = $page;
+
+        return $this->setCurrentRoute($page->type, 'index');
     }
 
     /**
      * Set the explicit route.
      *
      * @param  \App\Models\Page  $page
-     * @param  string  $slug
      * @return bool
      */
-    protected function setExplicitRoute(Page $page, $slug)
+    protected function setExplicitRoute(Page $page)
     {
-        if ($slug && array_key_exists($page->type, $this->explicitTypes)) {
-            return $this->setCurrentRoute($page->type, [$page, $slug], 'show');
+        if (! array_key_exists($page->type, $this->explicitTypes)
+            || $this->segmentsCount - ($itemsCount = count($this->items)) > 1
+        ) {
+            return false;
         }
 
-        return false;
+        $this->binders = array_fill(0, $itemsCount - 1, $this->unbinder);
+
+        $this->binders[] = $page;
+        $this->binders[] = last($this->segments);
+
+        return $this->setCurrentRoute($page->type, 'show');
     }
 
     /**
      * Set the implicit route.
      *
      * @param  \App\Models\Page  $page
-     * @param  string  $slug
      * @return bool
      */
-    protected function setImplicitRoute(Page $page, $slug)
+    protected function setImplicitRoute(Page $page)
     {
-        if (! array_key_exists($page->type, $this->implicitTypes)) {
+        if (! array_key_exists($page->type, $this->implicitTypes)
+            || $this->segmentsCount - ($itemsCount = count($this->items)) > 1
+        ) {
             return false;
         }
 
         $model = (new $this->implicitTypes[$page->type])->findOrFail($page->type_id);
 
-        if (! $slug) {
-            return $this->setCurrentRoute($model->type, [
-                $page, $model
-            ], 'index', $this->pagesCount);
+        $this->binders = array_fill(0, count($this->items) - 1, $this->unbinder);
+
+        $this->binders[] = [$page, $model];
+
+        if ($this->segmentsCount == $itemsCount) {
+            return $this->setCurrentRoute($model->type, 'index');
         }
 
         if (! array_key_exists($model->type, $this->implicitTypes)) {
-            return $this->setCurrentRoute($model->type, [$page, $slug], 'show');
+            $this->binders[] = last($this->segments);
+
+            return $this->setCurrentRoute($model->type, 'show');
         }
 
-        return $this->setDeepImplicitRoute($model, $slug);
+        return $this->setDeepImplicitRoute($model);
     }
 
     /**
      * Set the deep implicit route.
      *
      * @param  \App\Models\Abstracts\Model  $implicitModel
-     * @param  string  $slug
      * @return bool
      */
-    protected function setDeepImplicitRoute($implicitModel, $slug)
+    protected function setDeepImplicitRoute($implicitModel)
     {
         $model = new $this->implicitTypes[$implicitModel->type];
 
@@ -355,70 +362,42 @@ final class DynamicRouteServiceProvider extends ServiceProvider
             return false;
         }
 
-        $model = $model->bySlug($slug, $implicitModel->id)->firstOrFail();
+        $model = $model->bySlug(last($this->segments), $implicitModel->id)->firstOrFail();
 
-        return $this->setCurrentRoute($model->type, [
-            $model, $implicitModel
-        ], 'index');
+        $this->binders[] = $model;
+
+        return $this->setCurrentRoute($model->type, 'index');
     }
 
     /**
      * Set the current route.
      *
      * @param  string  $type
-     * @param  array  $parameters
      * @param  string|null  $defaultMethod
-     * @param  int  $fakeBind
      * @return bool
      */
-    protected function setCurrentRoute($type, array $parameters = [], $defaultMethod = null, $fakeBind = 0)
+    protected function setCurrentRoute($type, $defaultMethod = null)
     {
-        $paramsCount = count($parameters);
+        $path = '';
 
-        if ($this->segmentsLeftCount == 2
-            || ($this->segmentsLeftCount == $paramsCount
-                && current($parameters) instanceof Page
-            )
-        ) {
-            if (array_key_exists($type, $this->tabs)
-                && (array_key_exists(
-                        $tabKey = $tab = (string) end($this->segmentsLeft),
-                        $tabs = (array) $this->tabs[$type]
-                    )
-                    || is_int($tabKey = key($tabs))
-                )
-            ) {
-                $defaultMethod = $this->tabs[$type][$tabKey];
+        foreach ($this->binders as $key => $binder) {
+            $path .= ($binder == $this->unbinder
+                    ? $this->segments[$key]
+                    : '{bind' . ($key) . '}'
+                ) . '/';
 
-                $parameters[] = $tab;
-            } else {
-                return false;
+            $key = 'bind' . $key;
+
+            if ($binder != $this->unbinder) {
+                $this->router->bind($key, function () use ($binder) {
+                    return $binder;
+                });
             }
         }
 
         $typeParts = explode('@', $type);
 
-        $controller = $this->getControllerPath($typeParts[0]);
-
-        $method = count($typeParts) == 2 ? $typeParts[1] : $defaultMethod;
-
-        $segments = '';
-
-        for ($i = 0; $i <= ($this->segmentsCount - ($paramsCount + 1)); $i++) {
-            $segments .= $this->segments[$i] . '/';
-        }
-
-        foreach ($parameters as $key => $binder) {
-            $segments .= '{bind'.$key.'}'.(($paramsCount - $fakeBind - 1) == $key ? '' : '/');
-
-            $key = 'bind' . $key;
-
-            $this->router->bind($key, function () use ($binder) {
-                return $binder;
-            });
-        }
-
-        $this->app->instance('breadcrumb', new Collection($this->pages));
+        $method = $typeParts[1] ?? $defaultMethod;
 
         $route = strtolower($this->request->method());
 
@@ -433,11 +412,21 @@ final class DynamicRouteServiceProvider extends ServiceProvider
             $route = 'get';
         }
 
-        $this->router->$route($this->uriPrefix . $segments, [
-            'uses' => $controller . '@' . $method
+        $this->router->$route($this->pathPrefix . $path, [
+            'uses' => $this->getControllerPath($typeParts[0]) . '@' . $method
         ]);
 
         return true;
+    }
+
+    /**
+     * Set route instances.
+     *
+     * @return void
+     */
+    protected function setInstances()
+    {
+        $this->app->instance('breadcrumb', new Collection($this->items));
     }
 
     /**

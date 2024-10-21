@@ -18,14 +18,14 @@
         <div class="col-sm-4">
         @if ($item->image)
             <div class="img">
-                <a href="{{web_url([$current->slug, $item->slug])}}">
+                <a href="{{web_url([$current->full_slug, $item->slug])}}">
                     <img src="{{$item->image}}" class="img-responsive" alt="{{$item->title}}">
                 </a>
             </div>
             <!-- .img -->
         @endif
             <div class="title text-center">
-                <h2><a href="{{web_url([$current->slug, $item->slug])}}">{{$item->title}}</a></h2>
+                <h2><a href="{{web_url([$current->full_slug, $item->slug])}}">{{$item->title}}</a></h2>
             </div>
             <!-- .title -->
         </div>

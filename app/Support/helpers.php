@@ -515,7 +515,7 @@ function glide($path, $type)
 }
 
 /**
- * Convert bytes to human readable format.
+ * Convert bytes to human-readable format.
  *
  * @param  int  $bytes
  * @param  int  $precision
@@ -592,7 +592,7 @@ function get_youtube_id($url, array $allowQueryStrings = [], $strict = false)
     if ((! $strict || isset($parts['scheme'])) && isset($parts['path'])) {
         $path = explode('/', trim($parts['path'], '/'));
 
-        return (string) end($path) . $allowQueryStrings;
+        return end($path) . $allowQueryStrings;
     }
 
     return '';
@@ -608,23 +608,6 @@ function get_youtube_id($url, array $allowQueryStrings = [], $strict = false)
 function get_youtube_embed($url, array $allowQueryStrings = [])
 {
     return 'https://www.youtube.com/embed/' . get_youtube_id($url, $allowQueryStrings);
-}
-
-/**
- * Calculate age based on the date.
- *
- * @param  string  $dob
- * @return int
- */
-function get_age($dob)
-{
-    $dob = new DateTime($dob);
-
-    $today = new DateTime('today');
-
-    $age = $dob->diff($today)->y;
-
-    return $age;
 }
 
 /**

@@ -16,7 +16,7 @@ class EventRequest extends Request
         $id = $this->route('event');
 
         return [
-            'slug' => 'required|min:2|unique:events,slug,'.$id,
+            'slug' => 'required|min:1|unique:events,slug,'.$id,
             'title' => 'required|min:2',
         ];
     }
