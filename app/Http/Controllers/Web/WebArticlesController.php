@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\ArticleFile;
-use App\Models\Collection;
-use App\Models\Page;
 
 class WebArticlesController extends Controller
 {
@@ -31,13 +29,12 @@ class WebArticlesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \App\Models\Page  $page
-     * @param  \App\Models\Collection  $collection
+     * @param  array<\App\Models\Page, \App\Models\Collection>  $models
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(Page $page, Collection $collection)
+    public function index(array $models)
     {
-        $data['current'] = $page;
+        [$data['current'], $collection] = $models;
 
         $data['items'] = $this->model->getPublicCollection($collection);
 
@@ -47,15 +44,15 @@ class WebArticlesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Page  $page
+     * @param  array<\App\Models\Page, \App\Models\Collection>  $models
      * @param  string  $slug
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(Page $page, $slug)
+    public function show(array $models, $slug)
     {
-        $data['parent'] = $page;
+        [$data['parent'], $collection] = $models;
 
-        $data['current'] = $this->model->byCollectionSlug($page->type_id, $slug)->firstOrFail();
+        $data['current'] = $this->model->byCollectionSlug($collection->id, $slug)->firstOrFail();
 
         $data['files'] = (new ArticleFile)->getFiles($data['current']->id);
 

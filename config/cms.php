@@ -62,7 +62,9 @@ return [
             'collections' => App\Models\Collection::class,
             'galleries' => App\Models\Gallery::class
         ],
-        'explicit' => []
+        'explicit' => [
+            //
+        ]
     ],
 
     /*

@@ -30,13 +30,12 @@ class WebFaqController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \App\Models\Page  $page
-     * @param  \App\Models\Collection  $collection
+     * @param  array<\App\Models\Page, \App\Models\Collection>  $models
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(Page $page, Collection $collection)
+    public function index(array $models)
     {
-        $data['current'] = $page;
+        [$data['current'], $collection] = $models;
 
         $data['items'] = $this->model->getPublicCollection($collection);
 

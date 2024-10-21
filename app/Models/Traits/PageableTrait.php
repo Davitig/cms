@@ -42,7 +42,7 @@ trait PageableTrait
     }
 
     /**
-     * Set model full slug
+     * Set model full slug.
      *
      * @param  int|null  $value
      * @param  string|null  $column

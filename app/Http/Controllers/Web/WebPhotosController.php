@@ -29,11 +29,14 @@ class WebPhotosController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  array<\App\Models\Page, \App\Models\Collection>  $models
      * @param  \App\Models\Gallery  $gallery
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(Gallery $gallery)
+    public function index(array $models, Gallery $gallery)
     {
+        [$data['parent'], $collection] = $models;
+
         $data['current'] = $gallery;
 
         $data['items'] = $this->model->getPublicGallery($gallery);
