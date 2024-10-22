@@ -10,32 +10,11 @@ use Illuminate\Http\Request;
 class AdminNotesController extends Controller
 {
     /**
-     * The Note instance.
-     *
-     * @var \App\Models\Note
-     */
-    protected $model;
-
-    /**
-     * The Request instance.
-     *
-     * @var \Illuminate\Http\Request
-     */
-    protected $request;
-
-    /**
      * Create a new controller instance.
      *
-     * @param  \App\Models\Note  $model
-     * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    public function __construct(Note $model, Request $request)
-    {
-        $this->model = $model;
-
-        $this->request = $request;
-    }
+    public function __construct(protected Note $model, protected Request $request) {}
 
     /**
      * Display a listing of the resource.

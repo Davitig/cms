@@ -2,7 +2,9 @@
 
 namespace App\Models\Traits;
 
+use App\Models\Eloquent\Builder;
 use App\Models\Gallery;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 trait HasGallery
 {
@@ -12,10 +14,11 @@ trait HasGallery
      * Get the data based on the admin gallery.
      *
      * @param  \App\Models\Gallery  $gallery
-     * @param  array  $columns
+     * @param  array|string  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getAdminGallery(Gallery $gallery, $columns = ['*'])
+    public function getAdminGallery(Gallery $gallery, array|string $columns = ['*']):
+    LengthAwarePaginator
     {
         return $this->adminGallery($gallery)
             ->paginate($gallery->admin_per_page, $columns);
@@ -25,10 +28,11 @@ trait HasGallery
      * Get the data based on the public gallery.
      *
      * @param  \App\Models\Gallery  $gallery
-     * @param  array  $columns
+     * @param  array|string  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getPublicGallery(Gallery $gallery, $columns = ['*'])
+    public function getPublicGallery(Gallery $gallery, array|string $columns = ['*']):
+    LengthAwarePaginator
     {
         return $this->publicGallery($gallery)
             ->paginate($gallery->web_per_page, $columns);
@@ -40,10 +44,13 @@ trait HasGallery
      * @param  \App\Models\Gallery  $gallery
      * @return \App\Models\Eloquent\Builder
      */
-    public function adminGallery(Gallery $gallery)
+    public function adminGallery(Gallery $gallery): Builder
     {
         return $this->byGallery($gallery->id)
-            ->orderBy($this->getTable() . '.' . $gallery->admin_order_by, $gallery->admin_sort);
+            ->orderBy(
+                $this->getTable() . '.'
+                . $gallery->admin_order_by, $gallery->admin_sort
+            );
     }
 
     /**
@@ -52,12 +59,15 @@ trait HasGallery
      * @param  \App\Models\Gallery  $gallery
      * @return \App\Models\Eloquent\Builder
      */
-    public function publicGallery(Gallery $gallery)
+    public function publicGallery(Gallery $gallery): Builder
     {
         return $this->byGallery($gallery->id)
             ->hasFile()
             ->whereVisible()
-            ->orderBy($this->getTable() . '.' . $gallery->web_order_by, $gallery->web_sort);
+            ->orderBy(
+                $this->getTable() . '.' .
+                $gallery->web_order_by, $gallery->web_sort
+            );
     }
 
     /**
@@ -66,7 +76,7 @@ trait HasGallery
      * @param  int  $id
      * @return \App\Models\Eloquent\Builder
      */
-    public function byGallery($id)
+    public function byGallery(int $id): Builder
     {
         return $this->joinLanguage()->galleryId($id);
     }
@@ -77,7 +87,7 @@ trait HasGallery
      * @param  string|null  $type
      * @return \App\Models\Eloquent\Builder
      */
-    public function byType($type = null)
+    public function byType(string $type = null): Builder
     {
         return (new Gallery)->joinLanguage()->where(
             'type', is_null($type) ? static::TYPE : $type
@@ -89,7 +99,7 @@ trait HasGallery
      *
      * @return \App\Models\Eloquent\Builder
      */
-    public function hasFile()
+    public function hasFile(): Builder
     {
         return $this->whereNotNull('file')->where('file', '!=', '');
     }
@@ -97,10 +107,10 @@ trait HasGallery
     /**
      * Add a where "gallery_id" clause to the query.
      *
-     * @param  mixed  $id
+     * @param  int  $id
      * @return \App\Models\Eloquent\Builder
      */
-    public function galleryId($id)
+    public function galleryId(int $id): Builder
     {
         return $this->where('gallery_id', $id);
     }
@@ -111,7 +121,7 @@ trait HasGallery
      * @param  int  $value
      * @return \App\Models\Eloquent\Builder
      */
-    public function whereVisible($value = 1)
+    public function whereVisible(int $value = 1): Builder
     {
         return $this->where('visible', $value);
     }

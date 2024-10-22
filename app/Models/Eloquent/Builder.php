@@ -4,6 +4,7 @@ namespace App\Models\Eloquent;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Query\JoinClause;
@@ -16,12 +17,12 @@ class Builder extends EloquentBuilder
      *
      * @var array
      */
-    protected $propertyPrefixes = ['columns', 'from', 'joins', 'wheres'];
+    protected array $propertyPrefixes = ['columns', 'from', 'joins', 'wheres'];
 
     /**
      * {@inheritDoc}
      */
-    public function addSelect($column)
+    public function addSelect($column): Builder|QueryBuilder|static
     {
         parent::addSelect($column);
 
@@ -35,14 +36,14 @@ class Builder extends EloquentBuilder
     /**
      * Add a select exists statement to the query.
      *
-     * @param  \Closure|\Illuminate\Database\Query\Builder|string $query
+     * @param  \Closure|string|\Illuminate\Database\Query\Builder  $query
      * @param  string  $as
      * @param  bool  $not
      * @return \Illuminate\Database\Query\Builder|static
      *
      * @throws \InvalidArgumentException
      */
-    public function selectExists($query, $as, $not = false)
+    public function selectExists(mixed $query, string $as, bool $not = false): QueryBuilder|static
     {
         if ($query instanceof Closure) {
             $callback = $query;
@@ -70,11 +71,11 @@ class Builder extends EloquentBuilder
     /**
      * Add a select not exists statement to the query.
      *
-     * @param  \Closure|\Illuminate\Database\Query\Builder|string $query
+     * @param  \Closure|string|\Illuminate\Database\Query\Builder  $query
      * @param  string  $as
      * @return \Illuminate\Database\Query\Builder|static
      */
-    public function selectNotExists($query, $as)
+    public function selectNotExists(mixed $query, string $as): QueryBuilder|static
     {
         return $this->selectExists($query, $as, true);
     }
@@ -84,9 +85,9 @@ class Builder extends EloquentBuilder
      *
      * @return bool
      */
-    public function existsOrFail()
+    public function existsOrFail(): bool
     {
-        return $this->exists() or abort(404);
+        return $this->exists() or throw new ModelNotFoundException;
     }
 
     /**
@@ -94,13 +95,12 @@ class Builder extends EloquentBuilder
      *
      * @param  int|null  $value
      * @param  string|null  $column
-     * @param  mixed  $currentLang
      * @return string|null
      */
-    public function getFullSlug($value = null, $column = null, $currentLang = true)
+    public function getFullSlug(int $value = null, string $column = null): ?string
     {
-        if ($result = $this->fullSlug($value, $column, $currentLang)) {
-            return $result->full_slug;
+        if ($result = $this->first()) {
+            return $result->getFullSlug($value, $column);
         }
 
         return null;
@@ -109,10 +109,10 @@ class Builder extends EloquentBuilder
     /**
      * Find a model by its query or instantiate it.
      *
-     * @param  array  $columns
+     * @param  array|string  $columns
      * @return \App\Models\Eloquent\Model
      */
-    public function firstNew($columns = ['*'])
+    public function firstNew(array|string $columns = ['*']): Model
     {
         if (! is_null($model = $this->first($columns))) {
             return $model;
@@ -129,7 +129,7 @@ class Builder extends EloquentBuilder
      * @param  string|null  $column
      * @return string|null
      */
-    public function firstAttr($attribute, $value = null, $column = null)
+    public function firstAttr(string $attribute, int $value = null, string $column = null): ?string
     {
         return $this->when(! is_null($value), function ($q) use ($value, $column) {
             return $q->where($column ?: $this->getModel()->getKeyName(), $value);
@@ -146,7 +146,7 @@ class Builder extends EloquentBuilder
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function firstAttrOrFail($attribute, $value = null, $column = null)
+    public function firstAttrOrFail(string $attribute, int $value = null, string $column = null): ?string
     {
         if (is_null($attribute = $this->firstAttr($attribute, $value, $column))) {
             throw (new ModelNotFoundException)->setModel(get_class($this));
@@ -158,9 +158,9 @@ class Builder extends EloquentBuilder
     /**
      * {@inheritDoc}
      */
-    public function get($columns = ['*'])
+    public function get($columns = ['*']): Collection
     {
-        $this->prefixColumnsOnJoin($columns);
+        $this->prefixColumnsOnJoin();
 
         return parent::get($columns);
     }
@@ -168,16 +168,16 @@ class Builder extends EloquentBuilder
     /**
      * Execute the query as a "select" statement or throw an exception.
      *
-     * @param  array  $columns
-     * @return \Illuminate\Support\Collection
+     * @param  array|string  $columns
+     * @return \Illuminate\Database\Eloquent\Collection<int, Model>
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function getOrFail($columns = ['*'])
+    public function getOrFail(array|string $columns = ['*']): Collection
     {
         $collection = $this->get($columns);
 
-        $collection->isEmpty() and abort(404);
+        $collection->isEmpty() and throw new ModelNotFoundException;
 
         return $collection;
     }
@@ -185,15 +185,15 @@ class Builder extends EloquentBuilder
     /**
      * Update the model in the database.
      *
-     * @param  array   $attributes
-     * @param  string  $exclude
+     * @param  array  $values
+     * @param  string|null  $exclude
      * @return int
      */
-    public function update(array $attributes = [], $exclude = null)
+    public function update(array $values = [], string $exclude = null): int
     {
         $this->model->setFillableByUpdatable($exclude);
 
-        return parent::update($attributes);
+        return parent::update($values);
     }
 
     /**
@@ -201,7 +201,7 @@ class Builder extends EloquentBuilder
      *
      * @return void
      */
-    protected function prefixColumnsOnJoin()
+    protected function prefixColumnsOnJoin(): void
     {
         if (! isset($this->query->joins)) {
             return;
@@ -266,10 +266,10 @@ class Builder extends EloquentBuilder
     /**
      * Add an "order by" primary key asc clause to the query.
      *
-     * @param  mixed  $table
+     * @param  string|null  $table
      * @return \App\Models\Eloquent\Builder
      */
-    public function orderAsc($table = null)
+    public function orderAsc(string $table = null): Builder
     {
         return $this->orderBy(
             $this->getTableNameWithDot($table) . $this->getModel()->getKeyName()
@@ -282,7 +282,7 @@ class Builder extends EloquentBuilder
      * @param  string|null  $table
      * @return \App\Models\Eloquent\Builder
      */
-    public function orderDesc($table = null)
+    public function orderDesc(string $table = null): Builder
     {
         return $this->orderByDesc(
             $this->getTableNameWithDot($table) . $this->getModel()->getKeyName()
@@ -295,7 +295,7 @@ class Builder extends EloquentBuilder
      * @param  string|null  $table
      * @return \App\Models\Eloquent\Builder
      */
-    public function createdAsc($table = null)
+    public function createdAsc(string $table = null): Builder
     {
         return $this->orderBy($this->getTableNameWithDot($table) . 'created_at');
     }
@@ -306,7 +306,7 @@ class Builder extends EloquentBuilder
      * @param  string|null  $table
      * @return \App\Models\Eloquent\Builder
      */
-    public function createdDesc($table = null)
+    public function createdDesc(string $table = null): Builder
     {
         return $this->orderByDesc($this->getTableNameWithDot($table) . 'created_at');
     }
@@ -314,10 +314,10 @@ class Builder extends EloquentBuilder
     /**
      * Get the name of the table with the added dot.
      *
-     * @param  string  $table
+     * @param  bool|string|null  $table
      * @return string
      */
-    protected function getTableNameWithDot($table)
+    protected function getTableNameWithDot(bool|string|null $table): string
     {
         if ($table = (($table === true) ? $this->model->getTable() : $table)) {
             return $table . '.';

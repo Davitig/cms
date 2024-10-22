@@ -38,7 +38,7 @@ class Video extends Model
      *
      * @var array
      */
-    protected $notUpdatable = [
+    protected array $notUpdatable = [
         'gallery_id'
     ];
 
@@ -47,14 +47,14 @@ class Video extends Model
      *
      * @var string
      */
-    protected $languageTable = 'video_languages';
+    protected string $languageTable = 'video_languages';
 
     /**
      * The attributes that are mass assignable for the Language model.
      *
      * @var array
      */
-    protected $languageFillable = [
+    protected array $languageFillable = [
         'video_id', 'language_id', 'title'
     ];
 
@@ -63,7 +63,7 @@ class Video extends Model
      *
      * @var array
      */
-    protected $languageNotUpdatable = [
+    protected array $languageNotUpdatable = [
         'video_id', 'language_id'
     ];
 }

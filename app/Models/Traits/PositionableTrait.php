@@ -2,6 +2,7 @@
 
 namespace App\Models\Traits;
 
+use App\Models\Eloquent\Builder;
 use Exception;
 
 trait PositionableTrait
@@ -10,12 +11,16 @@ trait PositionableTrait
      * Update the position of the Eloquent models.
      *
      * @param  array  $data
-     * @param  int    $parentId
+     * @param  int  $parentId
      * @param  array  $params
-     * @param  bool   $nestable
+     * @param  bool  $nestable
      * @return bool
      */
-    public function updatePosition(array $data, $parentId = 0, array $params = [], $nestable = false)
+    public function updatePosition(
+        array $data,
+        int   $parentId = 0,
+        array $params = [],
+        bool  $nestable = false): bool
     {
         if (! $nestable && ! is_array($data = $this->movePosition($data, $params))) {
             return false;
@@ -58,7 +63,7 @@ trait PositionableTrait
      * @param  array  $params
      * @return array|bool
      */
-    private function movePosition(array $data, array $params = [])
+    private function movePosition(array $data, array $params = []): bool|array
     {
         if (! isset($params['move']) || ! isset($params['orderBy'])) {
             return $data;
@@ -92,13 +97,15 @@ trait PositionableTrait
 
         try {
             array_walk($data, $posFunc);
-        } catch (Exception $e) {
+        } catch (Exception) {
             return false;
         }
 
         $newData = $this->where(['position' => $newPos])->first(['id']);
 
-        if (! $newData) return false;
+        if (! $newData) {
+            return false;
+        }
 
         $dataCount = count($data);
 
@@ -114,7 +121,7 @@ trait PositionableTrait
      *
      * @return \App\Models\Eloquent\Builder
      */
-    public function positionAsc()
+    public function positionAsc(): Builder
     {
         return $this->orderBy('position');
     }
@@ -124,7 +131,7 @@ trait PositionableTrait
      *
      * @return \App\Models\Eloquent\Builder
      */
-    public function positionDesc()
+    public function positionDesc(): Builder
     {
         return $this->orderByDesc('position');
     }

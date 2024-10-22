@@ -13,7 +13,7 @@ class WebArticlesController extends Controller
      *
      * @var \App\Models\Article
      */
-    protected $model;
+    protected Article $model;
 
     /**
      * Create a new controller instance.
@@ -48,7 +48,7 @@ class WebArticlesController extends Controller
      * @param  string  $slug
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(array $models, $slug)
+    public function show(array $models, string $slug)
     {
         [$data['parent'], $collection] = $models;
 

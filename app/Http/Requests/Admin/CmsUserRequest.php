@@ -9,9 +9,9 @@ class CmsUserRequest extends Request
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    public function rules()
+    public function rules(): array
     {
         $id = $this->route('cms_user');
 
@@ -30,7 +30,7 @@ class CmsUserRequest extends Request
     /**
      * {@inheritDoc}
      */
-    public function all($keys = null)
+    public function all($keys = null): array
     {
         $input = parent::all();
 
@@ -55,7 +55,7 @@ class CmsUserRequest extends Request
      *
      * @return void
      */
-    protected function passedValidation()
+    protected function passedValidation(): void
     {
         if (! $this->filled('password')) {
             $this->offsetUnset('password');

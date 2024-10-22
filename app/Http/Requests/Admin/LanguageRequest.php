@@ -9,9 +9,9 @@ class LanguageRequest extends Request
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    public function rules()
+    public function rules(): array
     {
         $id = $this->route('language');
 
@@ -25,7 +25,7 @@ class LanguageRequest extends Request
     /**
      * {@inheritDoc}
      */
-    public function all($keys = null)
+    public function all($keys = null): array
     {
         $input = parent::all();
 

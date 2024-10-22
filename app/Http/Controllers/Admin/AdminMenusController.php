@@ -4,28 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\MenuRequest;
-use Illuminate\Http\Request;
 use App\Models\Menu;
+use Illuminate\Http\Request;
 
 class AdminMenusController extends Controller
 {
     /**
-     * The Menu instance.
-     *
-     * @var \App\Models\Menu
-     */
-    protected $model;
-
-    /**
      * Create a new controller instance.
      *
-     * @param  \App\Models\Menu  $model
      * @return void
      */
-    public function __construct(Menu $model)
-    {
-        $this->model = $model;
-    }
+    public function __construct(protected Menu $model) {}
 
     /**
      * Display a listing of the resource.
@@ -79,7 +68,7 @@ class AdminMenusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         $data['current'] = $this->model->findOrFail($id);
 
@@ -93,7 +82,7 @@ class AdminMenusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function update(MenuRequest $request, $id)
+    public function update(MenuRequest $request, int $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -114,7 +103,7 @@ class AdminMenusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $this->model->whereKey($id)->delete();
 

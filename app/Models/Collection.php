@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Eloquent\Builder;
 use App\Models\Eloquent\Model;
 
 class Collection extends Model
@@ -28,7 +29,7 @@ class Collection extends Model
      *
      * @var array
      */
-    protected $notUpdatable = [
+    protected array $notUpdatable = [
         'type'
     ];
 
@@ -36,9 +37,9 @@ class Collection extends Model
      * Get the same type collection instance.
      *
      * @param  string  $type
-     * @return $this
+     * @return \App\Models\Eloquent\Builder|static
      */
-    public function byType($type)
+    public function byType(string $type): Builder|static
     {
         return $this->where('type', $type);
     }

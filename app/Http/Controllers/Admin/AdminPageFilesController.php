@@ -4,41 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FileRequest;
-use Illuminate\Http\Request;
 use App\Models\Page;
 use App\Models\PageFile;
+use Illuminate\Http\Request;
 
 class AdminPageFilesController extends Controller
 {
     use Positionable, VisibilityTrait;
 
     /**
-     * The PageFile instance.
-     *
-     * @var \App\Models\PageFile
-     */
-    protected $model;
-
-    /**
-     * The Request instance.
-     *
-     * @var \Illuminate\Http\Request
-     */
-    protected $request;
-
-    /**
      * Create a new controller instance.
      *
-     * @param  \App\Models\PageFile  $model
-     * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    public function __construct(PageFile $model, Request $request)
-    {
-        $this->model = $model;
-
-        $this->request = $request;
-    }
+    public function __construct(protected PageFile $model, protected Request $request) {}
 
     /**
      * Display a listing of the resource.
@@ -46,7 +25,7 @@ class AdminPageFilesController extends Controller
      * @param  int  $pageId
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($pageId)
+    public function index(int $pageId)
     {
         $data['foreignModels'] = (new Page)->where('id', $pageId)
             ->joinLanguage(false)
@@ -66,7 +45,7 @@ class AdminPageFilesController extends Controller
      * @param  int  $pageId
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function create($pageId)
+    public function create(int $pageId)
     {
         if ($this->request->expectsJson()) {
             $data['current'] = $this->model;
@@ -88,7 +67,7 @@ class AdminPageFilesController extends Controller
      * @param  int  $pageId
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(FileRequest $request, $pageId)
+    public function store(FileRequest $request, int $pageId)
     {
         $input = $request->all();
         $input['page_id'] = $pageId;
@@ -127,7 +106,7 @@ class AdminPageFilesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function edit($pageId, $id)
+    public function edit(int $pageId, int $id)
     {
         if ($this->request->expectsJson()) {
             $data['items'] = $this->model->joinLanguage(false)
@@ -151,7 +130,7 @@ class AdminPageFilesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(FileRequest $request, $pageId, $id)
+    public function update(FileRequest $request, int $pageId, int $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -171,7 +150,7 @@ class AdminPageFilesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy($pageId, $id)
+    public function destroy(int $pageId, int $id)
     {
         $this->model->destroy($this->request->get('ids'));
 

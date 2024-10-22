@@ -2,7 +2,9 @@
 
 namespace App\Models\Traits;
 
+use App\Models\Eloquent\Builder;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -14,7 +16,7 @@ trait SettingsFileTrait
      *
      * @var array
      */
-    protected static $settingOptions = [
+    protected static array $settingOptions = [
         'admin_order_by' => [],
         'admin_sort' => [
             'desc' => 'Descending',
@@ -34,7 +36,7 @@ trait SettingsFileTrait
      *
      * @var array
      */
-    protected static $defaultSettings = [
+    protected static array $defaultSettings = [
         "admin_order_by" => "id",
         "admin_sort" => "desc",
         "admin_per_page" => 20,
@@ -48,22 +50,22 @@ trait SettingsFileTrait
      *
      * @var \Illuminate\Support\Collection|null
      */
-    private $settings;
+    private ?Collection $settings;
 
     /**
      * Indicates if the setting options are updated.
      *
      * @var bool
      */
-    private $settingOptionsUpdated = false;
+    private bool $settingOptionsUpdated = false;
 
     /**
      * Get the data based on the admin collection.
      *
-     * @param  array  $columns
+     * @param  array|string  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getAdminSettings($columns = ['*'])
+    public function getAdminSettings(array|string $columns = ['*']): LengthAwarePaginator
     {
         return $this->adminSettings()
             ->paginate($this->getSetting('admin_per_page'), $columns);
@@ -72,10 +74,10 @@ trait SettingsFileTrait
     /**
      * Get the data based on the public collection.
      *
-     * @param  array  $columns
+     * @param  array|string  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getPublicSettings($columns = ['*'])
+    public function getPublicSettings(array|string $columns = ['*']): LengthAwarePaginator
     {
         return $this->publicSettings()
             ->paginate($this->getSetting('web_per_page'), $columns);
@@ -86,7 +88,7 @@ trait SettingsFileTrait
      *
      * @return \App\Models\Eloquent\Builder
      */
-    public function adminSettings()
+    public function adminSettings(): Builder
     {
         return $this->orderBy(
             $this->getSetting('admin_order_by'),
@@ -99,7 +101,7 @@ trait SettingsFileTrait
      *
      * @return \App\Models\Eloquent\Builder
      */
-    public function publicSettings()
+    public function publicSettings(): Builder
     {
         return $this->orderBy(
             $this->getSetting('web_order_by'),
@@ -112,7 +114,7 @@ trait SettingsFileTrait
      *
      * @return array
      */
-    protected function updateSettingOptions()
+    protected function updateSettingOptions(): array
     {
         if ($this->settingOptionsUpdated) {
             return self::$settingOptions;
@@ -134,7 +136,7 @@ trait SettingsFileTrait
             $options['web_order_by'] += $values;
         }
 
-        $options += (array) $this->addSettingOptions();
+        $options += $this->addSettingOptions();
 
         $this->settingOptionsUpdated = true;
 
@@ -146,7 +148,7 @@ trait SettingsFileTrait
      *
      * @return array
      */
-    protected function addSettingOptions()
+    protected function addSettingOptions(): array
     {
         return [];
     }
@@ -156,7 +158,7 @@ trait SettingsFileTrait
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getSettingOptions()
+    public function getSettingOptions(): Collection
     {
         return new Collection($this->updateSettingOptions());
     }
@@ -165,14 +167,14 @@ trait SettingsFileTrait
      * Get the specified setting.
      *
      * @param  string  $key
-     * @param  mixed  $default
+     * @param  mixed|null  $default
      * @return mixed
      */
-    public function getSetting($key, $default = null)
+    public function getSetting(string $key, mixed $default = null): mixed
     {
-        $options = self::$defaultSettings + (array) $this->addSettingOptions();
+        $options = self::$defaultSettings + $this->addSettingOptions();
 
-        $default = isset($options[$key]) ? $options[$key] : $default;
+        $default = $options[$key] ?? $default;
 
         return $this->getSettings()->get($key, $default);
     }
@@ -182,7 +184,7 @@ trait SettingsFileTrait
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getSettings()
+    public function getSettings(): Collection
     {
         if ($this->settings instanceof Collection) {
             return $this->settings;
@@ -196,7 +198,7 @@ trait SettingsFileTrait
             $settings = $settings->make(
                 json_decode((new Filesystem)->get(resource_path("models/{$name}.json")))
             );
-        } catch (FileNotFoundException $exception) {}
+        } catch (FileNotFoundException) {}
 
         if (! $settings->isEmpty()) {
             return $this->settings = $settings;
@@ -209,9 +211,9 @@ trait SettingsFileTrait
      * Set the settings.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return int
+     * @return bool|int
      */
-    public function setSettings(Request $request)
+    public function setSettings(Request $request): bool|int
     {
         $this->settings = null;
 

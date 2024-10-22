@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Eloquent\Builder;
 use App\Models\Eloquent\Model;
 use App\Models\Traits\LanguageTrait;
 
@@ -30,7 +31,7 @@ class Translation extends Model
      *
      * @var array
      */
-    protected $notUpdatable = [
+    protected array $notUpdatable = [
         'code'
     ];
 
@@ -39,14 +40,14 @@ class Translation extends Model
      *
      * @var string
      */
-    protected $languageTable = 'translation_languages';
+    protected string $languageTable = 'translation_languages';
 
     /**
      * The attributes that are mass assignable for the Language model.
      *
      * @var array
      */
-    protected $languageFillable = [
+    protected array $languageFillable = [
         'translation_id', 'language_id', 'value'
     ];
 
@@ -55,7 +56,7 @@ class Translation extends Model
      *
      * @var array
      */
-    protected $languageNotUpdatable = [
+    protected array $languageNotUpdatable = [
         'translation_id', 'language_id'
     ];
 
@@ -63,10 +64,10 @@ class Translation extends Model
      * Build a query by code.
      *
      * @param  string  $code
-     * @param  mixed  $currentLang
+     * @param  bool|string  $currentLang
      * @return \App\Models\Eloquent\Builder
      */
-    public function byCode($code, $currentLang = true)
+    public function byCode(string $code, bool|string $currentLang = true): Builder
     {
         return $this->joinLanguage($currentLang)->where('code', $code);
     }

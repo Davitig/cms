@@ -2,7 +2,10 @@
 
 namespace App\Models\Traits;
 
+use App\Models\Eloquent\Builder;
+use App\Models\Eloquent\Model;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Filesystem\Filesystem;
 
 trait FileTrait
@@ -12,16 +15,16 @@ trait FileTrait
     /**
      * Get the model files.
      *
-     * @param  int  $forignId
+     * @param  int  $foreignId
      * @param  bool  $separated
-     * @param  array|mixed  $columns
-     * @return \Illuminate\Support\Collection
+     * @param  array|string  $columns
+     * @return \Illuminate\Database\Eloquent\Collection<int, Model>
      */
-    public function getFiles($forignId, $separated = true, $columns = ['*'])
+    public function getFiles(int $foreignId, bool $separated = true, array|string $columns = ['*']): Collection
     {
         $imageExt = ['png', 'jpg', 'jpeg', 'gif', 'bmp'];
 
-        $files = $this->forPublic($forignId)->get($columns);
+        $files = $this->forPublic($foreignId)->get($columns);
 
         if (! $separated) {
             return $files;
@@ -50,28 +53,28 @@ trait FileTrait
     /**
      * Build a public query.
      *
-     * @param  int  $forignId
-     * @param  mixed  $currentLang
+     * @param  int  $foreignId
+     * @param  bool|string  $currentLang
      * @return \App\Models\Eloquent\Builder
      */
-    public function forAdmin($forignId, $currentLang = true)
+    public function forAdmin(int $foreignId, bool|string $currentLang = true): Builder
     {
         return $this->joinLanguage($currentLang)
-            ->byForeign($forignId)
+            ->byForeign($foreignId)
             ->positionDesc();
     }
 
     /**
      * Build a public query.
      *
-     * @param  int  $forignId
-     * @param  mixed  $currentLang
+     * @param  int  $foreignId
+     * @param  bool|string  $currentLang
      * @return \App\Models\Eloquent\Builder
      */
-    public function forPublic($forignId, $currentLang = true)
+    public function forPublic(int $foreignId, bool|string $currentLang = true)
     {
         return $this->joinLanguage($currentLang)
-            ->byForeign($forignId)
+            ->byForeign($foreignId)
             ->whereVisible()
             ->positionDesc();
     }
@@ -82,7 +85,7 @@ trait FileTrait
      * @param  int  $value
      * @return \App\Models\Eloquent\Builder
      */
-    public function whereVisible($value = 1)
+    public function whereVisible(int $value = 1): Builder
     {
         return $this->where('visible', $value);
     }
@@ -107,10 +110,10 @@ trait FileTrait
     /**
      * Get the file size.
      *
-     * @param  string|null $file
+     * @param  string|null  $file
      * @return string
      */
-    public function getFileSize($file = null)
+    public function getFileSize(string $file = null): string
     {
         try {
             $size = (new Filesystem)->size(

@@ -11,9 +11,12 @@ class ElfinderServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      *
+     * @param  \Illuminate\Routing\Router  $router
      * @return void
+     *
+     * @throws \Throwable
      */
-    public function boot(Router $router)
+    public function boot(Router $router): void
     {
         $viewPath = dirname((new ReflectionClass($this))->getParentClass()->getFilename());
         $viewPath .= '/../resources/views';
@@ -51,7 +54,7 @@ class ElfinderServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         parent::register();
     }

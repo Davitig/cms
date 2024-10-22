@@ -39,7 +39,7 @@ class Gallery extends Model
      *
      * @var array
      */
-    protected $notUpdatable = [
+    protected array $notUpdatable = [
         'type'
     ];
 
@@ -48,14 +48,14 @@ class Gallery extends Model
      *
      * @var string
      */
-    protected $languageTable = 'gallery_languages';
+    protected string $languageTable = 'gallery_languages';
 
     /**
      * The attributes that are mass assignable for the Language model.
      *
      * @var array
      */
-    protected $languageFillable = [
+    protected array $languageFillable = [
         'gallery_id', 'language_id', 'title', 'description', 'meta_title', 'meta_desc'
     ];
 
@@ -64,7 +64,7 @@ class Gallery extends Model
      *
      * @var array
      */
-    protected $languageNotUpdatable = [
+    protected array $languageNotUpdatable = [
         'gallery_id', 'language_id'
     ];
 }

@@ -13,7 +13,7 @@ trait Positionable
      *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      *
-     * @throws \RuntimeException
+     * @throws \Throwable
      */
     public function updatePosition()
     {

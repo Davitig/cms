@@ -4,6 +4,10 @@ namespace App\Exceptions;
 
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
@@ -66,7 +70,7 @@ class Handler extends ExceptionHandler
      *
      * @throws \Throwable
      */
-    public function render($request, Throwable $e)
+    public function render($request, Throwable $e): SymfonyResponse
     {
         return parent::render($request, $e);
     }
@@ -74,7 +78,8 @@ class Handler extends ExceptionHandler
     /**
      * {@inheritDoc}
      */
-    protected function unauthenticated($request, AuthenticationException $exception)
+    protected function unauthenticated($request, AuthenticationException $exception):
+    Response|JsonResponse|RedirectResponse
     {
         return $this->shouldReturnJson($request, $exception)
             ? response()->json(['message' => $exception->getMessage()], 401)
@@ -84,19 +89,15 @@ class Handler extends ExceptionHandler
     /**
      * {@inheritDoc}
      */
-    protected function getHttpExceptionView(HttpExceptionInterface $e)
+    protected function getHttpExceptionView(HttpExceptionInterface $e): ?string
     {
-        $dir = cms_is_booted() ? 'admin' : 'web';
-
-        $view = 'errors::' . $dir . '.' .$e->getStatusCode();
+        $view = 'errors::' . (cms_is_booted() ? 'admin' : 'web') . '.' .$e->getStatusCode();
 
         if (view()->exists($view)) {
             return $view;
         }
 
-        $view = substr($view, 0, -2).'xx';
-
-        if (view()->exists($view)) {
+        if (view()->exists($view = substr($view, 0, -2) . 'xx')) {
             return $view;
         }
 

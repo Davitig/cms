@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Eloquent\Builder;
 use App\Models\Eloquent\Model;
 use App\Models\Traits\FileTrait;
 
@@ -30,7 +31,7 @@ class EventFile extends Model
      *
      * @var array
      */
-    protected $notUpdatable = [
+    protected array $notUpdatable = [
         'event_id'
     ];
 
@@ -39,14 +40,14 @@ class EventFile extends Model
      *
      * @var string
      */
-    protected $languageTable = 'event_file_languages';
+    protected string $languageTable = 'event_file_languages';
 
     /**
      * The attributes that are mass assignable for the Language model.
      *
      * @var array
      */
-    protected $languageFillable = [
+    protected array $languageFillable = [
         'event_file_id', 'language_id', 'title', 'file'
     ];
 
@@ -55,7 +56,7 @@ class EventFile extends Model
      *
      * @var array
      */
-    protected $languageNotUpdatable = [
+    protected array $languageNotUpdatable = [
         'event_file_id', 'language_id'
     ];
 
@@ -65,7 +66,7 @@ class EventFile extends Model
      * @param  string  $value
      * @return string
      */
-    public function getFileDefaultAttribute($value)
+    public function getFileDefaultAttribute($value): string
     {
         return $value ?: asset('assets/libs/images/image-1.jpg');
     }
@@ -74,9 +75,9 @@ class EventFile extends Model
      * Add a where foreign id clause to the query.
      *
      * @param  int  $foreignId
-     * @return $this
+     * @return \App\Models\Eloquent\Builder|static
      */
-    public function byForeign($foreignId)
+    public function byForeign(int $foreignId): Builder|static
     {
         return $this->where('event_id', $foreignId);
     }

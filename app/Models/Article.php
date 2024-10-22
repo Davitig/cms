@@ -39,21 +39,21 @@ class Article extends Model
      *
      * @var array
      */
-    protected $notUpdatable = [];
+    protected array $notUpdatable = [];
 
     /**
      * Related database table name used by the Language model.
      *
      * @var string
      */
-    protected $languageTable = 'article_languages';
+    protected string $languageTable = 'article_languages';
 
     /**
      * The attributes that are mass assignable for the Language model.
      *
      * @var array
      */
-    protected $languageFillable = [
+    protected array $languageFillable = [
         'article_id', 'language_id', 'title', 'description', 'content', 'meta_title', 'meta_desc'
     ];
 
@@ -62,7 +62,7 @@ class Article extends Model
      *
      * @var array
      */
-    protected $languageNotUpdatable = [
+    protected array $languageNotUpdatable = [
         'article_id', 'language_id'
     ];
 }

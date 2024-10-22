@@ -4,41 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PageRequest;
-use Illuminate\Http\Request;
 use App\Models\Menu;
 use App\Models\Page;
+use Illuminate\Http\Request;
 
 class AdminPagesController extends Controller
 {
     use Positionable, VisibilityTrait, Transferable, ClonableLanguage;
 
     /**
-     * The Page instance.
-     *
-     * @var \App\Models\Page
-     */
-    protected $model;
-
-    /**
-     * The Request instance.
-     *
-     * @var \Illuminate\Http\Request
-     */
-    protected $request;
-
-    /**
      * Create a new controller instance.
      *
-     * @param  \App\Models\Page  $model
-     * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    public function __construct(Page $model, Request $request)
-    {
-        $this->model = $model;
-
-        $this->request = $request;
-    }
+    public function __construct(protected Page $model, protected Request $request) {}
 
     /**
      * Display a listing of the resource.
@@ -46,7 +25,7 @@ class AdminPagesController extends Controller
      * @param  int  $menuId
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($menuId)
+    public function index(int $menuId)
     {
         $data['menu'] = (new Menu)->findOrFail($menuId);
 
@@ -61,7 +40,7 @@ class AdminPagesController extends Controller
      * @param  int  $menuId
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create($menuId)
+    public function create(int $menuId)
     {
         $data['current'] = $this->model;
         $data['current']->menu_id = $menuId;
@@ -81,7 +60,7 @@ class AdminPagesController extends Controller
      * @param  int  $menuId
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(PageRequest $request, $menuId)
+    public function store(PageRequest $request, int $menuId)
     {
         $input = $request->all();
         $input['menu_id'] = $menuId;
@@ -109,7 +88,7 @@ class AdminPagesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($menuId, $id)
+    public function edit(int $menuId, int $id)
     {
         $data['items'] = $this->model->where('id', $id)
             ->forAdmin(null, false)
@@ -128,13 +107,13 @@ class AdminPagesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\Admin\PageRequest $request
-     * @param  int $menuId
-     * @param  int $id
+     * @param  int  $menuId
+     * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      *
      * @throws \Throwable
      */
-    public function update(PageRequest $request, $menuId, $id)
+    public function update(PageRequest $request, int $menuId, int $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -183,7 +162,7 @@ class AdminPagesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy($menuId, $id)
+    public function destroy(int $menuId, int $id)
     {
         if ($this->model->hasSubModel($id)) {
             if (request()->expectsJson()) {
@@ -214,7 +193,7 @@ class AdminPagesController extends Controller
      * @param  string|null  $type
      * @return array
      */
-    public function getListableTypes($type = null)
+    public function getListableTypes(string $type = null)
     {
         if (! $type && ! ($type = $this->request->get('type'))) {
             return [];

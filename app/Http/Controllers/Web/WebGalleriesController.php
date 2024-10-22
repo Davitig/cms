@@ -12,7 +12,7 @@ class WebGalleriesController extends Controller
      *
      * @var \App\Models\Gallery
      */
-    protected $model;
+    protected Gallery $model;
 
     /**
      * Create a new controller instance.

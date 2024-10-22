@@ -12,22 +12,11 @@ class AdminArticlesController extends Controller
     use Positionable, VisibilityTrait, Transferable, ClonableLanguage;
 
     /**
-     * The Article instance.
-     *
-     * @var \App\Models\Article
-     */
-    protected $model;
-
-    /**
      * Create a new controller instance.
      *
-     * @param  \App\Models\Article  $model
      * @return void
      */
-    public function __construct(Article $model)
-    {
-        $this->model = $model;
-    }
+    public function __construct(protected Article $model) {}
 
     /**
      * Display a listing of the resource.
@@ -35,7 +24,7 @@ class AdminArticlesController extends Controller
      * @param  int  $collectionId
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($collectionId)
+    public function index(int $collectionId)
     {
         $data['parent'] = (new Collection)->where('type', Article::TYPE)
             ->findOrFail($collectionId);
@@ -53,7 +42,7 @@ class AdminArticlesController extends Controller
      * @param  int  $collectionId
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create($collectionId)
+    public function create(int $collectionId)
     {
         $data['current'] = $this->model;
         $data['current']->collection_id = $collectionId;
@@ -68,7 +57,7 @@ class AdminArticlesController extends Controller
      * @param  int  $collectionId
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(ArticleRequest $request, $collectionId)
+    public function store(ArticleRequest $request, int $collectionId)
     {
         $input = $request->all();
         $input['collection_id'] = $collectionId;
@@ -96,7 +85,7 @@ class AdminArticlesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($collectionId, $id)
+    public function edit(int $collectionId, int $id)
     {
         $data['items'] = $this->model->where('id', $id)
             ->forAdmin(null, false)
@@ -115,7 +104,7 @@ class AdminArticlesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function update(ArticleRequest $request, $collectionId, $id)
+    public function update(ArticleRequest $request, int $collectionId, int $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -137,7 +126,7 @@ class AdminArticlesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy($collectionId, $id)
+    public function destroy(int $collectionId, int $id)
     {
         $this->model->whereKey($id)->delete();
 

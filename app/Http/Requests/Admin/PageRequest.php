@@ -10,9 +10,9 @@ class PageRequest extends Request
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    public function rules()
+    public function rules(): array
     {
         $id = $this->route('page');
 
@@ -31,7 +31,7 @@ class PageRequest extends Request
      * @param  \Illuminate\Contracts\Validation\Validator  $validator
      * @return void
      */
-    protected function beforeValidation(Validator $validator)
+    protected function beforeValidation(Validator $validator): void
     {
         $validator->sometimes('type_id', 'required', function ($input) {
             return in_array($input->type, cms_pages('listable'));
@@ -41,7 +41,7 @@ class PageRequest extends Request
     /**
      * {@inheritDoc}
      */
-    public function all($keys = null)
+    public function all($keys = null): array
     {
         $input = parent::all();
 

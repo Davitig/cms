@@ -30,10 +30,10 @@ return new class extends Migration
             $table->string('file');
             $table->timestamps();
 
+            $table->unique(['article_file_id', 'language_id']);
             $table->foreign('article_file_id')->references('id')
                 ->on('article_files')->onDelete('cascade');
             $table->foreign('language_id')->references('id')->on('languages');
-            $table->unique(['article_file_id', 'language_id']);
         });
     }
 

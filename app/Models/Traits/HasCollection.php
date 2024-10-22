@@ -3,6 +3,8 @@
 namespace App\Models\Traits;
 
 use App\Models\Collection;
+use App\Models\Eloquent\Builder;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 trait HasCollection
 {
@@ -12,10 +14,11 @@ trait HasCollection
      * Get the data based on the admin collection.
      *
      * @param  \App\Models\Collection  $collection
-     * @param  array  $columns
+     * @param  array|string  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getAdminCollection(Collection $collection, $columns = ['*'])
+    public function getAdminCollection(Collection $collection, array|string $columns = ['*']):
+    LengthAwarePaginator
     {
         return $this->adminCollection($collection)
             ->paginate($collection->admin_per_page, $columns);
@@ -25,10 +28,11 @@ trait HasCollection
      * Get the data based on the public collection.
      *
      * @param  \App\Models\Collection  $collection
-     * @param  array  $columns
+     * @param  array|string  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getPublicCollection(Collection $collection, $columns = ['*'])
+    public function getPublicCollection(Collection $collection, array|string $columns = ['*']):
+    LengthAwarePaginator
     {
         return $this->publicCollection($collection)
             ->paginate($collection->web_per_page, $columns);
@@ -40,10 +44,13 @@ trait HasCollection
      * @param  \App\Models\Collection  $collection
      * @return \App\Models\Eloquent\Builder
      */
-    public function adminCollection(Collection $collection)
+    public function adminCollection(Collection $collection): Builder
     {
         return $this->forAdmin($collection->id)
-            ->orderBy($this->getTable() . '.' . $collection->admin_order_by, $collection->admin_sort);
+            ->orderBy(
+                $this->getTable() . '.'
+                . $collection->admin_order_by, $collection->admin_sort
+            );
     }
 
     /**
@@ -52,21 +59,27 @@ trait HasCollection
      * @param  \App\Models\Collection  $collection
      * @return \App\Models\Eloquent\Builder
      */
-    public function publicCollection(Collection $collection)
+    public function publicCollection(Collection $collection): Builder
     {
         return $this->forPublic($collection->id)
-            ->orderBy($this->getTable() . '.' . $collection->web_order_by, $collection->web_sort);
+            ->orderBy(
+                $this->getTable() . '.' .
+                $collection->web_order_by, $collection->web_sort
+            );
     }
 
     /**
      * Build an admin query.
      *
      * @param  int|null  $collectionId
-     * @param  mixed  $currentLang
-     * @param  array  $columns
+     * @param  bool|string  $currentLang
+     * @param  array|string  $columns
      * @return \App\Models\Eloquent\Builder
      */
-    public function forAdmin($collectionId = null, $currentLang = true, array $columns = [])
+    public function forAdmin(
+        int          $collectionId = null,
+        bool|string  $currentLang = true,
+        array|string $columns = []): Builder
     {
         return $this->when(! is_null($collectionId), function ($q) use ($collectionId) {
             return $q->collectionId($collectionId);
@@ -77,11 +90,14 @@ trait HasCollection
      * Build a public query.
      *
      * @param  int|null  $collectionId
-     * @param  mixed  $currentLang
-     * @param  array  $columns
+     * @param  bool|string  $currentLang
+     * @param  array|string  $columns
      * @return \App\Models\Eloquent\Builder
      */
-    public function forPublic($collectionId = null, $currentLang = true, array $columns = [])
+    public function forPublic(
+        int          $collectionId = null,
+        bool|string  $currentLang = true,
+        array|string $columns = []): Builder
     {
         return $this->when(! is_null($collectionId), function ($q) use ($collectionId) {
             return $q->collectionId($collectionId);
@@ -95,7 +111,7 @@ trait HasCollection
      * @param  int|null  $collectionId
      * @return \App\Models\Eloquent\Builder
      */
-    public function bySlug($slug, $collectionId = null)
+    public function bySlug(string $slug, int $collectionId = null): Builder
     {
         return $this->where('slug', $slug)->forPublic($collectionId);
     }
@@ -103,12 +119,12 @@ trait HasCollection
     /**
      * Build a query based on the collection id and slug.
      *
-     * @param  int $collectionId
+     * @param  int  $collectionId
      * @param  string  $slug
      * @param  int|null  $id
      * @return \App\Models\Eloquent\Builder
      */
-    public function byCollectionSlug($collectionId, $slug, $id = null)
+    public function byCollectionSlug(int $collectionId, string $slug, int $id = null): Builder
     {
         return $this->collectionId($collectionId)->bySlug($slug, $id);
     }
@@ -119,7 +135,7 @@ trait HasCollection
      * @param  int  $id
      * @return \App\Models\Eloquent\Builder
      */
-    public function collectionId($id)
+    public function collectionId(int $id): Builder
     {
         return $this->where('collection_id', $id);
     }
@@ -130,7 +146,7 @@ trait HasCollection
      * @param  int  $value
      * @return \App\Models\Eloquent\Builder
      */
-    public function whereVisible($value = 1)
+    public function whereVisible(int $value = 1): Builder
     {
         return $this->where('visible', $value);
     }

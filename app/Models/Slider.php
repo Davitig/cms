@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Eloquent\Builder;
 use App\Models\Eloquent\Model;
 use App\Models\Traits\LanguageTrait;
 use App\Models\Traits\PositionableTrait;
@@ -31,21 +32,21 @@ class Slider extends Model
      *
      * @var array
      */
-    protected $notUpdatable = [];
+    protected array $notUpdatable = [];
 
     /**
      * Related database table name used by the Language model.
      *
      * @var string
      */
-    protected $languageTable = 'slider_languages';
+    protected string $languageTable = 'slider_languages';
 
     /**
      * The attributes that are mass assignable for the Language model.
      *
      * @var array
      */
-    protected $languageFillable = [
+    protected array $languageFillable = [
         'slider_id', 'language_id', 'title', 'description'
     ];
 
@@ -54,7 +55,7 @@ class Slider extends Model
      *
      * @var array
      */
-    protected $languageNotUpdatable = [
+    protected array $languageNotUpdatable = [
         'slider_id', 'language_id'
     ];
 
@@ -64,7 +65,7 @@ class Slider extends Model
      * @param  string  $value
      * @return string
      */
-    public function getFileDefaultAttribute($value)
+    public function getFileDefaultAttribute($value): string
     {
         return $value ?: asset('assets/libs/images/image-1.jpg');
     }
@@ -72,11 +73,11 @@ class Slider extends Model
     /**
      * Build a query for admin.
      *
-     * @param  mixed  $currentLang
-     * @param  array  $columns
+     * @param  bool|string  $currentLang
+     * @param  array|string  $columns
      * @return \App\Models\Eloquent\Builder
      */
-    public function forAdmin($currentLang = true, array $columns = [])
+    public function forAdmin(bool|string $currentLang = true, array|string $columns = []): Builder
     {
         return $this->joinLanguage($currentLang, $columns)->positionDesc();
     }
@@ -84,11 +85,11 @@ class Slider extends Model
     /**
      * Build a public query.
      *
-     * @param  mixed  $currentLang
-     * @param  array  $columns
+     * @param  bool|string  $currentLang
+     * @param  array|string  $columns
      * @return \App\Models\Eloquent\Builder
      */
-    public function forPublic($currentLang = true, array $columns = [])
+    public function forPublic(bool|string $currentLang = true, array|string $columns = []): Builder
     {
         return $this->joinLanguage($currentLang, $columns)
             ->where('visible', 1)

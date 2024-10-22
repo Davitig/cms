@@ -3,7 +3,11 @@
 namespace App\Providers\Web;
 
 use App\Http\Controllers\Web\WebHomeController;
+use App\Models\Eloquent\Model;
 use App\Models\Page;
+use Illuminate\Contracts\Config\Repository;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -15,140 +19,141 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $namespace = 'App\Http\Controllers\Web';
+    protected string $namespace = 'App\Http\Controllers\Web';
 
     /**
      * The controller for home page.
      *
      * @var string
      */
-    protected $homeController = WebHomeController::class;
+    protected string $homeController = WebHomeController::class;
 
     /**
      * The config repository instance.
      *
      * @var \Illuminate\Contracts\Config\Repository
      */
-    protected $config;
+    protected Repository $config;
 
     /**
      * The Request instance.
      *
      * @var \Illuminate\Http\Request
      */
-    protected $request;
+    protected Request $request;
 
     /**
      * The router instance.
      *
      * @var \Illuminate\Routing\Router
      */
-    protected $router;
+    protected Router $router;
 
     /**
      * The list of router binders.
      *
      * @var array
      */
-    protected $binders = [];
+    protected array $binders = [];
 
     /**
      * The unbinder keyword.
      *
      * @var string
      */
-    protected $unbinder = '{{unbind}}';
+    protected string $unbinder = '{{unbind}}';
 
     /**
      * The prefix of the route path.
      *
      * @var string|null
      */
-    protected $pathPrefix = null;
+    protected ?string $pathPrefix = null;
 
     /**
      * The list of URL segments.
      *
      * @var array
      */
-    protected $segments = [];
+    protected array $segments = [];
 
     /**
      * The number of total URL segments.
      *
      * @var int
      */
-    protected $segmentsCount = 0;
+    protected int $segmentsCount = 0;
 
     /**
      * The array of model items.
      *
      * @var array
      */
-    protected $items = [];
+    protected array $items = [];
 
     /**
      * The array of the listable types.
      *
      * @var array
      */
-    protected $listableTypes = [];
+    protected array $listableTypes = [];
 
     /**
      * The array of the implicit types.
      *
      * @var array
      */
-    protected $implicitTypes = [];
+    protected array $implicitTypes = [];
 
     /**
      * The array of the explicit types.
      *
      * @var array
      */
-    protected $explicitTypes = [];
+    protected array $explicitTypes = [];
 
     /**
      * The array of the types that will allow specific requests.
      *
      * @var array
      */
-    protected $requestMethods = [];
+    protected array $requestMethods = [];
 
     /**
-     * Define a dynamic route.
+     * Bootstrap the application dynamic route.
      *
+     * @param  \Illuminate\Contracts\Config\Repository  $config
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Routing\Router  $router
      * @return void
      */
-    public function boot()
+    public function boot(Repository $config, Request $request, Router $router): void
     {
-        $this->app->booted(function ($app) {
-            $this->config = $app['config'];
+        $this->config = $config;
 
-            if (! $this->config->get('cms_is_booted')) {
-                $this->request = $app['request'];
+        if (! $this->config->get('cms_is_booted')) {
+            $this->request = $request;
 
-                $this->router = $app['router'];
+            $this->router = $router;
 
-                if ($this->config->get('language_in_url')) {
-                    $this->pathPrefix = $this->config->get('app.language') . '/';
-                }
+            if ($this->config->get('language_in_url')) {
+                $this->pathPrefix = $this->config->get('app.language') . '/';
+            }
 
-                $routeMatches = 0;
+            $routeMatches = 0;
 
-                foreach ($this->router->getRoutes()->get($this->request->method()) as $route) {
-                    if ($route->matches($this->request)) {
-                        $routeMatches = 1;
+            foreach ($this->router->getRoutes()->get($this->request->method()) as $route) {
+                if ($route->matches($this->request)) {
+                    $routeMatches = 1;
 
-                        break;
-                    }
-                }
-
-                if (! $routeMatches) {
-                    $this->build();
+                    break;
                 }
             }
-        });
+
+            if (! $routeMatches) {
+                $this->build();
+            }
+        }
     }
 
     /**
@@ -156,11 +161,11 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->segments = (array) $this->config->get('url_path_segments', []);
 
-        $this->segmentsCount = $this->config->get('url_path_segments_count', 0);
+        $this->segmentsCount = (int) $this->config->get('url_path_segments_count', 0);
 
         $this->listableTypes = (array) $this->config->get('cms.pages.listable', []);
 
@@ -176,7 +181,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function build()
+    public function build(): void
     {
         $this->configure();
 
@@ -193,7 +198,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function setPages()
+    protected function setPages(): void
     {
         $parentId = 0;
 
@@ -231,7 +236,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function setRoute()
+    protected function setRoute(): void
     {
         if (! $this->segmentsCount) {
             $this->router->get($this->pathPrefix, [$this->homeController, 'index']);
@@ -251,7 +256,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      *
      * @return bool
      */
-    protected function detectRoute()
+    protected function detectRoute(): bool
     {
         if (empty($page = end($this->items))) {
             return false;
@@ -278,7 +283,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      * @param  \App\Models\Page  $page
      * @return bool
      */
-    protected function setPageRoute(Page $page)
+    protected function setPageRoute(Page $page): bool
     {
         if (array_key_exists($page->type, $this->implicitTypes)
             || $this->segmentsCount > ($itemsCount = count($this->items))
@@ -299,7 +304,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      * @param  \App\Models\Page  $page
      * @return bool
      */
-    protected function setExplicitRoute(Page $page)
+    protected function setExplicitRoute(Page $page): bool
     {
         if (! array_key_exists($page->type, $this->explicitTypes)
             || $this->segmentsCount - ($itemsCount = count($this->items)) > 1
@@ -321,7 +326,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      * @param  \App\Models\Page  $page
      * @return bool
      */
-    protected function setImplicitRoute(Page $page)
+    protected function setImplicitRoute(Page $page): bool
     {
         if (! array_key_exists($page->type, $this->implicitTypes)
             || $this->segmentsCount - ($itemsCount = count($this->items)) > 1
@@ -354,7 +359,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      * @param  \App\Models\Eloquent\Model  $implicitModel
      * @return bool
      */
-    protected function setDeepImplicitRoute($implicitModel)
+    protected function setDeepImplicitRoute(Model $implicitModel): bool
     {
         $model = new $this->implicitTypes[$implicitModel->type];
 
@@ -376,7 +381,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      * @param  string|null  $defaultMethod
      * @return bool
      */
-    protected function setCurrentRoute($type, $defaultMethod = null)
+    protected function setCurrentRoute(string $type, string $defaultMethod = null): bool
     {
         $path = '';
 
@@ -424,7 +429,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function setInstances()
+    protected function setInstances(): void
     {
         $this->app->instance('breadcrumb', new Collection($this->items));
     }
@@ -435,7 +440,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      * @param  string  $path
      * @return string
      */
-    protected function getControllerPath($path)
+    protected function getControllerPath(string $path): string
     {
         $namespace = '';
 

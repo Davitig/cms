@@ -34,11 +34,11 @@ class AdminMainData
     }
 
     /**
-     * Share the cms settings.
+     * Share the CMS settings.
      *
      * @return void
      */
-    protected function shareSettings()
+    protected function shareSettings(): void
     {
         $settings = app('db')->table('cms_settings')
             ->where('cms_user_id', Auth::guard('cms')->id())
@@ -57,7 +57,7 @@ class AdminMainData
      *
      * @return void
      */
-    protected function shareMenus()
+    protected function shareMenus(): void
     {
         $menus = (new Menu)->get();
 
@@ -76,7 +76,7 @@ class AdminMainData
      *
      * @return void
      */
-    protected function shareCalendar()
+    protected function shareCalendar(): void
     {
         $start = date('Y-m-d');
         $end = date('Y-m-d', strtotime('+7 days', strtotime($start)));
@@ -95,9 +95,9 @@ class AdminMainData
     /**
      * Share route matches.
      *
-     * @return string
+     * @return void
      */
-    protected function shareRouteMatches()
+    protected function shareRouteMatches(): void
     {
         $currentRouteName = app('router')->current()->getName();
         $currentRouteParams = app('router')->current()->parameters();
@@ -140,7 +140,7 @@ class AdminMainData
      *
      * @return void
      */
-    protected function shareUserAccessRoutes()
+    protected function shareUserAccessRoutes(): void
     {
         if (is_null($user = Auth::guard('cms')->user())) {
             return;

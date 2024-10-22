@@ -17,7 +17,7 @@ class WebSearchController extends Controller
     {
         $data['current'] = $page;
 
-        // do whatever you want
+        // search action...
 
         return view('web.search', $data);
     }

@@ -4,40 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SliderRequest;
-use Illuminate\Http\Request;
 use App\Models\Slider;
+use Illuminate\Http\Request;
 
 class AdminSliderController extends Controller
 {
     use Positionable, VisibilityTrait;
 
     /**
-     * The Slider instance.
-     *
-     * @var \App\Models\Slider
-     */
-    protected $model;
-
-    /**
-     * The Request instance.
-     *
-     * @var \Illuminate\Http\Request
-     */
-    protected $request;
-
-    /**
      * Create a new controller instance.
      *
-     * @param  \App\Models\Slider  $model
-     * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    public function __construct(Slider $model, Request $request)
-    {
-        $this->model = $model;
-
-        $this->request = $request;
-    }
+    public function __construct(protected Slider $model, protected Request $request) {}
 
     /**
      * Display a listing of the resource.
@@ -46,7 +25,7 @@ class AdminSliderController extends Controller
      */
     public function index()
     {
-        $data['items'] = $this->model->forAdmin()->get();
+        $data = $this->model->forAdmin()->get();
 
         return view('admin.slider.index', $data);
     }
@@ -111,7 +90,7 @@ class AdminSliderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         if ($this->request->expectsJson()) {
             $data['items'] = $this->model->where('id', $id)
@@ -134,7 +113,7 @@ class AdminSliderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(SliderRequest $request, $id)
+    public function update(SliderRequest $request, int $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -153,7 +132,7 @@ class AdminSliderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $this->model->destroy($this->request->get('ids'));
 

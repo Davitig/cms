@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 
 class Calendar extends Model
 {
@@ -28,14 +29,14 @@ class Calendar extends Model
      *
      * @var array
      */
-    protected $notUpdatable = [];
+    protected array $notUpdatable = [];
 
     /**
      * The list of the available colors.
      *
      * @var array
      */
-    protected $colors = [
+    protected array $colors = [
         'red', 'blue', 'green', 'orange', 'turquoise', 'purple', 'black', 'gray'
     ];
 
@@ -45,7 +46,7 @@ class Calendar extends Model
      * @param  string  $value
      * @return string
      */
-    public function getStartAttribute($value)
+    public function getStartAttribute(string $value): string
     {
         $value = date('Y-m-d', strtotime($value));
 
@@ -62,7 +63,7 @@ class Calendar extends Model
      * @param  string  $value
      * @return string
      */
-    public function getEndAttribute($value)
+    public function getEndAttribute(string $value): string
     {
         $value = date('Y-m-d', strtotime($value));
 
@@ -78,7 +79,7 @@ class Calendar extends Model
      *
      * @return string
      */
-    public function getRandomColor()
+    public function getRandomColor(): string
     {
         return $this->colors[rand(0, count($this->colors) - 1)];
     }
@@ -86,11 +87,11 @@ class Calendar extends Model
     /**
      * Get active calendar events.
      *
-     * @param  string  $start
-     * @param  string  $end
+     * @param  string|null  $start
+     * @param  string|null  $end
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public function getActive($start = null, $end = null)
+    public function getActive(string $start = null, string $end = null): Collection|static
     {
         if (is_null($start)) {
             $start = date('Y-m') . '-01';
@@ -112,7 +113,7 @@ class Calendar extends Model
      *
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public function getInactive()
+    public function getInactive(): Collection|static
     {
         return $this->whereNull('start')->get();
     }
@@ -123,7 +124,7 @@ class Calendar extends Model
      * @param  \Illuminate\Http\Request  $request
      * @return bool|int
      */
-    public function updateEvent(Request $request)
+    public function updateEvent(Request $request): bool|int
     {
         $input = $request->all(['title', 'description', 'color']);
 
@@ -142,7 +143,7 @@ class Calendar extends Model
      * @param  array  $dates
      * @return array
      */
-    protected function filterDates(array $dates)
+    protected function filterDates(array $dates): array
     {
         $dates['time_start'] = $dates['time_end'] = null;
         $start = $dates['start'];

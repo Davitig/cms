@@ -38,7 +38,7 @@ class Photo extends Model
      *
      * @var array
      */
-    protected $notUpdatable = [
+    protected array $notUpdatable = [
         'gallery_id'
     ];
 
@@ -47,14 +47,14 @@ class Photo extends Model
      *
      * @var string
      */
-    protected $languageTable = 'photo_languages';
+    protected string $languageTable = 'photo_languages';
 
     /**
      * The attributes that are mass assignable for the Language model.
      *
      * @var array
      */
-    protected $languageFillable = [
+    protected array $languageFillable = [
         'photo_id', 'language_id', 'title'
     ];
 
@@ -63,7 +63,7 @@ class Photo extends Model
      *
      * @var array
      */
-    protected $languageNotUpdatable = [
+    protected array $languageNotUpdatable = [
         'photo_id', 'language_id'
     ];
 
@@ -73,7 +73,7 @@ class Photo extends Model
      * @param  string  $value
      * @return string
      */
-    public function getFileDefaultAttribute($value)
+    public function getFileDefaultAttribute($value): string
     {
         return $value ?: asset('assets/libs/images/image-1.jpg');
     }

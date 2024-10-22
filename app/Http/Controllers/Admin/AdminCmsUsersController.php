@@ -4,40 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CmsUserRequest;
+use App\Models\CmsUser;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
-use App\Models\CmsUser;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class AdminCmsUsersController extends Controller
 {
     /**
-     * The CmsUser instance.
-     *
-     * @var \App\Models\CmsUser
-     */
-    protected $model;
-
-    /**
-     * The authenticated user instance.
-     *
-     * @var \Illuminate\Contracts\Auth\Guard
-     */
-    protected $auth;
-
-    /**
      * Create a new controller instance.
      *
-     * @param  \App\Models\CmsUser  $model
-     * @param  \Illuminate\Contracts\Auth\Guard  $guard
      * @return void
      */
-    public function __construct(CmsUser $model, Guard $guard)
-    {
-        $this->model = $model;
-
-        $this->auth = $guard;
-    }
+    public function __construct(protected CmsUser $model, protected Guard $guard) {}
 
     /**
      * Display a listing of the resource.
@@ -110,7 +89,7 @@ class AdminCmsUsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show($id)
+    public function show(int $id)
     {
         $data['current'] = $this->model->findOrFail($id);
 
@@ -125,7 +104,7 @@ class AdminCmsUsersController extends Controller
      *
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         if (! $this->user()->isAdmin() && $this->user()->id != $id) {
             throw new AccessDeniedHttpException;
@@ -147,7 +126,7 @@ class AdminCmsUsersController extends Controller
      *
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
-    public function update(CmsUserRequest $request, $id)
+    public function update(CmsUserRequest $request, int $id)
     {
         if (! $this->user()->isAdmin() && $this->user()->id != $id) {
             throw new AccessDeniedHttpException;
@@ -180,7 +159,7 @@ class AdminCmsUsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         if ($this->user()->isAdmin()) {
             if ($this->user()->id == $id) {
@@ -208,6 +187,6 @@ class AdminCmsUsersController extends Controller
      */
     protected function user()
     {
-        return $this->auth->user();
+        return $this->guard->user();
     }
 }

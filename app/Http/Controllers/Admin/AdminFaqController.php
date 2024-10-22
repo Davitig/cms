@@ -4,41 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FaqRequest;
-use Illuminate\Http\Request;
 use App\Models\Collection;
 use App\Models\Faq;
+use Illuminate\Http\Request;
 
 class AdminFaqController extends Controller
 {
     use Positionable, VisibilityTrait, Transferable, ClonableLanguage;
 
     /**
-     * The Faq instance.
-     *
-     * @var \App\Models\Faq
-     */
-    protected $model;
-
-    /**
-     * The Request instance.
-     *
-     * @var \Illuminate\Http\Request
-     */
-    protected $request;
-
-    /**
      * Create a new controller instance.
      *
-     * @param  \App\Models\Faq  $model
-     * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    public function __construct(Faq $model, Request $request)
-    {
-        $this->model = $model;
-
-        $this->request = $request;
-    }
+    public function __construct(protected Faq $model, protected Request $request) {}
 
     /**
      * Display a listing of the resource.
@@ -46,7 +25,7 @@ class AdminFaqController extends Controller
      * @param  int  $collectionId
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($collectionId)
+    public function index(int $collectionId)
     {
         $data['parent'] = (new Collection)->findOrFail($collectionId);
 
@@ -63,7 +42,7 @@ class AdminFaqController extends Controller
      * @param  int  $collectionId
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create($collectionId)
+    public function create(int $collectionId)
     {
         $data['current'] = $this->model;
         $data['current']->collection_id = $collectionId;
@@ -78,7 +57,7 @@ class AdminFaqController extends Controller
      * @param  int  $collectionId
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(FaqRequest $request, $collectionId)
+    public function store(FaqRequest $request, int $collectionId)
     {
         $input = $request->all();
         $input['collection_id'] = $collectionId;
@@ -106,7 +85,7 @@ class AdminFaqController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($collectionId, $id)
+    public function edit(int $collectionId, int $id)
     {
         $data['items'] = $this->model->where('id', $id)
             ->forAdmin(null, false)
@@ -125,7 +104,7 @@ class AdminFaqController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function update(FaqRequest $request, $collectionId, $id)
+    public function update(FaqRequest $request, int $collectionId, int $id)
     {
         $input = $request->all();
 
@@ -149,7 +128,7 @@ class AdminFaqController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy($collectionId, $id)
+    public function destroy(int $collectionId, int $id)
     {
 
         $this->model->whereKey($id)->delete();

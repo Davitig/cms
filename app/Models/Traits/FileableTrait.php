@@ -2,7 +2,7 @@
 
 namespace App\Models\Traits;
 
-use App\Models\File;
+use App\Models\Eloquent\Builder;
 
 trait FileableTrait
 {
@@ -11,7 +11,7 @@ trait FileableTrait
      *
      * @return \App\Models\Eloquent\Builder
      */
-    public function countFiles()
+    public function countFiles(): Builder
     {
         return $this->selectSub(function ($q) {
             $tableId = ($table = $this->getTable()).'.'.$this->getKeyName();
@@ -27,7 +27,7 @@ trait FileableTrait
      *
     * @return \App\Models\Eloquent\Builder
      */
-    public function hasFile()
+    public function hasFile(): Builder
     {
         return $this->selectExists(function ($q) {
             $tableId = ($table = $this->getTable()).'.'.$this->getKeyName();
@@ -43,7 +43,7 @@ trait FileableTrait
      * @param  bool  $exists
      * @return \App\Models\Eloquent\Builder
      */
-    public function whereFileExists($exists = true)
+    public function whereFileExists($exists = true): Builder
     {
         return $this->whereExists(function ($q) {
             $tableId = ($table = $this->getTable()).'.'.$this->getKeyName();

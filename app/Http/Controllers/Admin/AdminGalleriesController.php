@@ -4,31 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\GalleryRequest;
-use Illuminate\Http\Request;
 use App\Models\Collection;
 use App\Models\Gallery;
+use Illuminate\Http\Request;
 
 class AdminGalleriesController extends Controller
 {
     use Positionable, VisibilityTrait, Transferable, ClonableLanguage;
 
     /**
-     * The Gallery instance.
-     *
-     * @var \App\Models\Gallery
-     */
-    protected $model;
-
-    /**
      * Create a new controller instance.
      *
-     * @param  \App\Models\Gallery  $model
      * @return void
      */
-    public function __construct(Gallery $model)
-    {
-        $this->model = $model;
-    }
+    public function __construct(protected Gallery $model) {}
 
     /**
      * Display a listing of the resource.
@@ -36,7 +25,7 @@ class AdminGalleriesController extends Controller
      * @param  int  $collectionId
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($collectionId)
+    public function index(int $collectionId)
     {
         $data['parent'] = (new Collection)->where('type', Gallery::TYPE)
             ->findOrFail($collectionId);
@@ -55,7 +44,7 @@ class AdminGalleriesController extends Controller
      * @param  int  $collectionId
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create(Request $request, $collectionId)
+    public function create(Request $request, int $collectionId)
     {
         $data['current'] = $this->model;
         $data['current']->collection_id = $collectionId;
@@ -73,7 +62,7 @@ class AdminGalleriesController extends Controller
      * @param  int  $collectionId
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(GalleryRequest $request, $collectionId)
+    public function store(GalleryRequest $request, int $collectionId)
     {
         $input = $request->all();
         $input['collection_id'] = $collectionId;
@@ -101,7 +90,7 @@ class AdminGalleriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($collectionId, $id)
+    public function edit(int $collectionId, int $id)
     {
         $data['items'] = $this->model->where('id', $id)
             ->forAdmin(null, false)
@@ -120,7 +109,7 @@ class AdminGalleriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function update(GalleryRequest $request, $collectionId, $id)
+    public function update(GalleryRequest $request, int $collectionId, int $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -142,7 +131,7 @@ class AdminGalleriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy($collectionId, $id)
+    public function destroy(int $collectionId, int $id)
     {
         $this->model->whereKey($id)->delete();
 

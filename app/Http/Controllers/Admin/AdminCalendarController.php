@@ -3,38 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Calendar;
+use Illuminate\Http\Request;
 
 class AdminCalendarController extends Controller
 {
     /**
-     * The Calendar instance.
-     *
-     * @var \App\Models\Calendar
-     */
-    protected $model;
-
-    /**
-     * The Request instance.
-     *
-     * @var \Illuminate\Http\Request
-     */
-    protected $request;
-
-    /**
      * Create a new controller instance.
      *
-     * @param  \App\Models\Calendar  $model
-     * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    public function __construct(Calendar $model, Request $request)
-    {
-        $this->model = $model;
-
-        $this->request = $request;
-    }
+    public function __construct(protected Calendar $model, protected Request $request) {}
 
     /**
      * Display a listing of the events.

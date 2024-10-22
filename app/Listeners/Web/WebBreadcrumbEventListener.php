@@ -3,6 +3,8 @@
 namespace App\Listeners\Web;
 
 use App\Models\Eloquent\Model;
+use Illuminate\Contracts\View\View;
+use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Collection;
 
 class WebBreadcrumbEventListener
@@ -13,7 +15,7 @@ class WebBreadcrumbEventListener
      * @param  \Illuminate\Contracts\View\View  $event
      * @return void
      */
-    public function onBreadcrumbComposer($event)
+    public function onBreadcrumbComposer(View $event): void
     {
         if ($event->current instanceof Model) {
             $breadcrumb = app_instance('breadcrumb');
@@ -48,7 +50,7 @@ class WebBreadcrumbEventListener
      * @param  \Illuminate\Events\Dispatcher  $events
      * @return void
      */
-    public function subscribe($events)
+    public function subscribe(Dispatcher $events): void
     {
         $events->listen([
             'composing: web._partials.breadcrumb',

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Eloquent\Builder;
 use App\Models\Eloquent\Model;
 use App\Models\Traits\FileableTrait;
 use App\Models\Traits\LanguageTrait;
@@ -33,21 +34,21 @@ class Page extends Model
      *
      * @var array
      */
-    protected $notUpdatable = [];
+    protected array $notUpdatable = [];
 
     /**
      * Related database table name used by the Language model.
      *
      * @var string
      */
-    protected $languageTable = 'page_languages';
+    protected string $languageTable = 'page_languages';
 
     /**
      * The attributes that are mass assignable for the Language model.
      *
      * @var array
      */
-    protected $languageFillable = [
+    protected array $languageFillable = [
         'page_id', 'language_id', 'title', 'short_title', 'description', 'content', 'meta_title', 'meta_desc'
     ];
 
@@ -56,17 +57,18 @@ class Page extends Model
      *
      * @var array
      */
-    protected $languageNotUpdatable = [
+    protected array $languageNotUpdatable = [
         'page_id', 'language_id'
     ];
 
     /**
      * Build an admin query.
      *
-     * @param  int  $menuId
+     * @param  int|null  $menuId
+     * @param  bool|string  $currentLang
      * @return \App\Models\Eloquent\Builder
      */
-    public function forAdmin($menuId = null, $currentLang = true)
+    public function forAdmin(int $menuId = null, bool|string $currentLang = true): Builder
     {
         return $this->when(! is_null($menuId), function ($q) use ($menuId) {
             return $q->menuId($menuId);
@@ -79,10 +81,10 @@ class Page extends Model
     /**
      * Build a public query.
      *
-     * @param  mixed  $currentLang
+     * @param  bool|string  $currentLang
      * @return \App\Models\Eloquent\Builder
      */
-    public function forPublic($currentLang = true)
+    public function forPublic(bool|string $currentLang = true): Builder
     {
         return $this->joinLanguage($currentLang)->whereVisible();
     }
@@ -91,10 +93,10 @@ class Page extends Model
      * Add a query, which is valid for routing.
      *
      * @param  string  $slug
-     * @param  int     $parentId
+     * @param  int  $parentId
      * @return \App\Models\Eloquent\Builder
      */
-    public function bySlugRoute($slug, $parentId)
+    public function bySlugRoute(string $slug, int $parentId): Builder
     {
         return $this->parentId($parentId)->where('slug', $slug)->forPublic();
     }
@@ -103,9 +105,9 @@ class Page extends Model
      * Add a where "menu_id" clause to the query.
      *
      * @param  int  $id
-     * @return $this
+     * @return \App\Models\Eloquent\Builder|static
      */
-    public function menuId($id)
+    public function menuId(int $id): Builder|static
     {
         return $this->where('menu_id', $id);
     }
@@ -113,11 +115,11 @@ class Page extends Model
     /**
      * Add a where "type_id" clause to the query.
      *
-     * @param  int     $id
+     * @param  int  $id
      * @param  string  $operator
-     * @return $this
+     * @return \App\Models\Eloquent\Builder|static
      */
-    public function typeId($id, $operator = '=')
+    public function typeId(int $id, string $operator = '='): Builder|static
     {
         return $this->where('type_id', $operator, $id);
     }
@@ -126,9 +128,9 @@ class Page extends Model
      * Add a where "visible" clause to the query.
      *
      * @param  int  $value
-     * @return $this
+     * @return \App\Models\Eloquent\Builder|static
      */
-    public function whereVisible($value = 1)
+    public function whereVisible(int $value = 1): Builder|static
     {
         return $this->where('visible', $value);
     }
@@ -136,9 +138,9 @@ class Page extends Model
     /**
      * Add a "collection" join to the query.
      *
-     * @return $this
+     * @return \App\Models\Eloquent\Builder|static
      */
-    public function joinCollection()
+    public function joinCollection(): Builder|static
     {
         $table = (new Collection)->getTable();
 

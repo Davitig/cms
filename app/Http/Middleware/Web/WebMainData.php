@@ -32,7 +32,7 @@ class WebMainData
      *
      * @return void
      */
-    protected function shareSettings()
+    protected function shareSettings(): void
     {
         view()->share([
             'webSettings' => new Collection(
@@ -46,7 +46,7 @@ class WebMainData
      *
      * @return void
      */
-    protected function shareTranslations()
+    protected function shareTranslations(): void
     {
         $trans = new Translation;
 

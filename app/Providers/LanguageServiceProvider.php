@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Language;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
-use App\Models\Language;
 
 class LanguageServiceProvider extends ServiceProvider
 {
@@ -14,28 +14,28 @@ class LanguageServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $languages = [];
+    protected array $languages = [];
 
     /**
      * The number of total application languages.
      *
      * @var int
      */
-    protected $languagesCount = 0;
+    protected int $languagesCount = 0;
 
     /**
      * The list of URL segments.
      *
      * @var array
      */
-    protected $segments = [];
+    protected array $segments = [];
 
     /**
      * The number of total URL segments.
      *
      * @var int
      */
-    protected $segmentsCount = 0;
+    protected int $segmentsCount = 0;
 
     /**
      * Bootstrap the application services.
@@ -44,7 +44,7 @@ class LanguageServiceProvider extends ServiceProvider
      * @param  \Illuminate\Contracts\Config\Repository  $config
      * @return void
      */
-    public function boot(Request $request, Config $config)
+    public function boot(Request $request, Config $config): void
     {
         if ($this->app->runningInConsole()) {
             return;
@@ -62,7 +62,7 @@ class LanguageServiceProvider extends ServiceProvider
      * @param  \Illuminate\Contracts\Config\Repository  $config
      * @return void
      */
-    protected function setLanguageConfig(Request $request, Config $config)
+    protected function setLanguageConfig(Request $request, Config $config): void
     {
         $this->segmentsCount = count($this->segments = $request->segments());
 
@@ -111,7 +111,7 @@ class LanguageServiceProvider extends ServiceProvider
      * @param  \Illuminate\Contracts\Config\Repository  $config
      * @return void
      */
-    protected function makeLanguageUrls(Request $request, Config $config)
+    protected function makeLanguageUrls(Request $request, Config $config): void
     {
         if ($this->languagesCount > 1
             && (! isset($this->segments[0])
