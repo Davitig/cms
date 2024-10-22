@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Abstracts\Model;
+use App\Models\Eloquent\Model;
 use App\Models\Traits\LanguageTrait;
 use App\Models\Traits\PositionableTrait;
 
@@ -74,7 +74,7 @@ class Slider extends Model
      *
      * @param  mixed  $currentLang
      * @param  array  $columns
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function forAdmin($currentLang = true, array $columns = [])
     {
@@ -86,7 +86,7 @@ class Slider extends Model
      *
      * @param  mixed  $currentLang
      * @param  array  $columns
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function forPublic($currentLang = true, array $columns = [])
     {

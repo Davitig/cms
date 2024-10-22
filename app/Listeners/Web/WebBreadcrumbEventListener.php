@@ -2,8 +2,8 @@
 
 namespace App\Listeners\Web;
 
+use App\Models\Eloquent\Model;
 use Illuminate\Support\Collection;
-use App\Models\Abstracts\Model;
 
 class WebBreadcrumbEventListener
 {

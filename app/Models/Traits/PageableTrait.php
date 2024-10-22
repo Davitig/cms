@@ -11,7 +11,7 @@ trait PageableTrait
      *
      * @param  string  $type
      * @param  string  $foreignKey
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function joinPage($type = 'right', $foreignKey = 'collection_id')
     {

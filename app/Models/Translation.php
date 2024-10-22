@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Abstracts\Model;
+use App\Models\Eloquent\Model;
 use App\Models\Traits\LanguageTrait;
 
 class Translation extends Model
@@ -64,7 +64,7 @@ class Translation extends Model
      *
      * @param  string  $code
      * @param  mixed  $currentLang
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function byCode($code, $currentLang = true)
     {

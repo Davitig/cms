@@ -84,7 +84,7 @@ trait SettingsFileTrait
     /**
      * Build a query based on the admin collection.
      *
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function adminSettings()
     {
@@ -97,7 +97,7 @@ trait SettingsFileTrait
     /**
      * Build a query based on the public collection.
      *
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function publicSettings()
     {

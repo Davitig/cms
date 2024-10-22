@@ -1,9 +1,9 @@
 <?php
 
+use App\Models\Eloquent\Model;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use App\Models\Abstracts\Model;
 
 /**
  * Get the application language.

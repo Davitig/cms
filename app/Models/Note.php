@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Abstracts\Model;
+use App\Models\Eloquent\Model;
 
 class Note extends Model
 {

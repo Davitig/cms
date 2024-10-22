@@ -10,7 +10,7 @@ trait NestableTrait
      * Add a where "parent_id" clause to the query.
      *
      * @param  int  $id
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function parentId($id)
     {

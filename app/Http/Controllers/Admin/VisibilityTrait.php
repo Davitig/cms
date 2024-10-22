@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Eloquent\Model;
 use Illuminate\Http\Request;
-use App\Models\Abstracts\Model;
 use RuntimeException;
 
 trait VisibilityTrait

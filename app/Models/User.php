@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Abstracts\User as Model;
+use App\Models\Base\User as Model;
 
 class User extends Model
 {

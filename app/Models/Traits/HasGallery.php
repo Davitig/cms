@@ -38,7 +38,7 @@ trait HasGallery
      * Build a query based on the admin gallery.
      *
      * @param  \App\Models\Gallery  $gallery
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function adminGallery(Gallery $gallery)
     {
@@ -50,7 +50,7 @@ trait HasGallery
      * Build a query based on the public gallery.
      *
      * @param  \App\Models\Gallery  $gallery
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function publicGallery(Gallery $gallery)
     {
@@ -64,7 +64,7 @@ trait HasGallery
      * Build a query based on the gallery.
      *
      * @param  int  $id
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function byGallery($id)
     {
@@ -75,7 +75,7 @@ trait HasGallery
      * Get the same type gallery instance.
      *
      * @param  string|null  $type
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function byType($type = null)
     {
@@ -87,7 +87,7 @@ trait HasGallery
     /**
      * Add a where "file" is not empty clause to the query.
      *
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function hasFile()
     {
@@ -98,7 +98,7 @@ trait HasGallery
      * Add a where "gallery_id" clause to the query.
      *
      * @param  mixed  $id
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function galleryId($id)
     {
@@ -109,7 +109,7 @@ trait HasGallery
      * Add a where "visible" clause to the query.
      *
      * @param  int  $value
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function whereVisible($value = 1)
     {
