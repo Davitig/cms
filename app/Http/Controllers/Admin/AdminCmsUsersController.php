@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CmsUserRequest;
-use App\Support\Admin\AdminDestroy;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use App\Models\CmsUser;
@@ -179,19 +178,27 @@ class AdminCmsUsersController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
         if ($this->user()->isAdmin()) {
             if ($this->user()->id == $id) {
-                $this->model = null;
+                abort(403);
             }
         } else {
-            $this->model = null;
+            abort(403);
         }
 
-        return (new AdminDestroy($this->model, $id))->handle();
+        $this->model->whereKey($id)->delete();
+
+        if (request()->expectsJson()) {
+            return response()->json(fill_data('success', trans('database.deleted')));
+        }
+
+        return redirect()->back()->with('alert', fill_data(
+            'success', trans('database.deleted')
+        ));
     }
 
     /**

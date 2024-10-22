@@ -90,25 +90,34 @@ class Page extends Model
     /**
      * Determine if the model has a subpage.
      *
+     * @param  int|null  $id
      * @return bool
      */
-    public function hasSubPage()
+    public function hasSubPage($id = null)
     {
-        return $this->parentId($this->getKey())->exists();
-    }
-
-    /**
-     * Determine if the model has a parent page.
-     *
-     * @return bool
-     */
-    public function hasSiblingPage()
-    {
-        if (! $this->parent_id) {
+        if (! ($id = $id ?: $this->getKey())) {
             return false;
         }
 
-        return $this->parentId($this->parent_id)->exists();
+        return $this->parentId($id)->exists();
+    }
+
+    /**
+     * Determine if the model has a sibling page.
+     *
+     * @param  int|null  $parentId
+     * @param  int|null  $id
+     * @return bool
+     */
+    public function hasSiblingPage($parentId = null, $id = null)
+    {
+        if (! ($parentId = $parentId ?: $this->parent_id)
+            || ! ($id = $id ?: $this->getKey())
+        ) {
+            return false;
+        }
+
+        return $this->parentId($parentId)->where('id', '<>', $id)->exists();
     }
 
     /**

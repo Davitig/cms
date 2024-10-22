@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Calendar;
 use App\Models\Note;
+use Illuminate\Http\Request;
 
 class AdminNotesController extends Controller
 {

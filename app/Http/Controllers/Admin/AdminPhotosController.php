@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PhotoRequest;
-use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
 use App\Models\Collection;
 use App\Models\Gallery;
@@ -171,12 +170,20 @@ class AdminPhotosController extends Controller
      *
      * @param  int  $galleryId
      * @param  int  $id
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function destroy($galleryId, $id)
     {
-        $id = $this->request->get('ids');
+        $this->model->destroy($this->request->get('ids'));
 
-        return (new AdminDestroy($this->model, $id))->handle();
+        if (request()->expectsJson()) {
+            return response()->json(fill_data(
+                'success', trans('database.deleted')
+            ));
+        }
+
+        return back()->with('alert', fill_data(
+            'success', trans('database.deleted')
+        ));
     }
 }

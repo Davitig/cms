@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FileRequest;
-use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\EventFile;
@@ -169,16 +168,20 @@ class AdminEventFilesController extends Controller
      *
      * @param  int  $eventId
      * @param  int  $id
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function destroy($eventId, $id)
     {
-        $id = $this->request->get('ids');
+        $this->model->destroy($this->request->get('ids'));
 
-        if (count($id) == 1) {
-            $id = $id[0];
+        if (request()->expectsJson()) {
+            return response()->json(fill_data(
+                'success', trans('database.deleted')
+            ));
         }
 
-        return (new AdminDestroy($this->model, $id))->handle();
+        return back()->with('alert', fill_data(
+            'success', trans('database.deleted')
+        ));
     }
 }

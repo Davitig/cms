@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\VideoRequest;
-use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
 use App\Models\Collection;
 use App\Models\Gallery;
@@ -173,14 +172,20 @@ class AdminVideosController extends Controller
      *
      * @param  int  $galleryId
      * @param  int  $id
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function destroy($galleryId, $id)
     {
-        return (new AdminDestroy(
-            $this->model,
-            $this->request->get('ids'),
-            false)
-        )->handle();
+        $this->model->destroy($this->request->get('ids'));
+
+        if (request()->expectsJson()) {
+            return response()->json(fill_data(
+                'success', trans('database.deleted')
+            ));
+        }
+
+        return back()->with('alert', fill_data(
+            'success', trans('database.deleted')
+        ));
     }
 }

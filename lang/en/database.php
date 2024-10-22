@@ -11,7 +11,7 @@ return [
     |
     */
 
-    'deleted' => 'The row has been successfully deleted.',
+    'deleted' => 'The item has been successfully deleted.',
 
     'error' => [
         '1054' => 'Unknown column.',

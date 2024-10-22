@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\MenuRequest;
-use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
 use App\Models\Menu;
 
@@ -113,11 +112,19 @@ class AdminMenusController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        return (new AdminDestroy($this->model, $id))->handle();
+        $this->model->whereKey($id)->delete();
+
+        if (request()->expectsJson()) {
+            return response()->json(fill_data('success', trans('database.deleted')));
+        }
+
+        return redirect()->back()->with('alert', fill_data(
+            'success', trans('database.deleted')
+        ));
     }
 
     /**

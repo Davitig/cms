@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PageRequest;
-use App\Support\Admin\AdminDestroy;
 use Illuminate\Http\Request;
 use App\Models\Menu;
 use App\Models\Page;
@@ -182,21 +181,37 @@ class AdminPagesController extends Controller
      *
      * @param  int  $menuId
      * @param  int  $id
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function destroy($menuId, $id)
     {
         if ($this->model->hasSubPage($id)) {
-            $this->model = null;
+            if (request()->expectsJson()) {
+                return response()->json(fill_data(
+                    'error', trans('database.error.1451')
+                ));
+            }
+
+            return redirect()->back()->with('alert', fill_data(
+                'error', trans('database.error.1451')
+            ));
         }
 
-        return (new AdminDestroy($this->model, $id))->handle();
+        $this->model->whereKey($id)->delete();
+
+        if (request()->expectsJson()) {
+            return response()->json(fill_data('success', trans('database.deleted')));
+        }
+
+        return redirect()->back()->with('alert', fill_data(
+            'success', trans('database.deleted')
+        ));
     }
 
     /**
      * Get the listable types.
      *
-     * @param  string|null
+     * @param  string|null  $type
      * @return array
      */
     public function getListableTypes($type = null)
