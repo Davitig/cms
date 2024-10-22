@@ -19,7 +19,7 @@ abstract class Model extends BaseModel
      *
      * @var bool
      */
-    protected $hasLanguage = false;
+    protected bool $hasLanguage = false;
 
     /**
      * Create a new Eloquent model instance.
@@ -44,7 +44,7 @@ abstract class Model extends BaseModel
      *
      * @return bool
      */
-    public function hasLanguage()
+    public function hasLanguage(): bool
     {
         return $this->hasLanguage;
     }
@@ -55,7 +55,7 @@ abstract class Model extends BaseModel
      * @param  string|null  $exclude
      * @return void
      */
-    public function setFillableByUpdatable($exclude = null)
+    public function setFillableByUpdatable(string $exclude = null): void
     {
         if (! ($hasUpdatable = ! empty($this->updatable)) && empty($this->notUpdatable)) {
             return;
@@ -81,7 +81,7 @@ abstract class Model extends BaseModel
      * @param  array  $fillable
      * @return array
      */
-    public function getRefillAttributes(array $fillable = [])
+    public function getRefillAttributes(array $fillable = []): array
     {
         $fillable = array_merge($this->fillable, $fillable);
 
@@ -110,7 +110,7 @@ abstract class Model extends BaseModel
      * @param  \App\Models\Eloquent\Builder  $builder
      * @return $this
      */
-    public function setEloquentBuilder(Builder $builder)
+    public function setEloquentBuilder(Builder $builder): static
     {
         $this->builder = $builder;
 
@@ -135,12 +135,12 @@ abstract class Model extends BaseModel
     /**
      * Update the model in the database.
      *
-     * @param  array   $attributes
-     * @param  array   $options
-     * @param  string  $exclude
-     * @return bool|int
+     * @param  array  $attributes
+     * @param  array  $options
+     * @param  string|null  $exclude
+     * @return bool
      */
-    public function update(array $attributes = [], array $options = [], $exclude = null)
+    public function update(array $attributes = [], array $options = [], string $exclude = null): bool
     {
         $this->setFillableByUpdatable($exclude);
 

@@ -21,7 +21,8 @@
         "mews/captcha": "3.3.*",
         "php-curl-class/php-curl-class": "11.0.*",
         "sabre/xml": "4.0.*",
-        "spatie/laravel-html": "3.11.*"
+        "spatie/laravel-html": "3.11.*",
+        "ext-dom": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

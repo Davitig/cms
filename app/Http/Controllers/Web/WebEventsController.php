@@ -13,7 +13,7 @@ class WebEventsController extends Controller
      *
      * @var \App\Models\Event
      */
-    protected $model;
+    protected Event $model;
 
     /**
      * Create a new controller instance.
@@ -48,7 +48,7 @@ class WebEventsController extends Controller
      * @param  string  $slug
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(array $models, $slug)
+    public function show(array $models, string $slug)
     {
         [$data['parent'], $collection] = $models;
 

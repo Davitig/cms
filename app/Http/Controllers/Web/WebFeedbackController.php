@@ -16,7 +16,7 @@ class WebFeedbackController extends Controller
      *
      * @var \Illuminate\Http\Request
      */
-    protected $request;
+    protected Request $request;
 
     /**
      * Create a new controller instance.
@@ -69,7 +69,7 @@ class WebFeedbackController extends Controller
             });
 
             $message = fill_data(true, trans('send_success'));
-        } catch (Exception $e) {
+        } catch (Exception) {
             $message = fill_data(false, trans('send_failure'));
         }
 

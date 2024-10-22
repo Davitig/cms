@@ -4,28 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CollectionRequest;
-use Illuminate\Http\Request;
 use App\Models\Collection;
+use Illuminate\Http\Request;
 
 class AdminCollectionsController extends Controller
 {
     /**
-     * The Collection instance.
-     *
-     * @var \App\Models\Collection
-     */
-    protected $model;
-
-    /**
      * Create a new controller instance.
      *
-     * @param  \App\Models\Collection  $model
      * @return void
      */
-    public function __construct(Collection $model)
-    {
-        $this->model = $model;
-    }
+    public function __construct(protected Collection $model) {}
 
     /**
      * Display a listing of the resource.
@@ -85,7 +74,7 @@ class AdminCollectionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         $data['current'] = $this->model->findOrFail($id);
 
@@ -99,7 +88,7 @@ class AdminCollectionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function update(CollectionRequest $request, $id)
+    public function update(CollectionRequest $request, int $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -120,7 +109,7 @@ class AdminCollectionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $this->model->whereKey($id)->delete();
 

@@ -40,9 +40,9 @@ return new class extends Migration
             $table->string('meta_desc')->nullable();
             $table->timestamps();
 
+            $table->unique(['page_id', 'language_id']);
             $table->foreign('page_id')->references('id')->on('pages')->onDelete('cascade');
             $table->foreign('language_id')->references('id')->on('languages');
-            $table->unique(['page_id', 'language_id']);
         });
     }
 

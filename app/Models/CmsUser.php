@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Base\User as Model;
+use App\Models\Eloquent\Builder;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 
@@ -47,14 +48,14 @@ class CmsUser extends Model
      *
      * @var array
      */
-    protected $notUpdatable = [];
+    protected array $notUpdatable = [];
 
     /**
      * Get the mutated attribute.
      *
      * @return string
      */
-    public function getRoleTextAttribute()
+    public function getRoleTextAttribute(): string
     {
         return (! is_null($this->role)) ? user_roles($this->role) : $this->role;
     }
@@ -65,7 +66,7 @@ class CmsUser extends Model
      * @param  string  $value
      * @return string
      */
-    public function getPhotoAttribute($value)
+    public function getPhotoAttribute(string $value): string
     {
         return $value ?: asset('assets/libs/images/user-2.png');
     }
@@ -75,7 +76,7 @@ class CmsUser extends Model
      *
      * @return bool
      */
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return $this->role == 'admin';
     }
@@ -84,25 +85,23 @@ class CmsUser extends Model
      * Set the lockscreen.
      *
      * @param  bool  $forceLock
-     * @return \Illuminate\Session\Store
+     * @return void
      */
-    public function lockScreen($forceLock = false)
+    public function lockScreen(bool $forceLock = false): void
     {
-        $lockscreen = session()->put('lockscreen', 1);
+        session()->put('lockscreen', 1);
 
         if ($forceLock) {
             throw new HttpResponseException(redirect(cms_route('lockscreen')));
         }
-
-        return $lockscreen;
     }
 
     /**
-     * Determine if screen is locked.
+     * Determine if the screen is locked.
      *
-     * @return \Illuminate\Session\Store
+     * @return bool
      */
-    public function hasLockScreen()
+    public function hasLockScreen(): bool
     {
         return session()->has('lockscreen');
     }
@@ -110,9 +109,9 @@ class CmsUser extends Model
     /**
      * Remove the lockscreen.
      *
-     * @return \Illuminate\Session\Store
+     * @return mixed
      */
-    public function unlockScreen()
+    public function unlockScreen(): mixed
     {
         return session()->remove('lockscreen');
     }
@@ -123,7 +122,7 @@ class CmsUser extends Model
      * @param  \Illuminate\Http\Request  $request
      * @return \App\Models\Eloquent\Builder
      */
-    public function adminFilter(Request $request)
+    public function adminFilter(Request $request): Builder
     {
         return $this->when($request->get('name'), function ($q, $value) {
             return $q->whereRaw("CONCAT(first_name, ' ', last_name) like ?", ["%{$value}%"]);

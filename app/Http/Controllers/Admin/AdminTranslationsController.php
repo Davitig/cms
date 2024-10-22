@@ -4,30 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TranslationRequest;
-use Illuminate\Http\Request;
 use App\Models\Translation;
+use Illuminate\Http\Request;
 
 class AdminTranslationsController extends Controller
 {
     use ClonableLanguage;
 
     /**
-     * The Translation instance.
-     *
-     * @var \App\Models\Translation
-     */
-    protected $model;
-
-    /**
      * Create a new controller instance.
      *
-     * @param  \App\Models\Translation  $model
      * @return void
      */
-    public function __construct(Translation $model)
-    {
-        $this->model = $model;
-    }
+    public function __construct(protected Translation $model) {}
 
     /**
      * Display a listing of the resource.
@@ -85,7 +74,7 @@ class AdminTranslationsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         $data['items'] = $this->model->joinLanguage(false)
             ->where('id', $id)
@@ -103,7 +92,7 @@ class AdminTranslationsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function update(TranslationRequest $request, $id)
+    public function update(TranslationRequest $request, int $id)
     {
         $input = $request->all();
         unset($input['code']);
@@ -127,7 +116,7 @@ class AdminTranslationsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $this->model->whereKey($id)->delete();
 

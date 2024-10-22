@@ -3,39 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Permission;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class AdminPermissionsController extends Controller
 {
     /**
-     * The Permission instance.
-     *
-     * @var \App\Models\Permission
-     */
-    protected $model;
-
-    /**
-     * The Request instance.
-     *
-     * @var \Illuminate\Http\Request
-     */
-    protected $request;
-
-    /**
      * Create a new controller instance.
      *
-     * @param  \App\Models\Permission  $model
-     * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    public function __construct(Permission $model, Request $request)
-    {
-        $this->model = $model;
-
-        $this->request = $request;
-    }
+    public function __construct(protected Permission $model, protected Request $request) {}
 
     /**
      * Display a listing of the resource.
@@ -93,7 +72,7 @@ class AdminPermissionsController extends Controller
 
         $attributes = [];
 
-        foreach ((array) $input as $key => $value) {
+        foreach ((array) $input as $value) {
             if (in_array(key($value), Permission::$routeGroupsHidden)){
                 continue;
             }
@@ -139,13 +118,15 @@ class AdminPermissionsController extends Controller
 
         $cmsSlug = cms_slug();
 
-        foreach ($routes as $key => $route) {
+        foreach ($routes as $route) {
             $routeName = $route->getName();
 
-            if (! is_null($routeName) && strpos($route->getPrefix(), $cmsSlug) !== false) {
+            if (! is_null($routeName) && str_contains($route->getPrefix(), $cmsSlug)) {
                 if ($prevRouteName == $routeName) continue;
 
-                $baseRouteName = explode('.', substr($routeName, 0, strrpos($routeName, '.')));
+                $baseRouteName = explode('.', substr(
+                    $routeName, 0, strrpos($routeName, '.')
+                ));
 
                 $routeNames[$baseRouteName[0]][] = $routeName;
 

@@ -2,6 +2,7 @@
 
 namespace App\Models\Traits;
 
+use App\Models\Eloquent\Builder;
 use App\Models\Page;
 
 trait PageableTrait
@@ -13,7 +14,7 @@ trait PageableTrait
      * @param  string  $foreignKey
      * @return \App\Models\Eloquent\Builder
      */
-    public function joinPage($type = 'right', $foreignKey = 'collection_id')
+    public function joinPage(string $type = 'right', string $foreignKey = 'collection_id'): Builder
     {
         return $this->join('pages', $foreignKey, 'type_id', $type)
             ->leftJoin('page_languages', function ($q) {
@@ -36,7 +37,7 @@ trait PageableTrait
      * @param  string|null  $column
      * @return string|null
      */
-    public function getFullSlug($value = null, $column = null)
+    public function getFullSlug(int $value = null, string $column = null): ?string
     {
         return $this->fullSlug($value, $column)->full_slug;
     }
@@ -48,7 +49,7 @@ trait PageableTrait
      * @param  string|null  $column
      * @return $this
      */
-    public function fullSlug($value = null, $column = null)
+    public function fullSlug(int $value = null, string $column = null): static
     {
         $this->full_slug ??= $this->slug;
 

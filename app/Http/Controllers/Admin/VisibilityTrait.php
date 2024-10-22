@@ -17,7 +17,7 @@ trait VisibilityTrait
      *
      * @throws \RuntimeException
      */
-    public function visibility(Request $request, $id)
+    public function visibility(Request $request, int $id)
     {
         if (! isset($this->model) || ! $this->model instanceof Model) {
             throw new RuntimeException('Model not found');

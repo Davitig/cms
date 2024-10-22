@@ -4,41 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FileRequest;
-use Illuminate\Http\Request;
 use App\Models\Article;
 use App\Models\ArticleFile;
+use Illuminate\Http\Request;
 
 class AdminArticleFilesController extends Controller
 {
     use Positionable, VisibilityTrait;
 
     /**
-     * The ArticleFile instance.
-     *
-     * @var \App\Models\ArticleFile
-     */
-    protected $model;
-
-    /**
-     * The Request instance.
-     *
-     * @var \Illuminate\Http\Request
-     */
-    protected $request;
-
-    /**
      * Create a new controller instance.
      *
-     * @param  \App\Models\ArticleFile  $model
-     * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    public function __construct(ArticleFile $model, Request $request)
-    {
-        $this->model = $model;
-
-        $this->request = $request;
-    }
+    public function __construct(protected ArticleFile $model, protected Request $request) {}
 
     /**
      * Display a listing of the resource.
@@ -46,7 +25,7 @@ class AdminArticleFilesController extends Controller
      * @param  int  $articleId
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($articleId)
+    public function index(int $articleId)
     {
         $data['foreignModels'] = (new Article)->where('id', $articleId)
             ->joinLanguage(false)
@@ -65,7 +44,7 @@ class AdminArticleFilesController extends Controller
      * @param  int  $articleId
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function create($articleId)
+    public function create(int $articleId)
     {
         if ($this->request->expectsJson()) {
             $data['current'] = $this->model;
@@ -87,7 +66,7 @@ class AdminArticleFilesController extends Controller
      * @param  int  $articleId
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(FileRequest $request, $articleId)
+    public function store(FileRequest $request, int $articleId)
     {
         $input = $request->all();
         $input['article_id'] = $articleId;
@@ -126,7 +105,7 @@ class AdminArticleFilesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function edit($articleId, $id)
+    public function edit(int $articleId, int $id)
     {
         if ($this->request->expectsJson()) {
             $data['items'] = $this->model->joinLanguage(false)
@@ -150,7 +129,7 @@ class AdminArticleFilesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(FileRequest $request, $articleId, $id)
+    public function update(FileRequest $request, int $articleId, int $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -170,7 +149,7 @@ class AdminArticleFilesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy($articleId, $id)
+    public function destroy(int $articleId, int $id)
     {
         $this->model->destroy($this->request->get('ids'));
 

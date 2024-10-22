@@ -11,7 +11,7 @@ class _Language extends Model
      *
      * @var array
      */
-    protected $notUpdatable = [];
+    protected array $notUpdatable = [];
 
     /**
      * Create a new Language model instance.

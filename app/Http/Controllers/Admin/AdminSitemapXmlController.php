@@ -17,63 +17,63 @@ class AdminSitemapXmlController extends Controller
      *
      * @var array
      */
-    protected $data = [];
+    protected array $data = [];
 
     /**
      * List of default namespace prefixes.
      *
      * @var array
      */
-    protected $namespaceMap = ['http://www.sitemaps.org/schemas/sitemap/0.9' => ''];
+    protected array $namespaceMap = ['http://www.sitemaps.org/schemas/sitemap/0.9' => ''];
 
     /**
      * xhtml namespace prefix.
      *
      * @var string
      */
-    protected $xhtml;
+    protected string $xhtml;
 
     /**
      * List of the application languages.
      *
      * @var array
      */
-    protected $languages = [];
+    protected array $languages = [];
 
     /**
      * Main language of the application.
      *
      * @var string
      */
-    protected $mainLanguage;
+    protected string|int|null $mainLanguage;
 
     /**
      * Indicates if the application has many languages.
      *
      * @var bool
      */
-    protected $hasManyLanguage = false;
+    protected bool $hasManyLanguage = false;
 
     /**
      * List of the listable types.
      *
      * @var array
      */
-    protected $listableTypes = [];
+    protected array $listableTypes = [];
 
     /**
      * List of the implicit types.
      *
      * @var array
      */
-    protected $implicitTypes = [];
+    protected array $implicitTypes = [];
 
     /**
      * List of the explicit types.
      *
      * @var array
      */
-    protected $explicitTypes = [];
+    protected array $explicitTypes = [];
 
     /**
      * Create a new controller instance.
@@ -92,11 +92,11 @@ class AdminSitemapXmlController extends Controller
             ];
         }
 
-        $this->listableTypes = cms_pages('listable');
+        $this->listableTypes = (array) cms_pages('listable');
 
-        $this->implicitTypes = cms_pages('implicit');
+        $this->implicitTypes = (array) cms_pages('implicit');
 
-        $this->explicitTypes = cms_pages('explicit');
+        $this->explicitTypes = (array) cms_pages('explicit');
     }
 
     /**
@@ -206,8 +206,8 @@ class AdminSitemapXmlController extends Controller
     /**
      * Get the urls.
      *
-     * @param  \App\Models\Page $page
-     * @param  \App\Models\Eloquent\Model $page
+     * @param  \App\Models\Page  $page
+     * @param  \App\Models\Eloquent\Model  $item
      * @return array
      */
     protected function getUrls(Page $page, Model $item)
@@ -235,11 +235,11 @@ class AdminSitemapXmlController extends Controller
      * Get an array of xml language links.
      *
      * @param  \App\Models\Page $page
-     * @param  string|null $slug
+     * @param  string|null  $slug
      * @param  string $langKey
      * @return array
      */
-    protected function getLanguageLinks(Model $page, $slug = null, $langKey)
+    protected function getLanguageLinks(Model $page, string $slug = null, $langKey)
     {
         return [
             'name' => "{{$this->xhtml}}link",

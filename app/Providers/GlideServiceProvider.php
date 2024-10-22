@@ -25,7 +25,7 @@ class GlideServiceProvider extends ServiceProvider implements DeferrableProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->singleton(Server::class, function ($app) {
             $filesystem = $app[Filesystem::class];
@@ -47,7 +47,7 @@ class GlideServiceProvider extends ServiceProvider implements DeferrableProvider
      *
      * @return array
      */
-    public function provides()
+    public function provides(): array
     {
         return [Server::class];
     }

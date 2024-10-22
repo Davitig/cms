@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Cocur\Slugify\Slugify;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 abstract class Request extends FormRequest
@@ -12,7 +13,7 @@ abstract class Request extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -20,7 +21,7 @@ abstract class Request extends FormRequest
     /**
      * {@inheritDoc}
      */
-    protected function getValidatorInstance()
+    protected function getValidatorInstance(): Validator
     {
         $validator = parent::getValidatorInstance();
 
@@ -34,12 +35,12 @@ abstract class Request extends FormRequest
     /**
      * Slugify specified input value.
      *
-     * @param array $input
-     * @param string $key
-     * @param array $altKeys
+     * @param  array  $input
+     * @param  string  $key
+     * @param  array  $altKeys
      * @return void
      */
-    protected function slugifyInput(array &$input, $key, array $altKeys = [])
+    protected function slugifyInput(array &$input, string $key, array $altKeys = []): void
     {
         if (! empty($input[$key])) {
             $input[$key] = (new Slugify)->slugify($input[$key]);
@@ -61,7 +62,7 @@ abstract class Request extends FormRequest
      * @param array $params
      * @return void
      */
-    protected function boolifyInput(array &$input, array $params)
+    protected function boolifyInput(array &$input, array $params): void
     {
         foreach ($params as $param) {
             $input[$param] = (int) $this->filled($param);

@@ -29,9 +29,10 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->timestamps();
 
-            $table->foreign('faq_id')->references('id')->on('faq')->onDelete('cascade');
-            $table->foreign('language_id')->references('id')->on('languages');
             $table->unique(['faq_id', 'language_id']);
+            $table->foreign('faq_id')->references('id')
+                ->on('faq')->onDelete('cascade');
+            $table->foreign('language_id')->references('id')->on('languages');
         });
     }
 

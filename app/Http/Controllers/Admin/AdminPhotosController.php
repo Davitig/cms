@@ -4,42 +4,21 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PhotoRequest;
-use Illuminate\Http\Request;
 use App\Models\Collection;
 use App\Models\Gallery;
 use App\Models\Photo;
+use Illuminate\Http\Request;
 
 class AdminPhotosController extends Controller
 {
     use Positionable, VisibilityTrait;
 
     /**
-     * The Photo instance.
-     *
-     * @var \App\Models\Photo
-     */
-    protected $model;
-
-    /**
-     * The Request instance.
-     *
-     * @var \Illuminate\Http\Request
-     */
-    protected $request;
-
-    /**
      * Create a new controller instance.
      *
-     * @param  \App\Models\Photo  $model
-     * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    public function __construct(Photo $model, Request $request)
-    {
-        $this->model = $model;
-
-        $this->request = $request;
-    }
+    public function __construct(protected Photo $model, protected Request $request) {}
 
     /**
      * Display a listing of the resource.
@@ -47,7 +26,7 @@ class AdminPhotosController extends Controller
      * @param  int  $galleryId
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($galleryId)
+    public function index(int $galleryId)
     {
         $data['parent'] = (new Gallery)->where('type', Photo::TYPE)
             ->joinLanguage()
@@ -66,7 +45,7 @@ class AdminPhotosController extends Controller
      * @param  int  $galleryId
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function create($galleryId)
+    public function create(int $galleryId)
     {
         if ($this->request->expectsJson()) {
             $data['current'] = $this->model;
@@ -88,7 +67,7 @@ class AdminPhotosController extends Controller
      * @param  int  $galleryId
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(PhotoRequest $request, $galleryId)
+    public function store(PhotoRequest $request, int $galleryId)
     {
         $input = $request->all();
         $input['gallery_id'] = $galleryId;
@@ -127,7 +106,7 @@ class AdminPhotosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function edit($galleryId, $id)
+    public function edit(int $galleryId, int $id)
     {
         if ($this->request->expectsJson()) {
             $model = $this->model;
@@ -152,7 +131,7 @@ class AdminPhotosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(PhotoRequest $request, $galleryId, $id)
+    public function update(PhotoRequest $request, int $galleryId, int $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -172,7 +151,7 @@ class AdminPhotosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy($galleryId, $id)
+    public function destroy(int $galleryId, int $id)
     {
         $this->model->destroy($this->request->get('ids'));
 

@@ -2,7 +2,9 @@
 
 namespace App\Models\Traits;
 
+use App\Models\Eloquent\Builder;
 use Closure;
+use Illuminate\Database\Eloquent\Collection;
 
 trait NestableTrait
 {
@@ -12,7 +14,7 @@ trait NestableTrait
      * @param  int  $id
      * @return \App\Models\Eloquent\Builder
      */
-    public function parentId($id)
+    public function parentId(int $id): Builder
     {
         return $this->where('parent_id', $id);
     }
@@ -20,12 +22,15 @@ trait NestableTrait
     /**
      * Get the base model.
      *
-     * @param  array  $columns
+     * @param  array|string  $columns
      * @param  int|null  $id
      * @param  \Closure|null  $callback
      * @return static
      */
-    public function getBaseModel($columns = ['*'], $id = null, Closure $callback = null)
+    public function getBaseModel(
+        array|string $columns = ['*'],
+        int          $id = null,
+        Closure      $callback = null): static
     {
         if (! ($id = ($id ?: $this->parent_id))) {
             return $this;
@@ -45,13 +50,17 @@ trait NestableTrait
     /**
      * Get sibling models.
      *
-     * @param  array  $columns
+     * @param  array|string  $columns
      * @param  int|null  $id
      * @param  int|null  $parentId
      * @param  bool|int  $recursive
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getSiblingModels($columns = ['*'], $parentId = null, $id = null, $recursive = false)
+    public function getSiblingModels(
+        array|string $columns = ['*'],
+        int          $parentId = null,
+        int          $id = null,
+        bool|int     $recursive = false): Collection
     {
         if (! ($parentId = $parentId ?: $this->parent_id)
             || ! ($id = $id ?: $this->getKey())
@@ -77,12 +86,15 @@ trait NestableTrait
     /**
      * Get sub models.
      *
-     * @param  array  $columns
+     * @param  array|string  $columns
      * @param  int|null  $parentId
      * @param  bool|int  $recursive
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getSubModels($columns = ['*'], $parentId = null, $recursive = false)
+    public function getSubModels(
+        array|string $columns = ['*'],
+        int          $parentId = null,
+        bool|int     $recursive = false): Collection
     {
         $columns = (array) $columns;
 
@@ -108,7 +120,7 @@ trait NestableTrait
      * @param  int|null  $id
      * @return bool
      */
-    public function hasSiblingModel($parentId = null, $id = null)
+    public function hasSiblingModel(int $parentId = null, int $id = null): bool
     {
         if (! ($parentId = $parentId ?: $this->parent_id)
             || ! ($id = $id ?: $this->getKey())
@@ -125,7 +137,7 @@ trait NestableTrait
      * @param  int|null  $parentId
      * @return bool
      */
-    public function hasSubModel($parentId = null)
+    public function hasSubModel(int $parentId = null): bool
     {
         if (! ($parentId = $parentId ?: $this->getKey())) {
             return false;
@@ -141,7 +153,7 @@ trait NestableTrait
      * @param  string|null  $column
      * @return string|null
      */
-    public function getFullSlug($value = null, $column = null)
+    public function getFullSlug(int $value = null, string $column = null): ?string
     {
         return $this->fullSlug($value, $column)->full_slug;
     }
@@ -153,7 +165,7 @@ trait NestableTrait
      * @param  string|null  $column
      * @return $this
      */
-    public function fullSlug($value = null, $column = null)
+    public function fullSlug(int $value = null, string $column = null): static
     {
         $this->full_slug ??= $this->slug;
 

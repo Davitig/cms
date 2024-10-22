@@ -2,32 +2,21 @@
 
 namespace App\Http\Middleware\Admin;
 
+use App\Models\Permission;
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
-use App\Models\Permission;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class AdminAuthenticate
 {
     /**
-     * The guard implementation.
-     *
-     * @var \Illuminate\Contracts\Auth\Guard
-     */
-    protected $guard;
-
-    /**
      * Create a new middleware instance.
      *
-     * @param  \Illuminate\Contracts\Auth\Guard  $guard
      * @return void
      */
-    public function __construct(Guard $guard)
-    {
-        $this->guard = $guard;
-    }
+    public function __construct(protected Guard $guard) {}
 
     /**
      * Handle an incoming request.
@@ -71,7 +60,7 @@ class AdminAuthenticate
      *
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
-    private function checkRoutePermission(Request $request)
+    private function checkRoutePermission(Request $request): void
     {
         if (! $this->guard->user()->isAdmin()) {
             $routeName = $request->route()->getName();

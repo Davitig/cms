@@ -8,11 +8,11 @@ use Illuminate\Support\Str;
 /**
  * Get the application language.
  *
- * @param  string|bool|null  $key
+ * @param  bool|string|null  $key
  * @param  string|null  $value
  * @return string|array
  */
-function language($key = null, $value = null)
+function language(bool|string $key = null, string $value = null): array|string
 {
     $lang = (string) config('app.language');
 
@@ -36,7 +36,7 @@ function language($key = null, $value = null)
  *
  * @return array
  */
-function languages()
+function languages(): array
 {
     return (array) config('app.languages', []);
 }
@@ -46,7 +46,7 @@ function languages()
  *
  * @return bool
  */
-function language_in_url()
+function language_in_url(): bool
 {
     return config('language_in_url', false);
 }
@@ -56,7 +56,7 @@ function language_in_url()
  *
  * @return bool
  */
-function is_multilanguage()
+function is_multilanguage(): bool
 {
     return count(languages()) > 1;
 }
@@ -66,18 +66,18 @@ function is_multilanguage()
  *
  * @return bool
  */
-function cms_is_booted()
+function cms_is_booted(): bool
 {
     return config('cms_is_booted', false);
 }
 
 /**
- * Get the CMS slug
+ * Get the CMS slug.
  *
  * @param  string|null  $path
  * @return string
  */
-function cms_slug($path = null)
+function cms_slug(string $path = null): string
 {
     if (is_null($path)) {
         return cms_config('slug');
@@ -92,7 +92,7 @@ function cms_slug($path = null)
  * @param  string  $name
  * @return array
  */
-function resource_names($name)
+function resource_names(string $name): array
 {
     return [
         'index'   => $name . '.index',
@@ -111,7 +111,7 @@ function resource_names($name)
  * @param  string  $name
  * @return string
  */
-function cms_route_name($name)
+function cms_route_name(string $name): string
 {
     return cms_slug() . '.' . $name;
 }
@@ -121,11 +121,15 @@ function cms_route_name($name)
  *
  * @param  string  $name
  * @param  mixed  $parameters
- * @param  mixed  $language
+ * @param  bool|string|null  $language
  * @param  bool  $absolute
  * @return string
  */
-function cms_route($name, $parameters = [], $language = null, $absolute = true)
+function cms_route(
+    string      $name,
+    mixed       $parameters = [],
+    bool|string $language = null,
+    bool        $absolute = true): string
 {
     return language_to_url(route(cms_route_name($name), $parameters, $absolute), $language);
 }
@@ -133,14 +137,24 @@ function cms_route($name, $parameters = [], $language = null, $absolute = true)
 /**
  * Generate a CMS URL.
  *
- * @param  string|array  $path
+ * @param  array|string  $path
  * @param  array  $parameters
- * @param  mixed  $language
+ * @param  bool|string|null  $language
  * @param  bool|null  $secure
- * @return \Illuminate\Contracts\Routing\UrlGenerator|string
+ * @return string
  */
-function cms_url($path = '', array $parameters = [], $language = null, $secure = null)
+function cms_url(
+    array|string $path = '',
+    array        $parameters = [],
+    bool|string  $language = null,
+    bool         $secure = null): string
 {
+    if (is_array($path)) {
+        $path = implode('/', array_filter($path));
+    } elseif (! is_string($path)) {
+        $path = '';
+    }
+
     return web_url(cms_slug($path), $parameters, $language, $secure);
 }
 
@@ -149,11 +163,15 @@ function cms_url($path = '', array $parameters = [], $language = null, $secure =
  *
  * @param  string  $name
  * @param  mixed  $parameters
- * @param  mixed  $language
+ * @param  bool|string|null  $language
  * @param  bool  $absolute
  * @return string
  */
-function web_route($name, $parameters = [], $language = null, $absolute = true)
+function web_route(
+    string      $name,
+    mixed       $parameters = [],
+    bool|string $language = null,
+    bool        $absolute = true): string
 {
     return language_to_url(route($name, $parameters, $absolute), $language);
 }
@@ -161,13 +179,17 @@ function web_route($name, $parameters = [], $language = null, $absolute = true)
 /**
  * Generate a web URL.
  *
- * @param  string|array  $path
+ * @param  array|string  $path
  * @param  array  $parameters
- * @param  mixed  $language
+ * @param  bool|string|null  $language
  * @param  bool|null  $secure
  * @return string
  */
-function web_url($path = '', array $parameters = [], $language = null, $secure = null)
+function web_url(
+    array|string $path = '',
+    array        $parameters = [],
+    bool|string  $language = null,
+    bool         $secure = null): string
 {
     if (is_array($path)) {
         $path = implode('/', array_filter($path));
@@ -189,7 +211,7 @@ function web_url($path = '', array $parameters = [], $language = null, $secure =
  * @param  string  $basePrefix
  * @return string
  */
-function query_string(array $parameters, $basePrefix = '?')
+function query_string(array $parameters, string $basePrefix = '?'): string
 {
     if (count($parameters) == 0) {
         return '';
@@ -212,10 +234,10 @@ function query_string(array $parameters, $basePrefix = '?')
  * Prefix a language to the path.
  *
  * @param  string  $path
- * @param  string|null  $language
+ * @param  bool|string|null  $language
  * @return string
  */
-function language_prefix($path, $language = null)
+function language_prefix(string $path, bool|string $language = null): string
 {
     $path = trim($path, '/');
 
@@ -235,15 +257,11 @@ function language_prefix($path, $language = null)
  * Add language to the url.
  *
  * @param  string  $url
- * @param  string|null  $language
+ * @param  bool|string|null  $language
  * @return string
  */
-function language_to_url($url, $language = null)
+function language_to_url(string $url, bool|string $language = null): string
 {
-    if (is_null($url)) {
-        return null;
-    }
-
     if (! ($withLanguage = ! empty($language)) && ! language_in_url()) {
         return trim($url, '/');
     }
@@ -291,24 +309,29 @@ function language_to_url($url, $language = null)
  * @param  string  $name
  * @return string
  */
-function model_path($name)
+function model_path(string $name): string
 {
-    return 'Models\\' . ucfirst(Str::singular($name));
+    return 'App\\Models\\' . ucfirst(Str::singular($name));
 }
 
 /**
  * Make a nestable eloquent models tree.
  *
- * @param  \Illuminate\Support\Collection|array  $items
+ * @param  array|\Illuminate\Support\Collection  $items
  * @param  string  $slug
  * @param  int  $parentId
  * @param  string  $parentKey
  * @param  string  $key
- * @return \Illuminate\Support\Collection|array
+ * @return \Illuminate\Support\Collection
  *
  * @throws \InvalidArgumentException
  */
-function make_model_sub_items($items, $slug = '', $parentId = 0, $parentKey = 'parent_id', $key = 'id')
+function make_model_sub_items(
+    array|Collection $items,
+    string           $slug = '',
+    int              $parentId = 0,
+    string           $parentKey = 'parent_id',
+    string           $key = 'id'): Collection
 {
     if (! $items instanceof Collection && ! is_array($items)) {
         throw new InvalidArgumentException(
@@ -321,11 +344,7 @@ function make_model_sub_items($items, $slug = '', $parentId = 0, $parentKey = 'p
     $prevSlug = $slug;
 
     foreach ($items as $item) {
-        if (! $item instanceof Model) {
-            return $items;
-        }
-
-        if ($item->$parentKey != $parentId) {
+        if (! $item instanceof Model || $item->$parentKey != $parentId) {
             continue;
         }
 
@@ -345,7 +364,7 @@ function make_model_sub_items($items, $slug = '', $parentId = 0, $parentKey = 'p
  * @param  mixed  $item
  * @return bool
  */
-function has_model_sub_items($item)
+function has_model_sub_items(mixed $item): bool
 {
     return $item instanceof Model
         && $item->sub_items instanceof Collection
@@ -356,15 +375,13 @@ function has_model_sub_items($item)
  * Get the instance from the container.
  *
  * @param  string  $instance
- * @param  mixed  $default
+ * @param  mixed|null  $default
  * @return mixed
  */
-function app_instance($instance, $default = null)
+function app_instance(string $instance, mixed $default = null): mixed
 {
-    $app = app();
-
-    if ($app->resolved($instance)) {
-        return $app[$instance];
+    if (app()->resolved($instance)) {
+        return app($instance);
     }
 
     return $default;
@@ -378,12 +395,12 @@ function app_instance($instance, $default = null)
  * @param  mixed  $input
  * @return array
  */
-function fill_data($result, $message = null, $input = null)
+function fill_data(string $result, string $message = null, mixed $input = null): array
 {
     return [
-        'result'  => $result,
+        'result' => $result,
         'message' => $message,
-        'input'   => $input
+        'input'=> $input
     ];
 }
 
@@ -391,10 +408,10 @@ function fill_data($result, $message = null, $input = null)
  * Fill a database error message.
  *
  * @param  string  $key
- * @param  array   $parameters
+ * @param  array  $parameters
  * @return array
  */
-function fill_db_data($key, array $parameters = [])
+function fill_db_data(string $key, array $parameters = []): array
 {
     return fill_data('error', trans('database.error.' . $key, $parameters));
 }
@@ -404,9 +421,9 @@ function fill_db_data($key, array $parameters = [])
  *
  * @param  string|null  $key
  * @param  mixed  $default
- * @return string|array
+ * @return array|string
  */
-function cms_config($key = null, $default = [])
+function cms_config(string $key = null, mixed $default = []): array|string
 {
     if (! is_null($key)) {
         return config('cms.' . $key, $default);
@@ -420,9 +437,9 @@ function cms_config($key = null, $default = [])
  *
  * @param  string|null  $key
  * @param  mixed  $default
- * @return string|array
+ * @return array|string
  */
-function cms_pages($key = null, $default = [])
+function cms_pages(string $key = null, mixed $default = []): array|string
 {
     if (! is_null($key)) {
         return cms_config('pages.' . $key, $default);
@@ -436,9 +453,9 @@ function cms_pages($key = null, $default = [])
  *
  * @param  string|null  $key
  * @param  mixed  $default
- * @return string|array
+ * @return array|string
  */
-function cms_collections($key = null, $default = [])
+function cms_collections(string $key = null, mixed $default = []): array|string
 {
     if (! is_null($key)) {
         return cms_config('collections.' . $key, $default);
@@ -452,9 +469,9 @@ function cms_collections($key = null, $default = [])
  *
  * @param  string|null  $key
  * @param  mixed  $default
- * @return array
+ * @return array|string
  */
-function deep_collection($key = null, $default = [])
+function deep_collection(string $key = null, mixed $default = []): array|string
 {
     if (! is_null($key)) {
         return cms_config('deep_collections.' . $key, $default);
@@ -467,10 +484,10 @@ function deep_collection($key = null, $default = [])
  * Get the CMS user role(s).
  *
  * @param  string|null  $key
- * @param  mixed  $default
- * @return string|array
+ * @param  mixed|null  $default
+ * @return array|string
  */
-function user_roles($key = null, $default = null)
+function user_roles(string $key = null, mixed $default = null): array|string
 {
     if (! is_null($key)) {
         return cms_config('user_roles.' . $key, $default);
@@ -483,10 +500,10 @@ function user_roles($key = null, $default = null)
  * Get the CMS icon name.
  *
  * @param  string  $key
- * @param  mixed  $default
- * @return string|array
+ * @param  mixed|null  $default
+ * @return array|string
  */
-function icon_type($key, $default = null)
+function icon_type(string $key, mixed $default = null): array|string
 {
     return cms_config('icons.' . $key, $default);
 }
@@ -498,7 +515,7 @@ function icon_type($key, $default = null)
  * @param  string  $type
  * @return string
  */
-function glide($path, $type)
+function glide(string $path, string $type): string
 {
     $files = (array) config('elfinder.dir');
     $files = current($files) . '/';
@@ -521,7 +538,7 @@ function glide($path, $type)
  * @param  int  $precision
  * @return string
  */
-function format_bytes($bytes, $precision = 2)
+function format_bytes(int $bytes, int $precision = 2): string
 {
     $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
@@ -537,18 +554,22 @@ function format_bytes($bytes, $precision = 2)
 /**
  * Cut the text after the limit and breakpoint.
  *
- * @param  string  $string
+ * @param  string|null  $string
  * @param  int  $limit
  * @param  string  $break
  * @param  string  $end
  * @return string
  */
-function text_limit($string, $limit = 100, $break = '.', $end = '')
+function text_limit(string $string = null, int $limit = 100, string $break = '.', string $end = ''): ?string
 {
+    if (! $string) {
+        return $string;
+    }
+
     $string = str_replace('&nbsp;', ' ', strip_tags($string));
     $string = preg_replace('/\s\s+/', ' ', $string);
 
-    if (($stringLength = mb_strlen($string, 'UTF-8')) <= $limit) {
+    if (mb_strlen($string, 'UTF-8') <= $limit) {
         return $string;
     }
 
@@ -569,7 +590,7 @@ function text_limit($string, $limit = 100, $break = '.', $end = '')
  * @param  bool  $strict
  * @return string
  */
-function get_youtube_id($url, array $allowQueryStrings = [], $strict = false)
+function get_youtube_id(string $url, array $allowQueryStrings = [], bool $strict = false): string
 {
     $parts = parse_url($url);
 
@@ -605,7 +626,7 @@ function get_youtube_id($url, array $allowQueryStrings = [], $strict = false)
  * @param  array  $allowQueryStrings
  * @return string
  */
-function get_youtube_embed($url, array $allowQueryStrings = [])
+function get_youtube_embed(string $url, array $allowQueryStrings = []): string
 {
     return 'https://www.youtube.com/embed/' . get_youtube_id($url, $allowQueryStrings);
 }
@@ -615,7 +636,7 @@ function get_youtube_embed($url, array $allowQueryStrings = [])
  *
  * @return void
  */
-function log_executed_db_queries()
+function log_executed_db_queries(): void
 {
     $filename = storage_path('logs/queries.log');
     $separator = '------------------------------' . PHP_EOL;

@@ -4,6 +4,8 @@ namespace App\Listeners\Web;
 
 use App\Models\Eloquent\Model;
 use App\Support\TranslationCollection;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\View\View;
 
 class WebCurrentPageEventListener
 {
@@ -13,7 +15,7 @@ class WebCurrentPageEventListener
      * @param  \Illuminate\Contracts\View\View  $event
      * @return void
      */
-    public function onCurrentPageComposer($event)
+    public function onCurrentPageComposer(View $event): void
     {
         $current = $event->current;
 
@@ -73,11 +75,11 @@ class WebCurrentPageEventListener
      * @param  \Illuminate\Contracts\View\View  $event
      * @return string
      */
-    protected function getPath($event)
+    protected function getPath(View $event): string
     {
         $path = trim($event->app->request->getPathInfo(), '/');
 
-        if (strpos($path, $language = language()) === 0) {
+        if (str_starts_with($path, $language = language())) {
             $path = substr($path, strlen($language) + 1);
         }
 
@@ -90,7 +92,7 @@ class WebCurrentPageEventListener
      * @param  \Illuminate\Events\Dispatcher  $events
      * @return void
      */
-    public function subscribe($events)
+    public function subscribe(Dispatcher $events): void
     {
         $events->listen([
             'composing: web.app',

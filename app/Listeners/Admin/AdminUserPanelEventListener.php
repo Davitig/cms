@@ -2,6 +2,9 @@
 
 namespace App\Listeners\Admin;
 
+use Illuminate\Contracts\View\View;
+use Illuminate\Events\Dispatcher;
+
 class AdminUserPanelEventListener
 {
     /**
@@ -10,7 +13,7 @@ class AdminUserPanelEventListener
      * @param  \Illuminate\Contracts\View\View  $event
      * @return void
      */
-    public function onUserPanelComposer($event)
+    public function onUserPanelComposer(View $event): void
     {
         $event->sitemapXmlTime = null;
 
@@ -25,7 +28,7 @@ class AdminUserPanelEventListener
      * @param  \Illuminate\Events\Dispatcher  $events
      * @return void
      */
-    public function subscribe($events)
+    public function subscribe(Dispatcher $events): void
     {
         $events->listen([
                 'composing: admin._partials.user',

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Eloquent\Builder;
 use App\Models\Eloquent\Model;
 
 class Permission extends Model
@@ -27,36 +28,36 @@ class Permission extends Model
      *
      * @var array
      */
-    protected $notUpdatable = [];
+    protected array $notUpdatable = [];
 
     /**
-     * Route group names that are hidden from list.
+     * Route group names that are hidden from a list.
      *
      * @var array
      */
-    public static $routeGroupsHidden = ['cmsUsers', 'permissions', 'login', 'logout', 'lockscreen'];
+    public static array $routeGroupsHidden = ['cmsUsers', 'permissions', 'login', 'logout', 'lockscreen'];
 
     /**
-     * Route names that are hidden from list.
+     * Route names that are hidden from a list.
      *
      * @var array
      */
-    public static $routeNamesHidden = [];
+    public static array $routeNamesHidden = [];
 
     /**
      * Route names that are not allowed.
      *
      * @var array
      */
-    public static $routeNamesAllowed = ['cmsUsers.index', 'cmsUsers.edit', 'cmsUsers.show', 'cmsUsers.update'];
+    public static array $routeNamesAllowed = ['cmsUsers.index', 'cmsUsers.edit', 'cmsUsers.show', 'cmsUsers.update'];
 
     /**
      * Get the list of permissions by user id.
      *
      * @param  string  $value
-     * @return $this
+     * @return \App\Models\Eloquent\Builder|static
      */
-    public function role($value)
+    public function role(string $value): Builder|static
     {
         return $this->where('role', $value);
     }
@@ -67,7 +68,7 @@ class Permission extends Model
      * @param  string  $routeName
      * @return bool
      */
-    public function hasAccess($routeName)
+    public function hasAccess(string $routeName): bool
     {
         return $this->where('route_name', $routeName)->exists();
     }
@@ -78,7 +79,7 @@ class Permission extends Model
      * @param  int  $value
      * @return bool|null
      */
-    public function clear($value)
+    public function clear(int $value): ?bool
     {
         return $this->role($value)->delete();
     }

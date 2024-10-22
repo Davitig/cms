@@ -34,9 +34,10 @@ return new class extends Migration
             $table->string('meta_desc')->nullable();
             $table->timestamps();
 
-            $table->foreign('article_id')->references('id')->on('articles')->onDelete('cascade');
-            $table->foreign('language_id')->references('id')->on('languages');
             $table->unique(['article_id', 'language_id']);
+            $table->foreign('article_id')->references('id')
+                ->on('articles')->onDelete('cascade');
+            $table->foreign('language_id')->references('id')->on('languages');
         });
     }
 

@@ -28,9 +28,10 @@ return new class extends Migration
             $table->string('description', 800)->nullable();
             $table->timestamps();
 
-            $table->foreign('slider_id')->references('id')->on('slider')->onDelete('cascade');
-            $table->foreign('language_id')->references('id')->on('languages');
             $table->unique(['slider_id', 'language_id']);
+            $table->foreign('slider_id')->references('id')
+                ->on('slider')->onDelete('cascade');
+            $table->foreign('language_id')->references('id')->on('languages');
         });
     }
 

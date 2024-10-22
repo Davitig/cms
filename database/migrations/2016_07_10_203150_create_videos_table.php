@@ -29,9 +29,9 @@ return new class extends Migration
             $table->string('title');
             $table->timestamps();
 
+            $table->unique(['video_id', 'language_id']);
             $table->foreign('video_id')->references('id')->on('videos')->onDelete('cascade');
             $table->foreign('language_id')->references('id')->on('languages');
-            $table->unique(['video_id', 'language_id']);
         });
     }
 

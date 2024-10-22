@@ -27,5 +27,5 @@ class Menu extends Model
      *
      * @var array
      */
-    protected $notUpdatable = [];
+    protected array $notUpdatable = [];
 }

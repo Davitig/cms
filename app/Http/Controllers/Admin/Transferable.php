@@ -13,13 +13,15 @@ trait Transferable
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     *
+     * @throws \Throwable
      */
-    public function transfer(Request $request, $id)
+    public function transfer(Request $request, int $id)
     {
         $input = $request->all(['id', 'column', 'column_value', 'recursive']);
 
         if (! $this->model instanceof Model) {
-            return $this->getMovableResponse($request, 'error', 'Model not found');
+            return $this->getTransferResponse($request, 'error', 'Model not found');
         }
 
         if ($id != $input['column_value']) {
@@ -42,7 +44,7 @@ trait Transferable
             });
         }
 
-        return $this->getMovableResponse($request, 'success', trans('general.updated'));
+        return $this->getTransferResponse($request, 'success', trans('general.updated'));
     }
 
     /**
@@ -50,10 +52,10 @@ trait Transferable
      *
      * @param  \App\Models\Eloquent\Model  $model
      * @param  string  $column
-     * @param  int     $columnValue
+     * @param  int  $columnValue
      * @return void
      */
-    protected function transferRecursively(Model $model, $column, $columnValue)
+    protected function transferRecursively(Model $model, string $column, int $columnValue)
     {
         $items = $this->model->where('parent_id', $model->id)->get(['id']);
 
@@ -67,19 +69,17 @@ trait Transferable
     }
 
     /**
-     * Get the movable response.
+     * Get the transfer response.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  string  $type
      * @param  string|null  $message
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    protected function getMovableResponse(Request $request, $type, $message = null)
+    protected function getTransferResponse(Request $request, string $type, string $message = null)
     {
         if ($request->expectsJson()) {
-            return response()->json(fill_data(
-                $type, $message
-            ));
+            return response()->json(fill_data($type, $message));
         }
 
         return redirect()->back()->with('alert', fill_data($type, $message));

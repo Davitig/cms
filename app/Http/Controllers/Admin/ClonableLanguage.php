@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\_Language;
-use App\Models\Page;
 
 trait ClonableLanguage
 {
@@ -13,7 +12,7 @@ trait ClonableLanguage
      * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function cloneLanguage($id)
+    public function cloneLanguage(int $id)
     {
         $_languageModel = (new _Language($this->model));
 

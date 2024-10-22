@@ -13,7 +13,7 @@ class WebPhotosController extends Controller
      *
      * @var \App\Models\Photo
      */
-    protected $model;
+    protected Photo $model;
 
     /**
      * Create a new controller instance.

@@ -14,7 +14,7 @@ class WebFaqController extends Controller
      *
      * @var \App\Models\Faq
      */
-    protected $model;
+    protected Faq $model;
 
     /**
      * Create a new controller instance.

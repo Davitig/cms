@@ -39,21 +39,21 @@ class Event extends Model
      *
      * @var array
      */
-    protected $notUpdatable = [];
+    protected array $notUpdatable = [];
 
     /**
      * Related database table name used by the Language model.
      *
      * @var string
      */
-    protected $languageTable = 'event_languages';
+    protected string $languageTable = 'event_languages';
 
     /**
      * The attributes that are mass assignable for the Language model.
      *
      * @var array
      */
-    protected $languageFillable = [
+    protected array $languageFillable = [
         'event_id', 'language_id', 'title', 'description', 'content', 'meta_title', 'meta_desc'
     ];
 
@@ -62,7 +62,7 @@ class Event extends Model
      *
      * @var array
      */
-    protected $languageNotUpdatable = [
+    protected array $languageNotUpdatable = [
         'event_id', 'language_id'
     ];
 }

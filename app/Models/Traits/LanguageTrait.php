@@ -3,6 +3,7 @@
 namespace App\Models\Traits;
 
 use App\Models\_Language;
+use App\Models\Eloquent\Builder;
 use Illuminate\Support\Str;
 
 trait LanguageTrait
@@ -12,14 +13,14 @@ trait LanguageTrait
      *
      * @var \App\Models\_Language
      */
-    protected $languageModel;
+    protected _Language $languageModel;
 
     /**
      * Create a new language instance, related to this model.
      *
      * @return $this
      */
-    public function setLanguage()
+    public function setLanguage(): static
     {
         $this->languageModel = new _Language($this);
 
@@ -31,7 +32,7 @@ trait LanguageTrait
      *
      * @return \App\Models\_Language
      */
-    public function getLanguage()
+    public function getLanguage(): _Language
     {
         return $this->languageModel;
     }
@@ -41,7 +42,7 @@ trait LanguageTrait
      *
      * @return string
      */
-    public function getLanguageTable()
+    public function getLanguageTable(): string
     {
         return $this->languageTable;
     }
@@ -51,7 +52,7 @@ trait LanguageTrait
      *
      * @return array
      */
-    public function getLanguageFillable()
+    public function getLanguageFillable(): array
     {
         return (array) $this->languageFillable;
     }
@@ -61,7 +62,7 @@ trait LanguageTrait
      *
      * @return array
      */
-    public function getLanguageNotUpdatable()
+    public function getLanguageNotUpdatable(): array
     {
         return (array) $this->languageNotUpdatable;
     }
@@ -69,11 +70,11 @@ trait LanguageTrait
     /**
      * Get the updatable attributes for the _Language model.
      *
-     * @param  array   $attributes
-     * @param  string  $exclude
+     * @param  array  $attributes
+     * @param  string|null  $exclude
      * @return array
      */
-    public function getLanguageUpdatable(array $attributes = [], $exclude = null)
+    public function getLanguageUpdatable(array $attributes = [], string $exclude = null): array
     {
         if (is_null($exclude)) {
             $notUpdatable = $this->getLanguageNotUpdatable();
@@ -91,11 +92,12 @@ trait LanguageTrait
     /**
      * Add a "*_languages" join to the query.
      *
-     * @param  mixed  $currentLang
-     * @param  array  $columns
+     * @param  bool|string  $currentLang
+     * @param  array|string  $columns
      * @return \App\Models\Eloquent\Builder
      */
-    public function joinLanguage($currentLang = true, array $columns = [])
+    public function joinLanguage(bool|string $currentLang = true, array|string $columns = []):
+    Builder
     {
         $table = $this->getTable();
         $languageTable = $this->getLanguageTable();
@@ -110,7 +112,7 @@ trait LanguageTrait
                             language($currentLang)['id'] ?? $currentLang
                         );
                     });
-            })->addSelect(array_merge($columns ?: ["{$languageTable}.*"], [
+            })->addSelect(array_merge(((array) $columns) ?: ["{$languageTable}.*"], [
             "{$languageTable}.id as {$languageKey}", "{$table}.*"
         ]))->selectSub(function ($q) use ($languageTable) {
             return $q->from('languages')
@@ -124,7 +126,7 @@ trait LanguageTrait
      *
      * @return \App\Models\Eloquent\Builder
      */
-    public function currentLanguage()
+    public function currentLanguage(): Builder
     {
         return $this->where("{$this->getLanguageTable()}.language_id", language(true, 'id'));
     }
@@ -132,20 +134,20 @@ trait LanguageTrait
     /**
      * Update the Eloquent model with its related _Language model.
      *
-     * @param  array   $attributes
-     * @param  array   $options
-     * @param  string  $exclude
-     * @return int
+     * @param  array  $attributes
+     * @param  array  $options
+     * @param  string|null  $exclude
+     * @return bool
      */
-    public function update(array $attributes = [], array $options = [], $exclude = null)
+    public function update(array $attributes = [], array $options = [], string $exclude = null): bool
     {
-        parent::update($attributes, $options, $exclude);
+        $result = parent::update($attributes, $options, $exclude);
 
-        $attributes = $this->getLanguageUpdatable($attributes, $exclude);
-
-        return $this->languageModel->where($this->getForeignKey(), $this->getKey())
+        $this->languageModel->where($this->getForeignKey(), $this->getKey())
             ->where('language_id', language(true, 'id'))
-            ->update($attributes);
+            ->update($this->getLanguageUpdatable($attributes, $exclude));
+
+        return $result;
     }
 
     /**
@@ -154,7 +156,7 @@ trait LanguageTrait
      * @param  array  $attributes
      * @return array
      */
-    protected function createLanguage(array $attributes = [])
+    protected function createLanguage(array $attributes = []): array
     {
         $newLanguages = [];
 

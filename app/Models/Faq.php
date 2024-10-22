@@ -38,21 +38,21 @@ class Faq extends Model
      *
      * @var array
      */
-    protected $notUpdatable = [];
+    protected array $notUpdatable = [];
 
     /**
      * Related database table name used by the Language model.
      *
      * @var string
      */
-    protected $languageTable = 'faq_languages';
+    protected string $languageTable = 'faq_languages';
 
     /**
      * The attributes that are mass assignable for the Language model.
      *
      * @var array
      */
-    protected $languageFillable = [
+    protected array $languageFillable = [
         'faq_id', 'language_id', 'title', 'description'
     ];
 
@@ -61,7 +61,7 @@ class Faq extends Model
      *
      * @var array
      */
-    protected $languageNotUpdatable = [
+    protected array $languageNotUpdatable = [
         'faq_id', 'language_id'
     ];
 }

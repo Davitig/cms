@@ -15,20 +15,20 @@ class WebGlideServerController extends Controller
      *
      * @var \League\Glide\Server
      */
-    protected $server;
+    protected Server $server;
 
     /**
      * The Request instance.
      *
      * @var \Illuminate\Http\Request
      */
-    protected $request;
+    protected Request $request;
 
     /**
      * Create a new controller instance.
      *
-     * @param  \League\Glide\Server $server
-     * @param  \Illuminate\Http\Request $request
+     * @param  \League\Glide\Server  $server
+     * @param  \Illuminate\Http\Request  $request
      * @return void
      */
     public function __construct(Server $server, Request $request)
@@ -41,11 +41,11 @@ class WebGlideServerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Illuminate\Contracts\Config\Repository $config
-     * @param  string $path
+     * @param  \Illuminate\Contracts\Config\Repository  $config
+     * @param  string  $path
      * @return void
      */
-    public function show(Config $config, $path)
+    public function show(Config $config, string $path)
     {
         $settings = $config['web.glide.' . $this->request->get('type')];
 
@@ -55,7 +55,7 @@ class WebGlideServerController extends Controller
 
         try {
             $this->server->outputImage($path, $settings);
-        } catch (Exception $e) {
+        } catch (Exception) {
             abort(404);
         }
     }

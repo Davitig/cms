@@ -18,7 +18,11 @@ use Illuminate\Filesystem\FilesystemAdapter;
 class ElfinderController extends Elfinder
 {
     /**
-     * {@inheritDoc}
+     * Show connector.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Exception
      */
     public function showConnector()
     {

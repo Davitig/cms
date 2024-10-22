@@ -13,7 +13,7 @@ class WebVideosController extends Controller
      *
      * @var \App\Models\Video
      */
-    protected $model;
+    protected Video $model;
 
     /**
      * Create a new controller instance.

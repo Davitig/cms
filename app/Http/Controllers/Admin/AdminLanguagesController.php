@@ -4,28 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\LanguageRequest;
-use Illuminate\Http\Request;
 use App\Models\Language;
+use Illuminate\Http\Request;
 
 class AdminLanguagesController extends Controller
 {
-    /**
-     * The Language instance.
-     *
-     * @var \App\Models\Language
-     */
-    protected $model;
-
     /**
      * Create a new controller instance.
      *
      * @param  \App\Models\Language  $model
      * @return void
      */
-    public function __construct(Language $model)
-    {
-        $this->model = $model;
-    }
+    public function __construct(protected Language $model) {}
 
     /**
      * Display a listing of the resource.
@@ -81,7 +71,7 @@ class AdminLanguagesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         $data['current'] = $this->model->findOrFail($id);
 
@@ -95,7 +85,7 @@ class AdminLanguagesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function update(LanguageRequest $request, $id)
+    public function update(LanguageRequest $request, int $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -116,7 +106,7 @@ class AdminLanguagesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $this->model->destroy($id);
 

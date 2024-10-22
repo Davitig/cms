@@ -26,12 +26,10 @@ return new class extends Migration
             $table->string('value');
             $table->timestamps();
 
-            $table->foreign('translation_id')
-                ->references('id')
-                ->on('translations')
-                ->onDelete('cascade');
-            $table->foreign('language_id')->references('id')->on('languages');
             $table->unique(['translation_id', 'language_id']);
+            $table->foreign('translation_id')->references('id')
+                ->on('translations')->onDelete('cascade');
+            $table->foreign('language_id')->references('id')->on('languages');
         });
     }
 
