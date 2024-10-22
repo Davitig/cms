@@ -397,39 +397,16 @@ class Builder extends EloquentBuilder
     }
 
     /**
-     * Dynamically retrieve attributes on the model.
-     *
-     * @param  string  $key
-     * @return mixed
-     */
-    public function __get($key)
-    {
-        return $this->query->$key;
-    }
-
-    /**
      * {@inheritDoc}
-     * @throws \ReflectionException
      */
     public function __call($method, $parameters)
     {
-        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
-
-        $possibleLoop = in_array($method, [
-            $backtrace[2]['function'], $backtrace[3]['function'], $backtrace[4]['function']
-        ]);
-
-        if (! $possibleLoop
-            && method_exists($this->model, $method)
-            && (new ReflectionMethod($this->model, $method))->isPublic()
-        ) {
+        if (method_exists($this->model, $method)) {
             $this->model->setEloquentBuilder($this);
 
             return call_user_func_array([$this->model, $method], $parameters);
         }
 
-        $result = call_user_func_array([$this->query, $method], $parameters);
-
-        return in_array(strtolower($method), $this->passthru) ? $result : $this;
+        return parent::__call($method, $parameters);
     }
 }
