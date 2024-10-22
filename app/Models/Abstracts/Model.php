@@ -201,23 +201,4 @@ abstract class Model extends BaseModel
 
         return parent::update($attributes, $options);
     }
-
-    /**
-     * Delete the model from the database.
-     *
-     * @param  int|null  $id
-     * @return bool|null
-     *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     */
-    public function delete($id = null)
-    {
-        if (is_null($id)) {
-            return parent::delete();
-        }
-
-        if (! is_null($model = $this->find($id))) {
-            return $model->delete();
-        }
-    }
 }

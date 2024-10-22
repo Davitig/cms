@@ -100,7 +100,7 @@ class AdminCalendarController extends Controller
     {
         $id = $this->request->get('id');
 
-        $result = $this->model->delete($id);
+        $result = $this->model->whereKey($id)->delete();
 
         if ($this->request->expectsJson()) {
             return response()->json($result);

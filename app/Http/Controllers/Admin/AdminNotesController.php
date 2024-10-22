@@ -111,7 +111,7 @@ class AdminNotesController extends Controller
     {
         $id = $this->request->get('id');
 
-        $model = $this->model->delete($id);
+        $model = $this->model->whereKey($id)->delete();
 
         if ($this->request->expectsJson()) {
             return response()->json($model);
