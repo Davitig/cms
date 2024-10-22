@@ -46,48 +46,50 @@ trait NestableTrait
      * Get sibling models.
      *
      * @param  array  $columns
+     * @param  int|null  $id
+     * @param  int|null  $parentId
      * @param  bool|int  $recursive
-     * @param  bool  $self
      * @return \Illuminate\Support\Collection
      */
-    public function getSiblingModels($columns = ['*'], $recursive = false, $self = true)
+    public function getSiblingModels($columns = ['*'], $parentId = null, $id = null, $recursive = false)
     {
-        if (! $this->parent_id) {
+        if (! ($parentId = $parentId ?: $this->parent_id)
+            || ! ($id = $id ?: $this->getKey())
+        ) {
             return $this->newCollection();
         }
 
-        $models = $this->when(! $self, function ($q) {
-            return $q->where('id', '<>', $this->getKey());
-        })->forPublic()->parentId($this->parent_id)->positionAsc()->get($columns);
+        $models = $this->forPublic()
+            ->parentId($parentId)
+            ->where('id', '<>', $id)
+            ->positionAsc()
+            ->get($columns);
 
-        if ($self && $models->count() > 1) {
+        if ($models->count() > 1) {
             return $recursive ? $models->each(function ($item) use ($columns, $recursive) {
                 $item->subModels = $this->getSubModels($columns, $recursive, $item->id);
             }) : $models;
-        } else {
-            return $models->make();
         }
+
+        return $models->make();
     }
 
     /**
      * Get sub models.
      *
      * @param  array  $columns
+     * @param  int|null  $parentId
      * @param  bool|int  $recursive
-     * @param  int|null  $value
-     * @param  string  $key
      * @return \Illuminate\Support\Collection
      */
-    public function getSubModels($columns = ['*'], $recursive = false, $value = null, $key = 'parent_id')
+    public function getSubModels($columns = ['*'], $parentId = null, $recursive = false)
     {
-        if (! is_array($columns)) {
-            $columns = [$columns];
-        }
+        $columns = (array) $columns;
 
         $columns = current($columns) == '*' ? $columns : array_merge($columns, ['id']);
 
         $models = $this->forPublic()->where(
-            $key, $value ?: $this->getKey()
+            'parent_id', $parentId ?: $this->getKey()
         )->positionAsc()->get($columns);
 
         if (is_int($recursive) && $recursive > 0) {
@@ -97,6 +99,39 @@ trait NestableTrait
         return $recursive ? $models->each(function ($item) use ($columns, $recursive) {
             $item->subModels = $this->getSubModels($columns, $recursive, $item->id);
         }) : $models;
+    }
+
+    /**
+     * Determine if the model has a sibling model.
+     *
+     * @param  int|null  $parentId
+     * @param  int|null  $id
+     * @return bool
+     */
+    public function hasSiblingModel($parentId = null, $id = null)
+    {
+        if (! ($parentId = $parentId ?: $this->parent_id)
+            || ! ($id = $id ?: $this->getKey())
+        ) {
+            return false;
+        }
+
+        return $this->parentId($parentId)->where('id', '<>', $id)->exists();
+    }
+
+    /**
+     * Determine if the model has a submodel.
+     *
+     * @param  int|null  $parentId
+     * @return bool
+     */
+    public function hasSubModel($parentId = null)
+    {
+        if (! ($parentId = $parentId ?: $this->getKey())) {
+            return false;
+        }
+
+        return $this->parentId($parentId)->exists();
     }
 
     /**

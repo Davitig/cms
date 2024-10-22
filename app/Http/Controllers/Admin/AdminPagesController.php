@@ -185,7 +185,7 @@ class AdminPagesController extends Controller
      */
     public function destroy($menuId, $id)
     {
-        if ($this->model->hasSubPage($id)) {
+        if ($this->model->hasSubModel($id)) {
             if (request()->expectsJson()) {
                 return response()->json(fill_data(
                     'error', trans('database.error.1451')

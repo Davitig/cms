@@ -88,39 +88,6 @@ class Page extends Model
     }
 
     /**
-     * Determine if the model has a subpage.
-     *
-     * @param  int|null  $id
-     * @return bool
-     */
-    public function hasSubPage($id = null)
-    {
-        if (! ($id = $id ?: $this->getKey())) {
-            return false;
-        }
-
-        return $this->parentId($id)->exists();
-    }
-
-    /**
-     * Determine if the model has a sibling page.
-     *
-     * @param  int|null  $parentId
-     * @param  int|null  $id
-     * @return bool
-     */
-    public function hasSiblingPage($parentId = null, $id = null)
-    {
-        if (! ($parentId = $parentId ?: $this->parent_id)
-            || ! ($id = $id ?: $this->getKey())
-        ) {
-            return false;
-        }
-
-        return $this->parentId($parentId)->where('id', '<>', $id)->exists();
-    }
-
-    /**
      * Add a query, which is valid for routing.
      *
      * @param  string  $slug
