@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Abstracts\Model;
+use App\Models\Eloquent\Model;
 
 class _Language extends Model
 {
@@ -16,7 +16,7 @@ class _Language extends Model
     /**
      * Create a new Language model instance.
      *
-     * @param  \App\Models\Abstracts\Model|null  $model
+     * @param  \App\Models\Eloquent\Model|null  $model
      * @param  array  $attributes
      * @return void
      */

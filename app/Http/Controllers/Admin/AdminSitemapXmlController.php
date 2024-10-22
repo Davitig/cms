@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Eloquent\Model;
+use App\Models\Page;
 use DOMDocument;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use App\Models\Abstracts\Model;
-use App\Models\Page;
 use Sabre\Xml\Service as XmlService;
 
 class AdminSitemapXmlController extends Controller
@@ -207,7 +207,7 @@ class AdminSitemapXmlController extends Controller
      * Get the urls.
      *
      * @param  \App\Models\Page $page
-     * @param  \App\Models\Abstracts\Model $page
+     * @param  \App\Models\Eloquent\Model $page
      * @return array
      */
     protected function getUrls(Page $page, Model $item)

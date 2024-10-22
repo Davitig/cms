@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Base\User as Model;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
-use App\Models\Abstracts\User as Model;
 
 class CmsUser extends Model
 {
@@ -121,7 +121,7 @@ class CmsUser extends Model
      * Filter a query by specific parameters.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function adminFilter(Request $request)
     {

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Abstracts\Model;
+use App\Models\Eloquent\Model;
 use App\Models\Traits\FileableTrait;
 use App\Models\Traits\HasCollection;
 use App\Models\Traits\LanguageTrait;

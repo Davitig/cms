@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Abstracts\Model;
+use App\Models\Eloquent\Model;
 use App\Models\Traits\FileTrait;
 
 class PageFile extends Model
@@ -74,7 +74,7 @@ class PageFile extends Model
      * Add a where foreign id clause to the query.
      *
      * @param  int  $foreignId
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function byForeign($foreignId)
     {

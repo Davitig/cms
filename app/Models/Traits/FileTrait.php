@@ -52,7 +52,7 @@ trait FileTrait
      *
      * @param  int  $forignId
      * @param  mixed  $currentLang
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function forAdmin($forignId, $currentLang = true)
     {
@@ -66,7 +66,7 @@ trait FileTrait
      *
      * @param  int  $forignId
      * @param  mixed  $currentLang
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function forPublic($forignId, $currentLang = true)
     {
@@ -80,7 +80,7 @@ trait FileTrait
      * Add a where "visible" clause to the query.
      *
      * @param  int  $value
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function whereVisible($value = 1)
     {

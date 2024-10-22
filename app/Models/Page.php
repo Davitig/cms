@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Abstracts\Model;
+use App\Models\Eloquent\Model;
 use App\Models\Traits\FileableTrait;
 use App\Models\Traits\LanguageTrait;
 use App\Models\Traits\NestableTrait;
@@ -64,7 +64,7 @@ class Page extends Model
      * Build an admin query.
      *
      * @param  int  $menuId
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function forAdmin($menuId = null, $currentLang = true)
     {
@@ -80,7 +80,7 @@ class Page extends Model
      * Build a public query.
      *
      * @param  mixed  $currentLang
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function forPublic($currentLang = true)
     {
@@ -92,7 +92,7 @@ class Page extends Model
      *
      * @param  string  $slug
      * @param  int     $parentId
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function bySlugRoute($slug, $parentId)
     {

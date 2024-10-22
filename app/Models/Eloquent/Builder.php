@@ -1,53 +1,22 @@
 <?php
 
-namespace App\Models\Builder;
+namespace App\Models\Eloquent;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Query\JoinClause;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
 use InvalidArgumentException;
-use App\Models\Abstracts\Model;
-use ReflectionMethod;
 
 class Builder extends EloquentBuilder
 {
     /**
-     * The Model instance.
-     *
-     * @var \App\Models\Abstracts\Model
-     */
-    protected $model;
-
-    /**
-     * The column callbacks that must also be added to the pagination count query.
+     * The property subjects where prefixes will be applied.
      *
      * @var array
      */
-    protected $paginationColumnCallbacks = [];
-
-    /**
-     * The current query value binding properties.
-     *
-     * @var array
-     */
-    protected $bindingProperties = ['columns', 'from', 'joins', 'wheres'];
-
-    /**
-     * Create a new Eloquent query builder instance.
-     *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  \App\Models\Abstracts\Model  $model
-     * @return void
-     */
-    public function __construct(QueryBuilder $query, Model $model)
-    {
-        parent::__construct($query);
-
-        $this->model = $model;
-    }
+    protected $propertyPrefixes = ['columns', 'from', 'joins', 'wheres'];
 
     /**
      * {@inheritDoc}
@@ -91,10 +60,9 @@ class Builder extends EloquentBuilder
             throw new InvalidArgumentException;
         }
 
-        $not = $not ? 'not ' : '';
-
         return $this->selectRaw(
-            '(select '.$not.'exists('.$query.')) as '.$this->query->getGrammar()->wrap($as),
+            '(select '.($not ? 'not ' : '').'exists('.$query.')) as '
+            . $this->query->getGrammar()->wrap($as),
             $bindings
         );
     }
@@ -127,101 +95,64 @@ class Builder extends EloquentBuilder
      * @param  int|null  $value
      * @param  string|null  $column
      * @param  mixed  $currentLang
-     * @return mixed
+     * @return string|null
      */
     public function getFullSlug($value = null, $column = null, $currentLang = true)
     {
         if ($result = $this->fullSlug($value, $column, $currentLang)) {
             return $result->full_slug;
         }
+
+        return null;
     }
 
     /**
-     * Set model full slug.
+     * Find a model by its query or instantiate it.
      *
+     * @param  array  $columns
+     * @return \App\Models\Eloquent\Model
+     */
+    public function firstNew($columns = ['*'])
+    {
+        if (! is_null($model = $this->first($columns))) {
+            return $model;
+        }
+
+        return $this->newModelInstance();
+    }
+
+    /**
+     * Execute the query and get the first result attribute.
+     *
+     * @param  string  $attribute
      * @param  int|null  $value
      * @param  string|null  $column
-     * @param  mixed  $currentLang
-     * @return mixed
+     * @return string|null
      */
-    public function fullSlug($value = null, $column = null, $currentLang = true)
+    public function firstAttr($attribute, $value = null, $column = null)
     {
-        if ($result = $this->first()) {
-            return $result->fullSlug($value, $column, $currentLang);
-        }
+        return $this->when(! is_null($value), function ($q) use ($value, $column) {
+            return $q->where($column ?: $this->getModel()->getKeyName(), $value);
+        })->value($attribute);
     }
 
     /**
-     * Add new select to the paginate count query.
+     * Execute the query and get the first result attribute or throw an exception.
      *
-     * @param  \Closure  $callback
-     * @return $this
+     * @param  string  $attribute
+     * @param  int|null  $value
+     * @param  string|null  $column
+     * @return string|null
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function selectPaginate(Closure $callback)
+    public function firstAttrOrFail($attribute, $value = null, $column = null)
     {
-        $this->paginationColumnCallbacks[] = $callback;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null, $total = null)
-    {
-        $this->prefixColumnsOnJoin($columns);
-
-        if (! $this->paginationColumnCallbacks) {
-            return parent::paginate($perPage, $columns, $pageName, $page, $total);
+        if (is_null($attribute = $this->firstAttr($attribute, $value, $column))) {
+            throw (new ModelNotFoundException)->setModel(get_class($this));
         }
 
-        $columnsBackup = $this->query->columns;
-        $this->query->columns = null;
-
-        $selectBindingsBackup = $this->query->bindings['select'];
-        $this->query->bindings['select'] = [];
-
-        $results = $this->query->selectRaw('count(*) as aggregate')
-            ->when($this->paginationColumnCallbacks, function ($q, $values) {
-                foreach ($values as $callback) {
-                    $callback($q);
-                }
-
-                return $q;
-            })->get()->all();
-
-        if (isset($this->query->groups)) {
-            $total = count($results);
-        } elseif (! isset($results[0])) {
-            $total = 0;
-        } elseif (is_object($item = $results[0])) {
-            $total = (int) $item->aggregate;
-        } else {
-            $total = (int) array_change_key_case((array) $item)['aggregate'];
-        }
-
-        $this->query->columns = $columnsBackup;
-        $this->query->bindings['select'] = $selectBindingsBackup;
-
-        if ($total) {
-            $results = $this->forPage(
-                $page = $page ?: Paginator::resolveCurrentPage($pageName),
-                $perPage = $perPage ?: $this->model->getPerPage()
-            )->when($this->paginationColumnCallbacks, function ($q, $values) {
-                foreach ($values as $callback) {
-                    $callback($q);
-                }
-
-                return $q;
-            })->get($columns);
-        } else {
-            $results = $this->model->newCollection();
-        }
-
-        return new LengthAwarePaginator($results, $total, $perPage, $page, [
-            'path' => Paginator::resolveCurrentPath(),
-            'pageName' => $pageName,
-        ]);
+        return $attribute;
     }
 
     /**
@@ -268,22 +199,17 @@ class Builder extends EloquentBuilder
     /**
      * Prefix columns with the model table name if join clause is set.
      *
-     * @param  array  $columns
      * @return void
      */
-    protected function prefixColumnsOnJoin($columns = ['*'])
+    protected function prefixColumnsOnJoin()
     {
         if (! isset($this->query->joins)) {
             return;
         }
 
-        if (isset($columns[0]) && $columns[0] != '*') {
-            $this->query->columns = (array) $columns;
-        }
+        $properties = $this->propertyPrefixes;
 
-        $bindings = $this->bindingProperties;
-
-        foreach ($bindings as $i => $binding) {
+        foreach ($properties as $i => $binding) {
             if (! is_array($binding = $this->query->$binding)) {
                 continue;
             }
@@ -302,14 +228,14 @@ class Builder extends EloquentBuilder
                         }
 
                         if (isset($value->wheres[$key]['first'])
-                            && strpos($first = $value->wheres[$key]['first'], '.') === false
+                            && ! str_contains($first = $value->wheres[$key]['first'], '.')
                         ) {
                             $value->wheres[$key]['first'] = "{$this->query->from}.{$first}";
                         }
 
                         if (($secondExists = ! empty($value->wheres[$key]['second']))
                             && is_string($second = $value->wheres[$key]['second'])
-                            && strpos($second, '.') === false
+                            && ! str_contains($second, '.')
                         ) {
                             $value->wheres[$key]['second'] = "{$value->table}.{$second}";
                         } elseif (! $secondExists) {
@@ -317,20 +243,20 @@ class Builder extends EloquentBuilder
                         }
                     }
                 } elseif (is_string($value) && $value == 'id') {
-                    $this->query->{$bindings[$i]}[$bind] = $this->query->from . '.' . $value;
+                    $this->query->{$properties[$i]}[$bind] = $this->query->from . '.' . $value;
                 } elseif (is_array($value)
                     && isset($value['column'])
-                    && strpos($value['column'], '.') === false
+                    && ! str_contains($value['column'], '.')
                 ) {
                     $columns = array_merge(
-                        (array) array_values($this->model->getFillable()),
-                        (array) array_values($this->model->getDates())
+                        array_values($this->model->getFillable()),
+                        array_values($this->model->getDates())
                     );
 
                     if ($value['column'] == 'id' || in_array($value['column'], $columns)) {
                         $table = $this->query->from . '.';
 
-                        $this->query->{$bindings[$i]}[$bind]['column'] = $table . $value['column'];
+                        $this->query->{$properties[$i]}[$bind]['column'] = $table . $value['column'];
                     }
                 }
             }
@@ -341,29 +267,33 @@ class Builder extends EloquentBuilder
      * Add an "order by" primary key asc clause to the query.
      *
      * @param  mixed  $table
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function orderAsc($table = null)
     {
-        return $this->orderBy($this->getTableNameWithDot($table) . $this->getKeyName());
+        return $this->orderBy(
+            $this->getTableNameWithDot($table) . $this->getModel()->getKeyName()
+        );
     }
 
     /**
      * Add an "order by" primary key desc clause to the query.
      *
      * @param  string|null  $table
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function orderDesc($table = null)
     {
-        return $this->orderByDesc($this->getTableNameWithDot($table) . $this->getKeyName());
+        return $this->orderByDesc(
+            $this->getTableNameWithDot($table) . $this->getModel()->getKeyName()
+        );
     }
 
     /**
      * Add an "order by" created at asc clause to the query.
      *
      * @param  string|null  $table
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function createdAsc($table = null)
     {
@@ -374,7 +304,7 @@ class Builder extends EloquentBuilder
      * Add an "order by" created at desc clause to the query.
      *
      * @param  string|null  $table
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function createdDesc($table = null)
     {

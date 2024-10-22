@@ -1,20 +1,16 @@
 <?php
 
-namespace App\Models\Abstracts;
+namespace App\Models\Eloquent;
 
-use Illuminate\Database\Eloquent\Model as BaseModel;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\QueryException;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use App\Models\Builder\Builder;
 use App\Models\Traits\LanguageTrait;
+use Illuminate\Database\Eloquent\Model as BaseModel;
 
 abstract class Model extends BaseModel
 {
     /**
      * The Eloquent query builder class to use for the model.
      *
-     * @var class-string<\App\Models\Builder\Builder<*>>
+     * @var class-string<\App\Models\Eloquent\Builder<*>>
      */
     protected static string $builder = Builder::class;
 
@@ -95,7 +91,7 @@ abstract class Model extends BaseModel
     /**
      * {@inheritDoc}
      */
-    public function newEloquentBuilder($builder)
+    public function newEloquentBuilder($query)
     {
         if ($this->builder instanceof Builder) {
             $builder = $this->builder;
@@ -105,13 +101,13 @@ abstract class Model extends BaseModel
             return $builder;
         }
 
-        return new Builder($builder, $this);
+        return new static::$builder($query);
     }
 
     /**
      * Set the Eloquent query builder instance.
      *
-     * @param  \App\Models\Builder\Builder  $builder
+     * @param  \App\Models\Eloquent\Builder  $builder
      * @return $this
      */
     public function setEloquentBuilder(Builder $builder)
@@ -119,57 +115,6 @@ abstract class Model extends BaseModel
         $this->builder = $builder;
 
         return $this;
-    }
-
-    /**
-     * Find a model by its query or return new static.
-     *
-     * @param  array  $columns
-     * @return static
-     */
-    public function firstNew($columns = ['*'])
-    {
-        if (! is_null($model = $this->first($columns))) {
-            return $model;
-        }
-
-        return new static;
-    }
-
-    /**
-     * Execute the query and get the first result attribute.
-     *
-     * @param  string  $attribute
-     * @param  int|null  $value
-     * @param  string|null  $column
-     * @return mixed
-     */
-    public function firstAttr($attribute, $value = null, $column = null)
-    {
-        $model = $this->when(! is_null($value), function ($q) use ($value, $column) {
-            return $q->where($column ?: $this->getKeyName(), $value);
-        })->first([$attribute]);
-
-        return ! is_null($model) ? $model->$attribute : null;
-    }
-
-    /**
-     * Execute the query and get the first result attribute or throw an exception.
-     *
-     * @param  string  $attribute
-     * @param  int|null  $value
-     * @param  string|null  $column
-     * @return mixed
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     */
-    public function firstAttrOrFail($attribute, $value = null, $column = null)
-    {
-        if (is_null($attribute = $this->firstAttr($attribute, $value, $column))) {
-            throw (new ModelNotFoundException)->setModel(get_class($this));
-        }
-
-        return $attribute;
     }
 
     /**

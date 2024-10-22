@@ -2,8 +2,8 @@
 
 namespace App\Models\Traits;
 
-use Illuminate\Support\Str;
 use App\Models\_Language;
+use Illuminate\Support\Str;
 
 trait LanguageTrait
 {
@@ -93,7 +93,7 @@ trait LanguageTrait
      *
      * @param  mixed  $currentLang
      * @param  array  $columns
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function joinLanguage($currentLang = true, array $columns = [])
     {
@@ -122,7 +122,7 @@ trait LanguageTrait
     /**
      * Add a where "language" clause to the query.
      *
-     * @return \App\Models\Builder\Builder
+     * @return \App\Models\Eloquent\Builder
      */
     public function currentLanguage()
     {

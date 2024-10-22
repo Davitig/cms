@@ -3,10 +3,10 @@
 namespace App\Providers\Web;
 
 use App\Http\Controllers\Web\WebHomeController;
+use App\Models\Page;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use App\Models\Page;
 
 final class DynamicRouteServiceProvider extends ServiceProvider
 {
@@ -351,7 +351,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     /**
      * Set the deep implicit route.
      *
-     * @param  \App\Models\Abstracts\Model  $implicitModel
+     * @param  \App\Models\Eloquent\Model  $implicitModel
      * @return bool
      */
     protected function setDeepImplicitRoute($implicitModel)

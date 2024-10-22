@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Eloquent\Model;
 use Illuminate\Http\Request;
-use App\Models\Abstracts\Model;
 
 class Calendar extends Model
 {
