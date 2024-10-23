@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
-use App\Models\Eloquent\Builder;
-use App\Models\Eloquent\Model;
-use App\Models\Traits\LanguageTrait;
+use App\Models\Base\Builder;
+use App\Models\Base\Model;
+use App\Models\Traits\HasLanguage;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Translation extends Model
 {
-    use LanguageTrait;
+    use HasLanguage;
 
     /**
      * The table associated with the model.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $table = 'translations';
 
@@ -36,22 +37,6 @@ class Translation extends Model
     ];
 
     /**
-     * Related database table name used by the Language model.
-     *
-     * @var string
-     */
-    protected string $languageTable = 'translation_languages';
-
-    /**
-     * The attributes that are mass assignable for the Language model.
-     *
-     * @var array
-     */
-    protected array $languageFillable = [
-        'translation_id', 'language_id', 'value'
-    ];
-
-    /**
      * The attributes that are not updatable for the Language model.
      *
      * @var array
@@ -61,11 +46,22 @@ class Translation extends Model
     ];
 
     /**
+     * Set languages a one-to-many relationship.
+     *
+     * @param  bool  $relation
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\TranslationLanguage
+     */
+    public function languages(bool $relation = true): HasMany|TranslationLanguage
+    {
+        return $relation ? $this->hasMany(TranslationLanguage::class) : new TranslationLanguage;
+    }
+
+    /**
      * Build a query by code.
      *
      * @param  string  $code
      * @param  bool|string  $currentLang
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function byCode(string $code, bool|string $currentLang = true): Builder
     {

@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Eloquent\Model;
+use App\Models\Base\Model;
 use App\Models\Traits\HasGallery;
-use App\Models\Traits\LanguageTrait;
-
+use App\Models\Traits\HasLanguage;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 class Video extends Model
 {
-    use HasGallery, LanguageTrait;
+    use HasGallery, HasLanguage;
 
     /**
      * Type of the gallery.
@@ -20,7 +20,7 @@ class Video extends Model
     /**
      * The table associated with the model.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $table = 'videos';
 
@@ -43,27 +43,13 @@ class Video extends Model
     ];
 
     /**
-     * Related database table name used by the Language model.
+     * Set languages a one-to-many relationship.
      *
-     * @var string
+     * @param  bool  $relation
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\VideoLanguage
      */
-    protected string $languageTable = 'video_languages';
-
-    /**
-     * The attributes that are mass assignable for the Language model.
-     *
-     * @var array
-     */
-    protected array $languageFillable = [
-        'video_id', 'language_id', 'title'
-    ];
-
-    /**
-     * The attributes that are not updatable for the Language model.
-     *
-     * @var array
-     */
-    protected array $languageNotUpdatable = [
-        'video_id', 'language_id'
-    ];
+    public function languages(bool $relation = true): HasMany|VideoLanguage
+    {
+        return $relation ? $this->hasMany(VideoLanguage::class) : new VideoLanguage;
+    }
 }

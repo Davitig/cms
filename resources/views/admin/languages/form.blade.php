@@ -28,7 +28,7 @@
         <div class="input-group">
             <span class="input-group-addon">
                 @if ($current->language)
-                    <img id="lang-img" src="{{ asset('assets/libs/images/flags/'.$current->language.'.png') }}" width="30">
+                    <img id="lang-img" src="{{ asset('assets/libs/images/flags/'.$current->language.'.png') }}" width="28" height="18" alt="flag">
                 @else
                     <i class="{{icon_type('languages')}}"></i>
                 @endif

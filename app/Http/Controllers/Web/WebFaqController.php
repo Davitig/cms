@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\Collection;
 use App\Models\Faq;
-use App\Models\Page;
 
 class WebFaqController extends Controller
 {
@@ -30,7 +28,7 @@ class WebFaqController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  array<\App\Models\Page, \App\Models\Collection>  $models
+     * @param  array<\App\Models\Page\Page, \App\Models\Collection>  $models
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(array $models)

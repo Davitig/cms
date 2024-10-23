@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\Page;
-use App\Models\PageFile;
+use App\Models\Page\Page;
+use App\Models\Page\PageFile;
 
 class WebPageController extends Controller
 {
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Page  $page
+     * @param  \App\Models\Page\Page  $page
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Page $page)

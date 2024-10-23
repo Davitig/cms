@@ -16,24 +16,20 @@ trait ClonableLanguage
     {
         $foreignId = $this->model->getForeignKey();
 
-        $_languageModel = new _Language;
-        $_languageModel->setFromForeignModel($this->model);
-
-        $currentLangExists = $_languageModel->where($foreignId, $id)
+        $langExists = $this->model->languages(false)->where($foreignId, $id)
             ->where('language_id', $languageId = language(true, 'id'))
             ->exists();
 
-        $currentLangModel = $_languageModel->where($foreignId, $id)->first();
+        $langModel = $this->model->languages(false)->where($foreignId, $id)->first();
 
-        if ($currentLangExists || is_null($currentLangModel)) {
+        if ($langExists || is_null($langModel)) {
             return redirect()->back();
         }
 
-        $attributes = $currentLangModel->getFillableAttributes($_languageModel->getFillable());
+        $attributes = $langModel->getAttributes();
         $attributes['language_id'] = $languageId;
 
-        $_languageModel::unguard();
-        $_languageModel->create($attributes);
+        $langModel->create($attributes);
 
         return redirect()->back()->with('alert', fill_data('success', trans('general.created')));
     }

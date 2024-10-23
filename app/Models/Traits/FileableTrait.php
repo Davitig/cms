@@ -2,14 +2,14 @@
 
 namespace App\Models\Traits;
 
-use App\Models\Eloquent\Builder;
+use App\Models\Base\Builder;
 
 trait FileableTrait
 {
     /**
      * Add a files count to the query.
      *
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function countFiles(): Builder
     {
@@ -25,7 +25,7 @@ trait FileableTrait
     /**
      * Determine if the model has a file(s).
      *
-    * @return \App\Models\Eloquent\Builder
+    * @return \App\Models\Base\Builder
      */
     public function hasFile(): Builder
     {
@@ -41,7 +41,7 @@ trait FileableTrait
      * Add a query where a file exists or not.
      *
      * @param  bool  $exists
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function whereFileExists($exists = true): Builder
     {

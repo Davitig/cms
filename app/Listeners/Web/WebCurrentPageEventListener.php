@@ -2,7 +2,7 @@
 
 namespace App\Listeners\Web;
 
-use App\Models\Eloquent\Model;
+use App\Models\Base\Model;
 use App\Support\TranslationCollection;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\View\View;

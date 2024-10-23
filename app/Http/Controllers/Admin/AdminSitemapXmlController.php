@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Eloquent\Model;
-use App\Models\Page;
+use App\Models\Base\Model;
+use App\Models\Page\Page;
 use DOMDocument;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Sabre\Xml\Service as XmlService;
+use Sabre\Xml\Service;
 
 class AdminSitemapXmlController extends Controller
 {
@@ -45,14 +45,14 @@ class AdminSitemapXmlController extends Controller
      *
      * @var string
      */
-    protected string|int|null $mainLanguage;
+    protected string $mainLanguage;
 
     /**
-     * Indicates if the application has many languages.
+     * Indicates if the application is multilanguage.
      *
      * @var bool
      */
-    protected bool $hasManyLanguage = false;
+    protected bool $isMultilanguage = false;
 
     /**
      * List of the listable types.
@@ -86,7 +86,7 @@ class AdminSitemapXmlController extends Controller
 
         $this->mainLanguage = key($this->languages);
 
-        if ($this->hasManyLanguage = (count($this->languages) > 1)) {
+        if ($this->isMultilanguage = (count($this->languages) > 1)) {
             $this->namespaceMap += [
                 $this->xhtml = 'http://www.w3.org/1999/xhtml' => 'xhtml'
             ];
@@ -113,14 +113,14 @@ class AdminSitemapXmlController extends Controller
 
         foreach ($pages as $page) {
             $value = ['url' => ['loc' => web_url(
-                $page->full_slug = $page->getFullSlug(), [], $this->hasManyLanguage
+                $page->full_slug = $page->getFullSlug(), [], $this->isMultilanguage
                 ? $this->mainLanguage
                 : null
             )]];
 
-            if ($page->hasLanguage() && $this->hasManyLanguage) {
-                foreach ($this->languages as $langKey => $langValue) {
-                    $value['url'][] = $this->getLanguageLinks($page, null, $langKey);
+            if ($this->isMultilanguage) {
+                foreach ($this->languages as $langValue => $values) {
+                    $value['url'][] = $this->getLanguageLinks($page, null, $langValue);
                 }
             }
 
@@ -130,7 +130,7 @@ class AdminSitemapXmlController extends Controller
             $this->setExplicitModels($page);
         }
 
-        $xml = new XmlService;
+        $xml = new Service;
         $xml->namespaceMap = $this->namespaceMap;
 
         $doc = new DOMDocument;
@@ -148,7 +148,7 @@ class AdminSitemapXmlController extends Controller
     /**
      * Set an implicit models to the xml data.
      *
-     * @param  \App\Models\Page $page
+     * @param  \App\Models\Page\Page $page
      * @return void
      */
     protected function setImplicitModels(Model $page)
@@ -159,8 +159,7 @@ class AdminSitemapXmlController extends Controller
             return;
         }
 
-        $implicitModel = (new $this->implicitTypes[$page->type])
-            ->find($page->type_id);
+        $implicitModel = (new $this->implicitTypes[$page->type])->find($page->type_id);
 
         if (! is_null($implicitModel)) {
             $model = cms_config('collections.models.' . $implicitModel->type);
@@ -171,6 +170,7 @@ class AdminSitemapXmlController extends Controller
             )->whereVisible()->orderDesc()->get();
 
             foreach ($items as $item) {
+                // entity without a show endpoint
                 if (empty($item->slug)) {
                     continue;
                 }
@@ -183,7 +183,7 @@ class AdminSitemapXmlController extends Controller
     /**
      * Set an explicit models to the xml data.
      *
-     * @param  \App\Models\Page $page
+     * @param  \App\Models\Page\Page $page
      * @return void
      */
     protected function setExplicitModels(Model $page)
@@ -198,6 +198,11 @@ class AdminSitemapXmlController extends Controller
             $items = (new $model)->whereVisible()->orderDesc()->get();
 
             foreach ($items as $item) {
+                // entity without a show endpoint
+                if (empty($item->slug)) {
+                    continue;
+                }
+
                 $this->data[] = $this->getUrls($page, $item);
             }
         }
@@ -206,22 +211,22 @@ class AdminSitemapXmlController extends Controller
     /**
      * Get the urls.
      *
-     * @param  \App\Models\Page  $page
-     * @param  \App\Models\Eloquent\Model  $item
+     * @param  \App\Models\Page\Page  $page
+     * @param  \App\Models\Base\Model  $item
      * @return array
      */
     protected function getUrls(Page $page, Model $item)
     {
         $value = ['url' => ['loc' => web_url(
-            [$page->full_slug, $item->slug], [], $this->hasManyLanguage
+            [$page->full_slug, $item->slug], [], $this->isMultilanguage
             ? $this->mainLanguage
             : null
         )]];
 
-        if ($item->hasLanguage() && $this->hasManyLanguage) {
-            foreach ($this->languages as $langKey => $langValue) {
+        if ($this->isMultilanguage) {
+            foreach ($this->languages as $langValue => $values) {
                 $value['url'][] = $this->getLanguageLinks(
-                    $page, $item->slug, $langKey
+                    $page, $item->slug, $langValue
                 );
             }
         }
@@ -234,23 +239,19 @@ class AdminSitemapXmlController extends Controller
     /**
      * Get an array of xml language links.
      *
-     * @param  \App\Models\Page $page
+     * @param  \App\Models\Page\Page $page
      * @param  string|null  $slug
-     * @param  string $langKey
+     * @param  string  $langValue
      * @return array
      */
-    protected function getLanguageLinks(Model $page, string $slug = null, $langKey)
+    protected function getLanguageLinks(Model $page, string $slug = null, string $langValue)
     {
         return [
             'name' => "{{$this->xhtml}}link",
             'attributes' => [
                 'rel' => 'alternate',
-                'hreflang' => $langKey,
-                'href' => web_url(
-                    [$page->full_slug, $slug],
-                    [],
-                    $langKey
-                )
+                'hreflang' => $langValue,
+                'href' => web_url([$page->full_slug, $slug], [], $langValue)
             ]
         ];
     }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FaqRequest;
 use App\Models\Collection;
 use App\Models\Faq;
+use App\Models\FaqLanguage;
 use Illuminate\Http\Request;
 
 class AdminFaqController extends Controller
@@ -64,6 +65,9 @@ class AdminFaqController extends Controller
 
         $model = $this->model->create($input);
 
+        $input['faq_id'] = $model->id;
+        $model->languages(false)->create($input);
+
         return redirect(cms_route('faq.edit', [$collectionId, $model->id]))
             ->with('alert', fill_data('success', trans('general.created')));
     }
@@ -109,6 +113,12 @@ class AdminFaqController extends Controller
         $input = $request->all();
 
         $this->model->findOrFail($id)->update($input);
+
+        $languageModel = (new FaqLanguage)->byForeign($id)->first();
+
+        if (! is_null($languageModel)) {
+            $languageModel->update($input);
+        }
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

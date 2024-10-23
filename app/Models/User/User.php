@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\User;
 
 use App\Models\Base\User as Model;
 
@@ -9,7 +9,7 @@ class User extends Model
     /**
      * The table associated with the model.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $table = 'users';
 

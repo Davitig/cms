@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use App\Models\Eloquent\Model;
+use App\Models\Base\Model;
 use App\Models\Traits\HasGallery;
-use App\Models\Traits\LanguageTrait;
+use App\Models\Traits\HasLanguage;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Photo extends Model
 {
-    use HasGallery, LanguageTrait;
+    use HasGallery, HasLanguage;
 
     /**
      * Type of the gallery.
@@ -20,7 +21,7 @@ class Photo extends Model
     /**
      * The table associated with the model.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $table = 'photos';
 
@@ -43,31 +44,6 @@ class Photo extends Model
     ];
 
     /**
-     * Related database table name used by the Language model.
-     *
-     * @var string
-     */
-    protected string $languageTable = 'photo_languages';
-
-    /**
-     * The attributes that are mass assignable for the Language model.
-     *
-     * @var array
-     */
-    protected array $languageFillable = [
-        'photo_id', 'language_id', 'title'
-    ];
-
-    /**
-     * The attributes that are not updatable for the Language model.
-     *
-     * @var array
-     */
-    protected array $languageNotUpdatable = [
-        'photo_id', 'language_id'
-    ];
-
-    /**
      * Get the mutated file attribute.
      *
      * @param  string  $value
@@ -76,5 +52,16 @@ class Photo extends Model
     public function getFileDefaultAttribute($value): string
     {
         return $value ?: asset('assets/libs/images/image-1.jpg');
+    }
+
+    /**
+     * Set languages a one-to-many relationship.
+     *
+     * @param  bool  $relation
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\PhotoLanguage
+     */
+    public function languages(bool $relation = true): HasMany|PhotoLanguage
+    {
+        return $relation ? $this->hasMany(PhotoLanguage::class) : new PhotoLanguage;
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Base\Builder;
 use App\Models\Base\User as Model;
-use App\Models\Eloquent\Builder;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 
@@ -12,7 +12,7 @@ class CmsUser extends Model
     /**
      * The table associated with the model.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $table = 'cms_users';
 
@@ -120,7 +120,7 @@ class CmsUser extends Model
      * Filter a query by specific parameters.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function adminFilter(Request $request): Builder
     {

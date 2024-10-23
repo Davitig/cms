@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Article;
 
-use App\Models\Eloquent\Builder;
-use App\Models\Eloquent\Model;
+use App\Models\Base\Builder;
+use App\Models\Base\Model;
 use App\Models\Traits\FileTrait;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 class ArticleFile extends Model
 {
     use FileTrait;
@@ -13,7 +13,7 @@ class ArticleFile extends Model
     /**
      * The table associated with the model.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $table = 'article_files';
 
@@ -36,31 +36,6 @@ class ArticleFile extends Model
     ];
 
     /**
-     * Related database table name used by the Language model.
-     *
-     * @var string
-     */
-    protected string $languageTable = 'article_file_languages';
-
-    /**
-     * The attributes that are mass assignable for the Language model.
-     *
-     * @var array
-     */
-    protected array $languageFillable = [
-        'article_file_id', 'language_id', 'title', 'file'
-    ];
-
-    /**
-     * The attributes that are not updatable for the Language model.
-     *
-     * @var array
-     */
-    protected array $languageNotUpdatable = [
-        'article_file_id', 'language_id'
-    ];
-
-    /**
      * Get the mutated file default attribute.
      *
      * @param  string  $value
@@ -72,10 +47,21 @@ class ArticleFile extends Model
     }
 
     /**
+     * Set languages a one-to-many relationship.
+     *
+     * @param  bool  $relation
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\Article\ArticleFileLanguage
+     */
+    public function languages(bool $relation = true): HasMany|ArticleFileLanguage
+    {
+        return $relation ? $this->hasMany(ArticleFileLanguage::class) : new ArticleFileLanguage;
+    }
+
+    /**
      * Add a where foreign id clause to the query.
      *
      * @param  int  $foreignId
-     * @return \App\Models\Eloquent\Builder|static
+     * @return \App\Models\Base\Builder|static
      */
     public function byForeign(int $foreignId): Builder|static
     {

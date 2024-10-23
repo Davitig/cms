@@ -1,22 +1,24 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Page;
 
-use App\Models\Eloquent\Builder;
-use App\Models\Eloquent\Model;
+use App\Models\Base\Builder;
+use App\Models\Base\Model;
+use App\Models\Collection;
 use App\Models\Traits\FileableTrait;
-use App\Models\Traits\LanguageTrait;
+use App\Models\Traits\HasLanguage;
 use App\Models\Traits\NestableTrait;
 use App\Models\Traits\PositionableTrait;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Page extends Model
 {
-    use LanguageTrait, PositionableTrait, FileableTrait, NestableTrait;
+    use HasLanguage, PositionableTrait, FileableTrait, NestableTrait;
 
     /**
      * The table associated with the model.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $table = 'pages';
 
@@ -37,36 +39,22 @@ class Page extends Model
     protected array $notUpdatable = [];
 
     /**
-     * Related database table name used by the Language model.
+     * Set languages a one-to-many relationship.
      *
-     * @var string
+     * @param  bool  $relation
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\Page\PageLanguage
      */
-    protected string $languageTable = 'page_languages';
-
-    /**
-     * The attributes that are mass assignable for the Language model.
-     *
-     * @var array
-     */
-    protected array $languageFillable = [
-        'page_id', 'language_id', 'title', 'short_title', 'description', 'content', 'meta_title', 'meta_desc'
-    ];
-
-    /**
-     * The attributes that are not updatable for the Language model.
-     *
-     * @var array
-     */
-    protected array $languageNotUpdatable = [
-        'page_id', 'language_id'
-    ];
+    public function languages(bool $relation = true): HasMany|PageLanguage
+    {
+        return $relation ? $this->hasMany(PageLanguage::class) : new PageLanguage;
+    }
 
     /**
      * Build an admin query.
      *
      * @param  int|null  $menuId
      * @param  bool|string  $currentLang
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function forAdmin(int $menuId = null, bool|string $currentLang = true): Builder
     {
@@ -82,7 +70,7 @@ class Page extends Model
      * Build a public query.
      *
      * @param  bool|string  $currentLang
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function forPublic(bool|string $currentLang = true): Builder
     {
@@ -94,7 +82,7 @@ class Page extends Model
      *
      * @param  string  $slug
      * @param  int  $parentId
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function bySlugRoute(string $slug, int $parentId): Builder
     {
@@ -105,7 +93,7 @@ class Page extends Model
      * Add a where "menu_id" clause to the query.
      *
      * @param  int  $id
-     * @return \App\Models\Eloquent\Builder|static
+     * @return \App\Models\Base\Builder|static
      */
     public function menuId(int $id): Builder|static
     {
@@ -117,7 +105,7 @@ class Page extends Model
      *
      * @param  int  $id
      * @param  string  $operator
-     * @return \App\Models\Eloquent\Builder|static
+     * @return \App\Models\Base\Builder|static
      */
     public function typeId(int $id, string $operator = '='): Builder|static
     {
@@ -128,7 +116,7 @@ class Page extends Model
      * Add a where "visible" clause to the query.
      *
      * @param  int  $value
-     * @return \App\Models\Eloquent\Builder|static
+     * @return \App\Models\Base\Builder|static
      */
     public function whereVisible(int $value = 1): Builder|static
     {
@@ -138,7 +126,7 @@ class Page extends Model
     /**
      * Add a "collection" join to the query.
      *
-     * @return \App\Models\Eloquent\Builder|static
+     * @return \App\Models\Base\Builder|static
      */
     public function joinCollection(): Builder|static
     {

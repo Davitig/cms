@@ -3,7 +3,7 @@
 namespace App\Listeners\Web;
 
 use App\Models\Menu;
-use App\Models\Page;
+use App\Models\Page\Page;
 use Illuminate\Contracts\View\View;
 use Illuminate\Events\Dispatcher;
 

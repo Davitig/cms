@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TranslationRequest;
 use App\Models\Translation;
+use App\Models\TranslationLanguage;
 use Illuminate\Http\Request;
 
 class AdminTranslationsController extends Controller
@@ -52,7 +53,10 @@ class AdminTranslationsController extends Controller
      */
     public function store(TranslationRequest $request)
     {
-        $model = $this->model->create($request->all());
+        $model = $this->model->create($input = $request->all());
+
+        $input['translation_id'] = $model->id;
+        $model->languages(false)->create($input);
 
         return redirect(cms_route('translations.edit', [$model->id]))
             ->with('alert', fill_data('success', trans('general.created')));
@@ -98,6 +102,12 @@ class AdminTranslationsController extends Controller
         unset($input['code']);
 
         $this->model->findOrFail($id)->update($input);
+
+        $languageModel = (new TranslationLanguage)->byForeign($id)->first();
+
+        if (! is_null($languageModel)) {
+            $languageModel->update($input);
+        }
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

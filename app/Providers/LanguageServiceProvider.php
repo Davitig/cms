@@ -121,7 +121,7 @@ class LanguageServiceProvider extends ServiceProvider
             array_unshift($this->segments, $config->get('app.language'));
         }
 
-        $query = query_string($request->query());
+        $query = query_string($request->except('lang'));
 
         foreach($this->languages as $key => $value) {
             if ($this->languagesCount > 1) {
@@ -129,7 +129,8 @@ class LanguageServiceProvider extends ServiceProvider
             }
 
             $config->set([
-                "app.languages.{$key}.url" => $request->root() . '/' . implode('/', $this->segments) . $query
+                "app.languages.{$key}.url" => $request->root() . '/' .
+                    implode('/', $this->segments) . $query
             ]);
         }
     }

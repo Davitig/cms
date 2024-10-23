@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Models\Eloquent;
+namespace App\Models\Base;
 
-use App\Models\Traits\LanguageTrait;
 use Illuminate\Database\Eloquent\Model as BaseModel;
 
 abstract class Model extends BaseModel
@@ -10,44 +9,9 @@ abstract class Model extends BaseModel
     /**
      * The Eloquent query builder class to use for the model.
      *
-     * @var class-string<\App\Models\Eloquent\Builder<*>>
+     * @var class-string<\App\Models\Base\Builder<*>>
      */
     protected static string $builder = Builder::class;
-
-    /**
-     * Indicates if the model has a languages.
-     *
-     * @var bool
-     */
-    protected bool $hasLanguage = false;
-
-    /**
-     * Create a new Eloquent model instance.
-     *
-     * @param  array  $attributes
-     * @return void
-     */
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        // Set language model if it's used into the called model.
-        if (in_array(LanguageTrait::class, trait_uses_recursive($this))) {
-            $this->setLanguage();
-
-            $this->hasLanguage = true;
-        }
-    }
-
-    /**
-     * Determine if a model has a languages.
-     *
-     * @return bool
-     */
-    public function hasLanguage(): bool
-    {
-        return $this->hasLanguage;
-    }
 
     /**
      * Set the updatable attributes for the model.
@@ -76,19 +40,6 @@ abstract class Model extends BaseModel
     }
 
     /**
-     * Get fillable attributes on the model.
-     *
-     * @param  array  $fillable
-     * @return array
-     */
-    public function getFillableAttributes(array $fillable = []): array
-    {
-        $fillable = array_merge($this->fillable, $fillable);
-
-        return array_intersect_key($this->getAttributes(), array_flip($fillable));
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function newEloquentBuilder($query)
@@ -107,7 +58,7 @@ abstract class Model extends BaseModel
     /**
      * Set the Eloquent query builder instance.
      *
-     * @param  \App\Models\Eloquent\Builder  $builder
+     * @param  \App\Models\Base\Builder  $builder
      * @return $this
      */
     public function setEloquentBuilder(Builder $builder): static
@@ -115,21 +66,6 @@ abstract class Model extends BaseModel
         $this->builder = $builder;
 
         return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function create(array $attributes = [])
-    {
-        $model = parent::create($attributes);
-
-        // Create a language model if it exists in this model.
-        if (method_exists(get_called_class(), 'createLanguage')) {
-            $model->createLanguage($attributes);
-        }
-
-        return $model;
     }
 
     /**

@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use App\Models\Eloquent\Model;
+use App\Models\Base\Model;
 use App\Models\Traits\HasCollection;
-use App\Models\Traits\LanguageTrait;
+use App\Models\Traits\HasLanguage;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Faq extends Model
 {
-    use HasCollection, LanguageTrait;
+    use HasCollection, HasLanguage;
 
     /**
      * Type of the collection.
@@ -20,7 +21,7 @@ class Faq extends Model
     /**
      * The table associated with the model.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $table = 'faq';
 
@@ -41,27 +42,13 @@ class Faq extends Model
     protected array $notUpdatable = [];
 
     /**
-     * Related database table name used by the Language model.
+     * Set languages a one-to-many relationship.
      *
-     * @var string
+     * @param  bool  $relation
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\FaqLanguage
      */
-    protected string $languageTable = 'faq_languages';
-
-    /**
-     * The attributes that are mass assignable for the Language model.
-     *
-     * @var array
-     */
-    protected array $languageFillable = [
-        'faq_id', 'language_id', 'title', 'description'
-    ];
-
-    /**
-     * The attributes that are not updatable for the Language model.
-     *
-     * @var array
-     */
-    protected array $languageNotUpdatable = [
-        'faq_id', 'language_id'
-    ];
+    public function languages(bool $relation = true): HasMany|FaqLanguage
+    {
+        return $relation ? $this->hasMany(FaqLanguage::class) : new FaqLanguage;
+    }
 }

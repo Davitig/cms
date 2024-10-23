@@ -1,19 +1,21 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Page;
 
-use App\Models\Eloquent\Builder;
-use App\Models\Eloquent\Model;
+use App\Models\Base\Builder;
+use App\Models\Base\Model;
 use App\Models\Traits\FileTrait;
+use App\Models\Traits\HasLanguage;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PageFile extends Model
 {
-    use FileTrait;
+    use HasLanguage, FileTrait;
 
     /**
      * The table associated with the model.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $table = 'page_files';
 
@@ -36,31 +38,6 @@ class PageFile extends Model
     ];
 
     /**
-     * Related database table name used by the Language model.
-     *
-     * @var string
-     */
-    protected string $languageTable = 'page_file_languages';
-
-    /**
-     * The attributes that are mass assignable for the Language model.
-     *
-     * @var array
-     */
-    protected array $languageFillable = [
-        'page_file_id', 'language_id', 'title', 'file'
-    ];
-
-    /**
-     * The attributes that are not updatable for the Language model.
-     *
-     * @var array
-     */
-    protected array $languageNotUpdatable = [
-        'page_file_id', 'language_id'
-    ];
-
-    /**
      * Get the mutated file default attribute.
      *
      * @param  string  $value
@@ -72,10 +49,21 @@ class PageFile extends Model
     }
 
     /**
+     * Set languages a one-to-many relationship.
+     *
+     * @param  bool  $relation
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\Page\PageFileLanguage
+     */
+    public function languages(bool $relation = true): HasMany|PageFileLanguage
+    {
+        return $relation ? $this->hasMany(PageFileLanguage::class) : new PageFileLanguage;
+    }
+
+    /**
      * Add a where foreign id clause to the query.
      *
      * @param  int  $foreignId
-     * @return \App\Models\Eloquent\Builder|static
+     * @return \App\Models\Base\Builder|static
      */
     public function byForeign(int $foreignId): Builder|static
     {

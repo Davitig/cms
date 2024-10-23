@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Eloquent;
+namespace App\Models\Base;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
@@ -110,7 +110,7 @@ class Builder extends EloquentBuilder
      * Find a model by its query or instantiate it.
      *
      * @param  array|string  $columns
-     * @return \App\Models\Eloquent\Model
+     * @return \App\Models\Base\Model
      */
     public function firstNew(array|string $columns = ['*']): Model
     {
@@ -267,7 +267,7 @@ class Builder extends EloquentBuilder
      * Add an "order by" primary key asc clause to the query.
      *
      * @param  string|null  $table
-     * @return \App\Models\Eloquent\Builder
+     * @return $this
      */
     public function orderAsc(string $table = null): Builder
     {
@@ -280,7 +280,7 @@ class Builder extends EloquentBuilder
      * Add an "order by" primary key desc clause to the query.
      *
      * @param  string|null  $table
-     * @return \App\Models\Eloquent\Builder
+     * @return $this
      */
     public function orderDesc(string $table = null): Builder
     {
@@ -293,7 +293,7 @@ class Builder extends EloquentBuilder
      * Add an "order by" created at asc clause to the query.
      *
      * @param  string|null  $table
-     * @return \App\Models\Eloquent\Builder
+     * @return $this
      */
     public function createdAsc(string $table = null): Builder
     {
@@ -304,7 +304,7 @@ class Builder extends EloquentBuilder
      * Add an "order by" created at desc clause to the query.
      *
      * @param  string|null  $table
-     * @return \App\Models\Eloquent\Builder
+     * @return $this
      */
     public function createdDesc(string $table = null): Builder
     {

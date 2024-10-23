@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\VideoRequest;
 use App\Models\Collection;
-use App\Models\Gallery;
+use App\Models\Gallery\Gallery;
 use App\Models\Video;
+use App\Models\VideoLanguage;
 use Illuminate\Http\Request;
 
 class AdminVideosController extends Controller
@@ -43,7 +44,9 @@ class AdminVideosController extends Controller
      * Show the form for creating a new resource.
      *
      * @param  int  $galleryId
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     *
+     * @throws \Throwable
      */
     public function create(int $galleryId)
     {
@@ -65,7 +68,9 @@ class AdminVideosController extends Controller
      *
      * @param  \App\Http\Requests\Admin\VideoRequest  $request
      * @param  int  $galleryId
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     *
+     * @throws \Throwable
      */
     public function store(VideoRequest $request, int $galleryId)
     {
@@ -73,6 +78,9 @@ class AdminVideosController extends Controller
         $input['gallery_id'] = $galleryId;
 
         $model = $this->model->create($input);
+
+        $input['video_id'] = $model->id;
+        $model->languages(false)->create($input);
 
         if ($request->expectsJson()) {
             $view = view('admin.galleries.videos.item', [
@@ -104,7 +112,9 @@ class AdminVideosController extends Controller
      *
      * @param  int  $galleryId
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     *
+     * @throws \Throwable
      */
     public function edit(int $galleryId, int $id)
     {
@@ -129,11 +139,17 @@ class AdminVideosController extends Controller
      * @param  \App\Http\Requests\Admin\VideoRequest  $request
      * @param  int  $galleryId
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function update(VideoRequest $request, int $galleryId, int $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
+
+        $languageModel = (new VideoLanguage)->byForeign($id)->first();
+
+        if (! is_null($languageModel)) {
+            $languageModel->update($input);
+        }
 
         if ($request->expectsJson()) {
             $input += ['youtube' => get_youtube_embed($request->get('file'))];

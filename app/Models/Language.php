@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Models\Eloquent\Model;
+use App\Models\Base\Model;
 
 class Language extends Model
 {
     /**
      * The table associated with the model.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $table = 'languages';
 
