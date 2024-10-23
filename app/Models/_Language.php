@@ -7,29 +7,17 @@ use App\Models\Eloquent\Model;
 class _Language extends Model
 {
     /**
-     * The attributes that are not updatable.
+     * Set data from a foreign model.
      *
-     * @var array
-     */
-    protected array $notUpdatable = [];
-
-    /**
-     * Create a new Language model instance.
-     *
-     * @param  \App\Models\Eloquent\Model|null  $model
-     * @param  array  $attributes
+     * @param  \App\Models\Eloquent\Model  $model
      * @return void
      */
-    public function __construct(Model $model = null, array $attributes = [])
+    public function setFromForeignModel(Model $model)
     {
-        if (! is_null($model)) {
-            $this->table = $model->getLanguageTable();
+        $this->table = $model->getLanguageTable();
 
-            $this->fillable = $model->getLanguageFillable();
+        $this->fillable = $model->getLanguageFillable();
 
-            $this->notUpdatable = $model->getLanguageNotUpdatable();
-        }
-
-        parent::__construct($attributes);
+        $this->notUpdatable = $model->getLanguageNotUpdatable();
     }
 }

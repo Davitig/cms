@@ -14,9 +14,10 @@ trait ClonableLanguage
      */
     public function cloneLanguage(int $id)
     {
-        $_languageModel = (new _Language($this->model));
+        $foreignId = $this->model->getForeignKey();
 
-        $foreignId = str($this->model->getTable())->singular() . '_id';
+        $_languageModel = new _Language;
+        $_languageModel->setFromForeignModel($this->model);
 
         $currentLangExists = $_languageModel->where($foreignId, $id)
             ->where('language_id', $languageId = language(true, 'id'))
@@ -28,7 +29,7 @@ trait ClonableLanguage
             return redirect()->back();
         }
 
-        $attributes = $currentLangModel->getRefillAttributes($_languageModel->getFillable());
+        $attributes = $currentLangModel->getFillableAttributes($_languageModel->getFillable());
         $attributes['language_id'] = $languageId;
 
         $_languageModel::unguard();
