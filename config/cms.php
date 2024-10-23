@@ -60,7 +60,7 @@ return [
         ],
         'implicit' => [
             'collections' => App\Models\Collection::class,
-            'galleries' => App\Models\Gallery::class
+            'galleries' => \App\Models\Gallery\Gallery::class
         ],
         'explicit' => [
             //
@@ -123,9 +123,9 @@ return [
             'faq' => 'FAQ'
         ],
         'models' => [
-            'articles' => \App\Models\Article::class,
-            'events' => \App\Models\Event::class,
-            'galleries' => \App\Models\Gallery::class,
+            'articles' => \App\Models\Article\Article::class,
+            'events' => \App\Models\Event\Event::class,
+            'galleries' => \App\Models\Gallery\Gallery::class,
             'faq' => \App\Models\Faq::class
         ],
         'order_by' => [

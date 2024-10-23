@@ -2,8 +2,8 @@
 
 namespace App\Models\Traits;
 
+use App\Models\Base\Builder;
 use App\Models\Collection;
-use App\Models\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 trait HasCollection
@@ -42,7 +42,7 @@ trait HasCollection
      * Build a query based on the admin collection.
      *
      * @param  \App\Models\Collection  $collection
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function adminCollection(Collection $collection): Builder
     {
@@ -57,7 +57,7 @@ trait HasCollection
      * Build a query based on the public collection.
      *
      * @param  \App\Models\Collection  $collection
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function publicCollection(Collection $collection): Builder
     {
@@ -74,7 +74,7 @@ trait HasCollection
      * @param  int|null  $collectionId
      * @param  bool|string  $currentLang
      * @param  array|string  $columns
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function forAdmin(
         int          $collectionId = null,
@@ -92,7 +92,7 @@ trait HasCollection
      * @param  int|null  $collectionId
      * @param  bool|string  $currentLang
      * @param  array|string  $columns
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function forPublic(
         int          $collectionId = null,
@@ -109,7 +109,7 @@ trait HasCollection
      *
      * @param  string  $slug
      * @param  int|null  $collectionId
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function bySlug(string $slug, int $collectionId = null): Builder
     {
@@ -122,7 +122,7 @@ trait HasCollection
      * @param  int  $collectionId
      * @param  string  $slug
      * @param  int|null  $id
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function byCollectionSlug(int $collectionId, string $slug, int $id = null): Builder
     {
@@ -133,7 +133,7 @@ trait HasCollection
      * Add a where "collection_id" clause to the query.
      *
      * @param  int  $id
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function collectionId(int $id): Builder
     {
@@ -144,7 +144,7 @@ trait HasCollection
      * Add a where "visible" clause to the query.
      *
      * @param  int  $value
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function whereVisible(int $value = 1): Builder
     {

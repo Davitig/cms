@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PhotoRequest;
 use App\Models\Collection;
-use App\Models\Gallery;
+use App\Models\Gallery\Gallery;
 use App\Models\Photo;
+use App\Models\PhotoLanguage;
 use Illuminate\Http\Request;
 
 class AdminPhotosController extends Controller
@@ -43,7 +44,9 @@ class AdminPhotosController extends Controller
      * Show the form for creating a new resource.
      *
      * @param  int  $galleryId
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     *
+     * @throws \Throwable
      */
     public function create(int $galleryId)
     {
@@ -65,7 +68,9 @@ class AdminPhotosController extends Controller
      *
      * @param  \App\Http\Requests\Admin\PhotoRequest  $request
      * @param  int  $galleryId
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     *
+     * @throws \Throwable
      */
     public function store(PhotoRequest $request, int $galleryId)
     {
@@ -73,6 +78,9 @@ class AdminPhotosController extends Controller
         $input['gallery_id'] = $galleryId;
 
         $model = $this->model->create($input);
+
+        $input['photo_id'] = $model->id;
+        $model->languages(false)->create($input);
 
         if ($request->expectsJson()) {
             $view = view('admin.galleries.photos.item', [
@@ -104,7 +112,9 @@ class AdminPhotosController extends Controller
      *
      * @param  int  $galleryId
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     *
+     * @throws \Throwable
      */
     public function edit(int $galleryId, int $id)
     {
@@ -129,11 +139,17 @@ class AdminPhotosController extends Controller
      * @param  \App\Http\Requests\Admin\PhotoRequest  $request
      * @param  int  $galleryId
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function update(PhotoRequest $request, int $galleryId, int $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
+
+        $languageModel = (new PhotoLanguage)->byForeign($id)->first();
+
+        if (! is_null($languageModel)) {
+            $languageModel->update($input);
+        }
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

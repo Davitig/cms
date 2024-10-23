@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Eloquent\Model;
-use App\Models\Page;
+use App\Models\Base\Model;
+use App\Models\Page\Page;
 use DOMDocument;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -148,7 +148,7 @@ class AdminSitemapXmlController extends Controller
     /**
      * Set an implicit models to the xml data.
      *
-     * @param  \App\Models\Page $page
+     * @param  \App\Models\Page\Page $page
      * @return void
      */
     protected function setImplicitModels(Model $page)
@@ -183,7 +183,7 @@ class AdminSitemapXmlController extends Controller
     /**
      * Set an explicit models to the xml data.
      *
-     * @param  \App\Models\Page $page
+     * @param  \App\Models\Page\Page $page
      * @return void
      */
     protected function setExplicitModels(Model $page)
@@ -206,8 +206,8 @@ class AdminSitemapXmlController extends Controller
     /**
      * Get the urls.
      *
-     * @param  \App\Models\Page  $page
-     * @param  \App\Models\Eloquent\Model  $item
+     * @param  \App\Models\Page\Page  $page
+     * @param  \App\Models\Base\Model  $item
      * @return array
      */
     protected function getUrls(Page $page, Model $item)
@@ -234,7 +234,7 @@ class AdminSitemapXmlController extends Controller
     /**
      * Get an array of xml language links.
      *
-     * @param  \App\Models\Page $page
+     * @param  \App\Models\Page\Page $page
      * @param  string|null  $slug
      * @param  string $langKey
      * @return array

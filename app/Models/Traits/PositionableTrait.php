@@ -2,7 +2,7 @@
 
 namespace App\Models\Traits;
 
-use App\Models\Eloquent\Builder;
+use App\Models\Base\Builder;
 use Exception;
 
 trait PositionableTrait
@@ -119,7 +119,7 @@ trait PositionableTrait
     /**
      * Add an "order by" position asc clause to the query.
      *
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function positionAsc(): Builder
     {
@@ -129,7 +129,7 @@ trait PositionableTrait
     /**
      * Add an "order by" position desc clause to the query.
      *
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function positionDesc(): Builder
     {

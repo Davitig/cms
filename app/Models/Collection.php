@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\Eloquent\Builder;
-use App\Models\Eloquent\Model;
+use App\Models\Base\Builder;
+use App\Models\Base\Model;
 
 class Collection extends Model
 {
     /**
      * The table associated with the model.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $table = 'collections';
 
@@ -21,7 +21,8 @@ class Collection extends Model
      */
 
     protected $fillable = [
-        'title', 'type', 'admin_order_by', 'admin_sort', 'admin_per_page', 'web_order_by', 'web_sort', 'web_per_page', 'description'
+        'title', 'type', 'admin_order_by', 'admin_sort', 'admin_per_page',
+        'web_order_by', 'web_sort', 'web_per_page', 'description'
     ];
 
     /**
@@ -37,7 +38,7 @@ class Collection extends Model
      * Get the same type collection instance.
      *
      * @param  string  $type
-     * @return \App\Models\Eloquent\Builder|static
+     * @return \App\Models\Base\Builder|static
      */
     public function byType(string $type): Builder|static
     {

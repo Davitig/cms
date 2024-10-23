@@ -2,15 +2,15 @@
 
 namespace App\Models\Traits;
 
-use App\Models\Eloquent\Builder;
-use App\Models\Eloquent\Model;
+use App\Models\Base\Builder;
+use App\Models\Base\Model;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Filesystem\Filesystem;
 
 trait FileTrait
 {
-    use LanguageTrait, PositionableTrait;
+    use HasLanguage, PositionableTrait;
 
     /**
      * Get the model files.
@@ -55,7 +55,7 @@ trait FileTrait
      *
      * @param  int  $foreignId
      * @param  bool|string  $currentLang
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function forAdmin(int $foreignId, bool|string $currentLang = true): Builder
     {
@@ -69,7 +69,7 @@ trait FileTrait
      *
      * @param  int  $foreignId
      * @param  bool|string  $currentLang
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function forPublic(int $foreignId, bool|string $currentLang = true)
     {
@@ -83,7 +83,7 @@ trait FileTrait
      * Add a where "visible" clause to the query.
      *
      * @param  int  $value
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function whereVisible(int $value = 1): Builder
     {
@@ -96,12 +96,7 @@ trait FileTrait
     public function create(array $attributes = [])
     {
         if (empty($attributes['position'])) {
-            if (isset($attributes['page_id'])) {
-                $attributes['position'] = $this->byForeign($attributes['page_id'])
-                        ->max('position') + 1;
-            } else {
-                $attributes['position'] = $this->max('position') + 1;
-            }
+            $attributes['position'] = $this->max('position') + 1;
         }
 
         return parent::create($attributes);

@@ -2,7 +2,7 @@
 
 namespace App\Listeners\Web;
 
-use App\Models\Eloquent\Model;
+use App\Models\Base\Model;
 use Illuminate\Contracts\View\View;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Collection;

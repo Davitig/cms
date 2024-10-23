@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\EventRequest;
 use App\Models\Collection;
-use App\Models\Event;
+use App\Models\Event\Event;
+use App\Models\Event\EventLanguage;
 
 class AdminEventsController extends Controller
 {
@@ -64,6 +65,9 @@ class AdminEventsController extends Controller
 
         $model = $this->model->create($input);
 
+        $input['event_id'] = $model->id;
+        $model->languages(false)->create($input);
+
         return redirect(cms_route('events.edit', [$collectionId, $model->id]))
             ->with('alert', fill_data('success', trans('general.created')));
     }
@@ -107,6 +111,12 @@ class AdminEventsController extends Controller
     public function update(EventRequest $request, int $collectionId, int $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
+
+        $languageModel = (new EventLanguage)->byForeign($id)->first();
+
+        if (! is_null($languageModel)) {
+            $languageModel->update($input);
+        }
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

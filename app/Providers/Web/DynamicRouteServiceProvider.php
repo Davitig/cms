@@ -3,8 +3,8 @@
 namespace App\Providers\Web;
 
 use App\Http\Controllers\Web\WebHomeController;
-use App\Models\Eloquent\Model;
-use App\Models\Page;
+use App\Models\Base\Model;
+use App\Models\Page\Page;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
@@ -280,7 +280,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     /**
      * Set the page route.
      *
-     * @param  \App\Models\Page  $page
+     * @param  \App\Models\Page\Page  $page
      * @return bool
      */
     protected function setPageRoute(Page $page): bool
@@ -301,7 +301,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     /**
      * Set the explicit route.
      *
-     * @param  \App\Models\Page  $page
+     * @param  \App\Models\Page\Page  $page
      * @return bool
      */
     protected function setExplicitRoute(Page $page): bool
@@ -323,7 +323,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     /**
      * Set the implicit route.
      *
-     * @param  \App\Models\Page  $page
+     * @param  \App\Models\Page\Page  $page
      * @return bool
      */
     protected function setImplicitRoute(Page $page): bool
@@ -356,7 +356,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     /**
      * Set the deep implicit route.
      *
-     * @param  \App\Models\Eloquent\Model  $implicitModel
+     * @param  \App\Models\Base\Model  $implicitModel
      * @return bool
      */
     protected function setDeepImplicitRoute(Model $implicitModel): bool

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Eloquent\Model;
+use App\Models\Base\Model;
 use Illuminate\Http\Request;
 
 trait Transferable
@@ -50,7 +50,7 @@ trait Transferable
     /**
      * Transfer model recursively with its child item(s).
      *
-     * @param  \App\Models\Eloquent\Model  $model
+     * @param  \App\Models\Base\Model  $model
      * @param  string  $column
      * @param  int  $columnValue
      * @return void

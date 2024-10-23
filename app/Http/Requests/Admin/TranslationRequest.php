@@ -21,4 +21,12 @@ class TranslationRequest extends Request
             'value' => 'required'
         ];
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function passedValidation(): void
+    {
+        $this->offsetUnset('code');
+    }
 }

@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ArticleRequest;
-use App\Models\Article;
+use App\Models\Article\Article;
+use App\Models\Article\ArticleLanguage;
 use App\Models\Collection;
 
 class AdminArticlesController extends Controller
@@ -64,6 +65,9 @@ class AdminArticlesController extends Controller
 
         $model = $this->model->create($input);
 
+        $input['article_id'] = $model->id;
+        $model->languages(false)->create($input);
+
         return redirect(cms_route('articles.edit', [$collectionId, $model->id]))
             ->with('alert', fill_data('success', trans('general.created')));
     }
@@ -107,6 +111,12 @@ class AdminArticlesController extends Controller
     public function update(ArticleRequest $request, int $collectionId, int $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
+
+        $languageModel = (new ArticleLanguage)->byForeign($id)->first();
+
+        if (! is_null($languageModel)) {
+            $languageModel->update($input);
+        }
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

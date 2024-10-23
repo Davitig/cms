@@ -2,7 +2,7 @@
 
 namespace App\Models\Traits;
 
-use App\Models\Eloquent\Builder;
+use App\Models\Base\Builder;
 use Closure;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -12,7 +12,7 @@ trait NestableTrait
      * Add a where "parent_id" clause to the query.
      *
      * @param  int  $id
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function parentId(int $id): Builder
     {

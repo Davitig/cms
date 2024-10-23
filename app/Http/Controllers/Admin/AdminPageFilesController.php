@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FileRequest;
-use App\Models\Page;
-use App\Models\PageFile;
+use App\Models\Page\Page;
+use App\Models\Page\PageFile;
+use App\Models\Page\PageFileLanguage;
 use Illuminate\Http\Request;
 
 class AdminPageFilesController extends Controller
@@ -44,6 +45,8 @@ class AdminPageFilesController extends Controller
      *
      * @param  int  $pageId
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     *
+     * @throws \Throwable
      */
     public function create(int $pageId)
     {
@@ -65,7 +68,9 @@ class AdminPageFilesController extends Controller
      *
      * @param  \App\Http\Requests\Admin\FileRequest  $request
      * @param  int  $pageId
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     *
+     * @throws \Throwable
      */
     public function store(FileRequest $request, int $pageId)
     {
@@ -73,6 +78,9 @@ class AdminPageFilesController extends Controller
         $input['page_id'] = $pageId;
 
         $model = $this->model->create($input);
+
+        $input['page_file_id'] = $model->id;
+        $model->languages(false)->create($input);
 
         if ($request->expectsJson()) {
             $view = view('admin.pages.files.item', [
@@ -104,7 +112,9 @@ class AdminPageFilesController extends Controller
      *
      * @param  int  $pageId
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     *
+     * @throws \Throwable
      */
     public function edit(int $pageId, int $id)
     {
@@ -128,11 +138,17 @@ class AdminPageFilesController extends Controller
      * @param  \App\Http\Requests\Admin\FileRequest  $request
      * @param  int  $pageId
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function update(FileRequest $request, int $pageId, int $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
+
+        $languageModel = (new PageFileLanguage)->byForeign($id)->first();
+
+        if (! is_null($languageModel)) {
+            $languageModel->update($input);
+        }
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

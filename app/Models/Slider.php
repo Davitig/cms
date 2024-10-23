@@ -2,19 +2,20 @@
 
 namespace App\Models;
 
-use App\Models\Eloquent\Builder;
-use App\Models\Eloquent\Model;
-use App\Models\Traits\LanguageTrait;
+use App\Models\Base\Builder;
+use App\Models\Base\Model;
+use App\Models\Traits\HasLanguage;
 use App\Models\Traits\PositionableTrait;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Slider extends Model
 {
-    use LanguageTrait, PositionableTrait;
+    use HasLanguage, PositionableTrait;
 
     /**
      * The table associated with the model.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $table = 'slider';
 
@@ -35,31 +36,6 @@ class Slider extends Model
     protected array $notUpdatable = [];
 
     /**
-     * Related database table name used by the Language model.
-     *
-     * @var string
-     */
-    protected string $languageTable = 'slider_languages';
-
-    /**
-     * The attributes that are mass assignable for the Language model.
-     *
-     * @var array
-     */
-    protected array $languageFillable = [
-        'slider_id', 'language_id', 'title', 'description'
-    ];
-
-    /**
-     * The attributes that are not updatable for the Language model.
-     *
-     * @var array
-     */
-    protected array $languageNotUpdatable = [
-        'slider_id', 'language_id'
-    ];
-
-    /**
      * Get the mutated file attribute.
      *
      * @param  string  $value
@@ -71,11 +47,22 @@ class Slider extends Model
     }
 
     /**
+     * Set languages a one-to-many relationship.
+     *
+     * @param  bool  $relation
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\SliderLanguage
+     */
+    public function languages(bool $relation = true): HasMany|SliderLanguage
+    {
+        return $relation ? $this->hasMany(SliderLanguage::class) : new SliderLanguage;
+    }
+
+    /**
      * Build a query for admin.
      *
      * @param  bool|string  $currentLang
      * @param  array|string  $columns
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function forAdmin(bool|string $currentLang = true, array|string $columns = []): Builder
     {
@@ -87,7 +74,7 @@ class Slider extends Model
      *
      * @param  bool|string  $currentLang
      * @param  array|string  $columns
-     * @return \App\Models\Eloquent\Builder
+     * @return \App\Models\Base\Builder
      */
     public function forPublic(bool|string $currentLang = true, array|string $columns = []): Builder
     {

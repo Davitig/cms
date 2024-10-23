@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FileRequest;
-use App\Models\Article;
-use App\Models\ArticleFile;
+use App\Models\Article\Article;
+use App\Models\Article\ArticleFile;
+use App\Models\Article\ArticleFileLanguage;
 use Illuminate\Http\Request;
 
 class AdminArticleFilesController extends Controller
@@ -43,6 +44,8 @@ class AdminArticleFilesController extends Controller
      *
      * @param  int  $articleId
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     *
+     * @throws \Throwable
      */
     public function create(int $articleId)
     {
@@ -64,7 +67,9 @@ class AdminArticleFilesController extends Controller
      *
      * @param  \App\Http\Requests\Admin\FileRequest  $request
      * @param  int  $articleId
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     *
+     * @throws \Throwable
      */
     public function store(FileRequest $request, int $articleId)
     {
@@ -72,6 +77,9 @@ class AdminArticleFilesController extends Controller
         $input['article_id'] = $articleId;
 
         $model = $this->model->create($input);
+
+        $input['article_file_id'] = $model->id;
+        $model->languages(false)->create($input);
 
         if ($request->expectsJson()) {
             $view = view('admin.collections.articles.files.item', [
@@ -103,7 +111,9 @@ class AdminArticleFilesController extends Controller
      *
      * @param  int  $articleId
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     *
+     * @throws \Throwable
      */
     public function edit(int $articleId, int $id)
     {
@@ -127,11 +137,17 @@ class AdminArticleFilesController extends Controller
      * @param  \App\Http\Requests\Admin\FileRequest  $request
      * @param  int  $articleId
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function update(FileRequest $request, int $articleId, int $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
+
+        $languageModel = (new ArticleFileLanguage)->byForeign($id)->first();
+
+        if (! is_null($languageModel)) {
+            $languageModel->update($input);
+        }
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

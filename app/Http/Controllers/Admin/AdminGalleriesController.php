@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\GalleryRequest;
 use App\Models\Collection;
-use App\Models\Gallery;
+use App\Models\Gallery\Gallery;
+use App\Models\Gallery\GalleryLanguage;
 use Illuminate\Http\Request;
 
 class AdminGalleriesController extends Controller
@@ -69,6 +70,9 @@ class AdminGalleriesController extends Controller
 
         $model = $this->model->create($input);
 
+        $input['gallery_id'] = $model->id;
+        $model->languages(false)->create($input);
+
         return redirect(cms_route('galleries.edit', [$collectionId, $model->id]))
             ->with('alert', fill_data('success', trans('general.created')));
     }
@@ -112,6 +116,12 @@ class AdminGalleriesController extends Controller
     public function update(GalleryRequest $request, int $collectionId, int $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
+
+        $languageModel = (new GalleryLanguage)->byForeign($id)->first();
+
+        if (! is_null($languageModel)) {
+            $languageModel->update($input);
+        }
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\Gallery;
+use App\Models\Gallery\Gallery;
 
 class WebGalleriesController extends Controller
 {
     /**
      * The Gallery instance.
      *
-     * @var \App\Models\Gallery
+     * @var \App\Models\Gallery\Gallery
      */
     protected Gallery $model;
 
     /**
      * Create a new controller instance.
      *
-     * @param  \App\Models\Gallery  $model
+     * @param  \App\Models\Gallery\Gallery  $model
      * @return void
      */
     public function __construct(Gallery $model)
@@ -28,7 +28,7 @@ class WebGalleriesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  array<\App\Models\Page, \App\Models\Collection>  $models
+     * @param  array<\App\Models\Page\Page, \App\Models\Collection>  $models
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(array $models)

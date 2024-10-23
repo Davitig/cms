@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\Eloquent\Builder;
-use App\Models\Eloquent\Model;
+use App\Models\Base\Builder;
+use App\Models\Base\Model;
 
 class Permission extends Model
 {
     /**
      * The table associated with the model.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $table = 'permissions';
 
@@ -55,7 +55,7 @@ class Permission extends Model
      * Get the list of permissions by user id.
      *
      * @param  string  $value
-     * @return \App\Models\Eloquent\Builder|static
+     * @return \App\Models\Base\Builder|static
      */
     public function role(string $value): Builder|static
     {

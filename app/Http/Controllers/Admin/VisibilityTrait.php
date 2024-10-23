@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Eloquent\Model;
+use App\Models\Base\Model;
 use Illuminate\Http\Request;
 use RuntimeException;
 
@@ -23,9 +23,7 @@ trait VisibilityTrait
             throw new RuntimeException('Model not found');
         }
 
-        $model = $this->model->when($this->model->hasLanguage(), function ($q) {
-            return $q->joinLanguage();
-        })->findOrFail($id);
+        $model = $this->model->findOrFail($id);
 
         $model->update(['visible' => $visible = (int) ! $model->visible]);
 

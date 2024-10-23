@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Gallery;
 
-use App\Models\Eloquent\Model;
+use App\Models\Base\Model;
 use App\Models\Traits\HasCollection;
-use App\Models\Traits\LanguageTrait;
+use App\Models\Traits\HasLanguage;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Gallery extends Model
 {
-    use HasCollection, LanguageTrait;
+    use HasCollection, HasLanguage;
 
     /**
      * Type of the collection.
@@ -20,7 +21,7 @@ class Gallery extends Model
     /**
      * The table associated with the model.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $table = 'galleries';
 
@@ -44,27 +45,14 @@ class Gallery extends Model
     ];
 
     /**
-     * Related database table name used by the Language model.
+     * Set languages a one-to-many relationship.
      *
-     * @var string
+     * @param  bool  $relation
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\Gallery\GalleryLanguage
      */
-    protected string $languageTable = 'gallery_languages';
+    public function languages(bool $relation = true): HasMany|GalleryLanguage
+    {
+        return $relation ? $this->hasMany(GalleryLanguage::class) : new GalleryLanguage;
 
-    /**
-     * The attributes that are mass assignable for the Language model.
-     *
-     * @var array
-     */
-    protected array $languageFillable = [
-        'gallery_id', 'language_id', 'title', 'description', 'meta_title', 'meta_desc'
-    ];
-
-    /**
-     * The attributes that are not updatable for the Language model.
-     *
-     * @var array
-     */
-    protected array $languageNotUpdatable = [
-        'gallery_id', 'language_id'
-    ];
+    }
 }

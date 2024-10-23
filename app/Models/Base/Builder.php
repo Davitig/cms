@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Eloquent;
+namespace App\Models\Base;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
@@ -110,7 +110,7 @@ class Builder extends EloquentBuilder
      * Find a model by its query or instantiate it.
      *
      * @param  array|string  $columns
-     * @return \App\Models\Eloquent\Model
+     * @return \App\Models\Base\Model
      */
     public function firstNew(array|string $columns = ['*']): Model
     {

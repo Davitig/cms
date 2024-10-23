@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use App\Models\Eloquent\Model;
-use Illuminate\Http\Request;
+use App\Models\Base\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 
 class Calendar extends Model
 {
     /**
      * The table associated with the model.
      *
-     * @var string|null
+     * @var null|string
      */
     protected $table = 'calendar';
 

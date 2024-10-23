@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Eloquent\Model;
+use App\Models\Base\Model;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;

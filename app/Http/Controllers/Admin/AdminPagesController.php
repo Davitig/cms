@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PageRequest;
 use App\Models\Menu;
-use App\Models\Page;
+use App\Models\Page\Page;
+use App\Models\Page\PageLanguage;
 use Illuminate\Http\Request;
 
 class AdminPagesController extends Controller
@@ -67,6 +68,9 @@ class AdminPagesController extends Controller
 
         $model = $this->model->create($input);
 
+        $input['page_id'] = $model->id;
+        $model->languages(false)->create($input);
+
         return redirect(cms_route('pages.edit', [$menuId, $model->id]))
             ->with('alert', fill_data('success', trans('general.created')));
     }
@@ -116,6 +120,12 @@ class AdminPagesController extends Controller
     public function update(PageRequest $request, int $menuId, int $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
+
+        $languageModel = (new PageLanguage)->byForeign($id)->first();
+
+        if (! is_null($languageModel)) {
+            $languageModel->update($input);
+        }
 
         if ($request->expectsJson()) {
             if (array_key_exists(
@@ -205,9 +215,7 @@ class AdminPagesController extends Controller
             return [];
         }
 
-        $model = new $model;
-
-        if ($model->hasLanguage()) {
+        if (method_exists($model = new $model, 'joinLanguage')) {
             $model = $model->joinLanguage();
         }
 
