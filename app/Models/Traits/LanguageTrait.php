@@ -22,7 +22,9 @@ trait LanguageTrait
      */
     public function setLanguage(): static
     {
-        $this->languageModel = new _Language($this);
+        $this->languageModel = new _Language;
+
+        $this->languageModel->setFromForeignModel($this);
 
         return $this;
     }

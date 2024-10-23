@@ -76,12 +76,12 @@ abstract class Model extends BaseModel
     }
 
     /**
-     * Get all the current fillable attributes on the model.
+     * Get fillable attributes on the model.
      *
      * @param  array  $fillable
      * @return array
      */
-    public function getRefillAttributes(array $fillable = []): array
+    public function getFillableAttributes(array $fillable = []): array
     {
         $fillable = array_merge($this->fillable, $fillable);
 
