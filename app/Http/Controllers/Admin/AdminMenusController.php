@@ -92,7 +92,7 @@ class AdminMenusController extends Controller
             ));
         }
 
-        return redirect()->back()->with('alert', fill_data(
+        return back()->with('alert', fill_data(
             'success', trans('general.updated')
         ));
     }
@@ -111,7 +111,7 @@ class AdminMenusController extends Controller
             return response()->json(fill_data('success', trans('database.deleted')));
         }
 
-        return redirect()->back()->with('alert', fill_data(
+        return back()->with('alert', fill_data(
             'success', trans('database.deleted')
         ));
     }

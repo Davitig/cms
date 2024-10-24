@@ -37,7 +37,7 @@ trait HasLanguage
                     ->when($currentLang !== false, function ($q) use ($languageTable, $currentLang) {
                         return $q->where(
                             "{$languageTable}.language_id",
-                            language($currentLang)['id'] ?? $currentLang
+                            is_numeric($currentLang) ? $currentLang : language($currentLang, 'id')
                         );
                     });
             })->addSelect(array_merge(((array) $columns) ?: ["{$languageTable}.*"], [

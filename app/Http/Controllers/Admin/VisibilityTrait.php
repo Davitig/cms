@@ -31,6 +31,6 @@ trait VisibilityTrait
             return response()->json($visible);
         }
 
-        return redirect()->back();
+        return back();
     }
 }

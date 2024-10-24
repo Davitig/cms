@@ -119,9 +119,9 @@ class AdminGalleriesController extends Controller
 
         $languageModel = (new GalleryLanguage)->byForeign($id)->first();
 
-        if (! is_null($languageModel)) {
-            $languageModel->update($input);
-        }
+        ! is_null($languageModel)
+            ? $languageModel->update($input)
+            : $this->cloneLanguage($id, $input);
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(
@@ -129,7 +129,7 @@ class AdminGalleriesController extends Controller
             ));
         }
 
-        return redirect()->back()->with('alert', fill_data(
+        return back()->with('alert', fill_data(
             'success', trans('general.updated')
         ));
     }
@@ -149,7 +149,7 @@ class AdminGalleriesController extends Controller
             return response()->json(fill_data('success', trans('database.deleted')));
         }
 
-        return redirect()->back()->with('alert', fill_data(
+        return back()->with('alert', fill_data(
             'success', trans('database.deleted')
         ));
     }

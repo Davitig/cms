@@ -49,7 +49,7 @@ class AdminNotesController extends Controller
             return response()->json($this->model->id);
         }
 
-        return redirect()->back();
+        return back();
     }
 
     /**
@@ -78,7 +78,7 @@ class AdminNotesController extends Controller
             return response()->json($model);
         }
 
-        return redirect()->back();
+        return back();
     }
 
     /**
@@ -96,6 +96,6 @@ class AdminNotesController extends Controller
             return response()->json($model);
         }
 
-        return redirect()->back();
+        return back();
     }
 }

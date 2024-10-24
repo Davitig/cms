@@ -82,6 +82,6 @@ trait Transferable
             return response()->json(fill_data($type, $message));
         }
 
-        return redirect()->back()->with('alert', fill_data($type, $message));
+        return back()->with('alert', fill_data($type, $message));
     }
 }

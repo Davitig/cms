@@ -67,7 +67,7 @@ class AdminCalendarController extends Controller
             ));
         }
 
-        return redirect()->back();
+        return back();
     }
 
     /**
@@ -85,6 +85,6 @@ class AdminCalendarController extends Controller
             return response()->json($result);
         }
 
-        return redirect()->back();
+        return back();
     }
 }

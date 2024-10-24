@@ -5,10 +5,11 @@
         $langCount = count($languages);
     @endphp
     @foreach ($items as $current)
+        @continue(! $current->language)
         <li{!! $activeLang == $current->language ? ' class="active"' : '' !!}>
             <a href="#item-{{$current->language}}" data-toggle="tab">
-                <img src="{{ asset('assets/libs/images/flags/'.$current->language.'.png') }}" width="23" height="13" alt="flag">
-                {{-- <span class="visible-xs">{{$current->language}}</span> --}}
+                <img src="{{ asset('assets/libs/images/flags/'.$current->language.'.png') }}" width="23" height="13" alt="{{$current->language}}">
+                {{-- <span class="visible-xs">{{strtoupper($current->language)}}</span> --}}
                 <span class="hidden-xs">
                     {{strtoupper(language($current->language, ($langCount > 5 ? 'short' : 'full') . '_name'))}}
                 </span>
@@ -19,8 +20,8 @@
     @foreach ($languages as $value)
         <li{!! $activeLang == $value['language'] ? ' class="active"' : '' !!}>
             <a href="#item-{{$value['language']}}" data-toggle="tab" class="text-red">
-                <img src="{{ asset('assets/libs/images/flags/'.$value['language'].'.png') }}" width="23" height="13" alt="flag">
-                {{-- <span class="visible-xs">{{$value['language']}}</span> --}}
+                <img src="{{ asset('assets/libs/images/flags/'.$value['language'].'.png') }}" width="23" height="13" alt="{{$value['language']}}">
+                {{-- <span class="visible-xs">{{strtoupper($value['language'])}}</span> --}}
                 <span class="hidden-xs">{{strtoupper($value[($langCount > 5 ? 'short' : 'full') . '_name'])}}</span>
             </a>
         </li>

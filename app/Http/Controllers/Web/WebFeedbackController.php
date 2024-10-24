@@ -73,6 +73,6 @@ class WebFeedbackController extends Controller
             $message = fill_data(false, trans('send_failure'));
         }
 
-        return redirect()->back()->with('alert', $message);
+        return back()->with('alert', $message);
     }
 }

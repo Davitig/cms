@@ -121,7 +121,9 @@ class LanguageServiceProvider extends ServiceProvider
             array_unshift($this->segments, $config->get('app.language'));
         }
 
-        $query = query_string($request->except('lang'));
+        $query = query_string(
+            $config->get('cms_is_booted') ? $request->except('lang') : $request->query()
+        );
 
         foreach($this->languages as $key => $value) {
             if ($this->languagesCount > 1) {
