@@ -114,9 +114,9 @@ class AdminEventsController extends Controller
 
         $languageModel = (new EventLanguage)->byForeign($id)->first();
 
-        if (! is_null($languageModel)) {
-            $languageModel->update($input);
-        }
+        ! is_null($languageModel)
+            ? $languageModel->update($input)
+            : $this->cloneLanguage($id, $input);
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(
@@ -124,7 +124,7 @@ class AdminEventsController extends Controller
             ));
         }
 
-        return redirect()->back()->with('alert', fill_data(
+        return back()->with('alert', fill_data(
             'success', trans('general.updated')
         ));
     }
@@ -144,7 +144,7 @@ class AdminEventsController extends Controller
             return response()->json(fill_data('success', trans('database.deleted')));
         }
 
-        return redirect()->back()->with('alert', fill_data(
+        return back()->with('alert', fill_data(
             'success', trans('database.deleted')
         ));
     }

@@ -143,6 +143,8 @@ select .sub-item {padding-left:20px;}
 
 /* tabs */
 .nav.nav-tabs li .visible-xs {text-transform:uppercase;}
+.tabs-vertical-env.custom .tab-content {width:1000px;padding:0;}
+.nav.tabs-vertical.custom {padding-top:40px;}
 
 /* users list & form */
 .members-table tbody tr td {padding: 12px 15px;}

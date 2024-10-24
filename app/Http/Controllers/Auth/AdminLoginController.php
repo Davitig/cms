@@ -109,6 +109,6 @@ class AdminLoginController extends Controller
             return response()->json(fill_data(false, trans('auth.invalid.password')));
         }
 
-        return redirect()->back()->withErrors(trans('auth.invalid.password'));
+        return back()->withErrors(trans('auth.invalid.password'));
     }
 }

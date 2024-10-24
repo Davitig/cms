@@ -53,7 +53,7 @@
                             <input type="radio" name="main" data-id="{{$item->id}}" class="cbr cbr-success"{{$item->main ? ' checked' : ''}}>
                         </td>
                         <td class="full-name{{ $item->language == language() ? ' text-bold text-primary' : '' }}">
-                            <img src="{{ asset('assets/libs/images/flags/'.$item->language.'.png') }}" width="30" height="20" alt="{{$item->full_name}} flag" />
+                            <img src="{{ asset('assets/libs/images/flags/'.$item->language.'.png') }}" width="30" height="20" alt="{{$item->full_name}}" />
                             <span>{{ $item->full_name }}</span>
                         </td>
                         <td>{{ $item->short_name }}</td>

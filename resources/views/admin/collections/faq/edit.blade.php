@@ -39,15 +39,17 @@
         </div>
         <div class="panel-body">
             <div class="tab-content">
-                @php($languages = languages())
+                @php
+                    $activeLang = request('lang', language());
+                    $languages = languages();
+                    $firstLang = key($languages);
+                @endphp
                 @foreach ($items as $current)
-                    <div class="tab-pane{{language() != $current->language ? '' : ' active'}}"
-                         id="item-{{$current->language}}">
-                        {{ html()->modelForm($current,
-                            'put', cms_route('faq.update', [
-                                $current->collection_id, $current->id
-                            ], is_multilanguage() ? $current->language : null)
-                        )->class('form-horizontal ' . $cmsSettings->get('ajax_form'))
+                    <div class="tab-pane{{$activeLang == $current->language || ! $current->language ? ' active' : ''}}" id="item-{{$current->language ?: $firstLang}}">
+                        {{ html()->modelForm($current, 'put', cms_route('faq.update', [
+                            $current->collection_id, $current->id
+                        ], is_multilanguage() ? ($current->language ?: $activeLang) : null))
+                        ->class('form-horizontal ' . $cmsSettings->get('ajax_form'))
                         ->data('lang', $current->language)->open() }}
                         @include('admin.collections.faq.form', [
                             'submit'        => trans('general.update'),
@@ -56,11 +58,10 @@
                         ])
                         {{ html()->form()->close() }}
                     </div>
-                    @unset($languages[$current->language])
+                    @unset($languages[$current->language ?: $firstLang])
                 @endforeach
                 @foreach ($languages as $value)
-                    <div class="tab-pane{{language() != $value['language'] ? '' : ' active'}}"
-                         id="item-{{$value['language']}}">
+                    <div class="tab-pane{{$activeLang == $value['language'] ? ' active' : ''}}" id="item-{{$value['language']}}">
                         {{ html()->form('post', cms_route('faq.cloneLanguage', [$current->id], $value['language']))
                             ->class('form-horizontal')->data('lang', $value['language'])->open() }}
                         <button class="btn btn-info btn-icon btn-icon-standalone btn-lg">
