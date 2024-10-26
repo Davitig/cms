@@ -43,4 +43,5 @@
             {{ html()->form()->close() }}
         </div>
     </div>
+    @include('admin.languages.scripts')
 @endsection

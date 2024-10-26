@@ -27,13 +27,10 @@
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon">
-                @if ($current->language)
-                    <img id="lang-img" src="{{ asset('assets/libs/images/flags/'.$current->language.'.png') }}" width="28" height="18" alt="flag">
-                @else
-                    <i class="{{icon_type('languages')}}"></i>
-                @endif
+                <img id="lang-img" src="{{ asset('assets/libs/images/flags/'.$current->language.'.png') }}" width="28" height="18" alt="flag">
+                {{-- <i class="{{icon_type('languages')}}"></i> --}}
             </span>
-            {{ html()->text('language')->id('language')->class('form-control')->placeholder('E.g. en') }}
+            {{ html()->text('language')->id('language')->class('form-control')->data('mask', 'aa')->placeholder('E.g. en') }}
         </div>
         @if ($error)
             <span class="text-danger">{{$error}}</span>

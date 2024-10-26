@@ -43,12 +43,5 @@
             {{ html()->form()->close() }}
         </div>
     </div>
-    @push('body.bottom')
-        <script type="text/javascript">
-            $('form.ajax-form').on('ajaxFormSuccess', function (form, data) {
-                if (! data?.input) return;
-                $('#lang-img').attr('src', '{{ asset('/') }}/assets/libs/images/flags/'+data.input.language+'.png');
-            });
-        </script>
-    @endpush
+    @include('admin.languages.scripts')
 @endsection
