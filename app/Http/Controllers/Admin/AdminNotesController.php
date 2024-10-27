@@ -88,14 +88,14 @@ class AdminNotesController extends Controller
      */
     public function destroy()
     {
-        $id = $this->request->get('id');
+        $this->model->whereKey($this->request->get('id'))->delete();
 
-        $model = $this->model->whereKey($id)->delete();
-
-        if ($this->request->expectsJson()) {
-            return response()->json($model);
+        if (request()->expectsJson()) {
+            return response()->json(fill_data('success', trans('database.deleted')));
         }
 
-        return back();
+        return back()->with('alert', fill_data(
+            'success', trans('database.deleted')
+        ));
     }
 }
