@@ -244,7 +244,7 @@ class AdminSitemapXmlController extends Controller
      * @param  string  $langValue
      * @return array
      */
-    protected function getLanguageLinks(Model $page, string $slug = null, string $langValue)
+    protected function getLanguageLinks(Model $page, ?string $slug, string $langValue)
     {
         return [
             'name' => "{{$this->xhtml}}link",

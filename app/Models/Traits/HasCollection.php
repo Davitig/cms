@@ -77,7 +77,7 @@ trait HasCollection
      * @return \App\Models\Base\Builder
      */
     public function forAdmin(
-        int          $collectionId = null,
+        ?int         $collectionId = null,
         bool|string  $currentLang = true,
         array|string $columns = []): Builder
     {
@@ -95,7 +95,7 @@ trait HasCollection
      * @return \App\Models\Base\Builder
      */
     public function forPublic(
-        int          $collectionId = null,
+        ?int         $collectionId = null,
         bool|string  $currentLang = true,
         array|string $columns = []): Builder
     {
@@ -111,7 +111,7 @@ trait HasCollection
      * @param  int|null  $collectionId
      * @return \App\Models\Base\Builder
      */
-    public function bySlug(string $slug, int $collectionId = null): Builder
+    public function bySlug(string $slug, ?int $collectionId = null): Builder
     {
         return $this->where('slug', $slug)->forPublic($collectionId);
     }
@@ -124,7 +124,7 @@ trait HasCollection
      * @param  int|null  $id
      * @return \App\Models\Base\Builder
      */
-    public function byCollectionSlug(int $collectionId, string $slug, int $id = null): Builder
+    public function byCollectionSlug(int $collectionId, string $slug, ?int $id = null): Builder
     {
         return $this->collectionId($collectionId)->bySlug($slug, $id);
     }

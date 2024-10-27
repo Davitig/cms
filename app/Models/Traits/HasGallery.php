@@ -87,7 +87,7 @@ trait HasGallery
      * @param  string|null  $type
      * @return \App\Models\Base\Builder
      */
-    public function byType(string $type = null): Builder
+    public function byType(?string $type = null): Builder
     {
         return (new Gallery)->joinLanguage()->where(
             'type', is_null($type) ? static::TYPE : $type

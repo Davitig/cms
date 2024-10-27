@@ -91,7 +91,7 @@ class Calendar extends Model
      * @param  string|null  $end
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public function getActive(string $start = null, string $end = null): Collection|static
+    public function getActive(?string $start = null, ?string $end = null): Collection|static
     {
         if (is_null($start)) {
             $start = date('Y-m') . '-01';

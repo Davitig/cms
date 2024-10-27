@@ -97,7 +97,7 @@ class Builder extends EloquentBuilder
      * @param  string|null  $column
      * @return string|null
      */
-    public function getFullSlug(int $value = null, string $column = null): ?string
+    public function getFullSlug(?int $value = null, ?string $column = null): ?string
     {
         if ($result = $this->first()) {
             return $result->getFullSlug($value, $column);
@@ -129,7 +129,7 @@ class Builder extends EloquentBuilder
      * @param  string|null  $column
      * @return string|null
      */
-    public function firstAttr(string $attribute, int $value = null, string $column = null): ?string
+    public function firstAttr(string $attribute, ?int $value = null, ?string $column = null): ?string
     {
         return $this->when(! is_null($value), function ($q) use ($value, $column) {
             return $q->where($column ?: $this->getModel()->getKeyName(), $value);
@@ -146,7 +146,7 @@ class Builder extends EloquentBuilder
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function firstAttrOrFail(string $attribute, int $value = null, string $column = null): ?string
+    public function firstAttrOrFail(string $attribute, ?int $value = null, ?string $column = null): ?string
     {
         if (is_null($attribute = $this->firstAttr($attribute, $value, $column))) {
             throw (new ModelNotFoundException)->setModel(get_class($this));
@@ -189,7 +189,7 @@ class Builder extends EloquentBuilder
      * @param  string|null  $exclude
      * @return int
      */
-    public function update(array $values = [], string $exclude = null): int
+    public function update(array $values = [], ?string $exclude = null): int
     {
         $this->model->setFillableByUpdatable($exclude);
 
@@ -269,7 +269,7 @@ class Builder extends EloquentBuilder
      * @param  string|null  $table
      * @return $this
      */
-    public function orderAsc(string $table = null): Builder
+    public function orderAsc(?string $table = null): Builder
     {
         return $this->orderBy(
             $this->getTableNameWithDot($table) . $this->getModel()->getKeyName()
@@ -282,7 +282,7 @@ class Builder extends EloquentBuilder
      * @param  string|null  $table
      * @return $this
      */
-    public function orderDesc(string $table = null): Builder
+    public function orderDesc(?string $table = null): Builder
     {
         return $this->orderByDesc(
             $this->getTableNameWithDot($table) . $this->getModel()->getKeyName()
@@ -295,7 +295,7 @@ class Builder extends EloquentBuilder
      * @param  string|null  $table
      * @return $this
      */
-    public function createdAsc(string $table = null): Builder
+    public function createdAsc(?string $table = null): Builder
     {
         return $this->orderBy($this->getTableNameWithDot($table) . 'created_at');
     }
@@ -306,7 +306,7 @@ class Builder extends EloquentBuilder
      * @param  string|null  $table
      * @return $this
      */
-    public function createdDesc(string $table = null): Builder
+    public function createdDesc(?string $table = null): Builder
     {
         return $this->orderByDesc($this->getTableNameWithDot($table) . 'created_at');
     }

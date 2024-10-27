@@ -76,7 +76,7 @@ trait Transferable
      * @param  string|null  $message
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    protected function getTransferResponse(Request $request, string $type, string $message = null)
+    protected function getTransferResponse(Request $request, string $type, ?string $message = null)
     {
         if ($request->expectsJson()) {
             return response()->json(fill_data($type, $message));

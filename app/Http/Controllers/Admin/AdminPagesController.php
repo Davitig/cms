@@ -203,7 +203,7 @@ class AdminPagesController extends Controller
      * @param  string|null  $type
      * @return array
      */
-    public function getListableTypes(string $type = null)
+    public function getListableTypes(?string $type = null)
     {
         if (! $type && ! ($type = $this->request->get('type'))) {
             return [];

@@ -37,7 +37,7 @@ trait PageableTrait
      * @param  string|null  $column
      * @return string|null
      */
-    public function getFullSlug(int $value = null, string $column = null): ?string
+    public function getFullSlug(?int $value = null, ?string $column = null): ?string
     {
         return $this->fullSlug($value, $column)->full_slug;
     }
@@ -49,7 +49,7 @@ trait PageableTrait
      * @param  string|null  $column
      * @return $this
      */
-    public function fullSlug(int $value = null, string $column = null): static
+    public function fullSlug(?int $value = null, ?string $column = null): static
     {
         $this->full_slug ??= $this->slug;
 

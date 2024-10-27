@@ -29,8 +29,8 @@ trait NestableTrait
      */
     public function getBaseModel(
         array|string $columns = ['*'],
-        int          $id = null,
-        Closure      $callback = null): static
+        ?int         $id = null,
+        ?Closure     $callback = null): static
     {
         if (! ($id = ($id ?: $this->parent_id))) {
             return $this;
@@ -58,8 +58,8 @@ trait NestableTrait
      */
     public function getSiblingModels(
         array|string $columns = ['*'],
-        int          $parentId = null,
-        int          $id = null,
+        ?int         $parentId = null,
+        ?int         $id = null,
         bool|int     $recursive = false): Collection
     {
         if (! ($parentId = $parentId ?: $this->parent_id)
@@ -93,7 +93,7 @@ trait NestableTrait
      */
     public function getSubModels(
         array|string $columns = ['*'],
-        int          $parentId = null,
+        ?int         $parentId = null,
         bool|int     $recursive = false): Collection
     {
         $columns = (array) $columns;
@@ -120,7 +120,7 @@ trait NestableTrait
      * @param  int|null  $id
      * @return bool
      */
-    public function hasSiblingModel(int $parentId = null, int $id = null): bool
+    public function hasSiblingModel(?int $parentId = null, ?int $id = null): bool
     {
         if (! ($parentId = $parentId ?: $this->parent_id)
             || ! ($id = $id ?: $this->getKey())
@@ -137,7 +137,7 @@ trait NestableTrait
      * @param  int|null  $parentId
      * @return bool
      */
-    public function hasSubModel(int $parentId = null): bool
+    public function hasSubModel(?int $parentId = null): bool
     {
         if (! ($parentId = $parentId ?: $this->getKey())) {
             return false;
@@ -153,7 +153,7 @@ trait NestableTrait
      * @param  string|null  $column
      * @return string|null
      */
-    public function getFullSlug(int $value = null, string $column = null): ?string
+    public function getFullSlug(?int $value = null, ?string $column = null): ?string
     {
         return $this->fullSlug($value, $column)->full_slug;
     }
@@ -165,7 +165,7 @@ trait NestableTrait
      * @param  string|null  $column
      * @return $this
      */
-    public function fullSlug(int $value = null, string $column = null): static
+    public function fullSlug(?int $value = null, ?string $column = null): static
     {
         $this->full_slug ??= $this->slug;
 

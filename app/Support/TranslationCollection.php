@@ -18,10 +18,10 @@ class TranslationCollection
      * Get the value from the collection.
      *
      * @param  string  $key
-     * @param  mixed|null  $default
+     * @param  string|null  $default
      * @return string|null
      */
-    public function get(string $key, mixed $default = null): ?string
+    public function get(string $key, ?string $default = null): ?string
     {
         return ! is_null($this->collection)
             ? $this->collection->get($key, $default)

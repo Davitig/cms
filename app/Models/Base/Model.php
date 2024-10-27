@@ -19,7 +19,7 @@ abstract class Model extends BaseModel
      * @param  string|null  $exclude
      * @return void
      */
-    public function setFillableByUpdatable(string $exclude = null): void
+    public function setFillableByUpdatable(?string $exclude = null): void
     {
         if (! ($hasUpdatable = ! empty($this->updatable)) && empty($this->notUpdatable)) {
             return;
@@ -76,7 +76,7 @@ abstract class Model extends BaseModel
      * @param  string|null  $exclude
      * @return bool
      */
-    public function update(array $attributes = [], array $options = [], string $exclude = null): bool
+    public function update(array $attributes = [], array $options = [], ?string $exclude = null): bool
     {
         $this->setFillableByUpdatable($exclude);
 

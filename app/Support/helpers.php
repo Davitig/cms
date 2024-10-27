@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
  * @param  string|null  $value
  * @return string|array
  */
-function language(bool|string $key = null, string $value = null): array|string
+function language(bool|string|null $key = null, ?string $value = null): array|string
 {
     $lang = (string) config('app.language');
 
@@ -77,7 +77,7 @@ function cms_is_booted(): bool
  * @param  string|null  $path
  * @return string
  */
-function cms_slug(string $path = null): string
+function cms_slug(?string $path = null): string
 {
     if (is_null($path)) {
         return cms_config('slug');
@@ -126,10 +126,10 @@ function cms_route_name(string $name): string
  * @return string
  */
 function cms_route(
-    string      $name,
-    mixed       $parameters = [],
-    bool|string $language = null,
-    bool        $absolute = true): string
+    string           $name,
+    mixed            $parameters = [],
+    bool|string|null $language = null,
+    bool             $absolute = true): string
 {
     return language_to_url(route(cms_route_name($name), $parameters, $absolute), $language);
 }
@@ -144,10 +144,10 @@ function cms_route(
  * @return string
  */
 function cms_url(
-    array|string $path = '',
-    array        $parameters = [],
-    bool|string  $language = null,
-    bool         $secure = null): string
+    array|string     $path = '',
+    array            $parameters = [],
+    bool|string|null $language = null,
+    ?bool            $secure = null): string
 {
     if (is_array($path)) {
         $path = implode('/', array_filter($path));
@@ -168,10 +168,10 @@ function cms_url(
  * @return string
  */
 function web_route(
-    string      $name,
-    mixed       $parameters = [],
-    bool|string $language = null,
-    bool        $absolute = true): string
+    string           $name,
+    mixed            $parameters = [],
+    bool|string|null $language = null,
+    bool             $absolute = true): string
 {
     return language_to_url(route($name, $parameters, $absolute), $language);
 }
@@ -186,10 +186,10 @@ function web_route(
  * @return string
  */
 function web_url(
-    array|string $path = '',
-    array        $parameters = [],
-    bool|string  $language = null,
-    bool         $secure = null): string
+    array|string     $path = '',
+    array            $parameters = [],
+    bool|string|null $language = null,
+    ?bool            $secure = null): string
 {
     if (is_array($path)) {
         $path = implode('/', array_filter($path));
@@ -237,7 +237,7 @@ function query_string(array $parameters, string $basePrefix = '?'): string
  * @param  bool|string|null  $language
  * @return string
  */
-function language_prefix(string $path, bool|string $language = null): string
+function language_prefix(string $path, bool|string|null $language = null): string
 {
     $path = trim($path, '/');
 
@@ -260,7 +260,7 @@ function language_prefix(string $path, bool|string $language = null): string
  * @param  bool|string|null  $language
  * @return string
  */
-function language_to_url(string $url, bool|string $language = null): string
+function language_to_url(string $url, bool|string|null $language = null): string
 {
     if (! ($withLanguage = ! empty($language)) && ! language_in_url()) {
         return trim($url, '/');
@@ -395,7 +395,7 @@ function app_instance(string $instance, mixed $default = null): mixed
  * @param  mixed  $input
  * @return array
  */
-function fill_data(string $result, string $message = null, mixed $input = null): array
+function fill_data(string $result, ?string $message = null, mixed $input = null): array
 {
     return [
         'result' => $result,
@@ -423,7 +423,7 @@ function fill_db_data(string $key, array $parameters = []): array
  * @param  mixed  $default
  * @return array|string
  */
-function cms_config(string $key = null, mixed $default = []): array|string
+function cms_config(?string $key = null, mixed $default = []): array|string
 {
     if (! is_null($key)) {
         return config('cms.' . $key, $default);
@@ -439,7 +439,7 @@ function cms_config(string $key = null, mixed $default = []): array|string
  * @param  mixed  $default
  * @return array|string
  */
-function cms_pages(string $key = null, mixed $default = []): array|string
+function cms_pages(?string $key = null, mixed $default = []): array|string
 {
     if (! is_null($key)) {
         return cms_config('pages.' . $key, $default);
@@ -455,7 +455,7 @@ function cms_pages(string $key = null, mixed $default = []): array|string
  * @param  mixed  $default
  * @return array|string
  */
-function cms_collections(string $key = null, mixed $default = []): array|string
+function cms_collections(?string $key = null, mixed $default = []): array|string
 {
     if (! is_null($key)) {
         return cms_config('collections.' . $key, $default);
@@ -471,7 +471,7 @@ function cms_collections(string $key = null, mixed $default = []): array|string
  * @param  mixed  $default
  * @return array|string
  */
-function deep_collection(string $key = null, mixed $default = []): array|string
+function deep_collection(?string $key = null, mixed $default = []): array|string
 {
     if (! is_null($key)) {
         return cms_config('deep_collections.' . $key, $default);
@@ -487,7 +487,7 @@ function deep_collection(string $key = null, mixed $default = []): array|string
  * @param  mixed|null  $default
  * @return array|string
  */
-function user_roles(string $key = null, mixed $default = null): array|string
+function user_roles(?string $key = null, mixed $default = null): array|string
 {
     if (! is_null($key)) {
         return cms_config('user_roles.' . $key, $default);
@@ -560,7 +560,7 @@ function format_bytes(int $bytes, int $precision = 2): string
  * @param  string  $end
  * @return string
  */
-function text_limit(string $string = null, int $limit = 100, string $break = '.', string $end = ''): ?string
+function text_limit(?string $string = null, int $limit = 100, string $break = '.', string $end = ''): ?string
 {
     if (! $string) {
         return $string;

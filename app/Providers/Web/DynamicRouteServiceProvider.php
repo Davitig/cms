@@ -381,7 +381,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      * @param  string|null  $defaultMethod
      * @return bool
      */
-    protected function setCurrentRoute(string $type, string $defaultMethod = null): bool
+    protected function setCurrentRoute(string $type, ?string $defaultMethod = null): bool
     {
         $path = '';
 

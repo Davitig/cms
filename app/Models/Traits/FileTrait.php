@@ -108,7 +108,7 @@ trait FileTrait
      * @param  string|null  $file
      * @return string
      */
-    public function getFileSize(string $file = null): string
+    public function getFileSize(?string $file = null): string
     {
         try {
             $size = (new Filesystem)->size(

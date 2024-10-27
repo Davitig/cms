@@ -56,7 +56,7 @@ class Page extends Model
      * @param  bool|string  $currentLang
      * @return \App\Models\Base\Builder
      */
-    public function forAdmin(int $menuId = null, bool|string $currentLang = true): Builder
+    public function forAdmin(?int $menuId = null, bool|string $currentLang = true): Builder
     {
         return $this->when(! is_null($menuId), function ($q) use ($menuId) {
             return $q->menuId($menuId);
