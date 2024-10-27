@@ -99,30 +99,41 @@ class AdminMainData
      */
     protected function shareRouteMatches(): void
     {
-        $currentRouteName = app('router')->current()->getName();
-        $currentRouteParams = app('router')->current()->parameters();
+        $currentRouteName = str_replace(
+            cms_slug() . '.', '', app('router')->current()->getName()
+        );
+        $currentRouteIndexParam = current(app('router')->current()->parameters());
 
-        $callback = function ($values) use ($currentRouteName) {
-            foreach ($values as $value) {
-                if (str_contains($currentRouteName, $value . '.')) {
-                    return $value;
-                }
+        $resourceMethod = null;
+
+        foreach (resource_names('') as $value) {
+            if (str_contains($currentRouteName, $value)) {
+                $currentRouteName = str_replace($value, '', $currentRouteName);
+
+                $resourceMethod = $value;
             }
-        };
-
-        $replaceStr = $callback(resource_names('')) . '.' . cms_slug();
-
-        $currentRouteName = str_replace($replaceStr, '', $currentRouteName);
+        }
 
         view()->composer('admin._partials.menu',
-            function($view) use ($currentRouteName, $currentRouteParams) {
+            function($view) use ($currentRouteName, $currentRouteIndexParam, $resourceMethod) {
                 $view->with('routeMatches', function (
-                    $routeNames, $routeParam = null
-                ) use ($currentRouteName, $currentRouteParams) {
-                    foreach ((array) $routeNames as $routeName) {
+                    $routeNames, $routeParam = null, $byResource = true
+                ) use ($currentRouteName, $currentRouteIndexParam, $resourceMethod) {
+                    if (! $byResource) {
+                        $currentRouteName .= $resourceMethod;
+                    }
+
+                    foreach ((array) $routeNames as $key => $value) {
+                        if (is_string($key)) {
+                            $routeName = $key;
+                            $currentRouteIndexParam = $value;
+                        } else {
+                            $routeName = $value;
+                        }
+
                         if (! $routeParam
                             && $routeName == $currentRouteName
-                            || $routeParam == current($currentRouteParams)
+                            || $routeParam == $currentRouteIndexParam
                             && $routeName == $currentRouteName
                         ) {
                             return true;
@@ -157,14 +168,14 @@ class AdminMainData
 
         $isAdmin = $user->isAdmin();
 
-        view()->composer(['admin.*',], function($view) use ($routeNamesAllowed, $isAdmin, $cmsSlug) {
+        view()->composer(['admin.*'], function($view) use ($routeNamesAllowed, $isAdmin, $cmsSlug) {
             $view->with('hasRouteAccess', function ($routeNames) use ($routeNamesAllowed, $isAdmin, $cmsSlug) {
                 if ($isAdmin) {
                     return true;
                 }
 
                 foreach ((array) $routeNames as $routeName) {
-                    if (in_array($routeName.'.'.$cmsSlug, $routeNamesAllowed)) {
+                    if (in_array($routeName . '.' . $cmsSlug, $routeNamesAllowed)) {
                         return true;
                     }
                 }

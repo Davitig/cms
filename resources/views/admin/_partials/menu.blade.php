@@ -1,5 +1,5 @@
 <li>
-    <a href="{{ cms_url('/') }}">
+    <a href="{{ cms_url('/') }}"{!! $routeMatches(['dashboard']) ? ' class="active"' : '' !!}>
         <i class="{{icon_type('dashboard')}}" title="Dashboard"></i>
         <span class="title">Home</span>
     </a>
@@ -13,7 +13,9 @@
         @if (! empty($menus))
             @foreach ($menus as $item)
                 <li>
-                    <a href="{{ cms_route('pages.index', [$item->id]) }}"{!! $routeMatches(['pages'], $item->id) ? ' class="active"' : '' !!}>
+                    <a href="{{ cms_route('pages.index', [$item->id]) }}"{!! $routeMatches([
+                            'pages', 'pages.files' => $activeMenuId ?? null
+                        ], $item->id) ? ' class="active"' : '' !!}>
                         <i class="{{icon_type('pages')}}" title="Pages"></i>
                         <span class="title">{{ $item->title }}</span>
                     </a>
