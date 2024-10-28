@@ -182,8 +182,6 @@ class AdminPageFilesController extends Controller
             ));
         }
 
-        return back()->with('alert', fill_data(
-            'success', trans('database.deleted')
-        ));
+        return back()->with('alert', fill_data('success', trans('database.deleted')));
     }
 }

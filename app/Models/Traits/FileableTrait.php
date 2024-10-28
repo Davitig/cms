@@ -25,7 +25,7 @@ trait FileableTrait
     /**
      * Determine if the model has a file(s).
      *
-    * @return \App\Models\Base\Builder
+     * @return \App\Models\Base\Builder
      */
     public function hasFile(): Builder
     {

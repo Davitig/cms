@@ -95,9 +95,7 @@ class AdminLanguagesController extends Controller
             ));
         }
 
-        return back()->with('alert', fill_data(
-            'success', trans('general.updated')
-        ));
+        return back()->with('alert', fill_data('success', trans('general.updated')));
     }
 
     /**

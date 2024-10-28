@@ -160,9 +160,7 @@ class AdminPagesController extends Controller
             ));
         }
 
-        return back()->with('alert', fill_data(
-            'success', trans('general.updated')
-        ));
+        return back()->with('alert', fill_data('success', trans('general.updated')));
     }
 
     /**
@@ -192,9 +190,7 @@ class AdminPagesController extends Controller
             return response()->json(fill_data('success', trans('database.deleted')));
         }
 
-        return back()->with('alert', fill_data(
-            'success', trans('database.deleted')
-        ));
+        return back()->with('alert', fill_data('success', trans('database.deleted')));
     }
 
     /**
@@ -235,7 +231,7 @@ class AdminPagesController extends Controller
     /**
      * Collapse specified page.
      *
-     * @return \Illuminate\Foundation\Application|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     public function collapse()
     {

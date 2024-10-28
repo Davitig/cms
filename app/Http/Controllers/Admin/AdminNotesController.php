@@ -94,8 +94,6 @@ class AdminNotesController extends Controller
             return response()->json(fill_data('success', trans('database.deleted')));
         }
 
-        return back()->with('alert', fill_data(
-            'success', trans('database.deleted')
-        ));
+        return back()->with('alert', fill_data('success', trans('database.deleted')));
     }
 }

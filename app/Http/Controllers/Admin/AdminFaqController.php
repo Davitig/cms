@@ -126,9 +126,7 @@ class AdminFaqController extends Controller
             ));
         }
 
-        return back()->with('alert', fill_data(
-            'success', trans('general.updated')
-        ));
+        return back()->with('alert', fill_data('success', trans('general.updated')));
     }
 
     /**
@@ -147,8 +145,6 @@ class AdminFaqController extends Controller
             return response()->json(fill_data('success', trans('database.deleted')));
         }
 
-        return back()->with('alert', fill_data(
-            'success', trans('database.deleted')
-        ));
+        return back()->with('alert', fill_data('success', trans('database.deleted')));
     }
 }
