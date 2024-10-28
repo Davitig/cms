@@ -121,7 +121,7 @@ class AdminPagesController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = (new PageLanguage)->byForeign($id)->first();
+        $languageModel = (new PageLanguage)->byForeignLanguage($id)->first();
 
         ! is_null($languageModel)
             ? $languageModel->update($input)

@@ -145,7 +145,7 @@ class AdminPhotosController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = (new PhotoLanguage)->byForeign($id)->first();
+        $languageModel = (new PhotoLanguage)->byForeignLanguage($id)->first();
 
         if (! is_null($languageModel)) {
             $languageModel->update($input);

@@ -145,7 +145,7 @@ class AdminVideosController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = (new VideoLanguage)->byForeign($id)->first();
+        $languageModel = (new VideoLanguage)->byForeignLanguage($id)->first();
 
         if (! is_null($languageModel)) {
             $languageModel->update($input);

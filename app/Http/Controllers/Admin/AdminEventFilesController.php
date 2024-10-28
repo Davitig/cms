@@ -143,7 +143,7 @@ class AdminEventFilesController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = (new EventFileLanguage)->byForeign($id)->first();
+        $languageModel = (new EventFileLanguage)->byForeignLanguage($id)->first();
 
         if (! is_null($languageModel)) {
             $languageModel->update($input);

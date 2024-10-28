@@ -117,7 +117,7 @@ class AdminGalleriesController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = (new GalleryLanguage)->byForeign($id)->first();
+        $languageModel = (new GalleryLanguage)->byForeignLanguage($id)->first();
 
         ! is_null($languageModel)
             ? $languageModel->update($input)

@@ -127,7 +127,7 @@ class AdminSliderController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = (new SliderLanguage)->byForeign($id)->first();
+        $languageModel = (new SliderLanguage)->byForeignLanguage($id)->first();
 
         if (! is_null($languageModel)) {
             $languageModel->update($input);

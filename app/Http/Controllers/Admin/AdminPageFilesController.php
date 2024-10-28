@@ -150,7 +150,7 @@ class AdminPageFilesController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = (new PageFileLanguage)->byForeign($id)->first();
+        $languageModel = (new PageFileLanguage)->byForeignLanguage($id)->first();
 
         if (! is_null($languageModel)) {
             $languageModel->update($input);

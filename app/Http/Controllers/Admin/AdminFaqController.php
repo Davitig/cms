@@ -114,7 +114,7 @@ class AdminFaqController extends Controller
 
         $this->model->findOrFail($id)->update($input);
 
-        $languageModel = (new FaqLanguage)->byForeign($id)->first();
+        $languageModel = (new FaqLanguage)->byForeignLanguage($id)->first();
 
         ! is_null($languageModel)
             ? $languageModel->update($input)

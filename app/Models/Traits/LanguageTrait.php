@@ -13,7 +13,7 @@ trait LanguageTrait
      * @param  bool|string  $currentLang
      * @return \App\Models\Base\Builder
      */
-    public function byForeign(int $id, bool|string $currentLang = true): Builder
+    public function byForeignLanguage(int $id, bool|string $currentLang = true): Builder
     {
         return $this->foreignId($id)->whereLanguage($currentLang);
     }

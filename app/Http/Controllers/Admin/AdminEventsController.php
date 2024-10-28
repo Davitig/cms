@@ -112,7 +112,7 @@ class AdminEventsController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = (new EventLanguage)->byForeign($id)->first();
+        $languageModel = (new EventLanguage)->byForeignLanguage($id)->first();
 
         ! is_null($languageModel)
             ? $languageModel->update($input)

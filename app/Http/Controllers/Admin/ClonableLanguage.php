@@ -15,26 +15,27 @@ trait ClonableLanguage
      */
     public function cloneLanguage(int $id, array $input = [])
     {
-        $foreignId = $this->model->getForeignKey();
-        $languageId = language(true, 'id');
+        $currentLangExists = $this->model->languages(false)->byForeignLanguage($id)->exists();
 
-        $langExists = $this->model->languages(false)->byForeign($id)->exists();
-
-        if (! empty($input)) {
-            $input[$foreignId] = $id;
-            $input['language_id'] = $languageId;
-
-            return $this->model->languages(false)->create($input);
+        if ($currentLangExists) {
+            return $this->cloneResponse();
         }
 
-        $langModel = $this->model->languages(false)->where($foreignId, $id)->first();
+        $languageId = language(true, 'id');
 
-        if ($langExists || is_null($langModel)) {
-            if (request()->expectsJson()) {
-                return response()->json();
-            }
+        if (! empty($input)) {
+            $input[$this->model->getForeignKey()] = $id;
+            $input['language_id'] = $languageId;
 
-            return back();
+            $this->model->languages(false)->create($input);
+
+            return $this->cloneResponse($input);
+        }
+
+        $langModel = $this->model->languages(false)->foreignId($id)->first();
+
+        if (is_null($langModel)) {
+            return $this->cloneResponse();
         }
 
         $attributes = $langModel->getAttributes();
@@ -42,6 +43,23 @@ trait ClonableLanguage
 
         $langModel->create($attributes);
 
-        return back()->with('alert', fill_data('success', trans('general.created')));
+        return $this->cloneResponse($attributes);
+    }
+
+    /**
+     * Get clone response.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
+    protected function cloneResponse(array $data = [])
+    {
+        if (request()->expectsJson()) {
+            return response()->json(fill_data(
+                'success', trans('general.updated'), $data
+            ));
+        }
+
+        return back()->with('alert', fill_data('success', trans('general.updated')));
     }
 }

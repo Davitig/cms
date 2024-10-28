@@ -112,7 +112,7 @@ class AdminArticlesController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = (new ArticleLanguage)->byForeign($id)->first();
+        $languageModel = (new ArticleLanguage)->byForeignLanguage($id)->first();
 
         ! is_null($languageModel)
             ? $languageModel->update($input)

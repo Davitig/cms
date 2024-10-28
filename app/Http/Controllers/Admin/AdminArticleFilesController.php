@@ -143,7 +143,7 @@ class AdminArticleFilesController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = (new ArticleFileLanguage)->byForeign($id)->first();
+        $languageModel = (new ArticleFileLanguage)->byForeignLanguage($id)->first();
 
         if (! is_null($languageModel)) {
             $languageModel->update($input);
