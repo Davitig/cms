@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\FeedbackRequest;
 use App\Models\Page\Page;
+use App\Models\Page\PageFile;
 use Exception;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Http\Request;
@@ -39,7 +40,7 @@ class WebFeedbackController extends Controller
     {
         $data['current'] = $page;
 
-        $data['files'] = $page->getFiles();
+        $data['files'] = (new PageFile)->getFiles($page->id);
 
         return view('web.' . $page->type, $data);
     }
