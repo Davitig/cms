@@ -39,7 +39,7 @@
         </div>
         <script type="text/javascript">
             var currentLang = '{{language()}}';
-            var formSelector = $('#form-modal').find('.{{$cmsSettings->get('ajax_form')}}');
+            var formSelector = $('#form-modal .{{$cmsSettings->get('ajax_form')}}');
 
             formSelector.on('ajaxFormSuccess', function(e, data) {
                 var lang = $(this).data('lang');

@@ -3,7 +3,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-gallery-image">
-                    <img src="{{$current->file ?: $current->file_default}}" class="img-responsive" />
+                    <img src="{{$current->file ?: $current->file_default}}" class="img-responsive" alt="File">
                 </div>
                 {{ html()->modelForm($current,
                     'post', cms_route('slider.store')
@@ -17,7 +17,7 @@
             </div>
         </div>
         <script type="text/javascript">
-            var formSelector = $('#form-modal').find('.form-create');
+            var formSelector = $('#form-modal .form-create');
 
             formSelector.on('submit', function(e) {
                 e.preventDefault();
