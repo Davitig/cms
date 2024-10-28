@@ -84,26 +84,12 @@ class Builder extends EloquentBuilder
      * Determine if any rows exist for the current query or fail.
      *
      * @return bool
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function existsOrFail(): bool
     {
         return $this->exists() or throw new ModelNotFoundException;
-    }
-
-    /**
-     * Get model full slug.
-     *
-     * @param  int|null  $value
-     * @param  string|null  $column
-     * @return string|null
-     */
-    public function getFullSlug(?int $value = null, ?string $column = null): ?string
-    {
-        if ($result = $this->first()) {
-            return $result->getFullSlug($value, $column);
-        }
-
-        return null;
     }
 
     /**
@@ -144,7 +130,7 @@ class Builder extends EloquentBuilder
      * @param  string|null  $column
      * @return string|null
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function firstAttrOrFail(string $attribute, ?int $value = null, ?string $column = null): ?string
     {
@@ -171,7 +157,7 @@ class Builder extends EloquentBuilder
      * @param  array|string  $columns
      * @return \Illuminate\Database\Eloquent\Collection<int, Model>
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function getOrFail(array|string $columns = ['*']): Collection
     {
