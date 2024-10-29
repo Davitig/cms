@@ -22,7 +22,7 @@ $language = language_in_url() ? language() . '/' : '';
 
 // CMS
 Route::group([
-    'middleware' => 'cms.data', 'prefix' => $language . cms_slug(), 'as' => cms_slug() . '.'
+    'middleware' => 'cms.viewData', 'prefix' => $language . cms_slug(), 'as' => cms_slug() . '.'
 ], function ($router) {
     // login
     $router->controller(AdminLoginController::class)->group(function ($router) {

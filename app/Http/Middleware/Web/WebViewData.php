@@ -2,21 +2,21 @@
 
 namespace App\Http\Middleware\Web;
 
+use App\Models\Translation;
 use App\Support\TranslationCollection;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use App\Models\Translation;
 use Symfony\Component\HttpFoundation\Response;
 
-class WebMainData
+class WebViewData
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -34,11 +34,9 @@ class WebMainData
      */
     protected function shareSettings(): void
     {
-        view()->share([
-            'webSettings' => new Collection(
-                app('db')->table('web_settings')->first()
-            )
-        ]);
+        view()->share(['webSettings' => new Collection(
+            app('db')->table('web_settings')->first()
+        )]);
     }
 
     /**
@@ -54,7 +52,7 @@ class WebMainData
 
         if ($trans->count() <= (int) cms_config('trans_query_limit')) {
             $transCollection->setCollection(
-                $trans->joinLanguage(true)->pluck('value', 'code')
+                $trans->joinLanguage()->pluck('value', 'code')
             );
         }
 

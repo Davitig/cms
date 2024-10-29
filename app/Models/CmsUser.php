@@ -53,20 +53,20 @@ class CmsUser extends Model
     /**
      * Get the mutated attribute.
      *
-     * @return string
+     * @return string|null
      */
-    public function getRoleTextAttribute(): string
+    public function getRoleTextAttribute(): ?string
     {
-        return (! is_null($this->role)) ? user_roles($this->role) : $this->role;
+        return ! is_null($this->role) ? user_roles($this->role) : $this->role;
     }
 
     /**
      * Get the mutated attribute.
      *
-     * @param  string  $value
+     * @param  string|null  $value
      * @return string
      */
-    public function getPhotoAttribute(string $value): string
+    public function getPhotoAttribute(?string $value): string
     {
         return $value ?: asset('assets/libs/images/user-2.png');
     }

@@ -22,8 +22,10 @@ class AdminAuthenticate
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -36,7 +38,7 @@ class AdminAuthenticate
         }
 
         if ($this->guard->user()->blocked) {
-            throw new AccessDeniedHttpException;
+            throw new AccessDeniedHttpException('Forbidden');
         }
 
         if ($this->guard->user()->hasLockScreen()) {
@@ -53,7 +55,7 @@ class AdminAuthenticate
     }
 
     /**
-     * Determine if the user has access to the given route
+     * Determine if the user has access to the given route.
      *
      * @param  \Illuminate\Http\Request $request
      * @return void
@@ -62,16 +64,21 @@ class AdminAuthenticate
      */
     private function checkRoutePermission(Request $request): void
     {
-        if (! $this->guard->user()->isAdmin()) {
-            $routeName = $request->route()->getName();
+        if ($this->guard->user()->isAdmin()) {
+            return;
+        }
 
-            $routeGroup = substr($routeName, 0, strpos($routeName, '.'));
+        $routeName = str_replace(
+            cms_route_name_prefix(''), '', $request->route()->getName()
+        );
 
-            if (! in_array($routeGroup, Permission::$routeGroupsHidden)
-                && ! (new Permission)->role($this->guard->user()->role)->hasAccess($routeName)
-            ) {
-                throw new AccessDeniedHttpException;
-            }
+        $routeGroup = substr($routeName, 0, strpos($routeName, '.'));
+
+        if (! in_array($routeGroup, Permission::$routeGroupsHidden)
+            && ! in_array($routeName, Permission::$routeNamesHidden)
+            && ! (new Permission)->role($this->guard->user()->role)->hasAccess($routeName)
+        ) {
+            throw new AccessDeniedHttpException('Forbidden');
         }
     }
 }

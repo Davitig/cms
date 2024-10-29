@@ -23,12 +23,16 @@ class EventServiceProvider extends ServiceProvider
      * @var array<int, class-string|string>
      */
     protected $subscribe = [
-        \App\Listeners\Admin\AdminUserPanelEventListener::class,
-
-        \App\Listeners\Web\WebCurrentPageEventListener::class,
-        \App\Listeners\Web\WebPagesEventListener::class,
-        \App\Listeners\Web\WebBreadcrumbEventListener::class,
+        \App\Listeners\Admin\AdminViewComposerSubscriber::class,
+        \App\Listeners\Web\WebViewComposerSubscriber::class
     ];
+
+    /**
+     * Indicates if events should be discovered.
+     *
+     * @var bool
+     */
+    protected static $shouldDiscoverEvents = false;
 
     /**
      * Register any events for your application.
@@ -36,13 +40,5 @@ class EventServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
-    }
-
-    /**
-     * Determine if events and listeners should be automatically discovered.
-     */
-    public function shouldDiscoverEvents(): bool
-    {
-        return false;
     }
 }

@@ -2,22 +2,22 @@
 
 namespace App\Http\Middleware\Admin;
 
+use App\Models\Calendar;
+use App\Models\Menu;
+use App\Models\Permission;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Calendar;
-use App\Models\Menu;
-use App\Models\Permission;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMainData
+class AdminViewData
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handle(Request $request, Closure $next): Response
@@ -29,6 +29,8 @@ class AdminMainData
         $this->shareCalendar();
 
         $this->shareRouteMatches();
+
+        // $this->shareUserRouteAccess();
 
         return $next($request);
     }
@@ -93,7 +95,7 @@ class AdminMainData
     }
 
     /**
-     * Share route matches.
+     * Share if current route matches the specified routes names.
      *
      * @return void
      */
@@ -147,35 +149,31 @@ class AdminMainData
     }
 
     /**
-     * Share user access routes.
+     * Share view function which indicates if user has access to the specified routes.
      *
      * @return void
      */
-    protected function shareUserAccessRoutes(): void
+    protected function shareUserRouteAccess(): void
     {
         if (is_null($user = Auth::guard('cms')->user())) {
             return;
         }
 
-        $cmsSlug = cms_slug();
-
         $routeNamesAllowed = array_merge(
             (new Permission)->role($user->role)->pluck('route_name')->toArray(),
-            array_map(function($value) use ($cmsSlug) {
-                return $value . '.' . $cmsSlug;
-            }, Permission::$routeNamesAllowed)
+            Permission::$routeNamesAllowed
         );
 
         $isAdmin = $user->isAdmin();
 
-        view()->composer(['admin.*'], function($view) use ($routeNamesAllowed, $isAdmin, $cmsSlug) {
-            $view->with('hasRouteAccess', function ($routeNames) use ($routeNamesAllowed, $isAdmin, $cmsSlug) {
+        view()->composer(['admin.*'], function($view) use ($routeNamesAllowed, $isAdmin) {
+            $view->with('routeAccess', function ($routeNames) use ($routeNamesAllowed, $isAdmin) {
                 if ($isAdmin) {
                     return true;
                 }
 
                 foreach ((array) $routeNames as $routeName) {
-                    if (in_array($routeName . '.' . $cmsSlug, $routeNamesAllowed)) {
+                    if (in_array($routeName, $routeNamesAllowed)) {
                         return true;
                     }
                 }

@@ -3,7 +3,7 @@
 use App\Http\Controllers\Web\WebGlideServerController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['namespace' => 'Web'], function ($router) {
+Route::namespace('Web')->middleware('web.viewData')->group(function ($router) {
     // web routes
 
     // glide server for image manipulation

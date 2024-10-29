@@ -14,6 +14,7 @@ iframe {border:0;}
 .mrg0 {margin:0;} .mrg {margin:15px;} .mrgt {margin-top:15px;} .mrgr {margin-right:15px;} .mrgb {margin-bottom:15px;} .mrgl {margin-left:15px;}
 .fs-16 {font-size:16px;} .fs-18 {font-size:18px;} .fs-20 {font-size:20px;} .fs-22 {font-size:22px;} .fs-24 {font-size:24px;} .fs-26 {font-size:26px;} .fs-28 {font-size:28px;} .fs-30 {font-size:30px;} .fs-32 {font-size:32px;}
 .w-100 {width:100%;}
+.w-auto {width:auto;}
 .pointer {cursor:pointer;}
 
 #container {height:100%;}

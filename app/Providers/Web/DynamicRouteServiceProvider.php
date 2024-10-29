@@ -186,7 +186,7 @@ final class DynamicRouteServiceProvider extends ServiceProvider
         $this->configure();
 
         $this->router->group([
-            'middleware' => ['web', 'web.data'],
+            'middleware' => ['web', 'web.viewData'],
             'namespace' => $this->namespace
         ], function () {
             $this->setRoute();

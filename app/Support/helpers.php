@@ -87,6 +87,18 @@ function cms_slug(?string $path = null): string
 }
 
 /**
+ * Get the CMS route name prefix.
+ *
+ * @param  string|null  $name
+ * @param  string  $separator
+ * @return string
+ */
+function cms_route_name_prefix(?string $name, string $separator = '.'): string
+{
+    return cms_slug() . $separator . $name;
+}
+
+/**
  * Get the list of named resource.
  *
  * @param  string  $name
@@ -106,17 +118,6 @@ function resource_names(string $name): array
 }
 
 /**
- * Get a full CMS route name.
- *
- * @param  string  $name
- * @return string
- */
-function cms_route_name(string $name): string
-{
-    return cms_slug() . '.' . $name;
-}
-
-/**
  * Generate a CMS URL to a named route.
  *
  * @param  string  $name
@@ -131,7 +132,7 @@ function cms_route(
     bool|string|null $language = null,
     bool             $absolute = true): string
 {
-    return language_to_url(route(cms_route_name($name), $parameters, $absolute), $language);
+    return language_to_url(route(cms_route_name_prefix($name), $parameters, $absolute), $language);
 }
 
 /**

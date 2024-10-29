@@ -43,7 +43,7 @@ class AdminCmsUsersController extends Controller
     public function create()
     {
         if (! $this->user()->isAdmin()) {
-            throw new AccessDeniedHttpException;
+            throw new AccessDeniedHttpException('Forbidden');
         }
 
         $data['current'] = $this->model;
@@ -64,7 +64,7 @@ class AdminCmsUsersController extends Controller
     public function store(CmsUserRequest $request)
     {
         if (! $this->user()->isAdmin()) {
-            throw new AccessDeniedHttpException;
+            throw new AccessDeniedHttpException('Forbidden');
         }
 
         $input = $request->all();
@@ -107,7 +107,7 @@ class AdminCmsUsersController extends Controller
     public function edit(int $id)
     {
         if (! $this->user()->isAdmin() && $this->user()->id != $id) {
-            throw new AccessDeniedHttpException;
+            throw new AccessDeniedHttpException('Forbidden');
         }
 
         $data['current'] = $this->model->findOrFail($id);
@@ -129,7 +129,7 @@ class AdminCmsUsersController extends Controller
     public function update(CmsUserRequest $request, int $id)
     {
         if (! $this->user()->isAdmin() && $this->user()->id != $id) {
-            throw new AccessDeniedHttpException;
+            throw new AccessDeniedHttpException('Forbidden');
         }
 
         $input = $request->all();

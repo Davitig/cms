@@ -43,14 +43,9 @@ class AdminPermissionsController extends Controller
                 ->toArray();
         }
 
-        $routeNames = array_diff_key(
-            $this->getAllRouteNames(),
-            array_flip(Permission::$routeGroupsHidden)
+        $data['routeGroups'] = array_diff_key(
+            $this->getAllRouteNames(), array_flip(Permission::$routeGroupsHidden)
         );
-
-        // ksort($routeNames);
-
-        $data['routes'] = $routeNames;
 
         $data['namesDisallowed'] = Permission::$routeNamesHidden;
 
@@ -72,15 +67,19 @@ class AdminPermissionsController extends Controller
 
         $attributes = [];
 
-        foreach ((array) $input as $value) {
-            if (in_array(key($value), Permission::$routeGroupsHidden)){
-                continue;
+        foreach ($input as $groupName => $routes) {
+            foreach ($routes as $routeName) {
+                if (in_array($groupName, Permission::$routeGroupsHidden)
+                    || in_array($routeName, Permission::$routeNamesHidden)
+                ) {
+                    continue;
+                }
+
+                $attributes['role'] = $role;
+                $attributes['route_name'] = $routeName;
+
+                $this->model->create($attributes);
             }
-
-            $attributes['role'] = $role;
-            $attributes['route_name'] = current($value);
-
-            $this->model->create($attributes);
         }
 
         return redirect(cms_route('permissions.index', ['role' => $role]))
@@ -99,7 +98,7 @@ class AdminPermissionsController extends Controller
         $user = $this->request->user('cms');
 
         if (! $user->isAdmin()) {
-            throw new AccessDeniedHttpException;
+            throw new AccessDeniedHttpException('Forbidden');
         }
     }
 
@@ -110,28 +109,28 @@ class AdminPermissionsController extends Controller
      */
     protected function getAllRouteNames()
     {
-        $routes = app('router')->getRoutes();
+        $routes = app('router')->getRoutes()->getRoutesByName();
 
         $routeNames = [];
 
         $prevRouteName = null;
 
-        $cmsSlug = cms_slug();
+        $cmsSlug = cms_route_name_prefix('');
 
-        foreach ($routes as $route) {
-            $routeName = $route->getName();
-
-            if (! is_null($routeName) && str_contains($route->getPrefix(), $cmsSlug)) {
-                if ($prevRouteName == $routeName) continue;
-
-                $baseRouteName = explode('.', substr(
-                    $routeName, 0, strrpos($routeName, '.')
-                ));
-
-                $routeNames[$baseRouteName[0]][] = $routeName;
-
-                $prevRouteName = $routeName;
+        foreach ($routes as $name => $route) {
+            if (! str_contains($name, $cmsSlug)) {
+                continue;
             }
+
+            $name = str_replace($cmsSlug, '', $name);
+
+            if ($prevRouteName == $name) {
+                continue;
+            }
+
+            $baseRouteName = explode('.', substr($name, 0, strrpos($name, '.')));
+
+            $routeNames[$baseRouteName[0]][] = $prevRouteName = $name;
         }
 
         return $routeNames;

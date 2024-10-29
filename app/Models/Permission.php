@@ -42,7 +42,7 @@ class Permission extends Model
      *
      * @var array
      */
-    public static array $routeNamesHidden = [];
+    public static array $routeNamesHidden = ['login', 'logout', 'lockscreen'];
 
     /**
      * Route names that are not allowed.
@@ -76,10 +76,10 @@ class Permission extends Model
     /**
      * Clear permissions from the database.
      *
-     * @param  int  $value
-     * @return bool|null
+     * @param  string  $value
+     * @return mixed
      */
-    public function clear(int $value): ?bool
+    public function clear(string $value): mixed
     {
         return $this->role($value)->delete();
     }

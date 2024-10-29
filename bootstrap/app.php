@@ -14,12 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'web.data' => \App\Http\Middleware\Web\WebMainData::class,
+            'web.viewData' => \App\Http\Middleware\Web\WebViewData::class,
 
             'cms.auth' => \App\Http\Middleware\Admin\AdminAuthenticate::class,
             'cms.guest' => \App\Http\Middleware\Admin\AdminRedirectIfAuthenticated::class,
             'cms.lockscreen' => \App\Http\Middleware\Admin\AdminLockscreen::class,
-            'cms.data' => \App\Http\Middleware\Admin\AdminMainData::class,
+            'cms.viewData' => \App\Http\Middleware\Admin\AdminViewData::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

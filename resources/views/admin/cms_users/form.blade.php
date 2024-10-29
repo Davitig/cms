@@ -18,7 +18,7 @@
                 <label class="col-sm-4 control-label text-left required">First name:</label>
                 <div class="col-sm-8">
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-user-secret"></i></span>
+                        <span class="input-group-addon"><i class="fa fa-header"></i></span>
                         {{ html()->text('first_name')->id('first_name')->class('form-control') }}
                     </div>
                     @if ($error)
@@ -32,7 +32,7 @@
                 <label class="col-sm-4 control-label required">Last name:</label>
                 <div class="col-sm-8">
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-user-secret"></i></span>
+                        <span class="input-group-addon"><i class="fa fa-header"></i></span>
                         {{ html()->text('last_name')->id('last_name')->class('form-control') }}
                     </div>
                     @if ($error)
@@ -96,7 +96,7 @@
     <div class="form-group">
         <label class="col-sm-2 control-label text-left">Block:</label>
         <div class="col-sm-10">
-            {{ html()->checkbox('blocked')->id('blocked')->class('form-control') }}
+            {{ html()->checkbox('blocked')->id('blocked')->class('iswitch iswitch-secondary') }}
         </div>
     </div>
 
