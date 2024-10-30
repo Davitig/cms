@@ -36,7 +36,7 @@
                         </a>
                     </li>
                     <li>
-                        <input type="checkbox" class="cbr" id="select-all" />
+                        <input type="checkbox" class="cbr" id="select-all">
                         <label>Select all</label>
                     </li>
                     <li>
@@ -83,11 +83,11 @@
                     <div class="album-image">
                         <a href="#" class="thumb" data-modal="edit">
                             @if (in_array($ext = pathinfo($item->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
-                                <img src="{{$item->file}}" class="img-responsive" alt="{{$item->title}}" />
+                                <img src="{{$item->file}}" class="img-responsive" alt="{{$item->title}}">
                             @elseif(! empty($ext))
-                                <img src="{{asset('assets/libs/images/file-ext-icons/'.$ext.'.png')}}" class="img-responsive" alt="{{$item->title}}" />
+                                <img src="{{asset('assets/libs/images/file-ext-icons/'.$ext.'.png')}}" class="img-responsive" alt="{{$item->title}}">
                             @else
-                                <img src="{{asset('assets/libs/images/file-ext-icons/www.png')}}" class="img-responsive" alt="{{$item->title}}" />
+                                <img src="{{asset('assets/libs/images/file-ext-icons/www.png')}}" class="img-responsive" alt="{{$item->title}}">
                             @endif
                         </a>
                         <a href="#" class="name">
@@ -96,7 +96,7 @@
                         </a>
                         <div class="image-options">
                             <div class="select-item dib">
-                                <input type="checkbox" data-id="{{$item->id}}" class="cbr" />
+                                <input type="checkbox" data-id="{{$item->id}}" class="cbr">
                             </div>
                             <a href="#" data-url="{{cms_route('photos.visibility', [$item->id])}}" class="visibility" title="{{trans('general.visibility')}}">
                                 <i class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></i>

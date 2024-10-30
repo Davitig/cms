@@ -14,8 +14,8 @@
                     <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
                 </li>
                 <li>
-                    <a href="{{ cms_route('events.edit', [$foreignModel->collection_id, $foreignModel->id]) }}">
-                        <i class="{{$foreignIcon = icon_type('events')}}"></i> Event
+                    <a href="{{ cms_route('events.index', [$foreignModel->collection_id]) }}">
+                        <i class="{{icon_type('events')}}"></i> Events
                     </a>
                 </li>
                 <li class="active">
@@ -47,7 +47,7 @@
                     <h2>Files</h2>
                     <ul class="album-options list-unstyled list-inline">
                         <li>
-                            <input type="checkbox" class="cbr" id="select-all" />
+                            <input type="checkbox" class="cbr" id="select-all">
                             <label>Select all</label>
                         </li>
                         <li>
@@ -92,11 +92,11 @@
                             <div class="album-image">
                                 <a href="#" class="thumb" data-modal="edit">
                                     @if (in_array($ext = pathinfo($item->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
-                                        <img src="{{$item->file}}" class="img-responsive" alt="{{$item->title}}" />
+                                        <img src="{{$item->file}}" class="img-responsive" alt="{{$item->title}}">
                                     @elseif(! empty($ext))
-                                        <img src="{{asset('assets/libs/images/file-ext-icons/'.$ext.'.png')}}" class="img-responsive" alt="{{$item->title}}" />
+                                        <img src="{{asset('assets/libs/images/file-ext-icons/'.$ext.'.png')}}" class="img-responsive" alt="{{$item->title}}">
                                     @else
-                                        <img src="{{asset('assets/libs/images/file-ext-icons/www.png')}}" class="img-responsive" alt="{{$item->title}}" />
+                                        <img src="{{asset('assets/libs/images/file-ext-icons/www.png')}}" class="img-responsive" alt="{{$item->title}}">
                                     @endif
                                 </a>
                                 <a href="#" class="name">
@@ -105,7 +105,7 @@
                                 </a>
                                 <div class="image-options">
                                     <div class="select-item dib">
-                                        <input type="checkbox" data-id="{{$item->id}}" class="cbr" />
+                                        <input type="checkbox" data-id="{{$item->id}}" class="cbr">
                                     </div>
                                     <a href="#" data-url="{{cms_route('events.files.visibility', [$item->id])}}" class="visibility" title="{{trans('general.visibility')}}">
                                         <i class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></i>

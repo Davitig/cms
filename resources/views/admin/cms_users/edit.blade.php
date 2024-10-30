@@ -37,7 +37,7 @@
                     <div class="col-md-10 col-sm-8">
                     @if ($current->photo)
                         <div class="user-img">
-                            <img src="{{$current->photo}}" width="128" class="img-circle" alt="Photo" />
+                            <img src="{{$current->photo}}" width="128" class="img-circle" alt="Photo">
                         </div>
                     @endif
                         <div class="user-name">

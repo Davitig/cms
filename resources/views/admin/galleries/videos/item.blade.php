@@ -10,7 +10,7 @@
         </a>
         <div class="image-options">
             <div class="select-item dib">
-                <input type="checkbox" data-id="{{$item->id}}" class="cbr" />
+                <input type="checkbox" data-id="{{$item->id}}" class="cbr">
             </div>
             <a href="#" data-url="{{cms_route('videos.visibility', [$item->id])}}" class="visibility">
                 <i class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></i>

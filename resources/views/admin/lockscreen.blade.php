@@ -6,13 +6,13 @@
                 <form role="form" action="{{cms_route('lockscreen.post')}}" method="post" class="lockcreen-form fade-in-effect">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="user-thumb">
-                        <img src="{{auth('cms')->user()->photo}}" width="128" class="img-circle" />
+                        <img src="{{auth('cms')->user()->photo}}" width="128" class="img-circle">
                     </div>
                     <div class="form-group">
                         <h3>Welcome back, {{auth('cms')->user()->first_name}}!</h3>
                         <p>Enter your password to access the admin.</p>
                         <div class="input-group">
-                            <input type="password" class="form-control input-dark{{! $errors->isEmpty() ? ' error' : ''}}" name="password" id="password" placeholder="Password" />
+                            <input type="password" class="form-control input-dark{{! $errors->isEmpty() ? ' error' : ''}}" name="password" id="password" placeholder="Password">
                         @if (! $errors->isEmpty())
                             <label class="error">{{$errors->first()}}</label>
                         @endif

@@ -28,7 +28,7 @@
             <div class="user-info-sidebar">
             @if ($current->photo)
                 <div class="user-img">
-                    <img src="{{$current->photo}}" alt="user-img" class="img-cirlce img-responsive img-thumbnail" />
+                    <img src="{{$current->photo}}" alt="user-img" class="img-cirlce img-responsive img-thumbnail">
                 </div>
             @endif
                 <div class="user-name">
@@ -41,7 +41,7 @@
             @if (auth('cms')->user()->isAdmin() || auth('cms')->id() == $current->id)
                 <a href="{{cms_route('cmsUsers.edit', [$current->id])}}" class="btn-block text-center">{{trans('general.edit')}}</a>
             @endif
-                <hr />
+                <hr>
                 <ul class="list-unstyled user-info-list">
                     <li>
                         <i class="fa fa-envelope"></i>

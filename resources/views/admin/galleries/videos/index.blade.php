@@ -36,7 +36,7 @@
                         </a>
                     </li>
                     <li>
-                        <input type="checkbox" class="cbr" id="select-all" />
+                        <input type="checkbox" class="cbr" id="select-all">
                         <label>Select all</label>
                     </li>
                     <li>
@@ -90,7 +90,7 @@
                         </a>
                         <div class="image-options">
                             <div class="select-item dib">
-                                <input type="checkbox" data-id="{{$item->id}}" class="cbr" />
+                                <input type="checkbox" data-id="{{$item->id}}" class="cbr">
                             </div>
                             <a href="#" data-url="{{cms_route('videos.visibility', [$item->id])}}" class="visibility" title="{{trans('general.visibility')}}">
                                 <i class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></i>

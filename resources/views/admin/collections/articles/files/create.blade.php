@@ -7,7 +7,11 @@
             {{ html()->modelForm($current,
                 'post', cms_route('articles.files.store', [$current->article_id])
             )->class('form-create form-horizontal')->open() }}
-            @include('admin.collections.articles.files.form')
+            <div class="modal-body">
+                <div class="row">
+                    @include('admin.collections.articles.files.form')
+                </div>
+            </div>
             {{ html()->form()->close() }}
         </div>
     </div>

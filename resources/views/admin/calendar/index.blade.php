@@ -32,7 +32,7 @@
                 @method('PUT')
                 @csrf
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Add new event..." />
+                    <input type="text" class="form-control" placeholder="Add new event...">
                     <div class="input-group-btn">
                         <button type="submit" class="btn btn-secondary">{{trans('general.create')}}</button>
                     </div>

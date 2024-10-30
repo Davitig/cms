@@ -3,11 +3,11 @@
         <div class="album-image">
             <a href="#" class="thumb" data-modal="edit">
                 @if (in_array($ext = pathinfo($itemInput['file'], PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
-                    <img src="{{$itemInput['file']}}" class="img-responsive" alt="{{$itemInput['title']}}" />
+                    <img src="{{$itemInput['file']}}" class="img-responsive" alt="{{$itemInput['title']}}">
                 @elseif( ! empty($ext))
-                    <img src="{{asset('assets/libs/images/file-ext-icons/'.$ext.'.png')}}" class="img-responsive" alt="{{$itemInput['title']}}" />
+                    <img src="{{asset('assets/libs/images/file-ext-icons/'.$ext.'.png')}}" class="img-responsive" alt="{{$itemInput['title']}}">
                 @else
-                    <img src="{{asset('assets/libs/images/file-ext-icons/www.png')}}" class="img-responsive" alt="{{$itemInput['title']}}" />
+                    <img src="{{asset('assets/libs/images/file-ext-icons/www.png')}}" class="img-responsive" alt="{{$itemInput['title']}}">
                 @endif
             </a>
             <a href="#" class="name">
@@ -16,7 +16,7 @@
             </a>
             <div class="image-options">
                 <div class="file-checkbox select-item dib">
-                    <input type="checkbox" data-id="{{$item->id}}" class="cbr" />
+                    <input type="checkbox" data-id="{{$item->id}}" class="cbr">
                 </div>
                 <a href="#" data-url="{{cms_route('events.files.visibility', [$item->id])}}" class="visibility">
                     <i class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></i>

@@ -32,8 +32,7 @@
         <a href="{{cms_route('collections.create')}}" class="pull-right padr">Add more</a>
     </div>
     <div class="panel-body">
-        {{ html()->modelForm($current,
-            'put', cms_route('collections.update', [$current->id])
+        {{ html()->modelForm($current, 'put', cms_route('collections.update', [$current->id])
         )->class('form-horizontal ' . $cmsSettings->get('ajax_form'))->open() }}
             {{ html()->hidden('type') }}
             @include('admin.collections.form', [

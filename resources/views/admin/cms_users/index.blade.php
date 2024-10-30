@@ -77,7 +77,7 @@
                 <tr id="item{{$item->id}}" class="item">
                     <td class="user-image">
                         @if ($item->photo)
-                            <img src="{{$item->photo}}" width="40" height="40" class="img-circle" alt="{{$item->first_name}} {{$item->last_name}}" />
+                            <img src="{{$item->photo}}" width="40" height="40" class="img-circle" alt="{{$item->first_name}} {{$item->last_name}}">
                         @endif
                     </td>
                     <td class="user-name">

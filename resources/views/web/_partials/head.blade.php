@@ -8,7 +8,7 @@
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="{{$trans->get('title')}}">
     <meta property="og:title" content="{{$current->meta_title ?: $current->title}}">
-    <meta property="og:description" content="{{$current->meta_desc}}"/>
+    <meta property="og:description" content="{{$current->meta_desc}}">
     <meta property="og:image" content="{{$current->image}}">
     <title>{{$current->meta_title ?: $current->title}}</title>
     <link rel="canonical" href="{{$url}}">

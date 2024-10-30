@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>elFinder 2.1</title>
-    <link rel="stylesheet" href="{{ asset('assets/libs/js/jquery-ui/jquery-ui.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/libs/js/jquery-ui/jquery-ui.css') }}">
     <link rel="stylesheet" href="{{ asset($dir.'/css/elfinder.min.css') }}">
     <link rel="stylesheet" href="{{ asset($dir.'/css/theme.css') }}">
     <script src="{{ asset('assets/libs/js/jquery-1.11.3.min.js') }}"></script>
