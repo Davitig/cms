@@ -38,7 +38,7 @@ return [
     | Global roots options
     |--------------------------------------------------------------------------
     |
-    | Roots global extra options for all of the Filesystem disks.
+    | Roots global extra options for all the Filesystem disks.
     |
     */
 

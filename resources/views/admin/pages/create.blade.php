@@ -28,9 +28,8 @@
         <h2 class="panel-title">Create a new page</h2>
     </div>
     <div class="panel-body">
-        {{ html()->modelForm($current,
-            'post', cms_route('pages.store', [$current->menu_id])
-        )->class('form-horizontal')->open() }}
+        {{ html()->modelForm($current, 'post', cms_route('pages.store', [$current->menu_id]))
+        ->class('form-horizontal')->open() }}
             {{ html()->hidden('parent_id') }}
             @include('admin.pages.form', [
                 'submit'        => trans('general.create'),

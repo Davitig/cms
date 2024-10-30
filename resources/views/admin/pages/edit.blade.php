@@ -48,7 +48,7 @@
                     @endphp
                     @foreach ($items as $current)
                         <div class="tab-pane{{$activeLang == $current->language || ! $current->language ? ' active' : ''}}" id="item-{{$current->language ?: $firstLang}}">
-                            {{ html()->modelForm($current,'put', cms_route('pages.update', [
+                            {{ html()->modelForm($current, 'put', cms_route('pages.update', [
                                 $current->menu_id, $current->id
                             ], is_multilanguage() ? ($current->language ?: $activeLang) : null))
                             ->class('form-horizontal ' . $cmsSettings->get('ajax_form'))

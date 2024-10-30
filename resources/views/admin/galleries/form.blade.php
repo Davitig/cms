@@ -191,7 +191,6 @@
     <label class="col-sm-2 control-label">Meta Title:</label>
     <div class="col-sm-10">
         {{ html()->text('meta_title')->id('meta_title' . $current->language)->class('form-control') }}
-        <div class="desc">Title for search engines. It is best to keep meta title less then 150 or 160 characters.</div>
     </div>
 </div>
 
@@ -201,7 +200,6 @@
     <label class="col-sm-2 control-label">Meta Description:</label>
     <div class="col-sm-10">
         {{ html()->text('meta_desc')->id('meta_desc' . $current->language)->class('form-control') }}
-        <div class="desc">Description for search engines. It is best to keep meta descriptions less then 150 or 160 characters.</div>
     </div>
 </div>
 

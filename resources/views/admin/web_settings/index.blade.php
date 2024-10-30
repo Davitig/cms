@@ -24,34 +24,28 @@
     <div class="panel-heading">
         <h2 class="panel-title">Web settings form</h2>
     </div>
-@if (! empty($webSettings))
     {{ html()->form('put', cms_route('webSettings.update'))->id('form-update')->class('form-horizontal')->open() }}
         <div class="panel-body">
             <div class="form-group">
                 <label class="col-sm-3 control-label">Email:</label>
                 <div class="col-sm-5">
-                    {{ html()->text('email', $webSettings->email)->class('form-control') }}
-                    <div class="desc">Messages from users will be sent to this email address.</div>
+                    {{ html()->text('email', $webSettings?->email)->class('form-control') }}
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">Phone:</label>
                 <div class="col-sm-5">
-                    {{ html()->text('phone', $webSettings->phone)->class('form-control') }}
-                    <div class="desc">Phone number that will be displayed on the website.</div>
+                    {{ html()->text('phone', $webSettings?->phone)->class('form-control') }}
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">Address:</label>
                 <div class="col-sm-5">
-                    {{ html()->text('address', $webSettings->address)->class('form-control') }}
-                    <div class="desc">Address that will be displayed on the website.</div>
+                    {{ html()->text('address', $webSettings?->address)->class('form-control') }}
                 </div>
             </div>
         </div>
-
         <div class="form-group-separator"></div>
-
         <div class="form-group">
             <div class="col-sm-10 btn-action pull-right">
                 <button type="submit" class="btn btn-secondary btn-icon-standalone" title="{{ trans('general.update') }}">
@@ -61,6 +55,5 @@
             </div>
         </div>
     {{ html()->form()->close() }}
-@endif
 </div>
 @endsection

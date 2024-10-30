@@ -5,7 +5,7 @@
 | elFinder
 |--------------------------------------------------------------------------
 |
-| Override base controller cuz its fuzzy configuration.
+| Override base controller.
 |
 */
 

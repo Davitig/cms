@@ -18,11 +18,10 @@ use App\Http\Controllers\Admin\AdminWebSettingsController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
 
-$language = language_in_url() ? language() . '/' : '';
-
-// CMS
 Route::group([
-    'middleware' => 'cms.viewData', 'prefix' => $language . cms_slug(), 'as' => cms_slug() . '.'
+    'middleware' => 'cms.viewData',
+    'prefix' => cms_slug(null, true),
+    'as' => cms_route_name_prefix('')
 ], function ($router) {
     // login
     $router->controller(AdminLoginController::class)->group(function ($router) {
@@ -116,7 +115,8 @@ Route::group([
             ->names(resource_names('cmsUsers'));
 
         // file manager
-        $router->get('filemanager', [AdminFilemanagerController::class, 'index'])->name('filemanager');
+        $router->get('filemanager', [AdminFilemanagerController::class, 'index'])
+            ->name('filemanager');
 
         // slider
         $router->post('slider/{id}/visibility', [AdminSliderController::class, 'visibility'])

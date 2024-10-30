@@ -75,15 +75,22 @@ function cms_is_booted(): bool
  * Get the CMS slug.
  *
  * @param  string|null  $path
+ * @param  bool|string  $language
  * @return string
  */
-function cms_slug(?string $path = null): string
+function cms_slug(?string $path = null, bool $language = false): string
 {
-    if (is_null($path)) {
-        return cms_config('slug');
+    $slug = cms_config('slug');
+
+    if ($language) {
+        $language = is_string($language)
+            ? $language
+            : (language_in_url() ? language() : '');
+
+        $slug = $language . '/' . $slug;
     }
 
-    return cms_config('slug') . '/' . $path;
+    return is_null($path) ? $slug : $slug . '/' . $path;
 }
 
 /**
@@ -126,11 +133,10 @@ function resource_names(string $name): array
  * @param  bool  $absolute
  * @return string
  */
-function cms_route(
-    string           $name,
-    mixed            $parameters = [],
-    bool|string|null $language = null,
-    bool             $absolute = true): string
+function cms_route(string           $name,
+                   mixed            $parameters = [],
+                   bool|string|null $language = null,
+                   bool             $absolute = true): string
 {
     return language_to_url(route(cms_route_name_prefix($name), $parameters, $absolute), $language);
 }
@@ -144,11 +150,10 @@ function cms_route(
  * @param  bool|null  $secure
  * @return string
  */
-function cms_url(
-    array|string     $path = '',
-    array            $parameters = [],
-    bool|string|null $language = null,
-    ?bool            $secure = null): string
+function cms_url(array|string     $path = '',
+                 array            $parameters = [],
+                 bool|string|null $language = null,
+                 ?bool            $secure = null): string
 {
     if (is_array($path)) {
         $path = implode('/', array_filter($path));
@@ -168,11 +173,10 @@ function cms_url(
  * @param  bool  $absolute
  * @return string
  */
-function web_route(
-    string           $name,
-    mixed            $parameters = [],
-    bool|string|null $language = null,
-    bool             $absolute = true): string
+function web_route(string           $name,
+                   mixed            $parameters = [],
+                   bool|string|null $language = null,
+                   bool             $absolute = true): string
 {
     return language_to_url(route($name, $parameters, $absolute), $language);
 }
@@ -186,11 +190,10 @@ function web_route(
  * @param  bool|null  $secure
  * @return string
  */
-function web_url(
-    array|string     $path = '',
-    array            $parameters = [],
-    bool|string|null $language = null,
-    ?bool            $secure = null): string
+function web_url(array|string     $path = '',
+                 array            $parameters = [],
+                 bool|string|null $language = null,
+                 ?bool            $secure = null): string
 {
     if (is_array($path)) {
         $path = implode('/', array_filter($path));
@@ -319,7 +322,7 @@ function model_path(string $name): string
  * Make a nestable eloquent models tree.
  *
  * @param  array|\Illuminate\Support\Collection  $items
- * @param  string  $slug
+ * @param  string|null  $slug
  * @param  int  $parentId
  * @param  string  $parentKey
  * @param  string  $key
@@ -329,7 +332,7 @@ function model_path(string $name): string
  */
 function make_model_sub_items(
     array|Collection $items,
-    string           $slug = '',
+    ?string          $slug = null,
     int              $parentId = 0,
     string           $parentKey = 'parent_id',
     string           $key = 'id'): Collection

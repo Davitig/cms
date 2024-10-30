@@ -86,7 +86,6 @@
                                     <a href="{{ $editUrl }}" class="btn btn-orange" title="{{trans('general.edit')}}">
                                         <span class="fa fa-edit"></span>
                                     </a>
-
                                     {{ html()->form('delete', cms_route('pages.destroy', [$menu->id, $item->id]))->class('form-delete')->open() }}
                                         <button type="submit" class="btn btn-danger" title="{{trans('general.delete')}}"{{has_model_sub_items($item) ? ' disabled' : ''}}>
                                             <span class="fa fa-trash"></span>

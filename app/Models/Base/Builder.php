@@ -111,11 +111,13 @@ class Builder extends EloquentBuilder
      * Execute the query and get the first result attribute.
      *
      * @param  string  $attribute
-     * @param  int|null  $value
+     * @param  int|string|null  $value
      * @param  string|null  $column
      * @return string|null
      */
-    public function firstAttr(string $attribute, ?int $value = null, ?string $column = null): ?string
+    public function firstAttr(string          $attribute,
+                              int|string|null $value = null,
+                              ?string         $column = null): ?string
     {
         return $this->when(! is_null($value), function ($q) use ($value, $column) {
             return $q->where($column ?: $this->getModel()->getKeyName(), $value);
@@ -126,13 +128,15 @@ class Builder extends EloquentBuilder
      * Execute the query and get the first result attribute or throw an exception.
      *
      * @param  string  $attribute
-     * @param  int|null  $value
+     * @param  int|string|null  $value
      * @param  string|null  $column
      * @return string|null
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function firstAttrOrFail(string $attribute, ?int $value = null, ?string $column = null): ?string
+    public function firstAttrOrFail(string          $attribute,
+                                    int|string|null $value = null,
+                                    ?string         $column = null): ?string
     {
         if (is_null($attribute = $this->firstAttr($attribute, $value, $column))) {
             throw (new ModelNotFoundException)->setModel(get_class($this));

@@ -22,7 +22,8 @@
         "php-curl-class/php-curl-class": "11.0.*",
         "sabre/xml": "4.0.*",
         "spatie/laravel-html": "3.11.*",
-        "ext-dom": "*"
+        "ext-dom": "*",
+        "ext-json": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
