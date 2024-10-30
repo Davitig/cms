@@ -1,4 +1,4 @@
-# Project #
+# Default #
 ###################
 /.phpunit.cache
 /node_modules
@@ -23,16 +23,11 @@ yarn-error.log
 /.vscode
 /.zed
 
-/nbproject
-/.vagrant
-/bower_components
+# Project #
+###################
 /public/files/*
 !/public/files/sample.txt
 /public/sitemap.xml
-/public/phpmyadmin
-*sftp-config.json
-# Ignore directories and files starting with "!" symbol
-/\!*
 
 # Compiled source #
 ###################
@@ -63,16 +58,3 @@ tags
 *.log
 *.sqlite
 *.sql
-
-# OS generated files #
-######################
-.DS_Store*
-ehthumbs.db
-Icon?
-Thumbs.db
-
-# Document files #
-######################
-*.doc
-*.docx
-*.xlsx
