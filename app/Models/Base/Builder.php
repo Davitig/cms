@@ -93,7 +93,7 @@ class Builder extends EloquentBuilder
     }
 
     /**
-     * Find a model by its query or instantiate it.
+     * Get the first record or instantiate it.
      *
      * @param  array|string  $columns
      * @return \App\Models\Base\Model
@@ -115,9 +115,10 @@ class Builder extends EloquentBuilder
      * @param  string|null  $column
      * @return string|null
      */
-    public function firstAttr(string          $attribute,
-                              int|string|null $value = null,
-                              ?string         $column = null): ?string
+    public function firstAttr(
+        string          $attribute,
+        int|string|null $value = null,
+        ?string         $column = null): ?string
     {
         return $this->when(! is_null($value), function ($q) use ($value, $column) {
             return $q->where($column ?: $this->getModel()->getKeyName(), $value);
@@ -134,9 +135,10 @@ class Builder extends EloquentBuilder
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function firstAttrOrFail(string          $attribute,
-                                    int|string|null $value = null,
-                                    ?string         $column = null): ?string
+    public function firstAttrOrFail(
+        string          $attribute,
+        int|string|null $value = null,
+        ?string         $column = null): ?string
     {
         if (is_null($attribute = $this->firstAttr($attribute, $value, $column))) {
             throw (new ModelNotFoundException)->setModel(get_class($this));
@@ -256,10 +258,10 @@ class Builder extends EloquentBuilder
     /**
      * Add an "order by" primary key asc clause to the query.
      *
-     * @param  string|null  $table
+     * @param  bool|string  $table
      * @return $this
      */
-    public function orderAsc(?string $table = null): Builder
+    public function orderAsc(bool|string $table = false): Builder
     {
         return $this->orderBy(
             $this->getTableNameWithDot($table) . $this->getModel()->getKeyName()
@@ -269,10 +271,10 @@ class Builder extends EloquentBuilder
     /**
      * Add an "order by" primary key desc clause to the query.
      *
-     * @param  string|null  $table
+     * @param  bool|string  $table
      * @return $this
      */
-    public function orderDesc(?string $table = null): Builder
+    public function orderDesc(bool|string $table = false): Builder
     {
         return $this->orderByDesc(
             $this->getTableNameWithDot($table) . $this->getModel()->getKeyName()
@@ -282,10 +284,10 @@ class Builder extends EloquentBuilder
     /**
      * Add an "order by" created at asc clause to the query.
      *
-     * @param  string|null  $table
+     * @param  bool|string  $table
      * @return $this
      */
-    public function createdAsc(?string $table = null): Builder
+    public function createdAsc(bool|string $table = false): Builder
     {
         return $this->orderBy($this->getTableNameWithDot($table) . 'created_at');
     }
@@ -293,10 +295,10 @@ class Builder extends EloquentBuilder
     /**
      * Add an "order by" created at desc clause to the query.
      *
-     * @param  string|null  $table
+     * @param  bool|string  $table
      * @return $this
      */
-    public function createdDesc(?string $table = null): Builder
+    public function createdDesc(bool|string $table = false): Builder
     {
         return $this->orderByDesc($this->getTableNameWithDot($table) . 'created_at');
     }
@@ -304,10 +306,10 @@ class Builder extends EloquentBuilder
     /**
      * Get the name of the table with the added dot.
      *
-     * @param  bool|string|null  $table
+     * @param  bool|string  $table
      * @return string
      */
-    protected function getTableNameWithDot(bool|string|null $table): string
+    protected function getTableNameWithDot(bool|string $table): string
     {
         if ($table = (($table === true) ? $this->model->getTable() : $table)) {
             return $table . '.';

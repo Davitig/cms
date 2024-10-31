@@ -24,8 +24,7 @@ trait HasLanguage
      * @param  array|string  $columns
      * @return \App\Models\Base\Builder
      */
-    public function joinLanguage(bool|string $currentLang = true, array|string $columns = []):
-    Builder
+    public function joinLanguage(bool|string $currentLang = true, array|string $columns = []): Builder
     {
         $table = $this->getTable();
         $languageTable = $this->languages()->getRelated()->getTable();

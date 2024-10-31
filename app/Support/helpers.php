@@ -129,14 +129,15 @@ function resource_names(string $name): array
  *
  * @param  string  $name
  * @param  mixed  $parameters
- * @param  bool|string|null  $language
+ * @param  mixed|null  $language
  * @param  bool  $absolute
  * @return string
  */
-function cms_route(string           $name,
-                   mixed            $parameters = [],
-                   bool|string|null $language = null,
-                   bool             $absolute = true): string
+function cms_route(
+    string $name,
+    mixed $parameters = [],
+    mixed $language = null,
+    bool $absolute = true): string
 {
     return language_to_url(route(cms_route_name_prefix($name), $parameters, $absolute), $language);
 }
@@ -144,16 +145,17 @@ function cms_route(string           $name,
 /**
  * Generate a CMS URL.
  *
- * @param  array|string  $path
+ * @param  mixed|null  $path
  * @param  array  $parameters
- * @param  bool|string|null  $language
+ * @param  mixed|null  $language
  * @param  bool|null  $secure
  * @return string
  */
-function cms_url(array|string     $path = '',
-                 array            $parameters = [],
-                 bool|string|null $language = null,
-                 ?bool            $secure = null): string
+function cms_url(
+    mixed $path = null,
+    array $parameters = [],
+    mixed $language = null,
+    ?bool $secure = null): string
 {
     if (is_array($path)) {
         $path = implode('/', array_filter($path));
@@ -169,14 +171,15 @@ function cms_url(array|string     $path = '',
  *
  * @param  string  $name
  * @param  mixed  $parameters
- * @param  bool|string|null  $language
+ * @param  mixed|null  $language
  * @param  bool  $absolute
  * @return string
  */
-function web_route(string           $name,
-                   mixed            $parameters = [],
-                   bool|string|null $language = null,
-                   bool             $absolute = true): string
+function web_route(
+    string $name,
+    mixed $parameters = [],
+    mixed $language = null,
+    bool $absolute = true): string
 {
     return language_to_url(route($name, $parameters, $absolute), $language);
 }
@@ -184,16 +187,17 @@ function web_route(string           $name,
 /**
  * Generate a web URL.
  *
- * @param  array|string  $path
+ * @param  mixed|null  $path
  * @param  array  $parameters
- * @param  bool|string|null  $language
+ * @param  mixed|null  $language
  * @param  bool|null  $secure
  * @return string
  */
-function web_url(array|string     $path = '',
-                 array            $parameters = [],
-                 bool|string|null $language = null,
-                 ?bool            $secure = null): string
+function web_url(
+    mixed $path = null,
+    array $parameters = [],
+    mixed $language = null,
+    ?bool $secure = null): string
 {
     if (is_array($path)) {
         $path = implode('/', array_filter($path));
@@ -237,11 +241,11 @@ function query_string(array $parameters, string $basePrefix = '?'): string
 /**
  * Prefix a language to the path.
  *
- * @param  string  $path
- * @param  bool|string|null  $language
+ * @param  string|null  $path
+ * @param  mixed|null  $language
  * @return string
  */
-function language_prefix(string $path, bool|string|null $language = null): string
+function language_prefix(?string $path = null, mixed $language = null): string
 {
     $path = trim($path, '/');
 
@@ -254,17 +258,17 @@ function language_prefix(string $path, bool|string|null $language = null): strin
         $path = language() . '/' . $path;
     }
 
-    return trim($path, '/');
+    return $path;
 }
 
 /**
  * Add language to the url.
  *
  * @param  string  $url
- * @param  bool|string|null  $language
+ * @param  mixed|null  $language
  * @return string
  */
-function language_to_url(string $url, bool|string|null $language = null): string
+function language_to_url(string $url, mixed $language = null): string
 {
     if (! ($withLanguage = ! empty($language)) && ! language_in_url()) {
         return trim($url, '/');
@@ -277,7 +281,7 @@ function language_to_url(string $url, bool|string|null $language = null): string
     $query = isset($segments['query']) ? '?' . $segments['query'] : '';
 
     if (! isset($segments['host'])) {
-        return language_prefix($path. $query, $language);
+        return language_prefix($path . $query, $language);
     }
 
     $baseUrl = $schemeAndHttpHost = '';
@@ -330,12 +334,11 @@ function model_path(string $name): string
  *
  * @throws \InvalidArgumentException
  */
-function make_model_sub_items(
-    array|Collection $items,
-    ?string          $slug = null,
-    int              $parentId = 0,
-    string           $parentKey = 'parent_id',
-    string           $key = 'id'): Collection
+function make_model_sub_items(array|Collection $items,
+                              ?string          $slug = null,
+                              int              $parentId = 0,
+                              string           $parentKey = 'parent_id',
+                              string           $key = 'id'): Collection
 {
     if (! $items instanceof Collection && ! is_array($items)) {
         throw new InvalidArgumentException(

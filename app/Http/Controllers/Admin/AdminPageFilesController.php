@@ -37,7 +37,7 @@ class AdminPageFilesController extends Controller
 
         $data['items'] = $this->model->forAdmin($pageId)->paginate(20);
 
-        // make menu list active from this (files) resource by passing the
+        // make a menu list active from this (files) resource by passing the
         // current page menu_id
         view()->composer('admin._partials.menu', function ($view) use ($data) {
             return $view->with('activeMenuId', $data['foreignModel']->menu_id);

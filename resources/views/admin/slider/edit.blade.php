@@ -4,7 +4,7 @@
             <div class="modal-content">
                 <div class="tab-content">
                     @foreach ($items as $current)
-                        <div class="tab-pane{{language() != $current->language ? '' : ' active'}}" id="modal-item-{{$current->language}}">
+                        <div class="tab-pane{{language() == $current->language ? ' active' : ''}}" id="modal-item-{{$current->language}}">
                             <div class="modal-gallery-image">
                                 @if (in_array($ext = pathinfo($current->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
                                     <img src="{{$current->file}}" class="file{{$current->language}} img-responsive" alt="{{$current->title}}">
@@ -36,7 +36,7 @@
                 @if (is_multilanguage())
                     <ul class="modal-footer modal-gallery-top-controls nav nav-tabs">
                         @foreach ($items as $current)
-                            <li{!!language() != $current->language ? '' : ' class="active"'!!}>
+                            <li{!!language() == $current->language ? ' class="active"' : ''!!}>
                                 <a href="#modal-item-{{$current->language}}" data-toggle="tab">
                                     <span class="visible-xs">{{$current->language}}</span>
                                     <span class="hidden-xs">{{language($current->language, 'full_name')}}</span>
@@ -52,19 +52,21 @@
             var formSelector = $('#form-modal .{{$cmsSettings->get('ajax_form')}}');
 
             formSelector.on('ajaxFormSuccess', function() {
+                $(this).find('[name="file"]').trigger('fileSet');
                 var lang = $(this).data('lang');
-                if (lang === currentLang) {
-                    var title   = $('[name="title"]', this).val();
-                    var file    = $('[name="file"]', this).val();
-                    var visible = $('[name="visible"]', this).prop('checked');
-
-                    var item = $('.gallery-env #item{{$current->id}}');
-                    $('.title', item).text(title);
-                    $('.thumb img', item).attr('src', getFileImage(file).file);
-
-                    var icon = (visible ? 'fa fa-eye' : 'fa fa-eye-slash');
-                    $('.visibility i', item).attr('class', icon);
+                if (lang !== currentLang) {
+                    return;
                 }
+                var title   = $('[name="title"]', this).val();
+                var file    = $('[name="file"]', this).val();
+                var visible = $('[name="visible"]', this).prop('checked');
+
+                var item = $('.gallery-env #item{{$current->id}}');
+                $('.title', item).text(title);
+                $('.thumb img', item).attr('src', getFileImage(file).file);
+
+                var icon = (visible ? 'fa fa-eye' : 'fa fa-eye-slash');
+                $('.visibility i', item).attr('class', icon);
             });
 
             formSelector.find('[name="file"]').on('fileSet', function () {
@@ -72,7 +74,7 @@
                 var fileValue = $(this).val();
                 var result = getFileImage(fileValue);
 
-                var photoSelector = $('#form-modal .' + fileId);
+                var photoSelector = $('#form-modal img.' + fileId);
                 photoSelector.removeClass('not-photo');
                 if (!result.isPhoto) {
                     photoSelector.addClass('not-photo');
