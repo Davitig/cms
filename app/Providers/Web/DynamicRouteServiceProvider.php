@@ -123,37 +123,21 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      * Bootstrap the application dynamic route.
      *
      * @param  \Illuminate\Contracts\Config\Repository  $config
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Routing\Router  $router
      * @return void
      */
-    public function boot(Repository $config, Request $request, Router $router): void
+    public function boot(Repository $config): void
     {
+        if ($config->get('cms_is_booted')) {
+            return;
+        }
+
         $this->config = $config;
 
-        if (! $this->config->get('cms_is_booted')) {
-            $this->request = $request;
+        $this->request = $this->app['request'];
 
-            $this->router = $router;
+        $this->router = $this->app['router'];
 
-            if ($this->config->get('language_in_url')) {
-                $this->pathPrefix = $this->config->get('app.language') . '/';
-            }
-
-            $routeMatches = 0;
-
-            foreach ($this->router->getRoutes()->get($this->request->method()) as $route) {
-                if ($route->matches($this->request)) {
-                    $routeMatches = 1;
-
-                    break;
-                }
-            }
-
-            if (! $routeMatches) {
-                $this->build();
-            }
-        }
+        $this->build();
     }
 
     /**
@@ -163,6 +147,10 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      */
     protected function configure(): void
     {
+        if ($this->config->get('language_in_url')) {
+            $this->pathPrefix = $this->config->get('app.language') . '/';
+        }
+
         $this->segments = (array) $this->config->get('url_path_segments', []);
 
         $this->segmentsCount = (int) $this->config->get('url_path_segments_count', 0);
