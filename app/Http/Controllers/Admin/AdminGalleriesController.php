@@ -71,6 +71,7 @@ class AdminGalleriesController extends Controller
         $model = $this->model->create($input);
 
         $input['gallery_id'] = $model->id;
+
         $model->languages(false)->create($input);
 
         return redirect(cms_route('galleries.edit', [$collectionId, $model->id]))
@@ -117,7 +118,7 @@ class AdminGalleriesController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = (new GalleryLanguage)->byForeignLanguage($id)->first();
+        $languageModel = $this->model->languages(false)->byForeignLanguage($id)->first();
 
         ! is_null($languageModel)
             ? $languageModel->update($input)

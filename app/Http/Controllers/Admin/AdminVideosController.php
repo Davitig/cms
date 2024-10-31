@@ -80,6 +80,7 @@ class AdminVideosController extends Controller
         $model = $this->model->create($input);
 
         $input['video_id'] = $model->id;
+
         $model->languages(false)->create($input);
 
         if ($request->expectsJson()) {
@@ -145,7 +146,7 @@ class AdminVideosController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = (new VideoLanguage)->byForeignLanguage($id)->first();
+        $languageModel = $this->model->languages(false)->byForeignLanguage($id)->first();
 
         if (! is_null($languageModel)) {
             $languageModel->update($input);

@@ -66,6 +66,7 @@ class AdminFaqController extends Controller
         $model = $this->model->create($input);
 
         $input['faq_id'] = $model->id;
+
         $model->languages(false)->create($input);
 
         return redirect(cms_route('faq.edit', [$collectionId, $model->id]))
@@ -114,7 +115,7 @@ class AdminFaqController extends Controller
 
         $this->model->findOrFail($id)->update($input);
 
-        $languageModel = (new FaqLanguage)->byForeignLanguage($id)->first();
+        $languageModel = $this->model->languages(false)->byForeignLanguage($id)->first();
 
         ! is_null($languageModel)
             ? $languageModel->update($input)

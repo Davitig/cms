@@ -56,6 +56,7 @@ class AdminTranslationsController extends Controller
         $model = $this->model->create($input = $request->all());
 
         $input['translation_id'] = $model->id;
+
         $model->languages(false)->create($input);
 
         return redirect(cms_route('translations.edit', [$model->id]))
@@ -103,7 +104,7 @@ class AdminTranslationsController extends Controller
 
         $this->model->findOrFail($id)->update($input);
 
-        $languageModel = (new TranslationLanguage)->byForeignLanguage($id)->first();
+        $languageModel = $this->model->languages(false)->byForeignLanguage($id)->first();
 
         ! is_null($languageModel)
             ? $languageModel->update($input)

@@ -69,6 +69,7 @@ class AdminPagesController extends Controller
         $model = $this->model->create($input);
 
         $input['page_id'] = $model->id;
+
         $model->languages(false)->create($input);
 
         return redirect(cms_route('pages.edit', [$menuId, $model->id]))
@@ -121,7 +122,7 @@ class AdminPagesController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = (new PageLanguage)->byForeignLanguage($id)->first();
+        $languageModel = $this->model->languages(false)->byForeignLanguage($id)->first();
 
         ! is_null($languageModel)
             ? $languageModel->update($input)

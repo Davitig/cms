@@ -80,6 +80,7 @@ class AdminPhotosController extends Controller
         $model = $this->model->create($input);
 
         $input['photo_id'] = $model->id;
+
         $model->languages(false)->create($input);
 
         if ($request->expectsJson()) {
@@ -145,7 +146,7 @@ class AdminPhotosController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = (new PhotoLanguage)->byForeignLanguage($id)->first();
+        $languageModel = $this->model->languages(false)->byForeignLanguage($id)->first();
 
         if (! is_null($languageModel)) {
             $languageModel->update($input);

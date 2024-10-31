@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\_Language;
-
 trait ClonableLanguage
 {
     /**
@@ -15,6 +13,10 @@ trait ClonableLanguage
      */
     public function cloneLanguage(int $id, array $input = [])
     {
+        if (! method_exists($this->model, 'languages')) {
+            return $this->cloneResponse([], 'error');
+        }
+
         $currentLangExists = $this->model->languages(false)->byForeignLanguage($id)->exists();
 
         if ($currentLangExists) {
@@ -50,16 +52,17 @@ trait ClonableLanguage
      * Get clone response.
      *
      * @param  array  $data
+     * @param  string  $message
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    protected function cloneResponse(array $data = [])
+    protected function cloneResponse(array $data = [], string $message = 'success')
     {
         if (request()->expectsJson()) {
             return response()->json(fill_data(
-                'success', trans('general.updated'), $data
+                $message, trans('general.' . $message), $data
             ));
         }
 
-        return back()->with('alert', fill_data('success', trans('general.updated')));
+        return back()->with('alert', fill_data($message, trans('general.' . $message)));
     }
 }

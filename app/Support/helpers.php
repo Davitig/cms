@@ -404,7 +404,7 @@ function fill_data(string $result, ?string $message = null, mixed $input = null)
     return [
         'result' => $result,
         'message' => $message,
-        'input'=> $input
+        'input' => $input
     ];
 }
 

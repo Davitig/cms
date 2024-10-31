@@ -66,6 +66,7 @@ class AdminEventsController extends Controller
         $model = $this->model->create($input);
 
         $input['event_id'] = $model->id;
+
         $model->languages(false)->create($input);
 
         return redirect(cms_route('events.edit', [$collectionId, $model->id]))
@@ -112,7 +113,7 @@ class AdminEventsController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = (new EventLanguage)->byForeignLanguage($id)->first();
+        $languageModel = $this->model->languages(false)->byForeignLanguage($id)->first();
 
         ! is_null($languageModel)
             ? $languageModel->update($input)

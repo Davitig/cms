@@ -79,6 +79,7 @@ class AdminEventFilesController extends Controller
         $model = $this->model->create($input);
 
         $input['event_file_id'] = $model->id;
+
         $model->languages(false)->create($input);
 
         if ($request->expectsJson()) {
@@ -143,7 +144,7 @@ class AdminEventFilesController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = (new EventFileLanguage)->byForeignLanguage($id)->first();
+        $languageModel = $this->model->languages(false)->byForeignLanguage($id)->first();
 
         if (! is_null($languageModel)) {
             $languageModel->update($input);

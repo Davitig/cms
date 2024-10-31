@@ -86,6 +86,7 @@ class AdminPageFilesController extends Controller
         $model = $this->model->create($input);
 
         $input['page_file_id'] = $model->id;
+
         $model->languages(false)->create($input);
 
         if ($request->expectsJson()) {
@@ -150,7 +151,7 @@ class AdminPageFilesController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = (new PageFileLanguage)->byForeignLanguage($id)->first();
+        $languageModel = $this->model->languages(false)->byForeignLanguage($id)->first();
 
         if (! is_null($languageModel)) {
             $languageModel->update($input);
