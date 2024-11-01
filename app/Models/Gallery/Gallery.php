@@ -2,6 +2,7 @@
 
 namespace App\Models\Gallery;
 
+use App\Models\Base\Builder;
 use App\Models\Base\Model;
 use App\Models\Traits\HasCollection;
 use App\Models\Traits\HasLanguage;
@@ -53,6 +54,16 @@ class Gallery extends Model
     public function languages(bool $relation = true): HasMany|GalleryLanguage
     {
         return $relation ? $this->hasMany(GalleryLanguage::class) : new GalleryLanguage;
+    }
 
+    /**
+     * Add a new where 'type' clause to the query.
+     *
+     * @param  string  $type
+     * @return \App\Models\Base\Builder|static
+     */
+    public function byType(string $type): Builder|static
+    {
+        return $this->where('type', $type);
     }
 }

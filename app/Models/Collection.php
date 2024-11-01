@@ -35,7 +35,7 @@ class Collection extends Model
     ];
 
     /**
-     * Get the same type collection instance.
+     * Add a new where 'type' clause to the query.
      *
      * @param  string  $type
      * @return \App\Models\Base\Builder|static

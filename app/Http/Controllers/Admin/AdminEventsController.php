@@ -27,7 +27,7 @@ class AdminEventsController extends Controller
      */
     public function index(int $collectionId)
     {
-        $data['parent'] = (new Collection)->where('type', Event::TYPE)
+        $data['parent'] = (new Collection)->byType($this->model::TYPE)
             ->findOrFail($collectionId);
 
         $data['items'] = $this->model->hasFile()->getAdminCollection($data['parent']);

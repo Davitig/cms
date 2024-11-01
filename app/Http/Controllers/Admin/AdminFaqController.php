@@ -28,7 +28,8 @@ class AdminFaqController extends Controller
      */
     public function index(int $collectionId)
     {
-        $data['parent'] = (new Collection)->findOrFail($collectionId);
+        $data['parent'] = (new Collection)->byType($this->model::TYPE)
+            ->findOrFail($collectionId);
 
         $data['items'] = $this->model->getAdminCollection($data['parent']);
 
