@@ -62,10 +62,7 @@
         <ul id="form-tabs" class="nav tabs-vertical custom">
             <li>
                 <a href="{{cms_route('events.files.index', [$current->id])}}">
-                    <span class="visible-xs"><i class="{{$iconFiles = icon_type('files')}}"></i></span>
-                    <div class="hidden-xs">
-                        <i class="{{$iconFiles}}"></i> {{trans('general.files')}}
-                    </div>
+                    <i class="{{icon_type('files')}}"></i> {{trans('general.files')}}
                 </a>
             </li>
         </ul>

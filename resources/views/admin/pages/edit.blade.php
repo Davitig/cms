@@ -63,29 +63,20 @@
         <ul id="form-tabs" class="nav tabs-vertical custom">
             <li>
                 <a href="{{cms_route('pages.files.index', $current->id)}}">
-                    <span class="visible-xs"><i class="{{$iconFiles = icon_type('files')}}"></i></span>
-                    <div class="hidden-xs">
-                        <i class="{{$iconFiles}}"></i> {{trans('general.files')}}
-                    </div>
+                    <i class="{{icon_type('files')}}"></i> {{trans('general.files')}}
                 </a>
             </li>
             @if ($current->collection_type)
                 <li class="listable">
                     <a href="{{cms_route($current->collection_type.'.index', [$current->type_id])}}">
-                        <span class="visible-xs"><i class="{{$iconType = icon_type($current->collection_type)}}"></i></span>
-                        <div class="hidden-xs">
-                            <i class="{{$iconType}}"></i> {{ucfirst($current->collection_type)}}
-                        </div>
+                        <i class="{{icon_type($current->collection_type)}}"></i> {{ucfirst($current->collection_type)}}
                     </a>
                 </li>
             @endif
             @if (array_key_exists($current->type, cms_pages('explicit')))
                 <li class="modules">
                     <a href="{{cms_route($current->type.'.index')}}">
-                        <span class="visible-xs"><i class="{{$iconType = icon_type($current->type)}}"></i></span>
-                        <div class="hidden-xs">
-                            <i class="{{$iconType}}"></i> {{ucfirst($current->type)}}
-                        </div>
+                        <i class="{{icon_type($current->type)}}"></i> {{ucfirst($current->type)}}
                     </a>
                 </li>
             @endif
