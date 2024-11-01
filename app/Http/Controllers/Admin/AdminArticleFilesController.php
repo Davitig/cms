@@ -6,12 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FileRequest;
 use App\Models\Article\Article;
 use App\Models\Article\ArticleFile;
-use App\Models\Article\ArticleFileLanguage;
 use Illuminate\Http\Request;
 
 class AdminArticleFilesController extends Controller
 {
-    use Positionable, VisibilityTrait;
+    use Positionable, VisibilityTrait, LanguageRelationsActionTrait;
 
     /**
      * Create a new controller instance.
@@ -78,9 +77,7 @@ class AdminArticleFilesController extends Controller
 
         $model = $this->model->create($input);
 
-        $input['article_file_id'] = $model->id;
-
-        $model->languages(false)->create($input);
+        $this->createLanguageRelations('languages', $input, $model->id, true);
 
         if ($request->expectsJson()) {
             $view = view('admin.collections.articles.files.item', [
@@ -144,11 +141,7 @@ class AdminArticleFilesController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = $this->model->languages(false)->byForeignLanguage($id)->first();
-
-        if (! is_null($languageModel)) {
-            $languageModel->update($input);
-        }
+        $this->updateOrCreateLanguageRelations('languages', $input, $id);
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

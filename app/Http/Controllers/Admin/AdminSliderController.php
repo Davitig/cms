@@ -5,12 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SliderRequest;
 use App\Models\Slider;
-use App\Models\SliderLanguage;
 use Illuminate\Http\Request;
 
 class AdminSliderController extends Controller
 {
-    use Positionable, VisibilityTrait;
+    use Positionable, VisibilityTrait, LanguageRelationsActionTrait;
 
     /**
      * Create a new controller instance.
@@ -64,9 +63,7 @@ class AdminSliderController extends Controller
     {
         $model = $this->model->create($input = $request->all());
 
-        $input['slider_id'] = $model->id;
-
-        $model->languages(false)->create($input);
+        $this->createLanguageRelations('languages', $input, $model->id, true);
 
         if ($request->expectsJson()) {
             $view = view('admin.slider.item', [
@@ -128,11 +125,7 @@ class AdminSliderController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = $this->model->languages(false)->byForeignLanguage($id)->first();
-
-        if (! is_null($languageModel)) {
-            $languageModel->update($input);
-        }
+        $this->updateOrCreateLanguageRelations('languages', $input, $id);
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

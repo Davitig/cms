@@ -6,12 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PageRequest;
 use App\Models\Menu;
 use App\Models\Page\Page;
-use App\Models\Page\PageLanguage;
 use Illuminate\Http\Request;
 
 class AdminPagesController extends Controller
 {
-    use Positionable, VisibilityTrait, Transferable, ClonableLanguage;
+    use Positionable, VisibilityTrait, Transferable, LanguageRelationsActionTrait;
 
     /**
      * Create a new controller instance.
@@ -68,9 +67,7 @@ class AdminPagesController extends Controller
 
         $model = $this->model->create($input);
 
-        $input['page_id'] = $model->id;
-
-        $model->languages(false)->create($input);
+        $this->createLanguageRelations('languages', $input, $model->id, true);
 
         return redirect(cms_route('pages.edit', [$menuId, $model->id]))
             ->with('alert', fill_data('success', trans('general.created')));
@@ -122,11 +119,7 @@ class AdminPagesController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = $this->model->languages(false)->byForeignLanguage($id)->first();
-
-        ! is_null($languageModel)
-            ? $languageModel->update($input)
-            : $this->cloneLanguage($id, $input);
+        $this->updateOrCreateLanguageRelations('languages', $input, $id);
 
         if ($request->expectsJson()) {
             if (array_key_exists(

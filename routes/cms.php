@@ -65,7 +65,6 @@ Route::group([
             $router->get('pages/listable-types', 'getListableTypes')->name('pages.listableTypes');
             $router->put('pages/transfer/{menuId}', 'transfer')->name('pages.transfer');
             $router->put('pages/collapse', 'collapse')->name('pages.collapse');
-            $router->post('pages/{id}/clone-language', 'cloneLanguage')->name('pages.cloneLanguage');
             $router->resource('menus.pages', AdminPagesController::class)
                 ->names(resource_names('pages'))
                 ->except(['show']);
@@ -85,8 +84,6 @@ Route::group([
                     ->name($route . '.updatePosition');
                 $router->put($route . '/transfer/{id}', [$controller, 'transfer'])
                     ->name($route . '.transfer');
-                $router->post($route . '/{id}/clone-language', [$controller, 'cloneLanguage'])
-                    ->name($route . '.cloneLanguage');
                 $router->resource($prefix . '.' . $route, $controller)
                     ->names(resource_names($route))
                     ->except(['show']);
@@ -131,8 +128,6 @@ Route::group([
         $router->controller(AdminTranslationsController::class)->group(function ($router) {
             $router->get('translations/form', 'getForm')->name('translations.form');
             $router->post('translations/form', 'setData')->name('translations.form.post');
-            $router->post('translations/{id}/clone-language', 'cloneLanguage')
-                ->name('translations.cloneLanguage');
             $router->resource('translations', AdminTranslationsController::class)
                 ->names(resource_names('translations'))
                 ->except(['show']);

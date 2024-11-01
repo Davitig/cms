@@ -5,12 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ArticleRequest;
 use App\Models\Article\Article;
-use App\Models\Article\ArticleLanguage;
 use App\Models\Collection;
 
 class AdminArticlesController extends Controller
 {
-    use Positionable, VisibilityTrait, Transferable, ClonableLanguage;
+    use Positionable, VisibilityTrait, Transferable, LanguageRelationsActionTrait;
 
     /**
      * Create a new controller instance.
@@ -65,9 +64,7 @@ class AdminArticlesController extends Controller
 
         $model = $this->model->create($input);
 
-        $input['article_id'] = $model->id;
-
-        $model->languages(false)->create($input);
+        $this->createLanguageRelations('languages', $input, $model->id, true);
 
         return redirect(cms_route('articles.edit', [$collectionId, $model->id]))
             ->with('alert', fill_data('success', trans('general.created')));
@@ -113,11 +110,7 @@ class AdminArticlesController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = $this->model->languages(false)->byForeignLanguage($id)->first();
-
-        ! is_null($languageModel)
-            ? $languageModel->update($input)
-            : $this->cloneLanguage($id, $input);
+        $this->updateOrCreateLanguageRelations('languages', $input, $id);
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

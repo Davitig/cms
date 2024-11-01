@@ -5,12 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TranslationRequest;
 use App\Models\Translation;
-use App\Models\TranslationLanguage;
 use Illuminate\Http\Request;
 
 class AdminTranslationsController extends Controller
 {
-    use ClonableLanguage;
+    use LanguageRelationsActionTrait;
 
     /**
      * Create a new controller instance.
@@ -55,9 +54,7 @@ class AdminTranslationsController extends Controller
     {
         $model = $this->model->create($input = $request->all());
 
-        $input['translation_id'] = $model->id;
-
-        $model->languages(false)->create($input);
+        $this->createLanguageRelations('languages', $input, $model->id, true);
 
         return redirect(cms_route('translations.edit', [$model->id]))
             ->with('alert', fill_data('success', trans('general.created')));
@@ -104,11 +101,7 @@ class AdminTranslationsController extends Controller
 
         $this->model->findOrFail($id)->update($input);
 
-        $languageModel = $this->model->languages(false)->byForeignLanguage($id)->first();
-
-        ! is_null($languageModel)
-            ? $languageModel->update($input)
-            : $this->cloneLanguage($id, $input);
+        $this->updateOrCreateLanguageRelations('languages', $input, $id);
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

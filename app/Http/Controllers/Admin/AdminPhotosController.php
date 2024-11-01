@@ -4,15 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PhotoRequest;
-use App\Models\Collection;
 use App\Models\Gallery\Gallery;
 use App\Models\Photo;
-use App\Models\PhotoLanguage;
 use Illuminate\Http\Request;
 
 class AdminPhotosController extends Controller
 {
-    use Positionable, VisibilityTrait;
+    use Positionable, VisibilityTrait, LanguageRelationsActionTrait;
 
     /**
      * Create a new controller instance.
@@ -81,9 +79,7 @@ class AdminPhotosController extends Controller
 
         $model = $this->model->create($input);
 
-        $input['photo_id'] = $model->id;
-
-        $model->languages(false)->create($input);
+        $this->createLanguageRelations('languages', $input, $model->id, true);
 
         if ($request->expectsJson()) {
             $view = view('admin.galleries.photos.item', [
@@ -148,11 +144,7 @@ class AdminPhotosController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = $this->model->languages(false)->byForeignLanguage($id)->first();
-
-        if (! is_null($languageModel)) {
-            $languageModel->update($input);
-        }
+        $this->updateOrCreateLanguageRelations('languages', $input, $id);
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

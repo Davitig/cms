@@ -41,13 +41,9 @@
             <div class="panel-body">
                 <div class="panel-body">
                     <div class="tab-content">
-                        @php
-                            $activeLang = request('lang', language());
-                            $languages = languages();
-                            $firstLang = key($languages);
-                        @endphp
+                        @php($activeLang = request('lang', language()))
                         @foreach ($items as $current)
-                            <div class="tab-pane{{$activeLang == $current->language || ! $current->language ? ' active' : ''}}" id="item-{{$current->language ?: $firstLang}}">
+                            <div class="tab-pane{{$activeLang == $current->language ? ' active' : ''}}" id="item-{{$current->language}}">
                                 {{ html()->modelForm($current, 'put', cms_route('articles.update', [
                                     $current->collection_id, $current->id
                                 ], is_multilanguage() ? ($current->language ?: $activeLang) : null))
@@ -58,18 +54,6 @@
                                     'submitAndBack' => trans('general.update_n_back'),
                                     'icon'          => 'save'
                                 ])
-                                {{ html()->form()->close() }}
-                            </div>
-                            @unset($languages[$current->language ?: $firstLang])
-                        @endforeach
-                        @foreach ($languages as $value)
-                            <div class="tab-pane{{$activeLang == $value['language'] ? ' active' : ''}}" id="item-{{$value['language']}}">
-                                {{ html()->form('post', cms_route('articles.cloneLanguage', [$current->id], $value['language']))
-                                    ->class('form-horizontal')->data('lang', $value['language'])->open() }}
-                                <button class="btn btn-info btn-icon btn-icon-standalone btn-lg">
-                                    <i class="{{$icon}}"></i>
-                                    <span>Create {{$value['full_name']}}</span>
-                                </button>
                                 {{ html()->form()->close() }}
                             </div>
                         @endforeach

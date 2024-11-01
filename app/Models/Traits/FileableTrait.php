@@ -43,7 +43,7 @@ trait FileableTrait
      * @param  bool  $exists
      * @return \App\Models\Base\Builder
      */
-    public function whereFileExists($exists = true): Builder
+    public function whereFileExists(bool $exists = true): Builder
     {
         return $this->whereExists(function ($q) {
             $tableId = ($table = $this->getTable()).'.'.$this->getKeyName();

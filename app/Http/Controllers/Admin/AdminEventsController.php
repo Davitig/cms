@@ -6,11 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\EventRequest;
 use App\Models\Collection;
 use App\Models\Event\Event;
-use App\Models\Event\EventLanguage;
 
 class AdminEventsController extends Controller
 {
-    use Positionable, VisibilityTrait, Transferable, ClonableLanguage;
+    use Positionable, VisibilityTrait, Transferable, LanguageRelationsActionTrait;
 
     /**
      * Create a new controller instance.
@@ -65,9 +64,7 @@ class AdminEventsController extends Controller
 
         $model = $this->model->create($input);
 
-        $input['event_id'] = $model->id;
-
-        $model->languages(false)->create($input);
+        $this->createLanguageRelations('languages', $input, $model->id, true);
 
         return redirect(cms_route('events.edit', [$collectionId, $model->id]))
             ->with('alert', fill_data('success', trans('general.created')));
@@ -113,11 +110,7 @@ class AdminEventsController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = $this->model->languages(false)->byForeignLanguage($id)->first();
-
-        ! is_null($languageModel)
-            ? $languageModel->update($input)
-            : $this->cloneLanguage($id, $input);
+        $this->updateOrCreateLanguageRelations('languages', $input, $id);
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

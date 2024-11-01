@@ -6,12 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FaqRequest;
 use App\Models\Collection;
 use App\Models\Faq;
-use App\Models\FaqLanguage;
 use Illuminate\Http\Request;
 
 class AdminFaqController extends Controller
 {
-    use Positionable, VisibilityTrait, Transferable, ClonableLanguage;
+    use Positionable, VisibilityTrait, Transferable, LanguageRelationsActionTrait;
 
     /**
      * Create a new controller instance.
@@ -66,9 +65,7 @@ class AdminFaqController extends Controller
 
         $model = $this->model->create($input);
 
-        $input['faq_id'] = $model->id;
-
-        $model->languages(false)->create($input);
+        $this->createLanguageRelations('languages', $input, $model->id, true);
 
         return redirect(cms_route('faq.edit', [$collectionId, $model->id]))
             ->with('alert', fill_data('success', trans('general.created')));
@@ -116,11 +113,7 @@ class AdminFaqController extends Controller
 
         $this->model->findOrFail($id)->update($input);
 
-        $languageModel = $this->model->languages(false)->byForeignLanguage($id)->first();
-
-        ! is_null($languageModel)
-            ? $languageModel->update($input)
-            : $this->cloneLanguage($id, $input);
+        $this->updateOrCreateLanguageRelations('languages', $input, $id);
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

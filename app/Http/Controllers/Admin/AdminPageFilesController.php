@@ -6,12 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FileRequest;
 use App\Models\Page\Page;
 use App\Models\Page\PageFile;
-use App\Models\Page\PageFileLanguage;
 use Illuminate\Http\Request;
 
 class AdminPageFilesController extends Controller
 {
-    use Positionable, VisibilityTrait;
+    use Positionable, VisibilityTrait, LanguageRelationsActionTrait;
 
     /**
      * Create a new controller instance.
@@ -85,9 +84,7 @@ class AdminPageFilesController extends Controller
 
         $model = $this->model->create($input);
 
-        $input['page_file_id'] = $model->id;
-
-        $model->languages(false)->create($input);
+        $this->createLanguageRelations('languages', $input, $model->id, true);
 
         if ($request->expectsJson()) {
             $view = view('admin.pages.files.item', [
@@ -151,11 +148,7 @@ class AdminPageFilesController extends Controller
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
-        $languageModel = $this->model->languages(false)->byForeignLanguage($id)->first();
-
-        if (! is_null($languageModel)) {
-            $languageModel->update($input);
-        }
+        $this->updateOrCreateLanguageRelations('languages', $input, $id);
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

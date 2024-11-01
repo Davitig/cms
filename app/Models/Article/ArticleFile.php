@@ -5,10 +5,12 @@ namespace App\Models\Article;
 use App\Models\Base\Builder;
 use App\Models\Base\Model;
 use App\Models\Traits\FileTrait;
+use App\Models\Traits\HasLanguage;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class ArticleFile extends Model
 {
-    use FileTrait;
+    use FileTrait, HasLanguage;
 
     /**
      * The table associated with the model.
