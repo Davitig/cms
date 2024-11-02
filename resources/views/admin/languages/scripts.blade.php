@@ -1,12 +1,13 @@
 @push('body.bottom')
     <script type="text/javascript">
         var flagSelector = $('#lang-img');
-        $('form.ajax-form #language').on('keyup', function (data) {
+        var sampleLangSelector = $('.sample-lang');
+        $('input#language').on('keyup', function (data) {
             var value = $(data.target).val();
             if (value.length === 2) {
-                flagSelector.attr('src', '{{ asset('/') }}/assets/libs/images/flags/'+value+'.png');
+                flagSelector.attr('src', '{{ asset('/assets/libs/images/flags/') }}/'+value+'.png');
+                sampleLangSelector.text(value);
             }
         });
     </script>
-    <script src="{{ asset('assets/libs/js/inputmask/jquery.inputmask.bundle.js') }}"></script>
 @endpush

@@ -27,11 +27,12 @@
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon">
-                <img id="lang-img" src="{{ asset('assets/libs/images/flags/'.$current->language.'.png') }}" width="28" height="18" alt="flag">
+                <img id="lang-img" src="{{ asset('assets/libs/images/flags/' . ($current->language ?: 'en') . '.png') }}" width="28" height="18" alt="flag">
                 {{-- <i class="{{icon_type('languages')}}"></i> --}}
             </span>
-            {{ html()->text('language')->id('language')->class('form-control')->data('mask', 'aa')->placeholder('E.g. en') }}
+            {{ html()->text('language')->id('language')->class('form-control')->placeholder('E.g. en') }}
         </div>
+        <div class="desc">Code will be used for URLs. E.g. {{ request()->host() }}/<strong class="sample-lang">{{ $current->language ?: 'en' }}</strong>/about</div>
         @if ($error)
             <span class="text-danger">{{$error}}</span>
         @endif
