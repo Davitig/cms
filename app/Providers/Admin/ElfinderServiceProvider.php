@@ -39,6 +39,7 @@ class ElfinderServiceProvider extends ServiceProvider
         }
 
         $config['namespace'] = 'App\Http\Controllers';
+        $config['middleware'][] = 'cms.auth';
         $config['as'] = cms_route_name_prefix('');
 
         $router->group($config, function($router) {
