@@ -157,10 +157,10 @@ $(function () {
                     field.closest('.form-group').addClass('validate-has-error');
 
                     var errorMsg = '<div class="text-danger">'+element+'</div>';
-                    if (! field.parent().hasClass('input-group')) {
-                        field.after(errorMsg);
-                    } else {
+                    if (field.parent().hasClass('input-group')) {
                         field.parent().after(errorMsg);
+                    } else {
+                        field.after(errorMsg);
                     }
                 });
 

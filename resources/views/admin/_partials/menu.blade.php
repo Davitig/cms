@@ -123,7 +123,7 @@
                 <li>
                     <a href="{{ cms_route('slider.index') }}"{!! $routeMatches(['slider']) ? ' class="active"' : '' !!}>
                         <i class="fa fa-photo" title="Slider"></i>
-                        <span class="title">Homepage Slider</span>
+                        <span class="title">Slider</span>
                     </a>
                 </li>
             @endif

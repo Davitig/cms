@@ -38,27 +38,12 @@
             </div>
         </div>
         <script type="text/javascript">
-            var currentLang = '{{language()}}';
             var formSelector = $('#form-modal .{{$cmsSettings->get('ajax_form')}}');
-
             formSelector.on('ajaxFormSuccess', function(e, data) {
-                $(this).find('[name="file"]').trigger('fileSet');
-                var lang = $(this).data('lang');
-                if (lang !== currentLang) {
-                    return;
-                }
-                var title   = $('[name="title"]', this).val();
-                // var file    = $('[name="file"]', this).val();
-                var visible = $('[name="visible"]', this).prop('checked');
-
-                var item = $('.gallery-env #item{{$current->id}}');
-                $('.title', item).text(title);
-                $('.thumb iframe', item).attr('src', data.input.youtube);
+                $('#item{{$current->id}} .thumb iframe').attr('src', data.input.youtube);
                 $('#form-modal').find('iframe').attr('src', data.input.youtube);
-
-                var icon = (visible ? 'fa fa-eye' : 'fa fa-eye-slash');
-                $('.visibility i', item).attr('class', icon);
             });
         </script>
     </div>
+    @include('admin._scripts.files_edit')
 @endif

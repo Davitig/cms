@@ -78,7 +78,7 @@
             if (ids.length) {
                 var input = {'ids':ids, '_method':'delete', '_token':"{{$csrfToken = csrf_token()}}"};
 
-                $.post('{{$routeIndex}}/' + ids, input, function(data) {
+                $.post('{{$routeIndex}}/' + ids[0], input, function(data) {
                     // alert toastr message
                     toastr[data.result](data.message);
 
