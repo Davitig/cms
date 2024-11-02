@@ -10,9 +10,9 @@ use Illuminate\Support\Str;
  *
  * @param  bool|string|null  $key
  * @param  string|null  $value
- * @return string|array
+ * @return string|array|null
  */
-function language(bool|string|null $key = null, ?string $value = null): array|string
+function language(bool|string|null $key = null, ?string $value = null): array|string|null
 {
     $lang = (string) config('app.language');
 
@@ -48,7 +48,7 @@ function languages(): array
  */
 function language_in_url(): bool
 {
-    return config('language_in_url', false);
+    return (bool) config('language_in_url');
 }
 
 /**
@@ -68,7 +68,7 @@ function is_multilanguage(): bool
  */
 function cms_is_booted(): bool
 {
-    return config('cms_is_booted', false);
+    return (bool) config('cms_is_booted');
 }
 
 /**
@@ -492,9 +492,9 @@ function deep_collection(?string $key = null, mixed $default = []): array|string
  *
  * @param  string  $key
  * @param  mixed|null  $default
- * @return array|string
+ * @return string|null
  */
-function icon_type(string $key, mixed $default = null): array|string
+function icon_type(string $key, mixed $default = null): ?string
 {
     return cms_config('icons.' . $key, $default);
 }
