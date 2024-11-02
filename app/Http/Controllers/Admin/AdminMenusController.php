@@ -23,6 +23,8 @@ class AdminMenusController extends Controller
      */
     public function index()
     {
+        // menu data is loaded from middleware
+
         return view('admin.menus.index');
     }
 
