@@ -13,33 +13,33 @@
     <link rel="stylesheet" href="{{ asset('assets/libs/css/xenon-components.css') }}">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
 <body class="page-body">
-    <div class="page-container">
-        <div class="main-content">
-            <div class="page-error centered">
-                <div class="error-symbol">
-                    <i class="fa fa-binoculars"></i>
-                </div>
-                <h2>
-                    404 Not Found
-                    <small>The requested page was not found!</small>
-                </h2>
-                <p>We did not find the page you were looking for.</p>
+<div class="page-container">
+    <div class="main-content">
+        <div class="page-error centered">
+            <div class="error-symbol">
+                <i class="fa fa-binoculars"></i>
             </div>
+            <h2>
+                404 Not Found
+                <small>The requested page was not found!</small>
+            </h2>
+            <p>We did not find the page you were looking for.</p>
+        </div>
         @if (! request()->filled('iframe'))
             <div class="page-error-search centered">
-                <a href="{{redirect()->intended()->getTargetUrl()}}" class="go-back">
+                <a href="{{redirect()->intended(cms_url())->getTargetUrl()}}" class="go-back">
                     <i class="fa fa-angle-left"></i>
                     Go back
                 </a>
             </div>
         @endif
-        </div>
     </div>
+</div>
 </body>
 </html>
 

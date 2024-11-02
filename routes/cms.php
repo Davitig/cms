@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminCalendarController;
+use App\Http\Controllers\Admin\AdminCmsUserRolesController;
 use App\Http\Controllers\Admin\AdminCmsUsersController;
 use App\Http\Controllers\Admin\AdminCollectionsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
@@ -25,8 +26,10 @@ Route::group([
 ], function ($router) {
     // login
     $router->controller(AdminLoginController::class)->group(function ($router) {
-        $router->get('login', 'showLoginForm')->name('login')->middleware('cms.guest');
-        $router->post('login', 'login')->name('login.post')->middleware('cms.guest');
+        $router->get('login', 'showLoginForm')->name('login')
+            ->middleware('cms.guest');
+        $router->post('login', 'login')->name('login.post')
+            ->middleware('cms.guest');
         $router->post('logout', 'logout')->name('logout');
 
         // lockscreen
@@ -52,7 +55,8 @@ Route::group([
             ->except(['show']);
 
         // menus
-        $router->post('menus/set-main', [AdminMenusController::class, 'setMain'])->name('menus.setMain');
+        $router->post('menus/set-main', [AdminMenusController::class, 'setMain'])
+            ->name('menus.setMain');
         $router->resource('menus', AdminMenusController::class)
             ->names(resource_names('menus'))
             ->except(['show']);
@@ -110,6 +114,10 @@ Route::group([
         // CMS users
         $router->resource('cms-users', AdminCmsUsersController::class)
             ->names(resource_names('cmsUsers'));
+        // CMS user roles
+        $router->resource('cms-user-roles', AdminCmsUserRolesController::class)
+            ->names(resource_names('cmsUserRoles'))
+            ->except(['show']);
 
         // file manager
         $router->get('filemanager', [AdminFilemanagerController::class, 'index'])
@@ -150,8 +158,10 @@ Route::group([
         });
 
         // CMS settings
-        $router->get('settings', [AdminSettingsController::class, 'index'])->name('settings.index');
-        $router->put('settings', [AdminSettingsController::class, 'update'])->name('settings.update');
+        $router->get('settings', [AdminSettingsController::class, 'index'])
+            ->name('settings.index');
+        $router->put('settings', [AdminSettingsController::class, 'update'])
+            ->name('settings.update');
         // web settings
         $router->get('web-settings', [AdminWebSettingsController::class, 'index'])
             ->name('webSettings.index');

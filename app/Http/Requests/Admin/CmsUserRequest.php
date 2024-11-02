@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use App\Http\Requests\Request;
+use App\Models\CmsUserRole;
 
 class CmsUserRequest extends Request
 {
@@ -19,7 +20,7 @@ class CmsUserRequest extends Request
             'email' => 'required|string|email|max:255|unique:cms_users,email,'.$id,
             'first_name' => 'required|min:2|max:35',
             'last_name' => 'required|min:2|max:35',
-            'role' => 'required',
+            'cms_user_role_id' => 'required|integer',
             'password' => array_merge(
                 $this->isMethod('POST') ? ['required'] : ['nullable'],
                 ['min:8', 'confirmed']
@@ -40,11 +41,15 @@ class CmsUserRequest extends Request
 
         $input['blocked'] = $this->filled('blocked') ? 1 : 0;
 
+        $roleIds = (new CmsUserRole)->pluck('id')->toArray();
+
         if ($user->id == $id) {
-            $input['role'] = $user->role;
+            $input['cms_user_role_id'] = $user->cms_user_role_id;
+            $input['full_access'] = $user->full_access;
             $input['blocked'] = 0;
-        } elseif (! in_array($this->get('role'), array_keys(user_roles()))) {
-            $input['role'] = null;
+        } elseif (! $user->hasFullAccess() || ! in_array($this->get('cms_user_role_id'), $roleIds)) {
+            $input['cms_user_role_id'] = null;
+            $input['full_access'] = 0;
         }
 
         return $input;

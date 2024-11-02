@@ -13,9 +13,13 @@ return new class extends Migration
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('role', 32)->index();
+            $table->unsignedTinyInteger('cms_user_role_id');
             $table->string('route_name', 64);
             $table->timestamps();
+
+            $table->foreign('cms_user_role_id')->references('id')
+                ->on('cms_user_roles')
+                ->onDelete('cascade');
         });
     }
 

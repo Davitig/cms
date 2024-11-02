@@ -16,11 +16,11 @@ class DatabaseSeeder extends Seeder
 
         $this->call(LanguageTableSeeder::class);
 
+        $this->call(CmsUserRolesTableSeeder::class);
+
         $this->call(CmsUsersTableSeeder::class);
 
         $this->call(MenusTableSeeder::class);
-
-        $this->call(NotesTableSeeder::class);
 
         Schema::enableForeignKeyConstraints();
     }

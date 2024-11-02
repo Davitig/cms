@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\CmsUserRole;
 use App\Models\Permission;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class AdminPermissionsController extends Controller
+class AdminPermissionsController extends Controller implements HasMiddleware
 {
     /**
      * Create a new controller instance.
@@ -17,37 +18,44 @@ class AdminPermissionsController extends Controller
     public function __construct(protected Permission $model, protected Request $request) {}
 
     /**
+     * Get the middleware that should be assigned to the controller.
+     */
+    public static function middleware(): array
+    {
+        return ['cms.withFullAccess'];
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        $this->checkAccess();
+        $data['roles'] = (new CmsUserRole)->fullAccess(false)
+            ->pluck('role', 'id')
+            ->toArray();
 
-        $data['roles'] = [];
+        $data['activeRoleId'] = $this->request->get('role', $roleId = key($data['roles']));
 
-        foreach ((array) user_roles() as $key => $value) {
-            if ($key == 'admin') {
-                continue;
-            }
-
-            $data['roles'][$key] = $value;
+        if (! array_key_exists($data['activeRoleId'], $data['roles'])) {
+            $data['activeRoleId'] = $roleId;
         }
 
-        $data['current'] = [];
+        $data['currentRoutes'] = $this->model->roleId($data['activeRoleId'])
+            ->pluck('route_name')
+            ->toArray();
 
-        if ($role = $this->request->get('role', key($data['roles']))) {
-            $data['current'] = $this->model->role($role)
-                ->pluck('route_name')
-                ->toArray();
-        }
-
-        $data['routeGroups'] = array_diff_key(
-            $this->getAllRouteNames(), array_flip(Permission::$routeGroupsHidden)
-        );
-
-        $data['namesDisallowed'] = Permission::$routeNamesHidden;
+        $data['routeGroups'] = array_filter(array_diff_key(
+            $this->getAllRouteNames(),
+            array_flip(Permission::$routeGroupsHidden),
+            array_flip(Permission::$routeGroupsAllowed)
+        ), function ($routes) {
+            return array_filter($routes, function ($route) {
+                return ! in_array($route, Permission::$routeNamesHidden)
+                    && ! in_array($route, Permission::$routeNamesAllowed);
+            });
+        });
 
         return view('admin.permissions.index', $data);
     }
@@ -59,9 +67,11 @@ class AdminPermissionsController extends Controller
      */
     public function store()
     {
-        $this->checkAccess();
+        $this->model->clear($roleId = $this->request->get('role_id'));
 
-        $this->model->clear($role = $this->request->get('role'));
+        if (! (new CmsUserRole)->whereKey($roleId)->fullAccess(false)->exists()) {
+            return redirect(cms_route('permissions.index'));
+        }
 
         $input = $this->request->get('permissions', []);
 
@@ -70,40 +80,26 @@ class AdminPermissionsController extends Controller
         foreach ($input as $groupName => $routes) {
             foreach ($routes as $routeName) {
                 if (in_array($groupName, Permission::$routeGroupsHidden)
+                    || in_array($groupName, Permission::$routeGroupsAllowed)
                     || in_array($routeName, Permission::$routeNamesHidden)
+                    || in_array($routeName, Permission::$routeNamesAllowed)
                 ) {
                     continue;
                 }
 
-                $attributes['role'] = $role;
+                $attributes['cms_user_role_id'] = $roleId;
                 $attributes['route_name'] = $routeName;
 
                 $this->model->create($attributes);
             }
         }
 
-        return redirect(cms_route('permissions.index', ['role' => $role]))
+        return redirect(cms_route('permissions.index', ['role' => $roleId]))
             ->with('alert', fill_data('success', trans('general.saved')));
     }
 
     /**
-     * Determine if the user has access to the given route
-     *
-     * @return void
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
-     */
-    protected function checkAccess()
-    {
-        $user = $this->request->user('cms');
-
-        if (! $user->isAdmin()) {
-            throw new AccessDeniedHttpException('Forbidden');
-        }
-    }
-
-    /**
-     * Get all cms route names.
+     * Get all CMS route names.
      *
      * @return array
      */
@@ -112,8 +108,6 @@ class AdminPermissionsController extends Controller
         $routes = app('router')->getRoutes()->getRoutesByName();
 
         $routeNames = [];
-
-        $prevRouteName = null;
 
         $cmsSlug = cms_route_name_prefix('');
 
@@ -124,13 +118,14 @@ class AdminPermissionsController extends Controller
 
             $name = str_replace($cmsSlug, '', $name);
 
-            if ($prevRouteName == $name) {
-                continue;
-            }
-
             $baseRouteName = explode('.', substr($name, 0, strrpos($name, '.')));
 
-            $routeNames[$baseRouteName[0]][] = $prevRouteName = $name;
+            if ($baseRouteName[0]) {
+                $routeNames[$baseRouteName[0]][] = $name;
+            } else {
+                $routeNames[$name] ??= [];
+                array_unshift($routeNames[$name], $name);
+            }
         }
 
         return $routeNames;

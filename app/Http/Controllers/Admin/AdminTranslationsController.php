@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TranslationRequest;
 use App\Models\Translation;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class AdminTranslationsController extends Controller
+class AdminTranslationsController extends Controller implements HasMiddleware
 {
     use LanguageRelationsActionTrait;
 
@@ -17,6 +18,14 @@ class AdminTranslationsController extends Controller
      * @return void
      */
     public function __construct(protected Translation $model) {}
+
+    /**
+     * Get the middleware that should be assigned to the controller.
+     */
+    public static function middleware(): array
+    {
+        return ['cms.withFullAccess'];
+    }
 
     /**
      * Display a listing of the resource.

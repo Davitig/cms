@@ -31,7 +31,9 @@ class AdminLoginController extends Controller
     }
 
     /**
-     * {@inheritDoc}
+     * Get the authentication guard.
+     *
+     * @return \Illuminate\Contracts\Auth\Guard
      */
     protected function guard()
     {
@@ -64,6 +66,8 @@ class AdminLoginController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     *
+     * @throws \Throwable
      */
     public function setLockscreen(Request $request)
     {

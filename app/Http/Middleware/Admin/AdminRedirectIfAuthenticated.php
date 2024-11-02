@@ -4,7 +4,6 @@ namespace App\Http\Middleware\Admin;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminRedirectIfAuthenticated
@@ -18,9 +17,7 @@ class AdminRedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $guard = Auth::guard('cms');
-
-        if ($guard->check() && ! $guard->user()->hasLockScreen()) {
+        if (! is_null($request->user()) && ! $request->user()->hasLockScreen()) {
             if ($request->expectsJson()) {
                 return response()->json('Forbidden', 403);
             }

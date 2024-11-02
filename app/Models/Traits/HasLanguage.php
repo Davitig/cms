@@ -48,11 +48,10 @@ trait HasLanguage
                     'languages.id', is_numeric($currentLang) ? $currentLang : language($currentLang, 'id')
                 );
             });
-        })->leftJoin($languageTable,
-            function ($q) use ($table, $languageTable) {
-                return $q->on("{$table}.id", "{$languageTable}.{$this->getForeignKey()}")
-                    ->whereColumn($languageTable . '.language_id', 'languages.id');
-            })->addSelect(array_merge(((array) $columns) ?: ["{$languageTable}.*"], [
+        })->leftJoin($languageTable, function ($q) use ($table, $languageTable) {
+            return $q->on("{$table}.id", "{$languageTable}.{$this->getForeignKey()}")
+                ->whereColumn($languageTable . '.language_id', 'languages.id');
+        })->addSelect(array_merge(((array) $columns) ?: ["{$languageTable}.*"], [
             "{$languageTable}.id as {$languageKey}", "{$table}.*"
         ]))->addSelect(['languages.language', 'languages.id as language_id']);
     }

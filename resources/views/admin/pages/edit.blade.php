@@ -84,7 +84,7 @@
     </div>
     @push('body.bottom')
         <script type="text/javascript">
-            $('form.ajax-form').on('ajaxFormSuccess', function (form, data) {
+            $('form.ajax-form').on('ajaxFormSuccess', function (e, data) {
                 var listableTypes = $('#form-tabs');
                 $('.listable', listableTypes).remove();
                 $('.modules', listableTypes).remove();

@@ -5,18 +5,46 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CmsUserRequest;
 use App\Models\CmsUser;
-use Illuminate\Contracts\Auth\Guard;
+use App\Models\CmsUserRole;
+use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-class AdminCmsUsersController extends Controller
+class AdminCmsUsersController extends Controller implements HasMiddleware
 {
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(protected CmsUser $model, protected Guard $guard) {}
+    public function __construct(protected CmsUser $model) {}
+
+    /**
+     * Get the middleware that should be assigned to the controller.
+     */
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(function (Request $request, Closure $next) {
+                if (! $request->user()->hasFullAccess()) {
+                    throw new AccessDeniedHttpException('Forbidden');
+                }
+
+                return $next($request);
+            }, only: ['create', 'store']),
+            new Middleware(function (Request $request, Closure $next) {
+                if (! $request->user()->hasFullAccess()
+                    && $request->user()->id != $request->route('cms_user')
+                ) {
+                    throw new AccessDeniedHttpException('Forbidden');
+                }
+
+                return $next($request);
+            }, only: ['show', 'edit', 'update']),
+        ];
+    }
 
     /**
      * Display a listing of the resource.
@@ -26,9 +54,17 @@ class AdminCmsUsersController extends Controller
      */
     public function index(Request $request)
     {
-        $data['items'] = $this->model->adminFilter($request)
-            ->orderDesc()
+        $data['items'] = $this->model->when(! $request->user()->hasFullAccess(),
+            function ($q) use ($request) {
+                $request->offsetUnset('role');
+
+                return $q->whereKey($request->user()->id);
+            }
+        )->joinRole()->adminFilter($request)
+            ->orderDesc(true)
             ->paginate(20);
+
+        $data['roles'] = (new CmsUserRole)->pluck('role', 'id');
 
         return view('admin.cms_users.index', $data);
     }
@@ -42,13 +78,9 @@ class AdminCmsUsersController extends Controller
      */
     public function create()
     {
-        if (! $this->user()->isAdmin()) {
-            throw new AccessDeniedHttpException('Forbidden');
-        }
-
         $data['current'] = $this->model;
 
-        $data['roles'] = user_roles();
+        $data['roles'] = (new CmsUserRole)->pluck('role', 'id');
 
         return view('admin.cms_users.create', $data);
     }
@@ -63,10 +95,6 @@ class AdminCmsUsersController extends Controller
      */
     public function store(CmsUserRequest $request)
     {
-        if (! $this->user()->isAdmin()) {
-            throw new AccessDeniedHttpException('Forbidden');
-        }
-
         $input = $request->all();
 
         if (! $request->filled('password')) {
@@ -91,7 +119,7 @@ class AdminCmsUsersController extends Controller
      */
     public function show(int $id)
     {
-        $data['current'] = $this->model->findOrFail($id);
+        $data['current'] = $this->model->joinRole()->findOrFail($id);
 
         return view('admin.cms_users.show', $data);
     }
@@ -106,13 +134,9 @@ class AdminCmsUsersController extends Controller
      */
     public function edit(int $id)
     {
-        if (! $this->user()->isAdmin() && $this->user()->id != $id) {
-            throw new AccessDeniedHttpException('Forbidden');
-        }
+        $data['current'] = $this->model->joinRole()->findOrFail($id);
 
-        $data['current'] = $this->model->findOrFail($id);
-
-        $data['roles'] = user_roles();
+        $data['roles'] = (new CmsUserRole)->pluck('role', 'id');
 
         return view('admin.cms_users.edit', $data);
     }
@@ -128,10 +152,6 @@ class AdminCmsUsersController extends Controller
      */
     public function update(CmsUserRequest $request, int $id)
     {
-        if (! $this->user()->isAdmin() && $this->user()->id != $id) {
-            throw new AccessDeniedHttpException('Forbidden');
-        }
-
         $input = $request->all();
 
         if ($request->filled('password')) {
@@ -159,12 +179,12 @@ class AdminCmsUsersController extends Controller
      */
     public function destroy(int $id)
     {
-        if ($this->user()->isAdmin()) {
-            if ($this->user()->id == $id) {
-                abort(403);
+        if (request()->user()->hasFullAccess()) {
+            if (request()->user()->id == $id) {
+                throw new AccessDeniedHttpException('Forbidden');
             }
         } else {
-            abort(403);
+            throw new AccessDeniedHttpException('Forbidden');
         }
 
         $this->model->whereKey($id)->delete();
@@ -174,15 +194,5 @@ class AdminCmsUsersController extends Controller
         }
 
         return back()->with('alert', fill_data('success', trans('database.deleted')));
-    }
-
-    /**
-     * Get the authenticated user instance.
-     *
-     * @return \Illuminate\Contracts\Auth\Authenticatable
-     */
-    protected function user()
-    {
-        return $this->guard->user();
     }
 }

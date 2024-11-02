@@ -43,20 +43,23 @@
         </div>
     </div>
 
-    @if (auth('cms')->user()->isAdmin() && auth('cms')->id() != $current->id)
+    @if (auth('cms')->user()->hasFullAccess() && auth('cms')->id() != $current->id)
         <div class="form-group-separator"></div>
 
-        <div class="form-group{{($error = $errors->first('role')) ? ' validate-has-error' : '' }}">
+        <div class="form-group{{($error = $errors->first('cms_user_role_id')) ? ' validate-has-error' : '' }}">
             <label class="col-sm-2 control-label text-left required">Role:</label>
             <div class="col-sm-10">
-                {{ html()->select('role', $roles)->id('role')->class('form-control') }}
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="{{ icon_type('roles') }}"></i></span>
+                    {{ html()->select('cms_user_role_id', $roles)->id('cms_user_role_id')->class('form-control') }}
+                </div>
                 @if ($error)
                     <span class="text-danger">{{$error}}</span>
                 @endif
             </div>
         </div>
     @else
-        {{ html()->hidden('role') }}
+        {{ html()->hidden('cms_user_role_id') }}
     @endif
 
     <div class="row">

@@ -49,10 +49,6 @@ class AdminDashboardController extends Controller
         // calendar
         $data['calendarTotal'] = $db->table('calendar')->count();
 
-        // files
-        $data['filesTotal'] = $db->table('files')->count();
-        $data['filesTotalDistinct'] = $db->table('files')->count($db->raw('DISTINCT table_name'));
-
         // notes
         $data['notes'] = $db->table('notes')->orderBy('id', 'desc')->take(5)->get();
 

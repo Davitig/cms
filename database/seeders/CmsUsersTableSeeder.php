@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 class CmsUsersTableSeeder extends DatabaseSeeder
 {
     /**
-     * Run cms_users table seeder.
+     * Run the database seeds.
      */
     public function run(): void
     {
@@ -18,9 +18,9 @@ class CmsUsersTableSeeder extends DatabaseSeeder
         DB::table('cms_users')->insert([
             [
                 'email' => 'admin@example.com',
+                'cms_user_role_id' => 1,
                 'first_name' => 'admin',
                 'last_name' => 'Admin',
-                'role' => 'admin',
                 'blocked' => 0,
                 'password' => '$2y$10$SGapfDy0uRJPxGD/KV0BaeW5YiP4tNN2kSFkEtvSA1P1t0AUX51oq', // 123456
                 'created_at' => $currentDate

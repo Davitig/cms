@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cms_users', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('email')->unique();
-            $table->string('role', 32);
+            $table->unsignedTinyInteger('cms_user_role_id');
             $table->string('first_name', 35);
             $table->string('last_name', 35);
             $table->string('phone', 30)->nullable();
@@ -25,6 +25,9 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('cms_user_role_id')->references('id')
+                ->on('cms_user_roles');
         });
     }
 

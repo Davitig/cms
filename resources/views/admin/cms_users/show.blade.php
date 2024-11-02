@@ -36,9 +36,9 @@
                     <span class="user-status is-online"></span>
                 </div>
                 <span class="btn-block text-center">
-                    <strong>{{user_roles($current->role)}}</strong>
+                    <strong>{{ucfirst($current->role)}}</strong>
                 </span>
-            @if (auth('cms')->user()->isAdmin() || auth('cms')->id() == $current->id)
+            @if (auth('cms')->user()->hasFullAccess() || auth('cms')->id() == $current->id)
                 <a href="{{cms_route('cmsUsers.edit', [$current->id])}}" class="btn-block text-center">{{trans('general.edit')}}</a>
             @endif
                 <hr>

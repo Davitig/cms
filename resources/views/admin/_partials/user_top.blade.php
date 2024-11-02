@@ -17,7 +17,7 @@
               <!-- Available statuses: is-online, is-idle, is-busy and is-offline -->
               <span class="user-status is-online"></span>
             </h3>
-            <p class="user-title">{{user_roles(auth('cms')->user()->role)}}</p>
+            <p class="user-title">{{ucfirst(auth('cms')->user()->role)}}</p>
             <div class="user-links">
               <a href="{{cms_route('cmsUsers.edit', [auth('cms')->id()])}}" class="btn btn-primary">Edit Profile</a>
             </div>

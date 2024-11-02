@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
             'cms.auth' => \App\Http\Middleware\Admin\AdminAuthenticate::class,
             'cms.guest' => \App\Http\Middleware\Admin\AdminRedirectIfAuthenticated::class,
+            'cms.withFullAccess' => \App\Http\Middleware\Admin\AdminCmsUserWithFullAccess::class,
             'cms.lockscreen' => \App\Http\Middleware\Admin\AdminLockscreen::class,
             'cms.viewData' => \App\Http\Middleware\Admin\AdminViewData::class,
         ]);

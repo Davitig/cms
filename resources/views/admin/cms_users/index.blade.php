@@ -21,46 +21,46 @@
         </div>
     </div>
     <ul class="nav nav-tabs">
-        <li{!!($role = request()->get('role')) ? '' : ' class="active"'!!}>
-            <a href="{{cms_route('cmsUsers.index', $params = request()->except('role'))}}">All CMS Users</a>
+        <li{!!($activeRoleId = request()->get('role')) ? '' : ' class="active"'!!}>
+            <a href="{{cms_route('cmsUsers.index', $params = request()->except('role'))}}">CMS Users</a>
         </li>
-        @foreach (user_roles() as $key => $value)
-            <li{!!$role == $key ? ' class="active"' : ''!!}>
-                <a href="{{cms_route('cmsUsers.index', $params + ['role' => $key])}}">{{$value}}</a>
-            </li>
-        @endforeach
+        @if (auth('cms')->user()->hasFullAccess())
+            @foreach ($roles as $id => $role)
+                <li{!!$activeRoleId == $id ? ' class="active"' : ''!!}>
+                    <a href="{{cms_route('cmsUsers.index', $params + ['role' => $id])}}">{{ucfirst($role)}}</a>
+                </li>
+            @endforeach
+        @endif
     </ul>
     <div class="tab-content clearfix">
-        <div class="dib padr">
-            <a href="{{ cms_route('cmsUsers.create') }}" class="btn btn-secondary btn-icon-standalone">
-                <i class="fa fa-user-plus"></i>
-                <span>{{ trans('general.create') }}</span>
-            </a>
-        </div>
-        <div class="dib vam">
-            <form action="{{cms_route('cmsUsers.index')}}" method="GET">
-                @if ($role)
-                    <input type="hidden" name="role" value="{{$role}}">
-                @endif
-                <div class="dib vam padr mrgb">
-                    <input type="text" name="name" class="form-control" placeholder="First name / Last Name" value="{{request('name')}}">
-                </div>
-                <div class="dib vam padr mrgb">
-                    <input type="text" name="email" class="form-control" placeholder="Email" value="{{request('email')}}">
-                </div>
-                <div class="dib vam padr mrgb">
-                    {{ html()->select('blocked', [
-                        '' => '-- Block --',
-                        '1' => 'Blocked',
-                        '0' => 'Non-Blocked'
-                    ], request('blocked'))->class('form-control') }}
-                </div>
-                <button type="submit" class="btn btn-secondary vat">Search</button>
-                <a href="{{cms_route('cmsUsers.index', request()->only(['role']))}}" class="btn btn-black vat">Reset</a>
-            </form>
-        </div>
-        @if (auth('cms')->user()->isAdmin())
-            <a href="{{cms_route('permissions.index', ['role' => $role])}}" class="btn btn-orange pull-right">Permissions</a>
+        @if (auth('cms')->user()->hasFullAccess())
+            <div class="dib padr">
+                <a href="{{ cms_route('cmsUsers.create') }}" class="btn btn-secondary btn-icon-standalone">
+                    <i class="fa fa-user-plus"></i>
+                    <span>{{ trans('general.create') }}</span>
+                </a>
+            </div>
+            <div class="dib vam">
+                <form action="{{cms_route('cmsUsers.index')}}" method="GET">
+                    <input type="hidden" name="role" value="{{$activeRoleId}}">
+                    <div class="dib vam padr mrgb">
+                        <input type="text" name="name" class="form-control" placeholder="First name / Last Name" value="{{request('name')}}">
+                    </div>
+                    <div class="dib vam padr mrgb">
+                        <input type="text" name="email" class="form-control" placeholder="Email" value="{{request('email')}}">
+                    </div>
+                    <div class="dib vam padr mrgb">
+                        {{ html()->select('blocked', [
+                            '' => '-- Block --',
+                            '1' => 'Blocked',
+                            '0' => 'Non-Blocked'
+                        ], request('blocked'))->class('form-control') }}
+                    </div>
+                    <button type="submit" class="btn btn-secondary vat">Search</button>
+                    <a href="{{cms_route('cmsUsers.index', request()->only(['role']))}}" class="btn btn-black vat">Reset</a>
+                </form>
+            </div>
+            <a href="{{cms_route('cmsUserRoles.index')}}" class="btn btn-blue pull-right">Roles</a>
         @endif
         <table class="table stacktable table-hover members-table middle-align">
             <thead>
@@ -82,7 +82,7 @@
                     </td>
                     <td class="user-name">
                         <a href="{{cms_route('cmsUsers.edit', [$item->id])}}" class="name{{auth('cms')->id() == $item->id ? ' active' : ''}}">{{$item->first_name}} {{$item->last_name}}</a>
-                        <span>{{$item->role_text}}</span>
+                        <span>{{ucfirst($item->role)}}</span>
                     </td>
                     <td>
                         <span class="email">{{$item->email}}</span>
@@ -95,15 +95,15 @@
                             <i class="fa fa-user"></i>
                             Profile
                         </a>
-                        @if (auth('cms')->user()->isAdmin() || auth('cms')->id() == $item->id)
+                        @if (auth('cms')->user()->hasFullAccess() || auth('cms')->id() == $item->id)
                             <a href="{{cms_route('cmsUsers.edit', [$item->id])}}" class="edit">
                                 <i class="fa fa-pencil"></i>
                                 Edit Profile
                             </a>
                         @endif
-                        @if (auth('cms')->user()->isAdmin() && auth('cms')->id() != $item->id)
+                        @if (auth('cms')->user()->hasFullAccess() && auth('cms')->id() != $item->id)
                             {{ html()->form('delete', cms_route('cmsUsers.destroy', [$item->id]))
-                                ->class('form-delete')->data('id', $item->id) }}
+                                ->class('form-delete')->data('id', $item->id)->open() }}
                             <a href="#" class="delete">
                                 <i class="fa fa-user-times"></i>
                                 Delete
@@ -115,12 +115,14 @@
             @endforeach
             </tbody>
         </table>
-        <div class="dib">
-            <a href="{{ cms_route('cmsUsers.create') }}" class="btn btn-secondary btn-icon-standalone">
-                <i class="fa fa-user-plus"></i>
-                <span>{{ trans('general.create') }}</span>
-            </a>
-        </div>
+        @if (auth('cms')->user()->hasFullAccess())
+            <div class="dib">
+                <a href="{{ cms_route('cmsUsers.create') }}" class="btn btn-secondary btn-icon-standalone">
+                    <i class="fa fa-user-plus"></i>
+                    <span>{{ trans('general.create') }}</span>
+                </a>
+            </div>
+        @endif
         <div class="pull-right">
             {!! $items->appends(request()->all())->links() !!}
         </div>

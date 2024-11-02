@@ -14,7 +14,7 @@
                     <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
                 </li>
                 <li>
-                    <a href="{{ cms_route('cmsUsers.index') }}"><i class="{{icon_type('cmsUsers')}}"></i>CMS Users</a>
+                    <a href="{{ cms_route('cmsUserRoles.index') }}"><i class="{{icon_type('roles')}}"></i>CMS User roles</a>
                 </li>
                 <li class="active">
                     <i class="{{$icon}}"></i>
@@ -25,25 +25,26 @@
     </div>
     <form action="{{cms_route('permissions.store')}}" method="post" id="permissions-form">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="hidden" name="role_id" value="{{ $activeRoleId }}">
         <div class="panel panel-headerless">
             <div class="panel-body">
                 <div class="member-form-add-header">
                     <div class="row">
                         <div class="col-md-2 col-sm-4 pull-right-sm">
                             <div class="permissions">
-                                <a href="{{cms_route('cmsUsers.index')}}" class="btn btn-block btn-turquoise">{{ trans('general.back') }}</a>
+                                <a href="{{cms_route('cmsUserRoles.index')}}" class="btn btn-block btn-turquoise">{{ trans('general.back') }}</a>
                             </div>
                             <div class="action-buttons">
                                 <button type="submit" class="btn btn-block btn-secondary">{{ trans('general.update') }}</button>
                             </div>
                         </div>
                         <div class="col-md-10 col-sm-8">
-                            <h2 class="text-primary inline padr">Role:</h2>
-                            <select name="role" class="form-control inline w-auto">
-                                @foreach($roles as $key => $value)
-                                    <option value="{{$key}}"{{request('role') == $key ? ' selected' : ''}}>{{$value}}</option>
+                            <h2 class="text-primary inline padr">Roles:</h2>
+                            <div id="roles-btn" class="inline">
+                                @foreach($roles as $id => $role)
+                                    <a href="{{ cms_route('permissions.index', ['role' => $id]) }}" class="btn{{ $id == $activeRoleId ? ' btn-info' : '' }}">{{ ucfirst($role) }}</a>
                                 @endforeach
-                            </select>
+                            </div>
                             <div id="multi-check-all" class="multi-check">
                                 <a href="#" class="check-action" data-group="*" data-action="check">Check all</a> /
                                 <a href="#" class="check-action" data-group="*" data-action="uncheck">Uncheck all</a> /
@@ -66,12 +67,10 @@
                         </div>
                     </div>
                     @foreach ($routes as $name)
-                        @if (! in_array($name, $namesDisallowed))
-                            <div class="panel-body col-xs-6 col-sm-4 col-md-3">
-                                <label><strong>{{ucfirst(implode(' ', explode('.', $name)))}}</strong></label>
-                                <input type="checkbox" name="permissions[{{$groupName}}][]" value="{{$name}}"{{in_array($name, $current) ? ' checked' : ''}} class="{{$groupName}} icheck" id="{{$name}}">
-                            </div>
-                        @endif
+                        <div class="panel-body col-xs-6 col-sm-4 col-md-3">
+                            <label><strong>{{ucfirst(implode(' ', explode('.', $name)))}}</strong></label>
+                            <input type="checkbox" name="permissions[{{$groupName}}][]" value="{{$name}}"{{in_array($name, $currentRoutes) ? ' checked' : ''}} class="{{$groupName}} icheck" id="{{$name}}">
+                        </div>
                     @endforeach
                 </div>
             @endforeach
@@ -81,7 +80,7 @@
                         <i class="fa fa-save"></i>
                         <span>{{ trans('general.save') }}</span>
                     </button>
-                    <a href="{{ cms_route('cmsUsers.index') }}" class="btn btn-blue btn-icon-standalone" title="{{ trans('general.back') }}">
+                    <a href="{{ cms_route('cmsUserRoles.index') }}" class="btn btn-blue btn-icon-standalone" title="{{ trans('general.back') }}">
                         <i class="fa fa-arrow-left"></i>
                         <span>{{ trans('general.back') }}</span>
                     </a>
@@ -96,10 +95,6 @@
         <script src="{{ asset('assets/libs/js/icheck/icheck.min.js') }}"></script>
         <script type="text/javascript">
             $(function() {
-                // redirect to specified user role
-                $('select#role-select').on('change', function() {
-                    window.location = window.location.pathname + '?role=' + $(this).val();
-                });
                 // Style Checkbox
                 $('input.icheck').iCheck({
                     checkboxClass: 'icheckbox_square-red'

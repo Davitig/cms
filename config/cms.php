@@ -199,20 +199,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | CMS User Roles
-    |--------------------------------------------------------------------------
-    |
-    | This array used to specify CMS user roles.
-    |
-    */
-
-    'user_roles' => [
-        'admin' => 'Administrator',
-        'member' => 'Member'
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Translation Types
     |--------------------------------------------------------------------------
     |
@@ -259,6 +245,7 @@ return [
         'photos' => 'fa fa-photo',
         'videos' => 'fa fa-video-camera',
 
+        'roles' => 'fa fa-key',
         'permissions' => 'fa fa-lock',
         'cmsUsers' => 'fa fa-user-secret',
         'users' => 'fa fa-user',

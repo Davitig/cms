@@ -81,13 +81,15 @@
         <script type="text/javascript">
             $(function () {
                 var items = $('#items');
-                items.on('click', '.cbr-radio', function() {
+                items.on('click', '.cbr-radio', function(e) {
+                    var radioBtn = $(this);
                     var id = $(this).find('input').data('id');
                     var data = {'id':id, '_token':"{{csrf_token()}}"};
-                    $(this).closest('table').find('.full-name').removeClass('text-bold text-primary');
-                    $(this).closest('td').siblings('.full-name').addClass('text-bold text-primary');
                     $.post('{{cms_route('languages.setMain')}}', data, function() {
+                        $(this).closest('table').find('.full-name').removeClass('text-bold text-primary');
+                        $(this).closest('td').siblings('.full-name').addClass('text-bold text-primary');
                     }, 'json').fail(function(xhr) {
+                        radioBtn.removeClass('cbr-checked');
                         alert(xhr.responseText);
                     });
                 });

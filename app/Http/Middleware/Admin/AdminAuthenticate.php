@@ -4,20 +4,12 @@ namespace App\Http\Middleware\Admin;
 
 use App\Models\Permission;
 use Closure;
-use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class AdminAuthenticate
 {
-    /**
-     * Create a new middleware instance.
-     *
-     * @return void
-     */
-    public function __construct(protected Guard $guard) {}
-
     /**
      * Handle an incoming request.
      *
@@ -29,7 +21,7 @@ class AdminAuthenticate
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($this->guard->guest()) {
+        if (! $request->user()) {
             if ($request->expectsJson()) {
                 return response()->json('Unauthorized.', 401);
             }
@@ -37,11 +29,11 @@ class AdminAuthenticate
             return redirect()->guest(cms_route('login'));
         }
 
-        if ($this->guard->user()->blocked) {
+        if ($request->user()->blocked) {
             throw new AccessDeniedHttpException('Forbidden');
         }
 
-        if ($this->guard->user()->hasLockScreen()) {
+        if ($request->user()->hasLockScreen()) {
             $redirect = redirect();
 
             $redirect->setIntendedUrl($request->fullUrl());
@@ -64,7 +56,7 @@ class AdminAuthenticate
      */
     private function checkRoutePermission(Request $request): void
     {
-        if ($this->guard->user()->isAdmin()) {
+        if ($request->user()->hasFullAccess()) {
             return;
         }
 
@@ -74,9 +66,9 @@ class AdminAuthenticate
 
         $routeGroup = substr($routeName, 0, strpos($routeName, '.'));
 
-        if (! in_array($routeGroup, Permission::$routeGroupsHidden)
-            && ! in_array($routeName, Permission::$routeNamesHidden)
-            && ! (new Permission)->role($this->guard->user()->role)->hasAccess($routeName)
+        if (! in_array($routeGroup, Permission::$routeGroupsAllowed)
+            && ! in_array($routeName, Permission::$routeNamesAllowed)
+            && ! (new Permission)->roleId($request->user()->cms_user_role_id)->hasAccess($routeName)
         ) {
             throw new AccessDeniedHttpException('Forbidden');
         }

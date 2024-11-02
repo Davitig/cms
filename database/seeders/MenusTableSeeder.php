@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 class MenusTableSeeder extends DatabaseSeeder
 {
     /**
-     * Run menus table seeder.
+     * Run the database seeds.
      */
     public function run(): void
     {

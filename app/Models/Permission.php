@@ -20,7 +20,7 @@ class Permission extends Model
      * @var array
      */
     protected $fillable = [
-        'role', 'route_name'
+        'cms_user_role_id', 'route_name'
     ];
 
     /**
@@ -31,35 +31,48 @@ class Permission extends Model
     protected array $notUpdatable = [];
 
     /**
-     * Route group names that are hidden from a list.
+     * Hidden route group/resource names.
      *
      * @var array
      */
-    public static array $routeGroupsHidden = ['cmsUsers', 'permissions', 'login', 'logout', 'lockscreen'];
+    public static array $routeGroupsHidden = [
+        'cmsUserRoles', 'permissions', 'webSettings', 'translations'
+    ];
 
     /**
-     * Route names that are hidden from a list.
+     * Hidden route names.
      *
      * @var array
      */
-    public static array $routeNamesHidden = ['login', 'logout', 'lockscreen'];
+    public static array $routeNamesHidden = [];
 
     /**
-     * Route names that are not allowed.
+     * Allowed route group/resource names.
      *
      * @var array
      */
-    public static array $routeNamesAllowed = ['cmsUsers.index', 'cmsUsers.edit', 'cmsUsers.show', 'cmsUsers.update'];
+    public static array $routeGroupsAllowed = [
+        'login', 'logout', 'lockscreen', 'cmsUsers', 'settings'
+    ];
 
     /**
-     * Get the list of permissions by user id.
+     * Allowed route names.
      *
-     * @param  string  $value
+     * @var array
+     */
+    public static array $routeNamesAllowed = [
+        'dashboard'
+    ];
+
+    /**
+     * Add a where 'cms_user_role_id' clause to the query.
+     *
+     * @param  int  $value
      * @return \App\Models\Base\Builder|static
      */
-    public function role(string $value): Builder|static
+    public function roleId(int $value): Builder|static
     {
-        return $this->where('role', $value);
+        return $this->where('cms_user_role_id', $value);
     }
 
     /**
@@ -76,11 +89,11 @@ class Permission extends Model
     /**
      * Clear permissions from the database.
      *
-     * @param  string  $value
+     * @param  int  $roleId
      * @return mixed
      */
-    public function clear(string $value): mixed
+    public function clear(int $roleId): mixed
     {
-        return $this->role($value)->delete();
+        return $this->roleId($roleId)->delete();
     }
 }

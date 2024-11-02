@@ -22,8 +22,15 @@ class CmsUser extends Model
      * @var array
      */
     protected $fillable = [
-        'email', 'first_name', 'last_name', 'phone', 'address', 'role', 'blocked', 'photo', 'password'
+        'email', 'cms_user_role_id', 'first_name', 'last_name', 'phone', 'address', 'blocked', 'photo', 'password'
     ];
+
+    /**
+     * The attributes that are not updatable.
+     *
+     * @var array
+     */
+    protected array $notUpdatable = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -44,23 +51,6 @@ class CmsUser extends Model
     ];
 
     /**
-     * The attributes that are not updatable.
-     *
-     * @var array
-     */
-    protected array $notUpdatable = [];
-
-    /**
-     * Get the mutated attribute.
-     *
-     * @return string|null
-     */
-    public function getRoleTextAttribute(): ?string
-    {
-        return ! is_null($this->role) ? user_roles($this->role) : $this->role;
-    }
-
-    /**
      * Get the mutated attribute.
      *
      * @param  string|null  $value
@@ -72,13 +62,13 @@ class CmsUser extends Model
     }
 
     /**
-     * Determine if the user is admin.
+     * Determine if the user has full access.
      *
      * @return bool
      */
-    public function isAdmin(): bool
+    public function hasFullAccess(): bool
     {
-        return $this->role == 'admin';
+        return (int) $this->full_access;
     }
 
     /**
@@ -117,6 +107,18 @@ class CmsUser extends Model
     }
 
     /**
+     * Add a 'cms_user_roles' join to the query.
+     *
+     * @return \App\Models\Base\Builder|static
+     */
+    public function joinRole(): Builder|static
+    {
+        return $this->leftJoin(
+            'cms_user_roles', 'cms_user_roles.id', 'cms_users.cms_user_role_id'
+        )->addSelect(['role', 'full_access', 'cms_users.*']);
+    }
+
+    /**
      * Filter a query by specific parameters.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -129,7 +131,7 @@ class CmsUser extends Model
         })->when($request->get('email'), function ($q, $value) {
             return $q->where('email', 'like', "%{$value}%");
         })->when($request->get('role'), function ($q, $value) {
-            return $q->where('role', $value);
+            return $q->where('cms_user_role_id', $value);
         })->when(! is_null($value = $request->get('blocked')), function ($q) use ($value) {
             return $q->when($value, function ($q) {
                 return $q->where('blocked', 1);

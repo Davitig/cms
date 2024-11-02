@@ -13,25 +13,25 @@
     <link rel="stylesheet" href="{{ asset('assets/libs/css/xenon-components.css') }}">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
 <body class="page-body">
-    <div class="page-container">
-        <div class="main-content">
-            <div class="page-error centered">
-                <div class="error-symbol">
-                    <i class="fa fa-server"></i>
-                </div>
-                <h2>
-                    500 Internal Server Error
-                    <small>Unexpected internal server error!</small>
-                </h2>
-                <p>The server encountered an internal error and was unable to complete your request.</p>
+<div class="page-container">
+    <div class="main-content">
+        <div class="page-error centered">
+            <div class="error-symbol">
+                <i class="fa fa-server"></i>
             </div>
+            <h2>
+                500 Internal Server Error
+                <small>Unexpected internal server error!</small>
+            </h2>
+            <p>The server encountered an internal error and was unable to complete your request.</p>
         </div>
     </div>
+</div>
 </body>
 </html>
 

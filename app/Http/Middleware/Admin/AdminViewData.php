@@ -3,6 +3,7 @@
 namespace App\Http\Middleware\Admin;
 
 use App\Models\Calendar;
+use App\Models\CmsUser;
 use App\Models\Menu;
 use App\Models\Permission;
 use Closure;
@@ -30,7 +31,7 @@ class AdminViewData
 
         $this->shareRouteMatches();
 
-        // $this->shareUserRouteAccess();
+        $this->shareUserRouteAccess($request->user());
 
         return $next($request);
     }
@@ -95,7 +96,7 @@ class AdminViewData
     }
 
     /**
-     * Share if current route matches the specified routes names.
+     * Share if the current route matches the specified routes names.
      *
      * @return void
      */
@@ -149,37 +150,54 @@ class AdminViewData
     }
 
     /**
-     * Share view function which indicates if user has access to the specified routes.
+     * Share view function which indicates if a user has access to the specified routes.
      *
+     * @param  \App\Models\CmsUser|null  $user
      * @return void
      */
-    protected function shareUserRouteAccess(): void
+    protected function shareUserRouteAccess(?CmsUser $user = null): void
     {
-        if (is_null($user = Auth::guard('cms')->user())) {
+        if (is_null($user)) {
+            $this->userRouteAccess(function () {
+                return false;
+            });
+
             return;
         }
 
         $routeNamesAllowed = array_merge(
-            (new Permission)->role($user->role)->pluck('route_name')->toArray(),
+            (new Permission)->roleId($user->cms_user_role_id)->pluck('route_name')->toArray(),
+            Permission::$routeGroupsAllowed,
             Permission::$routeNamesAllowed
         );
 
-        $isAdmin = $user->isAdmin();
+        $hasFullAccess = $user->hasFullAccess();
 
-        view()->composer(['admin.*'], function($view) use ($routeNamesAllowed, $isAdmin) {
-            $view->with('routeAccess', function ($routeNames) use ($routeNamesAllowed, $isAdmin) {
-                if ($isAdmin) {
+        $this->userRouteAccess(function (...$routeNames) use ($routeNamesAllowed, $hasFullAccess) {
+            if ($hasFullAccess) {
+                return true;
+            }
+
+            foreach ($routeNames as $routeName) {
+                if (in_array($routeName, $routeNamesAllowed)) {
                     return true;
                 }
+            }
 
-                foreach ((array) $routeNames as $routeName) {
-                    if (in_array($routeName, $routeNamesAllowed)) {
-                        return true;
-                    }
-                }
+            return false;
+        });
+    }
 
-                return false;
-            });
+    /**
+     * Function which indicates if a user has access to the specified routes.
+     *
+     * @param  \Closure  $callback
+     * @return void
+     */
+    protected function userRouteAccess(Closure $callback): void
+    {
+        view()->composer(['admin.*'], function($view) use ($callback) {
+            $view->with('userRouteAccess', $callback);
         });
     }
 }

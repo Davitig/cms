@@ -488,22 +488,6 @@ function deep_collection(?string $key = null, mixed $default = []): array|string
 }
 
 /**
- * Get the CMS user role(s).
- *
- * @param  string|null  $key
- * @param  mixed|null  $default
- * @return array|string
- */
-function user_roles(?string $key = null, mixed $default = null): array|string
-{
-    if (! is_null($key)) {
-        return cms_config('user_roles.' . $key, $default);
-    }
-
-    return cms_config('user_roles', $default);
-}
-
-/**
  * Get the CMS icon name.
  *
  * @param  string  $key
