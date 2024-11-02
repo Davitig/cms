@@ -17,8 +17,8 @@ class LanguageRequest extends Request
 
         return [
             'language' => 'required|size:2|unique:languages,language,'.$id,
-            'short_name' => 'required|min:2|max:250',
-            'full_name' => 'required|min:2|max:250'
+            'short_name' => 'required|min:2|max:3',
+            'full_name' => 'required|min:2|max:32'
         ];
     }
 

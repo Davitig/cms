@@ -14,7 +14,7 @@ class CollectionRequest extends Request
     public function rules(): array
     {
         return [
-            'title' => 'required|min:2',
+            'title' => 'required',
             'type' => 'required',
             'admin_order_by' => 'required',
             'admin_sort' => 'required',

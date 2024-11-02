@@ -14,7 +14,7 @@ class VideoRequest extends Request
     public function rules(): array
     {
         return [
-            'title' => 'required|min:2|max:250',
+            'title' => 'required|max:250',
             'file' => 'required'
         ];
     }

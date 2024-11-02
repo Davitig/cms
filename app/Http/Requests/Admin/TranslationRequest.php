@@ -16,8 +16,8 @@ class TranslationRequest extends Request
         $id = $this->route('translation') ?: $this->get('id');
 
         return [
-            'code' => 'required|min:2|max:18|regex:/^\w+$/|unique:translations,code,' . $id,
-            'title' => 'required|min:2',
+            'code' => 'required|max:18|regex:/^\w+$/|unique:translations,code,' . $id,
+            'title' => 'required',
             'value' => 'required'
         ];
     }

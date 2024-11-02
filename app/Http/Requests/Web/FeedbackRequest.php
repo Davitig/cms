@@ -14,7 +14,7 @@ class FeedbackRequest extends Request
     public function rules(): array
     {
         return [
-            'name' => 'required|min:2',
+            'name' => 'required',
             'email' => 'required|string|email',
             'text' => 'required',
             'captcha' => 'required|captcha'

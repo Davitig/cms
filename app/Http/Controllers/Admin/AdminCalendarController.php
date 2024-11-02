@@ -48,7 +48,7 @@ class AdminCalendarController extends Controller
      */
     public function save()
     {
-        $this->request->validate(['title' => 'required|min:2']);
+        $this->request->validate(['title' => 'required|min:1']);
 
         if ($this->request->filled('id')) {
             $id = $this->request->get('id');

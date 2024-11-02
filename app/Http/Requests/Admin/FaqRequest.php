@@ -14,7 +14,7 @@ class FaqRequest extends Request
     public function rules(): array
     {
         return [
-            'title' => 'required|min:2',
+            'title' => 'required',
         ];
     }
 

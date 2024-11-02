@@ -16,8 +16,8 @@ class GalleryRequest extends Request
         $id = $this->route('gallery');
 
         return [
-            'slug' => 'required|min:1|unique:galleries,slug,'.$id,
-            'title' => 'required|min:2',
+            'slug' => 'required|unique:galleries,slug,'.$id,
+            'title' => 'required',
             'type' => 'required',
             'admin_order_by' => 'required',
             'admin_sort' => 'required',

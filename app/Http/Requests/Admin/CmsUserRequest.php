@@ -18,8 +18,8 @@ class CmsUserRequest extends Request
 
         return [
             'email' => 'required|string|email|max:255|unique:cms_users,email,'.$id,
-            'first_name' => 'required|min:2|max:35',
-            'last_name' => 'required|min:2|max:35',
+            'first_name' => 'required|max:35',
+            'last_name' => 'required|max:35',
             'cms_user_role_id' => 'required|integer',
             'password' => array_merge(
                 $this->isMethod('POST') ? ['required'] : ['nullable'],
