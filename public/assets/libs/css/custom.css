@@ -106,8 +106,16 @@ select .sub-item {padding-left:20px;}
     .navbar.horizontal-menu .navbar-inner>.nav.nav-userinfo
     {display:block;}
 }
-.user-info-navbar .user-info-menu > li form button {position:relative;padding:0;margin:0;height:auto;color:#979898;z-index:2;}
-/* language dropdown */
+.user-info-navbar .user-info-menu > li form button
+{position:relative;padding:0;margin:0;height:auto;color:#979898;z-index:2;}
+.navbar-nav {float:none;}
+.navbar.horizontal-menu, .navbar.horizontal-menu.navbar-minimal {height:auto;}
+.navbar.horizontal-menu.navbar-fixed-top {position:unset;}
+.navbar.horizontal-menu.navbar-minimal.navbar-fixed-top + .page-container,
+.navbar.horizontal-menu.navbar-fixed-top + .page-container {margin-top:0;}
+/* dropdowns */
+.navbar.horizontal-menu .navbar-inner > .nav > li .dropdown-menu,
+.navbar.horizontal-menu .navbar-inner > .nav > li .dropdown-menu.user-profile-menu {z-index:100;}
 .user-info-navbar .user-info-menu > li > a.dropdown-toggle {padding-bottom:27px;}
 .user-info-navbar .user-info-menu > li.language-switcher a > img {margin-right:0;}
 .user-info-navbar .user-info-menu > li.language-switcher ul a > img {margin-right:5px;}
