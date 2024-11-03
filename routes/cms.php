@@ -63,10 +63,11 @@ Route::group([
 
         // pages
         $router->controller(AdminPagesController::class)->group(function ($router) {
+            $router->get('pages/listable-types', 'getListableTypes')
+                ->name('pages.getListableTypes');
             $router->post('pages/{id}/visibility', 'visibility')->name('pages.visibility');
             $router->put('pages/position', 'updatePosition')->name('pages.updatePosition');
             $router->get('pages/templates', 'getTemplates')->name('pages.templates');
-            $router->get('pages/listable-types', 'getListableTypes')->name('pages.listableTypes');
             $router->put('pages/transfer/{menuId}', 'transfer')->name('pages.transfer');
             $router->put('pages/collapse', 'collapse')->name('pages.collapse');
             $router->resource('menus.pages', AdminPagesController::class)

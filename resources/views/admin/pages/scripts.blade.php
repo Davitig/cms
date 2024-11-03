@@ -46,7 +46,7 @@
                 if (["{!!implode('","', (array) cms_pages('listable'))!!}"].indexOf(value) >= 0) {
                     $('label', typeId).text(value);
 
-                    $.get('{{cms_route('pages.listableTypes')}}', {"type": value}, function (data) {
+                    $.get('{{cms_route('pages.getListableTypes')}}', {"type": value}, function (data) {
                         typeIdSelect.html('<option value=""></option>');
                         typeId.removeClass('hidden');
 
