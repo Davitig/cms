@@ -137,7 +137,8 @@ function cms_route(
     string $name,
     mixed $parameters = [],
     mixed $language = null,
-    bool $absolute = true): string
+    bool $absolute = true
+): string
 {
     return language_to_url(route(cms_route_name_prefix($name), $parameters, $absolute), $language);
 }
@@ -155,7 +156,8 @@ function cms_url(
     mixed $path = null,
     array $parameters = [],
     mixed $language = null,
-    ?bool $secure = null): string
+    ?bool $secure = null
+): string
 {
     if (is_array($path)) {
         $path = implode('/', array_filter($path));
@@ -179,7 +181,8 @@ function web_route(
     string $name,
     mixed $parameters = [],
     mixed $language = null,
-    bool $absolute = true): string
+    bool $absolute = true
+): string
 {
     return language_to_url(route($name, $parameters, $absolute), $language);
 }
@@ -197,7 +200,8 @@ function web_url(
     mixed $path = null,
     array $parameters = [],
     mixed $language = null,
-    ?bool $secure = null): string
+    ?bool $secure = null
+): string
 {
     if (is_array($path)) {
         $path = implode('/', array_filter($path));

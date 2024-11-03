@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 
 class AdminLanguagesController extends Controller
 {
+    use Positionable;
+
     /**
      * Create a new controller instance.
      *
@@ -24,7 +26,7 @@ class AdminLanguagesController extends Controller
      */
     public function index()
     {
-        $data['items'] = $this->model->get();
+        $data['items'] = $this->model->positionAsc()->get();
 
         return view('admin.languages.index', $data);
     }

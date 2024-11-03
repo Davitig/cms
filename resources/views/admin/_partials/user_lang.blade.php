@@ -4,7 +4,7 @@
     </a>
     <ul class="dropdown-menu languages">
         @foreach (languages() as $key => $value)
-            <li>
+            <li data-id="{{$value['id']}}">
                 <a href="{{$value['url']}}">
                     <img src="{{ asset('assets/libs/images/flags/'.$key.'.png') }}" width="30" height="20" alt="{{$value['full_name']}}">
                     {{ $value['full_name'] }}

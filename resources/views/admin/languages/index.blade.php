@@ -35,10 +35,10 @@
                 <i class="{{$icon}}"></i>
                 <span>{{ trans('general.create') }}</span>
             </a>
+            <strong class="text-black pull-right">Drag and Drop to sort the languages order</strong>
             <table id="items" class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Main</th>
                     <th>Full Name</th>
                     <th>Short Name</th>
                     <th>Language Code</th>
@@ -46,14 +46,11 @@
                     <th>Actions</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="sortable">
                 @foreach ($items as $item)
-                    <tr id="item{{$item->id}}" class="item">
-                        <td>
-                            <input type="radio" name="main" data-id="{{$item->id}}" class="cbr cbr-success"{{$item->main ? ' checked' : ''}}>
-                        </td>
-                        <td class="full-name{{ $item->language == language() ? ' text-bold text-primary' : '' }}">
-                            <img src="{{ asset('assets/libs/images/flags/'.$item->language.'.png') }}" width="30" height="20" alt="{{$item->full_name}}">
+                    <tr id="item{{$item->id}}" class="item" data-id="{{$item->id}}">
+                        <td class="full-name pointer">
+                            <img src="{{ asset('assets/libs/images/flags/'.$item->language.'.png') }}" width="30" height="20" alt="{{$item->language}} Flag">
                             <span>{{ $item->full_name }}</span>
                         </td>
                         <td>{{ $item->short_name }}</td>
@@ -79,27 +76,42 @@
     </div>
     @push('body.bottom')
         <script type="text/javascript">
-            $(function () {
-                var items = $('#items');
-                items.on('click', '.cbr-radio', function(e) {
-                    var radioBtn = $(this);
-                    var id = $(this).find('input').data('id');
-                    var data = {'id':id, '_token':"{{csrf_token()}}"};
-                    $.post('{{cms_route('languages.setMain')}}', data, function() {
-                        $(this).closest('table').find('.full-name').removeClass('text-bold text-primary');
-                        $(this).closest('td').siblings('.full-name').addClass('text-bold text-primary');
-                    }, 'json').fail(function(xhr) {
-                        radioBtn.removeClass('cbr-checked');
+            $(function() {
+                let langInUrl = {{(int) language_in_url()}};
+                let activeLangSelector = $('.language-switcher > a img');
+                let langMenuSelector = $('.dropdown-menu.languages');
+                let sortableSelector = $('#sortable');
+                sortableSelector.sortable();
+                sortableSelector.on('sortupdate', function () {
+                    let ids = [];
+                    let input = {data: []};
+                    $.each(sortableSelector.sortable('toArray', {attribute: 'data-id'}), function (i, id) {
+                        ids[id] = i;
+                        input.data.push({id: id});
+                    });
+                    input['_method'] = 'put';
+                    input['_token'] = '{{csrf_token()}}';
+                    $.post('{{cms_route('languages.updatePosition')}}', input, function () {
+                        toastr['success']('Positions has been updated successfully');
+                        if (! langInUrl) {
+                            let flag = sortableSelector.children(':first').find('.full-name img').attr('src');
+                            activeLangSelector.attr('src', flag);
+                        }
+                        let langItems = langMenuSelector.children('li').each(function (i, e) {
+                            $(e).data('pos', ids[parseInt($(e).data('id'))]);
+                        }).sort(function (a, b) {
+                            return parseInt($(a).data('pos')) - parseInt($(b).data('pos'));
+                        });
+                        langMenuSelector.html('');
+                        langItems.each(function (i, e) {
+                            langMenuSelector.append(e);
+                        });
+                    }, 'json').fail(function (xhr) {
                         alert(xhr.responseText);
                     });
                 });
-                items.on('deleteFormSuccess', function (e) {
-                    if ($(e.target).closest('td').siblings('.text-bold').length) {
-                        $(e.target).closest('tr.item').siblings().first()
-                            .find('.full-name').addClass('text-bold text-primary');
-                    }
-                });
             });
         </script>
+        <script src="{{ asset('assets/libs/js/jquery-ui/jquery-ui.min.js') }}"></script>
     @endpush
 @endsection

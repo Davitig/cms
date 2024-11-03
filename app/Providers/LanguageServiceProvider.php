@@ -70,7 +70,7 @@ class LanguageServiceProvider extends ServiceProvider
 
         $languages = [];
 
-        foreach ((new Language)->orderByDesc('main')->get() as $language) {
+        foreach ((new Language)->positionAsc()->get() as $language) {
             $languages[strtolower($language->language)] = $language->getAttributes();
         }
 

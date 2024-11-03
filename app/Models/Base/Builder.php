@@ -118,7 +118,8 @@ class Builder extends EloquentBuilder
     public function firstAttr(
         string          $attribute,
         int|string|null $value = null,
-        ?string         $column = null): ?string
+        ?string         $column = null
+    ): ?string
     {
         return $this->when(! is_null($value), function ($q) use ($value, $column) {
             return $q->where($column ?: $this->getModel()->getKeyName(), $value);
@@ -138,7 +139,8 @@ class Builder extends EloquentBuilder
     public function firstAttrOrFail(
         string          $attribute,
         int|string|null $value = null,
-        ?string         $column = null): ?string
+        ?string         $column = null
+    ): ?string
     {
         if (is_null($attribute = $this->firstAttr($attribute, $value, $column))) {
             throw (new ModelNotFoundException)->setModel(get_class($this));

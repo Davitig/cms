@@ -41,7 +41,7 @@ trait HasLanguage
         $languageKey = Str::singular($languageTable) . '_id';
 
         return $this->when($currentLang === false, function ($q) {
-            return $q->crossMainLanguages()->orderBy('languages.main')->orderBy('languages.id');
+            return $q->crossMainLanguages()->orderBy('languages.position');
         }, function ($q) use ($currentLang) {
             return $q->leftJoin('languages', function ($q) use ($currentLang) {
                 return $q->where(

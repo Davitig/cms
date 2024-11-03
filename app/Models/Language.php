@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use App\Models\Base\Model;
+use App\Models\Traits\PositionableTrait;
 
 class Language extends Model
 {
+    use PositionableTrait;
+
     /**
      * The table associated with the model.
      *
@@ -19,7 +22,7 @@ class Language extends Model
      * @var array
      */
     protected $fillable = [
-        'language', 'main', 'short_name', 'full_name'
+        'language', 'position', 'short_name', 'full_name'
     ];
 
     /**

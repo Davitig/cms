@@ -5,9 +5,7 @@
         </a>
         <ul class="dropdown-menu notifications">
             <li class="top">
-                <p class="small">
-                    Update the XML sitemap when you change the URLs.
-                </p>
+                <p class="small">Update the XML sitemap when you change the URLs.</p>
             </li>
             <li>
                 <ul class="dropdown-menu-list list-unstyled ps-scrollbar">
@@ -15,14 +13,14 @@
                         <a href="{{asset('sitemap.xml')}}" target="_blank">
                             <i class="fa fa-sitemap icon-color-green"></i>
                             <span class="line">
-                                  <strong>Last update</strong>
-                                </span>
+                                <strong>Last update</strong>
+                            </span>
                             <span class="line small time">
-                                    Date: <span class="sm-date">{{$sitemapXmlTime ? date('d F Y', $sitemapXmlTime) : 'N/A'}}</span>
-                                </span>
+                                Date: <span class="sm-date">{{$sitemapXmlTime ? date('d F Y', $sitemapXmlTime) : 'N/A'}}</span>
+                            </span>
                             <span class="line small time">
-                                    Time: <span class="sm-time">{{$sitemapXmlTime ? date('H:i', $sitemapXmlTime) : 'N/A'}}</span>
-                                </span>
+                                Time: <span class="sm-time">{{$sitemapXmlTime ? date('H:i', $sitemapXmlTime) : 'N/A'}}</span>
+                            </span>
                         </a>
                     </li>
                 </ul>
@@ -63,15 +61,11 @@
                                 <a href="{{cms_route('calendar.index', ['gotoDate' => $item->start])}}">
                                     <i class="fa fa-calendar-o icon-color-{{$item->color}}"></i>
                                     <span class="line">
-                                            <strong>{{$item->title}}</strong>
-                                        </span>
-                                    <span class="line small time">
-                                            Date: {{$date}}
-                                        </span>
+                                        <strong>{{$item->title}}</strong>
+                                    </span>
+                                    <span class="line small time">Date: {{$date}}</span>
                                     @if ($item->time_start)
-                                        <span class="line small time">
-                                                Time: {{date('H:i', strtotime($date))}}
-                                            </span>
+                                        <span class="line small time">Time: {{date('H:i', strtotime($date))}}</span>
                                     @endif
                                 </a>
                             </li>

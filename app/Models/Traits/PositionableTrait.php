@@ -20,7 +20,8 @@ trait PositionableTrait
         array $data,
         int   $parentId = 0,
         array $params = [],
-        bool  $nestable = false): bool
+        bool  $nestable = false
+    ): bool
     {
         if (! $nestable && ! is_array($data = $this->movePosition($data, $params))) {
             return false;
@@ -30,23 +31,22 @@ trait PositionableTrait
 
         $position = 0;
 
-        foreach($data as $key => $item) {
+        foreach($data as $item) {
             if (! isset($item['id'])) {
                 return false;
             }
 
+            $position++;
+
             if ($nestable) {
-                $position++;
                 $attributes['parent_id'] = $parentId;
             } elseif (isset($item['pos'])) {
                 $position = $item['pos'];
-            } else {
-                return false;
             }
 
             $attributes['position'] = $position;
 
-            $this->where('id', $item['id'])->update($attributes);
+            $this->whereKey($item['id'])->update($attributes);
 
             if (isset($item['children'])) {
                 $this->updatePosition($item['children'], $item['id'], $params, $nestable);

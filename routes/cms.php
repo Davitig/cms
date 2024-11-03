@@ -48,8 +48,8 @@ Route::group([
         $router->get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
         // languages
-        $router->post('languages/set-main', [AdminLanguagesController::class, 'setMain' ])
-            ->name('languages.setMain');
+        $router->put('languages/position', [AdminLanguagesController::class, 'updatePosition'])
+            ->name('languages.updatePosition');
         $router->resource('languages', AdminLanguagesController::class)
             ->names(resource_names('languages'))
             ->except(['show']);

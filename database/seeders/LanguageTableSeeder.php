@@ -17,13 +17,13 @@ class LanguageTableSeeder extends Seeder
         DB::table('languages')->insert([
             [
                 'language' => 'en',
-                'main' => 1,
+                'position' => 1,
                 'short_name' => 'en',
                 'full_name' => 'English'
             ],
             [
                 'language' => 'ka',
-                'main' => 0,
+                'position' => 2,
                 'short_name' => 'ge',
                 'full_name' => 'Georgian'
             ]

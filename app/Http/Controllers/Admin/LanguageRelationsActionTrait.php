@@ -40,7 +40,8 @@ trait LanguageRelationsActionTrait
         string|array $relations,
         array        $attributes,
         int          $id,
-        bool         $allLanguage = false): void
+        bool         $allLanguage = false
+    ): void
     {
         $languageId = language(true, 'id');
 
