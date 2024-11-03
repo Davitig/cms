@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Base\Builder;
 use App\Models\Base\Model;
 
 class Note extends Model
@@ -19,7 +20,7 @@ class Note extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'description', 'content'
+        'cms_user_id', 'title', 'description', 'content'
     ];
 
     /**
@@ -28,4 +29,15 @@ class Note extends Model
      * @var array
      */
     protected array $notUpdatable = [];
+
+    /**
+     * Add a where 'cms_user_id' clause to the query.
+     *
+     * @param  int  $userId
+     * @return \App\Models\Base\Builder|static
+     */
+    public function byUserId(int $userId): Builder|static
+    {
+        return $this->where('cms_user_id', $userId);
+    }
 }

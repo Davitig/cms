@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Base\Builder;
 use App\Models\Base\Model;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class Calendar extends Model
@@ -21,7 +21,7 @@ class Calendar extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'description', 'color', 'start', 'end', 'time_start', 'time_end'
+        'cms_user_id', 'title', 'description', 'color', 'start', 'end', 'time_start', 'time_end'
     ];
 
     /**
@@ -85,13 +85,24 @@ class Calendar extends Model
     }
 
     /**
-     * Get active calendar events.
+     * Add a where 'cms_user_id' clause to the query.
+     *
+     * @param  int  $userId
+     * @return \App\Models\Base\Builder|static
+     */
+    public function byUserId(int $userId): Builder|static
+    {
+        return $this->where('cms_user_id', $userId);
+    }
+
+    /**
+     * Build a query based on active dates.
      *
      * @param  string|null  $start
      * @param  string|null  $end
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @return \App\Models\Base\Builder|static
      */
-    public function getActive(?string $start = null, ?string $end = null): Collection|static
+    public function active(?string $start = null, ?string $end = null): Builder|static
     {
         if (is_null($start)) {
             $start = date('Y-m') . '-01';
@@ -103,19 +114,17 @@ class Calendar extends Model
             $end = date('Y-m-d', strtotime('+50 days', strtotime($start)));
         }
 
-        return $this->whereNotNull('start')
-            ->whereBetween('start', [$start, $end])
-            ->get();
+        return $this->whereNotNull('start')->whereBetween('start', [$start, $end]);
     }
 
     /**
-     * Get inactive calendar events.
+     * Build a query based on inactive dates.
      *
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @return \App\Models\Base\Builder|static
      */
-    public function getInactive(): Collection|static
+    public function inactive(): Builder|static
     {
-        return $this->whereNull('start')->get();
+        return $this->whereNull('start');
     }
 
     /**

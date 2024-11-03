@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('notes', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('cms_user_id');
             $table->string('title')->nullable();
             $table->string('description')->nullable();
             $table->text('content')->nullable();
             $table->timestamps();
+
+            $table->foreign('cms_user_id')->references('id')
+                ->on('cms_users')->onDelete('cascade');
         });
     }
 

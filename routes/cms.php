@@ -146,7 +146,6 @@ Route::group([
             $router->get('notes', 'index')->name('notes.index');
             $router->put('notes', 'save')->name('notes.save');
             $router->post('notes', 'destroy')->name('notes.destroy');
-            $router->post('notes-calendar', 'calendar')->name('notes.calendar');
         });
 
         // calendar

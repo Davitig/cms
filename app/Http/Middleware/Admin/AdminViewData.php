@@ -84,7 +84,7 @@ class AdminViewData
         $start = date('Y-m-d');
         $end = date('Y-m-d', strtotime('+7 days', strtotime($start)));
 
-        $calendar = (new Calendar)->getActive($start, $end);
+        $calendar = (new Calendar)->active($start, $end)->get();
 
         view()->composer([
             'admin._partials.user',

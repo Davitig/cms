@@ -22,7 +22,9 @@ class AdminCalendarController extends Controller
      */
     public function index()
     {
-        $data['items'] = $this->model->getInactive();
+        $data['items'] = $this->model->byUserId($this->request->user()->id)
+            ->inactive()
+            ->get();
 
         return view('admin.calendar.index', $data);
     }
@@ -36,7 +38,9 @@ class AdminCalendarController extends Controller
     {
         $date = $this->request->all(['start', 'end']);
 
-        $data = $this->model->getActive($date['start'], $date['end']);
+        $data = $this->model->byUserId($this->request->user()->id)
+            ->active($date['start'], $date['end'])
+            ->get();
 
         return response()->json($data);
     }
@@ -48,7 +52,7 @@ class AdminCalendarController extends Controller
      */
     public function save()
     {
-        $this->request->validate(['title' => 'required|min:1']);
+        $this->request->validate(['title' => 'required']);
 
         if ($this->request->filled('id')) {
             $id = $this->request->get('id');
@@ -57,6 +61,7 @@ class AdminCalendarController extends Controller
         } else {
             $input = $this->request->all();
             $input['color'] = $this->model->getRandomColor();
+            $input['cms_user_id'] = $this->request->user()->id;
 
             $this->model = $this->model->create($input);
         }
@@ -77,7 +82,9 @@ class AdminCalendarController extends Controller
      */
     public function destroy()
     {
-        $this->model->whereKey($this->request->get('id'))->delete();
+        $this->model->byUserId($this->request->user()->id)
+            ->whereKey($this->request->get('id'))
+            ->delete();
 
         if (request()->expectsJson()) {
             return response()->json(fill_data('success', trans('database.deleted')));

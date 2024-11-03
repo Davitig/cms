@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('calendar', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('cms_user_id');
             $table->string('title');
             $table->string('description')->nullable();
             $table->string('color', 16)->nullable();
@@ -21,6 +22,9 @@ return new class extends Migration
             $table->time('time_start')->nullable();
             $table->time('time_end')->nullable();
             $table->timestamps();
+
+            $table->foreign('cms_user_id')->references('id')
+                ->on('cms_users')->onDelete('cascade');
         });
     }
 

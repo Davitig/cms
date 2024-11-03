@@ -23,7 +23,9 @@ class AdminNotesController extends Controller
      */
     public function index()
     {
-        $data['items'] = $this->model->orderDesc()->get();
+        $data['items'] = $this->model->byUserId($this->request->user()->id)
+            ->orderDesc()
+            ->get();
 
         return view('admin.notes.index', $data);
     }
@@ -42,40 +44,13 @@ class AdminNotesController extends Controller
 
             $this->model->findOrFail($id)->update($input);
         } else {
+            $input['cms_user_id'] = $this->request->user()->id;
+
             $this->model = $this->model->create($input);
         }
 
         if ($this->request->expectsJson()) {
             return response()->json($this->model->id);
-        }
-
-        return back();
-    }
-
-    /**
-     * Move resource into the calendar.
-     *
-     * @param  \App\Models\Calendar  $calendar
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
-     */
-    public function calendar(Calendar $calendar)
-    {
-        $input['title'] = $this->request->get('title');
-
-        $content = explode(PHP_EOL, $this->request->get('content'));
-
-        if (count($content) > 1) {
-            array_shift($content);
-
-            $input['description'] = implode(PHP_EOL, $content);
-        }
-
-        $input['color'] = $calendar->getRandomColor();
-
-        $model = $calendar->create($input);
-
-        if ($this->request->expectsJson()) {
-            return response()->json($model);
         }
 
         return back();
@@ -88,7 +63,9 @@ class AdminNotesController extends Controller
      */
     public function destroy()
     {
-        $this->model->whereKey($this->request->get('id'))->delete();
+        $this->model->byUserId($this->request->user()->id)
+            ->whereKey($this->request->get('id'))
+            ->delete();
 
         if (request()->expectsJson()) {
             return response()->json(fill_data('success', trans('database.deleted')));
