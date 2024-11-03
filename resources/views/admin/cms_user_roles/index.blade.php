@@ -35,7 +35,7 @@
                 <i class="{{$icon}}"></i>
                 <span>{{ trans('general.create') }}</span>
             </a>
-            <table id="items" class="table table-bordered table-striped">
+            <table id="items" class="table stacktable table-bordered table-striped">
                 <thead>
                 <tr>
                     <th>Role</th>
