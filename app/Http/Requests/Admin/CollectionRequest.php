@@ -18,10 +18,10 @@ class CollectionRequest extends Request
             'type' => 'required',
             'admin_order_by' => 'required',
             'admin_sort' => 'required',
-            'admin_per_page' => 'required|numeric|min:1|max:50',
+            'admin_per_page' => 'required|numeric|max:50',
             'web_order_by' => 'required',
             'web_sort' => 'required',
-            'web_per_page' => 'required|numeric|min:1|max:50'
+            'web_per_page' => 'required|numeric|max:50'
         ];
     }
 
