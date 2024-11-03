@@ -113,5 +113,6 @@
             });
         </script>
         <script src="{{ asset('assets/libs/js/jquery-ui/jquery-ui.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/js/jquery-ui/jquery.ui.touch-punch.min.js') }}"></script>
     @endpush
 @endsection
