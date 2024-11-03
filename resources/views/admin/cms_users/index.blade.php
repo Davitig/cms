@@ -60,7 +60,7 @@
                     <a href="{{cms_route('cmsUsers.index', request()->only(['role']))}}" class="btn btn-black vat">Reset</a>
                 </form>
             </div>
-            <a href="{{cms_route('cmsUserRoles.index')}}" class="btn btn-blue pull-right">Roles</a>
+            <a href="{{cms_route('cmsUserRoles.index')}}" class="btn btn-turquoise pull-right">Roles</a>
         @endif
         <table class="table stacktable table-hover members-table middle-align">
             <thead>
@@ -115,14 +115,6 @@
             @endforeach
             </tbody>
         </table>
-        @if (auth('cms')->user()->hasFullAccess())
-            <div class="dib">
-                <a href="{{ cms_route('cmsUsers.create') }}" class="btn btn-secondary btn-icon-standalone">
-                    <i class="fa fa-user-plus"></i>
-                    <span>{{ trans('general.create') }}</span>
-                </a>
-            </div>
-        @endif
         <div class="pull-right">
             {!! $items->appends(request()->all())->links() !!}
         </div>

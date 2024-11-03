@@ -243,7 +243,7 @@ return [
 
         'galleries' => 'fa fa-th',
         'photos' => 'fa fa-photo',
-        'videos' => 'fa fa-video-camera',
+        'videos' => 'fa fa-play-circle',
 
         'roles' => 'fa fa-key',
         'permissions' => 'fa fa-lock',
