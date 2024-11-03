@@ -1,22 +1,22 @@
 <script type="text/javascript">
     $(function() {
-        var galleryEnv = $('.gallery-env');
+        let galleryEnv = $('.gallery-env');
 
         // Select all items
         $("#select-all").on('change', function(e) {
-            var is_checked = $(this).is(':checked');
+            let is_checked = $(this).is(':checked');
             $(".album-image input[type='checkbox']").prop('checked', is_checked).trigger('change');
         });
 
-        var multiselect = [];
+        let multiselect = [];
 
         // Call Modal
         galleryEnv.on('click', 'a[data-modal]', function(e) {
             e.preventDefault();
-            var action = $(this).data('modal');
+            let action = $(this).data('modal');
             if (action == 'edit') {
-                var item = $(this).closest('.item');
-                var url = item.data('url');
+                let item = $(this).closest('.item');
+                let url = item.data('url');
 
                 $.get(url, function(data) {
                     galleryEnv.append(data.view);
@@ -60,23 +60,23 @@
         // Delete item(s)
         galleryEnv.on('click', 'a[data-delete]', function(e) {
             e.preventDefault();
-            var action = $(this).data('delete');
+            let action = $(this).data('delete');
             if (action == 'multiselect') {
-                var perform = confirm("{{trans('general.confirm_delete_selected')}}");
+                let perform = confirm("{{trans('general.confirm_delete_selected')}}");
                 if (perform != true) return;
 
-                var ids = [];
+                let ids = [];
                 $('.select-item input:checked', galleryEnv).each(function(i, e) {
                     ids.push($(e).data('id'));
                 });
             } else {
-                var perform = confirm("{{trans('general.confirm_delete')}}");
+                let perform = confirm("{{trans('general.confirm_delete')}}");
                 if (perform != true) return;
-                var ids = [$(this).data('id')];
+                let ids = [$(this).data('id')];
             }
 
             if (ids.length) {
-                var input = {'ids':ids, '_method':'delete', '_token':"{{$csrfToken = csrf_token()}}"};
+                let input = {'ids':ids, '_method':'delete', '_token':"{{$csrfToken = csrf_token()}}"};
 
                 $.post('{{$routeIndex}}/' + ids[0], input, function(data) {
                     // alert toastr message
@@ -96,17 +96,17 @@
         // visibility of the item
         galleryEnv.on('click', '.visibility', function(e) {
             e.preventDefault();
-            var item = $(this);
-            var url = item.data('url');
+            let item = $(this);
+            let url = item.data('url');
 
-            var input = {'_token':"{{$csrfToken}}"};
+            let input = {'_token':"{{$csrfToken}}"};
             $.post(url, input, function(data) {
                 if (data) {
                     value = 1;
-                    var icon = 'fa fa-eye';
+                    let icon = 'fa fa-eye';
                 } else {
                     value = 0;
-                    var icon = 'fa fa-eye-slash';
+                    let icon = 'fa fa-eye-slash';
                 }
                 item.find('i').attr('class', icon);
             }, 'json').fail(function(xhr) {
@@ -118,7 +118,7 @@
         $('.gallery-env a[data-action="sort"]').on('click', function(e) {
             e.preventDefault();
 
-            var is_sortable = $(".album-images").sortable('instance');
+            let is_sortable = $(".album-images").sortable('instance');
 
             if( ! is_sortable) {
                 $(".gallery-env .album-images").sortable({

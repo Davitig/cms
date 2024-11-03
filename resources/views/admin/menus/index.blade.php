@@ -78,8 +78,8 @@
 @push('body.bottom')
 <script type="text/javascript">
 $('#items').on('click', '.cbr-radio', function() {
-    var id = $(this).find('input').data('id');
-    var data = {'id':id, '_token':"{{csrf_token()}}"};
+    let id = $(this).find('input').data('id');
+    let data = {'id':id, '_token':"{{csrf_token()}}"};
     $.post('{{cms_route('menus.setMain')}}', data, function() {
     }, 'json').fail(function(xhr) {
         alert(xhr.responseText);

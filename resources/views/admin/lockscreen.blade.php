@@ -38,8 +38,8 @@
             $(".lockcreen-form").on('submit', function(e) {
                 e.preventDefault();
 
-                var input = $(this).serializeArray();
-                var password = $('#password', this);
+                let input = $(this).serializeArray();
+                let password = $('#password', this);
                 password.val('').siblings('label').remove();
 
                 $.ajax({

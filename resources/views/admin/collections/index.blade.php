@@ -79,7 +79,7 @@
 @push('body.bottom')
 <script type="text/javascript">
 $(function() {
-    var table = $('#items');
+    let table = $('#items');
     table.dataTable({
         pageLength: 50,
         // 'order': [0, 'desc']

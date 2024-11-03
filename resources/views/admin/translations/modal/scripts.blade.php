@@ -1,11 +1,11 @@
 <script type="text/javascript">
 $(function () {
-    var modalSelector = $('#translations-modal');
+    let modalSelector = $('#translations-modal');
 
     $('form', modalSelector).on('submit', function (e) {
         e.preventDefault();
-        var form = $(this);
-        var lang = form.data('lang') ?? '';
+        let form = $(this);
+        let lang = form.data('lang') ?? '';
         $('.form-group', form).find('.text-danger').remove();
 
         $.ajax({
@@ -21,8 +21,8 @@ $(function () {
                 ).fadeIn(300);
 
                 if (! lang || lang === '{{$currentLang = language()}}') {
-                    var trans = $('[data-trans="'+data.code+'"]');
-                    var attrName = trans.data('trans-attr');
+                    let trans = $('[data-trans="'+data.code+'"]');
+                    let attrName = trans.data('trans-attr');
                     if (! attrName) {
                         trans.text(data.value);
                     } else {
@@ -32,7 +32,7 @@ $(function () {
                 if (! lang) {
                 @if (count(languages()) > 1)
                     modalSelector.removeClass('fade');
-                    var ev = jQuery.Event('click');
+                    let ev = jQuery.Event('click');
                     ev.f2 = true;
                     $('[data-trans="'+data.code+'"]').trigger(ev);
                 @endif
@@ -54,10 +54,10 @@ $(function () {
                 if (xhr.responseJSON.errors === undefined) {
                     return;
                 }
-                var errors = xhr.responseJSON.errors;
+                let errors = xhr.responseJSON.errors;
                 $.each(errors, function (index, element) {
-                    var field = $('#' + index + lang, form);
-                    var errorMsg = '<div class="text-danger">'+element+'</div>';
+                    let field = $('#' + index + lang, form);
+                    let errorMsg = '<div class="text-danger">'+element+'</div>';
                     field.after(errorMsg);
                 });
             }
@@ -65,11 +65,11 @@ $(function () {
     });
 
     $('form [name="value"]', modalSelector).on('keyup', function () {
-        var lang = $(this).closest('form').data('lang');
+        let lang = $(this).closest('form').data('lang');
 
         if (! lang || lang === '{{$currentLang}}') {
-            var trans = $('[data-trans="{{$current->code}}"]');
-            var attrName = trans.data('trans-attr');
+            let trans = $('[data-trans="{{$current->code}}"]');
+            let attrName = trans.data('trans-attr');
             if (! attrName) {
                 trans.text($(this).val());
             } else {

@@ -436,18 +436,18 @@ $(function() {
         $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
     });
 
-    var isHorizontalMenu = {{$cmsSettings->get('horizontal_menu', 0)}};
+    let isHorizontalMenu = {{$cmsSettings->get('horizontal_menu', 0)}};
 
-    var skin_sidebar = '{{$cmsSettings->get('skin_sidebar')}}';
-    var skin_horizontal = isHorizontalMenu ? '{{$cmsSettings->get('skin_horizontal')}}' : '{{$cmsSettings->get('skin_user_menu')}}';
+    let skin_sidebar = '{{$cmsSettings->get('skin_sidebar')}}';
+    let skin_horizontal = isHorizontalMenu ? '{{$cmsSettings->get('skin_horizontal')}}' : '{{$cmsSettings->get('skin_user_menu')}}';
     if (skin_horizontal) {
         skin_horizontal = skin_horizontal.substring(skin_horizontal.indexOf("skin"));
     }
-    var skin_login = '{{$cmsSettings->get('skin_login')}}';
+    let skin_login = '{{$cmsSettings->get('skin_login')}}';
 
     $('#skin [data-skin]').each(function(i, el) {
-        var type = $(el).data('type');
-        var skin = $(el).data('skin');
+        let type = $(el).data('type');
+        let skin = $(el).data('skin');
 
         if (type == 'skin_sidebar' && skin == skin_sidebar) {
             $(el).removeClass('btn-white').addClass('btn-secondary');
@@ -465,23 +465,23 @@ $(function() {
     $('#skin [data-skin]').on('click', function(e) {
         e.preventDefault();
 
-        var skin = $(this).data('skin');
-        var type = $(this).data('type');
+        let skin = $(this).data('skin');
+        let type = $(this).data('type');
 
         $('#skin [data-type="'+type+'"]').removeClass('btn-secondary').addClass('btn-white');
         $(this).removeClass('btn-white').addClass('btn-secondary');
 
-        var skinPrepend = '';
+        let skinPrepend = '';
         if (type == 'skin_horizontal') {
             skinPrepend = isHorizontalMenu ? 'horizontal-menu-' : 'user-info-navbar-';
         }
 
-        var skin_class = skin ? skinPrepend+skin : '';
+        let skin_class = skin ? skinPrepend+skin : '';
 
         if (type != 'skin_login') {
-            var reg_exp = new RegExp('\\s'+skinPrepend+'skin-[a-z]+', 'i');
+            let reg_exp = new RegExp('\\s'+skinPrepend+'skin-[a-z]+', 'i');
 
-            var body_classes = public_vars.$body.attr('class').replace(reg_exp, '');
+            let body_classes = public_vars.$body.attr('class').replace(reg_exp, '');
 
             public_vars.$body.attr('class', body_classes).addClass(skin_class);
 
@@ -502,7 +502,7 @@ $(function() {
     $('.reset-skin').on('click', function(e) {
         e.preventDefault();
 
-        var body_classes = public_vars.$body.attr('class').replace(/(\sskin-[a-z]+)/gi, '').replace(/(\shorizontal-menu-skin-[a-z]+)/gi, '').replace(/(\suser-info-navbar-skin-[a-z]+)/gi, '');
+        let body_classes = public_vars.$body.attr('class').replace(/(\sskin-[a-z]+)/gi, '').replace(/(\shorizontal-menu-skin-[a-z]+)/gi, '').replace(/(\suser-info-navbar-skin-[a-z]+)/gi, '');
 
         public_vars.$body.attr('class', body_classes);
 
@@ -510,7 +510,7 @@ $(function() {
     });
 
     $('.nav-tabs a').on('click', function() {
-        var tab = $(this).data('tab');
+        let tab = $(this).data('tab');
 
         $('form#form-update #tab').val(tab);
     });

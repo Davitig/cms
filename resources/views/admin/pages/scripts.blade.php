@@ -13,15 +13,15 @@
                 $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
             });
 
-            var typeSelect = $('.panel form [name="type"].select');
+            let typeSelect = $('.panel form [name="type"].select');
 
-            var typeId = $('.panel form .type-id');
-            var typeIdSelect = $('select', typeId);
+            let typeId = $('.panel form .type-id');
+            let typeIdSelect = $('select', typeId);
 
-            var template = $('.panel form .template');
-            var templateSelect = $('select', template);
+            let template = $('.panel form .template');
+            let templateSelect = $('select', template);
 
-            var typeValue, templateValue;
+            let typeValue, templateValue;
 
             typeSelect.on('change', function() {
                 // Get the attached types list

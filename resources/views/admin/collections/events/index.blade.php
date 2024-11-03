@@ -44,7 +44,7 @@
                     <span>{{ trans('general.create') }}</span>
                 </a>
                 <button id="save-tree" data-token="{{csrf_token()}}" class="btn btn-secondary btn-icon-standalone dn" disabled>
-                    <i><b class="icon-var fa-save"></b></i>
+                    <i><b class="icon-let fa-save"></b></i>
                     <span>{{ trans('general.save') }}</span>
                 </button>
                 <div id="items">

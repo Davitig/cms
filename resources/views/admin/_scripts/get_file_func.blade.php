@@ -1,7 +1,7 @@
 <script type="text/javascript">
 function getFileImage(file) {
-    var fileExt = file.substr((~-file.lastIndexOf('.') >>> 0) + 2);
-    var result = {'file':file, 'isPhoto':true};
+    let fileExt = file.substr((~-file.lastIndexOf('.') >>> 0) + 2);
+    let result = {'file':file, 'isPhoto':true};
     if (fileExt.length
         && ['jpg', 'jpeg', 'png', 'gif'].indexOf(fileExt) < 0
         && fileExt.indexOf('/') < 0

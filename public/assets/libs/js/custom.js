@@ -3,7 +3,7 @@ $(function () {
     $('a[data-toggle="sidebar"]').on('click', function (e) {
         e.preventDefault();
 
-        var expanded = $('#main-menu').find('.expanded');
+        let expanded = $('#main-menu').find('.expanded');
         if (expanded.length) {
             if (public_vars.$sidebarMenu.hasClass('collapsed')) {
                 $('> ul', expanded).css('display', 'block');
@@ -14,7 +14,7 @@ $(function () {
     });
 
     // Toggle page action buttons
-    var items = $('#items');
+    let items = $('#items');
     items.on('click', '.btn-toggle', function (e) {
         e.preventDefault();
 
@@ -47,8 +47,8 @@ $(function () {
         if (! confirm('Are you sure you want to delete?')) {
             return;
         }
-        var form = $(this);
-        var btn = form.find('[type="submit"]').prop('disabled', true);
+        let form = $(this);
+        let btn = form.find('[type="submit"]').prop('disabled', true);
 
         $.ajax({
             type: 'POST',
@@ -90,12 +90,12 @@ $(function () {
     });
 
     // Ajax form submit
-    var ajaxFormSelector = 'form.ajax-form';
+    let ajaxFormSelector = 'form.ajax-form';
     $(document).on('submit', ajaxFormSelector, function (e) {
         e.preventDefault();
-        var form = $(this);
+        let form = $(this);
         form.find('.text-danger').remove();
-        var lang = form.data('lang') ?? '';
+        let lang = form.data('lang') ?? '';
 
         $.ajax({
             type: 'POST',
@@ -118,16 +118,16 @@ $(function () {
                 }
 
                 $.each(data.input, function (index, element) {
-                    var item = $('#' + index + lang, form);
+                    let item = $('#' + index + lang, form);
 
                     if (item.data('lang')) {
-                        var inputGeneral = $(ajaxFormSelector + ' [name="' + index + '"]');
+                        let inputGeneral = $(ajaxFormSelector + ' [name="' + index + '"]');
                         $(inputGeneral).each(function (i, e) {
                             item = $(e);
                             if (item.val() !== element) {
                                 item.val(element);
                                 if (item.is(':checkbox')) {
-                                    var bool = element === 1;
+                                    let bool = element === 1;
                                     item.prop('checked', bool);
                                 }
                                 if (item.is('select')) {
@@ -147,8 +147,8 @@ $(function () {
                     return;
                 }
                 $.each(xhr.responseJSON.errors, function (index, element) {
-                    var field;
-                    var arrayField = index.substr(0, index.indexOf('.'));
+                    let field;
+                    let arrayField = index.substr(0, index.indexOf('.'));
                     if (arrayField) {
                         field = $('.' + arrayField + lang, form).first();
                     } else {
@@ -156,7 +156,7 @@ $(function () {
                     }
                     field.closest('.form-group').addClass('validate-has-error');
 
-                    var errorMsg = '<div class="text-danger">'+element+'</div>';
+                    let errorMsg = '<div class="text-danger">'+element+'</div>';
                     if (field.parent().hasClass('input-group')) {
                         field.parent().after(errorMsg);
                     } else {
@@ -164,9 +164,9 @@ $(function () {
                     }
                 });
 
-                var errorField = form.find('.validate-has-error').first();
+                let errorField = form.find('.validate-has-error').first();
                 if (errorField) {
-                    var errorOffset = errorField.offset();
+                    let errorOffset = errorField.offset();
                     if (errorOffset) {
                         $('html, body').animate({
                             scrollTop: errorField.offset().top - 100
@@ -183,10 +183,10 @@ $(function () {
     // Visibility request
     $('form.visibility').on('submit', function (e) {
         e.preventDefault();
-        var form = $(this);
+        let form = $(this);
 
         $.post(form.attr('action'), form.serialize(), function (data) {
-            var icon, removeClass, addClass;
+            let icon, removeClass, addClass;
             if (data) {
                 icon = 'fa fa-eye';
                 removeClass = 'btn-gray';
@@ -207,8 +207,8 @@ $(function () {
 });
 
 // Lockscreen event handlers and functions
-var timer;
-var timerIsActive = true;
+let timer;
+let timerIsActive = true;
 
 $('form#set-lockscreen').on('submit', function (e) {
     e.preventDefault();
@@ -222,7 +222,7 @@ $('form#set-lockscreen').on('submit', function (e) {
 function setLockscreen(form) {
     $.post(form.attr('action'), form.serialize(), function (data) {
         if (data) {
-            var body = $('body');
+            let body = $('body');
             body.append(data.view);
             body.addClass('lockscreen-page');
         }
@@ -254,10 +254,10 @@ function lockscreen(time, form, reActive) {
 
 // Update url recursively
 function updateUrl(target, url) {
-    var prevUrl = url;
+    let prevUrl = url;
 
     target.each(function () {
-        var item = $(this).find('a.link');
+        let item = $(this).find('a.link');
 
         url = prevUrl + '/' + item.data('slug');
 
@@ -270,7 +270,7 @@ function updateUrl(target, url) {
 }
 
 function disableParentDeletion() {
-    var nestable = $('#nestable-list');
+    let nestable = $('#nestable-list');
     $('.form-delete [type="submit"]', nestable).prop('disabled', false);
 
     $('.uk-parent', nestable).each(function () {
@@ -279,18 +279,17 @@ function disableParentDeletion() {
 }
 
 function positionable(url, orderBy, page, hasMorePages) {
-    var saveBtn = $('#save-tree');
-    var saveBtnIcon = $('.icon-var', saveBtn);
-    var postHiddens = {'_method':'put', '_token':saveBtn.data('token')};
-    var nestable = $('#nestable-list');
+    const aTagStart = '<a href="#" class="move btn btn-gray fa-long-arrow-';
+    const aTagPrev = 'left left" data-move="prev" title="Move to prev page"';
+    const aTagNext = 'right right" data-move="next" title="Move to next page"';
+    const aTagEnd = '></a>';
+    let saveBtn = $('#save-tree');
+    let saveBtnIcon = $('.icon-var', saveBtn);
+    let postHidden = {'_method':'put', '_token':saveBtn.data('token')};
+    let nestable = $('#nestable-list');
     page = parseInt(page);
 
     if (page) {
-        var aTagStart = '<a href="#" class="move btn btn-gray fa-long-arrow-';
-        var aTagNext = 'right right" data-move="next" title="Move to next page"';
-        var aTagPrev = 'left left" data-move="prev" title="Move to prev page"';
-        var aTagEnd = '></a>';
-
         if (hasMorePages) {
             $('.btn-action', nestable).prepend(aTagStart + aTagNext + aTagEnd);
         }
@@ -308,10 +307,10 @@ function positionable(url, orderBy, page, hasMorePages) {
     // Position move
     nestable.on('click',  'a.move', function (e) {
         e.preventDefault();
-        var move = $(this).data('move');
-        var item = $(this).closest('li');
-        var input = [{'id':item.data('id'), 'pos':item.data('pos')}];
-        var items;
+        let move = $(this).data('move');
+        let item = $(this).closest('li');
+        let input = [{'id':item.data('id'), 'pos':item.data('pos')}];
+        let items;
 
         if (move === 'next') {
             items = item.nextAll();
@@ -323,12 +322,12 @@ function positionable(url, orderBy, page, hasMorePages) {
             input.push({'id':$(e).data('id'), 'pos':$(e).data('pos')});
         });
 
-        input = $.extend({'data':input, 'move':move, 'orderBy':orderBy}, postHiddens);
+        input = $.extend({'data':input, 'move':move, 'orderBy':orderBy}, postHidden);
 
         $.post(url, input, function () {
             page = move === 'next' ? page + 1 : page - 1;
-            var href = window.location.href;
-            var hrefQueryStart = href.indexOf('?');
+            let href = window.location.href;
+            let hrefQueryStart = href.indexOf('?');
             if (hrefQueryStart > 1) {
                 href = href.substr(0, hrefQueryStart);
             }
@@ -342,7 +341,7 @@ function positionable(url, orderBy, page, hasMorePages) {
     saveBtn.on('click', function () {
         $(this).prop('disabled', true);
         saveBtnIcon.addClass('fa-spin');
-        var nestable = $('#nestable-list');
+        let nestable = $('#nestable-list');
 
         if (page) {
             $('.move', nestable).remove();
@@ -354,10 +353,10 @@ function positionable(url, orderBy, page, hasMorePages) {
             }
         }
 
-        var input = nestable.data('nestable').serialize();
+        let input = nestable.data('nestable').serialize();
 
         if (orderBy) {
-            var posArr = [];
+            let posArr = [];
             $(input).each(function (i, e) {
                 posArr[i] = e.pos;
             });
@@ -372,7 +371,7 @@ function positionable(url, orderBy, page, hasMorePages) {
         }
 
         input = {'data':input};
-        input = $.extend(input, postHiddens);
+        input = $.extend(input, postHidden);
 
         $.post(url, input, function () {
             saveBtnIcon.removeClass('fa-spin fa-save').addClass('fa-check');

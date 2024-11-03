@@ -142,12 +142,12 @@
             }, 0);
             @endif
 
-            var i = 0;
+            let i = 0;
             $('#captcha-reload').on('click', function(e) {
                 e.preventDefault();
                 i++;
 
-                var captcha = '{{captcha_src('flat')}}' + i;
+                let captcha = '{{captcha_src('flat')}}' + i;
 
                 $('#captcha-img').attr('src', captcha);
             });

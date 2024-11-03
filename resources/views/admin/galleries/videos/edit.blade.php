@@ -38,7 +38,7 @@
             </div>
         </div>
         <script type="text/javascript">
-            var formSelector = $('#form-modal .{{$cmsSettings->get('ajax_form')}}');
+            let formSelector = $('#form-modal .{{$cmsSettings->get('ajax_form')}}');
             formSelector.on('ajaxFormSuccess', function(e, data) {
                 $('#item{{$current->id}} .thumb iframe').attr('src', data.input.youtube);
                 $('#form-modal').find('iframe').attr('src', data.input.youtube);

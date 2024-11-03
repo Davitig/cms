@@ -10,7 +10,7 @@
     <script src="{{ asset('assets/libs/js/jquery-ui/jquery-ui.min.js') }}"></script>
     <script src="{{ asset($dir.'/js/elfinder.min.js') }}"></script>
     <script type="text/javascript">
-        var FileBrowserDialogue = {
+        let FileBrowserDialogue = {
             init: function() {
                 // Here goes your code for setting your custom things onLoad.
             },

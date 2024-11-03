@@ -27,7 +27,7 @@
         // Fancybox click event handler
         $(document).on('click', '.popup', function(e){
             e.preventDefault();
-            var id = $(this).data('browse');
+            let id = $(this).data('browse');
             $.fancybox({
                 width    : 900,
                 height   : 600,
@@ -61,15 +61,15 @@
             "hideMethod": "fadeOut"
         };
 
-        var notifications = $('.notifications');
+        let notifications = $('.notifications');
         $(notifications).on('click', '.external button', function(e) {
             e.preventDefault();
         });
         $(notifications).on('click', '.external .external-btn', function(e) {
             e.preventDefault();
-            var target = $(this);
+            let target = $(this);
             target.removeClass('external-btn');
-            var form = $(this).closest('form');
+            let form = $(this).closest('form');
             $.post(form.attr('action'), form.serialize(), function() {
                 $('.sm-date', notifications).html('{{date('d F Y')}}');
                 $('.sm-time', notifications).html('{{date('H:i')}}');

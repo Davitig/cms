@@ -118,8 +118,8 @@ $(function() {
 
     // Collapse parent pages
     $('#items').on('click', '[data-nestable-action]', function() {
-        var id = $(this).closest('li').data('id');
-        var input = {'id':id, '_method':'put', '_token':"{{csrf_token()}}"};
+        let id = $(this).closest('li').data('id');
+        let input = {'id':id, '_method':'put', '_token':"{{csrf_token()}}"};
         $.post("{{cms_route('pages.collapse')}}", input, function() {}, 'json')
         .fail(function(xhr) {
             alert(xhr.responseText);

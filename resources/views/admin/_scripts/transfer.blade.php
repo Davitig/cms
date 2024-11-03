@@ -34,8 +34,8 @@
 <script type="text/javascript">
     $(function() {
         // Load modal
-        var id = 0;
-        var transferModal = $('#transfer-modal');
+        let id = 0;
+        let transferModal = $('#transfer-modal');
         $('#items').on('click', '.transfer', function(e) {
             e.preventDefault();
 
@@ -47,7 +47,7 @@
 
         // Remove transferred item
         $('#transfer-form').on('ajaxFormSuccess', function() {
-            var target = $(this).find('#column_value').val();
+            let target = $(this).find('#column_value').val();
 
             transferModal.modal('hide');
 

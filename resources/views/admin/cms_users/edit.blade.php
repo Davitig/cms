@@ -58,9 +58,9 @@
         <script type="text/javascript">
             $(function() {
                 $('form.ajax-form').on('ajaxFormSuccess', function() {
-                    var first_name = $('#first_name', this).val();
-                    var last_name = $('#last_name', this).val();
-                    var photo = $('#photo', this).val();
+                    let first_name = $('#first_name', this).val();
+                    let last_name = $('#last_name', this).val();
+                    let photo = $('#photo', this).val();
 
                     $('.user-name a', this).text(first_name + ' ' + last_name);
                     $('.user-name span', this).text($('[name="cms_user_role_id"] option:selected', this).text());

@@ -94,17 +94,17 @@
         <script type="text/javascript">
             // Calendar Initialization
             $(document).ready(function($) {
-                var eventsList = $('#events-list');
+                let eventsList = $('#events-list');
 
                 // Form to add new event
                 $('#add-calendar-event').on('submit', function(e) {
                     e.preventDefault();
 
-                    var $event = $(this).find('.form-control'),
+                    let $event = $(this).find('.form-control'),
                         title = $event.val().trim();
 
                     if (title.length >= 2) {
-                        var input = {'title':title, '_method':'put', '_token':"{{$csrfToken}}"};
+                        let input = {'title':title, '_method':'put', '_token':"{{$csrfToken}}"};
 
                         $.post("{{cms_route('calendar.save')}}", input, function(data) {
                             // Create Event Entry
@@ -138,7 +138,7 @@
                 });
 
                 // Calendar Initialization
-                var calendar = $('#calendar'),
+                let calendar = $('#calendar'),
                     updatedEvent;
                 calendar.fullCalendar({
                     header: {
@@ -164,7 +164,7 @@
                             dataType: 'json',
                             data: {'start':start.format(), 'end':end.format(), '_token':"{{$csrfToken}}"},
                             success: function(data) {
-                                var events = [];
+                                let events = [];
                                 $(data).each(function(index, element) {
                                     events.push({
                                         id: element.id,
@@ -205,7 +205,7 @@
                         }
                     },
                     drop: function(date) {
-                        var target = $(this),
+                        let target = $(this),
                             $event = target.find('a'),
                             eventObject = {
                                 id: $event.data('id'),
@@ -243,7 +243,7 @@
                     zIndex: 999
                 });
 
-                var modal = $('#event-modal');
+                let modal = $('#event-modal');
 
                 // Load event edit modal
                 eventsList.on('click', 'a', function(e) {
@@ -260,11 +260,11 @@
                 // Update event
                 $('#event-form.ajax-form').on('ajaxFormSuccess', function() {
                     if ($('#event-active', this).val() == 0) {
-                        var id = $('#event-id', this).val();
-                        var title = $('#title', this).val();
-                        var description = $('#description', this).val();
+                        let id = $('#event-id', this).val();
+                        let title = $('#title', this).val();
+                        let description = $('#description', this).val();
 
-                        var listEvent = $('#event' + id);
+                        let listEvent = $('#event' + id);
                         $('.title', listEvent).text(title);
                         $('.description', listEvent).text(description);
                     } else {
@@ -281,11 +281,11 @@
                 $('#event-delete').on('click', function(e) {
                     e.preventDefault();
 
-                    var form   = $(this).closest('form');
-                    var active = form.find('#event-active').val();
-                    var id     = form.find('#event-id').val();
+                    let form   = $(this).closest('form');
+                    let active = form.find('#event-active').val();
+                    let id     = form.find('#event-id').val();
 
-                    var input = {'id':id, '_token':"{{$csrfToken}}"};
+                    let input = {'id':id, '_token':"{{$csrfToken}}"};
                     $.post("{{cms_route('calendar.destroy')}}", input, function() {
                         modal.modal('hide');
 
@@ -300,7 +300,7 @@
                 });
 
                 function calendarChanges(event) {
-                    var eventObject = {
+                    let eventObject = {
                         id: event.id,
                         title: event.title,
                         description: event.description,

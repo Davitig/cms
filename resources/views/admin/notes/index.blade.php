@@ -27,7 +27,7 @@
                 <span>New Note</span>
             </a>
             <button id="save-note" class="btn btn-secondary btn-icon-standalone dn" disabled>
-                <i><b class="icon-var fa-save"></b></i>
+                <i><b class="icon-let fa-save"></b></i>
                 <span>{{ trans('general.save') }}</span>
             </button>
         </div>
@@ -64,13 +64,13 @@
         <script src="{{ asset('assets/libs/js/min/xenon-notes-min.js') }}"></script>
         <script type="text/javascript">
             $(function() {
-                var id,
+                let id,
                     title       = '',
                     description = '',
                     content     = '';
 
-                var listNotes = $('.list-of-notes');
-                var saveNote = $('#save-note');
+                let listNotes = $('.list-of-notes');
+                let saveNote = $('#save-note');
 
                 function updateNoteContent() {
                     id = listNotes.find('.current').data('id');
@@ -89,7 +89,7 @@
 
                 // create/update note
                 saveNote.on('click', function() {
-                    var input = {'id':id, 'title':title, 'description':description, 'content':content, '_method':'put', '_token':"{{$csrfToken = csrf_token()}}"};
+                    let input = {'id':id, 'title':title, 'description':description, 'content':content, '_method':'put', '_token':"{{$csrfToken = csrf_token()}}"};
 
                     $.post("{{cms_route('notes.save')}}", input, function(newId) {
                         if (! id && newId) {
@@ -109,7 +109,7 @@
 
                 // move note into the calendar
                 listNotes.on('click', '.note-calendar', function() {
-                    var note = $(this).closest('li');
+                    let note = $(this).closest('li');
                     note.addClass('current').siblings().removeClass('current');
                     xenonNotes.checkCurrentNote();
 
@@ -118,7 +118,7 @@
                     // slice the title
                     content = content.split("\n").slice(1).join("\n");
 
-                    var input = {'title':title, 'description':content, '_method':'put', '_token':"{{$csrfToken}}"};
+                    let input = {'title':title, 'description':content, '_method':'put', '_token':"{{$csrfToken}}"};
 
                     $.post("{{cms_route('calendar.save')}}", input, function() {
                         note.find('.note-close').trigger('click');
@@ -130,7 +130,7 @@
 
                 // delete note
                 listNotes.on('click', '.note-close', function() {
-                    var input = {'id':$(this).closest('li').data('id'), '_token':"{{$csrfToken}}"};
+                    let input = {'id':$(this).closest('li').data('id'), '_token':"{{$csrfToken}}"};
 
                     $.post("{{cms_route('notes.destroy')}}", input, function() {}, 'json')
                         .fail(function(xhr) {

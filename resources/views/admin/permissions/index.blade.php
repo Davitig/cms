@@ -100,12 +100,12 @@
                     checkboxClass: 'icheckbox_square-red'
                 });
                 // check all / uncheck all / toggle all
-                var permissionsForm = $('#permissions-form');
+                let permissionsForm = $('#permissions-form');
                 $('.check-action').on('click', permissionsForm, function(e) {
                     e.preventDefault();
-                    var action = $(this).data('action');
-                    var group = $(this).data('group');
-                    var selector = group === '*'
+                    let action = $(this).data('action');
+                    let group = $(this).data('group');
+                    let selector = group === '*'
                         ? permissionsForm
                         : permissionsForm.find('.' + group);
                     selector.each(function() {

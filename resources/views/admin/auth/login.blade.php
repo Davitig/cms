@@ -76,7 +76,7 @@ $(function() {
 
     // Login Form Label Focusing
     $(".login-form .form-group:has(label)").each(function(i, e) {
-        var $this = $(e),
+        let $this = $(e),
             $label = $this.find('label'),
             $input = $this.find('input');
 
