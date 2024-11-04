@@ -1,5 +1,6 @@
 $(function () {
-    var f2 = false;
+    // f2+click on data-trans element to get the translation form
+    let f2 = false;
     $(document).keydown(function (e) {
         if (f2) return;
         if (e.keyCode === 113) {
@@ -12,8 +13,8 @@ $(function () {
     $(document).on('click', '[data-trans]', function (e) {
         if (f2 || e.f2 === true) {
             e.preventDefault();
-            var trans = $('#translations');
-            var url = trans.data('trans-url');
+            let trans = $('#translations');
+            let url = trans.data('trans-url');
             if (url && url !== '/#not_found') {
                 $.get(trans.data('trans-url'), {'code':$(this).data('trans'), '_token':trans.data('token')}, function (data) {
                     $('body').append(data);

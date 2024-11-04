@@ -30,7 +30,7 @@ $(function () {
                     }
                 }
                 if (! lang) {
-                @if (count(languages()) > 1)
+                @if (is_multilanguage())
                     modalSelector.removeClass('fade');
                     let ev = jQuery.Event('click');
                     ev.f2 = true;
