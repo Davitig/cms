@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Model as BaseModel;
 abstract class Model extends BaseModel
 {
     /**
+     * The Eloquent query builder class used to ease scopes.
+     * The instance is set when calling method from the Builder.
+     * Null is set after the method call (see Builder's __call).
+     *
+     * @var \App\Models\Base\Builder|null
+     */
+    protected ?Builder $tmpBuilder = null;
+
+    /**
      * The Eloquent query builder class to use for the model.
      *
      * @var class-string<\App\Models\Base\Builder<*>>
@@ -44,10 +53,10 @@ abstract class Model extends BaseModel
      */
     public function newEloquentBuilder($query)
     {
-        if ($this->builder instanceof Builder) {
-            $builder = $this->builder;
+        if ($this->tmpBuilder instanceof Builder) {
+            $builder = $this->tmpBuilder;
 
-            $this->builder = null;
+            $this->tmpBuilder = null;
 
             return $builder;
         }
@@ -63,7 +72,7 @@ abstract class Model extends BaseModel
      */
     public function setEloquentBuilder(Builder $builder): static
     {
-        $this->builder = $builder;
+        $this->tmpBuilder = $builder;
 
         return $this;
     }
