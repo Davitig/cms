@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class AdminVideosController extends Controller
 {
-    use Positionable, VisibilityTrait, LanguageRelationsActionTrait;
+    use Positionable, VisibilityTrait, LanguageRelationsTrait;
 
     /**
      * Create a new controller instance.

@@ -1,4 +1,4 @@
-@if ($isMultilang = is_multilanguage())
+@if (is_multilanguage())
     @php($langCount = count(languages()))
     @foreach ($items as $current)
         <li>
@@ -11,15 +11,4 @@
             </a>
         </li>
     @endforeach
-@else
-    @if ($items->count() <= 1)
-        <li>
-            <a href="{{cms_route($routeName, $params, $items->first()->language)}}">
-                <span class="visible-xs"><i class="fa fa-home"></i></span>
-                <span class="hidden-xs">
-                    <i class="fa fa-home"></i> General
-                </span>
-            </a>
-        </li>
-    @endif
 @endif

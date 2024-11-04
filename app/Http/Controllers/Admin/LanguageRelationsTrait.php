@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-trait LanguageRelationsActionTrait
+trait LanguageRelationsTrait
 {
     /**
      * Perform update or create action on language relation models.

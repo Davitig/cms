@@ -14,15 +14,4 @@
             </a>
         </li>
     @endforeach
-@else
-    @if ($items->count() <= 1)
-        <li class="active">
-            <a href="#item-{{$items->first()->language}}" data-toggle="tab">
-                <span class="visible-xs"><i class="fa fa-home"></i></span>
-                <span class="hidden-xs">
-                    <i class="fa fa-home"></i> General
-                </span>
-            </a>
-        </li>
-    @endif
 @endif

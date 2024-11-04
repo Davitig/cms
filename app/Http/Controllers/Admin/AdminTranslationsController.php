@@ -10,7 +10,7 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 
 class AdminTranslationsController extends Controller implements HasMiddleware
 {
-    use LanguageRelationsActionTrait;
+    use LanguageRelationsTrait;
 
     /**
      * Create a new controller instance.
@@ -177,17 +177,17 @@ class AdminTranslationsController extends Controller implements HasMiddleware
         $input = $request->all('id', 'code', 'title', 'value', 'type');
 
         if (is_null($input['id'])) {
-            unset($input['id']);
+            $id = $this->model->create($input)->id;
 
-            $this->model->create($input);
+            $this->createLanguageRelations('languages', $input, $id, true);
         } else {
-            unset($input['code']);
-
             $model = $this->model->findOrFail($input['id']);
+
+            unset($input['code']);
 
             $model->update($input);
 
-            $input['code'] = $model->code;
+            $this->updateOrCreateLanguageRelations('languages', $input, $input['id']);
         }
 
         return response()->json($input);

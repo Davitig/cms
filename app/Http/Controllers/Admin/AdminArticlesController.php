@@ -9,7 +9,7 @@ use App\Models\Collection;
 
 class AdminArticlesController extends Controller
 {
-    use Positionable, VisibilityTrait, Transferable, LanguageRelationsActionTrait;
+    use Positionable, VisibilityTrait, Transferable, LanguageRelationsTrait;
 
     /**
      * Create a new controller instance.
