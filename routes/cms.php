@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::group([
     'middleware' => 'cms.viewData',
     'prefix' => cms_slug(null, true),
-    'as' => cms_route_name_prefix('')
+    'as' => cms_route_name()
 ], function ($router) {
     // login
     $router->controller(AdminLoginController::class)->group(function ($router) {

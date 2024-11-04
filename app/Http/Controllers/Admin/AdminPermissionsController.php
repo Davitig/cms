@@ -109,7 +109,7 @@ class AdminPermissionsController extends Controller implements HasMiddleware
 
         $routeNames = [];
 
-        $cmsSlug = cms_route_name_prefix('');
+        $cmsSlug = cms_route_name();
 
         foreach ($routes as $name => $route) {
             if (! str_contains($name, $cmsSlug)) {

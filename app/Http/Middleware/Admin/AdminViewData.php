@@ -103,7 +103,7 @@ class AdminViewData
     protected function shareRouteMatches(): void
     {
         $currentRouteName = str_replace(
-            cms_route_name_prefix(''), '', app('router')->current()->getName()
+            cms_route_name(), '', app('router')->current()->getName()
         );
         $currentRouteIndexParam = current(app('router')->current()->parameters());
 

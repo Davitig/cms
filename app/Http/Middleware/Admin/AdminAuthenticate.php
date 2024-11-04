@@ -60,9 +60,7 @@ class AdminAuthenticate
             return;
         }
 
-        $routeName = str_replace(
-            cms_route_name_prefix(''), '', $request->route()->getName()
-        );
+        $routeName = str_replace(cms_route_name(), '', $request->route()->getName());
 
         $routeGroup = substr($routeName, 0, strpos($routeName, '.'));
 

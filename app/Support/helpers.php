@@ -94,13 +94,13 @@ function cms_slug(?string $path = null, bool $language = false): string
 }
 
 /**
- * Get the CMS route name prefix.
+ * Get the CMS route name.
  *
  * @param  string|null  $name
  * @param  string  $separator
  * @return string
  */
-function cms_route_name_prefix(?string $name, string $separator = '.'): string
+function cms_route_name(?string $name = null, string $separator = '.'): string
 {
     return cms_slug() . $separator . $name;
 }
@@ -140,7 +140,7 @@ function cms_route(
     bool $absolute = true
 ): string
 {
-    return language_to_url(route(cms_route_name_prefix($name), $parameters, $absolute), $language);
+    return language_to_url(route(cms_route_name($name), $parameters, $absolute), $language);
 }
 
 /**
