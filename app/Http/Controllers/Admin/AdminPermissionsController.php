@@ -28,7 +28,7 @@ class AdminPermissionsController extends Controller implements HasMiddleware
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index()
     {

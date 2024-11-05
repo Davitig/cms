@@ -23,7 +23,7 @@ class AdminEventFilesController extends Controller
      * Display a listing of the resource.
      *
      * @param  int  $eventId
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(int $eventId)
     {

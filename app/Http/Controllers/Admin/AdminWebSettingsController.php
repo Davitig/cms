@@ -21,7 +21,7 @@ class AdminWebSettingsController extends Controller implements HasMiddleware
     /**
      * Display the specified resource.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index()
     {

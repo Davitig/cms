@@ -34,7 +34,7 @@ class WebFeedbackController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Page\Page  $page
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(Page $page)
     {

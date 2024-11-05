@@ -22,7 +22,7 @@ class AdminArticlesController extends Controller
      * Display a listing of the resource.
      *
      * @param  int  $collectionId
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(int $collectionId)
     {
@@ -40,7 +40,7 @@ class AdminArticlesController extends Controller
      * Show the form for creating a new resource.
      *
      * @param  int  $collectionId
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function create(int $collectionId)
     {
@@ -85,7 +85,7 @@ class AdminArticlesController extends Controller
      *
      * @param  int  $collectionId
      * @param  int  $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function edit(int $collectionId, int $id)
     {

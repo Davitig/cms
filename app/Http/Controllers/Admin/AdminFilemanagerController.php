@@ -18,7 +18,7 @@ class AdminFilemanagerController extends Controller
     /**
      * Display a file manager.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index()
     {

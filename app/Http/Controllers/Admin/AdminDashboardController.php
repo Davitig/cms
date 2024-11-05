@@ -9,7 +9,7 @@ class AdminDashboardController extends Controller
     /**
      * Display a Dashboard.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index()
     {

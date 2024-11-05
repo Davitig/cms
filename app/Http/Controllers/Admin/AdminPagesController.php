@@ -23,7 +23,7 @@ class AdminPagesController extends Controller
      * Display a listing of the resource.
      *
      * @param  int  $menuId
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(int $menuId)
     {
@@ -38,7 +38,7 @@ class AdminPagesController extends Controller
      * Show the form for creating a new resource.
      *
      * @param  int  $menuId
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function create(int $menuId)
     {
@@ -88,7 +88,7 @@ class AdminPagesController extends Controller
      *
      * @param  int  $menuId
      * @param  int  $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function edit(int $menuId, int $id)
     {

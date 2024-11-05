@@ -31,7 +31,7 @@ class WebVideosController extends Controller
      *
      * @param  array<\App\Models\Page\Page, \App\Models\Collection>  $models
      * @param  \App\Models\Gallery\Gallery  $gallery
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(array $models, Gallery $gallery)
     {

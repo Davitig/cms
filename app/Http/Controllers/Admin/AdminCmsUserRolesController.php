@@ -28,7 +28,7 @@ class AdminCmsUserRolesController extends Controller implements HasMiddleware
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index()
     {
@@ -40,7 +40,7 @@ class AdminCmsUserRolesController extends Controller implements HasMiddleware
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function create()
     {
@@ -77,7 +77,7 @@ class AdminCmsUserRolesController extends Controller implements HasMiddleware
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function edit(int $id)
     {

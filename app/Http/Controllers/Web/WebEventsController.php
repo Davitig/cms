@@ -30,7 +30,7 @@ class WebEventsController extends Controller
      * Display a listing of the resource.
      *
      * @param  array<\App\Models\Page\Page, \App\Models\Collection>  $models
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(array $models)
     {
@@ -46,7 +46,7 @@ class WebEventsController extends Controller
      *
      * @param  array<\App\Models\Page\Page, \App\Models\Collection>  $models
      * @param  string  $slug
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function show(array $models, string $slug)
     {
