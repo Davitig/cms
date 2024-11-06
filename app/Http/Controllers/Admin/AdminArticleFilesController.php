@@ -33,7 +33,7 @@ class AdminArticleFilesController extends Controller
 
         $data['foreignModel'] = $data['foreignModels']->first();
 
-        $data['items'] = $this->model->forAdmin($articleId)->paginate(20);
+        $data['items'] = $this->model->forAdmin($articleId)->paginate(24);
 
         return view('admin.collections.articles.files.index', $data);
     }

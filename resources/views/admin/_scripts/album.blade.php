@@ -14,7 +14,7 @@
         galleryEnv.on('click', 'a[data-modal]', function(e) {
             e.preventDefault();
             let action = $(this).data('modal');
-            if (action == 'edit') {
+            if (action === 'edit') {
                 let item = $(this).closest('.item');
                 let url = item.data('url');
 
@@ -29,15 +29,16 @@
                 if (multiselect.length) {
                     multiselect.splice(0, 1);
                 }
-            } else if (action == 'add') {
-                $.get('{{$routeCreate}}', function(data) {
+            } else if (action === 'add') {
+                let params = {sort: '{{$sort}}', currentPage: {{$currentPage}}, lastPage: {{$lastPage}}};
+                $.get('{{$routeCreate}}', params, function(data) {
                     galleryEnv.append(data.view);
 
                     $("#form-modal").modal('show');
                 }, 'json').fail(function(xhr) {
                     alert(xhr.responseText);
                 });
-            } else if (action == 'multiselect') {
+            } else if (action === 'multiselect') {
                 $('.album-image input:checked').each(function() {
                     multiselect.push($(this).data('id'));
                 });
@@ -61,18 +62,17 @@
         galleryEnv.on('click', 'a[data-delete]', function(e) {
             e.preventDefault();
             let action = $(this).data('delete');
-            if (action == 'multiselect') {
+            let ids = [];
+            if (action === 'multiselect') {
                 let perform = confirm("{{trans('general.confirm_delete_selected')}}");
-                if (perform != true) return;
-
-                let ids = [];
+                if (perform !== true) return;
                 $('.select-item input:checked', galleryEnv).each(function(i, e) {
                     ids.push($(e).data('id'));
                 });
             } else {
                 let perform = confirm("{{trans('general.confirm_delete')}}");
-                if (perform != true) return;
-                let ids = [$(this).data('id')];
+                if (perform !== true) return;
+                ids = [$(this).data('id')];
             }
 
             if (ids.length) {
@@ -82,7 +82,7 @@
                     // alert toastr message
                     toastr[data.result](data.message);
 
-                    if (data.result == 'success') {
+                    if (data.result === 'success') {
                         $.each(ids, function(i, e) {
                             $('#item'+e, galleryEnv).remove();
                         });
@@ -101,14 +101,7 @@
 
             let input = {'_token':"{{$csrfToken}}"};
             $.post(url, input, function(data) {
-                if (data) {
-                    value = 1;
-                    let icon = 'fa fa-eye';
-                } else {
-                    value = 0;
-                    let icon = 'fa fa-eye-slash';
-                }
-                item.find('i').attr('class', icon);
+                item.find('i').attr('class', data ? 'fa fa-eye' : 'fa fa-eye-slash');
             }, 'json').fail(function(xhr) {
                 alert(xhr.responseText);
             });
@@ -118,7 +111,8 @@
         $('.gallery-env a[data-action="sort"]').on('click', function(e) {
             e.preventDefault();
 
-            let is_sortable = $(".album-images").sortable('instance');
+            let albumImageSelector = $(".album-images");
+            let is_sortable = albumImageSelector.sortable('instance');
 
             if( ! is_sortable) {
                 $(".gallery-env .album-images").sortable({
@@ -129,11 +123,11 @@
                 $(".album-sorting-info").stop().slideDown(300);
                 $('#save-tree').show().prop('disabled', false);
             } else {
-                $(".album-images").sortable('destroy');
+                albumImageSelector.sortable('destroy');
                 $(".album-sorting-info").stop().slideUp(300);
             }
         });
 
-        positionable('{{$routePosition}}', '{{$sort}}', {{$page}}, {{$hasMorePages}});
+        positionable('{{$routePosition}}', '{{$sort}}', {{$currentPage}}, {{(int) ($currentPage < $lastPage)}});
     });
 </script>

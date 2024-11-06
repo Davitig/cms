@@ -22,7 +22,7 @@ trait SettingsFileTrait
             'desc' => 'Descending',
             'asc' => 'Ascending'
         ],
-        'admin_per_page' => 20,
+        'admin_per_page' => 12,
         'web_order_by' => [],
         'web_sort' => [
             'desc' => 'Descending',
@@ -37,12 +37,12 @@ trait SettingsFileTrait
      * @var array
      */
     protected static array $defaultSettings = [
-        "admin_order_by" => "id",
-        "admin_sort" => "desc",
-        "admin_per_page" => 20,
-        "web_order_by" => "id",
-        "web_sort" => "desc",
-        "web_per_page" => 20
+        'admin_order_by' => 'id',
+        'admin_sort' => 'desc',
+        'admin_per_page' => 12,
+        'web_order_by' => 'id',
+        'web_sort' => 'desc',
+        'web_per_page' => 20
     ];
 
     /**

@@ -134,12 +134,12 @@
     </section>
     @push('body.bottom')
         @include('admin._scripts.album', [
-            'routeCreate' => cms_route('articles.files.create', [$foreignModel->id, 'sort' => 'desc', 'page_val' => $items->currentPage(), 'lastPage' => $items->lastPage()]),
+            'routeCreate' => cms_route('articles.files.create', [$foreignModel->id]),
             'routeIndex' => cms_route('articles.files.index', [$foreignModel->id]),
             'routePosition' => cms_route('articles.files.updatePosition'),
             'sort' => 'desc',
-            'page' => request('page', 1),
-            'hasMorePages' => $items->hasMorePages()
+            'currentPage' => $items->currentPage(),
+            'lastPage' => $items->lastPage()
         ])
         <script src="{{ asset('assets/libs/js/jquery-ui/jquery-ui.min.js') }}"></script>
         <script src="{{ asset('assets/libs/js/uikit/js/uikit.min.js') }}"></script>

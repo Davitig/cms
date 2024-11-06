@@ -11,32 +11,11 @@ use League\Glide\Server;
 class WebGlideServerController extends Controller
 {
     /**
-     * The Server instance.
-     *
-     * @var \League\Glide\Server
-     */
-    protected Server $server;
-
-    /**
-     * The Request instance.
-     *
-     * @var \Illuminate\Http\Request
-     */
-    protected Request $request;
-
-    /**
      * Create a new controller instance.
      *
-     * @param  \League\Glide\Server  $server
-     * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    public function __construct(Server $server, Request $request)
-    {
-        $this->server = $server;
-
-        $this->request = $request;
-    }
+    public function __construct(protected Server $server, protected Request $request) {}
 
     /**
      * Display the specified resource.

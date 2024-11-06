@@ -338,11 +338,13 @@ function model_path(string $name): string
  *
  * @throws \InvalidArgumentException
  */
-function make_model_sub_items(array|Collection $items,
-                              ?string          $slug = null,
-                              int              $parentId = 0,
-                              string           $parentKey = 'parent_id',
-                              string           $key = 'id'): Collection
+function make_model_sub_items(
+    array|Collection $items,
+    ?string          $slug = null,
+    int              $parentId = 0,
+    string           $parentKey = 'parent_id',
+    string           $key = 'id'
+): Collection
 {
     if (! $items instanceof Collection && ! is_array($items)) {
         throw new InvalidArgumentException(
@@ -403,7 +405,7 @@ function app_instance(string $instance, mixed $default = null): mixed
  *
  * @param  string  $result
  * @param  string|null  $message
- * @param  mixed  $input
+ * @param  mixed|null  $input
  * @return array
  */
 function fill_data(string $result, ?string $message = null, mixed $input = null): array
@@ -553,7 +555,7 @@ function format_bytes(int $bytes, int $precision = 2): string
  * @param  int  $limit
  * @param  string  $break
  * @param  string  $end
- * @return string
+ * @return string|null
  */
 function text_limit(?string $string = null, int $limit = 100, string $break = '.', string $end = ''): ?string
 {

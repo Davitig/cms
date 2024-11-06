@@ -34,7 +34,7 @@ class AdminPageFilesController extends Controller
 
         $data['foreignModel'] = $data['foreignModels']->first();
 
-        $data['items'] = $this->model->forAdmin($pageId)->paginate(20);
+        $data['items'] = $this->model->forAdmin($pageId)->paginate(24);
 
         // make a menu list active from this (files) resource by passing the
         // current page menu_id

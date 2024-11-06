@@ -30,7 +30,8 @@ trait NestableTrait
     public function getBaseModel(
         array|string $columns = ['*'],
         ?int         $id = null,
-        ?Closure     $callback = null): static
+        ?Closure     $callback = null
+    ): static
     {
         if (! ($id = ($id ?: $this->parent_id))) {
             return $this;
@@ -60,7 +61,8 @@ trait NestableTrait
         array|string $columns = ['*'],
         ?int         $parentId = null,
         ?int         $id = null,
-        bool|int     $recursive = false): Collection
+        bool|int     $recursive = false
+    ): Collection
     {
         if (! ($parentId = $parentId ?: $this->parent_id)
             || ! ($id = $id ?: $this->getKey())
@@ -94,7 +96,8 @@ trait NestableTrait
     public function getSubModels(
         array|string $columns = ['*'],
         ?int         $parentId = null,
-        bool|int     $recursive = false): Collection
+        bool|int     $recursive = false
+    ): Collection
     {
         $columns = (array) $columns;
 

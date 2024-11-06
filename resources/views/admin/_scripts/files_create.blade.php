@@ -1,13 +1,10 @@
 <script type="text/javascript">
     let sort = '{{request('sort', 'desc')}}';
-    let currentPage = '{{request('page_val', '1')}}';
-    let creationPage = sort === 'desc' ? '1' : '{{request('lastPage', '1')}}';
+    let currentPage = {{(int) request('currentPage', 1)}};
+    let creationPage = sort === 'desc' ? 1 : {{(int) request('lastPage', 1)}};
     let formSelector = $('#form-modal form');
 
     formSelector.on('ajaxFormSuccess', function (e, data) {
-        // alert toastr message
-        toastr[data.result](data.message);
-
         let imageContainer = '.gallery-env .album-images';
         let insert = $(imageContainer).data('insert');
         insert = Function("$('" + imageContainer + "')." + insert + "('" + data.view + "');");
@@ -16,7 +13,8 @@
         cbr_replace();
 
         if (currentPage !== creationPage) {
-            window.location.href = window.location.href + '?page=' + creationPage;
+            window.location.href = window.location.href.replace(location.search, '')
+                + '?page=' + creationPage;
         } else {
             $('#form-modal').find('[data-dismiss]').trigger('click');
         }

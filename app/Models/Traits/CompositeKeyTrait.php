@@ -9,11 +9,11 @@ trait CompositeKeyTrait
      */
     protected function setKeysForSelectQuery($query)
     {
-        if (empty($this->compositePrimaryKey)) {
+        if (empty($this->compositePrimaryKeys)) {
             return parent::setKeysForSelectQuery($query);
         }
 
-        foreach ((array) $this->compositePrimaryKey as $key) {
+        foreach ((array) $this->compositePrimaryKeys as $key) {
             $query->where($key, $this->$key);
         }
 
@@ -25,11 +25,11 @@ trait CompositeKeyTrait
      */
     protected function setKeysForSaveQuery($query)
     {
-        if (empty($this->compositePrimaryKey)) {
+        if (empty($this->compositePrimaryKeys)) {
             return parent::setKeysForSaveQuery($query);
         }
 
-        foreach ((array) $this->compositePrimaryKey as $key) {
+        foreach ((array) $this->compositePrimaryKeys as $key) {
             $query->where($key, $this->$key);
         }
 

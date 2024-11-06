@@ -22,7 +22,7 @@ class Builder extends EloquentBuilder
     /**
      * {@inheritDoc}
      */
-    public function addSelect($column): Builder|QueryBuilder|static
+    public function addSelect($column): QueryBuilder|static
     {
         parent::addSelect($column);
 
@@ -263,7 +263,7 @@ class Builder extends EloquentBuilder
      * @param  bool|string  $table
      * @return $this
      */
-    public function orderAsc(bool|string $table = false): Builder
+    public function orderAsc(bool|string $table = false): static
     {
         return $this->orderBy(
             $this->getTableNameWithDot($table) . $this->getModel()->getKeyName()
@@ -276,7 +276,7 @@ class Builder extends EloquentBuilder
      * @param  bool|string  $table
      * @return $this
      */
-    public function orderDesc(bool|string $table = false): Builder
+    public function orderDesc(bool|string $table = false): static
     {
         return $this->orderByDesc(
             $this->getTableNameWithDot($table) . $this->getModel()->getKeyName()
@@ -289,7 +289,7 @@ class Builder extends EloquentBuilder
      * @param  bool|string  $table
      * @return $this
      */
-    public function createdAsc(bool|string $table = false): Builder
+    public function createdAsc(bool|string $table = false): static
     {
         return $this->orderBy($this->getTableNameWithDot($table) . 'created_at');
     }
@@ -300,7 +300,7 @@ class Builder extends EloquentBuilder
      * @param  bool|string  $table
      * @return $this
      */
-    public function createdDesc(bool|string $table = false): Builder
+    public function createdDesc(bool|string $table = false): static
     {
         return $this->orderByDesc($this->getTableNameWithDot($table) . 'created_at');
     }

@@ -33,7 +33,7 @@ class AdminEventFilesController extends Controller
 
         $data['foreignModel'] = $data['foreignModels']->first();
 
-        $data['items'] = $this->model->forAdmin($eventId)->paginate(20);
+        $data['items'] = $this->model->forAdmin($eventId)->paginate(24);
 
         return view('admin.collections.events.files.index', $data);
     }

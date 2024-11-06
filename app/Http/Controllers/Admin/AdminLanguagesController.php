@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\LanguageRequest;
 use App\Models\Language;
-use Illuminate\Http\Request;
 
 class AdminLanguagesController extends Controller
 {
@@ -137,24 +136,5 @@ class AdminLanguagesController extends Controller
         return redirect($url)->with('alert', fill_data(
             'success', trans('database.deleted')
         ));
-    }
-
-    /**
-     * Set the specified menu to main.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
-     */
-    public function setMain(Request $request)
-    {
-        if ($id = $request->get('id')) {
-            $this->model->where('main', 1)->update(['main' => 0]);
-
-            return response()->json(
-                $this->model->findOrFail($id)->update(['main' => 1])
-            );
-        }
-
-        return response(trans('general.invalid_input'), 422);
     }
 }

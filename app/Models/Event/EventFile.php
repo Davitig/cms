@@ -40,10 +40,10 @@ class EventFile extends Model
     /**
      * Get the mutated file default attribute.
      *
-     * @param  string  $value
+     * @param  string|null  $value
      * @return string
      */
-    public function getFileDefaultAttribute($value): string
+    public function getFileDefaultAttribute(?string $value): string
     {
         return $value ?: asset('assets/libs/images/image-1.jpg');
     }

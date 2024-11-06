@@ -155,12 +155,12 @@
     </section>
     @push('body.bottom')
         @include('admin._scripts.album', [
-            'routeCreate' => cms_route('pages.files.create', [$foreignModel->id, 'sort' => 'desc', 'page_val' => $items->currentPage(), 'lastPage' => $items->lastPage()]),
+            'routeCreate' => cms_route('pages.files.create', [$foreignModel->id]),
             'routeIndex' => cms_route('pages.files.index', [$foreignModel->id]),
             'routePosition' => cms_route('pages.files.updatePosition'),
             'sort' => 'desc',
-            'page' => request('page', 1),
-            'hasMorePages' => $items->hasMorePages()
+            'currentPage' => $items->currentPage(),
+            'lastPage' => $items->lastPage()
         ])
         <script src="{{ asset('assets/libs/js/jquery-ui/jquery-ui.min.js') }}"></script>
         <script src="{{ asset('assets/libs/js/uikit/js/uikit.min.js') }}"></script>

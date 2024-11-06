@@ -32,7 +32,7 @@ $(function () {
         $('input.form-close').val(1);
     });
 
-    // Disable buttons on submit for some period of time
+    // Disable buttons after submit for some period of time
     $(document).on('submit', 'form', function () {
         $('input[type="submit"], button[type="submit"]', this).prop('disabled', true);
 
@@ -56,29 +56,28 @@ $(function () {
             dataType: 'json',
             data: form.serialize(),
             success: function (data) {
-                if (data?.input?.redirect) {
-                    window.location.href = data.input.redirect;
+                if (data) {
+                    if (data?.input?.redirect) {
+                        window.location.href = data.input.redirect;
+                    }
+                    // toastr alert message
+                    if (typeof toastr === 'object' && data?.result) {
+                        toastr[data.result](data?.message);
+                    }
+                    // delete action
+                    if (data?.result === 'success') {
+                        form.closest('.item').fadeOut(600, function () {
+                            if ($(this).data('parent') === 1) {
+                                $(this).closest('.uk-parent').removeClass('uk-parent');
+                                disableParentDeletion();
+                            }
+
+                            $(this).remove();
+                        });
+                    }
                 }
 
                 form.trigger('deleteFormSuccess', [data]);
-
-                if (! data) return;
-
-                // toastr alert message
-                if (typeof toastr === 'object') {
-                    toastr[data.result](data.message);
-                }
-                // delete action
-                if (data.result === 'success') {
-                    form.closest('.item').fadeOut(600, function () {
-                        if ($(this).data('parent') === 1) {
-                            $(this).closest('.uk-parent').removeClass('uk-parent');
-                            disableParentDeletion();
-                        }
-
-                        $(this).remove();
-                    });
-                }
             },
             error: function (xhr) {
                 alert(xhr.responseText);
@@ -103,42 +102,40 @@ $(function () {
             dataType: 'json',
             data: form.serialize(),
             success: function (data) {
-                form.trigger('ajaxFormSuccess', [data]);
-
                 // toastr alert message
-                if (typeof toastr === 'object') {
-                    toastr[data.result](data.message);
+                if (typeof toastr === 'object' && data?.result) {
+                    toastr[data.result](data?.message);
                 }
 
                 $('.form-group', form).removeClass('validate-has-error');
 
                 // fill form inputs
-                if (! data.input || typeof data.input !== 'object') {
-                    return;
+                if (data?.input && typeof data.input === 'object') {
+                    $.each(data.input, function (index, element) {
+                        let item = $('#' + index + lang, form);
+
+                        if (item.data('lang')) {
+                            let inputGeneral = $(ajaxFormSelector + ' [name="' + index + '"]');
+                            $(inputGeneral).each(function (i, e) {
+                                item = $(e);
+                                if (item.val() !== element) {
+                                    item.val(element);
+                                    if (item.is(':checkbox')) {
+                                        let bool = element === 1;
+                                        item.prop('checked', bool);
+                                    }
+                                    if (item.is('select')) {
+                                        item.trigger('change');
+                                    }
+                                }
+                            });
+                        } else if (item.val() !== element) {
+                            item.val(element);
+                        }
+                    });
                 }
 
-                $.each(data.input, function (index, element) {
-                    let item = $('#' + index + lang, form);
-
-                    if (item.data('lang')) {
-                        let inputGeneral = $(ajaxFormSelector + ' [name="' + index + '"]');
-                        $(inputGeneral).each(function (i, e) {
-                            item = $(e);
-                            if (item.val() !== element) {
-                                item.val(element);
-                                if (item.is(':checkbox')) {
-                                    let bool = element === 1;
-                                    item.prop('checked', bool);
-                                }
-                                if (item.is('select')) {
-                                    item.trigger('change');
-                                }
-                            }
-                        });
-                    } else if (item.val() !== element) {
-                        item.val(element);
-                    }
-                });
+                form.trigger('ajaxFormSuccess', [data]);
             },
             error: function (xhr) {
                 if (xhr.responseJSON.errors === undefined) {
@@ -382,9 +379,9 @@ function positionable(url, orderBy, page, hasMorePages) {
                 });
             }
 
-            saveBtn.trigger('positionSaved');
-
             disableParentDeletion();
+
+            saveBtn.trigger('positionSaved');
         }, 'json').fail(function (xhr) {
             saveBtnIcon.removeClass('fa-spin fa-save').addClass('fa-remove');
 

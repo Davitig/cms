@@ -100,7 +100,7 @@ class AdminSitemapXmlController extends Controller
     }
 
     /**
-     * Store a newly created/update sitemap xml.
+     * Store a newly created/update sitemap XML.
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
@@ -134,7 +134,7 @@ class AdminSitemapXmlController extends Controller
         $xml->namespaceMap = $this->namespaceMap;
 
         $doc = new DOMDocument;
-        $doc->loadXML($xml->write("urlset", $this->data));
+        $doc->loadXML($xml->write('urlset', $this->data));
 
         $result = $doc->save(public_path('sitemap.xml'));
 
@@ -146,7 +146,7 @@ class AdminSitemapXmlController extends Controller
     }
 
     /**
-     * Set an implicit models to the xml data.
+     * Set an implicit models to the XML data.
      *
      * @param  \App\Models\Page\Page $page
      * @return void
@@ -181,7 +181,7 @@ class AdminSitemapXmlController extends Controller
     }
 
     /**
-     * Set an explicit models to the xml data.
+     * Set an explicit models to the XML data.
      *
      * @param  \App\Models\Page\Page $page
      * @return void
