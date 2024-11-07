@@ -28,7 +28,7 @@
             <li class="external">
                 <form action="{{cms_route('sitemap.xml.store')}}" method="POST">
                     {{csrf_field()}}
-                    <button type="submit" class="btn btn-link w-100">
+                    <button type="submit" class="btn btn-link w-100 pad0">
                         <a class="external-btn">
                             <span class="fa fa-sitemap padr"></span>
                             <span class="sm-status">{{$sitemapXmlTime ? 'Update' : 'Create'}} now!</span>
