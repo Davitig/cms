@@ -4,9 +4,8 @@
             <div class="modal-gallery-image">
                 <img src="{{$current->file ?: $current->file_default}}" class="img-responsive" alt="File">
             </div>
-            {{ html()->modelForm($current,
-                'post', cms_route('pages.files.store', [$current->page_id])
-            )->class('form-create form-horizontal ' . $cmsSettings->get('ajax_form'))->open() }}
+            {{ html()->modelForm($current, 'post', cms_route('pages.files.store', [$current->page_id]))
+            ->class('form-create form-horizontal ' . $cmsSettings->get('ajax_form'))->open() }}
             <div class="modal-body">
                 <div class="row">
                     @include('admin.pages.files.form')

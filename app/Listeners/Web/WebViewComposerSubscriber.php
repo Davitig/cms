@@ -55,11 +55,11 @@ class WebViewComposerSubscriber
 
             if (empty($current->meta_desc)) {
                 if (! empty($current->description)) {
-                    $current->meta_desc = text_limit($current->description);
+                    $current->meta_desc = str($current->description)->limit();
                 } elseif (! empty($current->content)) {
-                    $current->meta_desc = text_limit($current->content);
+                    $current->meta_desc = str($current->content)->limit();
                 } else {
-                    $current->meta_desc = text_limit($current->title);
+                    $current->meta_desc = str($current->title)->limit();
                 }
             }
 

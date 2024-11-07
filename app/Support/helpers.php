@@ -10,9 +10,9 @@ use Illuminate\Support\Str;
  *
  * @param  bool|string|null  $key
  * @param  string|null  $value
- * @return string|array|null
+ * @return mixed
  */
-function language(bool|string|null $key = null, ?string $value = null): array|string|null
+function language(mixed $key = null, ?string $value = null): mixed
 {
     $lang = (string) config('app.language');
 
@@ -48,7 +48,7 @@ function languages(): array
  */
 function language_in_url(): bool
 {
-    return (bool) config('language_in_url');
+    return (bool) config('language_in_url', false);
 }
 
 /**
@@ -68,7 +68,7 @@ function is_multilanguage(): bool
  */
 function cms_is_booted(): bool
 {
-    return (bool) config('cms_is_booted');
+    return (bool) config('cms_is_booted', false);
 }
 
 /**
@@ -314,18 +314,6 @@ function language_to_url(string $url, mixed $language = null): string
 
     return trim($schemeAndHttpHost . $baseUrl . '/' . $path, '/');
 }
-
-/**
- * Get the Eloquent model path.
- *
- * @param  string  $name
- * @return string
- */
-function model_path(string $name): string
-{
-    return 'App\\Models\\' . ucfirst(Str::singular($name));
-}
-
 /**
  * Make a nestable eloquent models tree.
  *
@@ -434,9 +422,9 @@ function fill_db_data(string $key, array $parameters = []): array
  *
  * @param  string|null  $key
  * @param  mixed  $default
- * @return array|string
+ * @return mixed
  */
-function cms_config(?string $key = null, mixed $default = []): array|string
+function cms_config(?string $key = null, mixed $default = []): mixed
 {
     if (! is_null($key)) {
         return config('cms.' . $key, $default);
@@ -450,9 +438,9 @@ function cms_config(?string $key = null, mixed $default = []): array|string
  *
  * @param  string|null  $key
  * @param  mixed  $default
- * @return array|string
+ * @return mixed
  */
-function cms_pages(?string $key = null, mixed $default = []): array|string
+function cms_pages(?string $key = null, mixed $default = []): mixed
 {
     if (! is_null($key)) {
         return cms_config('pages.' . $key, $default);
@@ -466,9 +454,9 @@ function cms_pages(?string $key = null, mixed $default = []): array|string
  *
  * @param  string|null  $key
  * @param  mixed  $default
- * @return array|string
+ * @return mixed
  */
-function cms_collections(?string $key = null, mixed $default = []): array|string
+function cms_collections(?string $key = null, mixed $default = []): mixed
 {
     if (! is_null($key)) {
         return cms_config('collections.' . $key, $default);
@@ -482,9 +470,9 @@ function cms_collections(?string $key = null, mixed $default = []): array|string
  *
  * @param  string|null  $key
  * @param  mixed  $default
- * @return array|string
+ * @return mixed
  */
-function deep_collection(?string $key = null, mixed $default = []): array|string
+function deep_collection(?string $key = null, mixed $default = []): mixed
 {
     if (! is_null($key)) {
         return cms_config('deep_collections.' . $key, $default);
@@ -498,9 +486,9 @@ function deep_collection(?string $key = null, mixed $default = []): array|string
  *
  * @param  string  $key
  * @param  mixed|null  $default
- * @return string|null
+ * @return mixed
  */
-function icon_type(string $key, mixed $default = null): ?string
+function icon_type(string $key, mixed $default = null): mixed
 {
     return cms_config('icons.' . $key, $default);
 }
@@ -547,38 +535,6 @@ function format_bytes(int $bytes, int $precision = 2): string
 
     return round($bytes, $precision) . ' ' . $units[$pow];
 }
-
-/**
- * Cut the text after the limit and breakpoint.
- *
- * @param  string|null  $string
- * @param  int  $limit
- * @param  string  $break
- * @param  string  $end
- * @return string|null
- */
-function text_limit(?string $string = null, int $limit = 100, string $break = '.', string $end = ''): ?string
-{
-    if (! $string) {
-        return $string;
-    }
-
-    $string = str_replace('&nbsp;', ' ', strip_tags($string));
-    $string = preg_replace('/\s\s+/', ' ', $string);
-
-    if (mb_strlen($string, 'UTF-8') <= $limit) {
-        return $string;
-    }
-
-    $breakpoint = ($break ? mb_strpos($string, $break, $limit, 'UTF-8') : $limit);
-
-    if ($breakpoint < (mb_strlen($string, 'UTF-8') - 1)) {
-        $string = mb_substr($string, 0, $breakpoint, 'UTF-8') . $end;
-    }
-
-    return $string;
-}
-
 /**
  * Get youtube video id from url.
  *

@@ -1,5 +1,6 @@
 @if (! empty($item) || ! empty($itemInput))
-<li id="item{{$item->id}}" data-id="{{$item->id}}" data-pos="{{$item->position}}" data-url="{{cms_route('slider.edit', [$item->id])}}" class="item col-md-3 col-sm-4 col-xs-6">
+<li id="item{{$item->id}}" data-id="{{$item->id}}" data-pos="{{$item->position}}"
+    data-url="{{cms_route('slider.edit', [$item->id])}}" class="item col-md-3 col-sm-4 col-xs-6">
     <div class="album-image">
         <a href="#" class="thumb" data-modal="edit">
             @if (in_array($ext = pathinfo($itemInput['file'], PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))

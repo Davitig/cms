@@ -26,7 +26,10 @@ trait LanguageTrait
      */
     public function whereLanguage(mixed $currentLang = true): Builder
     {
-        return $this->where('language_id', language($currentLang, 'id'));
+        return $this->where(
+            'language_id',
+            is_numeric($currentLang) ? $currentLang : language($currentLang, 'id')
+        );
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Models\Traits;
 
 use App\Models\Base\Builder;
 use App\Models\Base\Model;
+use Closure;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
@@ -20,9 +21,9 @@ trait HasLanguage
     /**
      * Add a languages cross join to the query.
      *
-     * @return \App\Models\Base\Builder
+     * @return \App\Models\Base\Builder|\App\Models\Base\Model
      */
-    public function crossMainLanguages(): Builder
+    public function crossMainLanguages(): Builder|Model
     {
         return $this->crossJoin('languages');
     }
@@ -32,9 +33,9 @@ trait HasLanguage
      *
      * @param  mixed  $currentLang
      * @param  array|string  $columns
-     * @return \App\Models\Base\Builder
+     * @return \App\Models\Base\Builder|static
      */
-    public function joinLanguage(mixed $currentLang = true, array|string $columns = []): Builder
+    public function joinLanguage(mixed $currentLang = true, array|string $columns = []): Builder|static
     {
         $table = $this->getTable();
         $languageTable = $this->languages()->getRelated()->getTable();
@@ -44,9 +45,7 @@ trait HasLanguage
             return $q->crossMainLanguages()->orderBy('languages.position');
         }, function ($q) use ($currentLang) {
             return $q->leftJoin('languages', function ($q) use ($currentLang) {
-                return $q->where(
-                    'languages.id', is_numeric($currentLang) ? $currentLang : language($currentLang, 'id')
-                );
+                return $q->when($this->wrapWhereLanguageQuery('languages.id', $currentLang));
             });
         })->leftJoin($languageTable, function ($q) use ($table, $languageTable) {
             return $q->on("{$table}.id", "{$languageTable}.{$this->getForeignKey()}")
@@ -54,5 +53,21 @@ trait HasLanguage
         })->addSelect(array_merge(((array) $columns) ?: ["{$languageTable}.*"], [
             "{$languageTable}.id as {$languageKey}", "{$table}.*"
         ]))->addSelect(['languages.language', 'languages.id as language_id']);
+    }
+
+    /**
+     * Apply the where language callback to the query.
+     *
+     * @param  string  $column
+     * @param  mixed  $currentLang
+     * @return \Closure
+     */
+    protected function wrapWhereLanguageQuery(string $column, mixed $currentLang = true): Closure
+    {
+        return function ($q) use ($column, $currentLang) {
+            return $q->where(
+                $column, is_numeric($currentLang) ? $currentLang : language($currentLang, 'id')
+            );
+        };
     }
 }

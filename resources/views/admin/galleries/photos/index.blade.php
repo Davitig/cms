@@ -4,7 +4,7 @@
         <div class="title-env">
             <h1 class="title">
                 <i class="{{$icon = icon_type('photos')}}"></i>
-                {{ $parent->title }}
+                {{ str($parent->title)->limit() }}
             </h1>
         </div>
         <div class="breadcrumb-env">
@@ -79,7 +79,8 @@
                 </div>
                 <ul id="nestable-list" class="album-images list-unstyled row" data-insert="{{$parent->admin_sort == 'desc' ? 'prepend' : 'append'}}" data-uk-nestable="{maxDepth:1}">
                     @foreach($items as $item)
-                        <li id="item{{$item->id}}" data-id="{{$item->id}}" data-pos="{{$item->position}}" data-url="{{cms_route('photos.edit', [$parent->id, $item->id])}}" class="item col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                        <li id="item{{$item->id}}" data-id="{{$item->id}}" data-pos="{{$item->position}}"
+                            data-url="{{cms_route('photos.edit', [$parent->id, $item->id])}}" class="item col-lg-3 col-md-4 col-sm-4 col-xs-6">
                             <div class="album-image">
                                 <a href="#" class="thumb" data-modal="edit">
                                     @if (in_array($ext = pathinfo($item->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))

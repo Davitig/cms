@@ -4,7 +4,7 @@
         <div class="title-env">
             <h1 class="title">
                 <i class="{{$icon = icon_type('files')}}"></i>
-                {{ Str::limit($foreignModel->title, 50, '...') }}
+                {{ str($foreignModel->title)->limit() }}
             </h1>
             <p class="description">Management of the files</p>
         </div>
@@ -92,8 +92,7 @@
                     data-uk-nestable="{maxDepth:1}" id="items">
                     @foreach($items as $item)
                         <li id="item{{$item->id}}" data-id="{{$item->id}}" data-pos="{{$item->position}}"
-                            data-url="{{cms_route('events.files.edit', [$item->event_id, $item->id])}}"
-                            class="item col-md-2 col-sm-4 col-xs-6">
+                            data-url="{{cms_route('events.files.edit', [$item->event_id, $item->id])}}" class="item col-md-2 col-sm-4 col-xs-6">
                             <div class="album-image">
                                 <a href="#" class="thumb" data-modal="edit">
                                     @if (in_array($ext = pathinfo($item->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
