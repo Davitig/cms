@@ -54,10 +54,10 @@ trait FileTrait
      * Build a public query.
      *
      * @param  int  $foreignId
-     * @param  bool|string  $currentLang
+     * @param  mixed  $currentLang
      * @return \App\Models\Base\Builder
      */
-    public function forAdmin(int $foreignId, bool|string $currentLang = true): Builder
+    public function forAdmin(int $foreignId, mixed $currentLang = true): Builder
     {
         return $this->joinLanguage($currentLang)
             ->byForeign($foreignId)
@@ -68,10 +68,10 @@ trait FileTrait
      * Build a public query.
      *
      * @param  int  $foreignId
-     * @param  bool|string  $currentLang
+     * @param  mixed  $currentLang
      * @return \App\Models\Base\Builder
      */
-    public function forPublic(int $foreignId, bool|string $currentLang = true)
+    public function forPublic(int $foreignId, mixed $currentLang = true)
     {
         return $this->joinLanguage($currentLang)
             ->byForeign($foreignId)

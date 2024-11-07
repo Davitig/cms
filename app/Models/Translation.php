@@ -60,10 +60,10 @@ class Translation extends Model
      * Build a query by code.
      *
      * @param  string  $code
-     * @param  bool|string  $currentLang
+     * @param  mixed  $currentLang
      * @return \App\Models\Base\Builder
      */
-    public function byCode(string $code, bool|string $currentLang = true): Builder
+    public function byCode(string $code, mixed $currentLang = true): Builder
     {
         return $this->joinLanguage($currentLang)->where('code', $code);
     }

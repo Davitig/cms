@@ -60,11 +60,11 @@ class Slider extends Model
     /**
      * Build a query for admin.
      *
-     * @param  bool|string  $currentLang
+     * @param  mixed  $currentLang
      * @param  array|string  $columns
      * @return \App\Models\Base\Builder
      */
-    public function forAdmin(bool|string $currentLang = true, array|string $columns = []): Builder
+    public function forAdmin(mixed $currentLang = true, array|string $columns = []): Builder
     {
         return $this->joinLanguage($currentLang, $columns)->positionDesc();
     }
@@ -72,11 +72,11 @@ class Slider extends Model
     /**
      * Build a public query.
      *
-     * @param  bool|string  $currentLang
+     * @param  mixed  $currentLang
      * @param  array|string  $columns
      * @return \App\Models\Base\Builder
      */
-    public function forPublic(bool|string $currentLang = true, array|string $columns = []): Builder
+    public function forPublic(mixed $currentLang = true, array|string $columns = []): Builder
     {
         return $this->joinLanguage($currentLang, $columns)
             ->where('visible', 1)

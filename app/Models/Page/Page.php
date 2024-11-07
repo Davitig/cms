@@ -53,10 +53,10 @@ class Page extends Model
      * Build an admin query.
      *
      * @param  int|null  $menuId
-     * @param  bool|string  $currentLang
+     * @param  mixed  $currentLang
      * @return \App\Models\Base\Builder
      */
-    public function forAdmin(?int $menuId = null, bool|string $currentLang = true): Builder
+    public function forAdmin(?int $menuId = null, mixed $currentLang = true): Builder
     {
         return $this->when(! is_null($menuId), function ($q) use ($menuId) {
             return $q->menuId($menuId);
@@ -69,10 +69,10 @@ class Page extends Model
     /**
      * Build a public query.
      *
-     * @param  bool|string  $currentLang
+     * @param  mixed  $currentLang
      * @return \App\Models\Base\Builder
      */
-    public function forPublic(bool|string $currentLang = true): Builder
+    public function forPublic(mixed $currentLang = true): Builder
     {
         return $this->joinLanguage($currentLang)->whereVisible();
     }
@@ -98,6 +98,18 @@ class Page extends Model
     public function menuId(int $id): Builder|static
     {
         return $this->where('menu_id', $id);
+    }
+
+    /**
+     * Add a where "type" clause to the query.
+     *
+     * @param  string  $value
+     * @param  string  $operator
+     * @return \App\Models\Base\Builder|static
+     */
+    public function typeName(string $value, string $operator = '='): Builder|static
+    {
+        return $this->where('type', $operator, $value);
     }
 
     /**

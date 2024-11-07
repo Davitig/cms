@@ -10,10 +10,10 @@ trait LanguageTrait
      * Build a query by foreign model.
      *
      * @param  int  $id
-     * @param  bool|string  $currentLang
+     * @param  mixed  $currentLang
      * @return \App\Models\Base\Builder
      */
-    public function byForeignLanguage(int $id, bool|string $currentLang = true): Builder
+    public function byForeignLanguage(int $id, mixed $currentLang = true): Builder
     {
         return $this->foreignId($id)->whereLanguage($currentLang);
     }
@@ -21,10 +21,10 @@ trait LanguageTrait
     /**
      * Add a where "language_id" clause to the query.
      *
-     * @param  bool|string  $currentLang
+     * @param  mixed  $currentLang
      * @return \App\Models\Base\Builder
      */
-    public function whereLanguage(bool|string $currentLang = true): Builder
+    public function whereLanguage(mixed $currentLang = true): Builder
     {
         return $this->where('language_id', language($currentLang, 'id'));
     }

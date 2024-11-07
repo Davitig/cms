@@ -30,11 +30,11 @@ trait HasLanguage
     /**
      * Add a "*_languages" join to the query.
      *
-     * @param  bool|string  $currentLang
+     * @param  mixed  $currentLang
      * @param  array|string  $columns
      * @return \App\Models\Base\Builder
      */
-    public function joinLanguage(bool|string $currentLang = true, array|string $columns = []): Builder
+    public function joinLanguage(mixed $currentLang = true, array|string $columns = []): Builder
     {
         $table = $this->getTable();
         $languageTable = $this->languages()->getRelated()->getTable();

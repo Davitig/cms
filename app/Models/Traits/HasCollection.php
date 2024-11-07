@@ -72,13 +72,13 @@ trait HasCollection
      * Build an admin query.
      *
      * @param  int|null  $collectionId
-     * @param  bool|string  $currentLang
+     * @param  mixed  $currentLang
      * @param  array|string  $columns
      * @return \App\Models\Base\Builder
      */
     public function forAdmin(
         ?int         $collectionId = null,
-        bool|string  $currentLang = true,
+        mixed  $currentLang = true,
         array|string $columns = []): Builder
     {
         return $this->when(! is_null($collectionId), function ($q) use ($collectionId) {
@@ -90,13 +90,13 @@ trait HasCollection
      * Build a public query.
      *
      * @param  int|null  $collectionId
-     * @param  bool|string  $currentLang
+     * @param  mixed  $currentLang
      * @param  array|string  $columns
      * @return \App\Models\Base\Builder
      */
     public function forPublic(
         ?int         $collectionId = null,
-        bool|string  $currentLang = true,
+        mixed  $currentLang = true,
         array|string $columns = []): Builder
     {
         return $this->when(! is_null($collectionId), function ($q) use ($collectionId) {
