@@ -10,7 +10,7 @@ use Illuminate\Filesystem\Filesystem;
 
 trait FileTrait
 {
-    use HasLanguage, PositionableTrait;
+    use PositionableTrait;
 
     /**
      * Get the model files.
@@ -22,30 +22,27 @@ trait FileTrait
      */
     public function getFiles(int $foreignId, bool $separated = true, array|string $columns = ['*']): Collection
     {
-        $imageExt = ['png', 'jpg', 'jpeg', 'gif', 'bmp'];
-
         $files = $this->forPublic($foreignId)->get($columns);
 
-        if (! $separated) {
+        if ($files->isEmpty() || ! $separated) {
             return $files;
         }
 
-        $images = $mixed = [];
+        $imageExt = ['png', 'jpg', 'jpeg', 'gif', 'bmp'];
 
-        if (! $files->isEmpty()) {
-            foreach ($files as $key => $value) {
-                $item = $files->pull($key);
+        $images = new Collection; $mixed = new Collection;
 
-                if (in_array(strtolower(pathinfo($item->file, PATHINFO_EXTENSION)), $imageExt)) {
-                    $images[] = $item;
-                } else {
-                    $mixed[] = $item;
-                }
+        foreach ($files as $key => $value) {
+            $item = $files->pull($key);
+
+            if (in_array(strtolower(pathinfo($item->file, PATHINFO_EXTENSION)), $imageExt)) {
+                $images->add($item);
+            } else {
+                $mixed->add($item);
             }
         }
 
-        $files->put('images', $images);
-        $files->put('mixed', $mixed);
+        $files->put('images', $images); $files->put('mixed', $mixed);
 
         return $files;
     }
@@ -71,7 +68,7 @@ trait FileTrait
      * @param  mixed  $currentLang
      * @return \App\Models\Base\Builder
      */
-    public function forPublic(int $foreignId, mixed $currentLang = true)
+    public function forPublic(int $foreignId, mixed $currentLang = true): Builder
     {
         return $this->joinLanguage($currentLang)
             ->byForeign($foreignId)

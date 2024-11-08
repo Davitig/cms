@@ -25,31 +25,35 @@
                 </div>
                 <!-- .text -->
                 <div class="row">
-                @if (! empty($files['mixed']))
-                    <div class="attached files">
-                        <ul class="list-unstyled">
-                            @foreach ($files['mixed'] as $item)
-                                <li>
-                                    <a href="{{$item->file}}" target="_blank">{{$item->title}}</a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    <!-- .files -->
-                @endif
-                @if (! empty($files['images']))
-                    <div class="attached images">
-                        @foreach ($files['images'] as $item)
-                            <div class="col-md-3 item">
-                                <a href="{{$item->file}}" class="img-pop" rel="photo" title="{{$item->title}}">
-                                    <img src="{{$item->file}}" width="270" height="180" alt="{{$item->title}}">
-                                </a>
-                            </div>
-                            <!-- .col-md-3 -->
-                        @endforeach
-                    </div>
-                    <!-- .images -->
-                @endif
+                    @if ($files->isNotEmpty())
+                        <div class="row">
+                            @if ($files->get('mixed')->isNotEmpty())
+                                <div class="attached files">
+                                    <ul class="list-unstyled">
+                                        @foreach ($files['mixed'] as $item)
+                                            <li>
+                                                <a href="{{$item->file}}" target="_blank">{{$item->title}}</a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                <!-- .files -->
+                            @endif
+                            @if ($files->get('images')->isNotEmpty())
+                                <div class="attached images">
+                                    @foreach ($files['images'] as $item)
+                                        <div class="col-md-3 item">
+                                            <a href="{{$item->file}}" title="{{$item->title}}" target="_blank">
+                                                <img src="{{$item->file}}" width="270" height="180" alt="{{$item->title}}">
+                                            </a>
+                                        </div>
+                                        <!-- .col-md-3 -->
+                                    @endforeach
+                                </div>
+                                <!-- .images -->
+                            @endif
+                        </div>
+                    @endif
                 </div>
             </div>
             <!-- .content -->
