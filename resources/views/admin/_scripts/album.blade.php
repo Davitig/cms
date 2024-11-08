@@ -61,36 +61,32 @@
         // Delete item(s)
         galleryEnv.on('click', 'a[data-delete]', function(e) {
             e.preventDefault();
-            let action = $(this).data('delete');
+            if (confirm("{{trans('general.confirm_delete_selected')}}") !== true) {
+                return;
+            }
             let ids = [];
+            let action = $(this).data('delete');
             if (action === 'multiselect') {
-                let perform = confirm("{{trans('general.confirm_delete_selected')}}");
-                if (perform !== true) return;
-                $('.select-item input:checked', galleryEnv).each(function(i, e) {
+                action = $('.select-item input:checked', galleryEnv).each(function(i, e) {
                     ids.push($(e).data('id'));
-                });
-            } else {
-                let perform = confirm("{{trans('general.confirm_delete')}}");
-                if (perform !== true) return;
-                ids = [$(this).data('id')];
+                }).closest('.image-options').find('[data-delete]').data('delete');
             }
 
-            if (ids.length) {
-                let input = {'ids':ids, '_method':'delete', '_token':"{{$csrfToken = csrf_token()}}"};
+            let input = {'ids':ids, '_method':'delete', '_token':"{{$csrfToken = csrf_token()}}"};
+            ids.push($(this).data('id'));
 
-                $.post('{{$routeIndex}}/' + ids[0], input, function(data) {
-                    // alert toastr message
-                    toastr[data.result](data.message);
+            $.post(action, input, function(data) {
+                // alert toastr message
+                toastr[data.result](data.message);
 
-                    if (data.result === 'success') {
-                        $.each(ids, function(i, e) {
-                            $('#item'+e, galleryEnv).remove();
-                        });
-                    }
-                }, 'json').fail(function(xhr) {
-                    alert(xhr.responseText);
-                });
-            }
+                if (data.result === 'success') {
+                    $.each(ids, function(i, e) {
+                        $('#item'+e, galleryEnv).remove();
+                    });
+                }
+            }, 'json').fail(function(xhr) {
+                alert(xhr.responseText);
+            });
         });
 
         // visibility of the item

@@ -80,7 +80,7 @@
                 <ul id="nestable-list" class="album-images list-unstyled row" data-insert="{{$parent->admin_sort == 'desc' ? 'prepend' : 'append'}}" data-uk-nestable="{maxDepth:1}">
                     @foreach($items as $item)
                         <li id="item{{$item->id}}" data-id="{{$item->id}}" data-pos="{{$item->position}}"
-                            data-url="{{cms_route('videos.edit', [$parent->id, $item->id])}}" class="item col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                            data-url="{{cms_route('videos.edit', [$item->gallery_id, $item->id])}}" class="item col-lg-4 col-md-6 col-sm-6 col-xs-12">
                             <div class="album-image">
                                 <a href="#" class="thumb embed-responsive embed-responsive-16by9" data-modal="edit">
                                     <iframe src="{{get_youtube_embed($item->file)}}" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe>
@@ -97,7 +97,9 @@
                                         <i class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></i>
                                     </a>
                                     <a href="#" data-modal="edit" title="{{trans('general.edit')}}"><i class="fa fa-pencil"></i></a>
-                                    <a href="#" data-delete="this" data-id="{{$item->id}}" title="{{trans('general.delete')}}"><i class="fa fa-trash"></i></a>
+                                    <a href="#" data-delete="{{cms_route('videos.destroy', [$item->gallery_id, $item->id])}}" data-id="{{$item->id}}" title="{{trans('general.delete')}}">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
                                 </div>
                                 <div class="btn-action"></div>
                             </div>
@@ -129,7 +131,6 @@
     @push('body.bottom')
         @include('admin._scripts.album', [
             'routeCreate' => cms_route('videos.create', [$parent->id]),
-            'routeIndex' => cms_route('videos.index', [$parent->id]),
             'routePosition' => cms_route('videos.updatePosition'),
             'sort' => $parent->admin_sort,
             'currentPage' => $items->currentPage(),

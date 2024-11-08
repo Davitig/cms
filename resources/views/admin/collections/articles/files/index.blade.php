@@ -113,14 +113,13 @@
                                     <div class="select-item dib">
                                         <input type="checkbox" data-id="{{$item->id}}" class="cbr">
                                     </div>
-                                    <a href="#" data-url="{{cms_route('articles.files.visibility', [$item->id])}}"
-                                       class="visibility" title="{{trans('general.visibility')}}">
+                                    <a href="#" data-url="{{cms_route('articles.files.visibility', [$item->id])}}" class="visibility" title="{{trans('general.visibility')}}">
                                         <i class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></i>
                                     </a>
-                                    <a href="#" data-modal="edit" title="{{trans('general.edit')}}"><i
-                                            class="fa fa-pencil"></i></a>
-                                    <a href="#" data-delete="this" data-id="{{$item->id}}"
-                                       title="{{trans('general.delete')}}"><i class="fa fa-trash"></i></a>
+                                    <a href="#" data-modal="edit" title="{{trans('general.edit')}}"><i class="fa fa-pencil"></i></a>
+                                    <a href="#" data-delete="{{cms_route('articles.files.destroy', [$item->article_id, $item->id])}}" data-id="{{$item->id}}" title="{{trans('general.delete')}}">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
                                 </div>
                                 <div class="btn-action"></div>
                             </div>
@@ -134,7 +133,6 @@
     @push('body.bottom')
         @include('admin._scripts.album', [
             'routeCreate' => cms_route('articles.files.create', [$foreignModel->id]),
-            'routeIndex' => cms_route('articles.files.index', [$foreignModel->id]),
             'routePosition' => cms_route('articles.files.updatePosition'),
             'sort' => 'desc',
             'currentPage' => $items->currentPage(),

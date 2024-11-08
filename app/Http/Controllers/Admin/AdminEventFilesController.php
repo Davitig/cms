@@ -161,7 +161,7 @@ class AdminEventFilesController extends Controller
      */
     public function destroy(int $eventId, int $id)
     {
-        $this->model->destroy($this->request->get('ids'));
+        $this->model->destroy($this->request->get('ids', $id));
 
         if (request()->expectsJson()) {
             return response()->json(fill_data(

@@ -91,7 +91,9 @@
                                         <i class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></i>
                                     </a>
                                     <a href="#" data-modal="edit" title="{{trans('general.edit')}}"><i class="fa fa-pencil"></i></a>
-                                    <a href="#" data-delete="this" data-id="{{$item->id}}" title="{{trans('general.delete')}}"><i class="fa fa-trash"></i></a>
+                                    <a href="#" data-delete="{{cms_route('slider.destroy', [$item->id])}}" data-id="{{$item->id}}" title="{{trans('general.delete')}}">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
                                 </div>
                                 <div class="btn-action"></div>
                             </div>
@@ -104,7 +106,6 @@
     @push('body.bottom')
         @include('admin._scripts.album', [
             'routeCreate' => cms_route('slider.create'),
-            'routeIndex' => cms_route('slider.index'),
             'routePosition' => cms_route('slider.updatePosition'),
             'sort' => 'desc',
             'currentPage' => 1,

@@ -17,7 +17,7 @@
                 <i class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></i>
             </a>
             <a href="#" data-modal="edit"><i class="fa fa-pencil"></i></a>
-            <a href="#" data-delete="this" data-id="{{$item->id}}"><i class="fa fa-trash"></i></a>
+            <a href="#" data-delete="{{cms_route('videos.destroy', [$item->gallery_id, $item->id])}}" data-id="{{$item->id}}"><i class="fa fa-trash"></i></a>
         </div>
     </div>
 </li>

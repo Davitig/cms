@@ -62,6 +62,6 @@ return [
     // confirmations
     'confirm_action' => 'ნამდვილად გსურთ ამ მოქმედების შესრულება?',
     'confirm_delete' => 'ნამდვილად გსურთ წაშლა?',
-    'confirm_delete_selected' => 'ნამდვილად გსურთ ყველა მონიშნულის წაშლა?',
+    'confirm_delete_selected' => 'ნამდვილად გსურთ მონიშნულის წაშლა?',
 
 ];

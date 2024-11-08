@@ -80,7 +80,7 @@
                 <ul id="nestable-list" class="album-images list-unstyled row" data-insert="{{$parent->admin_sort == 'desc' ? 'prepend' : 'append'}}" data-uk-nestable="{maxDepth:1}">
                     @foreach($items as $item)
                         <li id="item{{$item->id}}" data-id="{{$item->id}}" data-pos="{{$item->position}}"
-                            data-url="{{cms_route('photos.edit', [$parent->id, $item->id])}}" class="item col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                            data-url="{{cms_route('photos.edit', [$item->gallery_id, $item->id])}}" class="item col-lg-3 col-md-4 col-sm-4 col-xs-6">
                             <div class="album-image">
                                 <a href="#" class="thumb" data-modal="edit">
                                     @if (in_array($ext = pathinfo($item->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
@@ -103,7 +103,9 @@
                                         <i class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></i>
                                     </a>
                                     <a href="#" data-modal="edit" title="{{trans('general.edit')}}"><i class="fa fa-pencil"></i></a>
-                                    <a href="#" data-delete="this" data-id="{{$item->id}}" title="{{trans('general.delete')}}"><i class="fa fa-trash"></i></a>
+                                    <a href="#" data-delete="{{cms_route('photos.destroy', [$item->gallery_id, $item->id])}}" data-id="{{$item->id}}" title="{{trans('general.delete')}}">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
                                 </div>
                                 <div class="btn-action"></div>
                             </div>
@@ -135,7 +137,6 @@
     @push('body.bottom')
         @include('admin._scripts.album', [
             'routeCreate' => cms_route('photos.create', [$parent->id]),
-            'routeIndex' => cms_route('photos.index', [$parent->id]),
             'routePosition' => cms_route('photos.updatePosition'),
             'sort' => $parent->admin_sort,
             'currentPage' => $items->currentPage(),

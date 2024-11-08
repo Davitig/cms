@@ -41,9 +41,8 @@
         </li>
         @if ($foreignModel->collection_type)
             <li>
-                <a href="{{cms_route($foreignModel->collection_type.'.index', [$foreignModel->type_id])}}">
-                    <span class="visible-xs"><i
-                            class="{{$iconType = icon_type($foreignModel->collection_type)}}"></i></span>
+                <a href="{{cms_route($foreignModel->collection_type . '.index', [$foreignModel->type_id])}}">
+                    <span class="visible-xs"><i class="{{$iconType = icon_type($foreignModel->collection_type)}}"></i></span>
                     <div class="hidden-xs">
                         <i class="{{$iconType}}"></i> {{ucfirst($foreignModel->collection_type)}}
                     </div>
@@ -52,7 +51,7 @@
         @endif
         @if (array_key_exists($foreignModel->type, cms_pages('explicit')))
             <li>
-                <a href="{{cms_route($foreignModel->type.'.index')}}">
+                <a href="{{cms_route($foreignModel->type . '.index')}}">
                     <span class="visible-xs"><i class="{{$iconType = icon_type($foreignModel->type)}}"></i></span>
                     <div class="hidden-xs">
                         <i class="{{$iconType}}"></i> {{ucfirst($foreignModel->type)}}
@@ -134,14 +133,13 @@
                                     <div class="select-item dib">
                                         <input type="checkbox" data-id="{{$item->id}}" class="cbr">
                                     </div>
-                                    <a href="#" data-url="{{cms_route('pages.files.visibility', [$item->id])}}"
-                                       class="visibility" title="{{trans('general.visibility')}}">
+                                    <a href="#" data-url="{{cms_route('pages.files.visibility', [$item->id])}}" class="visibility" title="{{trans('general.visibility')}}">
                                         <i class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></i>
                                     </a>
-                                    <a href="#" data-modal="edit" title="{{trans('general.edit')}}"><i
-                                            class="fa fa-pencil"></i></a>
-                                    <a href="#" data-delete="this" data-id="{{$item->id}}"
-                                       title="{{trans('general.delete')}}"><i class="fa fa-trash"></i></a>
+                                    <a href="#" data-modal="edit" title="{{trans('general.edit')}}"><i class="fa fa-pencil"></i></a>
+                                    <a href="#" data-delete="{{cms_route('pages.files.destroy', [$item->page_id, $item->id])}}" data-id="{{$item->id}}" title="{{trans('general.delete')}}">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
                                 </div>
                                 <div class="btn-action"></div>
                             </div>
@@ -155,7 +153,6 @@
     @push('body.bottom')
         @include('admin._scripts.album', [
             'routeCreate' => cms_route('pages.files.create', [$foreignModel->id]),
-            'routeIndex' => cms_route('pages.files.index', [$foreignModel->id]),
             'routePosition' => cms_route('pages.files.updatePosition'),
             'sort' => 'desc',
             'currentPage' => $items->currentPage(),

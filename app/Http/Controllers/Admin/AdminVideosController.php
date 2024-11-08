@@ -166,7 +166,7 @@ class AdminVideosController extends Controller
      */
     public function destroy(int $galleryId, int $id)
     {
-        $this->model->destroy($this->request->get('ids'));
+        $this->model->destroy($this->request->get('ids', $id));
 
         if (request()->expectsJson()) {
             return response()->json(fill_data(
