@@ -1,16 +1,15 @@
-<div class="modal fade" id="translations-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title">Translation{{is_multilanguage() ? ' - ' . language(true, 'full_name') : ''}}</h4>
-            </div>
-            {{ html()->modelForm($current, 'post', cms_route('translations.form.post'))->class('form-horizontal')->open() }}
-                @include('admin.translations.modal.form')
-            {{ html()->form()->close() }}
+<div class="trans-modal-bg trans-closable" style="opacity:.2"></div>
+<div class="trans-closable trans-modal" tabindex="-1">
+    <div class="trans-dialog">
+        <div class="trans-header clearfix">
+            <button type="button" class="trans-close-btn" data-dismiss="trans-modal">
+                <span>&times;</span>
+            </button>
+            <div class="trans-title">Translation{{is_multilanguage() ? ' - ' . language(true, 'full_name') : ''}}</div>
         </div>
+        {{ html()->modelForm($current, 'post', cms_route('translations.form.post'))->id('trans-form')->open() }}
+        @include('admin.translations.modal.form')
+        {{ html()->form()->close() }}
     </div>
     @include('admin.translations.modal.scripts')
 </div>

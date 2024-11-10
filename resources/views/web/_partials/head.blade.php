@@ -19,6 +19,5 @@
     @endif
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" media="all" href="{{asset('assets/css/main.css')}}">
-    <link rel="stylesheet" media="all" href="{{asset('assets/css/' . language() . '.css')}}">
     <script src="{{asset('assets/libs/js/jquery-1.11.3.min.js')}}"></script>
 </head>

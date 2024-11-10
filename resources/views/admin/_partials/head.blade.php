@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{{ asset('assets/libs/css/xenon-forms.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/css/xenon-components.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/css/xenon-skins.css') }}">
-    @stack('head')
     <link rel="stylesheet" href="{{ asset('assets/libs/css/custom.css') }}">
     <script src="{{ asset('assets/libs/js/jquery-1.11.1.min.js') }}"></script>
+    @stack('head')
 </head>

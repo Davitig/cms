@@ -3,9 +3,9 @@
     <div class="col-sm-6">
         {{ html()->text('title')->id('title' . $current->language)->class('form-control')->data('lang', 1) }}
         @if ($error)
-        <span class="text-danger">{{$error}}</span>
+            <span class="text-danger">{{$error}}</span>
         @endif
-        <div class="desc">The title for the "value". It's visible only for CMS Users</div>
+        <div class="desc">The title for the "value." It's visible only for CMS Users</div>
     </div>
 </div>
 
@@ -22,7 +22,7 @@
         @if ($error)
             <span class="text-danger">{{$error}}</span>
         @endif
-        <div class="desc">The code is the identifier for the "value" (it's not changeable after creation!)</div>
+        <div class="desc">The code is the identifier for the "value" (Not changeable after creation)</div>
     </div>
 </div>
 
@@ -33,7 +33,7 @@
     <div class="col-sm-6">
         {{ html()->text('value')->id('value' . $current->language)->class('form-control') }}
         @if ($error)
-        <span class="text-danger">{{$error}}</span>
+            <span class="text-danger">{{$error}}</span>
         @endif
         <div class="desc">The value contains the translated text that will be displayed on the website</div>
     </div>

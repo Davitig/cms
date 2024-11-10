@@ -1,12 +1,12 @@
 <script type="text/javascript">
 $(function () {
-    let modalSelector = $('#translations-modal');
+    let transModalSelector = $('.trans-modal');
 
-    $('form', modalSelector).on('submit', function (e) {
+    $('form', transModalSelector).on('submit', function (e) {
         e.preventDefault();
         let form = $(this);
         let lang = form.data('lang') ?? '';
-        $('.form-group', form).find('.text-danger').remove();
+        $('.trans-form-group', form).find('.trans-text-danger').remove();
 
         $.ajax({
             type: 'POST',
@@ -14,8 +14,8 @@ $(function () {
             dataType: 'json',
             data: form.serialize(),
             success: function (data) {
-                $('.modal-footer', form).prepend(
-                    $('<span class="text-success">saved</span>').delay(1000).fadeOut(300, function () {
+                $('.trans-modal-footer', form).prepend(
+                    $('<span class="trans-text-success">saved</span>').delay(1000).fadeOut(300, function () {
                         $(this).remove();
                     })
                 ).fadeIn(300);
@@ -31,17 +31,17 @@ $(function () {
                 }
                 if (! lang) {
                 @if (is_multilanguage())
-                    modalSelector.removeClass('fade');
+                    transModalSelector.removeClass('fade');
                     let ev = jQuery.Event('click');
                     ev.f2 = true;
                     $('[data-trans="'+data.code+'"]').trigger(ev);
                 @endif
-                    modalSelector.modal('hide');
+                    transModalSelector.trigger('close.trans.modal');
                 } else {
-                    $('form [name="title"]', modalSelector).each(function (i, e) {
+                    $('form [name="title"]', transModalSelector).each(function (i, e) {
                         $(e).val(data.title);
                     });
-                    $('form [name="type"]', modalSelector).each(function (i, e) {
+                    $('form [name="type"]', transModalSelector).each(function (i, e) {
                         $(e).val(data.type);
                     });
                 }
@@ -57,18 +57,19 @@ $(function () {
                 let errors = xhr.responseJSON.errors;
                 $.each(errors, function (index, element) {
                     let field = $('#' + index + lang, form);
-                    let errorMsg = '<div class="text-danger">'+element+'</div>';
+                    let errorMsg = '<div class="trans-text-danger">'+element+'</div>';
                     field.after(errorMsg);
                 });
             }
         });
     });
 
-    $('form [name="value"]', modalSelector).on('keyup', function () {
+    let trans = $('[data-trans="{{$current->code}}"]');
+
+    $('form [name="value"]', transModalSelector).on('keyup', function () {
         let lang = $(this).closest('form').data('lang');
 
         if (! lang || lang === '{{$currentLang}}') {
-            let trans = $('[data-trans="{{$current->code}}"]');
             let attrName = trans.data('trans-attr');
             if (! attrName) {
                 trans.text($(this).val());
@@ -78,9 +79,29 @@ $(function () {
         }
     });
 
-    modalSelector.modal('show');
-    modalSelector.on('hidden.bs.modal', function () {
-        $(this).remove();
+    $('.trans-nav a', transModalSelector).on('click', function (e) {
+        e.preventDefault();
+        $(this).parent().addClass('active').siblings().each((i, e) => $(e).removeClass('active'));
+        let tab = $(this).attr('href');
+        $(tab, transModalSelector).addClass('active').siblings().each((i, e) => $(e).removeClass('active'));
+    });
+
+    $('[data-dismiss]', transModalSelector).on('click', function () {
+        transModalSelector.trigger('close.trans.modal');
+    });
+    $(document).on('click', function (e) {
+        if (! $(e.target).closest('.trans-dialog').length) {
+            transModalSelector.trigger('close.trans.modal');
+        }
+    });
+
+    transModalSelector.on('close.trans.modal', function () {
+        $(this).fadeOut(200, function () {
+            $(this).remove();
+        });
+        $('.trans-modal-bg').fadeOut(200, function () {
+            $(this).remove();
+        });
     });
 });
 </script>
