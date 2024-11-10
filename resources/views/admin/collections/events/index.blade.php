@@ -65,7 +65,7 @@
                                             <a href="#" class="transfer btn btn-white" title="Transfer to another collection" data-id="{{$item->id}}">
                                                 <span class="{{$iconParent}}"></span>
                                             </a>
-                                            {{ html()->form('post', cms_route('events.visibility', [$item->id]))->id('visibility' . $item->id)->class('visibility')->open() }}
+                                            {{ html()->form('put', cms_route('events.visibility', [$item->id]))->id('visibility' . $item->id)->class('visibility')->open() }}
                                             <button type="submit" class="btn btn-{{$item->visible ? 'white' : 'gray'}}" title="{{trans('general.visibility')}}">
                                                 <span class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></span>
                                             </button>

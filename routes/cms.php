@@ -65,7 +65,7 @@ Route::group([
         $router->controller(AdminPagesController::class)->group(function ($router) {
             $router->get('pages/listable-types', 'getListableTypes')
                 ->name('pages.getListableTypes');
-            $router->post('pages/{id}/visibility', 'visibility')->name('pages.visibility');
+            $router->put('pages/{id}/visibility', 'visibility')->name('pages.visibility');
             $router->put('pages/position', 'updatePosition')->name('pages.updatePosition');
             $router->get('pages/templates', 'getTemplates')->name('pages.templates');
             $router->put('pages/transfer/{menuId}', 'transfer')->name('pages.transfer');
@@ -83,7 +83,7 @@ Route::group([
         // type routes from config
         foreach ((array) cms_config('type_routes') as $prefix => $routes) {
             foreach ((array) $routes as $route => $controller) {
-                $router->post($route . '/{id}/visibility', [$controller, 'visibility'])
+                $router->put($route . '/{id}/visibility', [$controller, 'visibility'])
                     ->name($route . '.visibility');
                 $router->put($route . '/position', [$controller, 'updatePosition'])
                     ->name($route . '.updatePosition');
@@ -97,7 +97,7 @@ Route::group([
 
         // file routes from config
         foreach ((array) cms_config('file_routes') as $route => $controller) {
-            $router->post($route . '/files/{id}/visibility', [$controller, 'visibility'])
+            $router->put($route . '/files/{id}/visibility', [$controller, 'visibility'])
                 ->name($route . '.files.visibility');
             $router->put($route . '/files/position', [$controller, 'updatePosition'])
                 ->name($route . '.files.updatePosition');
@@ -125,7 +125,7 @@ Route::group([
             ->name('filemanager');
 
         // slider
-        $router->post('slider/{id}/visibility', [AdminSliderController::class, 'visibility'])
+        $router->put('slider/{id}/visibility', [AdminSliderController::class, 'visibility'])
             ->name('slider.visibility');
         $router->put('slider/position', [AdminSliderController::class, 'updatePosition'])
             ->name('slider.updatePosition');

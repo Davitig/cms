@@ -95,7 +95,7 @@
             let item = $(this);
             let url = item.data('url');
 
-            let input = {'_token':"{{$csrfToken}}"};
+            let input = {'_token': '{{$csrfToken}}', '_method': 'put'};
             $.post(url, input, function(data) {
                 item.find('i').attr('class', data ? 'fa fa-eye' : 'fa fa-eye-slash');
             }, 'json').fail(function(xhr) {
@@ -111,16 +111,16 @@
             let is_sortable = albumImageSelector.sortable('instance');
 
             if( ! is_sortable) {
-                $(".gallery-env .album-images").sortable({
+                $('.gallery-env .album-images').sortable({
                     items: '> li',
                     containment: 'parent'
                 });
 
-                $(".album-sorting-info").stop().slideDown(300);
+                $('.album-sorting-info').stop().slideDown(300);
                 $('#save-tree').show().prop('disabled', false);
             } else {
                 albumImageSelector.sortable('destroy');
-                $(".album-sorting-info").stop().slideUp(300);
+                $('.album-sorting-info').stop().slideUp(300);
             }
         });
 
