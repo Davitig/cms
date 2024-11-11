@@ -2,6 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::namespace('Web')->middleware('web.viewData')->group(function ($router) {
+Route::namespace('Web')->group(function ($router) {
     // web routes
 });

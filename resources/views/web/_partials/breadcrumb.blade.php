@@ -8,12 +8,12 @@
                     @if (! $loop->last)
                         <a href="{{web_url([$prevSlug, $item->slug])}}">
                             @endif
-                            {{$item->short_title ?: $item->title}}
+                            {{$item->short_title ?? $item->title}}
                             @if (! $loop->last)
                         </a>
                     @endif
                 </li>
-                @php($prevSlug = $item->slug)
+                @php($prevSlug .= '/' . $item->slug)
             @endforeach
         @endif
     </ul>

@@ -34,7 +34,7 @@ Route::prefix(cms_slug(null, true))->name(cms_route_name())->group(function ($ro
     });
 
     // lockscreen
-    $router->middleware(['cms.lockscreen', 'cms.viewData'])
+    $router->middleware('cms.lockscreen')
         ->controller(AdminLockscreenController::class)->group(function ($router) {
             $router->get('lockscreen', 'getLockscreen')->name('lockscreen');
             $router->post('lockscreen', 'postLockscreen')->name('lockscreen.post');
@@ -42,7 +42,7 @@ Route::prefix(cms_slug(null, true))->name(cms_route_name())->group(function ($ro
         });
 
     // Authenticated
-    $router->middleware(['cms.auth', 'cms.viewData'])->group(function ($router) {
+    $router->middleware('cms.auth')->group(function ($router) {
         // dashboard
         $router->get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
