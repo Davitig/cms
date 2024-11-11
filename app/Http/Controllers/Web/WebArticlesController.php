@@ -19,7 +19,6 @@ class WebArticlesController extends Controller
      * Create a new controller instance.
      *
      * @param  \App\Models\Article\Article  $model
-     * @return void
      */
     public function __construct(Article $model)
     {

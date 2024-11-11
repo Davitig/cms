@@ -14,8 +14,6 @@ class AdminPageFilesController extends Controller
 
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct(protected PageFile $model, protected Request $request) {}
 

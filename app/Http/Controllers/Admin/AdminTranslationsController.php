@@ -14,8 +14,6 @@ class AdminTranslationsController extends Controller implements HasMiddleware
 
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct(protected Translation $model) {}
 

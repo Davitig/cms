@@ -14,8 +14,6 @@ class AdminVideosController extends Controller
 
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct(protected Video $model, protected Request $request) {}
 

@@ -14,7 +14,6 @@ class AdminLanguagesController extends Controller
      * Create a new controller instance.
      *
      * @param  \App\Models\Language  $model
-     * @return void
      */
     public function __construct(protected Language $model) {}
 

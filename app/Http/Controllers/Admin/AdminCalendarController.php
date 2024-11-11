@@ -10,8 +10,6 @@ class AdminCalendarController extends Controller
 {
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct(protected Calendar $model, protected Request $request) {}
 

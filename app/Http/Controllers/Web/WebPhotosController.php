@@ -19,7 +19,6 @@ class WebPhotosController extends Controller
      * Create a new controller instance.
      *
      * @param  \App\Models\Photo  $model
-     * @return void
      */
     public function __construct(Photo $model)
     {

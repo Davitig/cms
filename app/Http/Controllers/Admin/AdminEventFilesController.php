@@ -14,8 +14,6 @@ class AdminEventFilesController extends Controller
 
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct(protected EventFile $model, protected Request $request) {}
 

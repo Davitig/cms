@@ -18,7 +18,6 @@ class WebFaqController extends Controller
      * Create a new controller instance.
      *
      * @param  \App\Models\Faq  $model
-     * @return void
      */
     public function __construct(Faq $model)
     {

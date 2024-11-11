@@ -19,7 +19,6 @@ class AdminUserRouteAccessComposer
 
     /**
      * Create a new view composer instance.
-     *
      */
     public function __construct(AuthManager $auth)
     {

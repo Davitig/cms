@@ -12,7 +12,6 @@ class AdminEloquentUserProvider extends EloquentUserProvider
      *
      * @param  \Illuminate\Contracts\Hashing\Hasher  $hasher
      * @param  string  $model
-     * @return void
      */
     public function __construct(HasherContract $hasher, $model)
     {

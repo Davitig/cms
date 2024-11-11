@@ -19,7 +19,6 @@ class WebVideosController extends Controller
      * Create a new controller instance.
      *
      * @param  \App\Models\Video  $model
-     * @return void
      */
     public function __construct(Video $model)
     {

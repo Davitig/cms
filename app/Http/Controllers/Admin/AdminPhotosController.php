@@ -14,8 +14,6 @@ class AdminPhotosController extends Controller
 
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct(protected Photo $model, protected Request $request) {}
 

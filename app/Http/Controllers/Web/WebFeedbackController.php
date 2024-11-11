@@ -23,7 +23,6 @@ class WebFeedbackController extends Controller
      * Create a new controller instance.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return void
      */
     public function __construct(Request $request)
     {

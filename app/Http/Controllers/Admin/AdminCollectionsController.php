@@ -11,8 +11,6 @@ class AdminCollectionsController extends Controller
 {
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct(protected Collection $model) {}
 

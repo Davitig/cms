@@ -14,8 +14,6 @@ class AdminFaqController extends Controller
 
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct(protected Faq $model, protected Request $request) {}
 

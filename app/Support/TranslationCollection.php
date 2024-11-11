@@ -9,8 +9,6 @@ class TranslationCollection
 {
     /**
      * Create a new TranslationCollection instance.
-     *
-     * @return void
      */
     public function __construct(protected ?Collection $collection = null) {}
 

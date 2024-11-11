@@ -19,7 +19,6 @@ class WebEventsController extends Controller
      * Create a new controller instance.
      *
      * @param  \App\Models\Event\Event  $model
-     * @return void
      */
     public function __construct(Event $model)
     {

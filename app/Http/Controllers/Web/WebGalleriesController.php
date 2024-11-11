@@ -18,7 +18,6 @@ class WebGalleriesController extends Controller
      * Create a new controller instance.
      *
      * @param  \App\Models\Gallery\Gallery  $model
-     * @return void
      */
     public function __construct(Gallery $model)
     {
