@@ -6,6 +6,7 @@ return [
     App\Providers\EloquentUserServiceProvider::class,
     App\Providers\ExceptionHandlerServiceProvider::class,
     App\Providers\GlideServiceProvider::class,
+    App\Providers\Test::class,
     App\Providers\ViewComposerServiceProvider::class,
     App\Providers\Web\DynamicRouteServiceProvider::class,
     Cocur\Slugify\Bridge\Laravel\SlugifyServiceProvider::class,

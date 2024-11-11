@@ -11,17 +11,7 @@ use League\Glide\ServerFactory;
 class GlideServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
-     * Bootstrap the application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
-
-    /**
-     * Register the application services.
+     * Register services.
      *
      * @return void
      */
@@ -40,6 +30,16 @@ class GlideServiceProvider extends ServiceProvider implements DeferrableProvider
                 'group_cache_in_folders' => false
             ]))->getServer();
         });
+    }
+
+    /**
+     * Bootstrap services.
+     *
+     * @return void
+     */
+    public function boot(): void
+    {
+        //
     }
 
     /**

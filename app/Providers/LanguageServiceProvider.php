@@ -38,7 +38,17 @@ class LanguageServiceProvider extends ServiceProvider
     protected int $segmentsCount = 0;
 
     /**
-     * Bootstrap the application services.
+     * Register services.
+     *
+     * @return void
+     */
+    public function register(): void
+    {
+        //
+    }
+
+    /**
+     * Bootstrap services.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Illuminate\Contracts\Config\Repository  $config
@@ -135,15 +145,5 @@ class LanguageServiceProvider extends ServiceProvider
                     implode('/', $this->segments) . $query
             ]);
         }
-    }
-
-    /**
-     * Register the application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
     }
 }

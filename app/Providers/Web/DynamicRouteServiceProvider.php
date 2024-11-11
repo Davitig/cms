@@ -120,7 +120,17 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     protected array $requestMethods = [];
 
     /**
-     * Bootstrap the application dynamic route.
+     * Register services.
+     *
+     * @return void
+     */
+    public function register(): void
+    {
+        //
+    }
+
+    /**
+     * Bootstrap services.
      *
      * @param  \Illuminate\Contracts\Config\Repository  $config
      * @return void
@@ -173,9 +183,9 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     {
         $this->configure();
 
-        $this->router->namespace($this->namespace)->middleware('web')->group(function () {
-            $this->setRoute();
-        });
+        $this->router->namespace($this->namespace)
+            ->middleware('web')
+            ->group(fn () => $this->setRoute());
     }
 
     /**
@@ -444,15 +454,5 @@ final class DynamicRouteServiceProvider extends ServiceProvider
         }
 
         return ltrim($namespace . 'Controller', '\\');
-    }
-
-    /**
-     * Register the application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
     }
 }

@@ -9,7 +9,17 @@ use ReflectionClass;
 class ElfinderServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap any application services.
+     * Register services.
+     *
+     * @return void
+     */
+    public function register(): void
+    {
+        parent::register();
+    }
+
+    /**
+     * Bootstrap services.
      *
      * @param  \Illuminate\Routing\Router  $router
      * @return void
@@ -48,15 +58,5 @@ class ElfinderServiceProvider extends ServiceProvider
             $router->get('popup/{input_id}', ['as' => 'filemanager.popup', 'uses' => 'ElfinderController@showPopup']);
             $router->get('tinymce4', ['as' => 'filemanager.tinymce4', 'uses' => 'ElfinderController@showTinyMCE4']);
         });
-    }
-
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register(): void
-    {
-        parent::register();
     }
 }
