@@ -16,7 +16,7 @@ class AdminCmsUserWithFullAccess
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! $request->user()->hasFullAccess()) {
+        if (! $request->user('cms')->hasFullAccess()) {
             if ($request->expectsJson()) {
                 return response()->json('Forbidden', 403);
             }

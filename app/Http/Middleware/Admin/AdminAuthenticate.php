@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware\Admin;
 
+use App\Models\CmsUser;
 use App\Models\Permission;
 use Closure;
 use Illuminate\Http\Request;
@@ -21,7 +22,9 @@ class AdminAuthenticate
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! $request->user()) {
+        $user = $request->user('cms');
+
+        if (is_null($user)) {
             if ($request->expectsJson()) {
                 return response()->json('Unauthorized.', 401);
             }
@@ -29,11 +32,11 @@ class AdminAuthenticate
             return redirect()->guest(cms_route('login'));
         }
 
-        if ($request->user()->blocked) {
+        if ($user->blocked) {
             throw new AccessDeniedHttpException('Forbidden');
         }
 
-        if ($request->user()->hasLockScreen()) {
+        if ($user->hasLockScreen()) {
             $redirect = redirect();
 
             $redirect->setIntendedUrl($request->fullUrl());
@@ -41,7 +44,7 @@ class AdminAuthenticate
             return $redirect->to(cms_route('lockscreen'));
         }
 
-        $this->checkRoutePermission($request);
+        $this->checkRoutePermission($user, $request->route()->getName());
 
         return $next($request);
     }
@@ -49,24 +52,25 @@ class AdminAuthenticate
     /**
      * Determine if the user has access to the given route.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\CmsUser  $user
+     * @param  string  $routeName
      * @return void
      *
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
-    private function checkRoutePermission(Request $request): void
+    private function checkRoutePermission(CmsUser $user, string $routeName): void
     {
-        if ($request->user()->hasFullAccess()) {
+        if ($user->hasFullAccess()) {
             return;
         }
 
-        $routeName = str_replace(cms_route_name(), '', $request->route()->getName());
+        $routeName = str_replace(cms_route_name(), '', $routeName);
 
         $routeGroup = substr($routeName, 0, strpos($routeName, '.'));
 
         if (! in_array($routeGroup, Permission::$routeGroupsAllowed)
             && ! in_array($routeName, Permission::$routeNamesAllowed)
-            && ! (new Permission)->roleId($request->user()->cms_user_role_id)->hasAccess($routeName)
+            && ! (new Permission)->roleId($user->cms_user_role_id)->hasAccess($routeName)
         ) {
             throw new AccessDeniedHttpException('Forbidden');
         }

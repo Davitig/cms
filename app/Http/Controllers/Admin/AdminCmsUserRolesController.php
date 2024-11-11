@@ -122,14 +122,4 @@ class AdminCmsUserRolesController extends Controller implements HasMiddleware
 
         return back()->with('alert', fill_data('success', trans('database.deleted')));
     }
-
-    /**
-     * Get the authenticated user instance.
-     *
-     * @return \Illuminate\Contracts\Auth\Authenticatable
-     */
-    protected function user()
-    {
-        return $this->guard->user();
-    }
 }

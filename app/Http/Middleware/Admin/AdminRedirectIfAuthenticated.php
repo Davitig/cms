@@ -17,7 +17,9 @@ class AdminRedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! is_null($request->user()) && ! $request->user()->hasLockScreen()) {
+        $user = $request->user('cms');
+
+        if (! is_null($user) && ! $user->hasLockScreen()) {
             if ($request->expectsJson()) {
                 return response()->json('Forbidden', 403);
             }

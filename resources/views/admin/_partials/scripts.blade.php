@@ -82,11 +82,9 @@
             });
         });
         @if (session()->has('alert'))
-
             toastr["{{session('alert.result')}}"]("{{session('alert.message')}}");
         @endif
         @if (! session()->has('includeLockscreen') && $cmsSettings->get('lockscreen'))
-
         lockscreen('{{$cmsSettings->get('lockscreen')}}', '{{cms_route('lockscreen.post')}}');
         @endif
     });

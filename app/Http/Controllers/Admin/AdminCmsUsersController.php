@@ -28,15 +28,15 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
     {
         return [
             new Middleware(function (Request $request, Closure $next) {
-                if (! $request->user()->hasFullAccess()) {
+                if (! $request->user('cms')->hasFullAccess()) {
                     throw new AccessDeniedHttpException('Forbidden');
                 }
 
                 return $next($request);
             }, only: ['create', 'store']),
             new Middleware(function (Request $request, Closure $next) {
-                if (! $request->user()->hasFullAccess()
-                    && $request->user()->id != $request->route('cms_user')
+                if (! $request->user('cms')->hasFullAccess()
+                    && $request->user('cms')->id != $request->route('cms_user')
                 ) {
                     throw new AccessDeniedHttpException('Forbidden');
                 }
@@ -54,11 +54,11 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
      */
     public function index(Request $request)
     {
-        $data['items'] = $this->model->when(! $request->user()->hasFullAccess(),
+        $data['items'] = $this->model->when(! $request->user('cms')->hasFullAccess(),
             function ($q) use ($request) {
                 $request->offsetUnset('role');
 
-                return $q->whereKey($request->user()->id);
+                return $q->whereKey($request->user('cms')->id);
             }
         )->joinRole()->adminFilter($request)
             ->orderDesc(true)
@@ -179,8 +179,8 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
      */
     public function destroy(int $id)
     {
-        if (request()->user()->hasFullAccess()) {
-            if (request()->user()->id == $id) {
+        if (request()->user('cms')->hasFullAccess()) {
+            if (request()->user('cms')->id == $id) {
                 throw new AccessDeniedHttpException('Forbidden');
             }
         } else {

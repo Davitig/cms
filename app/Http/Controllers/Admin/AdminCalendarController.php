@@ -22,7 +22,7 @@ class AdminCalendarController extends Controller
      */
     public function index()
     {
-        $data['items'] = $this->model->byUserId($this->request->user()->id)
+        $data['items'] = $this->model->byUserId($this->request->user('cms')->id)
             ->inactive()
             ->get();
 
@@ -38,7 +38,7 @@ class AdminCalendarController extends Controller
     {
         $date = $this->request->all(['start', 'end']);
 
-        $data = $this->model->byUserId($this->request->user()->id)
+        $data = $this->model->byUserId($this->request->user('cms')->id)
             ->active($date['start'], $date['end'])
             ->get();
 
@@ -61,7 +61,7 @@ class AdminCalendarController extends Controller
         } else {
             $input = $this->request->all();
             $input['color'] = $this->model->getRandomColor();
-            $input['cms_user_id'] = $this->request->user()->id;
+            $input['cms_user_id'] = $this->request->user('cms')->id;
 
             $this->model = $this->model->create($input);
         }
@@ -82,7 +82,7 @@ class AdminCalendarController extends Controller
      */
     public function destroy()
     {
-        $this->model->byUserId($this->request->user()->id)
+        $this->model->byUserId($this->request->user('cms')->id)
             ->whereKey($this->request->get('id'))
             ->delete();
 

@@ -4,7 +4,6 @@ namespace App\Http\Middleware\Admin;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminLockscreen
@@ -18,7 +17,7 @@ class AdminLockscreen
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (is_null($request->user())) {
+        if (is_null($request->user('cms'))) {
             if ($request->expectsJson()) {
                 return response()->json('Unauthorized.', 401);
             }

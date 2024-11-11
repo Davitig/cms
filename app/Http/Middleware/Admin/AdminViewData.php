@@ -31,7 +31,7 @@ class AdminViewData
 
         $this->shareRouteMatches();
 
-        $this->shareUserRouteAccess($request->user());
+        $this->shareUserRouteAccess($request->user('cms'));
 
         return $next($request);
     }
@@ -155,7 +155,7 @@ class AdminViewData
      * @param  \App\Models\CmsUser|null  $user
      * @return void
      */
-    protected function shareUserRouteAccess(?CmsUser $user = null): void
+    protected function shareUserRouteAccess(?CmsUser $user): void
     {
         if (is_null($user)) {
             $this->userRouteAccess(function () {

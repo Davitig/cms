@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{{ asset('assets/libs/js/icheck/skins/all.css') }}">
     <script src="{{ asset('assets/libs/js/jquery-1.11.3.min.js') }}"></script>
 </head>
-<body class="page-body login-page {{$cmsSettings->get('skin_login')}}">
+<body class="page-body login-page">
     <div class="login-container">
         <div class="row">
             <div class="col-sm-6">

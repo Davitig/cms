@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminCollectionsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminFilemanagerController;
 use App\Http\Controllers\Admin\AdminLanguagesController;
+use App\Http\Controllers\Admin\AdminLockscreenController;
 use App\Http\Controllers\Admin\AdminMenusController;
 use App\Http\Controllers\Admin\AdminNotesController;
 use App\Http\Controllers\Admin\AdminPagesController;
@@ -19,31 +20,29 @@ use App\Http\Controllers\Admin\AdminWebSettingsController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
 
-Route::group([
-    'middleware' => 'cms.viewData',
-    'prefix' => cms_slug(null, true),
-    'as' => cms_route_name()
-], function ($router) {
-    // login
+Route::prefix(cms_slug(null, true))->name(cms_route_name())->group(function ($router) {
+    // Authentication
     $router->controller(AdminLoginController::class)->group(function ($router) {
-        $router->get('login', 'showLoginForm')->name('login')
-            ->middleware('cms.guest');
-        $router->post('login', 'login')->name('login.post')
-            ->middleware('cms.guest');
-        $router->post('logout', 'logout')->name('logout');
-
-        // lockscreen
-        $router->middleware('cms.lockscreen')->group(function ($router) {
-            $router->get('lockscreen', 'getLockscreen')->name('lockscreen')
-                ->middleware('cms.guest');
-            $router->post('lockscreen', 'postLockscreen')->name('lockscreen.post')
-                ->middleware(['cms.guest', 'throttle:3,2']);
-            $router->put('lockscreen', 'setLockscreen')->name('lockscreen.put');
+        // login
+        $router->middleware('cms.guest')->group(function ($router) {
+            $router->get('login', 'showLoginForm')->name('login');
+            $router->post('login', 'login')->name('login.post');
         });
+
+        // logout
+        $router->post('logout', 'logout')->name('logout');
     });
 
-    // Authentication
-    $router->middleware('cms.auth')->group(function ($router) {
+    // lockscreen
+    $router->middleware(['cms.lockscreen', 'cms.viewData'])
+        ->controller(AdminLockscreenController::class)->group(function ($router) {
+            $router->get('lockscreen', 'getLockscreen')->name('lockscreen');
+            $router->post('lockscreen', 'postLockscreen')->name('lockscreen.post');
+            $router->put('lockscreen', 'setLockscreen')->name('lockscreen.put');
+        });
+
+    // Authenticated
+    $router->middleware(['cms.auth', 'cms.viewData'])->group(function ($router) {
         // dashboard
         $router->get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 

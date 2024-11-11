@@ -18,8 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
+            // web
             'web.viewData' => \App\Http\Middleware\Web\WebViewData::class,
-
+            // cms
             'cms.auth' => \App\Http\Middleware\Admin\AdminAuthenticate::class,
             'cms.guest' => \App\Http\Middleware\Admin\AdminRedirectIfAuthenticated::class,
             'cms.withFullAccess' => \App\Http\Middleware\Admin\AdminCmsUserWithFullAccess::class,
