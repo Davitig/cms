@@ -9,7 +9,7 @@ use Closure;
 class AdminRouteMatchesComposer
 {
     /**
-     * The route matcher callback.
+     * The current route matcher resolver callback.
      *
      * @var \Closure
      */
@@ -22,7 +22,7 @@ class AdminRouteMatchesComposer
      */
     public function __construct(Route $route)
     {
-        $this->routeMatcher = $this->setRouteMatcher($route);
+        $this->routeMatcher = $this->getRouteMatcher($route);
     }
 
     /**
@@ -37,17 +37,28 @@ class AdminRouteMatchesComposer
     }
 
     /**
-     * Set the matcher of the current route to the specified routes.
+     * Matches route names to the current route.
+     *
+     * Resource-Routes: (['users', 'orders', ...], {param}|null, true)
+     * Single-Routes: (['users.index', 'orders.store', ...], {param}|null, false)
+     * Param-Routes: (['users' => {param}, 'orders', ...], {param}|null, true|false)
+     *
+     * NOTE: Second parameter {param} is compared to the current route parameter.
+     * NOTE: Second parameter {param} replaces the current route parameter if
+     *       "Param-Routes" {param} is present.
+     * NOTE: Third parameter is true by default, which indicates resource routes.
      *
      * @param  \Illuminate\Routing\Route  $route
      * @return \Closure
      */
-    protected function setRouteMatcher(Route $route): Closure
+    protected function getRouteMatcher(Route $route): Closure
     {
         $currentRouteName = str_replace(
             cms_route_name(), '', $route->getName()
         );
-        $currentRouteIndexParam = current($route->parameters());
+
+        $params = $route->parameters();
+        $currentRouteIndexParam = end($params);
 
         $resourceMethod = null;
 
@@ -73,10 +84,8 @@ class AdminRouteMatchesComposer
                     $routeName = $value;
                 }
 
-                if (! $routeParam
-                    && $routeName == $currentRouteName
-                    || $routeParam == $currentRouteIndexParam
-                    && $routeName == $currentRouteName
+                if ($routeName == $currentRouteName
+                    && (! $routeParam || $routeParam == $currentRouteIndexParam)
                 ) {
                     return true;
                 }

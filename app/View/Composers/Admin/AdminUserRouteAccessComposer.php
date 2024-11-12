@@ -39,6 +39,12 @@ class AdminUserRouteAccessComposer
     /**
      * Get the user route access resolver.
      *
+     * Singe-Routes: ('users.index', 'orders.store', ...)
+     * Base-Routes: ('users', 'orders', ..., true) # last element with boolean true.
+     * Single-Or-Base-Routes: (['users' => true, 'orders.store', ...]) # specific route name(s) with boolean true.
+     *
+     * NOTE: Boolean true in the array checks routes by base name.
+     *
      * @param  \App\Models\CmsUser|null  $user
      * @return \Closure
      */
@@ -56,15 +62,42 @@ class AdminUserRouteAccessComposer
             Permission::$routeNamesAllowed
         );
 
-        $hasFullAccess = $user->hasFullAccess();
-
-        return function (...$routeNames) use ($routeNamesAllowed, $hasFullAccess) {
-            if ($hasFullAccess) {
-                return true;
+        //
+        return function (...$routeNames) use ($routeNamesAllowed) {
+            if (empty($routeNames)) {
+                return false;
             }
 
-            foreach ($routeNames as $routeName) {
-                if (in_array($routeName, $routeNamesAllowed)) {
+            $baseName = false;
+
+            if (count($routeNames) > 1
+                && $baseName = is_bool($baseName = end($routeNames)) && $baseName
+            ) {
+                array_pop($routeNames);
+
+                array_walk($routeNamesAllowed, function (&$value) {
+                    $value = str($value)->beforeLast('.')->toString();
+                });
+            }
+
+            if (is_array($routeNames[0])) {
+                $routeNames = $routeNames[0];
+            }
+
+            foreach ($routeNames as $key => $routeName) {
+                if ($routeName === true) {
+                    $routeName = $key;
+
+                    foreach ($routeNamesAllowed as $allowedRouteName) {
+                        if (! $baseName) {
+                            $allowedRouteName = str($allowedRouteName)->beforeLast('.')->toString();
+                        }
+
+                        if ($allowedRouteName === $routeName) {
+                            return true;
+                        }
+                    }
+                } elseif (in_array($routeName, $routeNamesAllowed)) {
                     return true;
                 }
             }
