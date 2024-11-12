@@ -164,9 +164,12 @@ select .sub-item {padding-left:20px;}
 }
 
 /* users list & form */
+.user-info-sidebar {padding:20px;margin-bottom:20px;background:#fff;}
 .members-table tbody tr td {padding: 12px 15px;}
 .members-table tbody tr td .name.active {color:#006600;}
 .members-table tbody tr td.action-links a+form {padding-top:5px;}
+.member-form-inputs .row + .row {margin-top:0;}
+.member-form-inputs .row::before {margin-bottom:15px;}
 .member-form-inputs .control-label {line-height:1.42857143;}
 .member-form-inputs .multi-check {font-size:12px;display:inline-block;}
 .member-form-add-header .user-name.selected {width:100%;}

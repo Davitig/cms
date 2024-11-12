@@ -71,8 +71,6 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Contracts\View\View
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
     public function create()
     {
@@ -88,8 +86,6 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
      *
      * @param  \App\Http\Requests\Admin\CmsUserRequest  $request
      * @return \Illuminate\Http\RedirectResponse
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
     public function store(CmsUserRequest $request)
     {
@@ -127,8 +123,6 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
      *
      * @param  int  $id
      * @return \Illuminate\Contracts\View\View
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
     public function edit(int $id)
     {
@@ -145,8 +139,6 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
      * @param  \App\Http\Requests\Admin\CmsUserRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
     public function update(CmsUserRequest $request, int $id)
     {

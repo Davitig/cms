@@ -152,6 +152,6 @@
     <button type="submit" class="btn btn-secondary">{{$submit}}</button>
     <a href="{{ cms_route('cmsUsers.index') }}" class="btn btn-blue">{{ trans('general.back') }}</a>
 @if ($current->id)
-    <div class="btn btn-info pull-right" data-toggle="collapse" data-target="#change-password">პაროლის შეცვლა</div>
+    <div class="btn btn-info pull-right" data-toggle="collapse" data-target="#change-password">Change Password</div>
 @endif
 </div>

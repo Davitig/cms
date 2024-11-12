@@ -115,9 +115,7 @@
             @endforeach
             </tbody>
         </table>
-        <div class="pull-right">
-            {!! $items->appends(request()->all())->links() !!}
-        </div>
+        {!! $items->appends(request()->all())->links() !!}
     </div>
     @push('body.bottom')
         <script type="text/javascript">

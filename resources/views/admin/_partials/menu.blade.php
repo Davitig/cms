@@ -64,12 +64,6 @@
         <span class="title">User Groups</span>
     </a>
     <ul{!! $hasRouteMatch ? ' style="display:block;"' : '' !!}>
-        <li>
-            <a href="{{ $url }}"{!! $routeMatches(['cmsUsers']) ? ' class="active"' : '' !!}>
-                <i class="{{icon_type('cmsUsers')}}" title="CMS Users"></i>
-                <span class="title">CMS Users</span>
-            </a>
-        </li>
         @if (auth('cms')->user()->hasFullAccess())
             <li>
                 <a href="{{ cms_route('cmsUserRoles.index') }}"{!! $routeMatches(['cmsUserRoles']) ? ' class="active"' : '' !!}>
@@ -78,6 +72,12 @@
                 </a>
             </li>
         @endif
+        <li>
+            <a href="{{ $url }}"{!! $routeMatches(['cmsUsers']) ? ' class="active"' : '' !!}>
+                <i class="{{icon_type('cmsUsers')}}" title="CMS Users"></i>
+                <span class="title">CMS Users</span>
+            </a>
+        </li>
     </ul>
 </li>
 @if ($userRouteAccess('settings', 'webSettings', 'translations'))
