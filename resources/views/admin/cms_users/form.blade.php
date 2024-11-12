@@ -7,7 +7,7 @@
                 {{ html()->text('email')->id('email')->class('form-control') }}
             </div>
             @if ($error)
-            <span class="text-danger">{{$error}}</span>
+                <span class="text-danger">{{$error}}</span>
             @endif
         </div>
     </div>
@@ -22,7 +22,7 @@
                         {{ html()->text('first_name')->id('first_name')->class('form-control') }}
                     </div>
                     @if ($error)
-                    <span class="text-danger">{{$error}}</span>
+                        <span class="text-danger">{{$error}}</span>
                     @endif
                 </div>
             </div>
@@ -36,7 +36,7 @@
                         {{ html()->text('last_name')->id('last_name')->class('form-control') }}
                     </div>
                     @if ($error)
-                    <span class="text-danger">{{$error}}</span>
+                        <span class="text-danger">{{$error}}</span>
                     @endif
                 </div>
             </div>
@@ -95,16 +95,16 @@
 
     <div class="form-group-separator"></div>
 
-@if (auth('cms')->id() != $current->id)
-    <div class="form-group">
-        <label class="col-sm-2 control-label text-left">Block:</label>
-        <div class="col-sm-10">
-            {{ html()->checkbox('blocked')->id('blocked')->class('iswitch iswitch-secondary') }}
+    @if (auth('cms')->id() != $current->id)
+        <div class="form-group">
+            <label class="col-sm-2 control-label text-left">Block:</label>
+            <div class="col-sm-10">
+                {{ html()->checkbox('blocked')->id('blocked')->class('iswitch iswitch-secondary') }}
+            </div>
         </div>
-    </div>
 
-    <div class="form-group-separator"></div>
-@endif
+        <div class="form-group-separator"></div>
+    @endif
 
     <div class="form-group">
         <label class="col-sm-2 control-label text-left">Photo:</label>
@@ -131,7 +131,7 @@
                         <input type="password" name="password" id="password" class="form-control">
                     </div>
                     @if ($error)
-                    <span class="text-danger">{{$error}}</span>
+                        <span class="text-danger">{{$error}}</span>
                     @endif
                 </div>
             </div>
@@ -151,7 +151,7 @@
 
     <button type="submit" class="btn btn-secondary">{{$submit}}</button>
     <a href="{{ cms_route('cmsUsers.index') }}" class="btn btn-blue">{{ trans('general.back') }}</a>
-@if ($current->id)
-    <div class="btn btn-info pull-right" data-toggle="collapse" data-target="#change-password">Change Password</div>
-@endif
+    @if ($current->id)
+        <div class="btn btn-info pull-right" data-toggle="collapse" data-target="#change-password">Change Password</div>
+    @endif
 </div>

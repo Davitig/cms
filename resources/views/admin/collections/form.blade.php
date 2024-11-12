@@ -24,7 +24,7 @@
             }) }}
         </div>
         @if ($error)
-        <span class="text-danger">{{$error}}</span>
+            <span class="text-danger">{{$error}}</span>
         @endif
     </div>
 </div>
@@ -42,7 +42,7 @@
                     ->id('admin_order_by')->class('form-control select') }}
                 </div>
                 @if ($error)
-                <span class="text-danger">{{$error}}</span>
+                    <span class="text-danger">{{$error}}</span>
                 @endif
             </div>
         </div>
@@ -56,7 +56,7 @@
                     {{ html()->select('web_order_by', $orderBy)->id('web_order_by')->class('form-control select') }}
                 </div>
                 @if ($error)
-                <span class="text-danger">{{$error}}</span>
+                    <span class="text-danger">{{$error}}</span>
                 @endif
             </div>
         </div>
@@ -75,7 +75,7 @@
                     {{ html()->select('admin_sort', cms_collections('sort'))->id('admin_sort')->class('form-control select') }}
                 </div>
                 @if ($error)
-                <span class="text-danger">{{$error}}</span>
+                    <span class="text-danger">{{$error}}</span>
                 @endif
             </div>
         </div>
@@ -89,7 +89,7 @@
                     {{ html()->select('web_sort', cms_collections('sort'))->class('form-control select') }}
                 </div>
                 @if ($error)
-                <span class="text-danger">{{$error}}</span>
+                    <span class="text-danger">{{$error}}</span>
                 @endif
             </div>
         </div>
@@ -113,7 +113,7 @@
                     </div>
                 </div>
                 @if ($error)
-                <span class="text-danger">{{$error}}</span>
+                    <span class="text-danger">{{$error}}</span>
                 @endif
             </div>
         </div>
@@ -132,7 +132,7 @@
                     </div>
                 </div>
                 @if ($error)
-                <span class="text-danger">{{$error}}</span>
+                    <span class="text-danger">{{$error}}</span>
                 @endif
             </div>
         </div>
@@ -169,18 +169,18 @@
     </div>
 </div>
 @push('body.bottom')
-<script type="text/javascript">
-$(function() {
-    $('select.select').select2({
-        placeholder: 'Select type...',
-        allowClear: true
-    }).on('select2-open', function() {
-        // Adding Custom Scrollbar
-        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-    });
-});
-</script>
-<link rel="stylesheet" href="{{ asset('assets/libs/js/select2/select2.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/libs/js/select2/select2-bootstrap.css') }}">
-<script src="{{ asset('assets/libs/js/select2/select2.min.js') }}"></script>
+    <script type="text/javascript">
+        $(function() {
+            $('select.select').select2({
+                placeholder: 'Select type...',
+                allowClear: true
+            }).on('select2-open', function() {
+                // Adding Custom Scrollbar
+                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+            });
+        });
+    </script>
+    <link rel="stylesheet" href="{{ asset('assets/libs/js/select2/select2.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/js/select2/select2-bootstrap.css') }}">
+    <script src="{{ asset('assets/libs/js/select2/select2.min.js') }}"></script>
 @endpush

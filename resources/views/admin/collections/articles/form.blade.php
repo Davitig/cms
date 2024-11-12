@@ -21,7 +21,7 @@
             {{ html()->text('slug')->id('slug' . $current->language)->class('form-control')->data('lang', 1) }}
         </div>
         @if ($error)
-        <span class="text-danger">{{$error}}</span>
+            <span class="text-danger">{{$error}}</span>
         @endif
     </div>
 </div>

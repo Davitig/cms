@@ -28,12 +28,12 @@
             <i class="fa fa-{{ $icon }}"></i>
             <span>{{ trans('general.save') }}</span>
         </button>
-    @if ($current->id)
-        <a href="{{ cms_route('pages.index', [$current->id]) }}" class="btn btn-info btn-icon-standalone" title="{{ trans('general.pages') }}">
-            <i class="{{icon_type('pages')}}"></i>
-            <span>{{ trans('general.pages') }}</span>
-        </a>
-    @endif
+        @if ($current->id)
+            <a href="{{ cms_route('pages.index', [$current->id]) }}" class="btn btn-info btn-icon-standalone" title="{{ trans('general.pages') }}">
+                <i class="{{icon_type('pages')}}"></i>
+                <span>{{ trans('general.pages') }}</span>
+            </a>
+        @endif
         <a href="{{ cms_route('menus.index') }}" class="btn btn-blue btn-icon-standalone" title="{{ trans('general.back') }}">
             <i class="fa fa-arrow-left"></i>
             <span>{{ trans('general.back') }}</span>

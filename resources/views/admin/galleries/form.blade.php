@@ -21,7 +21,7 @@
             {{ html()->text('slug')->id('slug' . $current->language)->class('form-control')->data('lang', 1) }}
         </div>
         @if ($error)
-        <span class="text-danger">{{$error}}</span>
+            <span class="text-danger">{{$error}}</span>
         @endif
     </div>
 </div>
@@ -40,7 +40,7 @@
             }) }}
         </div>
         @if ($error)
-        <span class="text-danger">{{$error}}</span>
+            <span class="text-danger">{{$error}}</span>
         @endif
     </div>
 </div>
@@ -58,7 +58,7 @@
                     ->id('admin_order_by')->class('form-control select') }}
                 </div>
                 @if ($error)
-                <span class="text-danger">{{$error}}</span>
+                    <span class="text-danger">{{$error}}</span>
                 @endif
             </div>
         </div>
@@ -74,7 +74,7 @@
                     ->id('web_order_by')->class('form-control select') }}
                 </div>
                 @if ($error)
-                <span class="text-danger">{{$error}}</span>
+                    <span class="text-danger">{{$error}}</span>
                 @endif
             </div>
         </div>
@@ -94,7 +94,7 @@
                     ->id('admin_sort' . $current->language)->class('form-control select')->data('lang', 1) }}
                 </div>
                 @if ($error)
-                <span class="text-danger">{{$error}}</span>
+                    <span class="text-danger">{{$error}}</span>
                 @endif
             </div>
         </div>
@@ -110,7 +110,7 @@
                     ->id('web_sort' . $current->language)->class('form-control select')->data('lang', 1) }}
                 </div>
                 @if ($error)
-                <span class="text-danger">{{$error}}</span>
+                    <span class="text-danger">{{$error}}</span>
                 @endif
             </div>
         </div>
@@ -134,7 +134,7 @@
                     </div>
                 </div>
                 @if ($error)
-                <span class="text-danger">{{$error}}</span>
+                    <span class="text-danger">{{$error}}</span>
                 @endif
             </div>
         </div>
@@ -154,7 +154,7 @@
                     </div>
                 </div>
                 @if ($error)
-                <span class="text-danger">{{$error}}</span>
+                    <span class="text-danger">{{$error}}</span>
                 @endif
             </div>
         </div>
@@ -225,12 +225,12 @@
             <i class="fa fa-{{ $icon }}"></i>
             <span>{{ trans('general.save') }}</span>
         </button>
-    @if ($current->id)
-        <a href="{{ cms_route($current->type . '.index', [$current->id]) }}" class="btn btn-info btn-icon-standalone" title="{{ trans('general.'.$current->type) }}">
-            <i class="{{icon_type($current->type)}}"></i>
-            <span>{{ucfirst($current->type)}}</span>
-        </a>
-    @endif
+        @if ($current->id)
+            <a href="{{ cms_route($current->type . '.index', [$current->id]) }}" class="btn btn-info btn-icon-standalone" title="{{ trans('general.'.$current->type) }}">
+                <i class="{{icon_type($current->type)}}"></i>
+                <span>{{ucfirst($current->type)}}</span>
+            </a>
+        @endif
         <a href="{{ cms_route('galleries.index', [$current->collection_id]) }}" class="btn btn-blue btn-icon-standalone" title="{{ trans('general.back') }}">
             <i class="fa fa-arrow-left"></i>
             <span>{{ trans('general.back') }}</span>
