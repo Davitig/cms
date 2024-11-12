@@ -4,7 +4,7 @@
         <div class="title-env">
             <h1 class="title">
                 <i class="{{$icon = icon_type('files')}}"></i>
-                {{ str($foreignModel->title)->limit() }}
+                <span data-substr-limit>{{ $foreignModel->title }}</span>
             </h1>
             <p class="description">Management of the files</p>
         </div>

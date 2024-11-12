@@ -201,6 +201,17 @@ $(function () {
             alert(xhr.responseText);
         });
     });
+
+    // substring text
+    $('[data-substr-limit], [data-substr-end]').each(function () {
+        let strLimit = parseInt($(this).data('substr-limit'));
+        strLimit = strLimit ? strLimit : 100;
+        let strEnd = $(this).data('substr-end');
+        let str = $(this).text();
+        if (str.length > strLimit) {
+            $(this).text(str.substring(0, strLimit) + (strEnd !== undefined ? strEnd : '...'));
+        }
+    });
 });
 
 // Lockscreen event handlers and functions

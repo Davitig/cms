@@ -50,19 +50,7 @@ class WebCurrentDataComposer
         } else {
             $current->slug ??= $slug;
 
-            if (empty($current->meta_title)) {
-                $current->meta_title = $current->title;
-            }
-
-            if (empty($current->meta_desc)) {
-                if (! empty($current->description)) {
-                    $current->meta_desc = str($current->description)->limit();
-                } elseif (! empty($current->content)) {
-                    $current->meta_desc = str($current->content)->limit();
-                } else {
-                    $current->meta_desc = str($current->title)->limit();
-                }
-            }
+            $current->meta_title ??= $current->title;
         }
     }
 

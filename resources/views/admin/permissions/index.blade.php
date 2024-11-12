@@ -68,7 +68,7 @@
                     </div>
                     @foreach ($routes as $name)
                         <div class="panel-body col-xs-6 col-sm-4 col-md-3">
-                            <label><strong>{{ucfirst(implode(' ', explode('.', $name)))}}</strong></label>
+                            <label><strong>{{str(implode(' ', explode('.', $name)))->headline()}}</strong></label>
                             <input type="checkbox" name="permissions[{{$groupName}}][]" value="{{$name}}"{{in_array($name, $currentRoutes) ? ' checked' : ''}} class="{{$groupName}} icheck" id="{{$name}}">
                         </div>
                     @endforeach

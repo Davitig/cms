@@ -114,12 +114,12 @@ class AdminPermissionsController extends Controller implements HasMiddleware
                 continue;
             }
 
-            $name = str_replace($cmsSlug, '', $name);
+            $name = str($name)->chopStart($cmsSlug)->toString();
 
-            $baseRouteName = explode('.', substr($name, 0, strrpos($name, '.')));
+            $baseRouteName = str($name)->before('.')->toString();
 
-            if ($baseRouteName[0]) {
-                $routeNames[$baseRouteName[0]][] = $name;
+            if ($baseRouteName) {
+                $routeNames[$baseRouteName][] = $name;
             } else {
                 $routeNames[$name] ??= [];
                 array_unshift($routeNames[$name], $name);

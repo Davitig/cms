@@ -4,7 +4,7 @@
         <div class="title-env">
             <h1 class="title">
                 <i class="{{$icon = icon_type('videos')}}"></i>
-                {{ str($parent->title)->limit() }}
+                <span data-substr-limit>{{ $parent->title }}</span>
             </h1>
         </div>
         <div class="breadcrumb-env">
