@@ -32,6 +32,6 @@ trait Positionable
             return response()->json($result);
         }
 
-        return redirect()->back();
+        return back();
     }
 }

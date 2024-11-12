@@ -1,7 +1,7 @@
 <nav>
     <ul class="breadcrumb">
         <li><a href="{{$url = web_url('/')}}">{{trans('general.home')}}</a></li>
-        @if ($breadcrumb = app_make('breadcrumb'))
+        @if ($breadcrumb = app('breadcrumb'))
             @php($prevSlug = null)
             @foreach ($breadcrumb as $item)
                 <li{!! $loop->last ? ' class="active"' : '' !!}>

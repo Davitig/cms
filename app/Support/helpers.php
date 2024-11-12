@@ -373,23 +373,6 @@ function has_model_sub_items(mixed $item): bool
 }
 
 /**
- * Resolve the given type from the container.
- *
- * @param  string  $instance
- * @param  array  $parameters
- * @param  mixed|null  $default
- * @return mixed
- */
-function app_make(string $instance, array $parameters = [], mixed $default = null): mixed
-{
-    if (app()->resolved($instance)) {
-        return app($instance, $parameters);
-    }
-
-    return $default;
-}
-
-/**
  * Fill an array with data.
  *
  * @param  string  $result
