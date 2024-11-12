@@ -38,7 +38,7 @@ function language(mixed $key = null, ?string $value = null): mixed
  */
 function languages(): array
 {
-    return (array) config('app.languages', []);
+    return config('app.languages', []);
 }
 
 /**
@@ -48,7 +48,7 @@ function languages(): array
  */
 function language_in_url(): bool
 {
-    return (bool) config('language_in_url', false);
+    return config('language_in_url', false);
 }
 
 /**
@@ -68,7 +68,7 @@ function is_multilanguage(): bool
  */
 function cms_is_booted(): bool
 {
-    return (bool) config('cms_is_booted', false);
+    return config('cms_is_booted', false);
 }
 
 /**
@@ -373,16 +373,17 @@ function has_model_sub_items(mixed $item): bool
 }
 
 /**
- * Get the instance from the container.
+ * Resolve the given type from the container.
  *
  * @param  string  $instance
+ * @param  array  $parameters
  * @param  mixed|null  $default
  * @return mixed
  */
-function app_instance(string $instance, mixed $default = null): mixed
+function app_make(string $instance, array $parameters = [], mixed $default = null): mixed
 {
     if (app()->resolved($instance)) {
-        return app($instance);
+        return app($instance, $parameters);
     }
 
     return $default;

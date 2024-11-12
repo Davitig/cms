@@ -32,7 +32,7 @@ class WebCurrentDataComposer
         $slug = $this->getPath();
 
         if (! $current instanceof Model) {
-            $trans = app_instance('trans', new TranslationCollection);
+            $trans = app_make('trans', [], new TranslationCollection);
 
             if (is_object($current) && isset($current->title)) {
                 $title = $current->title;

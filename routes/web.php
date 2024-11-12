@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Web\WebHomeController;
 
-Route::namespace('Web')->group(function ($router) {
-    // web routes
-});
+Route::get('/', [WebHomeController::class, 'index']);

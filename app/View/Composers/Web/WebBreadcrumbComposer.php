@@ -39,7 +39,7 @@ class WebBreadcrumbComposer
             return;
         }
 
-        $breadcrumb = app_instance('breadcrumb');
+        $breadcrumb = app_make('breadcrumb');
 
         if (! $breadcrumb instanceof Collection) {
             app()->instance('breadcrumb', new Collection([$current]));

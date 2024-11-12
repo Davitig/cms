@@ -2,7 +2,6 @@
 
 namespace App\Providers\Web;
 
-use App\Http\Controllers\Web\WebHomeController;
 use App\Models\Base\Model;
 use App\Models\Page\Page;
 use Illuminate\Contracts\Config\Repository;
@@ -12,7 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
-final class DynamicRouteServiceProvider extends ServiceProvider
+class DynamicRouteServiceProvider extends ServiceProvider
 {
     /**
      * The controller namespace for the dynamic routes.
@@ -20,20 +19,6 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      * @var string
      */
     protected string $namespace = 'App\Http\Controllers\Web';
-
-    /**
-     * The controller for home page.
-     *
-     * @var string
-     */
-    protected string $homeController = WebHomeController::class;
-
-    /**
-     * The config repository instance.
-     *
-     * @var \Illuminate\Contracts\Config\Repository
-     */
-    protected Repository $config;
 
     /**
      * The Request instance.
@@ -66,9 +51,9 @@ final class DynamicRouteServiceProvider extends ServiceProvider
     /**
      * The prefix of the route path.
      *
-     * @var string|null
+     * @var string
      */
-    protected ?string $pathPrefix = null;
+    protected string $pathPrefix = '';
 
     /**
      * The list of URL segments.
@@ -137,41 +122,37 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      */
     public function boot(Repository $config): void
     {
-        if ($config->get('cms_is_booted')) {
+        $this->segmentsCount = $config->get('url_path_segments_count', 0);
+
+        if ($config->get('cms_is_booted') || ! $this->segmentsCount) {
             return;
         }
-
-        $this->config = $config;
 
         $this->request = $this->app['request'];
 
         $this->router = $this->app['router'];
 
-        $this->build();
-    }
-
-    /**
-     * Set route configuration.
-     *
-     * @return void
-     */
-    protected function configure(): void
-    {
-        if ($this->config->get('language_in_url')) {
-            $this->pathPrefix = $this->config->get('app.language') . '/';
+        foreach ($this->router->getRoutes()->getRoutes() as $route) {
+            if ($route->matches($this->request)) {
+                return;
+            }
         }
 
-        $this->segments = (array) $this->config->get('url_path_segments', []);
+        if ($config->get('language_in_url')) {
+            $this->pathPrefix = $config->get('app.language') . '/';
+        }
 
-        $this->segmentsCount = (int) $this->config->get('url_path_segments_count', 0);
+        $this->segments = $config->get('url_path_segments', []);
 
-        $this->listableTypes = (array) $this->config->get('cms.pages.listable', []);
+        $this->listableTypes = $config->get('cms.pages.listable', []);
 
-        $this->implicitTypes = (array) $this->config->get('cms.pages.implicit', []);
+        $this->implicitTypes = $config->get('cms.pages.implicit', []);
 
-        $this->explicitTypes = (array) $this->config->get('cms.pages.explicit', []);
+        $this->explicitTypes = $config->get('cms.pages.explicit', []);
 
-        $this->requestMethods = (array) $this->config->get('cms.methods', []);
+        $this->requestMethods = $config->get('cms.methods', []);
+
+        $this->build();
     }
 
     /**
@@ -181,8 +162,6 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      */
     public function build(): void
     {
-        $this->configure();
-
         $this->router->namespace($this->namespace)
             ->middleware('web')
             ->group(fn () => $this->setRoute());
@@ -233,12 +212,6 @@ final class DynamicRouteServiceProvider extends ServiceProvider
      */
     protected function setRoute(): void
     {
-        if (! $this->segmentsCount) {
-            $this->router->get($this->pathPrefix, [$this->homeController, 'index']);
-
-            return;
-        }
-
         $this->setPages();
 
         if ($this->detectRoute()) {
