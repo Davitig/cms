@@ -4,11 +4,12 @@ namespace App\Models;
 
 use App\Models\Base\Builder;
 use App\Models\Base\Model;
+use App\Models\Contracts\Fileable;
 use App\Models\Traits\HasLanguage;
 use App\Models\Traits\PositionableTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Slider extends Model
+class Slider extends Model implements Fileable
 {
     use HasLanguage, PositionableTrait;
 

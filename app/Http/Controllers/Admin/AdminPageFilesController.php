@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\AdminFilesController as Controller;
 use App\Http\Requests\Admin\FileRequest;
 use App\Models\Page\Page;
 use App\Models\Page\PageFile;
@@ -10,12 +10,13 @@ use Illuminate\Http\Request;
 
 class AdminPageFilesController extends Controller
 {
-    use Positionable, VisibilityTrait, LanguageRelationsTrait;
-
     /**
      * Create a new controller instance.
      */
-    public function __construct(protected PageFile $model, protected Request $request) {}
+    public function __construct(PageFile $model, Request $request)
+    {
+        parent::__construct($model, $request);
+    }
 
     /**
      * Display a listing of the resource.
@@ -25,14 +26,7 @@ class AdminPageFilesController extends Controller
      */
     public function index(string $pageId)
     {
-        $data['foreignModels'] = (new Page)->where('id', $pageId)
-            ->joinLanguage(false)
-            ->joinCollection()
-            ->getOrFail();
-
-        $data['foreignModel'] = $data['foreignModels']->first();
-
-        $data['items'] = $this->model->forAdmin($pageId)->paginate(24);
+        $data = $this->indexData($pageId, new Page);
 
         // make a menu list active from this (files) resource by passing the
         // current page menu_id
@@ -53,17 +47,11 @@ class AdminPageFilesController extends Controller
      */
     public function create(string $pageId)
     {
-        if ($this->request->expectsJson()) {
-            $data['current'] = $this->model;
-            $data['current']->page_id = $pageId;
-
-            return response()->json([
-                'result' => true,
-                'view' => view('admin.pages.files.create', $data)->render()
-            ]);
-        }
-
-        return redirect(cms_route('pages.files.index', [$pageId]));
+        return $this->createData(
+            $pageId,
+            'admin.pages.files.create',
+            cms_route('pages.files.index', [$pageId])
+        );
     }
 
     /**
@@ -77,36 +65,12 @@ class AdminPageFilesController extends Controller
      */
     public function store(FileRequest $request, string $pageId)
     {
-        $input = $request->all();
-        $input['page_id'] = $pageId;
-
-        $model = $this->model->create($input);
-
-        $this->createLanguageRelations('languages', $input, $model->id, true);
-
-        if ($request->expectsJson()) {
-            $view = view('admin.pages.files.item', [
-                'item' => $model,
-                'itemInput' => $input
-            ])->render();
-
-            return response()->json(
-                fill_data('success', trans('general.created'))
-                + ['view' => preg_replace('/\s+/', ' ', trim($view))]
-            );
-        }
-
-        return redirect(cms_route('pages.files.index', [$pageId]));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @return void
-     */
-    public function show()
-    {
-        abort(404);
+        return $this->storeData(
+            $request,
+            $pageId,
+            'admin.pages.files.item',
+            cms_route('pages.files.index', [$pageId])
+        );
     }
 
     /**
@@ -120,18 +84,12 @@ class AdminPageFilesController extends Controller
      */
     public function edit(string $pageId, string $id)
     {
-        if ($this->request->expectsJson()) {
-            $data['items'] = $this->model->joinLanguage(false)
-                ->where('id', $id)
-                ->getOrFail();
-
-            return response()->json([
-                'result' => true,
-                'view' => view('admin.pages.files.edit', $data)->render()
-            ]);
-        }
-
-        return redirect(cms_route('pages.files.index', [$pageId]));
+        return $this->editData(
+            $pageId,
+            $id,
+            'admin.pages.files.edit',
+            cms_route('pages.files.index', [$pageId])
+        );
     }
 
     /**
@@ -144,17 +102,9 @@ class AdminPageFilesController extends Controller
      */
     public function update(FileRequest $request, string $pageId, string $id)
     {
-        $this->model->findOrFail($id)->update($input = $request->all());
-
-        $this->updateOrCreateLanguageRelations('languages', $input, $id);
-
-        if ($request->expectsJson()) {
-            return response()->json(fill_data(
-                'success', trans('general.updated'), $input
-            ));
-        }
-
-        return redirect(cms_route('pages.files.index', [$pageId]));
+        return $this->updateData(
+            $request, $pageId, $id, cms_route('pages.files.index', [$pageId])
+        );
     }
 
     /**
@@ -166,14 +116,6 @@ class AdminPageFilesController extends Controller
      */
     public function destroy(string $pageId, string $id)
     {
-        $this->model->destroy($this->request->get('ids', $id));
-
-        if (request()->expectsJson()) {
-            return response()->json(fill_data(
-                'success', trans('database.deleted')
-            ));
-        }
-
-        return back()->with('alert', fill_data('success', trans('database.deleted')));
+        return $this->destroyData($pageId, $id);
     }
 }

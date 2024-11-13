@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\AdminFilesController as Controller;
 use App\Http\Requests\Admin\VideoRequest;
 use App\Models\Gallery\Gallery;
 use App\Models\Video;
@@ -10,12 +10,13 @@ use Illuminate\Http\Request;
 
 class AdminVideosController extends Controller
 {
-    use Positionable, VisibilityTrait, LanguageRelationsTrait;
-
     /**
      * Create a new controller instance.
      */
-    public function __construct(protected Video $model, protected Request $request) {}
+    public function __construct(Video $model, Request $request)
+    {
+        parent::__construct($model, $request);
+    }
 
     /**
      * Display a listing of the resource.
@@ -48,17 +49,11 @@ class AdminVideosController extends Controller
      */
     public function create(string $galleryId)
     {
-        if ($this->request->expectsJson()) {
-            $data['current'] = $this->model;
-            $data['current']['gallery_id'] = $galleryId;
-
-            return response()->json([
-                'result' => true,
-                'view' => view('admin.galleries.videos.create', $data)->render()
-            ]);
-        }
-
-        return redirect(cms_route('videos.index', [$galleryId]));
+        return $this->createData(
+            $galleryId,
+            'admin.galleries.videos.create',
+            cms_route('videos.index', [$galleryId])
+        );
     }
 
     /**
@@ -72,36 +67,12 @@ class AdminVideosController extends Controller
      */
     public function store(VideoRequest $request, string $galleryId)
     {
-        $input = $request->all();
-        $input['gallery_id'] = $galleryId;
-
-        $model = $this->model->create($input);
-
-        $this->createLanguageRelations('languages', $input, $model->id, true);
-
-        if ($request->expectsJson()) {
-            $view = view('admin.galleries.videos.item', [
-                'item' => $model,
-                'itemInput' => $input
-            ])->render();
-
-            return response()->json(
-                fill_data('success', trans('general.created'))
-                + ['view' => preg_replace('/\s+/', ' ', trim($view))]
-            );
-        }
-
-        return redirect(cms_route('videos.index', [$galleryId]));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @return void
-     */
-    public function show()
-    {
-        abort(404);
+        return $this->storeData(
+            $request,
+            $galleryId,
+            'admin.galleries.videos.item',
+            cms_route('videos.index', [$galleryId])
+        );
     }
 
     /**
@@ -115,19 +86,12 @@ class AdminVideosController extends Controller
      */
     public function edit(string $galleryId, string $id)
     {
-        if ($this->request->expectsJson()) {
-            $model = $this->model;
-
-            $data['items'] = $model->joinLanguage(false)->where('id', $id)
-                ->getOrFail();
-
-            return response()->json([
-                'result' => true,
-                'view' => view('admin.galleries.videos.edit', $data)->render()
-            ]);
-        }
-
-        return redirect(cms_route('videos.index', [$galleryId]));
+        return $this->editData(
+            $galleryId,
+            $id,
+            'admin.galleries.videos.edit',
+            cms_route('videos.index', [$galleryId])
+        );
     }
 
     /**
@@ -140,19 +104,9 @@ class AdminVideosController extends Controller
      */
     public function update(VideoRequest $request, string $galleryId, string $id)
     {
-        $this->model->findOrFail($id)->update($input = $request->all());
-
-        $this->updateOrCreateLanguageRelations('languages', $input, $id);
-
-        if ($request->expectsJson()) {
-            $input += ['youtube' => get_youtube_embed($request->get('file'))];
-
-            return response()->json(fill_data(
-                'success', trans('general.updated'), $input
-            ));
-        }
-
-        return redirect(cms_route('videos.index', [$galleryId]));
+        return $this->updateData(
+            $request, $galleryId, $id, cms_route('videos.index', [$galleryId])
+        );
     }
 
     /**
@@ -164,14 +118,6 @@ class AdminVideosController extends Controller
      */
     public function destroy(string $galleryId, string $id)
     {
-        $this->model->destroy($this->request->get('ids', $id));
-
-        if (request()->expectsJson()) {
-            return response()->json(fill_data(
-                'success', trans('database.deleted')
-            ));
-        }
-
-        return back()->with('alert', fill_data('success', trans('database.deleted')));
+        return $this->destroyData($galleryId, $id);
     }
 }

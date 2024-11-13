@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\AdminFilesController as Controller;
 use App\Http\Requests\Admin\FileRequest;
 use App\Models\Event\Event;
 use App\Models\Event\EventFile;
@@ -10,12 +10,13 @@ use Illuminate\Http\Request;
 
 class AdminEventFilesController extends Controller
 {
-    use Positionable, VisibilityTrait, LanguageRelationsTrait;
-
     /**
      * Create a new controller instance.
      */
-    public function __construct(protected EventFile $model, protected Request $request) {}
+    public function __construct(EventFile $model, Request $request)
+    {
+        parent::__construct($model, $request);
+    }
 
     /**
      * Display a listing of the resource.
@@ -25,15 +26,9 @@ class AdminEventFilesController extends Controller
      */
     public function index(string $eventId)
     {
-        $data['foreignModels'] = (new Event)->where('id', $eventId)
-            ->joinLanguage(false)
-            ->getOrFail();
-
-        $data['foreignModel'] = $data['foreignModels']->first();
-
-        $data['items'] = $this->model->forAdmin($eventId)->paginate(24);
-
-        return view('admin.collections.events.files.index', $data);
+        return view('admin.collections.events.files.index', $this->indexData(
+            $eventId, new Event
+        ));
     }
 
     /**
@@ -46,17 +41,11 @@ class AdminEventFilesController extends Controller
      */
     public function create(string $eventId)
     {
-        if ($this->request->expectsJson()) {
-            $data['current'] = $this->model;
-            $data['current']->event_id = $eventId;
-
-            return response()->json([
-                'result' => true,
-                'view' => view('admin.collections.events.files.create', $data)->render()
-            ]);
-        }
-
-        return redirect(cms_route('events.files.index', [$eventId]));
+        return $this->createData(
+            $eventId,
+            'admin.collections.events.files.create',
+            cms_route('events.files.index', [$eventId])
+        );
     }
 
     /**
@@ -70,36 +59,12 @@ class AdminEventFilesController extends Controller
      */
     public function store(FileRequest $request, string $eventId)
     {
-        $input = $request->all();
-        $input['event_id'] = $eventId;
-
-        $model = $this->model->create($input);
-
-        $this->createLanguageRelations('languages', $input, $model->id, true);
-
-        if ($request->expectsJson()) {
-            $view = view('admin.collections.events.files.item', [
-                'item' => $model,
-                'itemInput' => $input
-            ])->render();
-
-            return response()->json(
-                fill_data('success', trans('general.created'))
-                + ['view' => preg_replace('/\s+/', ' ', trim($view))]
-            );
-        }
-
-        return redirect(cms_route('events.files.index', [$eventId]));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @return void
-     */
-    public function show()
-    {
-        abort(404);
+        return $this->storeData(
+            $request,
+            $eventId,
+            'admin.collections.events.files.item',
+            cms_route('events.files.index', [$eventId])
+        );
     }
 
     /**
@@ -113,18 +78,12 @@ class AdminEventFilesController extends Controller
      */
     public function edit(string $eventId, string $id)
     {
-        if ($this->request->expectsJson()) {
-            $data['items'] = $this->model->joinLanguage(false)
-                ->where('id', $id)
-                ->getOrFail();
-
-            return response()->json([
-                'result' => true,
-                'view' => view('admin.collections.events.files.edit', $data)->render()
-            ]);
-        }
-
-        return redirect(cms_route('events.files.index', [$eventId]));
+        return $this->editData(
+            $eventId,
+            $id,
+            'admin.collections.events.files.edit',
+            cms_route('events.files.index', [$eventId])
+        );
     }
 
     /**
@@ -137,17 +96,9 @@ class AdminEventFilesController extends Controller
      */
     public function update(FileRequest $request, string $eventId, string $id)
     {
-        $this->model->findOrFail($id)->update($input = $request->all());
-
-        $this->updateOrCreateLanguageRelations('languages', $input, $id);
-
-        if ($request->expectsJson()) {
-            return response()->json(fill_data(
-                'success', trans('general.updated'), $input
-            ));
-        }
-
-        return redirect(cms_route('events.files.index', [$eventId]));
+        return $this->updateData(
+            $request, $eventId, $id, cms_route('events.files.index', [$eventId])
+        );
     }
 
     /**
@@ -159,14 +110,6 @@ class AdminEventFilesController extends Controller
      */
     public function destroy(string $eventId, string $id)
     {
-        $this->model->destroy($this->request->get('ids', $id));
-
-        if (request()->expectsJson()) {
-            return response()->json(fill_data(
-                'success', trans('database.deleted')
-            ));
-        }
-
-        return back()->with('alert', fill_data('success', trans('database.deleted')));
+        return $this->destroyData($eventId, $id);
     }
 }

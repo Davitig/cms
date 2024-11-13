@@ -11,6 +11,16 @@ trait HasGallery
     use PositionableTrait;
 
     /**
+     * Get the gallery key name.
+     *
+     * @return string|null
+     */
+    public function getGalleryKeyName(): ?string
+    {
+        return $this->galleryKey ?? 'gallery_id';
+    }
+
+    /**
      * Get the data based on the admin gallery.
      *
      * @param  \App\Models\Gallery\Gallery  $gallery

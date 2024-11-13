@@ -4,11 +4,12 @@ namespace App\Models\Event;
 
 use App\Models\Base\Builder;
 use App\Models\Base\Model;
+use App\Models\Contracts\Fileable;
 use App\Models\Traits\FileTrait;
 use App\Models\Traits\HasLanguage;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class EventFile extends Model
+class EventFile extends Model implements Fileable
 {
     use FileTrait, HasLanguage;
 

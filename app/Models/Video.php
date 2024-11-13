@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use App\Models\Base\Model;
+use App\Models\Contracts\Fileable;
 use App\Models\Traits\HasGallery;
 use App\Models\Traits\HasLanguage;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-class Video extends Model
+class Video extends Model implements Fileable
 {
     use HasGallery, HasLanguage;
 

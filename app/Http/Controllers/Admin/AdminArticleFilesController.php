@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\AdminFilesController as Controller;
 use App\Http\Requests\Admin\FileRequest;
 use App\Models\Article\Article;
 use App\Models\Article\ArticleFile;
@@ -10,12 +10,13 @@ use Illuminate\Http\Request;
 
 class AdminArticleFilesController extends Controller
 {
-    use Positionable, VisibilityTrait, LanguageRelationsTrait;
-
     /**
      * Create a new controller instance.
      */
-    public function __construct(protected ArticleFile $model, protected Request $request) {}
+    public function __construct(ArticleFile $model, Request $request)
+    {
+        parent::__construct($model, $request);
+    }
 
     /**
      * Display a listing of the resource.
@@ -25,15 +26,9 @@ class AdminArticleFilesController extends Controller
      */
     public function index(string $articleId)
     {
-        $data['foreignModels'] = (new Article)->where('id', $articleId)
-            ->joinLanguage(false)
-            ->getOrFail();
-
-        $data['foreignModel'] = $data['foreignModels']->first();
-
-        $data['items'] = $this->model->forAdmin($articleId)->paginate(24);
-
-        return view('admin.collections.articles.files.index', $data);
+        return view('admin.collections.articles.files.index', $this->indexData(
+            $articleId, new Article
+        ));
     }
 
     /**
@@ -46,17 +41,11 @@ class AdminArticleFilesController extends Controller
      */
     public function create(string $articleId)
     {
-        if ($this->request->expectsJson()) {
-            $data['current'] = $this->model;
-            $data['current']->article_id = $articleId;
-
-            return response()->json([
-                'result' => true,
-                'view' => view('admin.collections.articles.files.create', $data)->render()
-            ]);
-        }
-
-        return redirect(cms_route('articles.files.index', [$articleId]));
+        return $this->createData(
+            $articleId,
+            'admin.collections.articles.files.create',
+            cms_route('articles.files.index', [$articleId])
+        );
     }
 
     /**
@@ -70,36 +59,12 @@ class AdminArticleFilesController extends Controller
      */
     public function store(FileRequest $request, string $articleId)
     {
-        $input = $request->all();
-        $input['article_id'] = $articleId;
-
-        $model = $this->model->create($input);
-
-        $this->createLanguageRelations('languages', $input, $model->id, true);
-
-        if ($request->expectsJson()) {
-            $view = view('admin.collections.articles.files.item', [
-                'item' => $model,
-                'itemInput' => $input
-            ])->render();
-
-            return response()->json(
-                fill_data('success', trans('general.created'))
-                + ['view' => preg_replace('/\s+/', ' ', trim($view))]
-            );
-        }
-
-        return redirect(cms_route('articles.files.index', [$articleId]));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @return void
-     */
-    public function show()
-    {
-        abort(404);
+        return $this->storeData(
+            $request,
+            $articleId,
+            'admin.collections.articles.files.item',
+            cms_route('articles.files.index', [$articleId])
+        );
     }
 
     /**
@@ -113,18 +78,12 @@ class AdminArticleFilesController extends Controller
      */
     public function edit(string $articleId, string $id)
     {
-        if ($this->request->expectsJson()) {
-            $data['items'] = $this->model->joinLanguage(false)
-                ->where('id', $id)
-                ->getOrFail();
-
-            return response()->json([
-                'result' => true,
-                'view' => view('admin.collections.articles.files.edit', $data)->render()
-            ]);
-        }
-
-        return redirect(cms_route('articles.files.index', [$articleId]));
+        return $this->editData(
+            $articleId,
+            $id,
+            'admin.collections.articles.files.edit',
+            cms_route('articles.files.index', [$articleId])
+        );
     }
 
     /**
@@ -137,17 +96,9 @@ class AdminArticleFilesController extends Controller
      */
     public function update(FileRequest $request, string $articleId, string $id)
     {
-        $this->model->findOrFail($id)->update($input = $request->all());
-
-        $this->updateOrCreateLanguageRelations('languages', $input, $id);
-
-        if ($request->expectsJson()) {
-            return response()->json(fill_data(
-                'success', trans('general.updated'), $input
-            ));
-        }
-
-        return redirect(cms_route('articles.files.index', [$articleId]));
+        return $this->updateData(
+            $request, $articleId, $id, cms_route('articles.files.index', [$articleId])
+        );
     }
 
     /**
@@ -159,14 +110,6 @@ class AdminArticleFilesController extends Controller
      */
     public function destroy(string $articleId, string $id)
     {
-        $this->model->destroy($this->request->get('ids', $id));
-
-        if (request()->expectsJson()) {
-            return response()->json(fill_data(
-                'success', trans('database.deleted')
-            ));
-        }
-
-        return back()->with('alert', fill_data('success', trans('database.deleted')));
+        return $this->destroyData($articleId, $id);
     }
 }

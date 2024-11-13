@@ -155,7 +155,7 @@ $(function () {
                 form.trigger('ajaxFormSuccess', [res]);
             },
             error: function (xhr) {
-                if (xhr.responseJSON.errors === undefined) {
+                if (! xhr?.responseJSON?.errors) {
                     alert(xhr.responseText);
 
                     return;

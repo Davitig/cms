@@ -47,15 +47,11 @@ $(function () {
                 }
             },
             error: function (xhr) {
-                if (xhr.status !== 422) {
+                if (! xhr?.responseJSON?.errors) {
                     alert(xhr.responseText);
                     return;
                 }
-                if (xhr.responseJSON.errors === undefined) {
-                    return;
-                }
-                let errors = xhr.responseJSON.errors;
-                $.each(errors, function (index, element) {
+                $.each(xhr.responseJSON.errors, function (index, element) {
                     let field = $('#' + index + lang, form);
                     let errorMsg = '<div class="trans-text-danger">'+element+'</div>';
                     field.after(errorMsg);

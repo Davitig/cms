@@ -78,7 +78,7 @@ trait HasCollection
      */
     public function forAdmin(
         ?int         $collectionId = null,
-        mixed  $currentLang = true,
+        mixed        $currentLang = true,
         array|string $columns = []): Builder
     {
         return $this->when(! is_null($collectionId), function ($q) use ($collectionId) {
@@ -96,7 +96,7 @@ trait HasCollection
      */
     public function forPublic(
         ?int         $collectionId = null,
-        mixed  $currentLang = true,
+        mixed        $currentLang = true,
         array|string $columns = []): Builder
     {
         return $this->when(! is_null($collectionId), function ($q) use ($collectionId) {

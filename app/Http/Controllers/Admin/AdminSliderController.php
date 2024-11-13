@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\AdminFilesController as Controller;
 use App\Http\Requests\Admin\SliderRequest;
 use App\Models\Slider;
 use Illuminate\Http\Request;
 
 class AdminSliderController extends Controller
 {
-    use Positionable, VisibilityTrait, LanguageRelationsTrait;
-
     /**
      * Create a new controller instance.
      */
-    public function __construct(protected Slider $model, protected Request $request) {}
+    public function __construct(Slider $model, Request $request)
+    {
+        parent::__construct($model, $request);
+    }
 
     /**
      * Display a listing of the resource.
@@ -37,16 +38,7 @@ class AdminSliderController extends Controller
      */
     public function create()
     {
-        if ($this->request->expectsJson()) {
-            $data['current'] = $this->model;
-
-            return response()->json([
-                'result' => true,
-                'view' => view('admin.slider.create', $data)->render()
-            ]);
-        }
-
-        return redirect(cms_route('slider.index'));
+        return $this->createData('', 'admin.slider.create', cms_route('slider.index'));
     }
 
     /**
@@ -59,33 +51,9 @@ class AdminSliderController extends Controller
      */
     public function store(SliderRequest $request)
     {
-        $model = $this->model->create($input = $request->all());
-
-        $this->createLanguageRelations('languages', $input, $model->id, true);
-
-        if ($request->expectsJson()) {
-            $view = view('admin.slider.item', [
-                'item' => $model,
-                'itemInput' => $input
-            ])->render();
-
-            return response()->json(
-                fill_data('success', trans('general.created'))
-                + ['view' => preg_replace('/\s+/', ' ', trim($view))]
-            );
-        }
-
-        return redirect(cms_route('slider.index'));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @return void
-     */
-    public function show()
-    {
-        abort(404);
+        return $this->storeData(
+            $request, '', 'admin.slider.item', cms_route('slider.index')
+        );
     }
 
     /**
@@ -98,18 +66,9 @@ class AdminSliderController extends Controller
      */
     public function edit(string $id)
     {
-        if ($this->request->expectsJson()) {
-            $data['items'] = $this->model->where('id', $id)
-                ->forAdmin(false)
-                ->getOrFail();
-
-            return response()->json([
-                'result' => true,
-                'view' => view('admin.slider.edit', $data)->render()
-            ]);
-        }
-
-        return redirect(cms_route('slider.index'));
+        return $this->editData(
+            '', $id, 'admin.slider.edit', cms_route('slider.index')
+        );
     }
 
     /**
@@ -121,17 +80,7 @@ class AdminSliderController extends Controller
      */
     public function update(SliderRequest $request, string $id)
     {
-        $this->model->findOrFail($id)->update($input = $request->all());
-
-        $this->updateOrCreateLanguageRelations('languages', $input, $id);
-
-        if ($request->expectsJson()) {
-            return response()->json(fill_data(
-                'success', trans('general.updated'), $input
-            ));
-        }
-
-        return redirect(cms_route('slider.index'));
+        return $this->updateData($request, '', $id, cms_route('slider.index'));
     }
 
     /**
@@ -142,14 +91,6 @@ class AdminSliderController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->model->destroy($this->request->get('ids', $id));
-
-        if (request()->expectsJson()) {
-            return response()->json(fill_data(
-                'success', trans('database.deleted')
-            ));
-        }
-
-        return back()->with('alert', fill_data('success', trans('database.deleted')));
+        return $this->destroyData('', $id);
     }
 }

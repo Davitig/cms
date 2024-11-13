@@ -74,16 +74,6 @@ class AdminGalleriesController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @return void
-     */
-    public function show()
-    {
-        abort(404);
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  string  $collectionId
