@@ -135,9 +135,9 @@ function resource_names(string $name): array
  */
 function cms_route(
     string $name,
-    mixed $parameters = [],
-    mixed $language = null,
-    bool $absolute = true
+    mixed  $parameters = [],
+    mixed  $language = null,
+    bool   $absolute = true
 ): string
 {
     return language_to_url(route(cms_route_name($name), $parameters, $absolute), $language);
@@ -179,9 +179,9 @@ function cms_url(
  */
 function web_route(
     string $name,
-    mixed $parameters = [],
-    mixed $language = null,
-    bool $absolute = true
+    mixed  $parameters = [],
+    mixed  $language = null,
+    bool   $absolute = true
 ): string
 {
     return language_to_url(route($name, $parameters, $absolute), $language);
@@ -385,20 +385,8 @@ function fill_data(string $result, ?string $message = null, mixed $input = null)
     return [
         'result' => $result,
         'message' => $message,
-        'input' => $input
+        'data' => $input
     ];
-}
-
-/**
- * Fill a database error message.
- *
- * @param  string  $key
- * @param  array  $parameters
- * @return array
- */
-function fill_db_data(string $key, array $parameters = []): array
-{
-    return fill_data('error', trans('database.error.' . $key, $parameters));
 }
 
 /**

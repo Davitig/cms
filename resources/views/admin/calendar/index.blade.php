@@ -106,12 +106,12 @@
                     if (title.length >= 2) {
                         let input = {'title':title, '_method':'put', '_token':"{{$csrfToken}}"};
 
-                        $.post("{{cms_route('calendar.save')}}", input, function(data) {
+                        $.post("{{cms_route('calendar.save')}}", input, function(res) {
                             // Create Event Entry
                             eventsList.append(
-                                '<li id="event' + data.input.id + '">\
-                        <a href="#" data-event-class="event-color-' + data.input.color + '" data-color="' + data.input.color + '" data-id="' + data.input.id + '">\
-                            <span class="title badge badge-' + data.input.color + ' badge-roundless">' + title + '</span>\
+                                '<li id="event' + res.data.id + '">\
+                        <a href="#" data-event-class="event-color-' + res.data.color + '" data-color="' + res.data.color + '" data-id="' + res.data.id + '">\
+                            <span class="title badge badge-' + res.data.color + ' badge-roundless">' + title + '</span>\
                             <span class="description hidden"></span>\
                         </a>\
                     </li>'
@@ -189,7 +189,7 @@
                         calendarChanges(event);
                     },
                     eventClick: function(event, jsEvent, view) {
-                        if (view.name != 'agendaDay') {
+                        if (view.name !== 'agendaDay') {
                             calendar.fullCalendar('gotoDate', event.start);
                             calendar.fullCalendar('changeView', 'agendaDay');
                         } else {
@@ -259,7 +259,7 @@
 
                 // Update event
                 $('#event-form.ajax-form').on('ajaxFormSuccess', function() {
-                    if ($('#event-active', this).val() == 0) {
+                    if ($('#event-active', this).val() === 0) {
                         let id = $('#event-id', this).val();
                         let title = $('#title', this).val();
                         let description = $('#description', this).val();
@@ -289,7 +289,7 @@
                     $.post("{{cms_route('calendar.destroy')}}", input, function() {
                         modal.modal('hide');
 
-                        if (active == 1) {
+                        if (active === 1) {
                             calendar.fullCalendar('removeEvents', id);
                         } else {
                             $('#events-list').find('#event' + id).remove();

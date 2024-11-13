@@ -84,13 +84,13 @@
     </div>
     @push('body.bottom')
         <script type="text/javascript">
-            $('form.ajax-form').on('ajaxFormSuccess', function (e, data) {
+            $('form.ajax-form').on('ajaxFormSuccess', function (e, res) {
                 let listableTypes = $('#form-tabs');
                 $('.listable', listableTypes).remove();
                 $('.modules', listableTypes).remove();
 
-                if (data.input.typeHtml !== undefined) {
-                    listableTypes.append(data.input.typeHtml);
+                if (res?.data?.typeHtml !== undefined) {
+                    listableTypes.append(res?.data?.typeHtml);
                 }
             });
         </script>

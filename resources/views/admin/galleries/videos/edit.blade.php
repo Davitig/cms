@@ -39,9 +39,9 @@
         </div>
         <script type="text/javascript">
             let formSelector = $('#form-modal .{{$cmsSettings->get('ajax_form')}}');
-            formSelector.on('ajaxFormSuccess', function(e, data) {
-                $('#item{{$current->id}} .thumb iframe').attr('src', data.input.youtube);
-                $('#form-modal').find('iframe').attr('src', data.input.youtube);
+            formSelector.on('ajaxFormSuccess', function(e, res) {
+                $('#item{{$current->id}} .thumb iframe').attr('src', res?.data?.youtube);
+                $('#form-modal').find('iframe').attr('src', res?.data?.youtube);
             });
         </script>
     </div>

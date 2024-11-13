@@ -45,8 +45,8 @@
     </div>
     @push('body.bottom')
         <script type="text/javascript">
-            $('form.ajax-form').on('ajaxFormSuccess', function (e, data) {
-                if (data?.input?.full_access === '1') {
+            $('form.ajax-form').on('ajaxFormSuccess', function (e, res) {
+                if (res?.data?.full_access === '1') {
                     $('#permissions-btn').addClass('hidden');
                 } else {
                     $('#permissions-btn').removeClass('hidden');

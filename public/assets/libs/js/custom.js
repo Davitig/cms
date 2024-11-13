@@ -1,3 +1,20 @@
+function getDateTimeString(date) {
+    const dateObj = date ? new Date(date) : new Date;
+    const y = dateObj.getFullYear();
+    let m = dateObj.getMonth() + 1;
+    let d = dateObj.getDate();
+    let h = dateObj.getHours();
+    let i = dateObj.getMinutes();
+    let s = dateObj.getSeconds();
+
+    if (d < 10) d = '0' + d;
+    if (m < 10) m = '0' + m;
+    if (h < 10) h = '0' + h;
+    if (i < 10) i = '0' + i;
+    if (s < 10) s = '0' + s;
+
+    return y+'-'+m+'-'+d+' '+h+':'+i+':'+s;
+}
 $(function () {
     // Fix sidebar toggle when it has fixed position
     $('a[data-toggle="sidebar"]').on('click', function (e) {
@@ -55,17 +72,17 @@ $(function () {
             url: form.attr('action'),
             dataType: 'json',
             data: form.serialize(),
-            success: function (data) {
-                if (data) {
-                    if (data?.input?.redirect) {
-                        window.location.href = data.input.redirect;
+            success: function (res) {
+                if (res) {
+                    if (res?.data?.redirect) {
+                        window.location.href = res.data.redirect;
                     }
                     // toastr alert message
-                    if (typeof toastr === 'object' && data?.result) {
-                        toastr[data.result](data?.message);
+                    if (typeof toastr === 'object' && res?.result) {
+                        toastr[res.result](res?.message);
                     }
                     // delete action
-                    if (data?.result === 'success') {
+                    if (res?.result === 'success') {
                         form.closest('.item').fadeOut(600, function () {
                             if ($(this).data('parent') === 1) {
                                 $(this).closest('.uk-parent').removeClass('uk-parent');
@@ -77,7 +94,7 @@ $(function () {
                     }
                 }
 
-                form.trigger('deleteFormSuccess', [data]);
+                form.trigger('deleteFormSuccess', [res]);
             },
             error: function (xhr) {
                 alert(xhr.responseText);
@@ -101,17 +118,17 @@ $(function () {
             url: form.attr('action'),
             dataType: 'json',
             data: form.serialize(),
-            success: function (data) {
+            success: function (res) {
                 // toastr alert message
-                if (typeof toastr === 'object' && data?.result) {
-                    toastr[data.result](data?.message);
+                if (typeof toastr === 'object' && res?.result) {
+                    toastr[res.result](res?.message);
                 }
 
                 $('.form-group', form).removeClass('validate-has-error');
 
                 // fill form inputs
-                if (data?.input && typeof data.input === 'object') {
-                    $.each(data.input, function (index, element) {
+                if (res?.data && typeof res.data === 'object') {
+                    $.each(res.data, function (index, element) {
                         let item = $('#' + index + lang, form);
 
                         if (item.data('lang')) {
@@ -135,7 +152,7 @@ $(function () {
                     });
                 }
 
-                form.trigger('ajaxFormSuccess', [data]);
+                form.trigger('ajaxFormSuccess', [res]);
             },
             error: function (xhr) {
                 if (xhr.responseJSON.errors === undefined) {
@@ -182,9 +199,9 @@ $(function () {
         e.preventDefault();
         let form = $(this);
 
-        $.post(form.attr('action'), form.serialize(), function (data) {
+        $.post(form.attr('action'), form.serialize(), function (res) {
             let icon, removeClass, addClass;
-            if (data) {
+            if (res) {
                 icon = 'fa fa-eye';
                 removeClass = 'btn-gray';
                 addClass = 'btn-white';
@@ -228,10 +245,10 @@ $('form#set-lockscreen').on('submit', function (e) {
 });
 
 function setLockscreen(form) {
-    $.post(form.attr('action'), form.serialize(), function (data) {
-        if (data) {
+    $.post(form.attr('action'), form.serialize(), function (res) {
+        if (res) {
             let body = $('body');
-            body.append(data.view);
+            body.append(res.view);
             body.addClass('lockscreen-page');
         }
     }, 'json').fail(function (xhr) {
