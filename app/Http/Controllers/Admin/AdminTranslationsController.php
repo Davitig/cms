@@ -80,10 +80,10 @@ class AdminTranslationsController extends Controller implements HasMiddleware
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit(int $id)
+    public function edit(string $id)
     {
         $data['items'] = $this->model->joinLanguage(false)
             ->where('id', $id)
@@ -98,10 +98,10 @@ class AdminTranslationsController extends Controller implements HasMiddleware
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\Admin\TranslationRequest  $request
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function update(TranslationRequest $request, int $id)
+    public function update(TranslationRequest $request, string $id)
     {
         $input = $request->all();
         unset($input['code']);
@@ -122,10 +122,10 @@ class AdminTranslationsController extends Controller implements HasMiddleware
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy(int $id)
+    public function destroy(string $id)
     {
         $this->model->whereKey($id)->delete();
 

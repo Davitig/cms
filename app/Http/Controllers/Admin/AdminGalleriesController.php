@@ -20,10 +20,10 @@ class AdminGalleriesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  int  $collectionId
+     * @param  string  $collectionId
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(int $collectionId)
+    public function index(string $collectionId)
     {
         $data['parent'] = (new Collection)->where('type', Gallery::TYPE)
             ->findOrFail($collectionId);
@@ -39,10 +39,10 @@ class AdminGalleriesController extends Controller
      * Show the form for creating a new resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $collectionId
+     * @param  string  $collectionId
      * @return \Illuminate\Contracts\View\View
      */
-    public function create(Request $request, int $collectionId)
+    public function create(Request $request, string $collectionId)
     {
         $data['current'] = $this->model;
         $data['current']->collection_id = $collectionId;
@@ -57,10 +57,10 @@ class AdminGalleriesController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\Admin\GalleryRequest  $request
-     * @param  int  $collectionId
+     * @param  string  $collectionId
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(GalleryRequest $request, int $collectionId)
+    public function store(GalleryRequest $request, string $collectionId)
     {
         $input = $request->all();
         $input['collection_id'] = $collectionId;
@@ -86,11 +86,11 @@ class AdminGalleriesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $collectionId
-     * @param  int  $id
+     * @param  string  $collectionId
+     * @param  string  $id
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit(int $collectionId, int $id)
+    public function edit(string $collectionId, string $id)
     {
         $data['items'] = $this->model->where('id', $id)
             ->forAdmin(null, false)
@@ -105,11 +105,11 @@ class AdminGalleriesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\Admin\GalleryRequest  $request
-     * @param  int  $collectionId
-     * @param  int  $id
+     * @param  string  $collectionId
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function update(GalleryRequest $request, int $collectionId, int $id)
+    public function update(GalleryRequest $request, string $collectionId, string $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -127,11 +127,11 @@ class AdminGalleriesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $collectionId
-     * @param  int  $id
+     * @param  string  $collectionId
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy(int $collectionId, int $id)
+    public function destroy(string $collectionId, string $id)
     {
         $this->model->whereKey($id)->delete();
 

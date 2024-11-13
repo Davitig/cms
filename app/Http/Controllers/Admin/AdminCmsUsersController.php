@@ -108,7 +108,7 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Contracts\View\View
      */
     public function show(int $id)
@@ -121,10 +121,10 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit(int $id)
+    public function edit(string $id)
     {
         $data['current'] = $this->model->joinRole()->findOrFail($id);
 
@@ -137,10 +137,10 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\Admin\CmsUserRequest  $request
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function update(CmsUserRequest $request, int $id)
+    public function update(CmsUserRequest $request, string $id)
     {
         $input = $request->all();
 
@@ -164,10 +164,10 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy(int $id)
+    public function destroy(string $id)
     {
         if (request()->user('cms')->hasFullAccess()) {
             if (request()->user('cms')->id == $id) {

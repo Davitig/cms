@@ -20,10 +20,10 @@ class AdminPageFilesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  int  $pageId
+     * @param  string  $pageId
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(int $pageId)
+    public function index(string $pageId)
     {
         $data['foreignModels'] = (new Page)->where('id', $pageId)
             ->joinLanguage(false)
@@ -46,12 +46,12 @@ class AdminPageFilesController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param  int  $pageId
+     * @param  string  $pageId
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      *
      * @throws \Throwable
      */
-    public function create(int $pageId)
+    public function create(string $pageId)
     {
         if ($this->request->expectsJson()) {
             $data['current'] = $this->model;
@@ -70,12 +70,12 @@ class AdminPageFilesController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\Admin\FileRequest  $request
-     * @param  int  $pageId
+     * @param  string  $pageId
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      *
      * @throws \Throwable
      */
-    public function store(FileRequest $request, int $pageId)
+    public function store(FileRequest $request, string $pageId)
     {
         $input = $request->all();
         $input['page_id'] = $pageId;
@@ -112,13 +112,13 @@ class AdminPageFilesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $pageId
-     * @param  int  $id
+     * @param  string  $pageId
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      *
      * @throws \Throwable
      */
-    public function edit(int $pageId, int $id)
+    public function edit(string $pageId, string $id)
     {
         if ($this->request->expectsJson()) {
             $data['items'] = $this->model->joinLanguage(false)
@@ -138,11 +138,11 @@ class AdminPageFilesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\Admin\FileRequest  $request
-     * @param  int  $pageId
-     * @param  int  $id
+     * @param  string  $pageId
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function update(FileRequest $request, int $pageId, int $id)
+    public function update(FileRequest $request, string $pageId, string $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -160,11 +160,11 @@ class AdminPageFilesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $pageId
-     * @param  int  $id
+     * @param  string  $pageId
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy(int $pageId, int $id)
+    public function destroy(string $pageId, string $id)
     {
         $this->model->destroy($this->request->get('ids', $id));
 

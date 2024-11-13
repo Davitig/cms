@@ -20,10 +20,10 @@ class AdminPagesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  int  $menuId
+     * @param  string  $menuId
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(int $menuId)
+    public function index(string $menuId)
     {
         $data['menu'] = (new Menu)->findOrFail($menuId);
 
@@ -35,10 +35,10 @@ class AdminPagesController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param  int  $menuId
+     * @param  string  $menuId
      * @return \Illuminate\Contracts\View\View
      */
-    public function create(int $menuId)
+    public function create(string $menuId)
     {
         $data['current'] = $this->model;
         $data['current']->menu_id = $menuId;
@@ -55,10 +55,10 @@ class AdminPagesController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\Admin\PageRequest  $request
-     * @param  int  $menuId
+     * @param  string  $menuId
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(PageRequest $request, int $menuId)
+    public function store(PageRequest $request, string $menuId)
     {
         $input = $request->all();
         $input['menu_id'] = $menuId;
@@ -84,11 +84,11 @@ class AdminPagesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $menuId
-     * @param  int  $id
+     * @param  string  $menuId
+     * @param  string  $id
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit(int $menuId, int $id)
+    public function edit(string $menuId, string $id)
     {
         $data['items'] = $this->model->where('id', $id)
             ->forAdmin(null, false)
@@ -107,13 +107,13 @@ class AdminPagesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\Admin\PageRequest $request
-     * @param  int  $menuId
-     * @param  int  $id
+     * @param  string  $menuId
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      *
      * @throws \Throwable
      */
-    public function update(PageRequest $request, int $menuId, int $id)
+    public function update(PageRequest $request, string $menuId, string $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -158,11 +158,11 @@ class AdminPagesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $menuId
-     * @param  int  $id
+     * @param  string  $menuId
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy(int $menuId, int $id)
+    public function destroy(string $menuId, string $id)
     {
         if ($this->model->hasSubModel($id)) {
             if (request()->expectsJson()) {

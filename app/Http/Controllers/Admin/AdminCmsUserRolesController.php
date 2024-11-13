@@ -74,10 +74,10 @@ class AdminCmsUserRolesController extends Controller implements HasMiddleware
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit(int $id)
+    public function edit(string $id)
     {
         $data['current'] = $this->model->findOrFail($id);
 
@@ -88,10 +88,10 @@ class AdminCmsUserRolesController extends Controller implements HasMiddleware
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\Admin\CmsUserRoleRequest  $request
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function update(CmsUserRoleRequest $request, int $id)
+    public function update(CmsUserRoleRequest $request, string $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -107,10 +107,10 @@ class AdminCmsUserRolesController extends Controller implements HasMiddleware
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy(int $id)
+    public function destroy(string $id)
     {
         $this->model->whereKey($id)->delete();
 

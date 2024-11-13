@@ -20,10 +20,10 @@ class AdminEventFilesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  int  $eventId
+     * @param  string  $eventId
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(int $eventId)
+    public function index(string $eventId)
     {
         $data['foreignModels'] = (new Event)->where('id', $eventId)
             ->joinLanguage(false)
@@ -39,12 +39,12 @@ class AdminEventFilesController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param  int  $eventId
+     * @param  string  $eventId
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      *
      * @throws \Throwable
      */
-    public function create(int $eventId)
+    public function create(string $eventId)
     {
         if ($this->request->expectsJson()) {
             $data['current'] = $this->model;
@@ -63,12 +63,12 @@ class AdminEventFilesController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\Admin\FileRequest  $request
-     * @param  int  $eventId
+     * @param  string  $eventId
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      *
      * @throws \Throwable
      */
-    public function store(FileRequest $request, int $eventId)
+    public function store(FileRequest $request, string $eventId)
     {
         $input = $request->all();
         $input['event_id'] = $eventId;
@@ -105,13 +105,13 @@ class AdminEventFilesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $eventId
-     * @param  int  $id
+     * @param  string  $eventId
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      *
      * @throws \Throwable
      */
-    public function edit(int $eventId, int $id)
+    public function edit(string $eventId, string $id)
     {
         if ($this->request->expectsJson()) {
             $data['items'] = $this->model->joinLanguage(false)
@@ -131,11 +131,11 @@ class AdminEventFilesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\Admin\FileRequest  $request
-     * @param  int  $eventId
-     * @param  int  $id
+     * @param  string  $eventId
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function update(FileRequest $request, int $eventId, int $id)
+    public function update(FileRequest $request, string $eventId, string $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -153,11 +153,11 @@ class AdminEventFilesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $eventId
-     * @param  int  $id
+     * @param  string  $eventId
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy(int $eventId, int $id)
+    public function destroy(string $eventId, string $id)
     {
         $this->model->destroy($this->request->get('ids', $id));
 

@@ -69,10 +69,10 @@ class AdminCollectionsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit(int $id)
+    public function edit(string $id)
     {
         $data['current'] = $this->model->findOrFail($id);
 
@@ -83,10 +83,10 @@ class AdminCollectionsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\Admin\CollectionRequest  $request
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function update(CollectionRequest $request, int $id)
+    public function update(CollectionRequest $request, string $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -102,10 +102,10 @@ class AdminCollectionsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy(int $id)
+    public function destroy(string $id)
     {
         $this->model->whereKey($id)->delete();
 

@@ -20,10 +20,10 @@ class AdminVideosController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  int  $galleryId
+     * @param  string  $galleryId
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(int $galleryId)
+    public function index(string $galleryId)
     {
         $data['parent'] = (new Gallery)->byType($this->model::TYPE)
             ->joinLanguage()
@@ -41,12 +41,12 @@ class AdminVideosController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param  int  $galleryId
+     * @param  string  $galleryId
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      *
      * @throws \Throwable
      */
-    public function create(int $galleryId)
+    public function create(string $galleryId)
     {
         if ($this->request->expectsJson()) {
             $data['current'] = $this->model;
@@ -65,12 +65,12 @@ class AdminVideosController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\Admin\VideoRequest  $request
-     * @param  int  $galleryId
+     * @param  string  $galleryId
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      *
      * @throws \Throwable
      */
-    public function store(VideoRequest $request, int $galleryId)
+    public function store(VideoRequest $request, string $galleryId)
     {
         $input = $request->all();
         $input['gallery_id'] = $galleryId;
@@ -107,13 +107,13 @@ class AdminVideosController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $galleryId
-     * @param  int  $id
+     * @param  string  $galleryId
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      *
      * @throws \Throwable
      */
-    public function edit(int $galleryId, int $id)
+    public function edit(string $galleryId, string $id)
     {
         if ($this->request->expectsJson()) {
             $model = $this->model;
@@ -134,11 +134,11 @@ class AdminVideosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\Admin\VideoRequest  $request
-     * @param  int  $galleryId
-     * @param  int  $id
+     * @param  string  $galleryId
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function update(VideoRequest $request, int $galleryId, int $id)
+    public function update(VideoRequest $request, string $galleryId, string $id)
     {
         $this->model->findOrFail($id)->update($input = $request->all());
 
@@ -158,11 +158,11 @@ class AdminVideosController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $galleryId
-     * @param  int  $id
+     * @param  string  $galleryId
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function destroy(int $galleryId, int $id)
+    public function destroy(string $galleryId, string $id)
     {
         $this->model->destroy($this->request->get('ids', $id));
 

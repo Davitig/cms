@@ -11,12 +11,12 @@ trait Transferable
      * Transfer model by changing the specified foreign key value.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      *
      * @throws \Throwable
      */
-    public function transfer(Request $request, int $id)
+    public function transfer(Request $request, string $id)
     {
         $input = $request->all(['id', 'column', 'column_value', 'recursive']);
 
@@ -52,10 +52,10 @@ trait Transferable
      *
      * @param  \App\Models\Base\Model  $model
      * @param  string  $column
-     * @param  int  $columnValue
+     * @param  string  $columnValue
      * @return void
      */
-    protected function transferRecursively(Model $model, string $column, int $columnValue)
+    protected function transferRecursively(Model $model, string $column, string $columnValue)
     {
         $items = $this->model->where('parent_id', $model->id)->get(['id']);
 
