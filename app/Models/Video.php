@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Base\Model;
-use App\Models\Contracts\Fileable;
-use App\Models\Traits\HasGallery;
-use App\Models\Traits\HasLanguage;
+use App\Models\Alt\Base\Model;
+use App\Models\Alt\Contracts\Fileable;
+use App\Models\Alt\Traits\HasGallery;
+use App\Models\Alt\Traits\HasLanguage;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class Video extends Model implements Fileable
 {
     use HasGallery, HasLanguage;

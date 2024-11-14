@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Base\Builder;
-use App\Models\Base\Model;
-use App\Models\Traits\HasLanguage;
+use App\Models\Alt\Base\Builder;
+use App\Models\Alt\Base\Model;
+use App\Models\Alt\Traits\HasLanguage;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Translation extends Model
@@ -61,7 +61,7 @@ class Translation extends Model
      *
      * @param  string  $code
      * @param  mixed  $currentLang
-     * @return \App\Models\Base\Builder
+     * @return \App\Models\Alt\Base\Builder
      */
     public function byCode(string $code, mixed $currentLang = true): Builder
     {

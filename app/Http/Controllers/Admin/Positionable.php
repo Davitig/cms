@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Base\Model;
+use App\Models\Alt\Base\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 trait Positionable

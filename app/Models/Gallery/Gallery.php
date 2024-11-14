@@ -2,10 +2,10 @@
 
 namespace App\Models\Gallery;
 
-use App\Models\Base\Builder;
-use App\Models\Base\Model;
-use App\Models\Traits\HasCollection;
-use App\Models\Traits\HasLanguage;
+use App\Models\Alt\Base\Builder;
+use App\Models\Alt\Base\Model;
+use App\Models\Alt\Traits\HasCollection;
+use App\Models\Alt\Traits\HasLanguage;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Gallery extends Model
@@ -60,7 +60,7 @@ class Gallery extends Model
      * Add a new where 'type' clause to the query.
      *
      * @param  string  $type
-     * @return \App\Models\Base\Builder|static
+     * @return \App\Models\Alt\Base\Builder|static
      */
     public function byType(string $type): Builder|static
     {

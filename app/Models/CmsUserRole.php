@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Base\Builder;
-use App\Models\Base\Model;
+use App\Models\Alt\Base\Builder;
+use App\Models\Alt\Base\Model;
 
 class CmsUserRole extends Model
 {
@@ -34,7 +34,7 @@ class CmsUserRole extends Model
      * Add a where 'full_access' to the query.
      *
      * @param  bool|int  $value
-     * @return \App\Models\Base\Builder|static
+     * @return \App\Models\Alt\Base\Builder|static
      */
     public function fullAccess(bool|int $value = 1): Builder|static
     {

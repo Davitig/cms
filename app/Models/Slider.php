@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\Base\Builder;
-use App\Models\Base\Model;
-use App\Models\Contracts\Fileable;
-use App\Models\Traits\HasLanguage;
-use App\Models\Traits\PositionableTrait;
+use App\Models\Alt\Base\Builder;
+use App\Models\Alt\Base\Model;
+use App\Models\Alt\Contracts\Fileable;
+use App\Models\Alt\Traits\HasLanguage;
+use App\Models\Alt\Traits\PositionableTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Slider extends Model implements Fileable
@@ -63,7 +63,7 @@ class Slider extends Model implements Fileable
      *
      * @param  mixed  $currentLang
      * @param  array|string  $columns
-     * @return \App\Models\Base\Builder
+     * @return \App\Models\Alt\Base\Builder
      */
     public function forAdmin(mixed $currentLang = true, array|string $columns = []): Builder
     {
@@ -75,7 +75,7 @@ class Slider extends Model implements Fileable
      *
      * @param  mixed  $currentLang
      * @param  array|string  $columns
-     * @return \App\Models\Base\Builder
+     * @return \App\Models\Alt\Base\Builder
      */
     public function forPublic(mixed $currentLang = true, array|string $columns = []): Builder
     {

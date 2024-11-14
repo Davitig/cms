@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models\Traits;
+namespace App\Models\Alt\Traits;
 
-use App\Models\Base\Builder;
+use App\Models\Alt\Base\Builder;
 use App\Models\Page\Page;
 
 trait PageableTrait
@@ -12,7 +12,7 @@ trait PageableTrait
      *
      * @param  string  $type
      * @param  string  $foreignKey
-     * @return \App\Models\Base\Builder
+     * @return \App\Models\Alt\Base\Builder
      */
     public function joinPage(string $type = 'right', string $foreignKey = 'collection_id'): Builder
     {

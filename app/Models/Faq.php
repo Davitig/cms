@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Base\Model;
-use App\Models\Traits\HasCollection;
-use App\Models\Traits\HasLanguage;
+use App\Models\Alt\Base\Model;
+use App\Models\Alt\Traits\HasCollection;
+use App\Models\Alt\Traits\HasLanguage;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Faq extends Model

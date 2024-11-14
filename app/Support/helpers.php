@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Base\Model;
+use App\Models\Alt\Base\Model;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;

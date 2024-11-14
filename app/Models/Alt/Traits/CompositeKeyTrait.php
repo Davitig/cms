@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Traits;
+namespace App\Models\Alt\Traits;
 
 trait CompositeKeyTrait
 {

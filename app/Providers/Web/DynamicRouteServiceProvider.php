@@ -2,7 +2,7 @@
 
 namespace App\Providers\Web;
 
-use App\Models\Base\Model;
+use App\Models\Alt\Base\Model;
 use App\Models\Page\Page;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\Request;
@@ -330,7 +330,7 @@ class DynamicRouteServiceProvider extends ServiceProvider
     /**
      * Set the deep implicit route.
      *
-     * @param  \App\Models\Base\Model  $implicitModel
+     * @param  \App\Models\Alt\Base\Model  $implicitModel
      * @return bool
      */
     protected function setDeepImplicitRoute(Model $implicitModel): bool

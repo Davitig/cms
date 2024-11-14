@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Models\Traits;
+namespace App\Models\Alt\Traits;
 
-use App\Models\Base\Builder;
-use App\Models\Base\Model;
+use App\Models\Alt\Base\Builder;
+use App\Models\Alt\Base\Model;
 use Closure;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
@@ -14,14 +14,14 @@ trait HasLanguage
      * Set languages a one-to-many relationship.
      *
      * @param  bool  $relation
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\Base\Model
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\Alt\Base\Model
      */
     abstract public function languages(bool $relation = true): HasMany|Model;
 
     /**
      * Add a languages cross join to the query.
      *
-     * @return \App\Models\Base\Builder|\App\Models\Base\Model
+     * @return \App\Models\Alt\Base\Builder|\App\Models\Alt\Base\Model
      */
     public function crossMainLanguages(): Builder|Model
     {
@@ -33,7 +33,7 @@ trait HasLanguage
      *
      * @param  mixed  $currentLang
      * @param  array|string  $columns
-     * @return \App\Models\Base\Builder|static
+     * @return \App\Models\Alt\Base\Builder|static
      */
     public function joinLanguage(mixed $currentLang = true, array|string $columns = []): Builder|static
     {

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models\Traits;
+namespace App\Models\Alt\Traits;
 
-use App\Models\Base\Builder;
+use App\Models\Alt\Base\Builder;
 
 trait LanguageTrait
 {
@@ -11,7 +11,7 @@ trait LanguageTrait
      *
      * @param  int  $id
      * @param  mixed  $currentLang
-     * @return \App\Models\Base\Builder
+     * @return \App\Models\Alt\Base\Builder
      */
     public function byForeignLanguage(int $id, mixed $currentLang = true): Builder
     {
@@ -22,7 +22,7 @@ trait LanguageTrait
      * Add a where "language_id" clause to the query.
      *
      * @param  mixed  $currentLang
-     * @return \App\Models\Base\Builder
+     * @return \App\Models\Alt\Base\Builder
      */
     public function whereLanguage(mixed $currentLang = true): Builder
     {

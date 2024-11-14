@@ -2,11 +2,11 @@
 
 namespace App\Models\Event;
 
-use App\Models\Base\Builder;
-use App\Models\Base\Model;
-use App\Models\Contracts\Fileable;
-use App\Models\Traits\FileTrait;
-use App\Models\Traits\HasLanguage;
+use App\Models\Alt\Base\Builder;
+use App\Models\Alt\Base\Model;
+use App\Models\Alt\Contracts\Fileable;
+use App\Models\Alt\Traits\FileTrait;
+use App\Models\Alt\Traits\HasLanguage;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class EventFile extends Model implements Fileable
@@ -64,7 +64,7 @@ class EventFile extends Model implements Fileable
      * Add a where foreign id clause to the query.
      *
      * @param  int  $foreignId
-     * @return \App\Models\Base\Builder|static
+     * @return \App\Models\Alt\Base\Builder|static
      */
     public function byForeign(int $foreignId): Builder|static
     {

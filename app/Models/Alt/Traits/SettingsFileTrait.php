@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models\Traits;
+namespace App\Models\Alt\Traits;
 
-use App\Models\Base\Builder;
+use App\Models\Alt\Base\Builder;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Filesystem\Filesystem;
@@ -86,7 +86,7 @@ trait SettingsFileTrait
     /**
      * Build a query based on the admin collection.
      *
-     * @return \App\Models\Base\Builder
+     * @return \App\Models\Alt\Base\Builder
      */
     public function adminSettings(): Builder
     {
@@ -99,7 +99,7 @@ trait SettingsFileTrait
     /**
      * Build a query based on the public collection.
      *
-     * @return \App\Models\Base\Builder
+     * @return \App\Models\Alt\Base\Builder
      */
     public function publicSettings(): Builder
     {

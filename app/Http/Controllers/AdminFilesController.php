@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Admin\LanguageRelationsTrait;
 use App\Http\Controllers\Admin\Positionable;
 use App\Http\Controllers\Admin\VisibilityTrait;
-use App\Models\Base\Model;
-use App\Models\Contracts\Fileable;
-use App\Models\Traits\HasGallery;
+use App\Models\Alt\Base\Model;
+use App\Models\Alt\Contracts\Fileable;
+use App\Models\Alt\Traits\HasGallery;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 
@@ -37,7 +37,7 @@ class AdminFilesController extends Controller
      * Get a listing of the resource.
      *
      * @param  string  $foreignId
-     * @param  \App\Models\Base\Model  $foreignModel
+     * @param  \App\Models\Alt\Base\Model  $foreignModel
      * @return array
      */
     public function indexData(string $foreignId, Model $foreignModel)

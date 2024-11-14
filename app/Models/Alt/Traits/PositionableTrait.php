@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models\Traits;
+namespace App\Models\Alt\Traits;
 
-use App\Models\Base\Builder;
+use App\Models\Alt\Base\Builder;
 use Exception;
 
 trait PositionableTrait
@@ -119,7 +119,7 @@ trait PositionableTrait
     /**
      * Add an "order by" position asc clause to the query.
      *
-     * @return \App\Models\Base\Builder
+     * @return \App\Models\Alt\Base\Builder
      */
     public function positionAsc(): Builder
     {
@@ -129,7 +129,7 @@ trait PositionableTrait
     /**
      * Add an "order by" position desc clause to the query.
      *
-     * @return \App\Models\Base\Builder
+     * @return \App\Models\Alt\Base\Builder
      */
     public function positionDesc(): Builder
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Base;
+namespace App\Models\Alt\Base;
 
 use Closure;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;

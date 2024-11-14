@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Base\Model;
-use App\Models\Traits\PositionableTrait;
+use App\Models\Alt\Base\Model;
+use App\Models\Alt\Traits\PositionableTrait;
 
 class Language extends Model
 {

@@ -2,10 +2,10 @@
 
 namespace App\Models\Article;
 
-use App\Models\Base\Model;
-use App\Models\Traits\FileableTrait;
-use App\Models\Traits\HasCollection;
-use App\Models\Traits\HasLanguage;
+use App\Models\Alt\Base\Model;
+use App\Models\Alt\Traits\FileableTrait;
+use App\Models\Alt\Traits\HasCollection;
+use App\Models\Alt\Traits\HasLanguage;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Article extends Model

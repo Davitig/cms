@@ -2,9 +2,9 @@
 
 namespace App\Models\Article;
 
-use App\Models\Base\Builder;
-use App\Models\Base\Model;
-use App\Models\Traits\LanguageTrait;
+use App\Models\Alt\Base\Builder;
+use App\Models\Alt\Base\Model;
+use App\Models\Alt\Traits\LanguageTrait;
 
 class ArticleFileLanguage extends Model
 {
@@ -39,7 +39,7 @@ class ArticleFileLanguage extends Model
      * Add a where "article_file_id" clause to the query.
      *
      * @param  int  $id
-     * @return \App\Models\Base\Builder|static
+     * @return \App\Models\Alt\Base\Builder|static
      */
     public function foreignId(int $id): Builder|static
     {
