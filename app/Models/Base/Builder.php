@@ -3,11 +3,13 @@
 namespace App\Models\Base;
 
 use Closure;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Database\RecordsNotFoundException;
+use Illuminate\Support\Collection as BaseCollection;
 use InvalidArgumentException;
 
 class Builder extends EloquentBuilder
@@ -81,33 +83,6 @@ class Builder extends EloquentBuilder
     }
 
     /**
-     * Determine if any rows exist for the current query or fail.
-     *
-     * @return bool
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     */
-    public function existsOrFail(): bool
-    {
-        return $this->exists() or throw new ModelNotFoundException;
-    }
-
-    /**
-     * Get the first record or instantiate it.
-     *
-     * @param  array|string  $columns
-     * @return \App\Models\Base\Model
-     */
-    public function firstNew(array|string $columns = ['*']): Model
-    {
-        if (! is_null($model = $this->first($columns))) {
-            return $model;
-        }
-
-        return $this->newModelInstance();
-    }
-
-    /**
      * Execute the query and get the first result attribute.
      *
      * @param  string  $attribute
@@ -124,29 +99,6 @@ class Builder extends EloquentBuilder
         return $this->when(! is_null($value), function ($q) use ($value, $column) {
             return $q->where($column ?: $this->getModel()->getKeyName(), $value);
         })->value($attribute);
-    }
-
-    /**
-     * Execute the query and get the first result attribute or throw an exception.
-     *
-     * @param  string  $attribute
-     * @param  int|string|null  $value
-     * @param  string|null  $column
-     * @return string|null
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     */
-    public function firstAttrOrFail(
-        string          $attribute,
-        int|string|null $value = null,
-        ?string         $column = null
-    ): ?string
-    {
-        if (is_null($attribute = $this->firstAttr($attribute, $value, $column))) {
-            throw (new ModelNotFoundException)->setModel(get_class($this));
-        }
-
-        return $attribute;
     }
 
     /**
@@ -171,9 +123,30 @@ class Builder extends EloquentBuilder
     {
         $collection = $this->get($columns);
 
-        $collection->isEmpty() and throw new ModelNotFoundException;
+        $collection->isEmpty() and throw new RecordsNotFoundException;
 
         return $collection;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function pluck($column, $key = null): BaseCollection
+    {
+        $this->prefixColumnsOnJoin();
+
+        return parent::pluck($column, $key);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null, $total = null)
+    : LengthAwarePaginator
+    {
+        $this->prefixColumnsOnJoin();
+
+        return parent::paginate($perPage, $columns, $pageName, $page, $total);
     }
 
     /**
