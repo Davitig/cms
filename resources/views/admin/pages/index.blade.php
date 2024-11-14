@@ -70,7 +70,7 @@
                                                 <span class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></span>
                                             </button>
                                             {{ html()->form()->close() }}
-                                            <a href="{{ cms_route('pages.files.index', [$item->id]) }}" class="btn btn-{{$item->has_file ? 'turquoise' : 'white'}}" title="{{trans('general.files')}}">
+                                            <a href="{{ cms_route('pages.files.index', [$item->id]) }}" class="btn btn-{{$item->files_exists ? 'turquoise' : 'white'}}" title="{{trans('general.files')}}">
                                                 <span class="{{icon_type('files')}}"></span>
                                             </a>
                                             <span title="{{ucfirst($type = $item->collection_type ?: $item->type)}}">

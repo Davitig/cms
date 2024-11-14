@@ -72,7 +72,7 @@ trait HasGallery
     public function publicGallery(Gallery $gallery): Builder
     {
         return $this->byGallery($gallery->id)
-            ->hasFile()
+            ->filesExists()
             ->whereVisible()
             ->orderBy(
                 $this->getTable() . '.' .

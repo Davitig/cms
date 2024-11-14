@@ -62,7 +62,7 @@ class Page extends Model
             return $q->menuId($menuId);
         })->joinLanguage($currentLang)
             ->joinCollection()
-            ->hasFile()
+            ->filesExists()
             ->positionAsc();
     }
 

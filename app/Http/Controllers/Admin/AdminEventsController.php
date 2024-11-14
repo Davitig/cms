@@ -27,7 +27,7 @@ class AdminEventsController extends Controller
         $data['parent'] = (new Collection)->byType($this->model::TYPE)
             ->findOrFail($collectionId);
 
-        $data['items'] = $this->model->hasFile()->getAdminCollection($data['parent']);
+        $data['items'] = $this->model->filesExists()->getAdminCollection($data['parent']);
 
         $data['parentSimilar'] = (new Collection)->byType($this->model::TYPE)->get();
 

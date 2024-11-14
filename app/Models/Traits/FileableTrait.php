@@ -27,14 +27,14 @@ trait FileableTrait
      *
      * @return \App\Models\Base\Builder
      */
-    public function hasFile(): Builder
+    public function filesExists(): Builder
     {
         return $this->selectExists(function ($q) {
             $tableId = ($table = $this->getTable()).'.'.$this->getKeyName();
 
             return $q->from(($table = str($table)->singular()) . '_files')
                 ->whereColumn($table . '_id', $tableId);
-        }, 'has_file');
+        }, 'files_exists');
     }
 
     /**
