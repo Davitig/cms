@@ -25,23 +25,21 @@ trait Transferable
         }
 
         if ($id != $input['column_value']) {
-            app('db')->transaction(function () use ($input) {
-                $model = $this->model->findOrFail($input['id'], ['id']);
+            $model = $this->model->findOrFail($input['id'], ['id']);
 
-                $position = $this->model->where($input['column'], $input['column_value'])->max('position');
+            $position = $this->model->where($input['column'], $input['column_value'])->max('position');
 
-                $attributes = [$input['column'] => $input['column_value'], 'position' => $position + 1];
+            $attributes = [$input['column'] => $input['column_value'], 'position' => $position + 1];
 
-                if ($recursive = ! empty($input['recursive'])) {
-                    $attributes['parent_id'] = 0;
-                }
+            if ($recursive = ! empty($input['recursive'])) {
+                $attributes['parent_id'] = 0;
+            }
 
-                $model->update($attributes);
+            $model->update($attributes);
 
-                if ($recursive) {
-                    $this->transferRecursively($model, $input['column'], $input['column_value']);
-                }
-            });
+            if ($recursive) {
+                $this->transferRecursively($model, $input['column'], $input['column_value']);
+            }
         }
 
         return $this->getTransferResponse($request, 'success', trans('general.updated'));
