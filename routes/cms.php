@@ -47,11 +47,15 @@ Route::prefix(cms_slug(null, true))->name(cms_route_name())->group(function ($ro
         $router->get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
         // languages
-        $router->put('languages/position', [AdminLanguagesController::class, 'updatePosition'])
-            ->name('languages.updatePosition');
-        $router->resource('languages', AdminLanguagesController::class)
-            ->names(resource_names('languages'))
-            ->except(['show']);
+        $router->controller(AdminLanguagesController::class)->group(function ($router) {
+            $router->put('languages/{id}/visibility', 'visibility')
+                ->name('languages.visibility');
+            $router->put('languages/position',  'updatePosition')
+                ->name('languages.updatePosition');
+            $router->resource('languages', AdminLanguagesController::class)
+                ->names(resource_names('languages'))
+                ->except(['show']);
+        });
 
         // menus
         $router->post('menus/set-main', [AdminMenusController::class, 'setMain'])
@@ -124,13 +128,13 @@ Route::prefix(cms_slug(null, true))->name(cms_route_name())->group(function ($ro
             ->name('filemanager');
 
         // slider
-        $router->put('slider/{id}/visibility', [AdminSliderController::class, 'visibility'])
-            ->name('slider.visibility');
-        $router->put('slider/position', [AdminSliderController::class, 'updatePosition'])
-            ->name('slider.updatePosition');
-        $router->resource('slider', AdminSliderController::class)
-            ->names(resource_names('slider'))
-            ->except(['show']);
+        $router->controller(AdminSliderController::class)->group(function ($router) {
+            $router->put('slider/{id}/visibility', 'visibility')->name('slider.visibility');
+            $router->put('slider/position', 'updatePosition')->name('slider.updatePosition');
+            $router->resource('slider', AdminSliderController::class)
+                ->names(resource_names('slider'))
+                ->except(['show']);
+        });
 
         // translations
         $router->controller(AdminTranslationsController::class)->group(function ($router) {

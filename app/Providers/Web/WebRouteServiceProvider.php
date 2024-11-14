@@ -23,8 +23,8 @@ class WebRouteServiceProvider extends ServiceProvider
     {
         $prefix = '';
 
-        if ($config->get('language_in_url')) {
-            $prefix = $config->get('app.language') . '/';
+        if ($config->get('_app.language_selected')) {
+            $prefix = $config->get('_app.language') . '/';
         }
 
         Route::middleware('web')->prefix($prefix)

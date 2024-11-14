@@ -91,7 +91,7 @@ class Handler extends ExceptionHandler
      */
     protected function getHttpExceptionView(HttpExceptionInterface $e): ?string
     {
-        $view = 'errors::' . (cms_is_booted() ? 'admin' : 'web') . '.' .$e->getStatusCode();
+        $view = 'errors::' . (cms_activated() ? 'admin' : 'web') . '.' . $e->getStatusCode();
 
         if (view()->exists($view)) {
             return $view;

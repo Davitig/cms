@@ -8,7 +8,7 @@ use App\Models\Language;
 
 class AdminLanguagesController extends Controller
 {
-    use Positionable;
+    use Positionable, VisibilityTrait;
 
     /**
      * Create a new controller instance.
@@ -106,7 +106,7 @@ class AdminLanguagesController extends Controller
 
         unset($languages[$language['language']]);
 
-        if (language_in_url()) {
+        if (language_selected()) {
             if (count($languages) <= 1) {
                 $url = cms_route('languages.index', [], false);
             } elseif ($language['id'] == $id) {

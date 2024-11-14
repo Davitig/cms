@@ -41,6 +41,20 @@
 
 <div class="form-group-separator"></div>
 
+<div class="row">
+    <div class="col-xs-4">
+        <div class="form-group">
+            <label class="col-sm-6 control-label">Visible:</label>
+            <div class="col-sm-6">
+                {{ html()->checkbox('visible')->id('visible' . $current->language)
+                ->class('iswitch iswitch-secondary')->data('lang', 1) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-group-separator"></div>
+
 <div class="form-group">
     <div class="col-sm-10 btn-action pull-right">
         <button type="submit" class="btn btn-secondary btn-icon-standalone" title="{{ $submit }}">

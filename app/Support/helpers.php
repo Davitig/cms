@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
  */
 function language(mixed $key = null, ?string $value = null): mixed
 {
-    $lang = (string) config('app.language');
+    $lang = (string) config('_app.language');
 
     if (is_null($key)) {
         return $lang;
@@ -25,20 +25,27 @@ function language(mixed $key = null, ?string $value = null): mixed
     }
 
     if (! is_null($value)) {
-        $value = '.' . $value;
+        return languages()[$key][$value];
     }
 
-    return config('app.languages.' . $key . $value);
+    return languages()[$key];
 }
 
 /**
  * Get the application languages.
  *
+ * @param  bool  $visible
  * @return array
  */
-function languages(): array
+function languages(bool $visible = false): array
 {
-    return config('app.languages', []);
+    if (! $visible) {
+        return config('_app.languages', []);
+    }
+
+    return array_filter(config('_app.languages', []), function (array $language) {
+        return $language['visible'];
+    });
 }
 
 /**
@@ -46,19 +53,20 @@ function languages(): array
  *
  * @return bool
  */
-function language_in_url(): bool
+function language_selected(): bool
 {
-    return config('language_in_url', false);
+    return config('_app.language_selected', false);
 }
 
 /**
  * Determine if the application is multilanguage.
  *
+ * @param  bool  $visible
  * @return bool
  */
-function is_multilanguage(): bool
+function is_multilanguage(bool $visible = false): bool
 {
-    return count(languages()) > 1;
+    return count(languages($visible)) > 1;
 }
 
 /**
@@ -66,9 +74,9 @@ function is_multilanguage(): bool
  *
  * @return bool
  */
-function cms_is_booted(): bool
+function cms_activated(): bool
 {
-    return config('cms_is_booted', false);
+    return config('_cms.activated', false);
 }
 
 /**
@@ -85,7 +93,7 @@ function cms_slug(?string $path = null, bool $language = false): string
     if ($language) {
         $language = is_string($language)
             ? $language
-            : (language_in_url() ? language() : '');
+            : (language_selected() ? language() : '');
 
         $slug = $language . '/' . $slug;
     }
@@ -256,7 +264,7 @@ function language_prefix(?string $path = null, mixed $language = null): string
     if (is_string($language)) {
         $path = $language . '/' . $path;
     } elseif ($language !== false
-        && ($language === true || language_in_url())
+        && ($language === true || language_selected())
         && count(languages()) > 1
     ) {
         $path = language() . '/' . $path;
@@ -274,7 +282,7 @@ function language_prefix(?string $path = null, mixed $language = null): string
  */
 function language_to_url(string $url, mixed $language = null): string
 {
-    if (! ($withLanguage = ! empty($language)) && ! language_in_url()) {
+    if (! ($withLanguage = ! empty($language)) && ! language_selected()) {
         return trim($url, '/');
     }
 

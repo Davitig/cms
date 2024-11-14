@@ -58,6 +58,11 @@
                         <td>{{ $item->id }}</td>
                         <td>
                             <div class="btn-action">
+                                {{ html()->form('put', cms_route('languages.visibility', [$item->id]))->id('visibility' . $item->id)->class('visibility')->open() }}
+                                <button type="submit" class="btn btn-{{$item->visible ? 'white' : 'gray'}}" title="{{trans('general.visibility')}}">
+                                    <span class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></span>
+                                </button>
+                                {{ html()->form()->close() }}
                                 <a href="{{ cms_route('languages.edit', [$item->id]) }}" class="btn btn-orange" title="{{trans('general.edit')}}">
                                     <span class="fa fa-edit"></span>
                                 </a>
@@ -77,7 +82,7 @@
     @push('body.bottom')
         <script type="text/javascript">
             $(function() {
-                let langInUrl = {{(int) language_in_url()}};
+                let langSelected = {{(int) language_selected()}};
                 let activeLangSelector = $('.language-switcher > a img');
                 let langMenuSelector = $('.dropdown-menu.languages');
                 let sortableSelector = $('#sortable');
@@ -93,7 +98,7 @@
                     input['_token'] = '{{csrf_token()}}';
                     $.post('{{cms_route('languages.updatePosition')}}', input, function () {
                         toastr['success']('Positions has been updated successfully');
-                        if (! langInUrl) {
+                        if (! langSelected) {
                             let flag = sortableSelector.children(':first').find('.full-name img').attr('src');
                             activeLangSelector.attr('src', flag);
                         }

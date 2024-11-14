@@ -6,23 +6,10 @@ use App\Models\Language;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class LanguageServiceProvider extends ServiceProvider
 {
-    /**
-     * The list of application languages.
-     *
-     * @var array
-     */
-    protected array $languages = [];
-
-    /**
-     * The number of total application languages.
-     *
-     * @var int
-     */
-    protected int $languagesCount = 0;
-
     /**
      * The list of URL segments.
      *
@@ -38,7 +25,7 @@ class LanguageServiceProvider extends ServiceProvider
     protected int $segmentsCount = 0;
 
     /**
-     * Register services.
+     * Register the application services.
      *
      * @return void
      */
@@ -48,7 +35,7 @@ class LanguageServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap services.
+     * Bootstrap the application services.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Illuminate\Contracts\Config\Repository  $config
@@ -60,9 +47,9 @@ class LanguageServiceProvider extends ServiceProvider
             return;
         }
 
-        $this->setLanguageConfig($request, $config);
+        $this->segmentsCount = count($this->segments = $request->segments());
 
-        $this->makeLanguageUrls($request, $config);
+        $this->setLanguageConfig($request, $config);
     }
 
     /**
@@ -74,76 +61,69 @@ class LanguageServiceProvider extends ServiceProvider
      */
     protected function setLanguageConfig(Request $request, Config $config): void
     {
-        $this->segmentsCount = count($this->segments = $request->segments());
-
-        $firstSegment = (string) current($this->segments);
-
         $languages = [];
 
         foreach ((new Language)->positionAsc()->get() as $language) {
             $languages[strtolower($language->language)] = $language->getAttributes();
         }
 
-        $config->set(['app.language' => key($languages)]);
-        $config->set(['app.languages' => $this->languages = $languages]);
+        // Set the active language data
+        $config->set(['_app.language' => key($languages)]);
 
-        $this->languagesCount = count($languages);
+        $firstSegment = (string) current($this->segments);
 
-        // Set the current application language
-        if ($this->languagesCount > 1 && array_key_exists($firstSegment, $this->languages)) {
-            $config->set(['app.language' => $firstSegment]);
-            $config->set(['language_in_url' => true]);
+        if (count($languages) > 1 && array_key_exists($firstSegment, $languages)) {
+            $config->set(['_app.language' => $firstSegment]);
+            $config->set(['_app.language_selected' => true]);
 
             $this->segmentsCount--;
 
             array_shift($this->segments);
         } else {
-            $config->set(['language_in_url' => false]);
+            $config->set(['_app.language_selected' => false]);
         }
 
-        // Set URL segments and its count, without a language segment
-        $config->set(['url_path_segments' => $this->segments]);
-        $config->set(['url_path_segments_count' => $this->segmentsCount]);
+        $cmsActivated = current($this->segments) == $config->get('cms.slug');
 
-        $cmsIsBooted = current($this->segments) == $config->get('cms.slug');
+        $config->set(['_cms.activated' => $cmsActivated]);
 
-        $config->set(['cms_is_booted' => $cmsIsBooted]);
-
-        if (! $cmsIsBooted) {
-            $config->set(['app.locale' => $config->get('app.language')]);
+        if (! $cmsActivated) {
+            $config->set(['app.locale' => $config->get('_app.language')]);
         }
+
+        $queryString = query_string(
+            $cmsActivated ? $request->except('lang') : $request->query()
+        );
+
+        // Set url for each language.
+        foreach ($languages as $language => $value) {
+            $languages[$language]['url'] = $request->root() . '/' . $language . '/' .
+                implode('/', $this->segments) . $queryString;
+        }
+
+        $config->set(['_app.languages' => $languages]);
+
+        $this->checkServiceAvailability($cmsActivated, $languages);
     }
 
     /**
-     * Make current URL for all available languages of the application.
+     * Check service availability.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Contracts\Config\Repository  $config
+     * @param  bool  $cmsActivated
+     * @param  array  $languages
      * @return void
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException
      */
-    protected function makeLanguageUrls(Request $request, Config $config): void
+    protected function checkServiceAvailability(bool $cmsActivated, array $languages): void
     {
-        if ($this->languagesCount > 1
-            && (! isset($this->segments[0])
-                || ! array_key_exists($this->segments[0], $this->languages)
-            )
+        if (! $cmsActivated
+            && $this->segmentsCount
+            && ! array_key_exists(language(), array_filter($languages, function ($language) {
+                return $language['visible'];
+            }))
         ) {
-            array_unshift($this->segments, $config->get('app.language'));
-        }
-
-        $query = query_string(
-            $config->get('cms_is_booted') ? $request->except('lang') : $request->query()
-        );
-
-        foreach($this->languages as $key => $value) {
-            if ($this->languagesCount > 1) {
-                $this->segments[0] = $key;
-            }
-
-            $config->set([
-                "app.languages.{$key}.url" => $request->root() . '/' .
-                    implode('/', $this->segments) . $query
-            ]);
+            throw new ServiceUnavailableHttpException;
         }
     }
 }

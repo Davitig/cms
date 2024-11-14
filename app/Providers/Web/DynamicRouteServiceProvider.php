@@ -122,13 +122,21 @@ class DynamicRouteServiceProvider extends ServiceProvider
      */
     public function boot(Repository $config): void
     {
-        $this->segmentsCount = $config->get('url_path_segments_count', 0);
-
-        if ($config->get('cms_is_booted') || ! $this->segmentsCount) {
+        if ($config->get('_cms.activated')) {
             return;
         }
 
         $this->request = $this->app['request'];
+
+        $this->segments = $this->request->segments();
+
+        if (current($this->segments) == $config->get('_app.language')) {
+            array_shift($this->segments);
+        }
+
+        if (! $this->segmentsCount = count($this->segments)) {
+            return;
+        }
 
         $this->router = $this->app['router'];
 
@@ -138,11 +146,9 @@ class DynamicRouteServiceProvider extends ServiceProvider
             }
         }
 
-        if ($config->get('language_in_url')) {
-            $this->pathPrefix = $config->get('app.language') . '/';
+        if ($config->get('_app.language_selected')) {
+            $this->pathPrefix = $config->get('_app.language') . '/';
         }
-
-        $this->segments = $config->get('url_path_segments', []);
 
         $this->listableTypes = $config->get('cms.pages.listable', []);
 

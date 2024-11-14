@@ -14,7 +14,7 @@
     <div id="error">
         <div id="message" class="text-center">
             <h1>503</h1>
-            <h2><span>The server is currently unavailable!</span></h2>
+            <h2><span>The service is currently unavailable!</span></h2>
         </div>
         <!-- #message -->
     </div>

@@ -38,7 +38,7 @@ trait HasLanguage
     public function joinLanguage(mixed $currentLang = true, array|string $columns = []): Builder|static
     {
         $table = $this->getTable();
-        $languageTable = $this->languages()->getRelated()->getTable();
+        $languageTable = $this->languages(false)->getTable();
         $languageKey = Str::singular($languageTable) . '_id';
 
         return $this->when($currentLang === false, function ($q) {

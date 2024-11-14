@@ -44,7 +44,7 @@ class ElfinderServiceProvider extends ServiceProvider
 
         $config['prefix'] = isset($config['prefix']) ? cms_slug($config['prefix']) : cms_slug();
 
-        if (language_in_url()) {
+        if (language_selected()) {
             $config['prefix'] = language() . '/' . $config['prefix'];
         }
 

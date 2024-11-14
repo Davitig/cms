@@ -31,6 +31,8 @@ class LanguageRequest extends Request
 
         $input['language'] = strtolower($this->get('language'));
 
+        $this->boolifyInput($input, ['visible']);
+
         return $input;
     }
 }
