@@ -35,13 +35,13 @@ class WebBreadcrumbComposer
             return;
         }
 
-        if (! is_object($current = $view->current) || empty($current->slug)) {
+        if (! is_object($current = $view->current)) {
             return;
         }
 
-        $breadcrumb = app('breadcrumb');
-
-        if (! $breadcrumb instanceof Collection) {
+        if (! app()->bound('breadcrumb')
+            || ! ($breadcrumb = app('breadcrumb')) instanceof Collection
+        ) {
             app()->instance('breadcrumb', new Collection([$current]));
         } elseif (! $breadcrumb->last() instanceof $current) {
             $breadcrumb->push($current);

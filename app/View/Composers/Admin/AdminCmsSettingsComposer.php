@@ -4,25 +4,24 @@ namespace App\View\Composers\Admin;
 
 use App\Models\CmsUser;
 use Illuminate\Auth\AuthManager;
-use Illuminate\Support\Collection;
 use Illuminate\Contracts\View\View;
-use stdClass;
+use Illuminate\Support\Collection;
 
 class AdminCmsSettingsComposer
 {
     /**
      * The CmsUser instance.
      *
-     * @var \App\Models\CmsUser|mixed|null
+     * @var \App\Models\CmsUser|null
      */
     protected ?CmsUser $user = null;
 
     /**
      * The instance of the settings.
      *
-     * @var \stdClass|null
+     * @var \Illuminate\Support\Collection
      */
-    protected ?stdClass $settings = null;
+    protected Collection $settings;
 
     /**
      * Create a new view composer instance.
@@ -32,6 +31,8 @@ class AdminCmsSettingsComposer
     public function __construct(AuthManager $auth)
     {
         $this->user = $auth->guard('cms')->user();
+
+        $this->settings = $this->getSettings();
     }
 
     /**
@@ -42,7 +43,7 @@ class AdminCmsSettingsComposer
      */
     public function compose(View $view): void
     {
-        $view->with('cmsSettings', $this->getSettings());
+        $view->with('cmsSettings', $this->settings);
     }
 
     /**
@@ -56,22 +57,20 @@ class AdminCmsSettingsComposer
             return new Collection;
         }
 
-        if (is_null($this->settings)) {
-            $this->settings = app('db')->table('cms_settings')
-                ->where('cms_user_id', $this->user->id)
-                ->first();
+        $settings = app('db')->table('cms_settings')
+            ->where('cms_user_id', $this->user->id)
+            ->first();
 
-            if (! is_null($this->settings)) {
-                $this->settings->body = <<< EOT
-{$this->settings->sidebar_direction} {$this->settings->layout_boxed} {$this->settings->skin_sidebar}
-{$this->settings->skin_user_menu} {$this->settings->skin_horizontal}
+        if (! is_null($settings)) {
+            $settings->body = <<< EOT
+$settings->sidebar_direction $settings->layout_boxed $settings->skin_sidebar
+$settings->skin_user_menu $settings->skin_horizontal
 EOT;
-                $this->settings->body = preg_replace(
-                    '/\s+/', ' ', trim($this->settings->body)
-                );
-            }
+            $settings->body = preg_replace(
+                '/\s+/', ' ', trim($settings->body)
+            );
         }
 
-        return new Collection($this->settings);
+        return new Collection($settings);
     }
 }

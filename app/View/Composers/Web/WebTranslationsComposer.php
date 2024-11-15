@@ -11,9 +11,17 @@ class WebTranslationsComposer
     /**
      * The Collection instance of the translations.
      *
-     * @var \App\Support\TranslationCollection|null
+     * @var \App\Support\TranslationCollection
      */
-    protected ?TranslationCollection $translations = null;
+    protected TranslationCollection $trans;
+
+    /**
+     * Create a new view composer instance.
+     */
+    public function __construct()
+    {
+        $this->trans = $this->getTranslations();
+    }
 
     /**
      * Bind data to the view.
@@ -23,7 +31,7 @@ class WebTranslationsComposer
      */
     public function compose(View $view): void
     {
-        $view->with('trans', $this->getTranslations());
+        $view->with('trans', $this->trans);
     }
 
     /**
@@ -33,18 +41,16 @@ class WebTranslationsComposer
      */
     protected function getTranslations(): TranslationCollection
     {
-        if (is_null($this->translations)) {
-            $trans = new Translation;
+        $model = new Translation;
 
-            $this->translations = new TranslationCollection;
+        $trans = new TranslationCollection;
 
-            if ($trans->count() <= (int) cms_config('trans_query_limit')) {
-                $this->translations->setCollection(
-                    $trans->joinLanguage()->pluck('value', 'code')
-                );
-            }
+        if ($model->count() <= (int) cms_config('trans_query_limit')) {
+            $trans->setCollection(
+                $model->joinLanguage()->pluck('value', 'code')
+            );
         }
 
-        return $this->translations;
+        return $trans;
     }
 }

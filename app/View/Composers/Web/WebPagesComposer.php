@@ -12,9 +12,17 @@ class WebPagesComposer
     /**
      * The Collection instance of the pages.
      *
-     * @var \Illuminate\Database\Eloquent\Collection|null
+     * @var \Illuminate\Support\Collection
      */
-    protected ?Collection $pages = null;
+    protected Collection $pages;
+
+    /**
+     * Create a new view composer instance.
+     */
+    public function __construct()
+    {
+        $this->pages = $this->getPages();
+    }
 
     /**
      * Bind data to the view.
@@ -24,7 +32,7 @@ class WebPagesComposer
      */
     public function compose(View $view): void
     {
-        $view->with('pageItems', $this->getPages());
+        $view->with('pageItems', $this->pages);
     }
 
     /**
@@ -36,10 +44,12 @@ class WebPagesComposer
     {
         $menuId = (new Menu)->where('main', 1)->value('id');
 
-        if (! is_null($menuId) && is_null($this->pages)) {
-            $this->pages = (new Page)->forPublic()->menuId($menuId)->positionAsc()->get();
+        if (! is_null($menuId)) {
+            return make_model_sub_items(
+                (new Page)->forPublic()->menuId($menuId)->positionAsc()->get()
+            );
         }
 
-        return make_model_sub_items($this->pages);
+        return new Collection;
     }
 }

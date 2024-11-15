@@ -29,8 +29,6 @@ class WebCurrentDataComposer
     {
         $current = &$view->current;
 
-        $slug = $this->getPath();
-
         if (! $current instanceof Model) {
             $trans = &$view->trans;
             $trans ??= new TranslationCollection();
@@ -43,13 +41,15 @@ class WebCurrentDataComposer
 
             $current = (object) [
                 'title' => $title,
-                'meta_title' => $title,
-                'slug' => $slug,
+                'slug' => $this->getPath(),
                 'image' => null,
+                'description' => null,
+                'content' => null,
+                'meta_title' => $title,
                 'meta_desc' => $trans->get('meta_desc') ?: $title,
             ];
         } else {
-            $current->slug ??= $slug;
+            $current->slug ??= $this->getPath();
 
             $current->meta_title ??= $current->title;
         }
