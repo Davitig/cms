@@ -6,7 +6,7 @@ use App\Providers\Admin\AdminEloquentUserProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
-class EloquentUserServiceProvider extends ServiceProvider
+class EloquentServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -21,7 +21,7 @@ class EloquentUserServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->app['auth']->provider('eloquent', function (Application $app, array $config) {
+        $this->app['auth']->provider('cmsEloquent', function (Application $app, array $config) {
             return new AdminEloquentUserProvider($app['hash'], $config['model']);
         });
     }

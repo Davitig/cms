@@ -17,7 +17,7 @@ use App\Http\Controllers\Admin\AdminSitemapXmlController;
 use App\Http\Controllers\Admin\AdminSliderController;
 use App\Http\Controllers\Admin\AdminTranslationsController;
 use App\Http\Controllers\Admin\AdminWebSettingsController;
-use App\Http\Controllers\Auth\AdminLoginController;
+use App\Http\Controllers\Admin\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix(cms_slug(null, true))->name(cms_route_name())->group(function ($router) {

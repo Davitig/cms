@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Auth\LoginController as Controller;
 use Illuminate\Http\Request;
@@ -31,10 +31,20 @@ class AdminLoginController extends Controller
     }
 
     /**
+     * Get the register / login redirect path.
+     *
+     * @return string
+     */
+    public function redirectTo(): string
+    {
+        return cms_url('/');
+    }
+
+    /**
      * {@inheritDoc}
      */
-    public function redirectPath()
+    protected function guard()
     {
-        return cms_url($this->redirectTo);
+        return Auth::guard('cms');
     }
 }
