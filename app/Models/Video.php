@@ -22,7 +22,7 @@ class Video extends Model implements Fileable
     /**
      * The table associated with the model.
      *
-     * @var null|string
+     * @var string|null
      */
     protected $table = 'videos';
 

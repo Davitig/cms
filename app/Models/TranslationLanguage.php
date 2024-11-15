@@ -13,7 +13,7 @@ class TranslationLanguage extends Model
     /**
      * The table associated with the model.
      *
-     * @var null|string
+     * @var string|null
      */
     protected $table = 'translation_languages';
 

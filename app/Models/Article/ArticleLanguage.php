@@ -13,7 +13,7 @@ class ArticleLanguage extends Model
     /**
      * The table associated with the model.
      *
-     * @var null|string
+     * @var string|null
      */
     protected $table = 'article_languages';
 
