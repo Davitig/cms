@@ -6,7 +6,7 @@
     <div class="page-title">
         <div class="title-env">
             <h1 class="title">
-                <i class="fa fa-times-circle"></i>
+                <i class="fa fa-exclamation"></i>
                 403 Forbidden
             </h1>
             <p>You don't have permission to perform this action.</p>

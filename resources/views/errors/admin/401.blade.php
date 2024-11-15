@@ -6,7 +6,7 @@
     <div class="page-title">
         <div class="title-env">
             <h1 class="title">
-                <i class="fa fa-times-circle"></i>
+                <i class="fa fa-exclamation"></i>
                 401 Unauthorized
             </h1>
             <p>The request has not been applied because it lacks valid authentication credentials for the target resource.</p>

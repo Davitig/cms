@@ -6,7 +6,7 @@
     <div class="page-title">
         <div class="title-env">
             <h1 class="title">
-                <i class="fa fa-times-circle"></i>
+                <i class="fa fa-exclamation"></i>
                 404 Not Found
             </h1>
             <p>We did not find the page you were looking for.</p>

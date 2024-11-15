@@ -6,7 +6,7 @@
     <div class="page-title">
         <div class="title-env">
             <h1 class="title">
-                <i class="fa fa-times-circle"></i>
+                <i class="fa fa-exclamation"></i>
                 500 Internal Server Error
             </h1>
             <p>The server encountered an internal error and was unable to complete your request.</p>

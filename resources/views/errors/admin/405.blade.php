@@ -6,7 +6,7 @@
     <div class="page-title">
         <div class="title-env">
             <h1 class="title">
-                <i class="fa fa-times-circle"></i>
+                <i class="fa fa-exclamation"></i>
                 405 Method Not Allowed
             </h1>
             <p>The resource was found, but the request method is not allowed.</p>
