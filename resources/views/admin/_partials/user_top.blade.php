@@ -8,7 +8,7 @@
         <div class="user-info">
           <div class="user-image">
             <a href="{{cms_route('cmsUsers.show', [auth('cms')->id()])}}">
-              <img src="{{auth('cms')->user()->photo}}" width="128" class="img-circle">
+              <img src="{{auth('cms')->user()->photo}}" width="128" class="img-circle" alt="User Photo">
             </a>
           </div>
           <div class="user-details">

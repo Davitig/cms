@@ -5,7 +5,7 @@
         </a>
         <ul class="dropdown-menu notifications">
             <li class="top">
-                <p class="small">Update the XML sitemap when you change the URLs.</p>
+                <p class="small">Generate XML sitemap when you add or update content.</p>
             </li>
             <li>
                 <ul class="dropdown-menu-list list-unstyled ps-scrollbar">
