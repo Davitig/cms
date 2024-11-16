@@ -2,4 +2,4 @@
 
 use App\Http\Controllers\Web\WebHomeController;
 
-Route::get('/', [WebHomeController::class, 'index']);
+Route::get('/', [WebHomeController::class, 'index'])->name('home');

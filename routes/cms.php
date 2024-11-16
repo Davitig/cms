@@ -84,7 +84,7 @@ Route::prefix(cms_slug(null, true))->name(cms_route_name())->group(function ($ro
             ->except(['show']);
 
         // type routes from config
-        foreach ((array) cms_config('type_routes') as $prefix => $routes) {
+        foreach ((array) cms_config('implicit_routes') as $prefix => $routes) {
             foreach ((array) $routes as $route => $controller) {
                 $router->put($route . '/{id}/visibility', [$controller, 'visibility'])
                     ->name($route . '.visibility');

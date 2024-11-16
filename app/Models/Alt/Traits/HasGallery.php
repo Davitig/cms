@@ -72,7 +72,6 @@ trait HasGallery
     public function publicGallery(Gallery $gallery): Builder
     {
         return $this->byGallery($gallery->id)
-            ->filesExists()
             ->whereVisible()
             ->orderBy(
                 $this->getTable() . '.' .
@@ -102,16 +101,6 @@ trait HasGallery
         return (new Gallery)->joinLanguage()->where(
             'type', is_null($type) ? static::TYPE : $type
         );
-    }
-
-    /**
-     * Add a where "file" is not empty clause to the query.
-     *
-     * @return \App\Models\Alt\Base\Builder
-     */
-    public function hasFile(): Builder
-    {
-        return $this->whereNotNull('file')->where('file', '!=', '');
     }
 
     /**

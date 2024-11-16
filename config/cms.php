@@ -52,7 +52,7 @@ return [
         ],
         'templates' => [
             // 'page' => [
-            //     'template_name' => 'Template Name'
+            //     'about' => 'About'
             // ]
         ],
         'listable' => [
@@ -60,7 +60,7 @@ return [
         ],
         'implicit' => [
             'collections' => App\Models\Collection::class,
-            'galleries' => \App\Models\Gallery\Gallery::class
+            'galleries' => App\Models\Gallery\Gallery::class
         ],
         'explicit' => [
             //
@@ -69,15 +69,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | CMS Type Routes
+    | CMS Implicit Routes
     |--------------------------------------------------------------------------
     |
-    | Here you can specify routes, which will also get additional routes.
+    | List of implicit type routes, which will also get additional routes.
     | Additional routes: "visibility", "position", "transfer"
     |
     */
 
-    'type_routes' => [
+    'implicit_routes' => [
         'collections' => [
             'articles' => AdminArticlesController::class,
             'events' => AdminEventsController::class,
@@ -123,10 +123,10 @@ return [
             'faq' => 'FAQ'
         ],
         'models' => [
-            'articles' => \App\Models\Article\Article::class,
-            'events' => \App\Models\Event\Event::class,
-            'galleries' => \App\Models\Gallery\Gallery::class,
-            'faq' => \App\Models\Faq::class
+            'articles' => App\Models\Article\Article::class,
+            'events' => App\Models\Event\Event::class,
+            'galleries' => App\Models\Gallery\Gallery::class,
+            'faq' => App\Models\Faq::class
         ],
         'order_by' => [
             'position' => 'Position',
@@ -170,7 +170,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | This array used to specify types with methods, that will allow to
-    | send a specific requests.
+    | send a specified requests.
     |
     | E.g. "post", "put", "delete".
     |
@@ -178,31 +178,16 @@ return [
 
     'methods' => [
         'post' => [
-            'feedback@index' => 'send'
+            'feedback' => 'send'
         ]
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Tabs
-    |--------------------------------------------------------------------------
-    |
-    | This array used to specify types, that will allow additional tab URIs.
-    |
-    | type => [
-    |     'uri' => 'method'
-    | ]
-    |
-    */
-
-    'tabs' => [],
 
     /*
     |--------------------------------------------------------------------------
     | Translation Types
     |--------------------------------------------------------------------------
     |
-    | The list of types that will filter translations.
+    | The list of types that will group translations.
     |
     */
 

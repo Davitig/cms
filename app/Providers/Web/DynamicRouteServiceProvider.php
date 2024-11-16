@@ -194,7 +194,7 @@ class DynamicRouteServiceProvider extends ServiceProvider
                     return;
                 }
 
-                break;
+                return;
             }
 
             if ($i > 0) {
@@ -303,7 +303,7 @@ class DynamicRouteServiceProvider extends ServiceProvider
     protected function setImplicitRoute(Page $page): bool
     {
         if (! array_key_exists($page->type, $this->implicitTypes)
-            || $this->segmentsCount - ($itemsCount = count($this->items)) > 1
+            || ($this->segmentsCount - ($itemsCount = count($this->items))) > 1
         ) {
             return false;
         }
@@ -381,10 +381,7 @@ class DynamicRouteServiceProvider extends ServiceProvider
         $route = strtolower($this->request->method());
 
         if (array_key_exists($route, $this->requestMethods)
-            && array_key_exists(
-                $type = "{$typeParts[0]}@{$method}",
-                $types = $this->requestMethods[$route]
-            )
+            && array_key_exists($typeParts[0], $types = $this->requestMethods[$route])
         ) {
             $method = $types[$type];
         } else {
