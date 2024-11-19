@@ -16,5 +16,6 @@
 @include('web._partials.footer')
 @include('web._partials.scripts')
 @stack('body.bottom')
+@include('web._partials.trans_form')
 </body>
 </html>
