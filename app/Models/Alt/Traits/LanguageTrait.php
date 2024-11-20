@@ -28,7 +28,7 @@ trait LanguageTrait
     {
         return $this->where(
             'language_id',
-            is_numeric($currentLang) ? $currentLang : language($currentLang, 'id')
+            is_int($currentLang) ? $currentLang : language($currentLang, 'id')
         );
     }
 

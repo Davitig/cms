@@ -66,7 +66,7 @@ trait HasLanguage
     {
         return function ($q) use ($column, $currentLang) {
             return $q->where(
-                $column, is_numeric($currentLang) ? $currentLang : language($currentLang, 'id')
+                $column, is_int($currentLang) ? $currentLang : language($currentLang, 'id')
             );
         };
     }
