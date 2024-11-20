@@ -126,18 +126,16 @@ class CmsUser extends Model
      */
     public function adminFilter(Request $request): Builder
     {
+        $blockedValue = (int) $request->boolean('blocked');
+
         return $this->when($request->get('name'), function ($q, $value) {
             return $q->whereRaw("CONCAT(first_name, ' ', last_name) like ?", ["%{$value}%"]);
         })->when($request->get('email'), function ($q, $value) {
             return $q->where('email', 'like', "%{$value}%");
         })->when($request->get('role'), function ($q, $value) {
             return $q->where('cms_user_role_id', $value);
-        })->when(! is_null($value = $request->get('blocked')), function ($q) use ($value) {
-            return $q->when($value, function ($q) {
-                return $q->where('blocked', 1);
-            }, function ($q) {
-                return $q->where('blocked', 0);
-            });
+        })->when($request->filled('blocked'), function ($q) use ($blockedValue) {
+            return $q->where('blocked', $blockedValue);
         });
     }
 }

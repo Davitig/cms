@@ -66,7 +66,7 @@
             <thead>
             <tr>
                 <th></th>
-                <th>Name and Role</th>
+                <th>Name</th>
                 <th>E-Mail</th>
                 <th>ID</th>
                 <th>Settings</th>

@@ -19,15 +19,11 @@ class AdminLoginController extends Controller
     /**
      * {@inheritDoc}
      */
-    public function logout(Request $request)
+    protected function loggedOut(Request $request)
     {
-        Auth::guard('cms')->logout();
-
-        $request->session()->flush();
-
-        $request->session()->regenerate();
-
-        return redirect(cms_route('login'));
+        return $request->wantsJson()
+            ? response()->json([], 204)
+            : redirect(cms_route('login'));
     }
 
     /**

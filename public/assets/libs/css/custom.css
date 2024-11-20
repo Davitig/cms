@@ -1,18 +1,22 @@
-/**
- *
- * Apply your custom CSS here
- *
- */
-
 /*** CUSTOM ***/
 
 iframe {border:0;}
 .ovh {overflow:hidden;}
 .dn {display:none;} .dib {display:inline-block;}
 .vat {vertical-align:top;} .vam {vertical-align:middle;} .vab {vertical-align:bottom;}
-.pad0 {padding:0;} .pad {padding:15px;} .padt {padding-top:15px;} .padr {padding-right:15px;} .padb {padding-bottom:15px;} .padl {padding-left:15px;}
-.mrg0 {margin:0;} .mrg {margin:15px;} .mrgt {margin-top:15px;} .mrgr {margin-right:15px;} .mrgb {margin-bottom:15px;} .mrgl {margin-left:15px;}
-.fs-16 {font-size:16px;} .fs-18 {font-size:18px;} .fs-20 {font-size:20px;} .fs-22 {font-size:22px;} .fs-24 {font-size:24px;} .fs-26 {font-size:26px;} .fs-28 {font-size:28px;} .fs-30 {font-size:30px;} .fs-32 {font-size:32px;}
+.pad {padding:15px;} .pad0 {padding:0;}
+.padt {padding-top:15px;} .padt0 {padding-top:0;}
+.padr {padding-right:15px;} .padr0 {padding-right:0;}
+.padb {padding-bottom:15px;} .padb0 {padding-bottom:0;}
+.padl {padding-left:15px;} .padl0 {padding-left:0;}
+.mrg {margin:15px;} .mrg0 {margin:0;}
+.mrgt {margin-top:15px;} .mrgt0 {margin-top:0;}
+.mrgr {margin-right:15px;} .mrgr0 {margin-right:0;}
+.mrgb {margin-bottom:15px;} .mrgb0 {margin-bottom:0;}
+.mrgl {margin-left:15px;} .mrgl0 {margin-left:0;}
+.fs-16 {font-size:16px;} .fs-18 {font-size:18px;} .fs-20 {font-size:20px;} .fs-22 {font-size:22px;}
+.fs-24 {font-size:24px;} .fs-26 {font-size:26px;} .fs-28 {font-size:28px;} .fs-30 {font-size:30px;}
+.fs-32 {font-size:32px;}
 .w-100 {width:100%;}
 .w-auto {width:auto;}
 .pointer {cursor:pointer;}
@@ -119,6 +123,7 @@ select .sub-item {padding-left:20px;}
 .navbar.horizontal-menu .navbar-inner > .nav > li .dropdown-menu.notifications,
 .navbar.horizontal-menu .navbar-inner > .nav > li .dropdown-menu.user-profile-menu {z-index:100;}
 .user-info-navbar .user-info-menu > li > a.dropdown-toggle {padding-bottom:27px;}
+.user-info-navbar .user-info-menu > li > form.form-btn {padding:20px;}
 .user-info-navbar .user-info-menu > li.language-switcher a > img {margin-right:0;}
 .user-info-navbar .user-info-menu > li.language-switcher ul a > img {margin-right:5px;}
 .user-info-navbar .user-info-menu .user-profile-menu > li button {padding:0 0 15px;}
@@ -154,7 +159,7 @@ select .sub-item {padding-left:20px;}
 
 /* tabs */
 .nav.nav-tabs li .visible-xs {text-transform:uppercase;}
-/* set .tab-content width to fixed 1200px unless its not display table-cell caused by vertical nav */
+/* set fixed width to .tab-content unless its not display table-cell overwritten by vertical nav */
 .tabs-vertical-env.custom .tab-content {width:1300px;padding:0;}
 .nav.tabs-vertical.custom {padding-top:40px;}
 @media (max-width:992px) {
@@ -165,7 +170,7 @@ select .sub-item {padding-left:20px;}
 
 /* users list & form */
 .user-info-sidebar {padding:20px;margin-bottom:20px;background:#fff;}
-.members-table tbody tr td {padding: 12px 15px;}
+.members-table tbody tr td {padding:12px 15px;}
 .members-table tbody tr td .name.active {color:#006600;}
 .members-table tbody tr td.action-links a+form {padding-top:5px;}
 .member-form-inputs .row + .row {margin-top:0;}
