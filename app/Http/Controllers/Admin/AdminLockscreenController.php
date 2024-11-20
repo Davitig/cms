@@ -14,7 +14,7 @@ class AdminLockscreenController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Contracts\View\View
      */
-    public function getLockscreen(Request $request)
+    public function index(Request $request)
     {
         $request->session()->flash('includeLockscreen', 1);
 
@@ -33,7 +33,7 @@ class AdminLockscreenController extends Controller
      *
      * @throws \Throwable
      */
-    public function setLockscreen(Request $request)
+    public function store(Request $request)
     {
         $request->user()->lockScreen();
 
@@ -52,7 +52,7 @@ class AdminLockscreenController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function postLockscreen(Request $request)
+    public function update(Request $request)
     {
         $guard = Auth::guard('cms');
 
