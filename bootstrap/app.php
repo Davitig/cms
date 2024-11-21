@@ -7,7 +7,8 @@ use Illuminate\Foundation\Configuration\Middleware;
 return Application::configure(basePath: dirname(__DIR__))
     ->withProviders([
         App\Providers\LanguageServiceProvider::class,
-        App\Providers\Web\WebRouteServiceProvider::class
+        App\Providers\Web\WebRouteServiceProvider::class,
+        App\Providers\Web\DynamicRouteServiceProvider::class
     ])
     ->withRouting(
         web: [

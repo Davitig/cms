@@ -83,25 +83,6 @@ class Builder extends EloquentBuilder
     }
 
     /**
-     * Execute the query and get the first result attribute.
-     *
-     * @param  string  $attribute
-     * @param  int|string|null  $value
-     * @param  string|null  $column
-     * @return string|null
-     */
-    public function firstAttr(
-        string          $attribute,
-        int|string|null $value = null,
-        ?string         $column = null
-    ): ?string
-    {
-        return $this->when(! is_null($value), function ($q) use ($value, $column) {
-            return $q->where($column ?: $this->getModel()->getKeyName(), $value);
-        })->value($attribute);
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function get($columns = ['*']): Collection

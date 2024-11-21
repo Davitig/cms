@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 
 class DynamicRouteServiceProvider extends ServiceProvider
 {
@@ -130,7 +129,7 @@ class DynamicRouteServiceProvider extends ServiceProvider
 
         $this->segments = $this->request->segments();
 
-        if (current($this->segments) == $config->get('_app.language')) {
+        if (current($this->segments) == $language = $config->get('_app.language')) {
             array_shift($this->segments);
         }
 
@@ -147,7 +146,7 @@ class DynamicRouteServiceProvider extends ServiceProvider
         }
 
         if ($config->get('_app.language_selected')) {
-            $this->pathPrefix = $config->get('_app.language') . '/';
+            $this->pathPrefix = $language;
         }
 
         $this->listableTypes = $config->get('cms.pages.listable', []);
@@ -269,7 +268,7 @@ class DynamicRouteServiceProvider extends ServiceProvider
 
         $this->binders[array_key_last($this->binders)] = $page;
 
-        return $this->setCurrentRoute($page->type, 'index');
+        return $this->setCurrentRoute($page->type, $page->template ?: 'index');
     }
 
     /**
@@ -352,10 +351,10 @@ class DynamicRouteServiceProvider extends ServiceProvider
      * Set the current route.
      *
      * @param  string  $type
-     * @param  string|null  $defaultMethod
+     * @param  string  $method
      * @return bool
      */
-    protected function setCurrentRoute(string $type, ?string $defaultMethod = null): bool
+    protected function setCurrentRoute(string $type, string $method): bool
     {
         $path = '';
 
@@ -374,23 +373,20 @@ class DynamicRouteServiceProvider extends ServiceProvider
             }
         }
 
-        $typeParts = explode('@', $type);
-
-        $method = $typeParts[1] ?? $defaultMethod;
-
         $route = strtolower($this->request->method());
 
         if (array_key_exists($route, $this->requestMethods)
-            && array_key_exists($typeParts[0], $types = $this->requestMethods[$route])
+            && array_key_exists($type, $types = $this->requestMethods[$route])
         ) {
             $method = $types[$type];
         } else {
             $route = 'get';
         }
 
-        $this->router->$route($this->pathPrefix . $path, [
-            'uses' => $this->getControllerPath($typeParts[0]) . '@' . $method
-        ]);
+        $this->router->$route(
+            trim($this->pathPrefix, '/') . '/' . trim($path, '/'),
+            $this->getControllerAction($type, $method)
+        );
 
         return true;
     }
@@ -406,29 +402,18 @@ class DynamicRouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get the controller path.
+     * Get a controller-based route action array.
      *
-     * @param  string  $path
-     * @return string
+     * @param  string  $type
+     * @param  string  $method
+     * @return array
      */
-    protected function getControllerPath(string $path): string
+    protected function getControllerAction(string $type, string $method): array
     {
-        $namespace = '';
-
-        $path = explode('.', $path);
-
-        if (($pathCount = count($path)) > 1) {
-            for ($i = 1; $i <= $pathCount; $i++) {
-                if ($i == $pathCount) {
-                    $namespace .= '\\Web' . Str::studly($path[$i - 1]);
-                } else {
-                    $namespace .= '\\' . Str::studly($path[$i - 1]);
-                }
-            }
-        } else {
-            $namespace .= 'Web' . Str::studly($path[0]);
+        if (array_key_exists($type, $controllers = cms_config('controllers'))) {
+            return [$controllers[$type], $method];
         }
 
-        return ltrim($namespace . 'Controller', '\\');
+        return ['uses' => 'Web' . str($type)->studly() . 'Controller@' . $method];
     }
 }

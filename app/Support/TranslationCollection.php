@@ -23,7 +23,7 @@ class TranslationCollection
     {
         return ! is_null($this->collection)
             ? $this->collection->get($key, $default)
-            : (new Translation)->byCode($key)->firstAttr('value', null, $default);
+            : (new Translation)->byCode($key)->value('value') ?? $default;
     }
 
     /**

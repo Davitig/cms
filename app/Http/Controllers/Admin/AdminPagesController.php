@@ -115,23 +115,20 @@ class AdminPagesController extends Controller
             )) {
                 $typeId = $request->get('type_id');
 
-                $explicitModel = cms_pages('implicit.' . $type);
+                $implicitModel = cms_pages('implicit.' . $type);
 
-                if ($explicitModel) {
-                    $explicitModelType = (new $explicitModel)->firstAttr('type', $typeId);
+                if ($implicitModel) {
+                    $implicitModelType = (new $implicitModel)->whereKey($typeId)->value('type');
 
-                    $input['page_type'] = $explicitModelType;
+                    $input['page_type'] = $implicitModelType;
 
                     $input['typeHtml'] = view(
                         'admin.pages._implicit_type', ['input' => $input]
                     )->render();
                 }
-            } elseif (
-                array_key_exists(
-                    $request->get('type'),
-                    (array) cms_pages('explicit')
-                )
-            ) {
+            } elseif (array_key_exists(
+                $request->get('type'), (array) cms_pages('explicit')
+            )) {
                 $input['typeHtml'] = view(
                     'admin.pages._module_type', ['input' => $input]
                 )->render();
