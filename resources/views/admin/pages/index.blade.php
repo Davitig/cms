@@ -113,7 +113,7 @@
 
                 // Update pages URL recursively, after position update
                 $('#save-tree').on('positionSaved', function() {
-                    updateUrl($('#nestable-list').find('> li'), '{{web_url()}}');
+                    updateUrl($('#nestable-list').find('> li'), '{{web_url('/')}}');
                 });
 
                 // Collapse parent pages

@@ -107,9 +107,9 @@ trait HasGallery
      * Add a where "gallery_id" clause to the query.
      *
      * @param  int  $id
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Base\Builder|static
      */
-    public function galleryId(int $id): Builder
+    public function galleryId(int $id): Builder|static
     {
         return $this->where('gallery_id', $id);
     }
@@ -118,9 +118,9 @@ trait HasGallery
      * Add a where "visible" clause to the query.
      *
      * @param  int  $value
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Base\Builder|static
      */
-    public function whereVisible(int $value = 1): Builder
+    public function whereVisible(int $value = 1): Builder|static
     {
         return $this->where('visible', $value);
     }

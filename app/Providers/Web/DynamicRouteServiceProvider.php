@@ -3,6 +3,7 @@
 namespace App\Providers\Web;
 
 use App\Models\Alt\Base\Model;
+use App\Models\Alt\Contracts\Collection as CollectionContract;
 use App\Models\Page\Page;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\Request;
@@ -18,13 +19,6 @@ class DynamicRouteServiceProvider extends ServiceProvider
      * @var string
      */
     protected string $namespace = 'App\Http\Controllers\Web';
-
-    /**
-     * The Request instance.
-     *
-     * @var \Illuminate\Http\Request
-     */
-    protected Request $request;
 
     /**
      * The router instance.
@@ -97,11 +91,32 @@ class DynamicRouteServiceProvider extends ServiceProvider
     protected array $explicitTypes = [];
 
     /**
-     * The array of the types that will allow specific requests.
+     * The array of the types that will allow specified requests.
      *
      * @var array
      */
-    protected array $requestMethods = [];
+    protected array $typeMethods = [];
+
+    /**
+     * The request method.
+     *
+     * @var string
+     */
+    protected string $requestMethod;
+
+    /**
+     * The array of the types that will allow adding tab like URIs.
+     *
+     * @var array
+     */
+    protected array $tabs = [];
+
+    /**
+     * The action method of the requested active tab.
+     *
+     * @var string|null
+     */
+    protected ?string $tabActionMethod = null;
 
     /**
      * Register services.
@@ -125,9 +140,9 @@ class DynamicRouteServiceProvider extends ServiceProvider
             return;
         }
 
-        $this->request = $this->app['request'];
+        $request = $this->app['request'];
 
-        $this->segments = $this->request->segments();
+        $this->segments = $request->segments();
 
         if (current($this->segments) == $language = $config->get('_app.language')) {
             array_shift($this->segments);
@@ -140,7 +155,7 @@ class DynamicRouteServiceProvider extends ServiceProvider
         $this->router = $this->app['router'];
 
         foreach ($this->router->getRoutes()->getRoutes() as $route) {
-            if ($route->matches($this->request)) {
+            if ($route->matches($request)) {
                 return;
             }
         }
@@ -155,7 +170,11 @@ class DynamicRouteServiceProvider extends ServiceProvider
 
         $this->explicitTypes = $config->get('cms.pages.explicit', []);
 
-        $this->requestMethods = $config->get('cms.methods', []);
+        $this->typeMethods = $config->get('cms.type_methods', []);
+
+        $this->requestMethod = strtolower($request->method());
+
+        $this->tabs = $config->get('cms.tabs', []);
 
         $this->build();
     }
@@ -225,6 +244,17 @@ class DynamicRouteServiceProvider extends ServiceProvider
     }
 
     /**
+     * Reset the binders' array by unbinder with the specified length.
+     *
+     * @param  int  $length
+     * @return void
+     */
+    protected function resetBinders(int $length = 0): void
+    {
+        $this->binders = array_fill(0, $length, $this->unbinder);
+    }
+
+    /**
      * Detect dynamic route.
      *
      * @return bool
@@ -259,16 +289,26 @@ class DynamicRouteServiceProvider extends ServiceProvider
     protected function setPageRoute(Page $page): bool
     {
         if (array_key_exists($page->type, $this->implicitTypes)
-            || $this->segmentsCount > ($itemsCount = count($this->items))
+            || ($segmentsLeft = (
+                $this->segmentsCount - ($itemsCount = count($this->items))
+            )) > 1
         ) {
             return false;
         }
 
-        $this->binders = array_fill(0, $itemsCount, $this->unbinder);
+        $this->resetBinders($itemsCount - 1);
 
-        $this->binders[array_key_last($this->binders)] = $page;
+        $this->binders[] = $page;
 
-        return $this->setCurrentRoute($page->type, $page->template ?: 'index');
+        if ($segmentsLeft
+            && ! $this->bindTab($page->type, 'index', last($this->segments))
+        ) {
+            return false;
+        }
+
+        $this->setCurrentRoute($page->type, $page->template ?: 'index');
+
+        return true;
     }
 
     /**
@@ -280,17 +320,27 @@ class DynamicRouteServiceProvider extends ServiceProvider
     protected function setExplicitRoute(Page $page): bool
     {
         if (! array_key_exists($page->type, $this->explicitTypes)
-            || $this->segmentsCount - ($itemsCount = count($this->items)) > 1
+            || ($segmentsLeft = (
+                $this->segmentsCount - ($itemsCount = count($this->items))
+            )) > 2
         ) {
             return false;
         }
 
-        $this->binders = array_fill(0, $itemsCount - 1, $this->unbinder);
+        $this->resetBinders($itemsCount - 1);
 
         $this->binders[] = $page;
-        $this->binders[] = last($this->segments);
+        $this->binders[] = $this->segments[$this->segmentsCount - $segmentsLeft];
 
-        return $this->setCurrentRoute($page->type, 'show');
+        if ($segmentsLeft > 1
+            && ! $this->bindTab($page->type, 'show', last($this->segments))
+        ) {
+            return false;
+        }
+
+        $this->setCurrentRoute($page->type, 'show');
+
+        return true;
     }
 
     /**
@@ -302,59 +352,154 @@ class DynamicRouteServiceProvider extends ServiceProvider
     protected function setImplicitRoute(Page $page): bool
     {
         if (! array_key_exists($page->type, $this->implicitTypes)
-            || ($this->segmentsCount - ($itemsCount = count($this->items))) > 1
+            || ($segmentsLeft = (
+                $this->segmentsCount - ($itemsCount = count($this->items))
+            )) > 2
         ) {
             return false;
         }
 
         $model = (new $this->implicitTypes[$page->type])->findOrFail($page->type_id);
 
-        $this->binders = array_fill(0, count($this->items) - 1, $this->unbinder);
+        $this->resetBinders($itemsCount - 1);
 
         $this->binders[] = [$page, $model];
 
-        if ($this->segmentsCount == $itemsCount) {
-            return $this->setCurrentRoute($model->type, 'index');
+        if (! $segmentsLeft
+            || $this->bindTab($model->type, 'index', last($this->segments))
+        ) {
+            $this->setCurrentRoute($model->type, 'index');
+
+            return true;
         }
 
         if (! array_key_exists($model->type, $this->implicitTypes)) {
-            $this->binders[] = last($this->segments);
+            $this->binders[] = $this->segments[$this->segmentsCount - $segmentsLeft];
 
-            return $this->setCurrentRoute($model->type, 'show');
+            if ($segmentsLeft > 1
+                && ! $this->bindTab($model->type, 'show', last($this->segments))
+            ) {
+                return false;
+            }
+
+            $this->setCurrentRoute($model->type, 'show');
+
+            return true;
         }
 
-        return $this->setDeepImplicitRoute($model);
+        $this->setDeepImplicitRoute($model, $segmentsLeft);
+
+        return false;
     }
 
     /**
      * Set the deep implicit route.
      *
      * @param  \App\Models\Alt\Base\Model  $implicitModel
+     * @param  int  $segmentsLeft
      * @return bool
      */
-    protected function setDeepImplicitRoute(Model $implicitModel): bool
+    protected function setDeepImplicitRoute(Model $implicitModel, int $segmentsLeft): bool
     {
         $model = new $this->implicitTypes[$implicitModel->type];
 
-        if (! method_exists($model, 'bySlug')) {
+        if (! $model instanceof CollectionContract) {
             return false;
         }
 
-        $model = $model->bySlug(last($this->segments), $implicitModel->id)->firstOrFail();
+        $model = $model->bySlug(
+            $this->segments[$this->segmentsCount - $segmentsLeft], $implicitModel->id
+        )->firstOrFail();
 
         $this->binders[] = $model;
 
-        return $this->setCurrentRoute($model->type, 'index');
+        if ($segmentsLeft > 1
+            && ! $this->bindTab($model->type, 'index', last($this->segments))
+        ) {
+            return true;
+        }
+
+        $this->setCurrentRoute($model->type, 'index');
+
+        return true;
+    }
+
+    /**
+     * Set the specified type tab into the binders.
+     *
+     * @param  string  $type
+     * @param  string  $typeMethod
+     * @param  string  $tab
+     * @return bool
+     */
+    protected function bindTab(string $type, string $typeMethod, string $tab): bool
+    {
+        if (! array_key_exists($this->requestMethod, $this->tabs)) {
+            return false;
+        }
+
+        $type .= '@' . $typeMethod;
+
+        foreach ($this->tabs[$this->requestMethod] as $key => $value) {
+            if (! str_contains($key, '@')) {
+                $this->tabs[$this->requestMethod][$key . '@index'] = $value;
+                unset($this->tabs[$this->requestMethod][$key]);
+            }
+        }
+
+        if (array_key_exists($type, $this->tabs[$this->requestMethod])
+            && array_key_exists($tab, $this->tabs[$this->requestMethod][$type])
+        ) {
+            $this->binders[] = $tab;
+
+            if ($this->requestMethod == strtolower(Request::METHOD_GET)) {
+                foreach (languages() as $key => $value) {
+                    $this->urlLangPaths[$key][] = $tab;
+                }
+            }
+
+            $this->tabActionMethod = $this->tabs[$this->requestMethod][$type][$tab];
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
      * Set the current route.
      *
      * @param  string  $type
-     * @param  string  $method
-     * @return bool
+     * @param  string  $actionMethod
+     * @return void
      */
-    protected function setCurrentRoute(string $type, string $method): bool
+    protected function setCurrentRoute(string $type, string $actionMethod): void
+    {
+        $routeMethod = $this->requestMethod;
+
+        if (is_null($this->tabActionMethod)) {
+            if (array_key_exists($routeMethod, $this->typeMethods)
+                && array_key_exists($type, $types = $this->typeMethods[$routeMethod])
+            ) {
+                $actionMethod = $types[$type];
+            } else {
+                $routeMethod = strtolower(Request::METHOD_GET);
+            }
+        } else {
+            $actionMethod = $this->tabActionMethod;
+        }
+
+        $this->router->$routeMethod(
+            $this->bindRoutesAndGetPath(), $this->getControllerAction($type, $actionMethod)
+        );
+    }
+
+    /**
+     * Bind routes and get a path.
+     *
+     * @return string
+     */
+    protected function bindRoutesAndGetPath(): string
     {
         $path = '';
 
@@ -373,22 +518,7 @@ class DynamicRouteServiceProvider extends ServiceProvider
             }
         }
 
-        $route = strtolower($this->request->method());
-
-        if (array_key_exists($route, $this->requestMethods)
-            && array_key_exists($type, $types = $this->requestMethods[$route])
-        ) {
-            $method = $types[$type];
-        } else {
-            $route = 'get';
-        }
-
-        $this->router->$route(
-            trim($this->pathPrefix, '/') . '/' . trim($path, '/'),
-            $this->getControllerAction($type, $method)
-        );
-
-        return true;
+        return trim($this->pathPrefix, '/') . '/' . trim($path, '/');
     }
 
     /**

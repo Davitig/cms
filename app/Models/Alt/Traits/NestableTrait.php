@@ -12,40 +12,11 @@ trait NestableTrait
      * Add a where "parent_id" clause to the query.
      *
      * @param  int  $id
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Base\Builder|static
      */
-    public function parentId(int $id): Builder
+    public function parentId(int $id): Builder|static
     {
         return $this->where('parent_id', $id);
-    }
-
-    /**
-     * Get the base model.
-     *
-     * @param  array|string  $columns
-     * @param  int|null  $id
-     * @param  \Closure|null  $callback
-     * @return static
-     */
-    public function getBaseModel(
-        array|string $columns = ['*'],
-        ?int         $id = null,
-        ?Closure     $callback = null
-    ): static
-    {
-        if (! ($id = ($id ?: $this->parent_id))) {
-            return $this;
-        }
-
-        if (is_null($model = $this->where('id', $id)->forPublic()->first($columns))) {
-            return $this;
-        }
-
-        if (! $model->parent_id || (! is_null($callback) && $callback($model))) {
-            return $model;
-        }
-
-        return $this->getBaseModel($columns, $model->parent_id, $callback);
     }
 
     /**

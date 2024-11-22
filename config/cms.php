@@ -178,20 +178,41 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Request Methods
+    | Request Methods For Types
     |--------------------------------------------------------------------------
     |
-    | This array used to specify types with methods, that will allow to
-    | send a specified requests.
+    | This array used to specify request methods with types, that will allow
+    | to send a specified requests.
     |
-    | E.g. "post", "put", "delete".
+    | [request methods] => [type => controller method]
+    |
+    | E.g. "post", "put", "delete"
     |
     */
 
-    'methods' => [
+    'type_methods' => [
         'post' => [
             'feedback' => 'send'
         ]
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tabs
+    |--------------------------------------------------------------------------
+    |
+    | This array used to specify types, that will allow adding tab like URIs.
+    |
+    | [request methods] => [types@method] => [URI => controller method]
+    |
+    */
+
+    'tabs' => [
+        // 'get' => [
+        //     'articles@show' => [
+        //         'authors' => 'getAuthors'
+        //     ]
+        // ]
     ],
 
     /*

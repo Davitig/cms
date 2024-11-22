@@ -62,7 +62,6 @@ class AdminUserRouteAccessComposer
             Permission::$routeNamesAllowed
         );
 
-        //
         return function (...$routeNames) use ($routeNamesAllowed) {
             if (empty($routeNames)) {
                 return false;

@@ -41,7 +41,7 @@ trait PositionableTrait
             if ($nestable) {
                 $attributes['parent_id'] = $parentId;
             } elseif (isset($item['pos'])) {
-                $position = $item['pos'];
+                $position = max($item['pos'], $position);
             }
 
             $attributes['position'] = $position;

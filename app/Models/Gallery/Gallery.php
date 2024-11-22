@@ -4,11 +4,12 @@ namespace App\Models\Gallery;
 
 use App\Models\Alt\Base\Builder;
 use App\Models\Alt\Base\Model;
+use App\Models\Alt\Contracts\Collection;
 use App\Models\Alt\Traits\HasCollection;
 use App\Models\Alt\Traits\HasLanguage;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Gallery extends Model
+class Gallery extends Model implements Collection
 {
     use HasCollection, HasLanguage;
 

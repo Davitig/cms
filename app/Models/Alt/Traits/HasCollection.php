@@ -133,9 +133,9 @@ trait HasCollection
      * Add a where "collection_id" clause to the query.
      *
      * @param  int  $id
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Base\Builder|static
      */
-    public function collectionId(int $id): Builder
+    public function collectionId(int $id): Builder|static
     {
         return $this->where('collection_id', $id);
     }
@@ -144,9 +144,9 @@ trait HasCollection
      * Add a where "visible" clause to the query.
      *
      * @param  int  $value
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Base\Builder|static
      */
-    public function whereVisible(int $value = 1): Builder
+    public function whereVisible(int $value = 1): Builder|static
     {
         return $this->where('visible', $value);
     }
