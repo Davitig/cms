@@ -1,4 +1,4 @@
-@if (isset($item) && has_model_sub_items($item))
+@if (isset($item) && has_sub_items($item))
     <ul>
         @foreach ($item->sub_items as $item)
             <li id="item{{ $item->id }}" class="item{{$item->collapse ? ' uk-collapsed' : ''}}" data-id="{{ $item->id }}" data-pos="{{$item->position}}" data-parent="{{$item->parent_id}}">

@@ -27,7 +27,7 @@ class AdminPagesController extends Controller
     {
         $data['menu'] = (new Menu)->findOrFail($menuId);
 
-        $data['items'] = make_model_sub_items($this->model->forAdmin($menuId)->get());
+        $data['items'] = make_sub_items($this->model->forAdmin($menuId)->get());
 
         return view('admin.pages.index', $data);
     }

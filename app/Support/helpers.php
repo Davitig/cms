@@ -1,9 +1,6 @@
 <?php
 
-use App\Models\Alt\Base\Model;
-use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 /**
  * Get the application language.
@@ -303,7 +300,7 @@ function language_to_url(string $url, mixed $language = null): string
     }
 
     if (! empty($path) || $withLanguage) {
-        if (Str::startsWith($path, $baseUrl = request()->getBaseUrl())
+        if (str($path)->startsWith($baseUrl = request()->getBaseUrl())
             && $schemeAndHttpHost == request()->getSchemeAndHttpHost()
         ) {
             $path = substr($path, strlen($baseUrl));
@@ -322,60 +319,57 @@ function language_to_url(string $url, mixed $language = null): string
 
     return trim($schemeAndHttpHost . $baseUrl . '/' . $path, '/');
 }
+
 /**
- * Make a nestable eloquent models tree.
+ * Make a subitems' collection.
  *
  * @param  array|\Illuminate\Support\Collection  $items
- * @param  string|null  $slug
+ * @param  bool  $baseAll
  * @param  int  $parentId
- * @param  string  $parentKey
- * @param  string  $key
- * @return \Illuminate\Support\Collection
- *
- * @throws \InvalidArgumentException
+ * @param  string|null  $slug
+ * @return array|\Illuminate\Support\Collection
  */
-function make_model_sub_items(
+function make_sub_items(
     array|Collection $items,
-    ?string          $slug = null,
+    bool             $baseAll = false,
     int              $parentId = 0,
-    string           $parentKey = 'parent_id',
-    string           $key = 'id'
-): Collection
+    ?string          $slug = null
+): array|Collection
 {
-    if (! $items instanceof Collection && ! is_array($items)) {
-        throw new InvalidArgumentException(
-            'Argument 1 must be of the type array or an instance of ' . Collection::class
-        );
-    }
-
-    $data = [];
+    $data = $baseAll ? $items : [];
 
     $prevSlug = $slug;
 
     foreach ($items as $item) {
-        if (! $item instanceof Model || $item->$parentKey != $parentId) {
+        if ($item->parent_id != $parentId) {
             continue;
         }
 
         $item->full_slug = $prevSlug ? $prevSlug . '/' . $item->slug : $item->slug;
 
-        $item->sub_items = make_model_sub_items($items, $item->full_slug, $item->$key, $parentKey, $key);
+        $item->sub_items = make_sub_items($items, false, $item->id, $item->full_slug);
 
-        $data[] = $item;
+        if (! $baseAll) {
+            $data[] = $item;
+        }
     }
 
-    return new Collection($data);
+    if (! is_array($items)) {
+        return $baseAll ? $data : new Collection($data);
+    }
+
+    return $data;
 }
 
 /**
- * Determine if the item has a nestable eloquent model items.
+ * Determine if the item has a subitems' collection.
  *
- * @param  mixed  $item
+ * @param  object  $item
  * @return bool
  */
-function has_model_sub_items(mixed $item): bool
+function has_sub_items(object $item): bool
 {
-    return $item instanceof Model
+    return isset($item->sub_items)
         && $item->sub_items instanceof Collection
         && $item->sub_items->isNotEmpty();
 }
@@ -515,8 +509,9 @@ function format_bytes(int $bytes, int $precision = 2): string
 
     return round($bytes, $precision) . ' ' . $units[$pow];
 }
+
 /**
- * Get youtube video id from url.
+ * Get YouTube video id from url.
  *
  * @param  string  $url
  * @param  array  $allowQueryStrings
@@ -562,33 +557,4 @@ function get_youtube_id(string $url, array $allowQueryStrings = [], bool $strict
 function get_youtube_embed(string $url, array $allowQueryStrings = []): string
 {
     return 'https://www.youtube.com/embed/' . get_youtube_id($url, $allowQueryStrings);
-}
-
-/**
- * Register a database query listener and log the queries.
- *
- * @return void
- */
-function log_executed_db_queries(): void
-{
-    $filename = storage_path('logs/queries.log');
-    $separator = '------------------------------' . PHP_EOL;
-
-    if (file_exists($filename)) {
-        @unlink($filename);
-    }
-
-    file_put_contents($filename, $separator);
-
-    app('events')->listen(QueryExecuted::class, function($query) use ($filename, $separator) {
-        $conn     = 'Connection: ' . $query->connectionName . PHP_EOL;
-        $sql      = 'SQL: ' . $query->sql . PHP_EOL;
-        $bindings = 'Bindings: ' . implode(', ', (array) $query->bindings) . PHP_EOL;
-        $time     = 'Time: ' . $query->time . ' ms' . PHP_EOL;
-        $data     = $conn . $sql . $bindings . $time . $separator;
-
-        $flags = FILE_APPEND | LOCK_EX;
-
-        file_put_contents($filename, $data, $flags);
-    });
 }

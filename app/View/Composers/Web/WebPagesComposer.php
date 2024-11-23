@@ -45,7 +45,7 @@ class WebPagesComposer
         $menuId = (new Menu)->where('main', 1)->value('id');
 
         if (! is_null($menuId)) {
-            return make_model_sub_items(
+            return make_sub_items(
                 (new Page)->forPublic()->menuId($menuId)->positionAsc()->get()
             );
         }
