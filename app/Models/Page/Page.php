@@ -82,11 +82,12 @@ class Page extends Model
      *
      * @param  string  $slug
      * @param  int  $parentId
+     * @param  mixed  $currentLang
      * @return \App\Models\Alt\Base\Builder
      */
-    public function bySlugRoute(string $slug, int $parentId): Builder
+    public function bySlugRoute(string $slug, int $parentId, mixed $currentLang = true): Builder
     {
-        return $this->parentId($parentId)->where('slug', $slug)->forPublic();
+        return $this->parentId($parentId)->where('slug', $slug)->forPublic($currentLang);
     }
 
     /**

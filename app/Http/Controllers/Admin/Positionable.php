@@ -36,12 +36,12 @@ trait Positionable
     }
 
     /**
-     * Delete the model and update sub models parent id.
+     * Delete the model and update submodels.
      *
      * @param  int|string  $id
      * @return bool|null
      */
-    protected function deleteAndUpdateSubParentIds(int|string $id): ?bool
+    protected function deleteAndUpdateSubItems(int|string $id): ?bool
     {
         $model = $this->model->findOrFail($id);
 
@@ -53,7 +53,11 @@ trait Positionable
 
         $parentId = $model->parent_id ? (int) $this->model->find($model->parent_id)?->id : 0;
 
-        $this->model->parentId($id)->update(['parent_id' => $parentId]);
+        $maxParentPosition = $model->parentId($parentId)->max('position') + 1;
+
+        $this->model->parentId($id)->update([
+            'position' => $maxParentPosition, 'parent_id' => $parentId
+        ]);
 
         return $deleted;
     }

@@ -151,7 +151,7 @@ class AdminPagesController extends Controller
      */
     public function destroy(string $menuId, string $id)
     {
-        $this->deleteAndUpdateSubParentIds($id);
+        $this->deleteAndUpdateSubItems($id);
 
         if (request()->expectsJson()) {
             return response()->json(fill_data('success', trans('database.deleted')));

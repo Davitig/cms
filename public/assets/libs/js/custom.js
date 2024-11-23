@@ -83,6 +83,7 @@ $(function () {
                     }
                     // delete action
                     if (res?.result === 'success') {
+                        // move up
                         let item = form.closest('.item');
                         let subItems = item.find('.uk-nestable-list').first()
                             .find('.item[data-parent="'+item.data('id')+'"]');
@@ -90,17 +91,26 @@ $(function () {
                             let baseItem = item.closest('.item[data-id="'+item.data('parent')+'"]')
                                 .find('.uk-nestable-list').first();
                             if (baseItem.length) {
-                                subItems.each(function () {
-                                    baseItem.append($(this).attr('data-parent', item.data('parent')));
+                                let parentId = item.data('parent');
+                                let pos = parseInt(
+                                    $('.item[data-parent="'+parentId+'"]', baseItem).last().data('pos')
+                                );
+                                subItems.each(function (i) {
+                                    $(this).attr('data-pos', pos + i + 1).attr('data-parent', parentId);
+                                    baseItem.append(this);
                                 });
                             } else {
                                 let list = $('#nestable-list');
-                                subItems.each(function () {
-                                    $(this).attr('data-parent', 0);
+                                let pos = parseInt(
+                                    $('.item[data-parent="0"]', list).last().data('pos')
+                                );
+                                subItems.each(function (i) {
+                                    $(this).attr('data-pos', pos + i + 1).attr('data-parent', 0);
                                     list.append(this);
                                 });
                             }
                         }
+                        // remove
                         item.fadeOut(500, function () {
                             $(this).remove();
                         });

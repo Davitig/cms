@@ -238,7 +238,7 @@ class DynamicRouteServiceProvider extends ServiceProvider
     {
         $this->setPages();
 
-        if ($this->detectRoute()) {
+        if ($this->detectPageRoute()) {
             $this->setInstances();
         }
     }
@@ -255,11 +255,11 @@ class DynamicRouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Detect dynamic route.
+     * Detect dynamic page route.
      *
      * @return bool
      */
-    protected function detectRoute(): bool
+    protected function detectPageRoute(): bool
     {
         if (empty($page = end($this->items))) {
             return false;
