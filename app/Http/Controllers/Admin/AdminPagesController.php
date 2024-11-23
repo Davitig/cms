@@ -151,19 +151,7 @@ class AdminPagesController extends Controller
      */
     public function destroy(string $menuId, string $id)
     {
-        if ($this->model->hasSubModel($id)) {
-            if (request()->expectsJson()) {
-                return response()->json(fill_data(
-                    'error', trans('database.error.1451')
-                ));
-            }
-
-            return back()->with('alert', fill_data(
-                'error', trans('database.error.1451')
-            ));
-        }
-
-        $this->model->whereKey($id)->delete();
+        $this->deleteAndUpdateSubParentIds($id);
 
         if (request()->expectsJson()) {
             return response()->json(fill_data('success', trans('database.deleted')));

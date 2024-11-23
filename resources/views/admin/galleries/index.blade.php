@@ -60,7 +60,7 @@
                                                 <div class="list-label"><a href="{{ $editUrl = cms_route('galleries.edit', [$parent->id, $item->id]) }}">{{ $item->title }}</a></div>
                                             </div>
                                             <div class="col-sm-5 col-xs-2">
-                                                <div class="btn-action togglable pull-right">
+                                                <div class="btn-action toggleable pull-right">
                                                     <div class="btn btn-gray item-id disabled">#{{$item->id}}</div>
                                                     <a href="#" class="transfer btn btn-white" title="Transfer to another collection" data-id="{{$item->id}}">
                                                         <span class="{{$iconParent}}"></span>

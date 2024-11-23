@@ -1,7 +1,7 @@
 @if (isset($item) && has_model_sub_items($item))
     <ul>
         @foreach ($item->sub_items as $item)
-            <li id="item{{ $item->id }}" class="item{{$item->collapse ? ' uk-collapsed' : ''}}" data-id="{{ $item->id }}" data-pos="{{$item->position}}">
+            <li id="item{{ $item->id }}" class="item{{$item->collapse ? ' uk-collapsed' : ''}}" data-id="{{ $item->id }}" data-pos="{{$item->position}}" data-parent="{{$item->parent_id}}">
                 <div class="uk-nestable-item">
                     <div class="row">
                         <div class="col-sm-7 col-xs-10">
@@ -10,7 +10,7 @@
                             <div class="list-label"><a href="{{ $editUrl = cms_route('pages.edit', [$item->menu_id, $item->id]) }}">{{ $item->short_title }}</a></div>
                         </div>
                         <div class="col-sm-5 col-xs-2">
-                            <div class="btn-action togglable pull-right">
+                            <div class="btn-action toggleable pull-right">
                                 <div class="btn btn-gray item-id disabled">#{{$item->id}}</div>
                                 <a href="{{web_url($item->slug)}}" class="link btn btn-white" title="Go to page" data-slug="{{$item->slug}}" target="_blank">
                                     <span class="fa fa-link"></span>
@@ -40,7 +40,7 @@
                                     <span class="fa fa-edit"></span>
                                 </a>
                                 {{ html()->form('delete', cms_route('pages.destroy', [$menu->id, $item->id]))->class('form-delete')->open() }}
-                                <button type="submit" class="btn btn-danger" title="{{trans('general.delete')}}"{{has_model_sub_items($item) ? ' disabled' : ''}}>
+                                <button type="submit" class="btn btn-danger" title="{{trans('general.delete')}}">
                                     <span class="fa fa-trash"></span>
                                 </button>
                                 {{ html()->form()->close() }}

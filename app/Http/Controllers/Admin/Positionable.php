@@ -34,4 +34,27 @@ trait Positionable
 
         return back();
     }
+
+    /**
+     * Delete the model and update sub models parent id.
+     *
+     * @param  int|string  $id
+     * @return bool|null
+     */
+    protected function deleteAndUpdateSubParentIds(int|string $id): ?bool
+    {
+        $model = $this->model->findOrFail($id);
+
+        $deleted = $model->delete();
+
+        if (is_null($model->parent_id)) {
+            return $deleted;
+        }
+
+        $parentId = $model->parent_id ? (int) $this->model->find($model->parent_id)?->id : 0;
+
+        $this->model->parentId($id)->update(['parent_id' => $parentId]);
+
+        return $deleted;
+    }
 }

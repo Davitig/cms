@@ -83,12 +83,25 @@ $(function () {
                     }
                     // delete action
                     if (res?.result === 'success') {
-                        form.closest('.item').fadeOut(600, function () {
-                            if ($(this).data('parent') === 1) {
-                                $(this).closest('.uk-parent').removeClass('uk-parent');
-                                disableParentDeletion();
+                        let item = form.closest('.item');
+                        let subItems = item.find('.uk-nestable-list').first()
+                            .find('.item[data-parent="'+item.data('id')+'"]');
+                        if (subItems.length) {
+                            let baseItem = item.closest('.item[data-id="'+item.data('parent')+'"]')
+                                .find('.uk-nestable-list').first();
+                            if (baseItem.length) {
+                                subItems.each(function () {
+                                    baseItem.append($(this).attr('data-parent', item.data('parent')));
+                                });
+                            } else {
+                                let list = $('#nestable-list');
+                                subItems.each(function () {
+                                    $(this).attr('data-parent', 0);
+                                    list.append(this);
+                                });
                             }
-
+                        }
+                        item.fadeOut(500, function () {
                             $(this).remove();
                         });
                     }
@@ -277,40 +290,47 @@ function lockscreen(time, form, reActive) {
 }
 // Lockscreen end
 
-// Update url recursively
-function updateUrl(target, url) {
+// Update sub items data
+function updateSubItems(subItems, url, parentId = 0) {
     let prevUrl = url;
 
-    target.each(function () {
+    subItems.each(function () {
+        $(this).attr('data-parent', parentId);
+
         let item = $(this).find('a.link');
+        let itemSlug = item.data('slug');
 
-        url = prevUrl + '/' + item.data('slug');
+        if (itemSlug) {
+            url = prevUrl + '/' + itemSlug;
 
-        item.attr('href', url);
+            item.attr('href', url);
+        }
 
         if ($(this).hasClass('uk-parent')) {
-            updateUrl($('> ul', this).children('li'), url);
+            updateSubItems($('> ul', this).children('li'), url, $(this).data('id'));
         }
     });
 }
 
-function disableParentDeletion() {
-    let nestable = $('#nestable-list');
-    $('.form-delete [type="submit"]', nestable).prop('disabled', false);
+let saveTreeBtn = $('#save-tree');
 
-    $('.uk-parent', nestable).each(function () {
-        $('.form-delete [type="submit"]', this).first().prop('disabled', true);
-    });
-}
+// Update nestable list data after position update
+saveTreeBtn.on('positionSaved', function() {
+    let webUrl = $('#web-url').attr('href');
+    let parentSlug = $('#items').data('parent-slug');
+    if (parentSlug) {
+        webUrl += '/' + parentSlug;
+    }
+    updateSubItems($('#nestable-list').find('> li'), webUrl);
+});
 
 function positionable(url, orderBy, page, hasMorePages) {
     const aTagStart = '<a href="#" class="move btn btn-gray fa-long-arrow-';
     const aTagPrev = 'left left" data-move="prev" title="Move to prev page"';
     const aTagNext = 'right right" data-move="next" title="Move to next page"';
     const aTagEnd = '></a>';
-    let saveBtn = $('#save-tree');
-    let saveBtnIcon = $('.icon-var', saveBtn);
-    let postHidden = {'_method':'put', '_token':saveBtn.data('token')};
+    let saveBtnIcon = $('.icon-var', saveTreeBtn);
+    let postHidden = {'_method':'put', '_token':saveTreeBtn.data('token')};
     let nestable = $('#nestable-list');
     page = parseInt(page);
 
@@ -325,7 +345,7 @@ function positionable(url, orderBy, page, hasMorePages) {
 
     nestable.on('nestable-stop', function () {
         $('.move', nestable).remove();
-        saveBtn.show().prop('disabled', false);
+        saveTreeBtn.show().prop('disabled', false);
         saveBtnIcon.removeClass('fa-spin fa-check').addClass('fa-save');
     });
 
@@ -363,7 +383,7 @@ function positionable(url, orderBy, page, hasMorePages) {
     });
 
     // Position save
-    saveBtn.on('click', function () {
+    saveTreeBtn.on('click', function () {
         $(this).prop('disabled', true);
         saveBtnIcon.addClass('fa-spin');
         let nestable = $('#nestable-list');
@@ -407,15 +427,13 @@ function positionable(url, orderBy, page, hasMorePages) {
                 });
             }
 
-            disableParentDeletion();
-
-            saveBtn.trigger('positionSaved');
+            saveTreeBtn.trigger('positionSaved');
         }, 'json').fail(function (xhr) {
             saveBtnIcon.removeClass('fa-spin fa-save').addClass('fa-remove');
 
             alert(xhr.responseText);
         }).always(function () {
-            saveBtn.delay(400).fadeOut(500);
+            saveTreeBtn.delay(400).fadeOut(500);
         });
     });
 }

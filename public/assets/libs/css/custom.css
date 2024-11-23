@@ -76,20 +76,20 @@ select .sub-item {padding-left:20px;}
 #items .item {position:relative;}
 #items .item .btn {min-width:40px;margin-left:2px;margin-right:2px;}
 #items .item .btn.item-id {width:auto;}
-#items .item .btn-action.togglable {white-space:nowrap;}
+#items .item .btn-action.toggleable {white-space:nowrap;}
 .btn-action form {display:inline-block;}
 .btn-action .btn {margin-bottom:0;}
 .btn-toggle {margin-bottom:0;}
 @media (max-width:1200px) {
-    #items .item .btn-action.togglable {display:none;position:absolute;top:0;right:60px;z-index:1;}
-    #items .item .btn-action.togglable .btn {margin-bottom:5px;}
+    #items .item .btn-action.toggleable {display:none;position:absolute;top:0;right:60px;z-index:1;}
+    #items .item .btn-action.toggleable .btn {margin-bottom:5px;}
 }
 @media (min-width:1200px) {
-    #items .item .btn-action.togglable {display:block !important;}
+    #items .item .btn-action.toggleable {display:block !important;}
     .btn-toggle {display:none;}
 }
 @media (max-width:768px) {
-    #items .item .btn-action.togglable {white-space:normal;}
+    #items .item .btn-action.toggleable {white-space:normal;}
 }
 
 /*** OVERRIDE XENON ***/
@@ -140,6 +140,9 @@ select .sub-item {padding-left:20px;}
 .cbr-replaced .cbr-state {width:19px;height:18px;}
 
 /* uk-nestable */
+.uk-nestable.custom .uk-nestable-handle {padding:13px;}
+.uk-nestable.custom .list-label {padding:13px;}
+.uk-nestable.custom .btn {padding:13px 18px;}
 .uk-nestable-item {clear:both;}
 .uk-nestable-item .list-label {display:block;padding:7px;overflow:hidden;}
 .uk-nestable-item .list-label a {width:100%;display:inline-block;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
