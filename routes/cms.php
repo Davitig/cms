@@ -1,21 +1,27 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminArticlesController;
 use App\Http\Controllers\Admin\AdminCalendarController;
 use App\Http\Controllers\Admin\AdminCmsUserRolesController;
 use App\Http\Controllers\Admin\AdminCmsUsersController;
 use App\Http\Controllers\Admin\AdminCollectionsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminEventsController;
+use App\Http\Controllers\Admin\AdminFaqController;
 use App\Http\Controllers\Admin\AdminFilemanagerController;
+use App\Http\Controllers\Admin\AdminGalleriesController;
 use App\Http\Controllers\Admin\AdminLanguagesController;
 use App\Http\Controllers\Admin\AdminLockscreenController;
 use App\Http\Controllers\Admin\AdminMenusController;
 use App\Http\Controllers\Admin\AdminNotesController;
 use App\Http\Controllers\Admin\AdminPagesController;
 use App\Http\Controllers\Admin\AdminPermissionsController;
+use App\Http\Controllers\Admin\AdminPhotosController;
 use App\Http\Controllers\Admin\AdminSettingsController;
 use App\Http\Controllers\Admin\AdminSitemapXmlController;
 use App\Http\Controllers\Admin\AdminSliderController;
 use App\Http\Controllers\Admin\AdminTranslationsController;
+use App\Http\Controllers\Admin\AdminVideosController;
 use App\Http\Controllers\Admin\AdminWebSettingsController;
 use App\Http\Controllers\Admin\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
@@ -71,7 +77,7 @@ Route::prefix(cms_slug(null, true))->name(cms_route_name())->group(function ($ro
             $router->put('pages/{id}/visibility', 'visibility')->name('pages.visibility');
             $router->put('pages/position', 'updatePosition')->name('pages.updatePosition');
             $router->get('pages/templates', 'getTemplates')->name('pages.templates');
-            $router->put('pages/transfer/{menuId}', 'transfer')->name('pages.transfer');
+            $router->put('pages/transfer/{menu}', 'transfer')->name('pages.transfer');
             $router->put('pages/collapse', 'collapse')->name('pages.collapse');
             $router->resource('menus.pages', AdminPagesController::class)
                 ->names(resource_names('pages'))
@@ -83,20 +89,63 @@ Route::prefix(cms_slug(null, true))->name(cms_route_name())->group(function ($ro
             ->names(resource_names('collections'))
             ->except(['show']);
 
-        // type routes from config
-        foreach ((array) cms_config('implicit_routes') as $prefix => $routes) {
-            foreach ((array) $routes as $route => $controller) {
-                $router->put($route . '/{id}/visibility', [$controller, 'visibility'])
-                    ->name($route . '.visibility');
-                $router->put($route . '/position', [$controller, 'updatePosition'])
-                    ->name($route . '.updatePosition');
-                $router->put($route . '/transfer/{id}', [$controller, 'transfer'])
-                    ->name($route . '.transfer');
-                $router->resource($prefix . '.' . $route, $controller)
-                    ->names(resource_names($route))
-                    ->except(['show']);
-            }
-        }
+        // collection articles
+        $router->controller(AdminArticlesController::class)->group(function ($router) {
+            $router->put('articles/{id}/visibility', 'visibility')->name('articles.visibility');
+            $router->put('articles/position', 'updatePosition')->name('articles.updatePosition');
+            $router->put('articles/transfer/{collection}', 'transfer')->name('articles.transfer');
+            $router->resource('collections.articles', AdminArticlesController::class)
+                ->names(resource_names('articles'))
+                ->except(['show']);
+        });
+
+        // collection events
+        $router->controller(AdminEventsController::class)->group(function ($router) {
+            $router->put('events/{id}/visibility', 'visibility')->name('events.visibility');
+            $router->put('events/position', 'updatePosition')->name('events.updatePosition');
+            $router->put('events/transfer/{collection}', 'transfer')->name('events.transfer');
+            $router->resource('collections.events', AdminEventsController::class)
+                ->names(resource_names('events'))
+                ->except(['show']);
+        });
+
+        // collection faq
+        $router->controller(AdminFaqController::class)->group(function ($router) {
+            $router->put('faq/{id}/visibility', 'visibility')->name('faq.visibility');
+            $router->put('faq/position', 'updatePosition')->name('faq.updatePosition');
+            $router->put('faq/transfer/{collection}', 'transfer')->name('faq.transfer');
+            $router->resource('collections.faq', AdminFaqController::class)
+                ->names(resource_names('faq'))
+                ->except(['show']);
+        });
+
+        // collection galleries
+        $router->controller(AdminGalleriesController::class)->group(function ($router) {
+            $router->put('galleries/{id}/visibility', 'visibility')->name('galleries.visibility');
+            $router->put('galleries/position', 'updatePosition')->name('galleries.updatePosition');
+            $router->put('galleries/transfer/{collection}', 'transfer')->name('galleries.transfer');
+            $router->resource('collections.galleries', AdminGalleriesController::class)
+                ->names(resource_names('galleries'))
+                ->except(['show']);
+        });
+
+        // gallery photos
+        $router->controller(AdminPhotosController::class)->group(function ($router) {
+            $router->put('photos/{id}/visibility', 'visibility')->name('photos.visibility');
+            $router->put('photos/position', 'updatePosition')->name('photos.updatePosition');
+            $router->resource('galleries.photos', AdminPhotosController::class)
+                ->names(resource_names('photos'))
+                ->except(['show']);
+        });
+
+        // gallery videos
+        $router->controller(AdminVideosController::class)->group(function ($router) {
+            $router->put('videos/{id}/visibility', 'visibility')->name('videos.visibility');
+            $router->put('videos/position', 'updatePosition')->name('videos.updatePosition');
+            $router->resource('galleries.videos', AdminVideosController::class)
+                ->names(resource_names('videos'))
+                ->except(['show']);
+        });
 
         // file routes from config
         foreach ((array) cms_config('file_routes') as $route => $controller) {

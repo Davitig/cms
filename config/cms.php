@@ -1,15 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminArticleFilesController;
-use App\Http\Controllers\Admin\AdminArticlesController;
-use App\Http\Controllers\Admin\AdminEventFilesController;
-use App\Http\Controllers\Admin\AdminEventsController;
-use App\Http\Controllers\Admin\AdminFaqController;
-use App\Http\Controllers\Admin\AdminGalleriesController;
-use App\Http\Controllers\Admin\AdminPageFilesController;
-use App\Http\Controllers\Admin\AdminPhotosController;
-use App\Http\Controllers\Admin\AdminVideosController;
-
 return [
 
     /*
@@ -81,29 +71,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | CMS Implicit Routes
-    |--------------------------------------------------------------------------
-    |
-    | List of implicit type routes, which will also get additional routes.
-    | Additional routes: "visibility", "position", "transfer"
-    |
-    */
-
-    'implicit_routes' => [
-        'collections' => [
-            'articles' => AdminArticlesController::class,
-            'events' => AdminEventsController::class,
-            'galleries' => AdminGalleriesController::class,
-            'faq' => AdminFaqController::class
-        ],
-        'galleries' => [
-            'photos' => AdminPhotosController::class,
-            'videos' => AdminVideosController::class
-        ]
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | CMS File Routes
     |--------------------------------------------------------------------------
     |
@@ -113,9 +80,9 @@ return [
     */
 
     'file_routes' => [
-        'pages' => AdminPageFilesController::class,
-        'articles' => AdminArticleFilesController::class,
-        'events' => AdminEventFilesController::class
+        'pages' => App\Http\Controllers\Admin\AdminPageFilesController::class,
+        'articles' => App\Http\Controllers\Admin\AdminArticleFilesController::class,
+        'events' => App\Http\Controllers\Admin\AdminEventFilesController::class
     ],
 
     /*
