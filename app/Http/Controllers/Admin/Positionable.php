@@ -24,9 +24,9 @@ trait Positionable
 
         $params = request()->except('data');
 
-        $nestable = in_array('parent_id', $this->model->getFillable());
+        $hasSubItems = in_array('parent_id', $this->model->getFillable());
 
-        $result = $this->model->updatePosition($data, 0, $params, $nestable);
+        $result = $this->model->updatePosition($data, 0, $params, $hasSubItems);
 
         if (request()->expectsJson()) {
             return response()->json($result);

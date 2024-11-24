@@ -3,10 +3,9 @@
 namespace App\Models\Alt\Traits;
 
 use App\Models\Alt\Base\Builder;
-use Closure;
 use Illuminate\Database\Eloquent\Collection;
 
-trait NestableTrait
+trait HasSubModels
 {
     /**
      * Add a where "parent_id" clause to the query.
@@ -35,9 +34,7 @@ trait NestableTrait
         bool|int     $recursive = false
     ): Collection
     {
-        if (! ($parentId = $parentId ?: $this->parent_id)
-            || ! ($id = $id ?: $this->getKey())
-        ) {
+        if (! $parentId ??= $this->parent_id || ! $id ??= $this->getKey()) {
             return $this->newCollection();
         }
 
@@ -96,9 +93,7 @@ trait NestableTrait
      */
     public function hasSiblingModel(?int $parentId = null, ?int $id = null): bool
     {
-        if (! ($parentId = $parentId ?: $this->parent_id)
-            || ! ($id = $id ?: $this->getKey())
-        ) {
+        if (! $parentId ??= $this->parent_id || ! $id ??= $this->getKey()) {
             return false;
         }
 
@@ -113,7 +108,7 @@ trait NestableTrait
      */
     public function hasSubModel(?int $parentId = null): bool
     {
-        if (! ($parentId = $parentId ?: $this->getKey())) {
+        if (! $parentId ??= $this->getKey()) {
             return false;
         }
 
@@ -143,7 +138,7 @@ trait NestableTrait
     {
         $this->full_slug ??= $this->slug;
 
-        if (! ($value = (is_null($value) ? $this->parent_id : $value))) {
+        if (! $value ??= $this->parent_id) {
             return $this;
         }
 
@@ -157,9 +152,7 @@ trait NestableTrait
             return $this;
         }
 
-        $this->full_slug = trim(
-            $model->slug . '/' . $this->full_slug, '/'
-        );
+        $this->full_slug = trim($model->slug . '/' . $this->full_slug, '/');
 
         return $this->fullSlug($model->parent_id, $column);
     }

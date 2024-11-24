@@ -13,17 +13,17 @@ trait PositionableTrait
      * @param  array  $data
      * @param  int  $parentId
      * @param  array  $params
-     * @param  bool  $nestable
+     * @param  bool  $hasSubItems
      * @return bool
      */
     public function updatePosition(
         array $data,
         int   $parentId = 0,
         array $params = [],
-        bool  $nestable = false
+        bool  $hasSubItems = false
     ): bool
     {
-        if (! $nestable && ! is_array($data = $this->movePosition($data, $params))) {
+        if (! $hasSubItems && ! is_array($data = $this->movePosition($data, $params))) {
             return false;
         }
 
@@ -38,7 +38,7 @@ trait PositionableTrait
 
             $position++;
 
-            if ($nestable) {
+            if ($hasSubItems) {
                 $attributes['parent_id'] = $parentId;
             } elseif (isset($item['pos'])) {
                 $position = max($item['pos'], $position);
@@ -49,7 +49,7 @@ trait PositionableTrait
             $this->whereKey($item['id'])->update($attributes);
 
             if (isset($item['children'])) {
-                $this->updatePosition($item['children'], $item['id'], $params, $nestable);
+                $this->updatePosition($item['children'], $item['id'], $params, $hasSubItems);
             }
         }
 
@@ -119,9 +119,9 @@ trait PositionableTrait
     /**
      * Add an "order by" position asc clause to the query.
      *
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Base\Builder|static
      */
-    public function positionAsc(): Builder
+    public function positionAsc(): Builder|static
     {
         return $this->orderBy('position');
     }
@@ -129,9 +129,9 @@ trait PositionableTrait
     /**
      * Add an "order by" position desc clause to the query.
      *
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Base\Builder|static
      */
-    public function positionDesc(): Builder
+    public function positionDesc(): Builder|static
     {
         return $this->orderByDesc('position');
     }

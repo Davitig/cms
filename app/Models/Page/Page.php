@@ -6,14 +6,14 @@ use App\Models\Alt\Base\Builder;
 use App\Models\Alt\Base\Model;
 use App\Models\Alt\Traits\FileableTrait;
 use App\Models\Alt\Traits\HasLanguage;
-use App\Models\Alt\Traits\NestableTrait;
+use App\Models\Alt\Traits\HasSubModels;
 use App\Models\Alt\Traits\PositionableTrait;
 use App\Models\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Page extends Model
 {
-    use HasLanguage, PositionableTrait, FileableTrait, NestableTrait;
+    use HasLanguage, PositionableTrait, FileableTrait, HasSubModels;
 
     /**
      * The table associated with the model.
