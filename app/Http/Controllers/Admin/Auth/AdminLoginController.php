@@ -27,11 +27,9 @@ class AdminLoginController extends Controller
     }
 
     /**
-     * Get the register / login redirect path.
-     *
-     * @return string
+     * {@inheritDoc}
      */
-    public function redirectTo(): string
+    public function redirectPath(): string
     {
         return cms_url('/');
     }
