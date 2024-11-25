@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Base\Model;
+use App\Models\Alt\Eloquent\Model;
 
 class Menu extends Model
 {

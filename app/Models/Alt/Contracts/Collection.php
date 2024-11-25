@@ -2,7 +2,7 @@
 
 namespace App\Models\Alt\Contracts;
 
-use App\Models\Alt\Base\Builder;
+use App\Models\Alt\Eloquent\Builder;
 use App\Models\Collection as ModelCollection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -32,7 +32,7 @@ interface Collection
      * Build a query based on the admin collection.
      *
      * @param  \App\Models\Collection  $collection
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function adminCollection(ModelCollection $collection): Builder;
 
@@ -40,7 +40,7 @@ interface Collection
      * Build a query based on the public collection.
      *
      * @param  \App\Models\Collection  $collection
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function publicCollection(ModelCollection $collection): Builder;
 
@@ -50,7 +50,7 @@ interface Collection
      * @param  int|null  $collectionId
      * @param  mixed  $currentLang
      * @param  array|string  $columns
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function forAdmin(
         ?int         $collectionId = null,
@@ -63,7 +63,7 @@ interface Collection
      * @param  int|null  $collectionId
      * @param  mixed  $currentLang
      * @param  array|string  $columns
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function forPublic(
         ?int         $collectionId = null,
@@ -75,7 +75,7 @@ interface Collection
      *
      * @param  string  $slug
      * @param  int|null  $collectionId
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function bySlug(string $slug, ?int $collectionId = null): Builder;
 
@@ -85,7 +85,7 @@ interface Collection
      * @param  int  $collectionId
      * @param  string  $slug
      * @param  int|null  $id
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function byCollectionSlug(int $collectionId, string $slug, ?int $id = null): Builder;
 
@@ -93,7 +93,7 @@ interface Collection
      * Add a where "collection_id" clause to the query.
      *
      * @param  int  $id
-     * @return \App\Models\Alt\Base\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
     public function collectionId(int $id): Builder|static;
 }

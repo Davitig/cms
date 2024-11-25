@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Base\Model;
+use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Traits\PositionableTrait;
 
 class Language extends Model

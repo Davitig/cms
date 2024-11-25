@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Base\Builder;
-use App\Models\Alt\Base\Model;
+use App\Models\Alt\Eloquent\Builder;
+use App\Models\Alt\Eloquent\Model;
 
 class Permission extends Model
 {
@@ -68,7 +68,7 @@ class Permission extends Model
      * Add a where 'cms_user_role_id' clause to the query.
      *
      * @param  int  $value
-     * @return \App\Models\Alt\Base\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
     public function roleId(int $value): Builder|static
     {

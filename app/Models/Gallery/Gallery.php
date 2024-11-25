@@ -2,8 +2,8 @@
 
 namespace App\Models\Gallery;
 
-use App\Models\Alt\Base\Builder;
-use App\Models\Alt\Base\Model;
+use App\Models\Alt\Eloquent\Builder;
+use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Contracts\Collection;
 use App\Models\Alt\Traits\HasCollection;
 use App\Models\Alt\Traits\HasLanguage;
@@ -61,7 +61,7 @@ class Gallery extends Model implements Collection
      * Add a new where 'type' clause to the query.
      *
      * @param  string  $type
-     * @return \App\Models\Alt\Base\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
     public function byType(string $type): Builder|static
     {

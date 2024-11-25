@@ -35,7 +35,7 @@
                 <i class="{{$icon}}"></i>
                 <span>{{ trans('general.create') }}</span>
             </a>
-            <strong class="text-black pull-right">Drag and Drop to sort the languages order</strong>
+            <strong class="text-black padl">Drag and Drop to sort the languages order</strong>
             <table id="items" class="table table-striped">
                 <thead>
                 <tr>

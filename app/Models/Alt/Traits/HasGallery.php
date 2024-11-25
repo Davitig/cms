@@ -2,7 +2,7 @@
 
 namespace App\Models\Alt\Traits;
 
-use App\Models\Alt\Base\Builder;
+use App\Models\Alt\Eloquent\Builder;
 use App\Models\Gallery\Gallery;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -52,7 +52,7 @@ trait HasGallery
      * Build a query based on the admin gallery.
      *
      * @param  \App\Models\Gallery\Gallery  $gallery
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function adminGallery(Gallery $gallery): Builder
     {
@@ -67,7 +67,7 @@ trait HasGallery
      * Build a query based on the public gallery.
      *
      * @param  \App\Models\Gallery\Gallery  $gallery
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function publicGallery(Gallery $gallery): Builder
     {
@@ -83,7 +83,7 @@ trait HasGallery
      * Build a query based on the gallery.
      *
      * @param  int  $id
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function byGallery(int $id): Builder
     {
@@ -94,7 +94,7 @@ trait HasGallery
      * Get the same type gallery instance.
      *
      * @param  string|null  $type
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function byType(?string $type = null): Builder
     {
@@ -107,7 +107,7 @@ trait HasGallery
      * Add a where "gallery_id" clause to the query.
      *
      * @param  int  $id
-     * @return \App\Models\Alt\Base\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
     public function galleryId(int $id): Builder|static
     {
@@ -118,7 +118,7 @@ trait HasGallery
      * Add a where "visible" clause to the query.
      *
      * @param  int  $value
-     * @return \App\Models\Alt\Base\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
     public function whereVisible(int $value = 1): Builder|static
     {

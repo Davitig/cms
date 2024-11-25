@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Alt\Base\Model;
+use App\Models\Alt\Eloquent\Model;
 use Illuminate\Http\Request;
 use RuntimeException;
 

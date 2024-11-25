@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Base\Builder;
-use App\Models\Alt\Base\User as Model;
+use App\Models\Alt\Eloquent\Builder;
+use App\Models\Alt\User\User as Model;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 
@@ -109,7 +109,7 @@ class CmsUser extends Model
     /**
      * Add a 'cms_user_roles' join to the query.
      *
-     * @return \App\Models\Alt\Base\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
     public function joinRole(): Builder|static
     {
@@ -122,7 +122,7 @@ class CmsUser extends Model
      * Filter a query by specific parameters.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function adminFilter(Request $request): Builder
     {

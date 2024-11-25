@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Base\Model;
+use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Contracts\Fileable;
 use App\Models\Alt\Traits\HasGallery;
 use App\Models\Alt\Traits\HasLanguage;

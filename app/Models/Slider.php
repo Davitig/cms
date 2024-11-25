@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Base\Builder;
-use App\Models\Alt\Base\Model;
+use App\Models\Alt\Eloquent\Builder;
+use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Contracts\Fileable;
 use App\Models\Alt\Traits\HasLanguage;
 use App\Models\Alt\Traits\PositionableTrait;
@@ -63,7 +63,7 @@ class Slider extends Model implements Fileable
      *
      * @param  mixed  $currentLang
      * @param  array|string  $columns
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function forAdmin(mixed $currentLang = true, array|string $columns = []): Builder
     {
@@ -75,7 +75,7 @@ class Slider extends Model implements Fileable
      *
      * @param  mixed  $currentLang
      * @param  array|string  $columns
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function forPublic(mixed $currentLang = true, array|string $columns = []): Builder
     {

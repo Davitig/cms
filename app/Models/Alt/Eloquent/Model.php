@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Alt\Base;
+namespace App\Models\Alt\Eloquent;
 
 use Illuminate\Database\Eloquent\Model as BaseModel;
 
@@ -11,14 +11,14 @@ abstract class Model extends BaseModel
      * The instance is set when calling method from the Builder.
      * Null is set after the method call (see Builder's __call).
      *
-     * @var \App\Models\Alt\Base\Builder|null
+     * @var \App\Models\Alt\Eloquent\Builder|null
      */
     protected ?Builder $tmpBuilder = null;
 
     /**
      * The Eloquent query builder class to use for the model.
      *
-     * @var class-string<\App\Models\Alt\Base\Builder<*>>
+     * @var class-string<\App\Models\Alt\Eloquent\Builder<*>>
      */
     protected static string $builder = Builder::class;
 
@@ -67,7 +67,7 @@ abstract class Model extends BaseModel
     /**
      * Set the Eloquent query builder instance.
      *
-     * @param  \App\Models\Alt\Base\Builder  $builder
+     * @param  \App\Models\Alt\Eloquent\Builder  $builder
      * @return $this
      */
     public function setEloquentBuilder(Builder $builder): static

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Base\Builder;
-use App\Models\Alt\Base\Model;
+use App\Models\Alt\Eloquent\Builder;
+use App\Models\Alt\Eloquent\Model;
 
 class Collection extends Model
 {
@@ -38,7 +38,7 @@ class Collection extends Model
      * Add a new where 'type' clause to the query.
      *
      * @param  string  $type
-     * @return \App\Models\Alt\Base\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
     public function byType(string $type): Builder|static
     {

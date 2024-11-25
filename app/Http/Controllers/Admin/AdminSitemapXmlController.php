@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Alt\Base\Model;
+use App\Models\Alt\Eloquent\Model;
 use App\Models\Page\Page;
 use DOMDocument;
 use Illuminate\Http\Request;
@@ -210,7 +210,7 @@ class AdminSitemapXmlController extends Controller
      * Get the urls.
      *
      * @param  \App\Models\Page\Page  $page
-     * @param  \App\Models\Alt\Base\Model  $item
+     * @param  \App\Models\Alt\Eloquent\Model  $item
      * @return array
      */
     protected function getUrls(Page $page, Model $item)

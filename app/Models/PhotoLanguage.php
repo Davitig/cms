@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Base\Builder;
-use App\Models\Alt\Base\Model;
+use App\Models\Alt\Eloquent\Builder;
+use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Traits\LanguageTrait;
 
 class PhotoLanguage extends Model
@@ -39,7 +39,7 @@ class PhotoLanguage extends Model
      * Add a where "photo_id" clause to the query.
      *
      * @param  int  $id
-     * @return \App\Models\Alt\Base\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
     public function foreignId(int $id): Builder|static
     {

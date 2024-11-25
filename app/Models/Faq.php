@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Base\Model;
+use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Traits\HasCollection;
 use App\Models\Alt\Traits\HasLanguage;
 use Illuminate\Database\Eloquent\Relations\HasMany;

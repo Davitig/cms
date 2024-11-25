@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Base\Builder;
-use App\Models\Alt\Base\Model;
+use App\Models\Alt\Eloquent\Builder;
+use App\Models\Alt\Eloquent\Model;
 
 class Note extends Model
 {
@@ -34,7 +34,7 @@ class Note extends Model
      * Add a where 'cms_user_id' clause to the query.
      *
      * @param  int  $userId
-     * @return \App\Models\Alt\Base\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
     public function byUserId(int $userId): Builder|static
     {

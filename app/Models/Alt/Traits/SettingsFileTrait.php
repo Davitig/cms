@@ -2,7 +2,7 @@
 
 namespace App\Models\Alt\Traits;
 
-use App\Models\Alt\Base\Builder;
+use App\Models\Alt\Eloquent\Builder;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Filesystem\Filesystem;
@@ -86,7 +86,7 @@ trait SettingsFileTrait
     /**
      * Build a query based on the admin collection.
      *
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function adminSettings(): Builder
     {
@@ -99,7 +99,7 @@ trait SettingsFileTrait
     /**
      * Build a query based on the public collection.
      *
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function publicSettings(): Builder
     {

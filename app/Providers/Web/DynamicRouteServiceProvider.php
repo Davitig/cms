@@ -2,7 +2,7 @@
 
 namespace App\Providers\Web;
 
-use App\Models\Alt\Base\Model;
+use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Contracts\Collection as CollectionContract;
 use App\Models\Page\Page;
 use Illuminate\Contracts\Config\Repository;
@@ -395,7 +395,7 @@ class DynamicRouteServiceProvider extends ServiceProvider
     /**
      * Set the deep implicit route.
      *
-     * @param  \App\Models\Alt\Base\Model  $implicitModel
+     * @param  \App\Models\Alt\Eloquent\Model  $implicitModel
      * @param  int  $segmentsLeft
      * @return bool
      */

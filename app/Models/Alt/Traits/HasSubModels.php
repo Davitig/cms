@@ -2,7 +2,7 @@
 
 namespace App\Models\Alt\Traits;
 
-use App\Models\Alt\Base\Builder;
+use App\Models\Alt\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 trait HasSubModels
@@ -11,7 +11,7 @@ trait HasSubModels
      * Add a where "parent_id" clause to the query.
      *
      * @param  int  $id
-     * @return \App\Models\Alt\Base\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
     public function parentId(int $id): Builder|static
     {

@@ -2,7 +2,7 @@
 
 namespace App\Models\Alt\Traits;
 
-use App\Models\Alt\Base\Builder;
+use App\Models\Alt\Eloquent\Builder;
 use App\Models\Page\Page;
 
 trait PageableTrait
@@ -12,7 +12,7 @@ trait PageableTrait
      *
      * @param  string  $type
      * @param  string  $foreignKey
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function joinPage(string $type = 'right', string $foreignKey = 'collection_id'): Builder
     {

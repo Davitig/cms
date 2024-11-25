@@ -2,7 +2,7 @@
 
 namespace App\Models\Event;
 
-use App\Models\Alt\Base\Model;
+use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Traits\FileableTrait;
 use App\Models\Alt\Traits\HasCollection;
 use App\Models\Alt\Traits\HasLanguage;

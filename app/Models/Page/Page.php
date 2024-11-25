@@ -2,8 +2,8 @@
 
 namespace App\Models\Page;
 
-use App\Models\Alt\Base\Builder;
-use App\Models\Alt\Base\Model;
+use App\Models\Alt\Eloquent\Builder;
+use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Traits\FileableTrait;
 use App\Models\Alt\Traits\HasLanguage;
 use App\Models\Alt\Traits\HasSubModels;
@@ -54,7 +54,7 @@ class Page extends Model
      *
      * @param  int|null  $menuId
      * @param  mixed  $currentLang
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function forAdmin(?int $menuId = null, mixed $currentLang = true): Builder
     {
@@ -70,7 +70,7 @@ class Page extends Model
      * Build a public query.
      *
      * @param  mixed  $currentLang
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function forPublic(mixed $currentLang = true): Builder
     {
@@ -83,7 +83,7 @@ class Page extends Model
      * @param  string  $slug
      * @param  int  $parentId
      * @param  mixed  $currentLang
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function bySlugRoute(string $slug, int $parentId, mixed $currentLang = true): Builder
     {
@@ -94,7 +94,7 @@ class Page extends Model
      * Add a where "menu_id" clause to the query.
      *
      * @param  int  $id
-     * @return \App\Models\Alt\Base\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
     public function menuId(int $id): Builder|static
     {
@@ -106,7 +106,7 @@ class Page extends Model
      *
      * @param  string  $value
      * @param  string  $operator
-     * @return \App\Models\Alt\Base\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
     public function typeName(string $value, string $operator = '='): Builder|static
     {
@@ -118,7 +118,7 @@ class Page extends Model
      *
      * @param  int  $id
      * @param  string  $operator
-     * @return \App\Models\Alt\Base\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
     public function typeId(int $id, string $operator = '='): Builder|static
     {
@@ -129,7 +129,7 @@ class Page extends Model
      * Add a where "visible" clause to the query.
      *
      * @param  int  $value
-     * @return \App\Models\Alt\Base\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
     public function whereVisible(int $value = 1): Builder|static
     {
@@ -139,7 +139,7 @@ class Page extends Model
     /**
      * Add a "collection" join to the query.
      *
-     * @return \App\Models\Alt\Base\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
     public function joinCollection(): Builder|static
     {

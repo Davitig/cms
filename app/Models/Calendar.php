@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Base\Builder;
-use App\Models\Alt\Base\Model;
+use App\Models\Alt\Eloquent\Builder;
+use App\Models\Alt\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class Calendar extends Model
@@ -88,7 +88,7 @@ class Calendar extends Model
      * Add a where 'cms_user_id' clause to the query.
      *
      * @param  int  $userId
-     * @return \App\Models\Alt\Base\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
     public function byUserId(int $userId): Builder|static
     {
@@ -100,7 +100,7 @@ class Calendar extends Model
      *
      * @param  string|null  $start
      * @param  string|null  $end
-     * @return \App\Models\Alt\Base\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
     public function active(?string $start = null, ?string $end = null): Builder|static
     {
@@ -120,7 +120,7 @@ class Calendar extends Model
     /**
      * Build a query based on inactive dates.
      *
-     * @return \App\Models\Alt\Base\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
     public function inactive(): Builder|static
     {

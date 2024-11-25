@@ -2,8 +2,8 @@
 
 namespace App\Models\Alt\Traits;
 
-use App\Models\Alt\Base\Builder;
-use App\Models\Alt\Base\Model;
+use App\Models\Alt\Eloquent\Builder;
+use App\Models\Alt\Eloquent\Model;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Filesystem\Filesystem;
@@ -52,7 +52,7 @@ trait FileTrait
      *
      * @param  int  $foreignId
      * @param  mixed  $currentLang
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function forAdmin(int $foreignId, mixed $currentLang = true): Builder
     {
@@ -66,7 +66,7 @@ trait FileTrait
      *
      * @param  int  $foreignId
      * @param  mixed  $currentLang
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function forPublic(int $foreignId, mixed $currentLang = true): Builder
     {
@@ -80,7 +80,7 @@ trait FileTrait
      * Add a where "visible" clause to the query.
      *
      * @param  int  $value
-     * @return \App\Models\Alt\Base\Builder
+     * @return \App\Models\Alt\Eloquent\Builder
      */
     public function whereVisible(int $value = 1): Builder
     {
