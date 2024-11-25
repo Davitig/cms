@@ -26,7 +26,7 @@ use App\Http\Controllers\Admin\AdminWebSettingsController;
 use App\Http\Controllers\Admin\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix(cms_slug(null, true))->name(cms_route_name())->group(function ($router) {
+Route::name(cms_route_name())->group(function ($router) {
     // Authentication
     $router->controller(AdminLoginController::class)->group(function ($router) {
         // login
@@ -40,8 +40,8 @@ Route::prefix(cms_slug(null, true))->name(cms_route_name())->group(function ($ro
     });
 
     // lockscreen
-    $router->middleware('cms.lockscreen')
-        ->controller(AdminLockscreenController::class)->group(function ($router) {
+    $router->middleware('cms.lockscreen')->controller(AdminLockscreenController::class)
+        ->group(function ($router) {
             $router->get('lockscreen', 'index')->name('lockscreen');
             $router->post('lockscreen', 'store')->name('lockscreen.post');
             $router->put('lockscreen', 'update')->name('lockscreen.put');

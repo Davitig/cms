@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Language;
+use Exception;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
@@ -26,8 +27,6 @@ class LanguageServiceProvider extends ServiceProvider
 
     /**
      * Register the application services.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -39,14 +38,9 @@ class LanguageServiceProvider extends ServiceProvider
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Illuminate\Contracts\Config\Repository  $config
-     * @return void
      */
     public function boot(Request $request, Config $config): void
     {
-        if ($this->app->runningInConsole()) {
-            return;
-        }
-
         $this->segmentsCount = count($this->segments = $request->segments());
 
         $this->setLanguageConfig($request, $config);
@@ -63,7 +57,14 @@ class LanguageServiceProvider extends ServiceProvider
     {
         $languages = [];
 
-        foreach ((new Language)->positionAsc()->get() as $language) {
+        try {
+            $items = (new Language)->positionAsc()->get();
+        } catch (Exception) {
+            // throw new ServiceUnavailableHttpException(null, 'Languages not found');
+            return;
+        }
+
+        foreach ($items as $language) {
             $languages[strtolower($language->language)] = $language->getAttributes();
         }
 
@@ -97,8 +98,10 @@ class LanguageServiceProvider extends ServiceProvider
 
         // Set url for each language.
         foreach ($languages as $language => $value) {
-            $languages[$language]['url'] = $request->root() . '/' . $language . '/' .
-                implode('/', $this->segments) . $queryString;
+            $languages[$language]['url'] = trim(
+                $request->root() . '/' . $language . '/' . implode('/', $this->segments),
+                '/'
+                ) . $queryString;
         }
 
         $config->set(['_app.languages' => $languages]);

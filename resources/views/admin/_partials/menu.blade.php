@@ -16,7 +16,7 @@
                     <li>
                         <a href="{{ cms_route('pages.index', [$item->id]) }}"{!! $routeMatches([
                             'pages', 'pages.files' => $activeMenuId ?? null
-                        ], $item->id) ? ' class="active"' : '' !!}>
+                        ], ['menu' => $item->id]) ? ' class="active"' : '' !!}>
                             <i class="{{icon_type('pages')}}" title="Pages"></i>
                             <span class="title">{{ $item->title }}</span>
                         </a>

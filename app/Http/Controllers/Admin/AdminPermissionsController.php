@@ -45,7 +45,7 @@ class AdminPermissionsController extends Controller implements HasMiddleware
             ->toArray();
 
         $data['routeGroups'] = array_filter(array_diff_key(
-            $this->getAllRouteNames(),
+            $this->getAllCMSRouteNames(),
             array_flip(Permission::$routeGroupsHidden),
             array_flip(Permission::$routeGroupsAllowed)
         ), function ($routes) {
@@ -101,16 +101,14 @@ class AdminPermissionsController extends Controller implements HasMiddleware
      *
      * @return array
      */
-    protected function getAllRouteNames()
+    protected function getAllCMSRouteNames(): array
     {
-        $routes = app('router')->getRoutes()->getRoutesByName();
-
         $routeNames = [];
 
         $cmsSlug = cms_route_name();
 
-        foreach ($routes as $name => $route) {
-            if (! str_contains($name, $cmsSlug)) {
+        foreach (app('router')->getRoutes()->getRoutesByName() as $name => $route) {
+            if (! str_starts_with($name, $cmsSlug)) {
                 continue;
             }
 

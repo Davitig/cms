@@ -92,7 +92,7 @@ function cms_slug(?string $path = null, bool $language = false): string
             ? $language
             : (language_selected() ? language() : '');
 
-        $slug = $language . '/' . $slug;
+        $slug = trim($language . '/' . $slug, '/');
     }
 
     return is_null($path) ? $slug : $slug . '/' . trim($path, '/');

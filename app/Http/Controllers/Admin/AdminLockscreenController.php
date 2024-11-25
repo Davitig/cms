@@ -35,7 +35,7 @@ class AdminLockscreenController extends Controller
      */
     public function store(Request $request)
     {
-        $request->user()->lockScreen();
+        $request->user('cms')->lockScreen();
 
         if ($request->expectsJson()) {
             return response()->json([

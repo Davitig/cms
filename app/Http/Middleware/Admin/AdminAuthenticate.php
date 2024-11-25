@@ -53,18 +53,22 @@ class AdminAuthenticate
      * Determine if the user has access to the given route.
      *
      * @param  \App\Models\CmsUser  $user
-     * @param  string  $routeName
+     * @param  string  $fullRouteName
      * @return void
      *
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
-    private function checkRoutePermission(CmsUser $user, string $routeName): void
+    private function checkRoutePermission(CmsUser $user, string $fullRouteName): void
     {
         if ($user->hasFullAccess()) {
             return;
         }
 
-        $routeName = str_replace(cms_route_name(), '', $routeName);
+        $routeName = str_replace(language() . '.' . cms_route_name(), '', $fullRouteName);
+
+        if ($routeName == $fullRouteName) {
+            $routeName = str_replace(cms_route_name(), '', $routeName);
+        }
 
         $routeGroup = substr($routeName, 0, strpos($routeName, '.'));
 

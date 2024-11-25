@@ -12,8 +12,6 @@ class GlideServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
      * Register services.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -34,8 +32,6 @@ class GlideServiceProvider extends ServiceProvider implements DeferrableProvider
 
     /**
      * Bootstrap services.
-     *
-     * @return void
      */
     public function boot(): void
     {

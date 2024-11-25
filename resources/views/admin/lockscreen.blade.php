@@ -3,7 +3,8 @@
         <div class="login-container">
             <div class="row">
                 <div class="col-sm-7">
-                    <form role="form" action="{{cms_route('lockscreen.post')}}" method="post" class="lockcreen-form fade-in-effect">
+                    <form role="form" action="{{cms_route('lockscreen.put')}}" method="post" class="lockcreen-form fade-in-effect">
+                        <input type="hidden" name="_method" value="put">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="user-thumb">
                             <img src="{{auth('cms')->user()->photo}}" width="128" class="img-circle" alt="User Photo">
@@ -43,14 +44,14 @@
                     password.val('').siblings('label').remove();
 
                     $.ajax({
-                        url: '{{cms_route('lockscreen.post')}}',
+                        url: '{{cms_route('lockscreen.put')}}',
                         method: 'POST',
                         dataType: 'json',
                         data: input,
                         success: function(data) {
                             if (data.result) {
                                 @if ($cmsSettings->get('lockscreen'))
-                                lockscreen('{{$cmsSettings->get('lockscreen')}}', '{{cms_route('lockscreen.post')}}', true);
+                                lockscreen('{{$cmsSettings->get('lockscreen')}}', '{{cms_route('lockscreen.put')}}', true);
                                 @endif
 
                                 $('body > #lockscreen').fadeOut(400, function() {

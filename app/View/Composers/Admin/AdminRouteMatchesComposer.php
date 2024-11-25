@@ -39,12 +39,12 @@ class AdminRouteMatchesComposer
     /**
      * Matches route names to the current route.
      *
-     * Resource-Routes: (['users', 'orders', ...], {param}|null, true)
-     * Single-Routes: (['users.index', 'orders.store', ...], {param}|null, false)
-     * Param-Routes: (['users' => {param}, 'orders', ...], {param}|null, true|false)
+     * Resource-Routes: (['users', 'orders', ...], [routeParam => paramValue]|null, true)
+     * Single-Routes: (['users.index', 'orders.store', ...], [routeParam => paramValue]|null, false)
+     * Param-Routes: (['users' => {param}, 'orders', ...], [routeParam => paramValue]|null, true|false)
      *
-     * NOTE: Second parameter {param} is compared to the current route parameter.
-     * NOTE: Second parameter {param} replaces the current route parameter if
+     * NOTE: The second parameter is compared to the last route parameter if `routeParam` key is not present.
+     * NOTE: The second parameter will be replaced by the current route parameter if
      *       "Param-Routes" {param} is present.
      * NOTE: Third parameter is true by default, which indicates resource routes.
      *
@@ -53,12 +53,17 @@ class AdminRouteMatchesComposer
      */
     protected function getRouteMatcher(Route $route): Closure
     {
+        $currentFullRouteName = $route->getName();
+
         $currentRouteName = str_replace(
-            cms_route_name(), '', $route->getName()
+            language() . '.' . cms_route_name(), '', $currentFullRouteName
         );
 
+        if ($currentRouteName == $currentFullRouteName) {
+            $currentRouteName = str_replace(cms_route_name(), '', $currentRouteName);
+        }
+
         $params = $route->parameters();
-        $currentRouteIndexParam = end($params);
 
         $resourceMethod = null;
 
@@ -71,21 +76,28 @@ class AdminRouteMatchesComposer
         }
 
         return function ($routeNames, $routeParam = null, $byResource = true)
-        use ($currentRouteName, $currentRouteIndexParam, $resourceMethod) {
+        use ($currentRouteName, $params, $resourceMethod) {
             if (! $byResource) {
                 $currentRouteName .= $resourceMethod;
             }
 
-            foreach ((array) $routeNames as $key => $value) {
+            if (is_array($routeParam)) {
+                $currentRouteParam = $params[key($routeParam)] ?? 0;
+
+                $routeParam = current($routeParam);
+            } else {
+                $currentRouteParam = end($params);
+            }
+
+            foreach ((array) $routeNames as $key => $routeName) {
                 if (is_string($key)) {
+                    $currentRouteParam = $routeName;
+
                     $routeName = $key;
-                    $currentRouteIndexParam = $value;
-                } else {
-                    $routeName = $value;
                 }
 
                 if ($routeName == $currentRouteName
-                    && (! $routeParam || $routeParam == $currentRouteIndexParam)
+                    && (! $routeParam || $routeParam == $currentRouteParam)
                 ) {
                     return true;
                 }

@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Providers\Web;
+namespace App\Support;
 
-use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Contracts\Collection as CollectionContract;
+use App\Models\Alt\Eloquent\Model;
 use App\Models\Page\Page;
-use Illuminate\Contracts\Config\Repository;
+use Closure;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Collection;
-use Illuminate\Support\ServiceProvider;
 
-class DynamicRouteServiceProvider extends ServiceProvider
+class DynamicRouteRegistrar
 {
     /**
      * The controller namespace for the dynamic routes.
@@ -119,24 +119,20 @@ class DynamicRouteServiceProvider extends ServiceProvider
     protected ?string $tabActionMethod = null;
 
     /**
-     * Register services.
-     *
-     * @return void
+     * Create a dynamic route registrar.
      */
-    public function register(): void
-    {
-        //
-    }
+    public function __construct(protected Application $app) {}
 
     /**
      * Bootstrap services.
      *
-     * @param  \Illuminate\Contracts\Config\Repository  $config
      * @return void
      */
-    public function boot(Repository $config): void
+    public function boot(): void
     {
-        if ($config->get('_cms.activated')) {
+        $config = $this->app['config'];
+
+        if ($config->get('_cms.activated') || $this->app->runningInConsole()) {
             return;
         }
 
@@ -144,7 +140,7 @@ class DynamicRouteServiceProvider extends ServiceProvider
 
         $this->segments = $request->segments();
 
-        if (current($this->segments) == $language = $config->get('_app.language')) {
+        if (current($this->segments) == ($language = $config->get('_app.language'))) {
             array_shift($this->segments);
         }
 
@@ -176,19 +172,34 @@ class DynamicRouteServiceProvider extends ServiceProvider
 
         $this->tabs = $config->get('cms.tabs', []);
 
-        $this->build();
+        $this->build(fn () => $this->setRoute());
     }
 
     /**
      * Build a new route.
      *
+     * @param  \Closure  $callback
      * @return void
      */
-    public function build(): void
+    public function build(Closure $callback): void
     {
         $this->router->namespace($this->namespace)
             ->middleware('web')
-            ->group(fn () => $this->setRoute());
+            ->group($callback);
+    }
+
+    /**
+     * Set a dynamic route.
+     *
+     * @return void
+     */
+    protected function setRoute(): void
+    {
+        $this->setPages();
+
+        if ($this->detectPageRoute()) {
+            $this->setInstances();
+        }
     }
 
     /**
@@ -226,20 +237,6 @@ class DynamicRouteServiceProvider extends ServiceProvider
             $parentId = $page->id;
 
             $this->items[$i] = $page;
-        }
-    }
-
-    /**
-     * Set a dynamic route.
-     *
-     * @return void
-     */
-    protected function setRoute(): void
-    {
-        $this->setPages();
-
-        if ($this->detectPageRoute()) {
-            $this->setInstances();
         }
     }
 
@@ -536,7 +533,7 @@ class DynamicRouteServiceProvider extends ServiceProvider
             }
         }
 
-        return trim($this->pathPrefix, '/') . '/' . trim($path, '/');
+        return trim($this->pathPrefix . '/' . $path, '/');
     }
 
     /**

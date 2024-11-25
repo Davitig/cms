@@ -10,8 +10,6 @@ class ElfinderServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -22,7 +20,6 @@ class ElfinderServiceProvider extends ServiceProvider
      * Bootstrap services.
      *
      * @param  \Illuminate\Routing\Router  $router
-     * @return void
      *
      * @throws \Throwable
      */
