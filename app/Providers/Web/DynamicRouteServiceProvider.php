@@ -288,21 +288,17 @@ class DynamicRouteServiceProvider extends ServiceProvider
      */
     protected function setPageRoute(Page $page): bool
     {
-        if (array_key_exists($page->type, $this->implicitTypes)
-            || ($segmentsLeft = (
-                $this->segmentsCount - ($itemsCount = count($this->items))
-            )) > 1
-        ) {
+        if (array_key_exists($page->type, $this->implicitTypes)) {
             return false;
         }
+
+        $segmentsLeft = ($this->segmentsCount - ($itemsCount = count($this->items)));
 
         $this->resetBinders($itemsCount - 1);
 
         $this->binders[] = $page;
 
-        if ($segmentsLeft
-            && ! $this->bindTab($page->type, 'index', last($this->segments))
-        ) {
+        if ($segmentsLeft && ! $this->bindTab($page->type, 'index', $segmentsLeft)) {
             return false;
         }
 
@@ -319,13 +315,11 @@ class DynamicRouteServiceProvider extends ServiceProvider
      */
     protected function setExplicitRoute(Page $page): bool
     {
-        if (! array_key_exists($page->type, $this->explicitTypes)
-            || ($segmentsLeft = (
-                $this->segmentsCount - ($itemsCount = count($this->items))
-            )) > 2
-        ) {
+        if (! array_key_exists($page->type, $this->explicitTypes)) {
             return false;
         }
+
+        $segmentsLeft = ($this->segmentsCount - ($itemsCount = count($this->items)));
 
         $this->resetBinders($itemsCount - 1);
 
@@ -333,7 +327,7 @@ class DynamicRouteServiceProvider extends ServiceProvider
         $this->binders[] = $this->segments[$this->segmentsCount - $segmentsLeft];
 
         if ($segmentsLeft > 1
-            && ! $this->bindTab($page->type, 'show', last($this->segments))
+            && ! $this->bindTab($page->type, 'show', $segmentsLeft - 1)
         ) {
             return false;
         }
@@ -351,23 +345,19 @@ class DynamicRouteServiceProvider extends ServiceProvider
      */
     protected function setImplicitRoute(Page $page): bool
     {
-        if (! array_key_exists($page->type, $this->implicitTypes)
-            || ($segmentsLeft = (
-                $this->segmentsCount - ($itemsCount = count($this->items))
-            )) > 2
-        ) {
+        if (! array_key_exists($page->type, $this->implicitTypes)) {
             return false;
         }
 
         $model = (new $this->implicitTypes[$page->type])->findOrFail($page->type_id);
 
+        $segmentsLeft = ($this->segmentsCount - ($itemsCount = count($this->items)));
+
         $this->resetBinders($itemsCount - 1);
 
         $this->binders[] = [$page, $model];
 
-        if (! $segmentsLeft
-            || $this->bindTab($model->type, 'index', last($this->segments))
-        ) {
+        if (! $segmentsLeft || $this->bindTab($model->type, 'index', $segmentsLeft)) {
             $this->setCurrentRoute($model->type, 'index');
 
             return true;
@@ -377,7 +367,7 @@ class DynamicRouteServiceProvider extends ServiceProvider
             $this->binders[] = $this->segments[$this->segmentsCount - $segmentsLeft];
 
             if ($segmentsLeft > 1
-                && ! $this->bindTab($model->type, 'show', last($this->segments))
+                && ! $this->bindTab($model->type, 'show', $segmentsLeft - 1)
             ) {
                 return false;
             }
@@ -414,7 +404,7 @@ class DynamicRouteServiceProvider extends ServiceProvider
         $this->binders[] = $model;
 
         if ($segmentsLeft > 1
-            && ! $this->bindTab($model->type, 'index', last($this->segments))
+            && ! $this->bindTab($model->type, 'index', $segmentsLeft - 1)
         ) {
             return true;
         }
@@ -429,12 +419,12 @@ class DynamicRouteServiceProvider extends ServiceProvider
      *
      * @param  string  $type
      * @param  string  $typeMethod
-     * @param  string  $tab
+     * @param  int  $segmentsLeft
      * @return bool
      */
-    protected function bindTab(string $type, string $typeMethod, string $tab): bool
+    protected function bindTab(string $type, string $typeMethod, int $segmentsLeft): bool
     {
-        if (! array_key_exists($this->requestMethod, $this->tabs)) {
+        if (! array_key_exists($this->requestMethod, $this->tabs) || ! $segmentsLeft) {
             return false;
         }
 
@@ -447,18 +437,46 @@ class DynamicRouteServiceProvider extends ServiceProvider
             }
         }
 
-        if (array_key_exists($type, $this->tabs[$this->requestMethod])
-            && array_key_exists($tab, $this->tabs[$this->requestMethod][$type])
-        ) {
-            $this->binders[] = $tab;
+        if (! array_key_exists($type, $this->tabs[$this->requestMethod])) {
+            return false;
+        }
 
-            if ($this->requestMethod == strtolower(Request::METHOD_GET)) {
-                foreach (languages() as $key => $value) {
-                    $this->urlLangPaths[$key][] = $tab;
+        $publicTabs = array_slice(
+            $this->segments, count($this->segments) - $segmentsLeft, $segmentsLeft
+        );
+
+        foreach ($this->tabs[$this->requestMethod][$type] as $path => $method) {
+            $tabs = [];
+
+            $optionalParam = (int) str($path)->afterLast('/')->contains('?');
+
+            $localTabs = explode('/', $path);
+
+            if (($paramsLeft = (count($localTabs) - count($publicTabs)))
+                && $paramsLeft - $optionalParam
+            ) {
+                continue;
+            }
+
+            for ($i = 0; $i < $segmentsLeft; $i++) {
+                if ($localTabs[$i] == $publicTabs[$i]
+                    || str($localTabs[$i])->containsAll(['{', '}'])
+                ) {
+                    $tabs[] = $publicTabs[$i];
                 }
             }
 
-            $this->tabActionMethod = $this->tabs[$this->requestMethod][$type][$tab];
+            if (($paramsLeft = (count($localTabs) - count($tabs)))
+                && $paramsLeft - $optionalParam
+            ) {
+                continue;
+            }
+
+            foreach ($tabs as $tab) {
+                $this->binders[] = $tab;
+            }
+
+            $this->tabActionMethod = $this->tabs[$this->requestMethod][$type][$path];
 
             return true;
         }

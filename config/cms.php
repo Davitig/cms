@@ -177,7 +177,8 @@ return [
     'tabs' => [
         // 'get' => [
         //     'articles@show' => [
-        //         'authors' => 'getAuthors'
+        //         'comments' => 'getComments'
+        //         'comments/{id}' => 'getComments'
         //     ]
         // ]
     ],
