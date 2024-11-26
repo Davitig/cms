@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Alt\Eloquent\Model;
+use ErrorException;
 use Illuminate\Http\Request;
-use RuntimeException;
 
 trait VisibilityTrait
 {
@@ -15,12 +15,12 @@ trait VisibilityTrait
      * @param  string  $id
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      *
-     * @throws \RuntimeException
+     * @throws \ErrorException
      */
     public function visibility(Request $request, string $id)
     {
         if (! isset($this->model) || ! $this->model instanceof Model) {
-            throw new RuntimeException('Model not found');
+            throw new ErrorException('Model not found');
         }
 
         $model = $this->model->findOrFail($id);
