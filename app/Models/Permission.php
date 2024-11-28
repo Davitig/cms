@@ -4,9 +4,12 @@ namespace App\Models;
 
 use App\Models\Alt\Eloquent\Builder;
 use App\Models\Alt\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Permission extends Model
 {
+    use HasFactory;
+
     /**
      * The table associated with the model.
      *
@@ -76,6 +79,17 @@ class Permission extends Model
     }
 
     /**
+     * Add a where 'route_name' clause to the query.
+     *
+     * @param  string  $routeName
+     * @return \App\Models\Alt\Eloquent\Builder|static
+     */
+    public function routeName(string $routeName): Builder|static
+    {
+        return $this->where('route_name', $routeName);
+    }
+
+    /**
      * Determine if the user has access to the given route.
      *
      * @param  string  $routeName
@@ -83,7 +97,7 @@ class Permission extends Model
      */
     public function hasAccess(string $routeName): bool
     {
-        return $this->where('route_name', $routeName)->exists();
+        return $this->routeName($routeName)->exists();
     }
 
     /**

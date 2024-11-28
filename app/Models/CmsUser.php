@@ -68,7 +68,17 @@ class CmsUser extends Model
      */
     public function hasFullAccess(): bool
     {
-        return (int) $this->full_access;
+        return (bool) $this->full_access;
+    }
+
+    /**
+     * Determine if the user has custom access.
+     *
+     * @return bool
+     */
+    public function hasCustomAccess(): bool
+    {
+        return ! $this->hasFullAccess();
     }
 
     /**
@@ -104,6 +114,17 @@ class CmsUser extends Model
     public function unlockScreen(): mixed
     {
         return session()->remove('lockscreen');
+    }
+
+    /**
+     * Add a where "cms_user_role_id" clause to the query.
+     *
+     * @param  int  $roleId
+     * @return \App\Models\Alt\Eloquent\Builder|static
+     */
+    public function roleId(int $roleId): Builder|static
+    {
+        return $this->where('cms_user_role_id', $roleId);
     }
 
     /**

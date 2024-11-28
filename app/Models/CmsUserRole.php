@@ -40,4 +40,14 @@ class CmsUserRole extends Model
     {
         return $this->where('full_access', (int) $value);
     }
+
+    /**
+     * Add a where not 'full_access' to the query.
+     *
+     * @return \App\Models\Alt\Eloquent\Builder|static
+     */
+    public function customAccess(): Builder|static
+    {
+        return $this->where('full_access', 0);
+    }
 }
