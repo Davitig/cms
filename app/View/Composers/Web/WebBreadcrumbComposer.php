@@ -26,7 +26,7 @@ class WebBreadcrumbComposer
      */
     public function handleBreadcrumb(View $view): void
     {
-        if ($breadcrumb = $view->breadcrumb) {
+        if ($breadcrumb = $view->breadcrumb ??= null) {
             app()->instance(
                 'breadcrumb',
                 $breadcrumb instanceof Collection ? $breadcrumb : new Collection($breadcrumb)
@@ -35,7 +35,7 @@ class WebBreadcrumbComposer
             return;
         }
 
-        if (! is_object($current = $view->current)) {
+        if (! is_object($current = $view->current ??= null)) {
             return;
         }
 
