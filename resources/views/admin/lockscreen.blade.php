@@ -3,7 +3,7 @@
         <div class="login-container">
             <div class="row">
                 <div class="col-sm-7">
-                    <form role="form" action="{{cms_route('lockscreen.put')}}" method="post" class="lockcreen-form fade-in-effect">
+                    <form role="form" action="{{cms_route('lockscreen.put')}}" method="post" class="lockscreen-form fade-in-effect">
                         <input type="hidden" name="_method" value="put">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="user-thumb">
@@ -32,11 +32,11 @@
                 setTimeout(function(){ $(".fade-in-effect").addClass('in'); }, 1);
 
                 // Set Form focus
-                $(".lockcreen-form .form-group:has(.form-control):first .form-control").focus();
+                $(".lockscreen-form .form-group:has(.form-control):first .form-control").focus();
 
                 @if (! session()->has('includeLockscreen'))
                 // Form validation and AJAX request
-                $(".lockcreen-form").on('submit', function(e) {
+                $(".lockscreen-form").on('submit', function(e) {
                     e.preventDefault();
 
                     let input = $(this).serializeArray();
