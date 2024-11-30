@@ -73,28 +73,6 @@ class AdminLanguagesResourceTest extends TestCase
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
-    public function test_admin_languages_resource_validation_unique_fail()
-    {
-        $response = $this->actingAs($this->getUser())->post(cms_route('languages.store'), [
-            'language' => 'en',
-            'short_name' => 'en',
-            'full_name' => 'English',
-        ]);
-
-        $response->assertFound()->assertSessionHasErrors(['language']);
-    }
-
-    public function test_admin_languages_resource_validation_string_length_fail()
-    {
-        $response = $this->actingAs($this->getUser())->post(cms_route('languages.store'), [
-            'language' => 'e',
-            'short_name' => 'e',
-            'full_name' => 'English',
-        ]);
-
-        $response->assertFound()->assertSessionHasErrors(['language', 'short_name']);
-    }
-
     /**
      * @throws \JsonException
      */
@@ -105,5 +83,27 @@ class AdminLanguagesResourceTest extends TestCase
         $response = $this->actingAs($this->getUser())->delete(cms_route('languages.destroy', [$id]));
 
         $response->assertFound()->assertSessionHasNoErrors();
+    }
+
+    public function test_admin_languages_resource_validate_unique()
+    {
+        $response = $this->actingAs($this->getUser())->post(cms_route('languages.store'), [
+            'language' => 'en',
+            'short_name' => 'en',
+            'full_name' => 'English',
+        ]);
+
+        $response->assertFound()->assertSessionHasErrors(['language']);
+    }
+
+    public function test_admin_languages_resource_validate_string_length()
+    {
+        $response = $this->actingAs($this->getUser())->post(cms_route('languages.store'), [
+            'language' => 'e',
+            'short_name' => 'e',
+            'full_name' => 'English',
+        ]);
+
+        $response->assertFound()->assertSessionHasErrors(['language', 'short_name']);
     }
 }
