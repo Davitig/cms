@@ -21,7 +21,7 @@ class AdminAuthenticatedUserTest extends TestCase
 
     public function test_admin_user_with_full_access()
     {
-        $roleId = (new CmsUserRole)->fullAccess()->firstOrFail()->id;
+        $roleId = (new CmsUserRole)->fullAccess()->valueOrFail('id');
 
         $user = (new CmsUser)->roleId($roleId)->joinRole()->firstOrFail();
 
@@ -33,7 +33,7 @@ class AdminAuthenticatedUserTest extends TestCase
 
     public function test_admin_user_with_custom_access_cannot_access_non_permitted_route()
     {
-        $roleId = (new CmsUserRole)->customAccess()->firstOrFail()->id;
+        $roleId = (new CmsUserRole)->customAccess()->valueOrFail('id');
 
         $user = (new CmsUser)->roleId($roleId)->joinRole()->firstOrFail();
 
@@ -47,7 +47,7 @@ class AdminAuthenticatedUserTest extends TestCase
     {
         $routeName = current(Arr::flatten($this->getAllCMSRouteNames()));
 
-        $roleId = (new CmsUserRole)->customAccess()->firstOrFail()->id;
+        $roleId = (new CmsUserRole)->customAccess()->valueOrFail('id');
 
         if (! (new Permission)->roleId($roleId)->routeName($routeName)->exists()) {
             (new Permission)->create([

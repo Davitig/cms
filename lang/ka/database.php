@@ -12,6 +12,7 @@ return [
     */
 
     'deleted' => 'წარმატებით წაიშალა.',
+    'no_changes' => 'No changes have been saved.',
 
     'error' => [
         '1054' => 'უცნობი სვეტი.',

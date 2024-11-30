@@ -168,21 +168,15 @@ class AdminPagesController extends Controller
      */
     public function getListableTypes(?string $type = null)
     {
-        if (! $type && ! ($type = $this->request->get('type'))) {
+        if (! $type ??= $this->request->get('type')) {
             return [];
         }
 
-        $model = cms_pages('implicit.' . $type) ?: cms_pages('explicit.' . $type);
-
-        if (! $model) {
+        if (! $model = cms_pages('implicit.' . $type)) {
             return [];
         }
 
-        if (method_exists($model = new $model, 'joinLanguage')) {
-            $model = $model->joinLanguage();
-        }
-
-        return $model->pluck('title', 'id')->toArray();
+        return (new $model)->pluck('title', 'id')->toArray();
     }
 
     /**
@@ -206,7 +200,7 @@ class AdminPagesController extends Controller
             $model = $this->model->findOrFail($id);
 
             if ($model->update(['collapse' => $model->collapse ? 0 : 1])) {
-                return response()->json(true);
+                return response()->json();
             }
         }
 

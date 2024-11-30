@@ -3,6 +3,8 @@
 namespace Feature\Admin\Resources;
 
 use App\Models\Language;
+use Database\Seeders\LanguageTableSeeder;
+use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class AdminLanguagesResourceTest extends TestCase
@@ -15,7 +17,7 @@ class AdminLanguagesResourceTest extends TestCase
      */
     protected function getLanguageId(string $language): int
     {
-        return (new Language)->whereLanguage($language)->firstOrFail()->id;
+        return (new Language)->whereLanguage($language)->valueOrFail('id');
     }
 
     public function test_admin_languages_resource_index()
@@ -37,7 +39,11 @@ class AdminLanguagesResourceTest extends TestCase
      */
     public function test_admin_languages_resource_store()
     {
-        $this->seed();
+        Schema::disableForeignKeyConstraints();
+
+        $this->seed(LanguageTableSeeder::class);
+
+        Schema::enableForeignKeyConstraints();
 
         $response = $this->actingAs($this->getUser())->post(cms_route('languages.store'), [
             'language' => 'cn',
@@ -73,9 +79,6 @@ class AdminLanguagesResourceTest extends TestCase
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
-    /**
-     * @throws \JsonException
-     */
     public function test_admin_languages_resource_destroy()
     {
         $id = $this->getLanguageId('cn');

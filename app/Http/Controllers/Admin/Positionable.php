@@ -20,7 +20,7 @@ trait Positionable
             throw new ModelNotFoundException;
         }
 
-        $data = request('data');
+        $data = (array) request('data');
 
         $params = request()->except('data');
 

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin\Resources;
 
 use App\Models\Menu;
+use App\Models\Page\Page;
 use Tests\TestCase;
 
 class AdminMenusResourceTest extends TestCase
@@ -26,10 +27,8 @@ class AdminMenusResourceTest extends TestCase
      */
     public function test_admin_menus_resource_store()
     {
-        $this->seed();
-
         $response = $this->actingAs($this->getUser())->post(cms_route('menus.store'), [
-            'title' => 'List of Pages'
+            'title' => fake()->sentence(2)
         ]);
 
         $response->assertFound()->assertSessionHasNoErrors();
@@ -37,7 +36,7 @@ class AdminMenusResourceTest extends TestCase
 
     public function test_admin_menus_resource_edit()
     {
-        $id = (new Menu)->firstOrFail()->id;
+        $id = (new Menu)->valueOrFail('id');
 
         $response = $this->actingAs($this->getUser())->get(cms_route('menus.edit', [$id]));
 
@@ -49,25 +48,39 @@ class AdminMenusResourceTest extends TestCase
      */
     public function test_admin_menus_resource_update()
     {
-        $id = (new Menu)->firstOrFail()->id;
+        $id = (new Menu)->orderDesc()->valueOrFail('id');
 
         $response = $this->actingAs($this->getUser())->put(cms_route('menus.update', [$id]), [
-            'title' => 'List of Pages'
+            'title' => 'List of Pages',
+            'main' => 1
         ]);
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
-    /**
-     * @throws \JsonException
-     */
     public function test_admin_menus_resource_destroy()
     {
-        $id = (new Menu)->firstOrFail()->id;
+        $response = $this->actingAs($this->getUser())->delete(cms_route('menus.destroy', [
+            (new Menu)->create(['title' => 'Deletable menu'])->id
+        ]));
+
+        $response->assertFound();
+    }
+
+    public function test_admin_menus_resource_destroy_internal_error_on_foreign_key_relation()
+    {
+        $id = (new Menu)->valueOrFail('id');
+
+        (new Page)->create([
+            'menu_id' => $id,
+            'title' => fake()->sentence(2),
+            'slug' => fake()->slug(2),
+            'type' => 'page'
+        ]);
 
         $response = $this->actingAs($this->getUser())->delete(cms_route('menus.destroy', [$id]));
 
-        $response->assertFound()->assertSessionHasNoErrors();
+        $response->assertInternalServerError();
     }
 
     public function test_admin_menus_resource_validate_title_required()
@@ -84,16 +97,16 @@ class AdminMenusResourceTest extends TestCase
      */
     public function test_admin_menus_set_main()
     {
-        $id = (new Menu)->firstOrFail()->id;
-
         $response = $this->actingAs($this->getUser())->post(cms_route('menus.setMain'), [
-            'id' => $id,
+            'id' => (new Menu)->create([
+                'title' => fake()->sentence(2),
+            ])->id,
         ]);
 
         $response->assertOk()->assertSessionHasNoErrors();
     }
 
-    public function test_admin_menus_set_main_is_unique()
+    public function test_admin_menus_main_is_unique()
     {
         $this->assertEquals(1, (new Menu)->whereMain(1)->count());
     }

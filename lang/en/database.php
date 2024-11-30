@@ -12,6 +12,7 @@ return [
     */
 
     'deleted' => 'The item has been successfully deleted.',
+    'no_changes' => 'No changes have been saved.',
 
     'error' => [
         '1054' => 'Unknown column.',
