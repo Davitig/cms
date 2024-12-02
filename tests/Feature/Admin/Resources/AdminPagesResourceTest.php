@@ -145,8 +145,6 @@ class AdminPagesResourceTest extends TestCase
 
     public function test_admin_pages_resource_get_listable_types()
     {
-        (new Collection)->newQuery()->delete();
-
         $collectionId = (new Collection)->create([
             'title' => 'Articles', 'type' => 'articles'
         ])->id;
