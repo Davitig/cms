@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use App\Http\Requests\Request;
+use Illuminate\Validation\Rule;
 
 class CollectionRequest extends Request
 {
@@ -13,14 +14,21 @@ class CollectionRequest extends Request
      */
     public function rules(): array
     {
-        return [
+        $orderList = array_keys(cms_collections('order_by'));
+
+        $sortList = array_keys(cms_collections('sort'));
+
+        $typeRule = $this->method() == 'POST'
+            ? ['type' => ['required', Rule::in(array_keys(cms_collections('types')))]]
+            : [];
+
+        return $typeRule + [
             'title' => 'required',
-            'type' => 'required',
-            'admin_order_by' => 'required',
-            'admin_sort' => 'required',
+            'admin_order_by' => ['required', Rule::in($orderList)],
+            'admin_sort' => ['required', Rule::in($sortList)],
             'admin_per_page' => 'required|numeric|max:50',
-            'web_order_by' => 'required',
-            'web_sort' => 'required',
+            'web_order_by' => ['required', Rule::in($orderList)],
+            'web_sort' => ['required', Rule::in($sortList)],
             'web_per_page' => 'required|numeric|max:50'
         ];
     }
@@ -32,28 +40,8 @@ class CollectionRequest extends Request
     {
         $input = parent::all();
 
-        if (! array_key_exists($this->get('type'), cms_collections('types'))) {
-            $input['type'] = null;
-        }
-
-        $orderList = cms_collections('order_by');
-
-        if (! array_key_exists($this->get('admin_order_by'), $orderList)) {
-            $input['admin_order_by'] = null;
-        }
-
-        if (! array_key_exists($this->get('web_order_by'), $orderList)) {
-            $input['web_order_by'] = null;
-        }
-
-        $sortList = cms_collections('sort');
-
-        if (! array_key_exists($this->get('admin_sort'), $sortList)) {
-            $input['admin_sort'] = null;
-        }
-
-        if (! array_key_exists($this->get('web_sort'), $sortList)) {
-            $input['web_sort'] = null;
+        if ($this->method() != 'POST') {
+            unset($input['type']);
         }
 
         return $input;

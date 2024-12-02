@@ -53,7 +53,7 @@ class AdminPagesResourceTest extends TestCase
             $this->getMenuId()
         ]), [
             'title' => fake()->sentence(2),
-            'type' => 'page',
+            'type' => 'page'
         ]);
 
         $response->assertFound()->assertSessionHasNoErrors();
