@@ -25,7 +25,7 @@
 <script type="text/javascript">
     $(function() {
         // Fancybox click event handler
-        $(document).on('click', '.popup', function(e){
+        $(document).on('click', '.popup', function(e) {
             e.preventDefault();
             let id = $(this).data('browse');
             $.fancybox({

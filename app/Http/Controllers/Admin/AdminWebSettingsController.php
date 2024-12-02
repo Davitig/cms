@@ -45,7 +45,13 @@ class AdminWebSettingsController extends Controller implements HasMiddleware
 
         $attributes = array_intersect_key($attributes, $columns);
 
-        DB::table('web_settings')->update($attributes);
+        $webSettings = DB::table('web_settings')->first();
+
+        if (is_null($webSettings)) {
+            DB::table('web_settings')->insert($attributes);
+        } else {
+            DB::table('web_settings')->update($attributes);
+        }
 
         return redirect(cms_route('webSettings.index'))
             ->with('alert', fill_data('success', trans('general.updated')));

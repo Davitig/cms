@@ -29,7 +29,7 @@ class AdminFilesController extends Controller
     {
         $this->foreignKey = in_array(HasGallery::class, class_uses($model))
             ? (string) $model->getGalleryKeyName()
-            : str($this->model->getTable())->before('_')->singular()
+            : str($this->model->getTable())->beforeLast('_')->singular()
             . '_' . $this->model->getKeyName();
     }
 
