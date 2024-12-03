@@ -18,7 +18,7 @@ class AdminArticlesResourceTest extends TestAdminResources
     public function test_admin_articles_resource_create()
     {
         $response = $this->actingAs($this->getUser())->get(cms_route('articles.create', [
-            $this->getCollectionModel()->id
+            $this->getCollectionModel('articles')->id
         ]));
 
         $response->assertOk();
@@ -30,7 +30,7 @@ class AdminArticlesResourceTest extends TestAdminResources
     public function test_admin_articles_resource_store()
     {
         $response = $this->actingAs($this->getUser())->post(cms_route('articles.store', [
-            $this->getCollectionModel()->id
+            $this->getCollectionModel('articles')->id
         ]), [
             'title' => fake()->sentence(2),
             'slug' => fake()->slug(2)
@@ -42,7 +42,7 @@ class AdminArticlesResourceTest extends TestAdminResources
     public function test_admin_articles_resource_edit()
     {
         $response = $this->actingAs($this->getUser())->get(cms_route('articles.edit', [
-            $this->getCollectionModel()->id, (new Article)->valueOrFail('id')
+            $this->getCollectionModel('articles')->id, (new Article)->valueOrFail('id')
         ]));
 
         $response->assertOk();
@@ -54,7 +54,7 @@ class AdminArticlesResourceTest extends TestAdminResources
     public function test_admin_articles_resource_update()
     {
         $response = $this->actingAs($this->getUser())->put(cms_route('articles.update', [
-            $this->getCollectionModel()->id, (new Article)->valueOrFail('id')
+            $this->getCollectionModel('articles')->id, (new Article)->valueOrFail('id')
         ]), [
             'title' => fake()->sentence(2),
             'slug' => fake()->slug(2)
@@ -65,8 +65,14 @@ class AdminArticlesResourceTest extends TestAdminResources
 
     public function test_admin_articles_resource_destroy()
     {
+        (new Article)->create([
+            'collection_id' => $collectionId = $this->getCollectionModel('articles')->id,
+            'title' => fake()->sentence(2),
+            'slug' => fake()->slug(2)
+        ]);
+
         $response = $this->actingAs($this->getUser())->delete(cms_route('articles.destroy', [
-            $this->getCollectionModel()->id, (new Article)->valueOrFail('id')
+            $collectionId, (new Article)->valueOrFail('id')
         ]));
 
         $response->assertFound();
@@ -75,7 +81,7 @@ class AdminArticlesResourceTest extends TestAdminResources
     public function test_admin_articles_resource_validate_title_required()
     {
         $response = $this->actingAs($this->getUser())->post(cms_route('articles.store', [
-            $this->getCollectionModel()->id, (new Article)->valueOrFail('id')
+            $this->getCollectionModel('articles')->id
         ]), [
             'slug' => fake()->slug(2)
         ]);
@@ -86,7 +92,7 @@ class AdminArticlesResourceTest extends TestAdminResources
     public function test_admin_articles_resource_validate_slug_unique()
     {
         $response = $this->actingAs($this->getUser())->post(cms_route('articles.store', [
-            $this->getCollectionModel()->id, (new Article)->valueOrFail('id')
+            $this->getCollectionModel('articles')->id
         ]), [
             'slug' => (new Article)->firstOrFail()->slug
         ]);
@@ -119,6 +125,8 @@ class AdminArticlesResourceTest extends TestAdminResources
             'column' => 'collection_id',
             'column_value' => $this->createCollectionModel('articles')->id
         ]);
+
+        $article->delete();
 
         $response->assertFound();
     }

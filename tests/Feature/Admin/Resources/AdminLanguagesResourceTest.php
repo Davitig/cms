@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature\Admin\Resources;
+namespace Tests\Feature\Admin\Resources;
 
 use App\Models\Language;
 use Database\Seeders\LanguageTableSeeder;

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use App\Http\Requests\Request;
+use Illuminate\Validation\Rule;
 
 class GalleryRequest extends Request
 {
@@ -15,15 +16,23 @@ class GalleryRequest extends Request
     {
         $id = $this->route('gallery');
 
-        return [
+        $orderList = array_keys(deep_collection('galleries.order_by'));
+
+        $sortList = array_keys(deep_collection('galleries.sort'));
+
+        $typeRule = $this->method() == 'POST'
+            ? ['type' => ['required', Rule::in(
+                array_keys(deep_collection('galleries.types'))
+            )]] : [];
+
+        return $typeRule + [
             'slug' => 'required|unique:galleries,slug,'.$id,
             'title' => 'required',
-            'type' => 'required',
-            'admin_order_by' => 'required',
-            'admin_sort' => 'required',
+            'admin_order_by' => ['required', Rule::in($orderList)],
+            'admin_sort' => ['required', Rule::in($sortList)],
             'admin_per_page' => 'required|numeric|max:50',
-            'web_order_by' => 'required',
-            'web_sort' => 'required',
+            'web_order_by' => ['required', Rule::in($orderList)],
+            'web_sort' => ['required', Rule::in($sortList)],
             'web_per_page' => 'required|numeric|max:50'
         ];
     }
@@ -35,33 +44,9 @@ class GalleryRequest extends Request
     {
         $input = parent::all();
 
-        $this->slugifyInput($input, 'slug', ['title']);
-
-        if (! array_key_exists($this->get('type'), deep_collection('galleries.types'))) {
-            $input['type'] = null;
+        if ($this->method() != 'POST') {
+            unset($input['type']);
         }
-
-        $orderList = deep_collection('galleries.order_by');
-
-        if (! array_key_exists($this->get('admin_order_by'), $orderList)) {
-            $input['admin_order_by'] = null;
-        }
-
-        if (! array_key_exists($this->get('web_order_by'), $orderList)) {
-            $input['web_order_by'] = null;
-        }
-
-        $sortList = deep_collection('galleries.sort');
-
-        if (! array_key_exists($this->get('admin_sort'), $sortList)) {
-            $input['admin_sort'] = null;
-        }
-
-        if (! array_key_exists($this->get('web_sort'), $sortList)) {
-            $input['web_sort'] = null;
-        }
-
-        $this->boolifyInput($input, ['visible']);
 
         return $input;
     }

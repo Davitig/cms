@@ -30,12 +30,15 @@ class TestAdminResources extends TestCase
     /**
      * Get the collection model.
      *
-     * @param  string|null  $id
+     * @param  string|null  $type
+     * @param  int|null  $id
      * @return \App\Models\Collection
      */
-    public function getCollectionModel(?string $id = null): Collection
+    public function getCollectionModel(?string $type = null, ?int $id = null): Collection
     {
-        return (new Collection)->when($id, function ($object) use ($id) {
+        return (new Collection)->when($type, function ($q, $value) {
+            return $q->whereType($value);
+        })->when($id, function ($object) use ($id) {
             return $object->findOrFail($id);
         }, function ($object) {
             return $object->firstOrFail();
