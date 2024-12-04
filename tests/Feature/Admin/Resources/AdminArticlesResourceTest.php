@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin\Resources;
 
 use App\Models\Article\Article;
+use App\Models\Collection;
 
 class AdminArticlesResourceTest extends TestAdminResources
 {
@@ -53,29 +54,16 @@ class AdminArticlesResourceTest extends TestAdminResources
      */
     public function test_admin_articles_resource_update()
     {
+        $article = (new Article)->firstOrFail();
+
         $response = $this->actingAs($this->getUser())->put(cms_route('articles.update', [
-            $this->getCollectionModel('articles')->id, (new Article)->valueOrFail('id')
+            $article->collection_id, $article->id
         ]), [
             'title' => fake()->sentence(2),
             'slug' => fake()->slug(2)
         ]);
 
         $response->assertFound()->assertSessionHasNoErrors();
-    }
-
-    public function test_admin_articles_resource_destroy()
-    {
-        (new Article)->create([
-            'collection_id' => $collectionId = $this->getCollectionModel('articles')->id,
-            'title' => fake()->sentence(2),
-            'slug' => fake()->slug(2)
-        ]);
-
-        $response = $this->actingAs($this->getUser())->delete(cms_route('articles.destroy', [
-            $collectionId, (new Article)->valueOrFail('id')
-        ]));
-
-        $response->assertFound();
     }
 
     public function test_admin_articles_resource_validate_title_required()
@@ -118,15 +106,34 @@ class AdminArticlesResourceTest extends TestAdminResources
 
     public function test_admin_articles_resource_transfer()
     {
+        $article = (new Article)->firstOrFail();
+
+        $collectionId = (new Collection)->whereKeyNot($article->collection_id)->value('id');
+
+        if (is_null($collectionId)) {
+            $collectionId = $this->createCollectionModel('articles')->id;
+        }
+
         $response = $this->actingAs($this->getUser())->put(cms_route('articles.transfer', [
-            ($article = (new Article)->firstOrFail())->collection_id
+            $article->collection_id
         ]), [
             'id' => $article->id,
             'column' => 'collection_id',
-            'column_value' => $this->createCollectionModel('articles')->id
+            'column_value' => $collectionId
         ]);
 
-        $article->delete();
+        $response->assertFound();
+    }
+
+    public function test_admin_articles_resource_destroy()
+    {
+        $article = (new Article)->firstOrFail();
+
+        $response = $this->actingAs($this->getUser())->delete(cms_route('articles.destroy', [
+            $article->collection_id, $article->id
+        ]));
+
+        (new Collection)->whereType('articles')->delete();
 
         $response->assertFound();
     }

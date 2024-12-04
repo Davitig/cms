@@ -69,15 +69,6 @@ class AdminCollectionsResourceTest extends TestCase
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
-    public function test_admin_collections_resource_destroy()
-    {
-        $response = $this->actingAs($this->getUser())->delete(cms_route('collections.destroy', [
-            (new Collection)->valueOrFail('id')
-        ]));
-
-        $response->assertFound();
-    }
-
     public function test_admin_collections_resource_validate_invalid_selection()
     {
         $response = $this->actingAs($this->getUser())->post(cms_route('collections.store'), [
@@ -86,5 +77,14 @@ class AdminCollectionsResourceTest extends TestCase
         ]);
 
         $response->assertFound()->assertSessionHasErrors(['admin_order_by', 'web_order_by']);
+    }
+
+    public function test_admin_collections_resource_destroy()
+    {
+        $response = $this->actingAs($this->getUser())->delete(cms_route('collections.destroy', [
+            (new Collection)->valueOrFail('id')
+        ]));
+
+        $response->assertFound();
     }
 }

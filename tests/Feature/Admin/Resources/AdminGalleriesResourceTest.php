@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin\Resources;
 
+use App\Models\Collection;
 use App\Models\Gallery\Gallery;
 
 class AdminGalleriesResourceTest extends TestAdminResources
@@ -60,8 +61,10 @@ class AdminGalleriesResourceTest extends TestAdminResources
      */
     public function test_admin_galleries_resource_update()
     {
+        $gallery = (new Gallery)->firstOrFail();
+
         $response = $this->actingAs($this->getUser())->put(cms_route('galleries.update', [
-            $this->getCollectionModel('galleries')->id, (new Gallery)->valueOrFail('id')
+            $gallery->collection_id, $gallery->id
         ]), [
             'title' => fake()->sentence(2),
             'slug' => fake()->slug(2),
@@ -74,28 +77,6 @@ class AdminGalleriesResourceTest extends TestAdminResources
         ]);
 
         $response->assertFound()->assertSessionHasNoErrors();
-    }
-
-    public function test_admin_galleries_resource_destroy()
-    {
-        (new Gallery)->create([
-            'collection_id' => $collectionId = $this->getCollectionModel('galleries')->id,
-            'title' => fake()->sentence(2),
-            'slug' => fake()->slug(2),
-            'type' => 'photos',
-            'admin_order_by' => 'position',
-            'admin_sort' => 'asc',
-            'admin_per_page' => 20,
-            'web_order_by' => 'created_at',
-            'web_sort' => 'asc',
-            'web_per_page' => 20
-        ]);
-
-        $response = $this->actingAs($this->getUser())->delete(cms_route('galleries.destroy', [
-            $collectionId, (new Gallery)->valueOrFail('id')
-        ]));
-
-        $response->assertFound();
     }
 
     public function test_admin_galleries_resource_validate_title_required()
@@ -120,7 +101,7 @@ class AdminGalleriesResourceTest extends TestAdminResources
         $response->assertFound()->assertSessionHasErrors(['slug']);
     }
 
-    public function test_admin_collections_resource_validate_invalid_selection()
+    public function test_admin_galleries_resource_validate_invalid_selection()
     {
         $response = $this->actingAs($this->getUser())->post(cms_route('galleries.store', [
             $this->getCollectionModel('galleries')->id
@@ -150,15 +131,34 @@ class AdminGalleriesResourceTest extends TestAdminResources
 
     public function test_admin_galleries_resource_transfer()
     {
+        $gallery = (new Gallery)->firstOrFail();
+
+        $collectionId = (new Collection)->whereKeyNot($gallery->collection_id)->value('id');
+
+        if (is_null($collectionId)) {
+            $collectionId = $this->createCollectionModel('galleries')->id;
+        }
+
         $response = $this->actingAs($this->getUser())->put(cms_route('galleries.transfer', [
-            ($gallery = (new Gallery)->firstOrFail())->collection_id
+            $gallery->collection_id
         ]), [
             'id' => $gallery->id,
             'column' => 'collection_id',
-            'column_value' => $this->createCollectionModel('galleries')->id
+            'column_value' => $collectionId
         ]);
 
-        $gallery->delete();
+        $response->assertFound();
+    }
+
+    public function test_admin_galleries_resource_destroy()
+    {
+        $gallery = (new Gallery)->firstOrFail();
+
+        $response = $this->actingAs($this->getUser())->delete(cms_route('galleries.destroy', [
+            $gallery->collection_id, $gallery->id
+        ]));
+
+        (new Collection)->whereType('galleries')->delete();
 
         $response->assertFound();
     }

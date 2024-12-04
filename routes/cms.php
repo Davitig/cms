@@ -164,13 +164,13 @@ Route::name(cms_route_name())->group(function ($router) {
         $router->post('permissions', [AdminPermissionsController::class, 'store'])
             ->name('permissions.store');
 
-        // CMS users
-        $router->resource('cms-users', AdminCmsUsersController::class)
-            ->names(resource_names('cmsUsers'));
         // CMS user roles
         $router->resource('cms-user-roles', AdminCmsUserRolesController::class)
             ->names(resource_names('cmsUserRoles'))
             ->except(['show']);
+        // CMS users
+        $router->resource('cms-users', AdminCmsUsersController::class)
+            ->names(resource_names('cmsUsers'));
 
         // file manager
         $router->get('filemanager', [AdminFilemanagerController::class, 'index'])

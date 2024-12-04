@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin\Resources;
 
 use App\Models\Event\Event;
+use App\Models\Collection;
 
 class AdminEventsResourceTest extends TestAdminResources
 {
@@ -53,29 +54,16 @@ class AdminEventsResourceTest extends TestAdminResources
      */
     public function test_admin_events_resource_update()
     {
+        $event = (new Event)->firstOrFail();
+
         $response = $this->actingAs($this->getUser())->put(cms_route('events.update', [
-            $this->getCollectionModel('events')->id, (new Event)->valueOrFail('id')
+            $event->collection_id, $event->id
         ]), [
             'title' => fake()->sentence(2),
             'slug' => fake()->slug(2)
         ]);
 
         $response->assertFound()->assertSessionHasNoErrors();
-    }
-
-    public function test_admin_events_resource_destroy()
-    {
-        (new Event)->create([
-            'collection_id' => $collectionId = $this->getCollectionModel('events')->id,
-            'title' => fake()->sentence(2),
-            'slug' => fake()->slug(2)
-        ]);
-
-        $response = $this->actingAs($this->getUser())->delete(cms_route('events.destroy', [
-            $collectionId, (new Event)->valueOrFail('id')
-        ]));
-
-        $response->assertFound();
     }
 
     public function test_admin_events_resource_validate_title_required()
@@ -118,15 +106,34 @@ class AdminEventsResourceTest extends TestAdminResources
 
     public function test_admin_events_resource_transfer()
     {
+        $event = (new Event)->firstOrFail();
+
+        $collectionId = (new Collection)->whereKeyNot($event->collection_id)->value('id');
+
+        if (is_null($collectionId)) {
+            $collectionId = $this->createCollectionModel('events')->id;
+        }
+
         $response = $this->actingAs($this->getUser())->put(cms_route('events.transfer', [
-            ($event = (new Event)->firstOrFail())->collection_id
+            $event->collection_id
         ]), [
             'id' => $event->id,
             'column' => 'collection_id',
-            'column_value' => $this->createCollectionModel('events')->id
+            'column_value' => $collectionId
         ]);
 
-        $event->delete();
+        $response->assertFound();
+    }
+
+    public function test_admin_events_resource_destroy()
+    {
+        $event = (new Event)->firstOrFail();
+
+        $response = $this->actingAs($this->getUser())->delete(cms_route('events.destroy', [
+            $event->collection_id, $event->id
+        ]));
+
+        (new Collection)->whereType('events')->delete();
 
         $response->assertFound();
     }

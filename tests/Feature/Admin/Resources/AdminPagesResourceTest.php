@@ -21,6 +21,8 @@ class AdminPagesResourceTest extends TestCase
 
     public function test_admin_pages_resource_index()
     {
+        (new Menu)->create(['title' => 'List of Pages']);
+
         $response = $this->actingAs($this->getUser())->get(cms_route('pages.index', [
             $this->getMenuId()
         ]));
@@ -42,13 +44,6 @@ class AdminPagesResourceTest extends TestCase
      */
     public function test_admin_pages_resource_store()
     {
-        (new Page)->create([
-            'menu_id' => $this->getMenuId(),
-            'title' => fake()->sentence(2),
-            'slug' => fake()->slug(2),
-            'type' => 'page'
-        ]);
-
         $response = $this->actingAs($this->getUser())->post(cms_route('pages.store', [
             $this->getMenuId()
         ]), [
@@ -73,23 +68,16 @@ class AdminPagesResourceTest extends TestCase
      */
     public function test_admin_pages_resource_update()
     {
+        $page = (new Page)->firstOrFail();
+
         $response = $this->actingAs($this->getUser())->put(cms_route('pages.update', [
-            $this->getMenuId(), (new Page)->valueOrFail('id')
+            $page->menu_id, $page->id
         ]), [
             'title' => fake()->sentence(2),
             'type' => 'page'
         ]);
 
         $response->assertFound()->assertSessionHasNoErrors();
-    }
-
-    public function test_admin_pages_resource_destroy()
-    {
-        $response = $this->actingAs($this->getUser())->delete(cms_route('pages.destroy', [
-            $this->getMenuId(), (new Page)->valueOrFail('id')
-        ]));
-
-        $response->assertFound();
     }
 
     public function test_admin_pages_resource_validate_title_required()
@@ -132,12 +120,20 @@ class AdminPagesResourceTest extends TestCase
 
     public function test_admin_pages_resource_transfer()
     {
+        $page = (new Page)->firstOrFail();
+
+        $menuId = (new Menu)->whereKeyNot($page->menu_id)->value('id');
+
+        if (is_null($menuId)) {
+            $menuId = (new Menu)->create(['title' => fake()->sentence(2)])->id;
+        }
+
         $response = $this->actingAs($this->getUser())->put(cms_route('pages.transfer', [
-            ($page = (new Page)->firstOrFail())->menu_id
+            $page->menu_id
         ]), [
             'id' => $page->id,
             'column' => 'menu_id',
-            'column_value' => (new Menu)->create(['title' => fake()->sentence(2)])->id,
+            'column_value' => $menuId
         ]);
 
         $response->assertFound();
@@ -145,15 +141,17 @@ class AdminPagesResourceTest extends TestCase
 
     public function test_admin_pages_resource_get_listable_types()
     {
-        $collectionId = (new Collection)->create([
+        $collection = (new Collection)->create([
             'title' => 'Articles', 'type' => 'articles'
-        ])->id;
+        ]);
 
         $response = $this->actingAs($this->getUser())->get(
             cms_route('pages.getListableTypes', ['type' => 'collections'])
         );
 
-        $this->assertArrayHasKey($collectionId, $response->json());
+        $this->assertArrayHasKey($collection->id, $response->json());
+
+        $collection->delete();
     }
 
     public function test_admin_pages_resource_get_templates()
@@ -170,5 +168,18 @@ class AdminPagesResourceTest extends TestCase
         ]);
 
         $response->assertOk()->assertJson([]);
+    }
+
+    public function test_admin_pages_resource_destroy()
+    {
+        $page = (new Page)->firstOrFail();
+
+        $response = $this->actingAs($this->getUser())->delete(cms_route('pages.destroy', [
+            $page->menu_id, $page->id
+        ]));
+
+        (new Menu)->newQuery()->delete();
+
+        $response->assertFound();
     }
 }
