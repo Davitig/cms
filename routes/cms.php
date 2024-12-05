@@ -158,16 +158,17 @@ Route::name(cms_route_name())->group(function ($router) {
                 ->except(['show']);
         }
 
-        // permissions
+        // CMS user roles
+        $router->resource('cms-user-roles', AdminCmsUserRolesController::class)
+            ->names(resource_names('cmsUserRoles'))
+            ->except(['show']);
+
+        // role permissions
         $router->get('permissions', [AdminPermissionsController::class, 'index'])
             ->name('permissions.index');
         $router->post('permissions', [AdminPermissionsController::class, 'store'])
             ->name('permissions.store');
 
-        // CMS user roles
-        $router->resource('cms-user-roles', AdminCmsUserRolesController::class)
-            ->names(resource_names('cmsUserRoles'))
-            ->except(['show']);
         // CMS users
         $router->resource('cms-users', AdminCmsUsersController::class)
             ->names(resource_names('cmsUsers'));

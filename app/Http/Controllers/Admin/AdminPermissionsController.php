@@ -65,18 +65,22 @@ class AdminPermissionsController extends Controller implements HasMiddleware
      */
     public function store()
     {
-        $this->model->clear($roleId = $this->request->get('role_id'));
-
-        if (! (new CmsUserRole)->whereKey($roleId)->fullAccess(false)->exists()) {
-            return redirect(cms_route('permissions.index'));
+        if (is_null($roleId = $this->request->get('role_id'))) {
+            return redirect(cms_route('permissions.index'))
+                ->with('alert', fill_data('error', trans('general.invalid_input')));
         }
 
-        $input = $this->request->get('permissions', []);
+        $this->model->clear($roleId);
+
+        if (! (new CmsUserRole)->whereKey($roleId)->fullAccess(false)->exists()) {
+            return redirect(cms_route('permissions.index'))
+                ->with('alert', fill_data('error', trans('general.invalid_input')));
+        }
 
         $attributes = [];
 
-        foreach ($input as $groupName => $routes) {
-            foreach ($routes as $routeName) {
+        foreach ((array) $this->request->get('permissions') as $groupName => $routes) {
+            foreach ((array) $routes as $routeName) {
                 if (in_array($groupName, Permission::$routeGroupsHidden)
                     || in_array($groupName, Permission::$routeGroupsAllowed)
                     || in_array($routeName, Permission::$routeNamesHidden)
