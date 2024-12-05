@@ -19,11 +19,11 @@ class AdminPhotosResourceTest extends TestAdminResources
 
     public function test_admin_photos_resource_create()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('photos.create', [
+        $response = $this->actingAs($this->getUser())->getJson(cms_route('photos.create', [
             $this->getGalleryModel('photos')->id
         ]));
 
-        $response->assertFound();
+        $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
 
     /**
@@ -43,11 +43,11 @@ class AdminPhotosResourceTest extends TestAdminResources
 
     public function test_admin_photos_resource_edit()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('photos.edit', [
+        $response = $this->actingAs($this->getUser())->getJson(cms_route('photos.edit', [
             $this->getGalleryModel('photos')->id, (new Photo)->valueOrFail('id')
         ]));
 
-        $response->assertFound();
+        $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
 
     /**

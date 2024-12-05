@@ -19,11 +19,11 @@ class AdminVideosResourceTest extends TestAdminResources
 
     public function test_admin_videos_resource_create()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('videos.create', [
+        $response = $this->actingAs($this->getUser())->getJson(cms_route('videos.create', [
             $this->getGalleryModel('videos')->id
         ]));
 
-        $response->assertFound();
+        $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
 
     /**
@@ -43,11 +43,11 @@ class AdminVideosResourceTest extends TestAdminResources
 
     public function test_admin_videos_resource_edit()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('videos.edit', [
+        $response = $this->actingAs($this->getUser())->getJson(cms_route('videos.edit', [
             $this->getGalleryModel('videos')->id, (new Video)->valueOrFail('id')
         ]));
 
-        $response->assertFound();
+        $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
 
     /**
