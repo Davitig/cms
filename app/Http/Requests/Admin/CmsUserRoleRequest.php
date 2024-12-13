@@ -15,7 +15,7 @@ class CmsUserRoleRequest extends Request
     {
         return [
             'role' => 'required',
-            'full_access' => 'required|integer|in:0,1'
+            'full_access' => 'integer|in:0,1'
         ];
     }
 }

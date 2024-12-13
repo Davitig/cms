@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\CmsUserRole;
+use Exception;
 use Illuminate\Support\Arr;
 use Tests\TestCase;
 
@@ -17,10 +18,17 @@ class AdminPermissionsTest extends TestCase
         $response->assertOk();
     }
 
+    /**
+     * @throws \Exception
+     */
     public function test_admin_permissions_store()
     {
+        if (is_null($roleId = (new CmsUserRole)->customAccess()->valueOrFail('id'))) {
+            throw new Exception('User role with custom access not found');
+        }
+
         $response = $this->actingAs($this->getUser())->post(cms_route('permissions.index', [
-            'role_id' => (new CmsUserRole)->customAccess()->valueOrFail('id'),
+            'role_id' => $roleId,
             'permissions' => [current(Arr::flatten($this->getAllCMSRouteNames()))]
         ]));
 
