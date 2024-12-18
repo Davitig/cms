@@ -65,7 +65,7 @@ abstract class Request extends FormRequest
     protected function boolifyInput(array &$input, array $params): void
     {
         foreach ($params as $param) {
-            $input[$param] = (int) $this->filled($param);
+            $input[$param] = (int) ($input[$param] ?? 0);
         }
     }
 }
