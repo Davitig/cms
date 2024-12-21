@@ -14,11 +14,13 @@
             init: function() {
                 // Here goes your code for setting your custom things onLoad.
             },
-            mySubmit: function(url) {
-                // pass selected file path to TinyMCE
-                parent.tinymce.activeEditor.windowManager.getParams().setUrl(url);
-                // close popup window
-                parent.tinymce.activeEditor.windowManager.close();
+            mySubmit: function (file) {
+                window.parent.postMessage({
+                    mceAction: 'fileSelected',
+                    data: {
+                        file: file
+                    }
+                }, '*');
             }
         };
         $(function() {
@@ -29,9 +31,9 @@
                 },
                 url: '{{ cms_route('filemanager.connector', ['hide_disks' => 1]) }}',  // connector URL
                 getFileCallback: function(file) { // editor callback
-                    FileBrowserDialogue.mySubmit(decodeURIComponent(file.url)); // pass selected file path to TinyMCE
+                    FileBrowserDialogue.mySubmit(file); // pass selected file path to TinyMCE
                 },
-                width: 880,
+                // width: 880,
                 height: 580,
                 resizable: false
             }).elfinder('instance');
@@ -40,6 +42,6 @@
     @include('vendor.elfinder._head')
 </head>
 <body>
-    <div id="elfinder"></div>
+<div id="elfinder"></div>
 </body>
 </html>
