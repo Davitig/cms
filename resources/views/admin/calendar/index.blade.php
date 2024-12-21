@@ -55,7 +55,7 @@
     <div id="event-modal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
-                <form action="{{cms_route('calendar.save')}}" method="post" id="event-form" class="{{$cmsSettings->get('ajax_form')}}">
+                <form action="{{cms_route('calendar.save')}}" method="post" id="event-form">
                     <input type="hidden" name="_method" value="put">
                     <input type="hidden" name="_token" value="{{$csrfToken = csrf_token()}}">
                     <input type="hidden" name="active" id="event-active" value="0">
@@ -97,7 +97,8 @@
                 let eventsList = $('#events-list');
 
                 // Form to add new event
-                $('#add-calendar-event').on('submit', function(e) {
+                let calendarForm = $('#add-calendar-event');
+                calendarForm.on('submit', function(e) {
                     e.preventDefault();
 
                     let $event = $(this).find('.form-control'),
@@ -127,8 +128,18 @@
 
                             // Reset input
                             $event.val('').focus();
+                            $('.text-danger', calendarForm).remove();
                         }, 'json').fail(function(xhr) {
-                            alert(xhr.responseText);
+                            if (! xhr?.responseJSON) {
+                                alert(xhr.responseText);
+                                return;
+                            }
+                            $('.text-danger', calendarForm).remove();
+                            if (xhr?.responseJSON?.message) {
+                                calendarForm.append(
+                                    '<div class="text-danger">' + xhr?.responseJSON?.message + '</div>'
+                                );
+                            }
                         });
                     } else {
                         $event.focus();
@@ -221,7 +232,7 @@
                         $.post("{{cms_route('calendar.save')}}", eventObject, function() {
                             calendar.fullCalendar('renderEvent', eventObject);
 
-                            // Remove event from list
+                            // Remove event from a list
                             $(target).remove();
                         }, 'json').fail(function(xhr) {
                             alert(xhr.responseText);
@@ -285,14 +296,14 @@
                     let active = form.find('#event-active').val();
                     let id     = form.find('#event-id').val();
 
-                    let input = {'id':id, '_token':"{{$csrfToken}}"};
+                    let input = {'id':id, '_token':'{{$csrfToken}}', '_method': 'DELETE'};
                     $.post("{{cms_route('calendar.destroy')}}", input, function() {
                         modal.modal('hide');
 
-                        if (active === 1) {
-                            calendar.fullCalendar('removeEvents', id);
+                        if (active) {
+                            calendar.fullCalendar('removeEvents', [id]);
                         } else {
-                            $('#events-list').find('#event' + id).remove();
+                            eventsList.find('#event' + id).remove();
                         }
                     }, 'json').fail(function(xhr) {
                         alert(xhr.responseText);

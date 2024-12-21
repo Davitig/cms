@@ -199,7 +199,7 @@ Route::name(cms_route_name())->group(function ($router) {
         $router->controller(AdminNotesController::class)->group(function ($router) {
             $router->get('notes', 'index')->name('notes.index');
             $router->put('notes', 'save')->name('notes.save');
-            $router->post('notes', 'destroy')->name('notes.destroy');
+            $router->delete('notes', 'destroy')->name('notes.destroy');
         });
 
         // calendar
@@ -207,7 +207,7 @@ Route::name(cms_route_name())->group(function ($router) {
             $router->get('calendar', 'index')->name('calendar.index');
             $router->post('calendar/events', 'events')->name('calendar.events');
             $router->put('calendar', 'save')->name('calendar.save');
-            $router->post('calendar', 'destroy')->name('calendar.destroy');
+            $router->delete('calendar', 'destroy')->name('calendar.destroy');
         });
 
         // CMS settings

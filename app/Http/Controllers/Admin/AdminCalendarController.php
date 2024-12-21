@@ -52,9 +52,7 @@ class AdminCalendarController extends Controller
     {
         $this->request->validate(['title' => 'required']);
 
-        if ($this->request->filled('id')) {
-            $id = $this->request->get('id');
-
+        if ($id = $this->request->get('id')) {
             $this->model->findOrFail($id)->updateEvent($this->request);
         } else {
             $input = $this->request->all();

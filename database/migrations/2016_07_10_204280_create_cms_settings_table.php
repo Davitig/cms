@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('cms_settings', function (Blueprint $table) {
             $table->tinyInteger('id', true);
-            $table->unsignedBigInteger('cms_user_id');
+            $table->unsignedBigInteger('cms_user_id')->unique();
             $table->string('sidebar_position', 64)->default('fixed');
             $table->string('sidebar_direction', 64)->default('left-sidebar');
             $table->boolean('horizontal_menu')->default(1);

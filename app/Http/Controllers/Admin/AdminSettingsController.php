@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 
@@ -56,10 +55,9 @@ class AdminSettingsController extends Controller
      * Update the "cms_settings" table.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Contracts\Auth\Guard  $guard
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Guard $guard)
+    public function update(Request $request)
     {
         $columns = array_flip(Schema::getColumnListing('cms_settings'));
         unset($columns['id']);
@@ -74,16 +72,16 @@ class AdminSettingsController extends Controller
         }
 
         $attributes['horizontal_menu'] = $request->filled('horizontal_menu') ? 1 : 0;
-        $attributes['cms_user_id'] = $guard->id();
+        $attributes['cms_user_id'] = $userId = $request->user('cms')->id;
 
         $attributes = array_intersect_key($attributes, $columns);
 
         $table = app('db')->table('cms_settings');
 
-        if (is_null($table->where('cms_user_id', $guard->id())->first())) {
-            $table->insert($attributes);
-        } else {
+        if ($table->where('cms_user_id', $userId)->exists()) {
             $table->update($attributes);
+        } else {
+            $table->insert($attributes);
         }
 
         return redirect(cms_route('settings.index', ['tab' => $request->get('tab', 1)]))

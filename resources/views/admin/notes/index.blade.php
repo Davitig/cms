@@ -70,6 +70,7 @@
                     content     = '';
 
                 let listNotes = $('.list-of-notes');
+                let notesList = $('.notes-header');
                 let saveNote = $('#save-note');
 
                 function updateNoteContent() {
@@ -97,12 +98,20 @@
                         }
 
                         saveNote.find('.icon-var').removeClass('fa-spin fa-save').addClass('fa-check');
-                    }, 'json')
-                        .fail(function(xhr) {
-                            saveNote.find('.icon-var').removeClass('fa-spin fa-save').addClass('fa-remove');
-
+                        $('.text-danger', notesList).remove();
+                    }, 'json').fail(function(xhr) {
+                        saveNote.find('.icon-var').removeClass('fa-spin fa-save').addClass('fa-remove');
+                        if (! xhr?.responseJSON) {
                             alert(xhr.responseText);
-                        }).always(function() {
+                            return;
+                        }
+                        $('.text-danger', notesList).remove();
+                        if (xhr?.responseJSON?.message) {
+                            notesList.append(
+                                '<span class="text-danger">' + xhr?.responseJSON?.message + '</span>'
+                            );
+                        }
+                    }).always(function() {
                         saveNote.delay(400).fadeOut(500);
                     });
                 });
@@ -122,20 +131,18 @@
 
                     $.post("{{cms_route('calendar.save')}}", input, function() {
                         note.find('.note-close').trigger('click');
-                    }, 'json')
-                        .fail(function(xhr) {
-                            alert(xhr.responseText);
-                        });
+                    }, 'json').fail(function(xhr) {
+                        alert(xhr.responseText);
+                    });
                 });
 
                 // delete note
                 listNotes.on('click', '.note-close', function() {
-                    let input = {'id':$(this).closest('li').data('id'), '_token':"{{$csrfToken}}"};
+                    let input = {'id':$(this).closest('li').data('id'), '_token':'{{$csrfToken}}', '_method': 'DELETE'};
 
-                    $.post("{{cms_route('notes.destroy')}}", input, function() {}, 'json')
-                        .fail(function(xhr) {
-                            alert(xhr.responseText);
-                        })
+                    $.post("{{cms_route('notes.destroy')}}", input, function() {}, 'json').fail(function(xhr) {
+                        alert(xhr.responseText);
+                    })
                 });
             });
         </script>

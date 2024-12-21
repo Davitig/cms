@@ -34,6 +34,8 @@ class AdminNotesController extends Controller
      */
     public function save()
     {
+        $this->request->validate(['title' => 'required']);
+
         $input = $this->request->all(['title', 'description', 'content']);
 
         if ($this->request->filled('id')) {
