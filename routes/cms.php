@@ -43,8 +43,8 @@ Route::name(cms_route_name())->group(function ($router) {
     $router->middleware('cms.lockscreen')->controller(AdminLockscreenController::class)
         ->group(function ($router) {
             $router->get('lockscreen', 'index')->name('lockscreen');
-            $router->post('lockscreen', 'store')->name('lockscreen.post');
-            $router->put('lockscreen', 'update')->name('lockscreen.put');
+            $router->post('lockscreen', 'lock')->name('lockscreen.lock');
+            $router->put('lockscreen', 'unlock')->name('lockscreen.unlock');
         });
 
     // Authenticated

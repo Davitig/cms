@@ -3,7 +3,7 @@
         <div class="login-container">
             <div class="row">
                 <div class="col-sm-7">
-                    <form role="form" action="{{cms_route('lockscreen.put')}}" method="post" class="lockscreen-form fade-in-effect">
+                    <form role="form" action="{{cms_route('lockscreen.unlock')}}" method="post" class="lockscreen-form fade-in-effect">
                         <input type="hidden" name="_method" value="put">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="user-thumb">
@@ -39,19 +39,17 @@
                 $(".lockscreen-form").on('submit', function(e) {
                     e.preventDefault();
 
-                    let input = $(this).serializeArray();
                     let password = $('#password', this);
-                    password.val('').siblings('label').remove();
 
                     $.ajax({
-                        url: '{{cms_route('lockscreen.put')}}',
+                        url: $(this).attr('action'),
                         method: 'POST',
                         dataType: 'json',
-                        data: input,
+                        data: $(this).serializeArray(),
                         success: function(data) {
                             if (data.result) {
                                 @if ($cmsSettings->get('lockscreen'))
-                                lockscreen('{{$cmsSettings->get('lockscreen')}}', '{{cms_route('lockscreen.put')}}', true);
+                                activateLockscreenTimer()
                                 @endif
 
                                 $('body > #lockscreen').fadeOut(400, function() {
@@ -70,6 +68,8 @@
                             }
                         }
                     });
+
+                    password.val('').siblings('label').remove();
                 });
                 @endif
             });

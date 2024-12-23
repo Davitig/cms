@@ -33,7 +33,7 @@ class AdminLockscreenController extends Controller
      *
      * @throws \Throwable
      */
-    public function store(Request $request)
+    public function lock(Request $request)
     {
         $request->user('cms')->lockScreen();
 
@@ -47,21 +47,20 @@ class AdminLockscreenController extends Controller
     }
 
     /**
-     * Handle a lockscreen request to the application.
+     * Handle a lockscreen unlock request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request)
+    public function unlock(Request $request)
     {
         $guard = Auth::guard('cms');
 
         $isValid = false;
 
-        if ($request->filled('password')) {
+        if ($password = $request->get('password')) {
             $isValid = $guard->getProvider()->validateCredentials(
-                $guard->user(),
-                $request->all('password')
+                $guard->user(), compact('password')
             );
         }
 

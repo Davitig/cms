@@ -1,5 +1,5 @@
 <li>
-    <form method="post" action="{{cms_route('lockscreen.post')}}" id="set-lockscreen">
+    <form method="post" action="{{cms_route('lockscreen.lock')}}" id="set-lockscreen">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <button type="submit" class="btn btn-link" title="Lockscreen">
             <i class="fa fa-lock"></i>

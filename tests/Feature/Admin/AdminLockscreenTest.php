@@ -12,21 +12,21 @@ class AdminLockscreenTest extends TestCase
         return (new CmsUser)->firstOrFail();
     }
 
-    public function test_admin_lockscreen_is_inactive()
+    public function test_admin_lockscreen_is_unlocked()
     {
         $response = $this->actingAs($this->getUser())->get(cms_route('lockscreen'));
 
         $response->assertFound();
     }
 
-    public function test_admin_lockscreen_activate()
+    public function test_admin_lockscreen_lock()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('lockscreen.post'));
+        $response = $this->actingAs($this->getUser())->post(cms_route('lockscreen.lock'));
 
         $response->assertRedirect(cms_route('dashboard'))->assertSessionHas('lockscreen', 1);
     }
 
-    public function test_admin_lockscreen_is_active()
+    public function test_admin_lockscreen_is_locked()
     {
         $response = $this->actingAs($this->getUser())->withSession([
             'lockscreen' => 1,
@@ -37,7 +37,7 @@ class AdminLockscreenTest extends TestCase
 
     public function test_admin_lockscreen_invalid_unlocking()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('lockscreen.put'), [
+        $response = $this->actingAs($this->getUser())->put(cms_route('lockscreen.unlock'), [
             'password' => str()->random(10),
         ]);
 
@@ -49,7 +49,7 @@ class AdminLockscreenTest extends TestCase
      */
     public function test_admin_lockscreen_successful_unlocking()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('lockscreen.put'), [
+        $response = $this->actingAs($this->getUser())->put(cms_route('lockscreen.unlock'), [
             'password' => '123456',
         ]);
 

@@ -49,7 +49,7 @@ $(function () {
         $('input.form-close').val(1);
     });
 
-    // Disable buttons after submit for some period of time
+    // Disable buttons for some period of time after submitting
     $(document).on('submit', 'form', function () {
         $('input[type="submit"], button[type="submit"]', this).prop('disabled', true);
 
@@ -255,20 +255,30 @@ $(function () {
 });
 
 // Lockscreen event handlers and functions
-let timer;
-let timerIsActive = true;
+let lockscreenTimer;
+let lockscreenTimerIsActive = true;
 
 $('form#set-lockscreen').on('submit', function (e) {
     e.preventDefault();
 
-    clearTimeout(timer);
-    timerIsActive = false;
+    clearTimeout(lockscreenTimer);
+    lockscreenTimerIsActive = false;
 
-    setLockscreen($(this));
+    setLockscreen($(this).attr('action'), $(this).find('input[name="_token"]').val());
 });
 
-function setLockscreen(form) {
-    $.post(form.attr('action'), form.serialize(), function (res) {
+function activateLockscreenTimer() {
+    lockscreenTimerIsActive = true;
+
+    $(document).trigger('lockscreen');
+}
+
+function setLockscreen(url, csrfToken) {
+    if (! url) {
+        console.log('%c Lockscreen URL not provided.', 'color:red;');
+        return;
+    }
+    $.post(url, {'_token': csrfToken}, function (res) {
         if (res) {
             let body = $('body');
             body.append(res.view);
@@ -279,19 +289,15 @@ function setLockscreen(form) {
     });
 }
 
-function lockscreen(time, form, reActive) {
-    if (reActive) {
-        timerIsActive = true;
-    }
+function lockscreen(time, url, csrfToken) {
+    $(document).on('click mousemove keypress scroll lockscreen', function () {
+        if (lockscreenTimerIsActive) {
+            clearTimeout(lockscreenTimer);
 
-    $(document).on('click mousemove keypress scroll', function () {
-        if (timerIsActive) {
-            clearTimeout(timer);
+            lockscreenTimer = setTimeout(function () {
+                setLockscreen(url, csrfToken);
 
-            timer = setTimeout(function () {
-                setLockscreen(form);
-
-                timerIsActive = false;
+                lockscreenTimerIsActive = false;
             }, time);
         }
     });
