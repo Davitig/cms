@@ -55,7 +55,7 @@ class LanguageServiceProvider extends ServiceProvider
      */
     protected function setLanguageConfig(Request $request, Config $config): void
     {
-        $languages = [];
+        $languages = $visibleLanguages = [];
 
         try {
             $items = (new Language)->positionAsc()->get();
@@ -68,20 +68,19 @@ class LanguageServiceProvider extends ServiceProvider
             $languages[strtolower($language->language)] = $language->getAttributes();
         }
 
-        // Set the active language data
-        $config->set(['_app.language' => key($languages)]);
-
         $firstSegment = (string) current($this->segments);
+        $langSelected = array_key_exists($firstSegment, $languages);
 
-        if (count($languages) > 1 && array_key_exists($firstSegment, $languages)) {
-            $config->set(['_app.language' => $firstSegment]);
-            $config->set(['_app.language_selected' => true]);
+        $config->set(['_app.language_selected' => $langSelected]);
+
+        if ($langSelected) {
+            $config->set(['_app.language' => $activeLanguage = $firstSegment]);
 
             $this->segmentsCount--;
 
             array_shift($this->segments);
         } else {
-            $config->set(['_app.language_selected' => false]);
+            $config->set(['_app.language' => $activeLanguage = key($languages)]);
         }
 
         $cmsActivated = current($this->segments) == $config->get('cms.slug');
@@ -89,42 +88,50 @@ class LanguageServiceProvider extends ServiceProvider
         $config->set(['_cms.activated' => $cmsActivated]);
 
         if (! $cmsActivated) {
-            $config->set(['app.locale' => $config->get('_app.language')]);
+            $visibleLanguages = array_filter($languages, fn ($lang) => $lang['visible']);
+
+            if (! array_key_exists($activeLanguage, $visibleLanguages)) {
+                $config->set(['_app.language' => $activeLanguage = key($visibleLanguages)]);
+            }
+
+            $config->set(['app.locale' => $activeLanguage]);
         }
 
         $queryString = query_string(
             $cmsActivated ? $request->except('lang') : $request->query()
         );
 
-        // Set url for each language.
+        // set url for each language.
         foreach ($languages as $language => $value) {
             $languages[$language]['url'] = trim(
-                $request->root() . '/' . $language . '/' . implode('/', $this->segments),
-                '/'
+                    $request->root() . '/' . $language . '/' . implode('/', $this->segments),
+                    '/'
                 ) . $queryString;
         }
 
         $config->set(['_app.languages' => $languages]);
 
-        $this->checkServiceAvailability($cmsActivated, $languages);
+        $this->checkServiceAvailability($cmsActivated, $langSelected, $firstSegment, $visibleLanguages);
     }
 
     /**
      * Check service availability.
      *
      * @param  bool  $cmsActivated
-     * @param  array  $languages
+     * @param  bool  $langSelected
+     * @param  string  $firstSegment
+     * @param  array  $visibleLanguages
      * @return void
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException
      */
-    protected function checkServiceAvailability(bool $cmsActivated, array $languages): void
+    protected function checkServiceAvailability(
+        bool   $cmsActivated,
+        bool   $langSelected,
+        string $firstSegment,
+        array  $visibleLanguages
+    ): void
     {
-        if (! $cmsActivated
-            && $this->segmentsCount
-            && ! array_key_exists(language(), array_filter($languages, function ($language) {
-                return $language['visible'];
-            }))
+        if (! $cmsActivated && $langSelected
+            && ! array_key_exists($firstSegment, $visibleLanguages)
         ) {
             throw new ServiceUnavailableHttpException;
         }

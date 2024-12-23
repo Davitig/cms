@@ -27,7 +27,7 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li>
-                            <a href="{{web_url('/')}}">{{trans('general.home')}}</a>
+                            <a href="{{web_url('/', [], is_multilanguage(true))}}">{{trans('general.home')}}</a>
                         </li>
                     </ul>
                     @include('web._partials.lang')
