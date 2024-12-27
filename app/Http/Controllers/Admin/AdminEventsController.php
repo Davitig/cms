@@ -62,7 +62,7 @@ class AdminEventsController extends Controller
 
         $model = $this->model->create($input);
 
-        $this->createLanguageRelations('languages', $input, $model->id, true);
+        $this->createLanguageRelations('languages', $input, $model->id);
 
         return redirect(cms_route('events.edit', [$collectionId, $model->id]))
             ->with('alert', fill_data('success', trans('general.created')));

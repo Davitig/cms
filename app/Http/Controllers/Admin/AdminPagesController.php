@@ -65,7 +65,7 @@ class AdminPagesController extends Controller
 
         $model = $this->model->create($input);
 
-        $this->createLanguageRelations('languages', $input, $model->id, true);
+        $this->createLanguageRelations('languages', $input, $model->id);
 
         return redirect(cms_route('pages.edit', [$menuId, $model->id]))
             ->with('alert', fill_data('success', trans('general.created')));

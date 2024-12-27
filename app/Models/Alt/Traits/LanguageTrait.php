@@ -11,9 +11,9 @@ trait LanguageTrait
      *
      * @param  int  $id
      * @param  mixed  $currentLang
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
-    public function byForeignLanguage(int $id, mixed $currentLang = true): Builder
+    public function byForeignLanguage(int $id, mixed $currentLang = true): Builder|static
     {
         return $this->foreignId($id)->whereLanguage($currentLang);
     }
@@ -22,13 +22,13 @@ trait LanguageTrait
      * Add a where "language_id" clause to the query.
      *
      * @param  mixed  $currentLang
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
-    public function whereLanguage(mixed $currentLang = true): Builder
+    public function whereLanguage(mixed $currentLang = true): Builder|static
     {
         return $this->where(
             'language_id',
-            is_int($currentLang) ? $currentLang : language($currentLang, 'id')
+            is_numeric($currentLang) ? $currentLang : language($currentLang, 'id')
         );
     }
 
@@ -46,7 +46,7 @@ trait LanguageTrait
         foreach(languages() as $value) {
             $attributes['language_id'] = $value['id'];
 
-            $models[] = parent::create($attributes);
+            $models[$attributes['language_id']] = parent::create($attributes);
         }
 
         return $models;

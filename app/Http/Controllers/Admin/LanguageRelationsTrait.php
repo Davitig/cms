@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Alt\Eloquent\Model;
+
 trait LanguageRelationsTrait
 {
     /**
@@ -9,22 +11,42 @@ trait LanguageRelationsTrait
      *
      * @param  string|array  $relations
      * @param  array  $attributes
-     * @param  int  $id
-     * @return void
+     * @param  \App\Models\Alt\Eloquent\Model|int  $model
+     * @return array
      */
-    protected function updateOrCreateLanguageRelations(string|array $relations, array $attributes, int $id): void
+    protected function updateOrCreateLanguageRelations(
+        string|array $relations,
+        array        $attributes,
+        Model|int    $model
+    ): array
     {
+        if (is_int($model)) {
+            $id = $model;
+
+            $model = $this->model;
+        } else {
+            $id = $model->id;
+        }
+
+        $data = [];
+
         foreach ((array) $relations as $relation) {
-            if (! method_exists($this->model, $relation)) {
+            if (! method_exists($model, $relation)) {
                 continue;
             }
 
-            $model = $this->model->$relation(false)->byForeignLanguage($id)->first();
+            $relationModel = $model->$relation(false)->byForeignLanguage($id)->first();
 
-            ! is_null($model)
-                ? $model->update($attributes)
-                : $this->createLanguageRelations($relation, $attributes, $id);
+            if (is_null($relationModel)) {
+                $data += $this->createLanguageRelations($relation, $attributes, $id, false);
+            } else {
+                $relationModel->update($attributes);
+
+                $data[$relation][$relationModel->language_id] = $relationModel;
+            }
         }
+
+        return $data;
     }
 
     /**
@@ -32,27 +54,45 @@ trait LanguageRelationsTrait
      *
      * @param  string|array  $relations
      * @param  array  $attributes
-     * @param  int  $id
-     * @param  bool  $allLanguage
-     * @return void
+     * @param  \App\Models\Alt\Eloquent\Model|int  $model
+     * @param  bool  $allLanguages
+     * @return array
      */
     protected function createLanguageRelations(
         string|array $relations,
         array        $attributes,
-        int          $id,
-        bool         $allLanguage = false
-    ): void
+        Model|int    $model,
+        bool         $allLanguages = true
+    ): array
     {
+        if (is_int($model)) {
+            $id = $model;
+
+            $model = $this->model;
+        } else {
+            $id = $model->id;
+        }
+
         $languageId = language(true, 'id');
 
-        $attributes[$this->model->getForeignKey()] = $id;
+        $attributes[$model->getForeignKey()] = $id;
 
-        if (! $allLanguage) {
+        if (! $allLanguages) {
             $attributes['language_id'] = $languageId;
         }
 
+        $data = [];
+
         foreach ((array) $relations as $relation) {
-            $this->model->$relation(false)->create($attributes);
+            $langModels = $model->$relation(false)->create($attributes);
+
+            if ($allLanguages) {
+                $data[$relation] = $langModels;
+            } else {
+                $data[$relation][$languageId] = $langModels;
+            }
         }
+
+        return $data;
     }
 }

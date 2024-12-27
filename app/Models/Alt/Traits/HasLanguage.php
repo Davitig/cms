@@ -39,7 +39,6 @@ trait HasLanguage
     {
         $table = $this->getTable();
         $languageTable = $this->languages(false)->getTable();
-        $languageKey = Str::singular($languageTable) . '_id';
 
         return $this->when($currentLang === false, function ($q) {
             return $q->crossMainLanguages()->orderBy('languages.position');
@@ -51,7 +50,7 @@ trait HasLanguage
             return $q->on("{$table}.id", "{$languageTable}.{$this->getForeignKey()}")
                 ->whereColumn($languageTable . '.language_id', 'languages.id');
         })->addSelect(array_merge(((array) $columns) ?: ["{$languageTable}.*"], [
-            "{$languageTable}.id as {$languageKey}", "{$table}.*"
+            "{$table}.*"
         ]))->addSelect(['languages.language', 'languages.id as language_id']);
     }
 

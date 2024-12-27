@@ -11,6 +11,19 @@
 
 <div class="form-group-separator"></div>
 
+<div class="form-group{{($error = $errors->first('value')) ? ' validate-has-error' : '' }}">
+    <label class="col-sm-2 control-label required">Value:</label>
+    <div class="col-sm-6">
+        {{ html()->text('value')->id('value' . $current->language)->class('form-control') }}
+        @if ($error)
+            <span class="text-danger">{{$error}}</span>
+        @endif
+        <div class="desc">The value contains the translated text that will be displayed on the website</div>
+    </div>
+</div>
+
+<div class="form-group-separator"></div>
+
 <div class="form-group{{($error = $errors->first('code')) ? ' validate-has-error' : '' }}">
     <label class="col-sm-2 control-label required">Code:</label>
     <div class="col-sm-6">
@@ -28,25 +41,11 @@
 
 <div class="form-group-separator"></div>
 
-<div class="form-group{{($error = $errors->first('value')) ? ' validate-has-error' : '' }}">
-    <label class="col-sm-2 control-label required">Value:</label>
-    <div class="col-sm-6">
-        {{ html()->text('value')->id('value' . $current->language)->class('form-control') }}
-        @if ($error)
-            <span class="text-danger">{{$error}}</span>
-        @endif
-        <div class="desc">The value contains the translated text that will be displayed on the website</div>
-    </div>
-</div>
-
-<div class="form-group-separator"></div>
-
 <div class="form-group">
     <label class="col-sm-2 control-label">Type:</label>
     <div class="col-sm-6">
         {{ html()->select('type', ['' => 'Global'] + $transTypes)
         ->id('type' . $current->language)->class('form-control')->data('lang', 1) }}
-        <div class="desc">The type that will separate translations.</div>
     </div>
 </div>
 

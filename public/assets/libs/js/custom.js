@@ -237,6 +237,7 @@ $(function () {
                 .addClass(addClass)
                 .find('span')
                 .attr('class', icon);
+            form.trigger('visibilityResponse', [res])
         }, 'json').fail(function (xhr) {
             alert(xhr.responseText);
         });

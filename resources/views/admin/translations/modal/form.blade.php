@@ -25,7 +25,6 @@
         <div class="">
             {{ html()->select('type', ['' => 'Global'] + $transTypes)
             ->id('type' . $current->language)->class('trans-form-control')->data('lang', 1) }}
-            <div class="desc">The type that will separate translations.</div>
         </div>
     </div>
 </div>

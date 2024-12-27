@@ -61,7 +61,7 @@ class AdminTranslationsController extends Controller implements HasMiddleware
     {
         $model = $this->model->create($input = $request->all());
 
-        $this->createLanguageRelations('languages', $input, $model->id, true);
+        $this->createLanguageRelations('languages', $input, $model->id);
 
         return redirect(cms_route('translations.edit', [$model->id]))
             ->with('alert', fill_data('success', trans('general.created')));
@@ -167,7 +167,7 @@ class AdminTranslationsController extends Controller implements HasMiddleware
         if (is_null($input['id'])) {
             $id = $this->model->create($input)->id;
 
-            $this->createLanguageRelations('languages', $input, $id, true);
+            $this->createLanguageRelations('languages', $input, $id);
         } else {
             $model = $this->model->findOrFail($input['id']);
 

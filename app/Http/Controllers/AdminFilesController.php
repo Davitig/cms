@@ -96,7 +96,7 @@ class AdminFilesController extends Controller
 
         $model = $this->model->create($input);
 
-        $this->createLanguageRelations('languages', $input, $model->id, true);
+        $this->createLanguageRelations('languages', $input, $model->id);
 
         if ($request->expectsJson()) {
             $view = view($viewPath, ['item' => $model, 'itemInput' => $input])->render();
