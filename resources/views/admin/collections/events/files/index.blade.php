@@ -26,7 +26,7 @@
         </div>
     </div>
     <ul class="nav nav-tabs nav-tabs-justified">
-        @include('admin._partials.forms.lang-tabs-linked', [
+        @include('admin._partials.forms.lang_tabs_linked', [
             'items' => $foreignModels, 'routeName' => 'events.edit', 'params' => [
                 $foreignModel->collection_id, $foreignModel->id
             ]

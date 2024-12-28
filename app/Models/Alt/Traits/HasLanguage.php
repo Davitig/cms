@@ -6,7 +6,6 @@ use App\Models\Alt\Eloquent\Builder;
 use App\Models\Alt\Eloquent\Model;
 use Closure;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Str;
 
 trait HasLanguage
 {
