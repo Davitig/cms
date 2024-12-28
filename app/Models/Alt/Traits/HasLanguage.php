@@ -18,6 +18,25 @@ trait HasLanguage
     abstract public function languages(bool $relation = true): HasMany|Model;
 
     /**
+     * Merge the language attributes into the model.
+     *
+     * @param  array  $attributes
+     * @return static
+     */
+    public function mergeLanguageAttributes(array $attributes): static
+    {
+        $attributes = array_intersect_key(
+            $attributes, array_flip($this->languages(false)->getFillable())
+        );
+
+        foreach ($attributes as $key => $value) {
+            $this->setAttribute($key, $value);
+        }
+
+        return $this;
+    }
+
+    /**
      * Add a languages cross join to the query.
      *
      * @return \App\Models\Alt\Eloquent\Builder|\App\Models\Alt\Eloquent\Model
