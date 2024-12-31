@@ -36,6 +36,9 @@
                 <span>{{ trans('general.create') }}</span>
             </a>
             <strong class="text-black padl">Drag and Drop to sort the languages order</strong>
+            <strong class="language-visible text-danger padl{{ $langVisibleCount ? ' hidden' : '' }}">
+                Website will be unavailable when languages are invisible or doesn't exist
+            </strong>
             <table id="items" class="table table-striped">
                 <thead>
                 <tr>
@@ -47,7 +50,7 @@
                 </tr>
                 </thead>
                 <tbody id="sortable">
-                @foreach ($items as $item)
+                @forelse ($items as $item)
                     <tr id="item{{$item->id}}" class="item" data-id="{{$item->id}}">
                         <td class="full-name pointer">
                             <img src="{{ asset('assets/libs/images/flags/'.$item->language.'.png') }}" width="30" height="20" alt="{{$item->language}} Flag">
@@ -74,7 +77,11 @@
                             </div>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="5">No Result</td>
+                    </tr>
+                @endforelse
                 </tbody>
             </table>
         </div>
@@ -115,6 +122,17 @@
                         alert(xhr.responseText);
                     });
                 });
+                // toggle message when all languages are invisible
+                let langVisibleCount = {{ $langVisibleCount }};
+                let langVisibleSelector = $('.language-visible');
+                $('form.visibility').on('visibilityResponse', function (e, res) {
+                    langVisibleCount += res ? res : -1;
+                    if (langVisibleCount > 0) {
+                        langVisibleSelector.addClass('hidden');
+                    } else {
+                        langVisibleSelector.removeClass('hidden');
+                    }
+                })
             });
         </script>
         <script src="{{ asset('assets/libs/js/jquery-ui/jquery-ui.min.js') }}"></script>

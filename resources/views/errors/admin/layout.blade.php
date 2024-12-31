@@ -115,7 +115,9 @@
                 <!-- Right links for user info navbar -->
                 <ul class="user-info-menu right-links list-inline list-unstyled">
                     <li>
-                        <a href="{{web_url('/')}}" target="_blank" title="Go to website"><i class="fa fa-desktop"></i></a>
+                        <a href="{{web_url('/')}}" target="_blank" title="Go to website">
+                            <i class="fa fa-globe"></i>
+                        </a>
                     </li>
                     <li class="dropdown user-profile">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">

@@ -30,6 +30,10 @@ class AdminLanguagesController extends Controller
     {
         $data['items'] = $this->model->positionAsc()->get();
 
+        $data['langVisibleCount'] = $data['items']->filter(
+            fn ($item) => $item->visible
+        )->count();
+
         return view('admin.languages.index', $data);
     }
 

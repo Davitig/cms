@@ -11,7 +11,9 @@ use Illuminate\Support\Collection;
  */
 function language(mixed $key = null, ?string $value = null): mixed
 {
-    $lang = (string) config('_app.language');
+    if (! $lang = (string) config('_app.language')) {
+        return null;
+    }
 
     if (is_null($key)) {
         return $lang;

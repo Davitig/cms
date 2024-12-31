@@ -63,7 +63,7 @@ trait HasLanguage
         }, function ($q) use ($currentLang) {
             return $q->leftJoin('languages', function ($q) use ($currentLang) {
                 return $q->when($this->wrapWhereLanguageQuery('languages.id', $currentLang));
-            });
+            })->where('languages.visible', 1);
         })->leftJoin($languageTable, function ($q) use ($table, $languageTable) {
             return $q->on("{$table}.id", "{$languageTable}.{$this->getForeignKey()}")
                 ->whereColumn($languageTable . '.language_id', 'languages.id');
@@ -83,7 +83,7 @@ trait HasLanguage
     {
         return function ($q) use ($column, $currentLang) {
             return $q->where(
-                $column, is_int($currentLang) ? $currentLang : language($currentLang, 'id')
+                $column, is_numeric($currentLang) ? $currentLang : language($currentLang, 'id')
             );
         };
     }

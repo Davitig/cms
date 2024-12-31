@@ -55,17 +55,16 @@ class LanguageServiceProvider extends ServiceProvider
      */
     protected function setLanguageConfig(Request $request, Config $config): void
     {
-        $languages = $visibleLanguages = [];
-
-        try {
-            $items = (new Language)->positionAsc()->get();
-        } catch (Exception) {
-            // throw new ServiceUnavailableHttpException(null, 'Languages not found');
+        if (! $this->app['db']->connection()->getSchemaBuilder()->hasTable('languages')) {
             return;
         }
 
-        foreach ($items as $language) {
-            $languages[strtolower($language->language)] = $language->getAttributes();
+        $languages = $visibleLanguages = [];
+
+        $langItems = (new Language)->positionAsc()->get()->toArray();
+
+        foreach ($langItems as $language) {
+            $languages[strtolower($language['language'])] = $language;
         }
 
         $firstSegment = (string) current($this->segments);
@@ -88,6 +87,10 @@ class LanguageServiceProvider extends ServiceProvider
         $config->set(['_cms.activated' => $cmsActivated]);
 
         if (! $cmsActivated) {
+            if (empty(array_filter($langItems, fn ($item) => $item['visible']))) {
+                $this->throwServiceUnavailableHttpException();
+            }
+
             $visibleLanguages = array_filter($languages, fn ($lang) => $lang['visible']);
 
             if (! array_key_exists($activeLanguage, $visibleLanguages)) {
@@ -133,7 +136,22 @@ class LanguageServiceProvider extends ServiceProvider
         if (! $cmsActivated && $langSelected
             && ! array_key_exists($firstSegment, $visibleLanguages)
         ) {
-            throw new ServiceUnavailableHttpException;
+            $this->throwServiceUnavailableHttpException();
         }
+    }
+
+    /**
+     * Throw the throw service unavailable http exception.
+     *
+     * @param  bool  $console
+     * @return void
+     */
+    protected function throwServiceUnavailableHttpException(bool $console = false): void
+    {
+        if (! $console && $this->app->runningInConsole()) {
+            return;
+        }
+
+        throw new ServiceUnavailableHttpException;
     }
 }
