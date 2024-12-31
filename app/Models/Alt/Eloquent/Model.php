@@ -23,6 +23,25 @@ abstract class Model extends BaseModel
     protected static string $builder = Builder::class;
 
     /**
+     * Get the full fillable attributes for the model.
+     *
+     * @param  bool  $table
+     * @return array<string>
+     */
+    public function getFullFillable(bool $table = false): array
+    {
+        $tablePrefix = ($table ? $this->getTable() . '.' : '');
+
+        $fillable = array_merge([$this->getKeyName()], $this->getFillable(), $this->getDates());
+
+        if (empty($tablePrefix)) {
+            return $fillable;
+        }
+
+        return array_map(fn ($value) => $tablePrefix . $value, $fillable);
+    }
+
+    /**
      * Set the updatable attributes for the model.
      *
      * @param  string|null  $exclude

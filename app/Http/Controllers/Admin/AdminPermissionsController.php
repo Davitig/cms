@@ -116,18 +116,77 @@ class AdminPermissionsController extends Controller implements HasMiddleware
                 continue;
             }
 
-            $name = str($name)->chopStart($cmsSlug)->toString();
+            $routeNames[] = str($name)->chopStart($cmsSlug)->toString();
+        }
 
-            $baseRouteName = str($name)->before('.')->toString();
+        return $this->groupRouteNames($routeNames);
+    }
+
+    /**
+     * Group the route names.
+     *
+     * @param  array  $routeNames
+     * @return array
+     */
+    protected function groupRouteNames(array $routeNames): array
+    {
+        $routeNameList = [];
+
+        foreach ($routeNames as $routeName) {
+            $baseRouteName = str($routeName)->before('.')->toString();
 
             if ($baseRouteName) {
-                $routeNames[$baseRouteName][] = $name;
+                $groupedRouteName = $this->getGroupedRouteName($routeName);
+
+                // $routeNameList[$baseRouteName][] = $routeName;
+                if (is_int(key($groupedRouteName))) {
+                    $routeNameList[$baseRouteName][] = current($groupedRouteName);
+                } else {
+                    $routeNameList[$baseRouteName]
+                    [key($groupedRouteName)][] = current($groupedRouteName);
+                }
             } else {
-                $routeNames[$name] ??= [];
-                array_unshift($routeNames[$name], $name);
+                $routeNameList[$routeName] ??= [];
+                array_unshift($routeNameList[$routeName], $routeName);
             }
         }
 
-        return $routeNames;
+        array_walk($routeNameList, fn (&$array) => uksort($array, function ($a, $b) {
+            return is_string($a) ? (is_string($b) ? 0 : 1) : 0;
+        }));
+
+        return $routeNameList;
+    }
+
+    /**
+     * Get the grouped route name.
+     *
+     * @param  string  $routeName
+     * @param  int  $startLevel
+     * @return string|array
+     */
+    protected function getGroupedRouteName(string $routeName, int $startLevel = 1): string|array
+    {
+        $startLevel = abs($startLevel);
+
+        if (substr_count($routeName, '.') < (1 + $startLevel)) {
+            return [$routeName];
+        }
+
+        if (! $startLevel) {
+            return [str($routeName)->before('.')->toString() => $routeName];
+        }
+
+        $subRouteName = $routeName;
+
+        for ($i = 0; $i < $startLevel; $i++) {
+            $subRouteName = str($subRouteName)->after('.')->toString();
+        }
+
+        if (! substr_count($routeName, '.')) {
+            return [$routeName];
+        }
+
+        return [str($subRouteName)->before('.')->toString() => $routeName];
     }
 }

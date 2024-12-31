@@ -45,7 +45,7 @@
                                     <a href="{{ cms_route('permissions.index', ['role' => $id]) }}" class="btn{{ $id == $activeRoleId ? ' btn-info' : '' }}">{{ ucfirst($role) }}</a>
                                 @endforeach
                             </div>
-                            <div id="multi-check-all" class="multi-check">
+                            <div id="multi-check-all" class="multi-check dib fs-14">
                                 <a href="#" class="check-action" data-group="*" data-action="check">Check all</a> /
                                 <a href="#" class="check-action" data-group="*" data-action="uncheck">Uncheck all</a> /
                                 <a href="#" class="check-action" data-group="*" data-action="toggle">Toggle</a>
@@ -55,22 +55,38 @@
                 </div>
             </div>
         </div>
-        <div id="permissions-input" class="member-form-inputs">
+        <div id="permissions-input" class="">
             @foreach ($routeGroups as $groupName => $routes)
                 <div class="panel panel-default clearfix">
                     <div class="panel-heading">
                         <label>{{ucfirst($groupName ?: config('app.name'))}}</label> -
-                        <div class="multi-check">
+                        <div class="multi-check dib fs-14">
                             <a href="#" class="check-action" data-group="{{$groupName}}" data-action="Check">Check all</a> /
                             <a href="#" class="check-action" data-group="{{$groupName}}" data-action="Uncheck">Uncheck all</a> /
                             <a href="#" class="check-action" data-group="{{$groupName}}" data-action="Toggle">Toggle</a>
                         </div>
                     </div>
-                    @foreach ($routes as $name)
-                        <div class="panel-body col-xs-6 col-sm-4 col-md-3">
-                            <label><strong>{{str(implode(' ', explode('.', $name)))->headline()}}</strong></label>
-                            <input type="checkbox" name="permissions[{{$groupName}}][]" value="{{$name}}"{{in_array($name, $currentRoutes) ? ' checked' : ''}} class="{{$groupName}} icheck" id="{{$name}}">
-                        </div>
+                    @foreach ($routes as $subGroupName => $name)
+                        @if (is_array($name))
+                            <div class="clearfix padb">
+                                <div class="row">
+                                    <div class="title col-xs-12 padt">
+                                        <div class="fs-16{{ $loop->first ? '' : ' padt bot' }}">{{ucfirst($subGroupName ?: config('app.name'))}}</div>
+                                    </div>
+                                </div>
+                                @foreach($name as $subName)
+                                    <div class="panel-body col-xs-6 col-sm-4 col-md-3">
+                                        <label><strong>{{str(implode(' ', explode('.', $subName)))->headline()}}</strong></label>
+                                        <input type="checkbox" name="permissions[{{$groupName}}][]" value="{{$subName}}"{{in_array($subName, $currentRoutes) ? ' checked' : ''}} class="{{$groupName}} icheck" id="{{$subName}}">
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="panel-body col-xs-6 col-sm-4 col-md-3">
+                                <label><strong>{{str(implode(' ', explode('.', $name)))->headline()}}</strong></label>
+                                <input type="checkbox" name="permissions[{{$groupName}}][]" value="{{$name}}"{{in_array($name, $currentRoutes) ? ' checked' : ''}} class="{{$groupName}} icheck" id="{{$name}}">
+                            </div>
+                        @endif
                     @endforeach
                 </div>
             @endforeach

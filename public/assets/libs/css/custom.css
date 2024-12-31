@@ -14,8 +14,10 @@ iframe {border:0;}
 .mrgr {margin-right:15px;} .mrgr0 {margin-right:0;}
 .mrgb {margin-bottom:15px;} .mrgb0 {margin-bottom:0;}
 .mrgl {margin-left:15px;} .mrgl0 {margin-left:0;}
-.fs-16 {font-size:16px;} .fs-18 {font-size:18px;} .fs-20 {font-size:20px;} .fs-22 {font-size:22px;}
-.fs-24 {font-size:24px;} .fs-26 {font-size:26px;} .fs-28 {font-size:28px;} .fs-30 {font-size:30px;}
+.bot {border-top:1px solid #eee;}
+.bob {border-bottom:1px solid #eee;}
+.fs-12 {font-size:12px;} .fs-14 {font-size:14px;} .fs-16 {font-size:16px;} .fs-18 {font-size:18px;} .fs-20 {font-size:20px;}
+.fs-22 {font-size:22px;} .fs-24 {font-size:24px;} .fs-26 {font-size:26px;} .fs-28 {font-size:28px;} .fs-30 {font-size:30px;}
 .fs-32 {font-size:32px;}
 .w-100 {width:100%;}
 .w-auto {width:auto;}
@@ -55,7 +57,7 @@ body.lockscreen-page #container {display:none !important;visibility:hidden !impo
 #select-home .item {display:inline-block;}
 
 /* forms */
-.form-horizontal .control-label.text-left{text-align:left;}
+.form-horizontal .control-label.text-left {text-align:left;}
 .required:after {content:" *";color:red;}
 
 select .has-sub {font-weight:bold;}
@@ -169,6 +171,7 @@ select .sub-item {padding-left:20px;}
     .nav.tabs-vertical.custom > li {display:table-cell;}
     .nav.tabs-vertical.custom > li > a {margin-right:5px;}
 }
+#panel-accordion .collapsed {margin-bottom:10px;}
 
 /* users list & form */
 .user-info-sidebar {padding:20px;margin-bottom:20px;background:#fff;}
@@ -178,7 +181,6 @@ select .sub-item {padding-left:20px;}
 .member-form-inputs .row + .row {margin-top:0;}
 .member-form-inputs .row::before {margin-bottom:15px;}
 .member-form-inputs .control-label {line-height:1.42857143;}
-.member-form-inputs .multi-check {font-size:12px;display:inline-block;}
 .member-form-add-header .user-name.selected {width:100%;}
 @media (min-width:1200px) {
     .member-form-add-header .user-name.selected {width:500px;}
