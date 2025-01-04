@@ -377,6 +377,27 @@ function has_sub_items(object $item): bool
 }
 
 /**
+ * Count the items/subitems collection.
+ *
+ * @param  array|\Illuminate\Support\Collection  $items
+ * @return int
+ */
+function count_sub_items(array|Collection $items): int
+{
+    $count = 0;
+
+    foreach ($items as $item) {
+        $count++;
+
+        if (isset($item->sub_items) && $item->sub_items instanceof Collection) {
+            $count += count_sub_items($item->sub_items);
+        }
+    }
+
+    return $count;
+}
+
+/**
  * Fill an array with data.
  *
  * @param  string  $result

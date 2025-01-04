@@ -22,7 +22,7 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h2 class="panel-title">List of all menus</h2>
+            <h2 class="panel-title">List of all menus | total {{ $menus->count() }}</h2>
             <div class="panel-options">
                 <a href="#" data-toggle="panel">
                     <span class="collapse-icon">&ndash;</span>

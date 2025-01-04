@@ -25,7 +25,7 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h2 class="panel-title">List of all pages</h2>
+            <h2 class="panel-title">List of {{ $menu->title }} | total {{ count_sub_items($items) }}</h2>
             <div class="panel-options">
                 <a href="{{cms_route('menus.edit', [$menu->id])}}">
                     <i class="fa fa-gear"></i>
