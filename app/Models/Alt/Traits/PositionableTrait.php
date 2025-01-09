@@ -43,7 +43,7 @@ trait PositionableTrait
             if ($hasSubItems) {
                 $attributes['parent_id'] = $parentId;
             } elseif (isset($item['pos'])) {
-                $position = max($item['pos'], $position);
+                $position = $item['pos'];
             }
 
             $attributes['position'] = $position;

@@ -151,7 +151,7 @@ Route::name(cms_route_name())->group(function ($router) {
         foreach ((array) cms_config('file_routes') as $route => $controller) {
             $router->put($route . '/files/{id}/visibility', [$controller, 'visibility'])
                 ->name($route . '.files.visibility');
-            $router->put($route . '/files/position', [$controller, 'updatePosition'])
+            $router->put($route . '/files/position/update', [$controller, 'updatePosition'])
                 ->name($route . '.files.updatePosition');
             $router->resource($route . '.files', $controller)
                 ->names(resource_names($route . '.files'))

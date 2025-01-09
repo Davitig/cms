@@ -9,9 +9,9 @@ trait FileableTrait
     /**
      * Add a files count to the query.
      *
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
-    public function countFiles(): Builder
+    public function countFiles(): Builder|static
     {
         return $this->selectSub(function ($q) {
             $tableId = ($table = $this->getTable()).'.'.$this->getKeyName();
@@ -41,9 +41,9 @@ trait FileableTrait
      * Add a query where a file exists or not.
      *
      * @param  bool  $exists
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \App\Models\Alt\Eloquent\Builder|static
      */
-    public function whereFileExists(bool $exists = true): Builder
+    public function whereFileExists(bool $exists = true): Builder|static
     {
         return $this->whereExists(function ($q) {
             $tableId = ($table = $this->getTable()).'.'.$this->getKeyName();
