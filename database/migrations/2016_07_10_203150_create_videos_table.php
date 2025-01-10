@@ -19,7 +19,9 @@ return new class extends Migration
             $table->string('file', 800)->nullable();
             $table->timestamps();
 
-            $table->foreign('gallery_id')->references('id')->on('galleries')->onDelete('cascade');
+            $table->foreign('gallery_id')->references('id')
+                ->on('galleries')
+                ->onDelete('cascade');
         });
 
         Schema::create('video_languages', function (Blueprint $table) {
@@ -30,7 +32,9 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unique(['video_id', 'language_id']);
-            $table->foreign('video_id')->references('id')->on('videos')->onDelete('cascade');
+            $table->foreign('video_id')->references('id')
+                ->on('videos')
+                ->onDelete('cascade');
             $table->foreign('language_id')->references('id')->on('languages');
         });
     }

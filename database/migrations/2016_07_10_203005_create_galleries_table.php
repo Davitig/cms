@@ -42,7 +42,8 @@ return new class extends Migration
 
             $table->unique(['gallery_id', 'language_id']);
             $table->foreign('gallery_id')->references('id')
-                ->on('galleries')->onDelete('cascade');
+                ->on('galleries')
+                ->onDelete('cascade');
             $table->foreign('language_id')->references('id')->on('languages');
         });
     }

@@ -31,7 +31,8 @@ return new class extends Migration
 
             $table->unique(['faq_id', 'language_id']);
             $table->foreign('faq_id')->references('id')
-                ->on('faq')->onDelete('cascade');
+                ->on('faq')
+                ->onDelete('cascade');
             $table->foreign('language_id')->references('id')->on('languages');
         });
     }

@@ -19,7 +19,8 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('article_id')->references('id')
-                ->on('articles')->onDelete('cascade');
+                ->on('articles')
+                ->onDelete('cascade');
         });
 
         Schema::create('article_file_languages', function (Blueprint $table) {
@@ -32,7 +33,8 @@ return new class extends Migration
 
             $table->unique(['article_file_id', 'language_id']);
             $table->foreign('article_file_id')->references('id')
-                ->on('article_files')->onDelete('cascade');
+                ->on('article_files')
+                ->onDelete('cascade');
             $table->foreign('language_id')->references('id')->on('languages');
         });
     }
