@@ -10,12 +10,13 @@ trait HasSubModels
     /**
      * Add a where "parent_id" clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $id
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function parentId(int $id): Builder|static
+    public function scopeParentId(Builder $query, int $id): Builder
     {
-        return $this->where('parent_id', $id);
+        return $query->where('parent_id', $id);
     }
 
     /**
@@ -40,7 +41,7 @@ trait HasSubModels
 
         $models = $this->forPublic()
             ->parentId($parentId)
-            ->where('id', '<>', $id)
+            ->whereKeyNot($id)
             ->positionAsc()
             ->get($columns);
 

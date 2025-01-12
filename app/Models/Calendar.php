@@ -87,22 +87,24 @@ class Calendar extends Model
     /**
      * Add a where 'cms_user_id' clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $userId
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function byUserId(int $userId): Builder|static
+    public function scopeByUserId(Builder $query, int $userId): Builder
     {
-        return $this->where('cms_user_id', $userId);
+        return $query->where('cms_user_id', $userId);
     }
 
     /**
      * Build a query based on active dates.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  string|null  $start
      * @param  string|null  $end
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function active(?string $start = null, ?string $end = null): Builder|static
+    public function scopeActive(Builder $query, ?string $start = null, ?string $end = null): Builder
     {
         if (is_null($start)) {
             $start = date('Y-m') . '-01';
@@ -114,17 +116,18 @@ class Calendar extends Model
             $end = date('Y-m-d', strtotime('+50 days', strtotime($start)));
         }
 
-        return $this->whereNotNull('start')->whereBetween('start', [$start, $end]);
+        return $query->whereNotNull('start')->whereBetween('start', [$start, $end]);
     }
 
     /**
      * Build a query based on inactive dates.
      *
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function inactive(): Builder|static
+    public function scopeInactive(Builder $query): Builder
     {
-        return $this->whereNull('start');
+        return $query->whereNull('start');
     }
 
     /**

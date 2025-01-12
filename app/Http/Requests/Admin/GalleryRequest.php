@@ -44,6 +44,8 @@ class GalleryRequest extends Request
     {
         $input = parent::all();
 
+        $this->slugifyInput($input, 'slug', ['title']);
+
         if ($this->method() != 'POST') {
             unset($input['type']);
         }

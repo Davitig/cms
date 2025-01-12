@@ -50,13 +50,14 @@ trait FileTrait
     /**
      * Build a public query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $foreignId
      * @param  mixed  $currentLang
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function forAdmin(int $foreignId, mixed $currentLang = true): Builder
+    public function scopeForAdmin(Builder $query, int $foreignId, mixed $currentLang = true): Builder
     {
-        return $this->joinLanguage($currentLang)
+        return $query->joinLanguage($currentLang)
             ->byForeign($foreignId)
             ->positionDesc();
     }
@@ -64,13 +65,14 @@ trait FileTrait
     /**
      * Build a public query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $foreignId
      * @param  mixed  $currentLang
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function forPublic(int $foreignId, mixed $currentLang = true): Builder
+    public function scopeForPublic(Builder $query, int $foreignId, mixed $currentLang = true): Builder
     {
-        return $this->joinLanguage($currentLang)
+        return $query->joinLanguage($currentLang)
             ->byForeign($foreignId)
             ->whereVisible()
             ->positionDesc();
@@ -79,12 +81,13 @@ trait FileTrait
     /**
      * Add a where "visible" clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $value
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function whereVisible(int $value = 1): Builder
+    public function scopeWhereVisible(Builder $query, int $value = 1): Builder
     {
-        return $this->where('visible', $value);
+        return $query->where('visible', $value);
     }
 
     /**

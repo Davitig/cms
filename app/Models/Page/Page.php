@@ -52,13 +52,16 @@ class Page extends Model
     /**
      * Build an admin query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int|null  $menuId
      * @param  mixed  $currentLang
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function forAdmin(?int $menuId = null, mixed $currentLang = true): Builder
+    public function scopeForAdmin(
+        Builder $query, ?int $menuId = null, mixed $currentLang = true
+    ): Builder
     {
-        return $this->when(! is_null($menuId), function ($q) use ($menuId) {
+        return $query->when(! is_null($menuId), function ($q) use ($menuId) {
             return $q->menuId($menuId);
         })->joinLanguage($currentLang)
             ->joinCollection()
@@ -69,79 +72,88 @@ class Page extends Model
     /**
      * Build a public query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  mixed  $currentLang
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function forPublic(mixed $currentLang = true): Builder
+    public function scopeForPublic(Builder $query, mixed $currentLang = true): Builder
     {
-        return $this->joinLanguage($currentLang)->whereVisible();
+        return $query->joinLanguage($currentLang)->whereVisible();
     }
 
     /**
      * Add a query, which is valid for routing.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  string  $slug
      * @param  int  $parentId
      * @param  mixed  $currentLang
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function bySlugRoute(string $slug, int $parentId, mixed $currentLang = true): Builder
+    public function scopeBySlugRoute(
+        Builder $query, string $slug, int $parentId, mixed $currentLang = true
+    ): Builder
     {
-        return $this->parentId($parentId)->where('slug', $slug)->forPublic($currentLang);
+        return $query->parentId($parentId)->where('slug', $slug)->forPublic($currentLang);
     }
 
     /**
      * Add a where "menu_id" clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $id
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function menuId(int $id): Builder|static
+    public function scopeMenuId(Builder $query, int $id): Builder
     {
-        return $this->where('menu_id', $id);
+        return $query->where('menu_id', $id);
     }
 
     /**
      * Add a where "type" clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  string  $value
      * @param  string  $operator
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function typeName(string $value, string $operator = '='): Builder|static
+    public function scopeTypeName(Builder $query, string $value, string $operator = '='): Builder
     {
-        return $this->where('type', $operator, $value);
+        return $query->where('type', $operator, $value);
     }
 
     /**
      * Add a where "type_id" clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $id
      * @param  string  $operator
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function typeId(int $id, string $operator = '='): Builder|static
+    public function scopeTypeId(Builder $query, int $id, string $operator = '='): Builder
     {
-        return $this->where('type_id', $operator, $id);
+        return $query->where('type_id', $operator, $id);
     }
 
     /**
      * Add a where "visible" clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $value
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function whereVisible(int $value = 1): Builder|static
+    public function scopeWhereVisible(Builder $query, int $value = 1): Builder
     {
-        return $this->where('visible', $value);
+        return $query->where('visible', $value);
     }
 
     /**
      * Add a "collection" join to the query.
      *
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function joinCollection(): Builder|static
+    public function scopeJoinCollection(Builder $query): Builder
     {
         $table = (new Collection)->getTable();
 
@@ -150,7 +162,7 @@ class Page extends Model
             $table . '.type as collection_type',
         ];
 
-        return $this->leftJoin($table, function ($q) use ($table) {
+        return $query->leftJoin($table, function ($q) use ($table) {
             return $q->where($this->getTable() . '.type', 'collections')
                 ->on('type_id', $table . '.id');
         })->addSelect($columns);

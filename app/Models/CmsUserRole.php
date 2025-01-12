@@ -33,21 +33,23 @@ class CmsUserRole extends Model
     /**
      * Add a where 'full_access' to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  bool|int  $value
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function fullAccess(bool|int $value = 1): Builder|static
+    public function scopeFullAccess(Builder $query, bool|int $value = 1): Builder
     {
-        return $this->where('full_access', (int) $value);
+        return $query->where('full_access', (int) $value);
     }
 
     /**
      * Add a where not 'full_access' to the query.
      *
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function customAccess(): Builder|static
+    public function scopeCustomAccess(Builder $query): Builder
     {
-        return $this->where('full_access', 0);
+        return $query->where('full_access', 0);
     }
 }

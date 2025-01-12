@@ -9,24 +9,26 @@ trait LanguageTrait
     /**
      * Build a query by foreign model.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $id
      * @param  mixed  $currentLang
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function byForeignLanguage(int $id, mixed $currentLang = true): Builder|static
+    public function scopeByForeignLanguage(Builder $query, int $id, mixed $currentLang = true): Builder
     {
-        return $this->foreignId($id)->whereLanguage($currentLang);
+        return $query->foreignId($id)->whereLanguage($currentLang);
     }
 
     /**
      * Add a where "language_id" clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  mixed  $currentLang
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function whereLanguage(mixed $currentLang = true): Builder|static
+    public function scopeWhereLanguage(Builder $query, mixed $currentLang = true): Builder
     {
-        return $this->where(
+        return $query->where(
             'language_id',
             is_numeric($currentLang) ? $currentLang : language($currentLang, 'id')
         );

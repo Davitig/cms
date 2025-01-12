@@ -70,44 +70,48 @@ class Permission extends Model
     /**
      * Add a where 'cms_user_role_id' clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $value
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function roleId(int $value): Builder|static
+    public function scopeRoleId(Builder $query, int $value): Builder
     {
-        return $this->where('cms_user_role_id', $value);
+        return $query->where('cms_user_role_id', $value);
     }
 
     /**
      * Add a where 'route_name' clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  string  $routeName
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function routeName(string $routeName): Builder|static
+    public function scopeRouteName(Builder $query, string $routeName): Builder
     {
-        return $this->where('route_name', $routeName);
+        return $query->where('route_name', $routeName);
     }
 
     /**
      * Determine if the user has access to the given route.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  string  $routeName
      * @return bool
      */
-    public function hasAccess(string $routeName): bool
+    public function scopeHasAccess(Builder $query, string $routeName): bool
     {
-        return $this->routeName($routeName)->exists();
+        return $query->routeName($routeName)->exists();
     }
 
     /**
      * Clear permissions from the database.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $roleId
      * @return mixed
      */
-    public function clear(int $roleId): mixed
+    public function scopeClear(Builder $query, int $roleId): mixed
     {
-        return $this->roleId($roleId)->delete();
+        return $query->roleId($roleId)->delete();
     }
 }

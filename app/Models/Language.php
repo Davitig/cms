@@ -36,22 +36,24 @@ class Language extends Model
     /**
      * Add a where "language" clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  string  $language
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function whereLanguage(string $language): Builder|static
+    public function scopeWhereLanguage(Builder $query, string $language): Builder
     {
-        return $this->where('language', $language);
+        return $query->where('language', $language);
     }
 
     /**
      * Add a where "visible" clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $value
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function whereVisible(int $value = 1): Builder|static
+    public function scopeWhereVisible(Builder $query, int $value = 1): Builder
     {
-        return $this->where('visible', $value);
+        return $query->where('visible', $value);
     }
 }

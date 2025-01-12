@@ -23,106 +23,100 @@ trait HasGallery
     /**
      * Get the data based on the admin gallery.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  \App\Models\Gallery\Gallery  $gallery
      * @param  array|string  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getAdminGallery(Gallery $gallery, array|string $columns = ['*']):
-    LengthAwarePaginator
+    public function scopeGetAdminGallery(
+        Builder $query, Gallery $gallery, array|string $columns = ['*']
+    ): LengthAwarePaginator
     {
-        return $this->adminGallery($gallery)
+        return $query->adminGallery($gallery)
             ->paginate($gallery->admin_per_page, $columns);
     }
 
     /**
      * Get the data based on the public gallery.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  \App\Models\Gallery\Gallery  $gallery
      * @param  array|string  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getPublicGallery(Gallery $gallery, array|string $columns = ['*']):
-    LengthAwarePaginator
+    public function scopeGetPublicGallery(
+        Builder $query, Gallery $gallery, array|string $columns = ['*']
+    ): LengthAwarePaginator
     {
-        return $this->publicGallery($gallery)
+        return $query->publicGallery($gallery)
             ->paginate($gallery->web_per_page, $columns);
     }
 
     /**
      * Build a query based on the admin gallery.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  \App\Models\Gallery\Gallery  $gallery
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function adminGallery(Gallery $gallery): Builder
+    public function scopeAdminGallery(Builder $query, Gallery $gallery): Builder
     {
-        return $this->byGallery($gallery->id)
+        return $query->byGallery($gallery->id)
             ->orderBy(
-                $this->getTable() . '.'
-                . $gallery->admin_order_by, $gallery->admin_sort
+                $this->getTable() . '.' . $gallery->admin_order_by, $gallery->admin_sort
             );
     }
 
     /**
      * Build a query based on the public gallery.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  \App\Models\Gallery\Gallery  $gallery
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function publicGallery(Gallery $gallery): Builder
+    public function scopePublicGallery(Builder $query, Gallery $gallery): Builder
     {
-        return $this->byGallery($gallery->id)
+        return $query->byGallery($gallery->id)
             ->whereVisible()
             ->orderBy(
-                $this->getTable() . '.' .
-                $gallery->web_order_by, $gallery->web_sort
+                $this->getTable() . '.' . $gallery->web_order_by, $gallery->web_sort
             );
     }
 
     /**
      * Build a query based on the gallery.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $id
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function byGallery(int $id): Builder
+    public function scopeByGallery(Builder $query, int $id): Builder
     {
-        return $this->joinLanguage()->galleryId($id);
-    }
-
-    /**
-     * Get the same type gallery instance.
-     *
-     * @param  string|null  $type
-     * @return \App\Models\Alt\Eloquent\Builder
-     */
-    public function byType(?string $type = null): Builder
-    {
-        return (new Gallery)->joinLanguage()->where(
-            'type', is_null($type) ? static::TYPE : $type
-        );
+        return $query->joinLanguage()->galleryId($id);
     }
 
     /**
      * Add a where "gallery_id" clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $id
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function galleryId(int $id): Builder|static
+    public function scopeGalleryId(Builder $query, int $id): Builder
     {
-        return $this->where('gallery_id', $id);
+        return $query->where('gallery_id', $id);
     }
 
     /**
      * Add a where "visible" clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $value
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function whereVisible(int $value = 1): Builder|static
+    public function scopeWhereVisible(Builder $query, int $value = 1): Builder
     {
-        return $this->where('visible', $value);
+        return $query->where('visible', $value);
     }
 
     /**

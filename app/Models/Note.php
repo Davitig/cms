@@ -33,11 +33,12 @@ class Note extends Model
     /**
      * Add a where 'cms_user_id' clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $userId
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function byUserId(int $userId): Builder|static
+    public function scopeByUserId(Builder $query, int $userId): Builder
     {
-        return $this->where('cms_user_id', $userId);
+        return $query->where('cms_user_id', $userId);
     }
 }

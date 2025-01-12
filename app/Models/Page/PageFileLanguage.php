@@ -38,11 +38,12 @@ class PageFileLanguage extends Model
     /**
      * Add a where "page_file_id" clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $id
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function foreignId(int $id): Builder|static
+    public function scopeForeignId(Builder $query, int $id): Builder
     {
-        return $this->where('page_file_id', $id);
+        return $query->where('page_file_id', $id);
     }
 }

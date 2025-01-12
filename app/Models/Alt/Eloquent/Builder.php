@@ -273,18 +273,4 @@ class Builder extends EloquentBuilder
 
         return '';
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function __call($method, $parameters)
-    {
-        if (method_exists($this->model, $method)) {
-            $this->model->setEloquentBuilder($this);
-
-            return call_user_func_array([$this->model, $method], $parameters);
-        }
-
-        return parent::__call($method, $parameters);
-    }
 }

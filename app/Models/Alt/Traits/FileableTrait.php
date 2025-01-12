@@ -9,11 +9,12 @@ trait FileableTrait
     /**
      * Add a files count to the query.
      *
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function countFiles(): Builder|static
+    public function scopeCountFiles(Builder $query): Builder
     {
-        return $this->selectSub(function ($q) {
+        return $query->selectSub(function ($q) {
             $tableId = ($table = $this->getTable()).'.'.$this->getKeyName();
 
             return $q->from(($table = str($table)->singular()) . '_files')
@@ -25,11 +26,12 @@ trait FileableTrait
     /**
      * Determine if the model has a file(s).
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function filesExists(): Builder
+    public function scopeFilesExists(Builder $query): Builder
     {
-        return $this->selectExists(function ($q) {
+        return $query->selectExists(function ($q) {
             $tableId = ($table = $this->getTable()).'.'.$this->getKeyName();
 
             return $q->from(($table = str($table)->singular()) . '_files')
@@ -40,12 +42,13 @@ trait FileableTrait
     /**
      * Add a query where a file exists or not.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  bool  $exists
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function whereFileExists(bool $exists = true): Builder|static
+    public function scopeWhereFileExists(Builder $query, bool $exists = true): Builder
     {
-        return $this->whereExists(function ($q) {
+        return $query->whereExists(function ($q) {
             $tableId = ($table = $this->getTable()).'.'.$this->getKeyName();
 
             return $q->from(($table = str($table)->singular()) . '_files')

@@ -39,26 +39,30 @@ trait HasLanguage
     /**
      * Add a languages cross join to the query.
      *
-     * @return \App\Models\Alt\Eloquent\Builder|\App\Models\Alt\Eloquent\Model
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function crossMainLanguages(): Builder|Model
+    public function scopeCrossMainLanguages(Builder $query): Builder
     {
-        return $this->crossJoin('languages');
+        return $query->crossJoin('languages');
     }
 
     /**
      * Add a "*_languages" join to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  mixed  $currentLang
      * @param  array|string  $columns
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function joinLanguage(mixed $currentLang = true, array|string $columns = []): Builder|static
+    public function scopeJoinLanguage(
+        Builder $query, mixed $currentLang = true, array|string $columns = []
+    ): Builder
     {
         $table = $this->getTable();
         $languageTable = $this->languages(false)->getTable();
 
-        return $this->when($currentLang === false, function ($q) {
+        return $query->when($currentLang === false, function ($q) {
             return $q->crossMainLanguages()->orderBy('languages.position');
         }, function ($q) use ($currentLang) {
             return $q->leftJoin('languages', function ($q) use ($currentLang) {

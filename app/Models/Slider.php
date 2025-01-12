@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Alt\Contracts\Fileable;
 use App\Models\Alt\Eloquent\Builder;
 use App\Models\Alt\Eloquent\Model;
-use App\Models\Alt\Contracts\Fileable;
 use App\Models\Alt\Traits\HasLanguage;
 use App\Models\Alt\Traits\PositionableTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -61,25 +61,31 @@ class Slider extends Model implements Fileable
     /**
      * Build a query for admin.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  mixed  $currentLang
      * @param  array|string  $columns
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function forAdmin(mixed $currentLang = true, array|string $columns = []): Builder
+    public function scopeForAdmin(
+        Builder $query, mixed $currentLang = true, array|string $columns = []
+    ): Builder
     {
-        return $this->joinLanguage($currentLang, $columns)->positionDesc();
+        return $query->joinLanguage($currentLang, $columns)->positionDesc();
     }
 
     /**
      * Build a public query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  mixed  $currentLang
      * @param  array|string  $columns
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function forPublic(mixed $currentLang = true, array|string $columns = []): Builder
+    public function scopeForPublic(
+        Builder $query, mixed $currentLang = true, array|string $columns = []
+    ): Builder
     {
-        return $this->joinLanguage($currentLang, $columns)
+        return $query->joinLanguage($currentLang, $columns)
             ->where('visible', 1)
             ->whereNotNull('file')
             ->where('file', '!=', '')

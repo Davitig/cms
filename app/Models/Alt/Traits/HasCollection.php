@@ -13,75 +13,81 @@ trait HasCollection
     /**
      * Get the data based on the admin collection.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  \App\Models\Collection  $collection
      * @param  array|string  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getAdminCollection(Collection $collection, array|string $columns = ['*']):
-    LengthAwarePaginator
+    public function scopeGetAdminCollection(
+        Builder $query, Collection $collection, array|string $columns = ['*']
+    ): LengthAwarePaginator
     {
-        return $this->adminCollection($collection)
+        return $query->adminCollection($collection)
             ->paginate($collection->admin_per_page, $columns);
     }
 
     /**
      * Get the data based on the public collection.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  \App\Models\Collection  $collection
      * @param  array|string  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getPublicCollection(Collection $collection, array|string $columns = ['*']):
-    LengthAwarePaginator
+    public function scopeGetPublicCollection(
+        Builder $query, Collection $collection, array|string $columns = ['*']
+    ): LengthAwarePaginator
     {
-        return $this->publicCollection($collection)
+        return $query->publicCollection($collection)
             ->paginate($collection->web_per_page, $columns);
     }
 
     /**
      * Build a query based on the admin collection.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  \App\Models\Collection  $collection
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function adminCollection(Collection $collection): Builder
+    public function scopeAdminCollection(Builder $query, Collection $collection): Builder
     {
-        return $this->forAdmin($collection->id)
+        return $query->forAdmin($collection->id)
             ->orderBy(
-                $this->getTable() . '.'
-                . $collection->admin_order_by, $collection->admin_sort
+                $this->getTable() . '.' . $collection->admin_order_by, $collection->admin_sort
             );
     }
 
     /**
      * Build a query based on the public collection.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  \App\Models\Collection  $collection
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function publicCollection(Collection $collection): Builder
+    public function scopePublicCollection(Builder $query, Collection $collection): Builder
     {
-        return $this->forPublic($collection->id)
+        return $query->forPublic($collection->id)
             ->orderBy(
-                $this->getTable() . '.' .
-                $collection->web_order_by, $collection->web_sort
+                $this->getTable() . '.' . $collection->web_order_by, $collection->web_sort
             );
     }
 
     /**
      * Build an admin query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int|null  $collectionId
      * @param  mixed  $currentLang
      * @param  array|string  $columns
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function forAdmin(
+    public function scopeForAdmin(
+        Builder      $query,
         ?int         $collectionId = null,
         mixed        $currentLang = true,
         array|string $columns = []): Builder
     {
-        return $this->when(! is_null($collectionId), function ($q) use ($collectionId) {
+        return $query->when(! is_null($collectionId), function ($q) use ($collectionId) {
             return $q->collectionId($collectionId);
         })->joinLanguage($currentLang, $columns);
     }
@@ -89,17 +95,19 @@ trait HasCollection
     /**
      * Build a public query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int|null  $collectionId
      * @param  mixed  $currentLang
      * @param  array|string  $columns
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function forPublic(
+    public function scopeForPublic(
+        Builder      $query,
         ?int         $collectionId = null,
         mixed        $currentLang = true,
         array|string $columns = []): Builder
     {
-        return $this->when(! is_null($collectionId), function ($q) use ($collectionId) {
+        return $query->when(! is_null($collectionId), function ($q) use ($collectionId) {
             return $q->collectionId($collectionId);
         })->joinLanguage($currentLang, $columns)->whereVisible();
     }
@@ -107,48 +115,54 @@ trait HasCollection
     /**
      * Build a query based on the slug.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  string  $slug
      * @param  int|null  $collectionId
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function bySlug(string $slug, ?int $collectionId = null): Builder
+    public function scopeBySlug(Builder $query, string $slug, ?int $collectionId = null): Builder
     {
-        return $this->where('slug', $slug)->forPublic($collectionId);
+        return $query->where('slug', $slug)->forPublic($collectionId);
     }
 
     /**
      * Build a query based on the collection id and slug.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $collectionId
      * @param  string  $slug
      * @param  int|null  $id
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function byCollectionSlug(int $collectionId, string $slug, ?int $id = null): Builder
+    public function scopeByCollectionSlug(
+        Builder $query, int $collectionId, string $slug, ?int $id = null
+    ): Builder
     {
-        return $this->collectionId($collectionId)->bySlug($slug, $id);
+        return $query->collectionId($collectionId)->bySlug($slug, $id);
     }
 
     /**
      * Add a where "collection_id" clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $id
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function collectionId(int $id): Builder|static
+    public function scopeCollectionId(Builder $query, int $id): Builder
     {
-        return $this->where('collection_id', $id);
+        return $query->where('collection_id', $id);
     }
 
     /**
      * Add a where "visible" clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $value
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function whereVisible(int $value = 1): Builder|static
+    public function scopeWhereVisible(Builder $query, int $value = 1): Builder
     {
-        return $this->where('visible', $value);
+        return $query->where('visible', $value);
     }
 
     /**

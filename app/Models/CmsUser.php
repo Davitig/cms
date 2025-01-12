@@ -119,22 +119,24 @@ class CmsUser extends Model
     /**
      * Add a where "cms_user_role_id" clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $roleId
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function roleId(int $roleId): Builder|static
+    public function scopeRoleId(Builder $query, int $roleId): Builder
     {
-        return $this->where('cms_user_role_id', $roleId);
+        return $query->where('cms_user_role_id', $roleId);
     }
 
     /**
      * Add a 'cms_user_roles' join to the query.
      *
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function joinRole(): Builder|static
+    public function scopeJoinRole(Builder $query): Builder
     {
-        return $this->leftJoin(
+        return $query->leftJoin(
             'cms_user_roles', 'cms_user_roles.id', 'cms_users.cms_user_role_id'
         )->addSelect(['role', 'full_access', 'cms_users.*']);
     }
@@ -142,14 +144,15 @@ class CmsUser extends Model
     /**
      * Filter a query by specific parameters.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  \Illuminate\Http\Request  $request
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function adminFilter(Request $request): Builder
+    public function scopeAdminFilter(Builder $query, Request $request): Builder
     {
         $blockedValue = (int) $request->boolean('blocked');
 
-        return $this->when($request->get('name'), function ($q, $value) {
+        return $query->when($request->get('name'), function ($q, $value) {
             return $q->whereRaw("CONCAT(first_name, ' ', last_name) like ?", ["%{$value}%"]);
         })->when($request->get('email'), function ($q, $value) {
             return $q->where('email', 'like', "%{$value}%");

@@ -10,13 +10,16 @@ trait PageableTrait
     /**
      * Add a "pages" join to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  string  $type
      * @param  string  $foreignKey
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function joinPage(string $type = 'right', string $foreignKey = 'collection_id'): Builder
+    public function scopeJoinPage(
+        Builder $query, string $type = 'right', string $foreignKey = 'collection_id'
+    ): Builder
     {
-        return $this->join('pages', $foreignKey, 'type_id', $type)
+        return $query->join('pages', $foreignKey, 'type_id', $type)
             ->leftJoin('page_languages', function ($q) {
                 return $q->on('page_languages.page_id', 'pages.id')
                     ->where(function ($q) {

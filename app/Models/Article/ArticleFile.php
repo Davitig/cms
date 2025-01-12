@@ -63,11 +63,12 @@ class ArticleFile extends Model implements Fileable
     /**
      * Add a where foreign id clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $foreignId
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function byForeign(int $foreignId): Builder|static
+    public function scopeByForeign(Builder $query, int $foreignId): Builder
     {
-        return $this->where('article_id', $foreignId);
+        return $query->where('article_id', $foreignId);
     }
 }

@@ -121,21 +121,23 @@ trait PositionableTrait
     /**
      * Add an "order by" position asc clause to the query.
      *
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function positionAsc(): Builder|static
+    public function scopePositionAsc(Builder $query): Builder
     {
-        return $this->orderBy('position');
+        return $query->orderBy('position');
     }
 
     /**
      * Add an "order by" position desc clause to the query.
      *
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function positionDesc(): Builder|static
+    public function scopePositionDesc(Builder $query): Builder
     {
-        return $this->orderByDesc('position');
+        return $query->orderByDesc('position');
     }
 
     /**

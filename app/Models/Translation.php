@@ -59,12 +59,13 @@ class Translation extends Model
     /**
      * Build a query by code.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  string  $code
      * @param  mixed  $currentLang
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function byCode(string $code, mixed $currentLang = true): Builder
+    public function scopeByCode(Builder $query, string $code, mixed $currentLang = true): Builder
     {
-        return $this->joinLanguage($currentLang)->where('code', $code);
+        return $query->joinLanguage($currentLang)->where('code', $code);
     }
 }

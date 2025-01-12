@@ -37,11 +37,12 @@ class Collection extends Model
     /**
      * Add a new where 'type' clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  string  $type
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function byType(string $type): Builder|static
+    public function scopeByType(Builder $query, string $type): Builder
     {
-        return $this->where('type', $type);
+        return $query->where('type', $type);
     }
 }

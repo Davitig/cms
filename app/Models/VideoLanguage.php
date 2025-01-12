@@ -38,11 +38,12 @@ class VideoLanguage extends Model
     /**
      * Add a where "video_id" clause to the query.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  int  $id
-     * @return \App\Models\Alt\Eloquent\Builder|static
+     * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function foreignId(int $id): Builder|static
+    public function scopeForeignId(Builder $query, int $id): Builder
     {
-        return $this->where('video_id', $id);
+        return $query->where('video_id', $id);
     }
 }
