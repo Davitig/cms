@@ -19,7 +19,7 @@ function language(mixed $key = null, ?string $value = null): mixed
         return $lang;
     }
 
-    if ($key === true) {
+    if (is_bool($key)) {
         $key = $lang;
     }
 
