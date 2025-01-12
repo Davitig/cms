@@ -374,9 +374,7 @@ class DynamicRouteRegistrar
             return true;
         }
 
-        $this->setDeepImplicitRoute($model, $segmentsLeft);
-
-        return false;
+        return $this->setDeepImplicitRoute($model, $segmentsLeft);
     }
 
     /**
