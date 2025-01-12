@@ -23,6 +23,9 @@ iframe {border:0;}
 .w-auto {width:auto;}
 .pointer {cursor:pointer;}
 
+.border-orange {border-color:#cc3f44;}
+.border-yellow {border-color:#ffc107;}
+
 #container {height:100%;}
 body.lockscreen-page #container {display:none !important;visibility:hidden !important;}
 
