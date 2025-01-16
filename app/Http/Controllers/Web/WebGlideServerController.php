@@ -20,11 +20,15 @@ class WebGlideServerController extends Controller
      *
      * @param  \Illuminate\Contracts\Config\Repository  $config
      * @param  string  $path
-     * @return void
+     * @return \Illuminate\Http\RedirectResponse|void
      */
     public function show(Config $config, string $path)
     {
-        $settings = $config['web.glide.' . $this->request->get('type')];
+        if (! $type = $this->request->get('type')) {
+            return redirect(web_url([current(config('elfinder.dir')) . '/' . $path]));
+        }
+
+        $settings = $config['web.glide.' . $type];
 
         if (! is_array($settings)) {
             abort(404);

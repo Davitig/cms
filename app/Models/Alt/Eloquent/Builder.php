@@ -24,7 +24,7 @@ class Builder extends EloquentBuilder
     /**
      * {@inheritDoc}
      */
-    public function addSelect($column): QueryBuilder|static
+    public function addSelect($column): static
     {
         parent::addSelect($column);
 

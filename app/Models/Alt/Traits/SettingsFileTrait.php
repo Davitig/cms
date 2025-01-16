@@ -62,50 +62,56 @@ trait SettingsFileTrait
     /**
      * Get the data based on the admin collection.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  array|string  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getAdminSettings(array|string $columns = ['*']): LengthAwarePaginator
+    public function scopeGetAdminSettings(
+        Builder $query, array|string $columns = ['*']
+    ): LengthAwarePaginator
     {
-        return $this->adminSettings()
+        return $query->adminSettings()
             ->paginate($this->getSetting('admin_per_page'), $columns);
     }
 
     /**
      * Get the data based on the public collection.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @param  array|string  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getPublicSettings(array|string $columns = ['*']): LengthAwarePaginator
+    public function scopeGetPublicSettings(
+        Builder $query, array|string $columns = ['*']
+    ): LengthAwarePaginator
     {
-        return $this->publicSettings()
+        return $query->publicSettings()
             ->paginate($this->getSetting('web_per_page'), $columns);
     }
 
     /**
      * Build a query based on the admin collection.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function adminSettings(): Builder
+    public function scopeAdminSettings(Builder $query): Builder
     {
-        return $this->orderBy(
-            $this->getSetting('admin_order_by'),
-            $this->getSetting('admin_sort')
+        return $query->orderBy(
+            $this->getSetting('admin_order_by'), $this->getSetting('admin_sort')
         );
     }
 
     /**
      * Build a query based on the public collection.
      *
+     * @param  \App\Models\Alt\Eloquent\Builder  $query
      * @return \App\Models\Alt\Eloquent\Builder
      */
-    public function publicSettings(): Builder
+    public function scopePublicSettings(Builder $query): Builder
     {
-        return $this->orderBy(
-            $this->getSetting('web_order_by'),
-            $this->getSetting('web_sort')
+        return $query->orderBy(
+            $this->getSetting('web_order_by'), $this->getSetting('web_sort')
         );
     }
 

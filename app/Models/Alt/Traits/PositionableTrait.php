@@ -35,7 +35,7 @@ trait PositionableTrait
 
         foreach($data as $item) {
             if (! isset($item['id'])) {
-                return false;
+                continue;
             }
 
             $position++;

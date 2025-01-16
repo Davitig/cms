@@ -218,7 +218,7 @@ $(function () {
     });
 
     // Visibility request
-    $('form.visibility').on('submit', function (e) {
+    $(document).on('submit', 'form.visibility', function (e) {
         e.preventDefault();
         let form = $(this);
 
@@ -341,14 +341,21 @@ saveTreeBtn.on('positionSaved', function() {
     updateSubItems($('#nestable-list').find('> li'), webUrl);
 });
 
-function positionable(url, orderBy, page, hasMorePages) {
+function positionable(url, orderBy, page, hasMorePages, selectors) {
     const aTagStart = '<a href="#" class="move btn btn-gray fa-long-arrow-';
     const aTagPrev = 'left left" data-move="prev" title="Move to prev page"';
     const aTagNext = 'right right" data-move="next" title="Move to next page"';
     const aTagEnd = '></a>';
     let saveBtnIcon = $('.icon-var', saveTreeBtn);
     let postHidden = {'_method':'put', '_token':saveTreeBtn.data('token')};
-    let nestable = $('#nestable-list');
+    let nestables = [];
+    if (selectors === undefined || selectors.length === 0) {
+        nestables.push($('#nestable-list'));
+    } else {
+        $.each(selectors, function (i, selector) {
+            nestables.push($(selector));
+        })
+    }
     page = parseInt(page);
 
     if (page) {
@@ -360,62 +367,65 @@ function positionable(url, orderBy, page, hasMorePages) {
         }
     }
 
-    nestable.on('nestable-stop', function () {
-        $('.move', nestable).remove();
-        saveTreeBtn.show().prop('disabled', false);
-        saveBtnIcon.removeClass('fa-spin fa-check').addClass('fa-save');
-    });
-
-    // Position move
-    nestable.on('click',  'a.move', function (e) {
-        e.preventDefault();
-        let move = $(this).data('move');
-        let item = $(this).closest('li');
-        let input = [{'id':item.data('id'), 'pos':item.data('pos')}];
-        let items;
-
-        if (move === 'next') {
-            items = item.nextAll();
-        } else {
-            items = item.prevAll();
-        }
-
-        items.each(function (i, e) {
-            input.push({'id':$(e).data('id'), 'pos':$(e).data('pos')});
+    $.each(nestables, function (i, nestable) {
+        nestable.on('nestable-stop', function () {
+            $('.move', nestable).remove();
+            saveTreeBtn.show().prop('disabled', false);
+            saveBtnIcon.removeClass('fa-spin fa-check').addClass('fa-save');
         });
+        // Position move
+        nestable.on('click',  'a.move', function (e) {
+            e.preventDefault();
+            let move = $(this).data('move');
+            let item = $(this).closest('li');
+            let input = [{'id':item.data('id'), 'pos':item.data('pos')}];
+            let items;
 
-        input = $.extend({'data':input, 'move':move, 'orderBy':orderBy}, postHidden);
-
-        $.post(url, input, function () {
-            page = move === 'next' ? page + 1 : page - 1;
-            let href = window.location.href;
-            let hrefQueryStart = href.indexOf('?');
-            if (hrefQueryStart > 1) {
-                href = href.substr(0, hrefQueryStart);
+            if (move === 'next') {
+                items = item.nextAll();
+            } else {
+                items = item.prevAll();
             }
-            window.location.href = href + '?page=' + page;
-        }, 'json').fail(function (xhr) {
-            alert(xhr.responseText);
+
+            items.each(function (i, e) {
+                input.push({'id':$(e).data('id'), 'pos':$(e).data('pos')});
+            });
+
+            input = $.extend({'data':input, 'move':move, 'orderBy':orderBy}, postHidden);
+
+            $.post(url, input, function () {
+                page = move === 'next' ? page + 1 : page - 1;
+                let href = window.location.href;
+                let hrefQueryStart = href.indexOf('?');
+                if (hrefQueryStart > 1) {
+                    href = href.substr(0, hrefQueryStart);
+                }
+                window.location.href = href + '?page=' + page;
+            }, 'json').fail(function (xhr) {
+                alert(xhr.responseText);
+            });
         });
-    });
+    })
 
     // Position save
     saveTreeBtn.on('click', function () {
         $(this).prop('disabled', true);
         saveBtnIcon.addClass('fa-spin');
-        let nestable = $('#nestable-list');
 
         if (page) {
-            $('.move', nestable).remove();
+            $('.move').remove();
             if (hasMorePages) {
-                $('btn-action', nestable).prepend(aTagStart + aTagNext + aTagEnd);
+                $('.btn-action').prepend(aTagStart + aTagNext + aTagEnd);
             }
             if (page > 1) {
-                $('btn-action', nestable).prepend(aTagStart + aTagPrev + aTagEnd);
+                $('.btn-action').prepend(aTagStart + aTagPrev + aTagEnd);
             }
         }
 
-        let input = nestable.data('nestable').serialize();
+        let input = [];
+        $.each(nestables, function (i, nestable) {
+            input = input.concat(nestable.data('nestable').serialize());
+        })
 
         if (orderBy) {
             let posArr = [];
@@ -440,7 +450,7 @@ function positionable(url, orderBy, page, hasMorePages) {
 
             if (orderBy) {
                 $(input.data).each(function (i, e) {
-                    $('item'+e.id, nestable).data('pos', e.pos);
+                    $('.item'+e.id).data('pos', e.pos);
                 });
             }
 
