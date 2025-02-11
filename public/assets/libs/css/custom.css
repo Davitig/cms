@@ -22,7 +22,14 @@ iframe {border:0;}
 .w-100 {width:100%;}
 .w-auto {width:auto;}
 .pointer {cursor:pointer;}
+.text-decoration-underline {text-decoration:underline;}
+.bg-main-light {background-color:#f8f8f8;}
 
+.border-1 {border:1px solid transparent;}
+.border-radius-1 {border-radius:1px;}
+.border-radius-2 {border-radius:2px;}
+.border-radius-3 {border-radius:3px;}
+.border-gray {border-color:#eee;}
 .border-orange {border-color:#cc3f44;}
 .border-yellow {border-color:#ffc107;}
 

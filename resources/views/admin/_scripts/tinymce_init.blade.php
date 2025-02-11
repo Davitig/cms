@@ -4,6 +4,7 @@
 
     function tinymceInit() {
         tinymce.init({
+            license_key: 'gpl',
             selector: ".text-editor",
             relative_urls: false,
             remove_script_host: false,

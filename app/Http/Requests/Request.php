@@ -45,13 +45,17 @@ abstract class Request extends FormRequest
         if (! empty($input[$key])) {
             $input[$key] = (new Slugify)->slugify($input[$key]);
         } elseif (! empty($altKeys)) {
-            $keys = [];
+            $values = [];
 
             foreach ($altKeys as $value) {
-                $keys[] = $input[$value];
+                if (isset($input[$value])) {
+                    $values[] = $input[$value];
+                }
             }
 
-            $input[$key] = (new Slugify)->slugify(implode('-', $keys));
+            if (! empty($values)) {
+                $input[$key] = (new Slugify)->slugify(implode('-', $values));
+            }
         }
     }
 
