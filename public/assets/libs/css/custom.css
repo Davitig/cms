@@ -25,6 +25,7 @@ iframe {border:0;}
 .text-decoration-underline {text-decoration:underline;}
 .bg-main-light {background-color:#f8f8f8;}
 
+.border-left-info, .alert.border-left-info {border-left: 5px solid #40bbea;}
 .border-1 {border:1px solid transparent;}
 .border-radius-1 {border-radius:1px;}
 .border-radius-2 {border-radius:2px;}

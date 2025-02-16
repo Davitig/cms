@@ -2,6 +2,7 @@
 
 namespace App\View\Composers\Web;
 
+use App\Models\Setting\WebSetting;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 
@@ -40,6 +41,6 @@ class WebSettingsComposer
      */
     protected function getSettings(): Collection
     {
-        return new Collection(app('db')->table('web_settings')->first());
+        return new Collection((new WebSetting)->getSettings());
     }
 }

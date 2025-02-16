@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setting\WebSetting;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 class AdminWebSettingsController extends Controller implements HasMiddleware
 {
@@ -25,7 +24,7 @@ class AdminWebSettingsController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        $data['webSettings'] = DB::table('web_settings')->first();
+        $data['webSettings'] = (new WebSetting)->getSettings();
 
         return view('admin.web_settings.index', $data);
     }
@@ -38,20 +37,7 @@ class AdminWebSettingsController extends Controller implements HasMiddleware
      */
     public function update(Request $request)
     {
-        $columns = array_flip(Schema::getColumnListing('web_settings'));
-        unset($columns['id']);
-
-        $attributes = $request->all();
-
-        $attributes = array_intersect_key($attributes, $columns);
-
-        $webSettings = DB::table('web_settings')->first();
-
-        if (is_null($webSettings)) {
-            DB::table('web_settings')->insert($attributes);
-        } else {
-            DB::table('web_settings')->update($attributes);
-        }
+        (new WebSetting)->saveSettings($request->all());
 
         return redirect(cms_route('webSettings.index'))
             ->with('alert', fill_data('success', trans('general.updated')));
