@@ -17,7 +17,7 @@ use App\Http\Controllers\Admin\AdminNotesController;
 use App\Http\Controllers\Admin\AdminPagesController;
 use App\Http\Controllers\Admin\AdminPermissionsController;
 use App\Http\Controllers\Admin\AdminPhotosController;
-use App\Http\Controllers\Admin\AdminSettingsController;
+use App\Http\Controllers\Admin\AdminCmsSettingsController;
 use App\Http\Controllers\Admin\AdminSitemapXmlController;
 use App\Http\Controllers\Admin\AdminSliderController;
 use App\Http\Controllers\Admin\AdminTranslationsController;
@@ -211,10 +211,10 @@ Route::name(cms_route_name())->group(function ($router) {
         });
 
         // CMS settings
-        $router->get('settings', [AdminSettingsController::class, 'index'])
-            ->name('settings.index');
-        $router->put('settings', [AdminSettingsController::class, 'update'])
-            ->name('settings.update');
+        $router->get('cms-settings', [AdminCmsSettingsController::class, 'index'])
+            ->name('cmsSettings.index');
+        $router->put('cms-settings', [AdminCmsSettingsController::class, 'update'])
+            ->name('cmsSettings.update');
         // web settings
         $router->get('web-settings', [AdminWebSettingsController::class, 'index'])
             ->name('webSettings.index');

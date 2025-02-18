@@ -245,7 +245,9 @@ class Builder extends EloquentBuilder
      */
     public function createdAsc(bool|string $table = false): static
     {
-        return $this->orderBy($this->getTableNameWithDot($table) . 'created_at');
+        return $this->orderBy(
+            $this->getTableNameWithDot($table) . $this->getModel()->getCreatedAtColumn()
+        );
     }
 
     /**
@@ -256,7 +258,9 @@ class Builder extends EloquentBuilder
      */
     public function createdDesc(bool|string $table = false): static
     {
-        return $this->orderByDesc($this->getTableNameWithDot($table) . 'created_at');
+        return $this->orderByDesc(
+            $this->getTableNameWithDot($table) . $this->getModel()->getCreatedAtColumn()
+        );
     }
 
     /**

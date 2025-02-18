@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 
-class AdminSettingsController extends Controller
+class AdminCmsSettingsController extends Controller
 {
     /**
      * Display the specified resource.
@@ -84,7 +84,7 @@ class AdminSettingsController extends Controller
             $table->insert($attributes);
         }
 
-        return redirect(cms_route('settings.index', ['tab' => $request->get('tab', 1)]))
+        return redirect(cms_route('cmsSettings.index', ['tab' => $request->get('tab', 1)]))
             ->with('alert', fill_data('success', trans('general.updated')));
     }
 }

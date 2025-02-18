@@ -80,17 +80,17 @@
         </li>
     </ul>
 </li>
-@if ($userRouteAccess('settings', 'webSettings', 'translations'))
-<li{!! $hasRouteMatch = $routeMatches(['settings', 'webSettings', 'translations']) ? ' class="has-sub expanded"' : '' !!}>
-    <a href="{{ $url = cms_route('settings.index') }}">
+@if ($userRouteAccess('cmsSettings', 'webSettings', 'translations'))
+<li{!! $hasRouteMatch = $routeMatches(['cmsSettings', 'webSettings', 'translations']) ? ' class="has-sub expanded"' : '' !!}>
+    <a href="{{ $url = cms_route('cmsSettings.index') }}">
         <i class="fa fa-gears" title="Settings"></i>
         <span class="title">Settings</span>
     </a>
     <ul{!! $hasRouteMatch ? ' style="display:block;"' : '' !!}>
-        @if ($userRouteAccess('settings'))
+        @if ($userRouteAccess('cmsSettings'))
         <li>
-            <a href="{{ $url }}"{!! $routeMatches(['settings']) ? ' class="active"' : '' !!}>
-                <i class="fa fa-gear" title="Admin Settings"></i>
+            <a href="{{ $url }}"{!! $routeMatches(['cmsSettings']) ? ' class="active"' : '' !!}>
+                <i class="fa fa-gear" title="CMS Settings"></i>
                 <span class="title">CMS Settings</span>
             </a>
         </li>

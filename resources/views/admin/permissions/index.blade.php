@@ -45,7 +45,7 @@
                                     <a href="{{ cms_route('permissions.index', ['role' => $id]) }}" class="btn{{ $id == $activeRoleId ? ' btn-info' : '' }}">{{ ucfirst($role) }}</a>
                                 @endforeach
                             </div>
-                            <div id="multi-check-all" class="multi-check dib fs-14">
+                            <div id="multi-check-all" class="multi-check dib padl fs-14">
                                 <a href="#" class="check-action" data-group="*" data-action="check">Check all</a> /
                                 <a href="#" class="check-action" data-group="*" data-action="uncheck">Uncheck all</a> /
                                 <a href="#" class="check-action" data-group="*" data-action="toggle">Toggle</a>
@@ -59,7 +59,8 @@
             @foreach ($routeGroups as $groupName => $routes)
                 <div class="panel panel-default clearfix">
                     <div class="panel-heading">
-                        <label>{{ucfirst($groupName ?: config('app.name'))}}</label> -
+                        <label>{{ucfirst($groupName ?: config('app.name'))}}</label>
+                        -
                         <div class="multi-check dib fs-14">
                             <a href="#" class="check-action" data-group="{{$groupName}}" data-action="Check">Check all</a> /
                             <a href="#" class="check-action" data-group="{{$groupName}}" data-action="Uncheck">Uncheck all</a> /
@@ -71,13 +72,21 @@
                             <div class="clearfix padb">
                                 <div class="row">
                                     <div class="title col-xs-12 padt">
-                                        <div class="fs-16{{ $loop->first ? '' : ' padt bot' }}">{{ucfirst($subGroupName ?: config('app.name'))}}</div>
+                                        <div class="fs-16{{ $loop->first ? '' : ' padt bot' }}">
+                                            {{ucfirst($subGroupName ?: config('app.name'))}}
+                                            -
+                                            <div class="multi-check dib fs-14">
+                                                <a href="#" class="check-action" data-group="{{$subGroupName}}" data-action="Check">Check all</a> /
+                                                <a href="#" class="check-action" data-group="{{$subGroupName}}" data-action="Uncheck">Uncheck all</a> /
+                                                <a href="#" class="check-action" data-group="{{$subGroupName}}" data-action="Toggle">Toggle</a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 @foreach($name as $subName)
                                     <div class="panel-body col-xs-6 col-sm-4 col-md-3">
                                         <label><strong>{{str(implode(' ', explode('.', $subName)))->headline()}}</strong></label>
-                                        <input type="checkbox" name="permissions[{{$groupName}}][]" value="{{$subName}}"{{in_array($subName, $currentRoutes) ? ' checked' : ''}} class="{{$groupName}} icheck" id="{{$subName}}">
+                                        <input type="checkbox" name="permissions[{{$groupName}}][]" value="{{$subName}}"{{in_array($subName, $currentRoutes) ? ' checked' : ''}} class="{{$groupName}} {{$subGroupName}} icheck" id="{{$subName}}">
                                     </div>
                                 @endforeach
                             </div>
@@ -93,7 +102,7 @@
             <div class="panel panel-default">
                 <div class="btn-action text-center">
                     <button type="submit" class="btn btn-secondary btn-icon-standalone" title="{{ trans('general.update') }}">
-                        <i class="fa fa-save"></i>
+                        <i class="fa fa-update"></i>
                         <span>{{ trans('general.save') }}</span>
                     </button>
                     <a href="{{ cms_route('cmsUserRoles.index') }}" class="btn btn-blue btn-icon-standalone" title="{{ trans('general.back') }}">

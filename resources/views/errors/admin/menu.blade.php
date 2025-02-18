@@ -19,9 +19,9 @@
     </ul>
 </li>
 <li>
-    <a href="{{ $url = cms_route('settings.index') }}">
-        <i class="fa fa-gears" title="Settings"></i>
-        <span class="title">Settings</span>
+    <a href="{{ $url = cms_route('cmsSettings.index') }}">
+        <i class="fa fa-gears" title="CMS Settings"></i>
+        <span class="title">CMS Settings</span>
     </a>
     <ul>
         <li>
