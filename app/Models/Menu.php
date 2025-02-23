@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model
 {
@@ -21,11 +21,4 @@ class Menu extends Model
     protected $fillable = [
         'main', 'title', 'description'
     ];
-
-    /**
-     * The attributes that are not updatable.
-     *
-     * @var array
-     */
-    protected array $notUpdatable = [];
 }

@@ -37,7 +37,7 @@
     <div class="col-sm-10 btn-action pull-right">
         <button type="submit" class="btn btn-secondary btn-icon-standalone" title="{{ $submit }}">
             <i class="fa fa-{{ $icon }}"></i>
-            <span>{{ trans('general.save') }}</span>
+            <span>{{ $submit }}</span>
         </button>
         <a href="{{ cms_route('permissions.index', ['role' => $current->id]) }}" id="permissions-btn"
            class="btn btn-orange btn-icon-standalone{{ ! $current->id || $current->full_access ? ' hidden' : '' }}" title="Permissions">

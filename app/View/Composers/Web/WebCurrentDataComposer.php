@@ -2,7 +2,7 @@
 
 namespace App\View\Composers\Web;
 
-use App\Models\Alt\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;
 use App\Support\TranslationCollection;
 use Illuminate\Contracts\View\View;
 

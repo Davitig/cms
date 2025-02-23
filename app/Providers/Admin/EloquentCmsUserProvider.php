@@ -5,7 +5,7 @@ namespace App\Providers\Admin;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 
-class AdminEloquentUserProvider extends EloquentUserProvider
+class EloquentCmsUserProvider extends EloquentUserProvider
 {
     /**
      * Create a new database user provider.

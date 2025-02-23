@@ -2,7 +2,7 @@
 
 namespace App\Models\Alt\Traits;
 
-use App\Models\Alt\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder;
 
 trait NameValueSettingTrait
 {
@@ -31,7 +31,7 @@ trait NameValueSettingTrait
     /**
      * Get the first record matching the attributes or instantiate it.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  array  $attributes
      * @param  array  $values
      * @return static

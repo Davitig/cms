@@ -292,19 +292,14 @@
                 $('#event-delete').on('click', function(e) {
                     e.preventDefault();
 
-                    let form   = $(this).closest('form');
-                    let active = form.find('#event-active').val();
-                    let id     = form.find('#event-id').val();
+                    let form = $(this).closest('form');
+                    let id = form.find('#event-id').val();
 
                     let input = {'id':id, '_token':'{{$csrfToken}}', '_method': 'DELETE'};
                     $.post("{{cms_route('calendar.destroy')}}", input, function() {
                         modal.modal('hide');
-
-                        if (active) {
-                            calendar.fullCalendar('removeEvents', [id]);
-                        } else {
-                            eventsList.find('#event' + id).remove();
-                        }
+                        calendar.fullCalendar('removeEvents', [id]);
+                        eventsList.find('#event' + id).remove();
                     }, 'json').fail(function(xhr) {
                         alert(xhr.responseText);
                     })

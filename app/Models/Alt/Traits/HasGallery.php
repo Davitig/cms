@@ -2,9 +2,9 @@
 
 namespace App\Models\Alt\Traits;
 
-use App\Models\Alt\Eloquent\Builder;
 use App\Models\Gallery\Gallery;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 
 trait HasGallery
 {
@@ -23,7 +23,7 @@ trait HasGallery
     /**
      * Get the data based on the admin gallery.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  \App\Models\Gallery\Gallery  $gallery
      * @param  array|string  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
@@ -39,7 +39,7 @@ trait HasGallery
     /**
      * Get the data based on the public gallery.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  \App\Models\Gallery\Gallery  $gallery
      * @param  array|string  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
@@ -55,9 +55,9 @@ trait HasGallery
     /**
      * Build a query based on the admin gallery.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  \App\Models\Gallery\Gallery  $gallery
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeAdminGallery(Builder $query, Gallery $gallery): Builder
     {
@@ -70,9 +70,9 @@ trait HasGallery
     /**
      * Build a query based on the public gallery.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  \App\Models\Gallery\Gallery  $gallery
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopePublicGallery(Builder $query, Gallery $gallery): Builder
     {
@@ -86,9 +86,9 @@ trait HasGallery
     /**
      * Build a query based on the gallery.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $id
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeByGallery(Builder $query, int $id): Builder
     {
@@ -98,9 +98,9 @@ trait HasGallery
     /**
      * Add a where "gallery_id" clause to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $id
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeGalleryId(Builder $query, int $id): Builder
     {
@@ -110,9 +110,9 @@ trait HasGallery
     /**
      * Add a where "visible" clause to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $value
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeWhereVisible(Builder $query, int $value = 1): Builder
     {

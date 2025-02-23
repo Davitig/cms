@@ -3,15 +3,16 @@
 namespace App\Models;
 
 use App\Models\Alt\Contracts\Fileable;
-use App\Models\Alt\Eloquent\Builder;
-use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Traits\HasLanguage;
 use App\Models\Alt\Traits\PositionableTrait;
+use App\Models\Alt\Traits\QueriesTrait;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Slider extends Model implements Fileable
 {
-    use HasLanguage, PositionableTrait;
+    use QueriesTrait, HasLanguage, PositionableTrait;
 
     /**
      * The table associated with the model.
@@ -28,13 +29,6 @@ class Slider extends Model implements Fileable
     protected $fillable = [
         'position', 'visible', 'link', 'file'
     ];
-
-    /**
-     * The attributes that are not updatable.
-     *
-     * @var array
-     */
-    protected array $notUpdatable = [];
 
     /**
      * Get the mutated file attribute.
@@ -61,10 +55,10 @@ class Slider extends Model implements Fileable
     /**
      * Build a query for admin.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  mixed  $currentLang
      * @param  array|string  $columns
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeForAdmin(
         Builder $query, mixed $currentLang = true, array|string $columns = []
@@ -76,10 +70,10 @@ class Slider extends Model implements Fileable
     /**
      * Build a public query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  mixed  $currentLang
      * @param  array|string  $columns
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeForPublic(
         Builder $query, mixed $currentLang = true, array|string $columns = []

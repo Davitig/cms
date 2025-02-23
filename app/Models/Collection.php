@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Eloquent\Builder;
-use App\Models\Alt\Eloquent\Model;
+use App\Models\Alt\Traits\QueriesTrait;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class Collection extends Model
 {
+    use QueriesTrait;
+
     /**
      * The table associated with the model.
      *
@@ -26,20 +29,11 @@ class Collection extends Model
     ];
 
     /**
-     * The attributes that are not updatable.
-     *
-     * @var array
-     */
-    protected array $notUpdatable = [
-        'type'
-    ];
-
-    /**
      * Add a new where 'type' clause to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  string  $type
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeByType(Builder $query, string $type): Builder
     {

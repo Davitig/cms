@@ -2,16 +2,17 @@
 
 namespace App\Models\Gallery;
 
-use App\Models\Alt\Eloquent\Builder;
-use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Contracts\Collection;
 use App\Models\Alt\Traits\HasCollection;
 use App\Models\Alt\Traits\HasLanguage;
+use App\Models\Alt\Traits\QueriesTrait;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Gallery extends Model implements Collection
 {
-    use HasCollection, HasLanguage;
+    use QueriesTrait, HasCollection, HasLanguage;
 
     /**
      * Type of the collection.
@@ -38,15 +39,6 @@ class Gallery extends Model implements Collection
     ];
 
     /**
-     * The attributes that are not updatable.
-     *
-     * @var array
-     */
-    protected array $notUpdatable = [
-        'type'
-    ];
-
-    /**
      * Set languages a one-to-many relationship.
      *
      * @param  bool  $relation
@@ -60,9 +52,9 @@ class Gallery extends Model implements Collection
     /**
      * Add a new where 'type' clause to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  string  $type
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeByType(Builder $query, string $type): Builder
     {

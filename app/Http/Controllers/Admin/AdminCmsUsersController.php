@@ -59,7 +59,7 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
                 return $q->whereKey($request->user('cms')->id);
             }
         )->joinRole()->adminFilter($request)
-            ->orderDesc(true)
+            ->orderDesc()
             ->paginate(20);
 
         $data['roles'] = (new CmsUserRole)->pluck('role', 'id');

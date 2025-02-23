@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Alt\Eloquent\Model;
 use App\Models\Page\Page;
 use DOMDocument;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Sabre\Xml\Service;
@@ -149,7 +149,7 @@ class AdminSitemapXmlController extends Controller
      * @param  \App\Models\Page\Page $page
      * @return void
      */
-    protected function setImplicitModels(Model $page)
+    protected function setImplicitModels(Page $page): void
     {
         if (! in_array($page->type, $this->listableTypes)
             && ! array_key_exists($page->type, $this->implicitTypes)
@@ -163,7 +163,7 @@ class AdminSitemapXmlController extends Controller
             $model = cms_config('collections.models.' . $implicitModel->type);
 
             $items = (new $model)->where(
-                Str::singular($implicitModel->getTable()) . '_id',
+                Str::singular($implicitModel->getTable()) . '_' . $implicitModel->getKeyName(),
                 $implicitModel->id
             )->whereVisible()->orderDesc()->get();
 
@@ -184,7 +184,7 @@ class AdminSitemapXmlController extends Controller
      * @param  \App\Models\Page\Page $page
      * @return void
      */
-    protected function setExplicitModels(Model $page)
+    protected function setExplicitModels(Page $page): void
     {
         if (! array_key_exists($page->type, $this->explicitTypes)) {
             return;
@@ -210,10 +210,10 @@ class AdminSitemapXmlController extends Controller
      * Get the urls.
      *
      * @param  \App\Models\Page\Page  $page
-     * @param  \App\Models\Alt\Eloquent\Model  $item
+     * @param  \Illuminate\Database\Eloquent\Model  $item
      * @return array
      */
-    protected function getUrls(Page $page, Model $item)
+    protected function getUrls(Page $page, Model $item): array
     {
         $value = ['url' => ['loc' => web_url(
             [$page->full_slug, $item->slug], [], $this->isMultilanguage
@@ -242,7 +242,7 @@ class AdminSitemapXmlController extends Controller
      * @param  string  $langValue
      * @return array
      */
-    protected function getLanguageLinks(Model $page, ?string $slug, string $langValue)
+    protected function getLanguageLinks(Model $page, ?string $slug, string $langValue): array
     {
         return [
             'name' => "{{$this->xhtml}}link",

@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Eloquent\Builder;
-use App\Models\Alt\Eloquent\Model;
+use App\Models\Alt\Traits\QueriesTrait;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class Note extends Model
 {
+    use QueriesTrait;
+
     /**
      * The table associated with the model.
      *
@@ -24,18 +27,11 @@ class Note extends Model
     ];
 
     /**
-     * The attributes that are not updatable.
-     *
-     * @var array
-     */
-    protected array $notUpdatable = [];
-
-    /**
      * Add a where 'cms_user_id' clause to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $userId
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeByUserId(Builder $query, int $userId): Builder
     {

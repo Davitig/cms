@@ -2,10 +2,10 @@
 
 namespace App\Models\Alt\Traits;
 
-use App\Models\Alt\Eloquent\Builder;
-use App\Models\Alt\Eloquent\Model;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\Filesystem;
 
 trait FileTrait
@@ -50,10 +50,10 @@ trait FileTrait
     /**
      * Build a public query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $foreignId
      * @param  mixed  $currentLang
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeForAdmin(Builder $query, int $foreignId, mixed $currentLang = true): Builder
     {
@@ -65,10 +65,10 @@ trait FileTrait
     /**
      * Build a public query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $foreignId
      * @param  mixed  $currentLang
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeForPublic(Builder $query, int $foreignId, mixed $currentLang = true): Builder
     {
@@ -81,9 +81,9 @@ trait FileTrait
     /**
      * Add a where "visible" clause to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $value
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeWhereVisible(Builder $query, int $value = 1): Builder
     {

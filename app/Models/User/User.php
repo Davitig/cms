@@ -30,11 +30,4 @@ class User extends Model
     protected $hidden = [
         'password', 'remember_token'
     ];
-
-    /**
-     * The attributes that are not updatable.
-     *
-     * @var array
-     */
-    protected array $notUpdatable = [];
 }

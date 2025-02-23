@@ -2,15 +2,16 @@
 
 namespace App\Models\Event;
 
-use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Traits\FileableTrait;
 use App\Models\Alt\Traits\HasCollection;
 use App\Models\Alt\Traits\HasLanguage;
+use App\Models\Alt\Traits\QueriesTrait;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Event extends Model
 {
-    use HasCollection, HasLanguage, FileableTrait;
+    use QueriesTrait, HasCollection, HasLanguage, FileableTrait;
 
     /**
      * Type of the collection.
@@ -34,13 +35,6 @@ class Event extends Model
     protected $fillable = [
         'collection_id', 'slug', 'position', 'visible', 'image'
     ];
-
-    /**
-     * The attributes that are not updatable.
-     *
-     * @var array
-     */
-    protected array $notUpdatable = [];
 
     /**
      * Set languages a one-to-many relationship.

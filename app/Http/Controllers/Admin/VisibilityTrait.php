@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Alt\Eloquent\Model;
 use ErrorException;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 trait VisibilityTrait

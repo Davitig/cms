@@ -2,16 +2,17 @@
 
 namespace App\Models\Article;
 
-use App\Models\Alt\Eloquent\Builder;
-use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Contracts\Fileable;
 use App\Models\Alt\Traits\FileTrait;
 use App\Models\Alt\Traits\HasLanguage;
+use App\Models\Alt\Traits\QueriesTrait;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ArticleFile extends Model implements Fileable
 {
-    use FileTrait, HasLanguage;
+    use QueriesTrait, FileTrait, HasLanguage;
 
     /**
      * The table associated with the model.
@@ -27,15 +28,6 @@ class ArticleFile extends Model implements Fileable
      */
     protected $fillable = [
         'article_id', 'position', 'visible'
-    ];
-
-    /**
-     * The attributes that are not updatable.
-     *
-     * @var array
-     */
-    protected array $notUpdatable = [
-        'article_id'
     ];
 
     /**
@@ -63,9 +55,9 @@ class ArticleFile extends Model implements Fileable
     /**
      * Add a where foreign id clause to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $foreignId
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeByForeign(Builder $query, int $foreignId): Builder
     {

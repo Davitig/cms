@@ -26,7 +26,7 @@
     <div class="col-sm-10 btn-action pull-right">
         <button type="submit" class="btn btn-secondary btn-icon-standalone" title="{{ $submit }}">
             <i class="fa fa-{{ $icon }}"></i>
-            <span>{{ trans('general.save') }}</span>
+            <span>{{ $submit }}</span>
         </button>
         @if ($current->id)
             <a href="{{ cms_route('pages.index', [$current->id]) }}" class="btn btn-info btn-icon-standalone" title="{{ trans('general.pages') }}">

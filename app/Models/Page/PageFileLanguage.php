@@ -2,9 +2,9 @@
 
 namespace App\Models\Page;
 
-use App\Models\Alt\Eloquent\Builder;
-use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Traits\LanguageTrait;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class PageFileLanguage extends Model
 {
@@ -27,20 +27,11 @@ class PageFileLanguage extends Model
     ];
 
     /**
-     * The attributes that are not updatable for the Language model.
-     *
-     * @var array
-     */
-    protected array $notUpdatable = [
-        'page_file_id', 'language_id'
-    ];
-
-    /**
      * Add a where "page_file_id" clause to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $id
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeForeignId(Builder $query, int $id): Builder
     {

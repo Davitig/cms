@@ -2,18 +2,19 @@
 
 namespace App\Models\Page;
 
-use App\Models\Alt\Eloquent\Builder;
-use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Traits\FileableTrait;
 use App\Models\Alt\Traits\HasLanguage;
 use App\Models\Alt\Traits\HasSubModels;
 use App\Models\Alt\Traits\PositionableTrait;
+use App\Models\Alt\Traits\QueriesTrait;
 use App\Models\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Page extends Model
 {
-    use HasLanguage, PositionableTrait, FileableTrait, HasSubModels;
+    use QueriesTrait, HasLanguage, PositionableTrait, FileableTrait, HasSubModels;
 
     /**
      * The table associated with the model.
@@ -32,13 +33,6 @@ class Page extends Model
     ];
 
     /**
-     * The attributes that are not updatable.
-     *
-     * @var array
-     */
-    protected array $notUpdatable = [];
-
-    /**
      * Set languages a one-to-many relationship.
      *
      * @param  bool  $relation
@@ -52,10 +46,10 @@ class Page extends Model
     /**
      * Build an admin query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int|null  $menuId
      * @param  mixed  $currentLang
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeForAdmin(
         Builder $query, ?int $menuId = null, mixed $currentLang = true
@@ -72,9 +66,9 @@ class Page extends Model
     /**
      * Build a public query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  mixed  $currentLang
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeForPublic(Builder $query, mixed $currentLang = true): Builder
     {
@@ -84,11 +78,11 @@ class Page extends Model
     /**
      * Add a query, which is valid for routing.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  string  $slug
      * @param  int  $parentId
      * @param  mixed  $currentLang
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeBySlugRoute(
         Builder $query, string $slug, int $parentId, mixed $currentLang = true
@@ -100,9 +94,9 @@ class Page extends Model
     /**
      * Add a where "menu_id" clause to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $id
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeMenuId(Builder $query, int $id): Builder
     {
@@ -112,10 +106,10 @@ class Page extends Model
     /**
      * Add a where "type" clause to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  string  $value
      * @param  string  $operator
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeTypeName(Builder $query, string $value, string $operator = '='): Builder
     {
@@ -125,10 +119,10 @@ class Page extends Model
     /**
      * Add a where "type_id" clause to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $id
      * @param  string  $operator
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeTypeId(Builder $query, int $id, string $operator = '='): Builder
     {
@@ -138,9 +132,9 @@ class Page extends Model
     /**
      * Add a where "visible" clause to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $value
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeWhereVisible(Builder $query, int $value = 1): Builder
     {
@@ -150,8 +144,8 @@ class Page extends Model
     /**
      * Add a "collection" join to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeJoinCollection(Builder $query): Builder
     {

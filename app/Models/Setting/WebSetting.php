@@ -2,8 +2,8 @@
 
 namespace App\Models\Setting;
 
-use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Traits\NameValueSettingTrait;
+use Illuminate\Database\Eloquent\Model;
 
 class WebSetting extends Model
 {
@@ -24,13 +24,6 @@ class WebSetting extends Model
     protected $fillable = [
         'name', 'value'
     ];
-
-    /**
-     * The options that are not updatable.
-     *
-     * @var array
-     */
-    protected array $notUpdatable = [];
 
     /**
      * The list of default named values.

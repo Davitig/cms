@@ -77,7 +77,7 @@ class AdminEventsController extends Controller
      */
     public function edit(string $collectionId, string $id)
     {
-        $data['items'] = $this->model->where('id', $id)
+        $data['items'] = $this->model->whereKey($id)
             ->forAdmin(null, false)
             ->getOrFail();
 

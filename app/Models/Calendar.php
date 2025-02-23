@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Eloquent\Builder;
-use App\Models\Alt\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class Calendar extends Model
@@ -25,13 +25,6 @@ class Calendar extends Model
     ];
 
     /**
-     * The attributes that are not updatable.
-     *
-     * @var array
-     */
-    protected array $notUpdatable = [];
-
-    /**
      * The list of the available colors.
      *
      * @var array
@@ -43,10 +36,10 @@ class Calendar extends Model
     /**
      * Get the mutated "start" attribute.
      *
-     * @param  string  $value
+     * @param  string|null  $value
      * @return string
      */
-    public function getStartAttribute(string $value): string
+    public function getStartAttribute(?string $value): string
     {
         $value = date('Y-m-d', strtotime($value));
 
@@ -60,10 +53,10 @@ class Calendar extends Model
     /**
      * Get the mutated "end" attribute.
      *
-     * @param  string  $value
+     * @param  string|null  $value
      * @return string
      */
-    public function getEndAttribute(string $value): string
+    public function getEndAttribute(?string $value): string
     {
         $value = date('Y-m-d', strtotime($value));
 
@@ -87,9 +80,9 @@ class Calendar extends Model
     /**
      * Add a where 'cms_user_id' clause to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $userId
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeByUserId(Builder $query, int $userId): Builder
     {
@@ -99,10 +92,10 @@ class Calendar extends Model
     /**
      * Build a query based on active dates.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  string|null  $start
      * @param  string|null  $end
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeActive(Builder $query, ?string $start = null, ?string $end = null): Builder
     {
@@ -122,8 +115,8 @@ class Calendar extends Model
     /**
      * Build a query based on inactive dates.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeInactive(Builder $query): Builder
     {

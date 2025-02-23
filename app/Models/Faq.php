@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Traits\HasCollection;
 use App\Models\Alt\Traits\HasLanguage;
+use App\Models\Alt\Traits\QueriesTrait;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Faq extends Model
 {
-    use HasCollection, HasLanguage;
+    use QueriesTrait, HasCollection, HasLanguage;
 
     /**
      * Type of the collection.
@@ -33,13 +34,6 @@ class Faq extends Model
     protected $fillable = [
         'collection_id', 'position', 'visible'
     ];
-
-    /**
-     * The attributes that are not updatable.
-     *
-     * @var array
-     */
-    protected array $notUpdatable = [];
 
     /**
      * Set languages a one-to-many relationship.

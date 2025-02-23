@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Alt\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;
 
 trait LanguageRelationsTrait
 {
@@ -11,7 +11,7 @@ trait LanguageRelationsTrait
      *
      * @param  string|array  $relations
      * @param  array  $attributes
-     * @param  \App\Models\Alt\Eloquent\Model|int  $model
+     * @param  \Illuminate\Database\Eloquent\Model|int  $model
      * @return array
      */
     protected function updateOrCreateLanguageRelations(
@@ -54,7 +54,7 @@ trait LanguageRelationsTrait
      *
      * @param  string|array  $relations
      * @param  array  $attributes
-     * @param  \App\Models\Alt\Eloquent\Model|int  $model
+     * @param  \Illuminate\Database\Eloquent\Model|int  $model
      * @param  bool  $allLanguages
      * @return array
      */

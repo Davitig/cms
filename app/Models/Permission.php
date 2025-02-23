@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Eloquent\Builder;
-use App\Models\Alt\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Permission extends Model
 {
@@ -25,13 +25,6 @@ class Permission extends Model
     protected $fillable = [
         'cms_user_role_id', 'route_name'
     ];
-
-    /**
-     * The attributes that are not updatable.
-     *
-     * @var array
-     */
-    protected array $notUpdatable = [];
 
     /**
      * Hidden route group/resource names.
@@ -70,9 +63,9 @@ class Permission extends Model
     /**
      * Add a where 'cms_user_role_id' clause to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $value
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeRoleId(Builder $query, int $value): Builder
     {
@@ -82,9 +75,9 @@ class Permission extends Model
     /**
      * Add a where 'route_name' clause to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  string  $routeName
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeRouteName(Builder $query, string $routeName): Builder
     {
@@ -94,7 +87,7 @@ class Permission extends Model
     /**
      * Determine if the user has access to the given route.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  string  $routeName
      * @return bool
      */
@@ -106,7 +99,7 @@ class Permission extends Model
     /**
      * Clear permissions from the database.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $roleId
      * @return mixed
      */

@@ -357,7 +357,9 @@ function make_sub_items(
     }
 
     if (! is_array($items)) {
-        return $baseAll ? $data : new Collection($data);
+        $collection = get_class($items);
+
+        return $baseAll ? $data : new $collection($data);
     }
 
     return $data;

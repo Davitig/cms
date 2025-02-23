@@ -2,17 +2,17 @@
 
 namespace App\Models\Alt\Traits;
 
-use App\Models\Alt\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder;
 
 trait LanguageTrait
 {
     /**
      * Build a query by foreign model.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $id
      * @param  mixed  $currentLang
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeByForeignLanguage(Builder $query, int $id, mixed $currentLang = true): Builder
     {
@@ -22,9 +22,9 @@ trait LanguageTrait
     /**
      * Add a where "language_id" clause to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  mixed  $currentLang
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeWhereLanguage(Builder $query, mixed $currentLang = true): Builder
     {

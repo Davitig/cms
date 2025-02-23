@@ -76,7 +76,7 @@ class AdminTranslationsController extends Controller implements HasMiddleware
     public function edit(string $id)
     {
         $data['items'] = $this->model->joinLanguage(false)
-            ->where('id', $id)
+            ->whereKey($id)
             ->getOrFail();
 
         $data['transTypes'] = (array) cms_config('trans_types');

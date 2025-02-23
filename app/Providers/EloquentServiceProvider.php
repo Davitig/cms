@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Providers\Admin\AdminEloquentUserProvider;
+use App\Providers\Admin\EloquentCmsUserProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
@@ -21,8 +21,8 @@ class EloquentServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->app['auth']->provider('cmsEloquent', function (Application $app, array $config) {
-            return new AdminEloquentUserProvider($app['hash'], $config['model']);
+        $this->app['auth']->provider('cms', function (Application $app, array $config) {
+            return new EloquentCmsUserProvider($app['hash'], $config['model']);
         });
     }
 }

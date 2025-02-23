@@ -2,9 +2,9 @@
 
 namespace App\Models\Alt\Traits;
 
-use App\Models\Alt\Eloquent\Builder;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -62,7 +62,7 @@ trait SettingsFileTrait
     /**
      * Get the data based on the admin collection.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  array|string  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
@@ -77,7 +77,7 @@ trait SettingsFileTrait
     /**
      * Get the data based on the public collection.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  array|string  $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
@@ -92,8 +92,8 @@ trait SettingsFileTrait
     /**
      * Build a query based on the admin collection.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeAdminSettings(Builder $query): Builder
     {
@@ -105,8 +105,8 @@ trait SettingsFileTrait
     /**
      * Build a query based on the public collection.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopePublicSettings(Builder $query): Builder
     {

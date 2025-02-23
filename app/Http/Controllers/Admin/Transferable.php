@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Alt\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 trait Transferable
@@ -48,12 +50,12 @@ trait Transferable
     /**
      * Transfer model recursively with its child item(s).
      *
-     * @param  \App\Models\Alt\Eloquent\Model  $model
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @param  string  $column
      * @param  string  $columnValue
      * @return void
      */
-    protected function transferRecursively(Model $model, string $column, string $columnValue)
+    protected function transferRecursively(Model $model, string $column, string $columnValue): void
     {
         $items = $this->model->where('parent_id', $model->id)->get(['id']);
 
@@ -74,7 +76,9 @@ trait Transferable
      * @param  string|null  $message
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    protected function getTransferResponse(Request $request, string $type, ?string $message = null)
+    protected function getTransferResponse(
+        Request $request, string $type, ?string $message = null
+    ): JsonResponse|RedirectResponse
     {
         if ($request->expectsJson()) {
             return response()->json(fill_data($type, $message));

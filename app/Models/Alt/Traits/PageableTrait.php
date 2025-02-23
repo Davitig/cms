@@ -2,18 +2,18 @@
 
 namespace App\Models\Alt\Traits;
 
-use App\Models\Alt\Eloquent\Builder;
 use App\Models\Page\Page;
+use Illuminate\Database\Eloquent\Builder;
 
 trait PageableTrait
 {
     /**
      * Add a "pages" join to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  string  $type
      * @param  string  $foreignKey
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeJoinPage(
         Builder $query, string $type = 'right', string $foreignKey = 'collection_id'

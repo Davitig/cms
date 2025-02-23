@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Eloquent\Builder;
+use App\Models\Alt\Traits\QueriesTrait;
 use App\Models\Alt\User\User as Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 
 class CmsUser extends Model
 {
+    use QueriesTrait;
+
     /**
      * The table associated with the model.
      *
@@ -24,13 +27,6 @@ class CmsUser extends Model
     protected $fillable = [
         'email', 'cms_user_role_id', 'first_name', 'last_name', 'phone', 'address', 'blocked', 'photo', 'password'
     ];
-
-    /**
-     * The attributes that are not updatable.
-     *
-     * @var array
-     */
-    protected array $notUpdatable = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -119,9 +115,9 @@ class CmsUser extends Model
     /**
      * Add a where "cms_user_role_id" clause to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $roleId
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeRoleId(Builder $query, int $roleId): Builder
     {
@@ -131,8 +127,8 @@ class CmsUser extends Model
     /**
      * Add a 'cms_user_roles' join to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeJoinRole(Builder $query): Builder
     {
@@ -144,9 +140,9 @@ class CmsUser extends Model
     /**
      * Filter a query by specific parameters.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  \Illuminate\Http\Request  $request
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeAdminFilter(Builder $query, Request $request): Builder
     {

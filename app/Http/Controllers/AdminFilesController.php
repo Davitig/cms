@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Admin\LanguageRelationsTrait;
 use App\Http\Controllers\Admin\Positionable;
 use App\Http\Controllers\Admin\VisibilityTrait;
-use App\Models\Alt\Eloquent\Model;
 use App\Models\Alt\Contracts\Fileable;
 use App\Models\Alt\Traits\HasGallery;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 
@@ -37,12 +37,12 @@ class AdminFilesController extends Controller
      * Get a listing of the resource.
      *
      * @param  string  $foreignId
-     * @param  \App\Models\Alt\Eloquent\Model  $foreignModel
+     * @param  \Illuminate\Database\Eloquent\Model  $foreignModel
      * @return array
      */
     public function indexData(string $foreignId, Model $foreignModel)
     {
-        $data['foreignModels'] = $foreignModel->where('id', $foreignId)
+        $data['foreignModels'] = $foreignModel->whereKey($foreignId)
             ->joinLanguage(false)
             ->getOrFail();
 
@@ -125,7 +125,7 @@ class AdminFilesController extends Controller
     {
         if ($this->request->expectsJson()) {
             $data['items'] = $this->model->joinLanguage(false)
-                ->where('id', $id)
+                ->whereKey($id)
                 ->getOrFail();
 
             return response()->json([

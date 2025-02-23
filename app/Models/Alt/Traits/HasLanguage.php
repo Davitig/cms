@@ -2,9 +2,9 @@
 
 namespace App\Models\Alt\Traits;
 
-use App\Models\Alt\Eloquent\Builder;
-use App\Models\Alt\Eloquent\Model;
 use Closure;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait HasLanguage
@@ -13,7 +13,7 @@ trait HasLanguage
      * Set languages a one-to-many relationship.
      *
      * @param  bool  $relation
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\Alt\Eloquent\Model
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\Illuminate\Database\Eloquent\Model
      */
     abstract public function languages(bool $relation = true): HasMany|Model;
 
@@ -39,8 +39,8 @@ trait HasLanguage
     /**
      * Add a languages cross join to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeCrossMainLanguages(Builder $query): Builder
     {
@@ -50,10 +50,10 @@ trait HasLanguage
     /**
      * Add a "*_languages" join to the query.
      *
-     * @param  \App\Models\Alt\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  mixed  $currentLang
      * @param  array|string  $columns
-     * @return \App\Models\Alt\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeJoinLanguage(
         Builder $query, mixed $currentLang = true, array|string $columns = []

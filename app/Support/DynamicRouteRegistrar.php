@@ -3,7 +3,7 @@
 namespace App\Support;
 
 use App\Models\Alt\Contracts\Collection as CollectionContract;
-use App\Models\Alt\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\Page\Page;
 use Closure;
 use Illuminate\Foundation\Application;
@@ -380,7 +380,7 @@ class DynamicRouteRegistrar
     /**
      * Set the deep implicit route.
      *
-     * @param  \App\Models\Alt\Eloquent\Model  $implicitModel
+     * @param  \Illuminate\Database\Eloquent\Model  $implicitModel
      * @param  int  $segmentsLeft
      * @return bool
      */
