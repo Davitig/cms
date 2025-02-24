@@ -159,18 +159,20 @@ $(function () {
                             $(inputGeneral).each(function (i, e) {
                                 item = $(e);
                                 if (item.val() !== element) {
-                                    item.val(element);
                                     if (item.is(':checkbox')) {
-                                        let bool = element === 1;
-                                        item.prop('checked', bool);
-                                    }
-                                    if (item.is('select')) {
-                                        item.trigger('change');
+                                        item.prop('checked', element === 1);
+                                    } else {
+                                        item.val(element);
+                                        if (item.is('select')) {
+                                            item.trigger('change');
+                                        }
                                     }
                                 }
                             });
                         } else if (item.val() !== element) {
-                            item.val(element);
+                            if (! item.is(':checkbox')) {
+                                item.val(element);
+                            }
                         }
                     });
                 }

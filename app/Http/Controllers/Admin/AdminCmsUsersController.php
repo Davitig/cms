@@ -111,7 +111,7 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
      * @param  string  $id
      * @return \Illuminate\Contracts\View\View
      */
-    public function show(int $id)
+    public function show(string $id)
     {
         $data['current'] = $this->model->joinRole()->findOrFail($id);
 

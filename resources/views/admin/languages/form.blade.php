@@ -46,7 +46,7 @@
         <div class="form-group">
             <label class="col-sm-6 control-label">Visible:</label>
             <div class="col-sm-6">
-                {{ html()->checkbox('visible')->id('visible' . $current->language)
+                {{ html()->checkbox('visible')->id('visible')
                 ->class('iswitch iswitch-secondary')->data('lang', 1) }}
             </div>
         </div>

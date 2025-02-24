@@ -146,6 +146,7 @@ select .sub-item {padding-left:20px;}
 .user-info-navbar .user-info-menu > li.language-switcher ul a > img {margin-right:5px;}
 .user-info-navbar .user-info-menu .user-profile-menu > li button {padding:0 0 15px;}
 .user-profile-menu > li button {display:block;color:#979898;background:none;padding:0 0 15px;border:0;}
+.profile-env .user-timeline-stories .timeline-story .story-content.padl0 {padding-left:0;}
 
 /* fix & collapse menu at the same time */
 /*.sidebar-menu.fixed.collapsed .sidebar-menu-inner {position:fixed;}*/
