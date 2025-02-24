@@ -19,8 +19,6 @@ return new class extends Migration
             $table->string('color', 16)->nullable();
             $table->dateTime('start')->nullable();
             $table->dateTime('end')->nullable();
-            $table->time('time_start')->nullable();
-            $table->time('time_end')->nullable();
             $table->timestamps();
 
             $table->foreign('cms_user_id')->references('id')

@@ -53,7 +53,7 @@ class AdminCalendarController extends Controller
         $this->request->validate(['title' => 'required']);
 
         if ($id = $this->request->get('id')) {
-            $this->model->findOrFail($id)->updateEvent($this->request);
+            $this->model->findOrFail($id)->update($this->request->all());
         } else {
             $input = $this->request->all();
             $input['color'] = $this->model->getRandomColor();

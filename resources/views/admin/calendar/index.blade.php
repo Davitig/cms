@@ -104,7 +104,7 @@
                     let $event = $(this).find('.form-control'),
                         title = $event.val().trim();
 
-                    if (title.length >= 2) {
+                    if (title.length) {
                         let input = {'title':title, '_method':'put', '_token':"{{$csrfToken}}"};
 
                         $.post("{{cms_route('calendar.save')}}", input, function(res) {
@@ -144,7 +144,7 @@
                     } else {
                         $event.focus();
 
-                        alert('Title must contain at least 3 characters');
+                        alert('Title must contain at least 1 character');
                     }
                 });
 
