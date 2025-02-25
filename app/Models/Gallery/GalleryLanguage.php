@@ -30,11 +30,11 @@ class GalleryLanguage extends Model
      * Add a where "gallery_id" clause to the query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  int  $id
+     * @param  int  $foreignKey
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeForeignId(Builder $query, int $id): Builder
+    public function scopeForeignKey(Builder $query, int $foreignKey): Builder
     {
-        return $query->where('gallery_id', $id);
+        return $query->where('gallery_id', $foreignKey);
     }
 }

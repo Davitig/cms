@@ -16,7 +16,7 @@ trait LanguageTrait
      */
     public function scopeByForeignLanguage(Builder $query, int $id, mixed $currentLang = true): Builder
     {
-        return $query->foreignId($id)->whereLanguage($currentLang);
+        return $query->foreignKey($id)->whereLanguage($currentLang);
     }
 
     /**

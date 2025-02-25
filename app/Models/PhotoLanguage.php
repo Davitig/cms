@@ -30,11 +30,11 @@ class PhotoLanguage extends Model
      * Add a where "photo_id" clause to the query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  int  $id
+     * @param  int  $foreignKey
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeForeignId(Builder $query, int $id): Builder
+    public function scopeForeignKey(Builder $query, int $foreignKey): Builder
     {
-        return $query->where('photo_id', $id);
+        return $query->where('photo_id', $foreignKey);
     }
 }

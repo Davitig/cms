@@ -58,7 +58,7 @@ trait FileTrait
     public function scopeForAdmin(Builder $query, int $foreignId, mixed $currentLang = true): Builder
     {
         return $query->joinLanguage($currentLang)
-            ->byForeign($foreignId)
+            ->foreignKey($foreignId)
             ->positionDesc();
     }
 
@@ -73,7 +73,7 @@ trait FileTrait
     public function scopeForPublic(Builder $query, int $foreignId, mixed $currentLang = true): Builder
     {
         return $query->joinLanguage($currentLang)
-            ->byForeign($foreignId)
+            ->foreignKey($foreignId)
             ->whereVisible()
             ->positionDesc();
     }

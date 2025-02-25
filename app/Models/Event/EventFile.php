@@ -53,14 +53,14 @@ class EventFile extends Model implements Fileable
     }
 
     /**
-     * Add a where foreign id clause to the query.
+     * Add a where foreign key clause to the query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  int  $foreignId
+     * @param  int  $foreignKey
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeByForeign(Builder $query, int $foreignId): Builder
+    public function scopeForeignKey(Builder $query, int $foreignKey): Builder
     {
-        return $query->where('event_id', $foreignId);
+        return $query->where('event_id', $foreignKey);
     }
 }
