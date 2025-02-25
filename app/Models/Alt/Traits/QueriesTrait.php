@@ -29,6 +29,27 @@ trait QueriesTrait
     }
 
     /**
+     * Add a select exists statement to the query.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $from
+     * @param  string  $foreignKey
+     * @param  string  $as
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSelectExists(
+        Builder $query, string $from, string $foreignKey, string $as
+    ): Builder
+    {
+        $queryString = $query->getQuery()->newQuery()
+            ->from($from)
+            ->whereColumn($this->qualifyColumn($this->getKeyName()), $foreignKey)
+            ->toSql();
+
+        return $query->selectRaw('(select exists(' . $queryString . ')) as ' . $as);
+    }
+
+    /**
      * Execute the query as a "select" statement or throw an exception.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query

@@ -25,22 +25,18 @@ trait FileableTrait
     }
 
     /**
-     * Determine if the model has a file(s).
+     * Add a select files exists statement to the query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeFilesExists(Builder $query): Builder
     {
-        $keyName = $this->getKeyName();
-        $tableId = ($table = $this->getTable()).'.'.$keyName;
-
-        $queryString = $query->getQuery()->newQuery()
-            ->from(($table = str($table)->singular()) . '_files')
-            ->whereColumn($table . '_' . $keyName, $tableId)
-            ->toSql();
-
-        return $query->selectRaw('(select exists(' . $queryString . ')) as files_exists');
+        return $query->selectExists(
+            ($table = str($this->getTable())->singular()) . '_files',
+            $table . '_' . $this->getKeyName(),
+            'files_exists'
+        );
     }
 
     /**
