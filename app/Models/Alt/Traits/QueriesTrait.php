@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\RecordsNotFoundException;
+use Illuminate\Support\Arr;
 
 trait QueriesTrait
 {
@@ -26,6 +27,24 @@ trait QueriesTrait
         }
 
         return array_map(fn ($value) => $tablePrefix . $value, $fillable);
+    }
+
+    /**
+     * Add a new qualified select column to the query.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  mixed  $columns
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeAddQualifiedSelect(Builder $query, ...$columns): Builder
+    {
+        foreach (Arr::flatten($columns) as $as => $column) {
+            $columns[$as] = str_contains($column, '.')
+                ? $column
+                : $this->qualifyColumn($column);
+        }
+
+        return $query->addSelect($columns);
     }
 
     /**
