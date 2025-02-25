@@ -42,14 +42,14 @@
                             <h2 class="text-primary inline padr">Roles:</h2>
                             <div id="roles-btn" class="inline">
                                 @foreach($roles as $id => $role)
-                                    <a href="{{ cms_route('permissions.index', ['role' => $id]) }}" class="btn{{ $id == $activeRoleId ? ' btn-info' : '' }}">{{ ucfirst($role) }}</a>
+                                    <a href="{{ cms_route('permissions.index', ['role' => $id]) }}" class="btn btn-{{ $id == $activeRoleId ? 'info' : 'gray' }}">{{ ucfirst($role) }}</a>
                                 @endforeach
                             </div>
-                            <div id="multi-check-all" class="multi-check dib padl fs-14">
-                                <a href="#" class="check-action" data-group="*" data-action="check">Check all</a> /
-                                <a href="#" class="check-action" data-group="*" data-action="uncheck">Uncheck all</a> /
-                                <a href="#" class="check-action" data-group="*" data-action="toggle">Toggle</a>
-                            </div>
+                        </div>
+                        <div id="multi-check-all" class="multi-check dib padl fs-14">
+                            <a href="#" class="check-action" data-group="*" data-action="check">Check all</a> /
+                            <a href="#" class="check-action" data-group="*" data-action="uncheck">Uncheck all</a> /
+                            <a href="#" class="check-action" data-group="*" data-action="toggle">Toggle</a>
                         </div>
                     </div>
                 </div>
@@ -102,8 +102,8 @@
             <div class="panel panel-default">
                 <div class="btn-action text-center">
                     <button type="submit" class="btn btn-secondary btn-icon-standalone" title="{{ trans('general.update') }}">
-                        <i class="fa fa-update"></i>
-                        <span>{{ trans('general.save') }}</span>
+                        <i class="fa fa-save"></i>
+                        <span>{{ trans('general.update') }}</span>
                     </button>
                     <a href="{{ cms_route('cmsUserRoles.index') }}" class="btn btn-blue btn-icon-standalone" title="{{ trans('general.back') }}">
                         <i class="fa fa-arrow-left"></i>

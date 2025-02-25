@@ -134,6 +134,7 @@ select .sub-item {padding-left:20px;}
 .navbar.horizontal-menu.navbar-minimal.navbar-fixed-top + .page-container,
 .navbar.horizontal-menu.navbar-fixed-top + .page-container {margin-top:0;}
 /* dropdowns */
+.navbar.horizontal-menu .navbar-inner .navbar-nav > li:hover {z-index:100;}
 .navbar.horizontal-menu .navbar-inner > .nav > li > form.form-btn {padding:0 15px;}
 .navbar.horizontal-menu .navbar-inner > .nav > li i.text-white {color:#fff;}
 .navbar.horizontal-menu .navbar-inner > .nav > li .dropdown-menu,

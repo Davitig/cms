@@ -6,29 +6,13 @@
 </li>
 <li>
     <a href="{{ $url = cms_route('cmsUsers.index') }}">
-        <i class="fa fa-users" title="User Groups"></i>
-        <span class="title">User Groups</span>
+        <i class="{{icon_type('cmsUsers')}}" title="CMS Users"></i>
+        <span class="title">CMS Users</span>
     </a>
-    <ul>
-        <li>
-            <a href="{{ $url }}">
-                <i class="{{icon_type('cmsUsers')}}" title="CMS Users"></i>
-                <span class="title">CMS Users</span>
-            </a>
-        </li>
-    </ul>
 </li>
 <li>
     <a href="{{ $url = cms_route('cmsSettings.index') }}">
-        <i class="fa fa-gears" title="CMS Settings"></i>
+        <i class="fa fa-gear" title="CMS Settings"></i>
         <span class="title">CMS Settings</span>
     </a>
-    <ul>
-        <li>
-            <a href="{{ $url }}">
-                <i class="fa fa-gear" title="Admin Settings"></i>
-                <span class="title">CMS Settings</span>
-            </a>
-        </li>
-    </ul>
 </li>

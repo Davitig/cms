@@ -16,11 +16,11 @@
 <div class="row">
     <div class="col-lg-6">
         <div class="form-group{{($error = $errors->first('full_access')) ? ' validate-has-error' : '' }}">
-            <label class="col-lg-4 col-sm-2 control-label required">Full Access:</label>
+            <label class="col-lg-4 col-sm-2 control-label required">Access:</label>
             <div class="col-lg-8 col-sm-10">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-ellipsis-h"></i></span>
-                    {{ html()->select('full_access', ['' => '-- Full Access --', 0 => 'No', 1 => 'Yes'])
+                    {{ html()->select('full_access', [0 => 'Custom', 1 => 'Full Access'])
                     ->id('full_access' . $current->language)->class('form-control select')->data('lang', 1) }}
                 </div>
                 @if ($error)
