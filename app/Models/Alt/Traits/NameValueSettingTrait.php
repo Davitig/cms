@@ -55,7 +55,7 @@ trait NameValueSettingTrait
 
         $uncheckedBoolValues = array_filter(
             static::$defaultNamedValues,
-            fn ($value, $key) => ! array_key_exists($key, $input) && $value === 1,
+            fn ($value, $key) => ! array_key_exists($key, $input) && is_int($value),
             ARRAY_FILTER_USE_BOTH
         );
 
