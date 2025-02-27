@@ -3,17 +3,45 @@
 namespace App\Models\Alt\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 trait NameValueSettingTrait
 {
     /**
-     * Get a list of the settings.
+     * Indicates whether unchecked boolean values should be ignored from saving.
+     *
+     * @var bool
+     */
+    protected bool $ignoreUnchecked = false;
+
+    /**
+     * Get the list of default named values.
      *
      * @return array
      */
-    public function getSettings(): array
+    abstract public function defaultNamedValues(): array;
+
+    /**
+     * Set whether unchecked boolean values should be ignored from saving.
+     *
+     * @param  bool  $value
+     * @return $this
+     */
+    public function ignoreUnchecked(bool $value = true): static
     {
-        $data = $this->get()->pluck('value', 'name')->toArray();
+        $this->ignoreUnchecked = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get a list of the settings.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getSettings(): Collection
+    {
+        $data = $this->pluck('value', 'name')->toArray();
 
         foreach ($data as $key => $value) {
             if (is_numeric($value)) {
@@ -25,7 +53,7 @@ trait NameValueSettingTrait
             }
         }
 
-        return array_merge(static::$defaultNamedValues, $data);
+        return new Collection(array_merge($this->defaultNamedValues(), $data));
     }
 
     /**
@@ -36,10 +64,13 @@ trait NameValueSettingTrait
      * @param  array  $values
      * @return static
      */
-    public function scopeFirstOrDefault(Builder $query, array $attributes = [], array $values = []): static
+    public function scopeFirstOrDefault(
+        Builder $query, array $attributes = [], array $values = []
+    ): static
     {
         return $query->firstOrNew($attributes, $values ?: [
-            'name' => key(self::$defaultNamedValues), 'value' => current(self::$defaultNamedValues)
+            'name' => key($this->defaultNamedValues()),
+            'value' => current($this->defaultNamedValues())
         ]);
     }
 
@@ -53,18 +84,20 @@ trait NameValueSettingTrait
     {
         $count = 0;
 
-        $uncheckedBoolValues = array_filter(
-            static::$defaultNamedValues,
-            fn ($value, $key) => ! array_key_exists($key, $input) && is_int($value),
-            ARRAY_FILTER_USE_BOTH
-        );
+        if (! $this->ignoreUnchecked) {
+            $uncheckedValues = array_filter(
+                $this->defaultNamedValues(),
+                fn ($value, $key) => ! array_key_exists($key, $input) && is_int($value),
+                ARRAY_FILTER_USE_BOTH
+            );
 
-        array_walk($uncheckedBoolValues, fn (&$value, $key) => $value = 0);
+            array_walk($uncheckedValues, fn (&$value, $key) => $value = 0);
 
-        $input = array_merge($input, $uncheckedBoolValues);
+            $input = array_merge($input, $uncheckedValues);
+        }
 
         foreach ($input as $key => $value) {
-            if (! array_key_exists($key, static::$defaultNamedValues)) {
+            if (! array_key_exists($key, $this->defaultNamedValues())) {
                 continue;
             }
 

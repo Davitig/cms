@@ -55,15 +55,19 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function loadCMSRoutes(Router $router): void
     {
-        $router->prefix(cms_slug())->group(base_path('routes/cms.php'));
+        $router->prefix(cms_slug())->name(cms_route_name())->group(function ($router) {
+            $router->group([], base_path('routes/cms.php'));
+        });
 
         if (is_multilanguage()) {
             $cmsSlug = cms_slug();
 
             foreach (languages() as $lang => $value) {
-                $router->prefix($lang . '/' . $cmsSlug)->name($lang . '.')->group(
-                    base_path('routes/cms.php')
-                );
+                $router->prefix($lang . '/' . $cmsSlug)->name(
+                    $lang . '.' . cms_route_name()
+                )->group(function ($router) {
+                    $router->group([], base_path('routes/cms.php'));
+                });
             }
         }
     }

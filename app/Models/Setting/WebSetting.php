@@ -26,13 +26,14 @@ class WebSetting extends Model
     ];
 
     /**
-     * The list of default named values.
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public static array $defaultNamedValues = [
-        'email' => '',
-        'phone' => '',
-        'address' => ''
-    ];
+    public function defaultNamedValues(): array
+    {
+        return [
+            'email' => '',
+            'phone' => '',
+            'address' => ''
+        ];
+    }
 }

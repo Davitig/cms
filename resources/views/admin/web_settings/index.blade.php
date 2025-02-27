@@ -29,19 +29,19 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">Email:</label>
                 <div class="col-sm-5">
-                    {{ html()->text('email', $webSettings['email'])->class('form-control') }}
+                    {{ html()->text('email', $webSettings->get('email'))->class('form-control') }}
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">Phone:</label>
                 <div class="col-sm-5">
-                    {{ html()->text('phone', $webSettings['phone'])->class('form-control') }}
+                    {{ html()->text('phone', $webSettings->get('phone'))->class('form-control') }}
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">Address:</label>
                 <div class="col-sm-5">
-                    {{ html()->text('address', $webSettings['address'])->class('form-control') }}
+                    {{ html()->text('address', $webSettings->get('address'))->class('form-control') }}
                 </div>
             </div>
         </div>
