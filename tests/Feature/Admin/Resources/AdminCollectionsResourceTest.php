@@ -9,14 +9,18 @@ class AdminCollectionsResourceTest extends TestCase
 {
     public function test_admin_collections_resource_index()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('collections.index'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('collections.index'));
 
         $response->assertOk();
     }
 
     public function test_admin_collections_resource_create()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('collections.create'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('collections.create'));
 
         $response->assertOk();
     }
@@ -26,7 +30,9 @@ class AdminCollectionsResourceTest extends TestCase
      */
     public function test_admin_collections_resource_store()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('collections.store'), [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('collections.store'), [
             'title' => 'List of articles',
             'type' => 'articles',
             'admin_order_by' => 'position',
@@ -42,9 +48,9 @@ class AdminCollectionsResourceTest extends TestCase
 
     public function test_admin_collections_resource_edit()
     {
-        $id = (new Collection)->valueOrFail('id');
-
-        $response = $this->actingAs($this->getUser())->get(cms_route('collections.edit', [$id]));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('collections.edit', [(new Collection)->valueOrFail('id')]));
 
         $response->assertOk();
     }
@@ -54,9 +60,11 @@ class AdminCollectionsResourceTest extends TestCase
      */
     public function test_admin_collections_resource_update()
     {
-        $id = (new Collection)->orderDesc()->valueOrFail('id');
-
-        $response = $this->actingAs($this->getUser())->put(cms_route('collections.update', [$id]), [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('collections.update', [
+            (new Collection)->orderDesc()->valueOrFail('id')
+        ]), [
             'title' => 'List of news',
             'admin_order_by' => 'position',
             'admin_sort' => 'desc',
@@ -71,7 +79,9 @@ class AdminCollectionsResourceTest extends TestCase
 
     public function test_admin_collections_resource_validate_invalid_selection()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('collections.store'), [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('collections.store'), [
             'admin_order_by' => 'id',
             'web_order_by' => 'title'
         ]);
@@ -81,7 +91,9 @@ class AdminCollectionsResourceTest extends TestCase
 
     public function test_admin_collections_resource_destroy()
     {
-        $response = $this->actingAs($this->getUser())->delete(cms_route('collections.destroy', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->delete(cms_route('collections.destroy', [
             (new Collection)->valueOrFail('id')
         ]));
 

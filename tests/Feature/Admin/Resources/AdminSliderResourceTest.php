@@ -8,14 +8,18 @@ class AdminSliderResourceTest extends TestAdminResources
 {
     public function test_admin_slider_resource_index()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('slider.index'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('slider.index'));
 
         $response->assertOk();
     }
 
     public function test_admin_slider_resource_create()
     {
-        $response = $this->actingAs($this->getUser())->getJson(cms_route('slider.create'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->getJson(cms_route('slider.create'));
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -25,7 +29,9 @@ class AdminSliderResourceTest extends TestAdminResources
      */
     public function test_admin_slider_resource_store()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('slider.store'), [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('slider.store'), [
             'title' => fake()->sentence(2),
             'file' => fake()->imageUrl()
         ]);
@@ -35,7 +41,9 @@ class AdminSliderResourceTest extends TestAdminResources
 
     public function test_admin_slider_resource_edit()
     {
-        $response = $this->actingAs($this->getUser())->getJson(cms_route('slider.edit', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->getJson(cms_route('slider.edit', [
             (new Slider)->valueOrFail('id')
         ]));
 
@@ -47,7 +55,9 @@ class AdminSliderResourceTest extends TestAdminResources
      */
     public function test_admin_slider_resource_update()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('slider.update', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('slider.update', [
             (new Slider)->valueOrFail('id')
         ]), [
             'title' => fake()->sentence(2),
@@ -59,7 +69,9 @@ class AdminSliderResourceTest extends TestAdminResources
 
     public function test_admin_slider_resource_validate_required()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('slider.store'), [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('slider.store'), [
             // empty data
         ]);
 
@@ -68,7 +80,9 @@ class AdminSliderResourceTest extends TestAdminResources
 
     public function test_admin_slider_resource_visibility()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('slider.visibility', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('slider.visibility', [
             (new Slider)->valueOrFail('id')
         ]));
 
@@ -77,14 +91,18 @@ class AdminSliderResourceTest extends TestAdminResources
 
     public function test_admin_slider_resource_update_position()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('slider.updatePosition'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('slider.updatePosition'));
 
         $response->assertFound();
     }
 
     public function test_admin_slider_resource_destroy()
     {
-        $response = $this->actingAs($this->getUser())->delete(cms_route('slider.destroy', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->delete(cms_route('slider.destroy', [
             (new Slider)->valueOrFail('id')
         ]));
 

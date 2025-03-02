@@ -23,7 +23,7 @@ class AdminLoginTest extends TestCase
     public function test_admin_login_invalid_credentials(): void
     {
         $response = $this->post(cms_route('login.post'), [
-            'email' => 'invalid@email.com',
+            'email' => 'invalid@example.com',
             'password' => str()->random()
         ]);
 
@@ -33,8 +33,8 @@ class AdminLoginTest extends TestCase
     public function test_admin_login_success(): void
     {
         $response = $this->post(cms_route('login.post'), [
-            'email' => 'admin@example.com',
-            'password' => '123456'
+            'email' => 'test@example.com',
+            'password' => 'password'
         ]);
 
         $response->assertRedirect(cms_route('dashboard'));

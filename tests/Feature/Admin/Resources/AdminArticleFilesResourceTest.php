@@ -10,7 +10,9 @@ class AdminArticleFilesResourceTest extends TestAdminResources
 {
     public function test_admin_article_files_resource_index()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('articles.files.index', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('articles.files.index', [
             $this->createArticleModel()->id
         ]));
 
@@ -19,7 +21,9 @@ class AdminArticleFilesResourceTest extends TestAdminResources
 
     public function test_admin_article_files_resource_create()
     {
-        $response = $this->actingAs($this->getUser())->getJson(cms_route('articles.files.create', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->getJson(cms_route('articles.files.create', [
             $this->getArticleModel()->id
         ]));
 
@@ -31,7 +35,9 @@ class AdminArticleFilesResourceTest extends TestAdminResources
      */
     public function test_admin_article_files_resource_store()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('articles.files.store', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('articles.files.store', [
             $this->getArticleModel()->id
         ]), [
             'title' => fake()->sentence(2),
@@ -43,7 +49,9 @@ class AdminArticleFilesResourceTest extends TestAdminResources
 
     public function test_admin_article_files_resource_edit()
     {
-        $response = $this->actingAs($this->getUser())->getJson(cms_route('articles.files.edit', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->getJson(cms_route('articles.files.edit', [
             $this->getArticleModel()->id, (new ArticleFile)->valueOrFail('id')
         ]));
 
@@ -55,7 +63,9 @@ class AdminArticleFilesResourceTest extends TestAdminResources
      */
     public function test_admin_article_files_resource_update()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('articles.files.update', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('articles.files.update', [
             $this->getArticleModel()->id, (new ArticleFile)->valueOrFail('id')
         ]), [
             'title' => fake()->sentence(2),
@@ -67,7 +77,9 @@ class AdminArticleFilesResourceTest extends TestAdminResources
 
     public function test_admin_article_files_resource_validate_required()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('articles.files.store', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('articles.files.store', [
             $this->getArticleModel()->id
         ]), [
             // empty data
@@ -78,7 +90,9 @@ class AdminArticleFilesResourceTest extends TestAdminResources
 
     public function test_admin_article_files_resource_visibility()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('articles.files.visibility', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('articles.files.visibility', [
             (new ArticleFile)->valueOrFail('id')
         ]));
 
@@ -87,14 +101,18 @@ class AdminArticleFilesResourceTest extends TestAdminResources
 
     public function test_admin_article_files_resource_update_position()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('articles.files.updatePosition'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('articles.files.updatePosition'));
 
         $response->assertFound();
     }
 
     public function test_admin_article_files_resource_destroy()
     {
-        $response = $this->actingAs($this->getUser())->delete(cms_route('articles.files.destroy', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->delete(cms_route('articles.files.destroy', [
             $this->getArticleModel()->id, (new ArticleFile)->valueOrFail('id')
         ]));
 
