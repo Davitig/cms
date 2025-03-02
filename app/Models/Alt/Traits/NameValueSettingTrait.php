@@ -35,7 +35,7 @@ trait NameValueSettingTrait
     }
 
     /**
-     * Get a list of the settings.
+     * Get the result of the settings record.
      *
      * @return \Illuminate\Support\Collection
      */
@@ -57,25 +57,23 @@ trait NameValueSettingTrait
     }
 
     /**
-     * Get the first record matching the attributes or instantiate it.
+     * Find a record by its name.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  array  $attributes
-     * @param  array  $values
+     * @param  string  $column
      * @return static
      */
-    public function scopeFirstOrDefault(
-        Builder $query, array $attributes = [], array $values = []
-    ): static
+    public function scopeFindByName(Builder $query, string $column): static
     {
-        return $query->firstOrNew($attributes, $values ?: [
-            'name' => key($this->defaultNamedValues()),
-            'value' => current($this->defaultNamedValues())
-        ]);
+        return $query->whereName($column)->firstOrNew([], [
+            'name' => $column, 'value' => $this->defaultNamedValues()[$column]
+        ])->forceFill(array_filter(
+            [$this->getKeyName() => null] + array_fill_keys($this->getDates(), null)
+        ));
     }
 
     /**
-     * Save the list of settings.
+     * Save the settings model to the database.
      *
      * @param  array  $input
      * @return int

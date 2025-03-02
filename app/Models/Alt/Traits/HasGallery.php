@@ -116,7 +116,7 @@ trait HasGallery
      */
     public function scopeWhereVisible(Builder $query, int $value = 1): Builder
     {
-        return $query->where('visible', $value);
+        return $query->where($this->qualifyColumn('visible'), $value);
     }
 
     /**

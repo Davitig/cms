@@ -80,7 +80,7 @@ class Slider extends Model implements Fileable
     ): Builder
     {
         return $query->joinLanguage($currentLang, $columns)
-            ->where('visible', 1)
+            ->where($this->qualifyColumn('visible'), 1)
             ->whereNotNull('file')
             ->where('file', '!=', '')
             ->positionDesc();

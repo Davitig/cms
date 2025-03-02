@@ -44,17 +44,13 @@ abstract class Request extends FormRequest
     {
         if (! empty($input[$key])) {
             $input[$key] = (new Slugify)->slugify($input[$key]);
-        } elseif (! empty($altKeys)) {
-            $values = [];
 
-            foreach ($altKeys as $value) {
-                if (isset($input[$value])) {
-                    $values[] = $input[$value];
-                }
-            }
+            return;
+        }
 
-            if (! empty($values)) {
-                $input[$key] = (new Slugify)->slugify(implode('-', $values));
+        foreach ($altKeys as $altKey) {
+            if (! empty($input[$altKey])) {
+                $input[$key] = (new Slugify)->slugify($input[$altKey]);
             }
         }
     }
@@ -63,13 +59,13 @@ abstract class Request extends FormRequest
      * Boolify specified input values.
      *
      * @param array $input
-     * @param array $params
+     * @param array $keys
      * @return void
      */
-    protected function boolifyInput(array &$input, array $params): void
+    protected function boolifyInput(array &$input, array $keys): void
     {
-        foreach ($params as $param) {
-            $input[$param] = (int) ($input[$param] ?? 0);
+        foreach ($keys as $key) {
+            $input[$key] = (int) ($input[$key] ?? 0);
         }
     }
 }
