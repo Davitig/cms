@@ -45,7 +45,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('page_file_languages');
-
         Schema::dropIfExists('page_files');
     }
 };

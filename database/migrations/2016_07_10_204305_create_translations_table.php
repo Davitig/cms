@@ -40,7 +40,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('translation_languages');
-
         Schema::dropIfExists('translations');
     }
 };

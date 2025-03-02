@@ -17,21 +17,25 @@ class CmsUsersTableSeeder extends DatabaseSeeder
 
         DB::table('cms_users')->insert([
             [
-                'email' => 'admin@example.com',
+                'email' => $email = 'admin@example.com',
                 'cms_user_role_id' => 1,
                 'first_name' => 'Admin',
                 'last_name' => 'Admin',
                 'blocked' => 0,
-                'password' => '$2y$10$SGapfDy0uRJPxGD/KV0BaeW5YiP4tNN2kSFkEtvSA1P1t0AUX51oq', // 123456
+                'password' => bcrypt($this->command->ask(
+                    'Enter password for cms user: ' . $email
+                )),
                 'created_at' => $currentDate
             ],
             [
-                'email' => 'test@example.com',
+                'email' => $email = 'test@example.com',
                 'cms_user_role_id' => 2,
                 'first_name' => 'Test',
                 'last_name' => 'Test',
                 'blocked' => 0,
-                'password' => '$2y$10$SGapfDy0uRJPxGD/KV0BaeW5YiP4tNN2kSFkEtvSA1P1t0AUX51oq', // 123456
+                'password' => bcrypt($this->command->ask(
+                    'Enter password for cms user: ' . $email
+                )),
                 'created_at' => $currentDate
             ]
         ]);

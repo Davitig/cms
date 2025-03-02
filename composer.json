@@ -1,4 +1,5 @@
 {
+    "$schema": "https://getcomposer.org/schema.json",
     "name": "davitig/laravel-cms",
     "type": "project",
     "description": "Content Management System based on Laravel Framework.",
@@ -12,13 +13,13 @@
     ],
     "require": {
         "php": "^8.2",
-        "laravel/framework": "^11.9",
-        "laravel/tinker": "^2.9",
-        "laravel/ui": "^4.5",
-        "barryvdh/laravel-elfinder": "0.5.3",
+        "laravel/framework": "^12.0",
+        "laravel/tinker": "^2.10.1",
+        "laravel/ui": "^4.6",
+        "anhskohbo/no-captcha": "3.7.*",
+        "barryvdh/laravel-elfinder": "0.5.4",
         "cocur/slugify": "4.6.0",
-        "league/glide": "^2.3",
-        "mews/captcha": "3.3.*",
+        "league/glide": "3.0.0-RC2",
         "php-curl-class/php-curl-class": "11.0.*",
         "sabre/xml": "4.0.*",
         "spatie/laravel-html": "3.11.*",
@@ -27,12 +28,12 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
-        "laravel/pail": "^1.1",
+        "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.13",
-        "laravel/sail": "^1.26",
+        "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
-        "nunomaduro/collision": "^8.1",
-        "phpunit/phpunit": "^11.0.1"
+        "nunomaduro/collision": "^8.6",
+        "phpunit/phpunit": "^11.5.3"
     },
     "autoload": {
         "psr-4": {
@@ -67,12 +68,13 @@
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
-            "npx concurrently -k -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail\" \"npm run dev\" --names=server,queue,logs,vite"
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
         ]
     },
     "extra": {
         "laravel": {
             "dont-discover": [
+                "anhskohbo/no-captcha",
                 "barryvdh/laravel-elfinder"
             ]
         }

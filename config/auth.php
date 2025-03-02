@@ -15,7 +15,7 @@ return [
 
     'defaults' => [
         'guard' => env('AUTH_GUARD', 'cms'),
-        'passwords' => env('AUTH_PASSWORD_BROKER', 'web'),
+        'passwords' => env('AUTH_PASSWORD_BROKER', 'cms'),
     ],
 
     /*
@@ -39,12 +39,6 @@ return [
         'cms' => [
             'driver' => 'session',
             'provider' => 'cms_users',
-        ],
-
-        'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
-            'hash' => false,
         ],
     ],
 
@@ -71,9 +65,9 @@ return [
             'model' => env('AUTH_MODEL', App\Models\CmsUser::class),
         ],
 
-        // 'cms_users' => [
+        // 'users' => [
         //     'driver' => 'database',
-        //     'table' => 'cms_users',
+        //     'table' => 'users',
         // ],
     ],
 
