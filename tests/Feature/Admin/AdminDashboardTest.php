@@ -8,7 +8,9 @@ class AdminDashboardTest extends TestCase
 {
     public function test_admin_dashboard()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('dashboard'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('dashboard'));
 
         $response->assertOk();
     }
