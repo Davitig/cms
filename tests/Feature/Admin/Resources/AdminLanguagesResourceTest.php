@@ -3,11 +3,9 @@
 namespace Tests\Feature\Admin\Resources;
 
 use App\Models\Language;
-use Database\Seeders\LanguageTableSeeder;
-use Illuminate\Support\Facades\Schema;
-use Tests\TestCase;
+use Tests\Feature\Admin\TestAdmin;
 
-class AdminLanguagesResourceTest extends TestCase
+class AdminLanguagesResourceTest extends TestAdmin
 {
     /**
      * Get the language id.
@@ -22,14 +20,18 @@ class AdminLanguagesResourceTest extends TestCase
 
     public function test_admin_languages_resource_index()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('languages.index'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('languages.index'));
 
         $response->assertOk();
     }
 
     public function test_admin_languages_resource_create()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('languages.create'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('languages.create'));
 
         $response->assertOk();
     }
@@ -39,16 +41,14 @@ class AdminLanguagesResourceTest extends TestCase
      */
     public function test_admin_languages_resource_store()
     {
-        Schema::disableForeignKeyConstraints();
+        (new Language)->whereLanguage('te')->delete();
 
-        $this->seed(LanguageTableSeeder::class);
-
-        Schema::enableForeignKeyConstraints();
-
-        $response = $this->actingAs($this->getUser())->post(cms_route('languages.store'), [
-            'language' => 'cn',
-            'short_name' => 'cn',
-            'full_name' => 'Chinese',
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('languages.store'), [
+            'language' => 'te',
+            'short_name' => 'te',
+            'full_name' => 'Test language name',
         ]);
 
         $response->assertFound()->assertSessionHasNoErrors();
@@ -56,9 +56,9 @@ class AdminLanguagesResourceTest extends TestCase
 
     public function test_admin_languages_resource_edit()
     {
-        $id = $this->getLanguageId('cn');
-
-        $response = $this->actingAs($this->getUser())->get(cms_route('languages.edit', [$id]));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('languages.edit', [$this->getLanguageId('te')]));
 
         $response->assertOk();
     }
@@ -68,12 +68,12 @@ class AdminLanguagesResourceTest extends TestCase
      */
     public function test_admin_languages_resource_update()
     {
-        $id = $this->getLanguageId('cn');
-
-        $response = $this->actingAs($this->getUser())->put(cms_route('languages.update', [$id]), [
-            'language' => 'cn',
-            'short_name' => 'cn',
-            'full_name' => 'Chinese',
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('languages.update', [$this->getLanguageId('te')]), [
+            'language' => 'te',
+            'short_name' => 'te',
+            'full_name' => 'Test language full name',
         ]);
 
         $response->assertFound()->assertSessionHasNoErrors();
@@ -81,16 +81,18 @@ class AdminLanguagesResourceTest extends TestCase
 
     public function test_admin_languages_resource_destroy()
     {
-        $id = $this->getLanguageId('cn');
-
-        $response = $this->actingAs($this->getUser())->delete(cms_route('languages.destroy', [$id]));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->delete(cms_route('languages.destroy', [$this->getLanguageId('te')]));
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
     public function test_admin_languages_resource_validate_unique()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('languages.store'), [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('languages.store'), [
             'language' => 'en',
             'short_name' => 'en',
             'full_name' => 'English',
@@ -101,7 +103,9 @@ class AdminLanguagesResourceTest extends TestCase
 
     public function test_admin_languages_resource_validate_string_length()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('languages.store'), [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('languages.store'), [
             'language' => 'e',
             'short_name' => 'e',
             'full_name' => 'English',

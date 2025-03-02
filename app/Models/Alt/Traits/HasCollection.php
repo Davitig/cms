@@ -53,7 +53,7 @@ trait HasCollection
     {
         return $query->forAdmin($collection->id)
             ->orderBy(
-                $this->getTable() . '.' . $collection->admin_order_by, $collection->admin_sort
+                $this->qualifyColumn($collection->admin_order_by), $collection->admin_sort
             );
     }
 
@@ -68,7 +68,7 @@ trait HasCollection
     {
         return $query->forPublic($collection->id)
             ->orderBy(
-                $this->getTable() . '.' . $collection->web_order_by, $collection->web_sort
+                $this->qualifyColumn($collection->web_order_by), $collection->web_sort
             );
     }
 

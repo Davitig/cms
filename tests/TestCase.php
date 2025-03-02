@@ -2,13 +2,22 @@
 
 namespace Tests;
 
-use App\Models\CmsUser;
+use App\Models\Language;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-    protected function getUser(): CmsUser
+    protected function setUp(): void
     {
-        return (new CmsUser)->joinRole()->firstOrFail();
+        parent::setUp();
+
+        if (! (new Language)->exists()) {
+            (new Language)->create([
+                'language' => 'en',
+                'short_name' => 'en',
+                'full_name' => 'English',
+                'visible' => 1
+            ]);
+        }
     }
 }

@@ -5,15 +5,16 @@ namespace Tests\Feature\Admin;
 use App\Models\CmsUserRole;
 use Exception;
 use Illuminate\Support\Arr;
-use Tests\TestCase;
 
-class AdminPermissionsTest extends TestCase
+class AdminPermissionsTest extends TestAdmin
 {
     use AdminRoutesTrait;
 
     public function test_admin_permissions_index()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('permissions.index'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('permissions.index'));
 
         $response->assertOk();
     }
@@ -27,7 +28,9 @@ class AdminPermissionsTest extends TestCase
             throw new Exception('User role with custom access not found');
         }
 
-        $response = $this->actingAs($this->getUser())->post(cms_route('permissions.index', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('permissions.index', [
             'role_id' => $roleId,
             'permissions' => [current(Arr::flatten($this->getAllCMSRouteNames()))]
         ]));

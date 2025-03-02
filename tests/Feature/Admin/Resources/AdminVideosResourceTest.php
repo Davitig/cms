@@ -10,8 +10,10 @@ class AdminVideosResourceTest extends TestAdminResources
 {
     public function test_admin_videos_resource_index()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('videos.index', [
-            $this->createGalleryModel('videos')->id
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('videos.index', [
+            $this->getGalleryModel('videos')->id
         ]));
 
         $response->assertOk();
@@ -19,7 +21,9 @@ class AdminVideosResourceTest extends TestAdminResources
 
     public function test_admin_videos_resource_create()
     {
-        $response = $this->actingAs($this->getUser())->getJson(cms_route('videos.create', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->getJson(cms_route('videos.create', [
             $this->getGalleryModel('videos')->id
         ]));
 
@@ -31,7 +35,9 @@ class AdminVideosResourceTest extends TestAdminResources
      */
     public function test_admin_videos_resource_store()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('videos.store', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('videos.store', [
             $this->getGalleryModel('videos')->id
         ]), [
             'title' => fake()->sentence(2),
@@ -43,7 +49,9 @@ class AdminVideosResourceTest extends TestAdminResources
 
     public function test_admin_videos_resource_edit()
     {
-        $response = $this->actingAs($this->getUser())->getJson(cms_route('videos.edit', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->getJson(cms_route('videos.edit', [
             $this->getGalleryModel('videos')->id, (new Video)->valueOrFail('id')
         ]));
 
@@ -57,7 +65,9 @@ class AdminVideosResourceTest extends TestAdminResources
     {
         $video = (new Video)->firstOrFail();
 
-        $response = $this->actingAs($this->getUser())->put(cms_route('videos.update', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('videos.update', [
             $video->gallery_id, $video->id
         ]), [
             'title' => fake()->sentence(2),
@@ -69,7 +79,9 @@ class AdminVideosResourceTest extends TestAdminResources
 
     public function test_admin_videos_resource_validate_required()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('videos.store', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('videos.store', [
             $this->getGalleryModel('videos')->id
         ]), [
             // empty data
@@ -80,7 +92,9 @@ class AdminVideosResourceTest extends TestAdminResources
 
     public function test_admin_videos_resource_visibility()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('videos.visibility', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('videos.visibility', [
             (new Video)->valueOrFail('id')
         ]));
 
@@ -89,7 +103,9 @@ class AdminVideosResourceTest extends TestAdminResources
 
     public function test_admin_videos_resource_update_position()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('videos.updatePosition'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('videos.updatePosition'));
 
         $response->assertFound();
     }
@@ -98,13 +114,11 @@ class AdminVideosResourceTest extends TestAdminResources
     {
         $video = (new Video)->firstOrFail();
 
-        $response = $this->actingAs($this->getUser())->delete(cms_route('videos.destroy', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->delete(cms_route('videos.destroy', [
             $video->gallery_id, $video->id
         ]));
-
-        (new Gallery)->whereType('videos')->delete();
-
-        (new Collection)->whereType('galleries')->delete();
 
         $response->assertFound();
     }

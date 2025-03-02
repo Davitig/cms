@@ -3,20 +3,23 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\Note;
-use Tests\TestCase;
 
-class AdminNotesTest extends TestCase
+class AdminNotesTest extends TestAdmin
 {
     public function test_admin_notes_index()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('notes.index'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('notes.index'));
 
         $response->assertOk();
     }
 
     public function test_admin_notes_store()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('notes.save'), [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('notes.save'), [
             'title' => fake()->word(),
             'description' => fake()->paragraph(),
             'content' => fake()->text()
@@ -27,7 +30,9 @@ class AdminNotesTest extends TestCase
 
     public function test_admin_notes_update()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('notes.save'), [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('notes.save'), [
             'id' => (new Note)->valueOrFail('id'),
             'title' => fake()->word()
         ]);
@@ -37,7 +42,9 @@ class AdminNotesTest extends TestCase
 
     public function test_admin_notes_validate_title_required()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('notes.save'), [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('notes.save'), [
             // empty data
         ]);
 
@@ -46,7 +53,9 @@ class AdminNotesTest extends TestCase
 
     public function test_admin_notes_destroy()
     {
-        $response = $this->actingAs($this->getUser())->delete(cms_route('notes.destroy'), [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->delete(cms_route('notes.destroy'), [
             'id' => (new Note)->valueOrFail('id')
         ]);
 

@@ -5,9 +5,9 @@ namespace Tests\Feature\Admin\Resources;
 use App\Models\Collection;
 use App\Models\Menu;
 use App\Models\Page\Page;
-use Tests\TestCase;
+use Tests\Feature\Admin\TestAdmin;
 
-class AdminPagesResourceTest extends TestCase
+class AdminPagesResourceTest extends TestAdmin
 {
     /**
      * Get the menu id.
@@ -16,14 +16,16 @@ class AdminPagesResourceTest extends TestCase
      */
     protected function getMenuId(): int
     {
-        return (new Menu)->valueOrFail('id');
+        return (new Menu)->value('id') ?: (new Menu)->create([
+            'title' => 'List of Pages'
+        ])->id;
     }
 
     public function test_admin_pages_resource_index()
     {
-        (new Menu)->create(['title' => 'List of Pages']);
-
-        $response = $this->actingAs($this->getUser())->get(cms_route('pages.index', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('pages.index', [
             $this->getMenuId()
         ]));
 
@@ -32,7 +34,9 @@ class AdminPagesResourceTest extends TestCase
 
     public function test_admin_pages_resource_create()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('pages.create', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('pages.create', [
             $this->getMenuId()
         ]));
 
@@ -44,7 +48,9 @@ class AdminPagesResourceTest extends TestCase
      */
     public function test_admin_pages_resource_store()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('pages.store', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('pages.store', [
             $this->getMenuId()
         ]), [
             'title' => fake()->sentence(2),
@@ -56,7 +62,9 @@ class AdminPagesResourceTest extends TestCase
 
     public function test_admin_pages_resource_edit()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('pages.edit', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('pages.edit', [
             $this->getMenuId(), (new Page)->valueOrFail('id')
         ]));
 
@@ -70,7 +78,9 @@ class AdminPagesResourceTest extends TestCase
     {
         $page = (new Page)->firstOrFail();
 
-        $response = $this->actingAs($this->getUser())->put(cms_route('pages.update', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('pages.update', [
             $page->menu_id, $page->id
         ]), [
             'title' => fake()->sentence(2),
@@ -82,7 +92,9 @@ class AdminPagesResourceTest extends TestCase
 
     public function test_admin_pages_resource_validate_title_required()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('pages.store', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('pages.store', [
             $this->getMenuId(), (new Page)->valueOrFail('id')
         ]), [
             'slug' => fake()->slug(2)
@@ -93,10 +105,12 @@ class AdminPagesResourceTest extends TestCase
 
     public function test_admin_pages_resource_validate_slug_unique()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('pages.store', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('pages.store', [
             $this->getMenuId(), (new Page)->valueOrFail('id')
         ]), [
-            'slug' => (new Page)->firstOrFail()->slug
+            'slug' => (new Page)->valueOrFail('slug')
         ]);
 
         $response->assertFound()->assertSessionHasErrors(['slug']);
@@ -104,7 +118,9 @@ class AdminPagesResourceTest extends TestCase
 
     public function test_admin_pages_resource_visibility()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('pages.visibility', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('pages.visibility', [
             (new Page)->valueOrFail('id')
         ]));
 
@@ -113,7 +129,9 @@ class AdminPagesResourceTest extends TestCase
 
     public function test_admin_pages_resource_update_position()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('pages.updatePosition'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('pages.updatePosition'));
 
         $response->assertFound();
     }
@@ -128,7 +146,9 @@ class AdminPagesResourceTest extends TestCase
             $menuId = (new Menu)->create(['title' => fake()->sentence(2)])->id;
         }
 
-        $response = $this->actingAs($this->getUser())->put(cms_route('pages.transfer', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('pages.transfer', [
             $page->menu_id
         ]), [
             'id' => $page->id,
@@ -145,7 +165,9 @@ class AdminPagesResourceTest extends TestCase
             'title' => 'Articles', 'type' => 'articles'
         ]);
 
-        $response = $this->actingAs($this->getUser())->get(
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(
             cms_route('pages.getListableTypes', ['type' => 'collections'])
         );
 
@@ -156,14 +178,18 @@ class AdminPagesResourceTest extends TestCase
 
     public function test_admin_pages_resource_get_templates()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('pages.templates'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('pages.templates'));
 
         $response->assertOk()->assertJsonIsArray();
     }
 
     public function test_admin_pages_resource_collapse()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('pages.collapse'), [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('pages.collapse'), [
             'id' => (new Page)->valueOrFail('id'),
         ]);
 
@@ -174,7 +200,9 @@ class AdminPagesResourceTest extends TestCase
     {
         $page = (new Page)->firstOrFail();
 
-        $response = $this->actingAs($this->getUser())->delete(cms_route('pages.destroy', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->delete(cms_route('pages.destroy', [
             $page->menu_id, $page->id
         ]));
 

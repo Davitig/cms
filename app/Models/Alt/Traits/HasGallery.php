@@ -63,7 +63,7 @@ trait HasGallery
     {
         return $query->byGallery($gallery->id)
             ->orderBy(
-                $this->getTable() . '.' . $gallery->admin_order_by, $gallery->admin_sort
+                $this->qualifyColumn($gallery->admin_order_by), $gallery->admin_sort
             );
     }
 
@@ -79,7 +79,7 @@ trait HasGallery
         return $query->byGallery($gallery->id)
             ->whereVisible()
             ->orderBy(
-                $this->getTable() . '.' . $gallery->web_order_by, $gallery->web_sort
+                $this->qualifyColumn($gallery->web_order_by), $gallery->web_sort
             );
     }
 

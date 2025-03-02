@@ -2,9 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
-use Tests\TestCase;
-
-class AdminLoginTest extends TestCase
+class AdminLoginTest extends TestAdmin
 {
     public function test_admin_access_needs_authentication(): void
     {
@@ -23,7 +21,7 @@ class AdminLoginTest extends TestCase
     public function test_admin_login_invalid_credentials(): void
     {
         $response = $this->post(cms_route('login.post'), [
-            'email' => 'invalid@email.com',
+            'email' => 'invalid@example.com',
             'password' => str()->random()
         ]);
 
@@ -33,8 +31,8 @@ class AdminLoginTest extends TestCase
     public function test_admin_login_success(): void
     {
         $response = $this->post(cms_route('login.post'), [
-            'email' => 'admin@example.com',
-            'password' => '123456'
+            'email' => 'full-access-test@example.com',
+            'password' => 'password'
         ]);
 
         $response->assertRedirect(cms_route('dashboard'));
@@ -42,7 +40,9 @@ class AdminLoginTest extends TestCase
 
     public function test_admin_logout(): void
     {
-        $response = $this->post(cms_route('logout'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('logout'));
 
         $response->assertRedirect(cms_route('login'));
     }

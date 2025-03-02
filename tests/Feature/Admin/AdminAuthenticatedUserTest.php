@@ -6,41 +6,36 @@ use App\Models\CmsUser;
 use App\Models\CmsUserRole;
 use App\Models\Permission;
 use Illuminate\Support\Arr;
-use Tests\TestCase;
 
-class AdminAuthenticatedUserTest extends TestCase
+class AdminAuthenticatedUserTest extends TestAdmin
 {
     use AdminRoutesTrait;
 
     public function test_admin_user_authenticated()
     {
-        $user = (new CmsUser)->firstOrFail();
-
-        $response = $this->actingAs($user, 'cms')->get(cms_route('dashboard'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser(), 'cms'
+        )->get(cms_route('dashboard'));
 
         $response->assertOk();
     }
 
     public function test_admin_user_with_full_access()
     {
-        $roleId = (new CmsUserRole)->fullAccess()->valueOrFail('id');
-
-        $user = (new CmsUser)->roleId($roleId)->joinRole()->firstOrFail();
-
-        // route needs full access
-        $response = $this->actingAs($user, 'cms')->get(cms_route('permissions.index'));
+        // specified route needs full access
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser(), 'cms'
+        )->get(cms_route('permissions.index'));
 
         $response->assertOk();
     }
 
     public function test_admin_user_with_custom_access_cannot_access_non_permitted_route()
     {
-        $roleId = (new CmsUserRole)->customAccess()->valueOrFail('id');
-
-        $user = (new CmsUser)->roleId($roleId)->joinRole()->firstOrFail();
-
-        // route needs full access
-        $response = $this->actingAs($user, 'cms')->get(cms_route('permissions.index'));
+        // specified route needs full access
+        $response = $this->actingAs(
+            $this->getCustomAccessCmsUser(), 'cms'
+        )->get(cms_route('permissions.index'));
 
         $response->assertForbidden();
     }

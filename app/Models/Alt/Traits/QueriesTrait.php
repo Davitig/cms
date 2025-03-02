@@ -13,18 +13,20 @@ trait QueriesTrait
     /**
      * Get the fillable attributes for the model including statically defined columns.
      *
-     * @param  bool  $prefixTable
+     * @param  bool  $qualifyColumns
      * @return array<string>
      */
-    public function getFillableWithStaticColumns(bool $prefixTable = false): array
+    public function getFillableWithStaticColumns(bool $qualifyColumns = false): array
     {
-        $tablePrefix = ($prefixTable ? $this->getTable() . '.' : '');
+        $fillable = array_merge(
+            [$this->getKeyName()], $this->getFillable(), $this->getDates()
+        );
 
-        $fillable = array_merge([$this->getKeyName()], $this->getFillable(), $this->getDates());
-
-        if (empty($tablePrefix)) {
+        if (! $qualifyColumns) {
             return $fillable;
         }
+
+        $tablePrefix = $this->getTable() . '.';
 
         return array_map(fn ($value) => $tablePrefix . $value, $fillable);
     }

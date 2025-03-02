@@ -8,9 +8,9 @@ use App\Models\Event\Event;
 use App\Models\Gallery\Gallery;
 use App\Models\Menu;
 use App\Models\Page\Page;
-use Tests\TestCase;
+use Tests\Feature\Admin\TestAdmin;
 
-class TestAdminResources extends TestCase
+class TestAdminResources extends TestAdmin
 {
     /**
      * Create a new collection model.
@@ -35,19 +35,12 @@ class TestAdminResources extends TestCase
     /**
      * Get the collection model.
      *
-     * @param  string|null  $type
-     * @param  int|null  $id
+     * @param  string  $type
      * @return \App\Models\Collection
      */
-    public function getCollectionModel(?string $type = null, ?int $id = null): Collection
+    public function getCollectionModel(string $type): Collection
     {
-        return (new Collection)->when($type, function ($q, $value) {
-            return $q->whereType($value);
-        })->when($id, function ($object) use ($id) {
-            return $object->findOrFail($id);
-        }, function ($object) {
-            return $object->firstOrFail();
-        });
+        return (new Collection)->byType($type)->first() ?: $this->createCollectionModel($type);
     }
 
     /**
@@ -59,7 +52,7 @@ class TestAdminResources extends TestCase
     public function createGalleryModel(string $type): Gallery
     {
         return (new Gallery)->create([
-            'collection_id' => $this->createCollectionModel('galleries')->id,
+            'collection_id' => $this->getCollectionModel('galleries')->id,
             'slug' => fake()->slug(2),
             'title' => fake()->sentence(2),
             'type' => $type,
@@ -75,19 +68,12 @@ class TestAdminResources extends TestCase
     /**
      * Get the gallery model.
      *
-     * @param  string|null  $type
-     * @param  int|null  $id
+     * @param  string  $type
      * @return \App\Models\Gallery\Gallery
      */
-    public function getGalleryModel(?string $type = null, ?int $id = null): Gallery
+    public function getGalleryModel(string $type): Gallery
     {
-        return (new Gallery)->when($type, function ($q, $value) {
-            return $q->whereType($value);
-        })->when($id, function ($object) use ($id) {
-            return $object->findOrFail($id);
-        }, function ($object) {
-            return $object->firstOrFail();
-        });
+        return (new Gallery)->byType($type)->first() ?: $this->createGalleryModel($type);
     }
 
     /**
@@ -97,8 +83,12 @@ class TestAdminResources extends TestCase
      */
     public function createPageModel(): Page
     {
+        $menuId = (
+            (new Menu)->first() ?: (new Menu)->create(['title' => 'List of Pages'])
+        )->id;
+
         return (new Page)->create([
-            'menu_id' => (new Menu)->create(['title' => 'List of Pages'])->id,
+            'menu_id' => $menuId,
             'slug' => fake()->slug(2),
             'title' => fake()->sentence(2),
             'type' => 'page'
@@ -108,16 +98,11 @@ class TestAdminResources extends TestCase
     /**
      * Get the page model.
      *
-     * @param  int|null  $id
      * @return \App\Models\Page\Page
      */
-    public function getPageModel(?int $id = null): Page
+    public function getPageModel(): Page
     {
-        return (new Page)->when($id, function ($object) use ($id) {
-            return $object->findOrFail($id);
-        }, function ($object) {
-            return $object->firstOrFail();
-        });
+        return (new Page)->first() ?: $this->createPageModel();
     }
 
     /**
@@ -128,7 +113,7 @@ class TestAdminResources extends TestCase
     public function createArticleModel(): Article
     {
         return (new Article)->create([
-            'collection_id' => $this->createCollectionModel('articles')->id,
+            'collection_id' => $this->getCollectionModel('articles')->id,
             'slug' => fake()->slug(2),
             'title' => fake()->sentence(2)
         ]);
@@ -137,16 +122,11 @@ class TestAdminResources extends TestCase
     /**
      * Get the article model.
      *
-     * @param  int|null  $id
      * @return \App\Models\Article\Article
      */
-    public function getArticleModel(?int $id = null): Article
+    public function getArticleModel(): Article
     {
-        return (new Article)->when($id, function ($object) use ($id) {
-            return $object->findOrFail($id);
-        }, function ($object) {
-            return $object->firstOrFail();
-        });
+        return (new Article)->first() ?: $this->createArticleModel();
     }
 
     /**
@@ -157,7 +137,7 @@ class TestAdminResources extends TestCase
     public function createEventModel(): Event
     {
         return (new Event)->create([
-            'collection_id' => $this->createCollectionModel('events')->id,
+            'collection_id' => $this->getCollectionModel('events')->id,
             'slug' => fake()->slug(2),
             'title' => fake()->sentence(2)
         ]);
@@ -166,15 +146,10 @@ class TestAdminResources extends TestCase
     /**
      * Get the event model.
      *
-     * @param  int|null  $id
      * @return \App\Models\Event\Event
      */
-    public function getEventModel(?int $id = null): Event
+    public function getEventModel(): Event
     {
-        return (new Event)->when($id, function ($object) use ($id) {
-            return $object->findOrFail($id);
-        }, function ($object) {
-            return $object->firstOrFail();
-        });
+        return (new Event)->first() ?: $this->createEventModel();
     }
 }

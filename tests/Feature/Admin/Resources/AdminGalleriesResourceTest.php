@@ -9,8 +9,10 @@ class AdminGalleriesResourceTest extends TestAdminResources
 {
     public function test_admin_galleries_resource_index()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('galleries.index', [
-            $this->createCollectionModel('galleries')->id
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('galleries.index', [
+            $this->getCollectionModel('galleries')->id
         ]));
 
         $response->assertOk();
@@ -18,7 +20,9 @@ class AdminGalleriesResourceTest extends TestAdminResources
 
     public function test_admin_galleries_resource_create()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('galleries.create', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('galleries.create', [
             $this->getCollectionModel('galleries')->id
         ]));
 
@@ -30,7 +34,9 @@ class AdminGalleriesResourceTest extends TestAdminResources
      */
     public function test_admin_galleries_resource_store()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('galleries.store', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('galleries.store', [
             $this->getCollectionModel('galleries')->id
         ]), [
             'title' => fake()->sentence(2),
@@ -49,7 +55,9 @@ class AdminGalleriesResourceTest extends TestAdminResources
 
     public function test_admin_galleries_resource_edit()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('galleries.edit', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('galleries.edit', [
             $this->getCollectionModel('galleries')->id, (new Gallery)->valueOrFail('id')
         ]));
 
@@ -63,7 +71,9 @@ class AdminGalleriesResourceTest extends TestAdminResources
     {
         $gallery = (new Gallery)->firstOrFail();
 
-        $response = $this->actingAs($this->getUser())->put(cms_route('galleries.update', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('galleries.update', [
             $gallery->collection_id, $gallery->id
         ]), [
             'title' => fake()->sentence(2),
@@ -81,7 +91,9 @@ class AdminGalleriesResourceTest extends TestAdminResources
 
     public function test_admin_galleries_resource_validate_title_required()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('galleries.store', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('galleries.store', [
             $this->getCollectionModel('galleries')->id
         ]), [
             'slug' => fake()->slug(2)
@@ -92,10 +104,12 @@ class AdminGalleriesResourceTest extends TestAdminResources
 
     public function test_admin_galleries_resource_validate_slug_unique()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('galleries.store', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('galleries.store', [
             $this->getCollectionModel('galleries')->id
         ]), [
-            'slug' => (new Gallery)->firstOrFail()->slug
+            'slug' => (new Gallery)->valueOrFail('slug')
         ]);
 
         $response->assertFound()->assertSessionHasErrors(['slug']);
@@ -103,7 +117,9 @@ class AdminGalleriesResourceTest extends TestAdminResources
 
     public function test_admin_galleries_resource_validate_invalid_selection()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('galleries.store', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('galleries.store', [
             $this->getCollectionModel('galleries')->id
         ]), [
             'admin_order_by' => 'id',
@@ -115,7 +131,9 @@ class AdminGalleriesResourceTest extends TestAdminResources
 
     public function test_admin_galleries_resource_visibility()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('galleries.visibility', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('galleries.visibility', [
             (new Gallery)->valueOrFail('id')
         ]));
 
@@ -124,7 +142,9 @@ class AdminGalleriesResourceTest extends TestAdminResources
 
     public function test_admin_galleries_resource_update_position()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('galleries.updatePosition'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('galleries.updatePosition'));
 
         $response->assertFound();
     }
@@ -139,7 +159,9 @@ class AdminGalleriesResourceTest extends TestAdminResources
             $collectionId = $this->createCollectionModel('galleries')->id;
         }
 
-        $response = $this->actingAs($this->getUser())->put(cms_route('galleries.transfer', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('galleries.transfer', [
             $gallery->collection_id
         ]), [
             'id' => $gallery->id,
@@ -154,11 +176,11 @@ class AdminGalleriesResourceTest extends TestAdminResources
     {
         $gallery = (new Gallery)->firstOrFail();
 
-        $response = $this->actingAs($this->getUser())->delete(cms_route('galleries.destroy', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->delete(cms_route('galleries.destroy', [
             $gallery->collection_id, $gallery->id
         ]));
-
-        (new Collection)->whereType('galleries')->delete();
 
         $response->assertFound();
     }

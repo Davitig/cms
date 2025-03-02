@@ -157,7 +157,7 @@ class Page extends Model
         ];
 
         return $query->leftJoin($table, function ($q) use ($table) {
-            return $q->where($this->getTable() . '.type', 'collections')
+            return $q->where($this->qualifyColumn('type'), 'collections')
                 ->on('type_id', $table . '.id');
         })->addSelect($columns);
     }

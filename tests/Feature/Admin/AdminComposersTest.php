@@ -9,9 +9,8 @@ use App\View\Composers\Admin\AdminRouteMatchesComposer;
 use App\View\Composers\Admin\AdminSitemapXmlComposer;
 use App\View\Composers\Admin\AdminUserRouteAccessComposer;
 use Illuminate\Contracts\View\View;
-use Tests\TestCase;
 
-class AdminComposersTest extends TestCase
+class AdminComposersTest extends TestAdmin
 {
     protected function testAdminComposer(string $composerClass, ...$someOfArgs)
     {

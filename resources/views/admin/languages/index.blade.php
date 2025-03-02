@@ -37,7 +37,7 @@
             </a>
             <strong class="text-black padl">Drag and Drop to sort the languages order</strong>
             <strong class="language-visible text-danger padl{{ $langVisibleCount ? ' hidden' : '' }}">
-                Website will be unavailable when languages are invisible or doesn't exist
+                Website will be unavailable when languages are not visible or doesn't exist
             </strong>
             <table id="items" class="table table-striped">
                 <thead>

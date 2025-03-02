@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Models\Language;
-use Exception;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
@@ -59,11 +58,9 @@ class LanguageServiceProvider extends ServiceProvider
             return;
         }
 
-        $languages = $visibleLanguages = [];
+        $languages = [];
 
-        $langItems = (new Language)->positionAsc()->get()->toArray();
-
-        foreach ($langItems as $language) {
+        foreach ((new Language)->positionAsc()->get()->toArray() as $language) {
             $languages[strtolower($language['language'])] = $language;
         }
 
@@ -86,72 +83,30 @@ class LanguageServiceProvider extends ServiceProvider
 
         $config->set(['_cms.activated' => $cmsActivated]);
 
-        if (! $cmsActivated) {
-            if (empty(array_filter($langItems, fn ($item) => $item['visible']))) {
-                $this->throwServiceUnavailableHttpException();
-            }
-
+        if (! $cmsActivated && ! $this->app->runningInConsole()) {
             $visibleLanguages = array_filter($languages, fn ($lang) => $lang['visible']);
 
-            if (! array_key_exists($activeLanguage, $visibleLanguages)) {
-                $config->set(['_app.language' => $activeLanguage = key($visibleLanguages)]);
+            if (empty($visibleLanguages)
+                || ! array_key_exists($activeLanguage, $visibleLanguages)
+            ) {
+                throw new ServiceUnavailableHttpException;
             }
 
             $config->set(['app.locale' => $activeLanguage]);
+
+            $queryString = $request->query();
+        } else {
+            $queryString = $request->except('lang');
         }
 
-        $queryString = query_string(
-            $cmsActivated ? $request->except('lang') : $request->query()
-        );
-
-        // set url for each language.
+        // set active URL for each language.
         foreach ($languages as $language => $value) {
             $languages[$language]['url'] = trim(
                     $request->root() . '/' . $language . '/' . implode('/', $this->segments),
                     '/'
-                ) . $queryString;
+                ) . query_string($queryString);
         }
 
         $config->set(['_app.languages' => $languages]);
-
-        $this->checkServiceAvailability($cmsActivated, $langSelected, $firstSegment, $visibleLanguages);
-    }
-
-    /**
-     * Check service availability.
-     *
-     * @param  bool  $cmsActivated
-     * @param  bool  $langSelected
-     * @param  string  $firstSegment
-     * @param  array  $visibleLanguages
-     * @return void
-     */
-    protected function checkServiceAvailability(
-        bool   $cmsActivated,
-        bool   $langSelected,
-        string $firstSegment,
-        array  $visibleLanguages
-    ): void
-    {
-        if (! $cmsActivated && $langSelected
-            && ! array_key_exists($firstSegment, $visibleLanguages)
-        ) {
-            $this->throwServiceUnavailableHttpException();
-        }
-    }
-
-    /**
-     * Throw the throw service unavailable http exception.
-     *
-     * @param  bool  $console
-     * @return void
-     */
-    protected function throwServiceUnavailableHttpException(bool $console = false): void
-    {
-        if (! $console && $this->app->runningInConsole()) {
-            return;
-        }
-
-        throw new ServiceUnavailableHttpException;
     }
 }

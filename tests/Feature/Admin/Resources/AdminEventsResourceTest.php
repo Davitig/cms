@@ -9,8 +9,10 @@ class AdminEventsResourceTest extends TestAdminResources
 {
     public function test_admin_events_resource_index()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('events.index', [
-            $this->createCollectionModel('events')->id
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('events.index', [
+            $this->getCollectionModel('events')->id
         ]));
 
         $response->assertOk();
@@ -18,7 +20,9 @@ class AdminEventsResourceTest extends TestAdminResources
 
     public function test_admin_events_resource_create()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('events.create', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('events.create', [
             $this->getCollectionModel('events')->id
         ]));
 
@@ -30,7 +34,9 @@ class AdminEventsResourceTest extends TestAdminResources
      */
     public function test_admin_events_resource_store()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('events.store', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('events.store', [
             $this->getCollectionModel('events')->id
         ]), [
             'title' => fake()->sentence(2),
@@ -42,7 +48,9 @@ class AdminEventsResourceTest extends TestAdminResources
 
     public function test_admin_events_resource_edit()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('events.edit', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('events.edit', [
             $this->getCollectionModel('events')->id, (new Event)->valueOrFail('id')
         ]));
 
@@ -56,7 +64,9 @@ class AdminEventsResourceTest extends TestAdminResources
     {
         $event = (new Event)->firstOrFail();
 
-        $response = $this->actingAs($this->getUser())->put(cms_route('events.update', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('events.update', [
             $event->collection_id, $event->id
         ]), [
             'title' => fake()->sentence(2),
@@ -68,7 +78,9 @@ class AdminEventsResourceTest extends TestAdminResources
 
     public function test_admin_events_resource_validate_title_required()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('events.store', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('events.store', [
             $this->getCollectionModel('events')->id
         ]), [
             'slug' => fake()->slug(2)
@@ -79,10 +91,12 @@ class AdminEventsResourceTest extends TestAdminResources
 
     public function test_admin_events_resource_validate_slug_unique()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('events.store', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('events.store', [
             $this->getCollectionModel('events')->id
         ]), [
-            'slug' => (new Event)->firstOrFail()->slug
+            'slug' => (new Event)->valueOrFail('slug')
         ]);
 
         $response->assertFound()->assertSessionHasErrors(['slug']);
@@ -90,7 +104,9 @@ class AdminEventsResourceTest extends TestAdminResources
 
     public function test_admin_events_resource_visibility()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('events.visibility', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('events.visibility', [
             (new Event)->valueOrFail('id')
         ]));
 
@@ -99,7 +115,9 @@ class AdminEventsResourceTest extends TestAdminResources
 
     public function test_admin_events_resource_update_position()
     {
-        $response = $this->actingAs($this->getUser())->put(cms_route('events.updatePosition'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('events.updatePosition'));
 
         $response->assertFound();
     }
@@ -114,7 +132,9 @@ class AdminEventsResourceTest extends TestAdminResources
             $collectionId = $this->createCollectionModel('events')->id;
         }
 
-        $response = $this->actingAs($this->getUser())->put(cms_route('events.transfer', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('events.transfer', [
             $event->collection_id
         ]), [
             'id' => $event->id,
@@ -129,11 +149,11 @@ class AdminEventsResourceTest extends TestAdminResources
     {
         $event = (new Event)->firstOrFail();
 
-        $response = $this->actingAs($this->getUser())->delete(cms_route('events.destroy', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->delete(cms_route('events.destroy', [
             $event->collection_id, $event->id
         ]));
-
-        (new Collection)->whereType('events')->delete();
 
         $response->assertFound();
     }

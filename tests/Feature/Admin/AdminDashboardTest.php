@@ -2,13 +2,13 @@
 
 namespace Tests\Feature\Admin;
 
-use Tests\TestCase;
-
-class AdminDashboardTest extends TestCase
+class AdminDashboardTest extends TestAdmin
 {
     public function test_admin_dashboard()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('dashboard'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('dashboard'));
 
         $response->assertOk();
     }

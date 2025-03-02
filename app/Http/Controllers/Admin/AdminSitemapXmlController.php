@@ -41,13 +41,6 @@ class AdminSitemapXmlController extends Controller
     protected array $languages = [];
 
     /**
-     * Main language of the application.
-     *
-     * @var string
-     */
-    protected string $mainLanguage;
-
-    /**
      * Indicates if the application is multilanguage.
      *
      * @var bool
@@ -82,8 +75,6 @@ class AdminSitemapXmlController extends Controller
     {
         $this->languages = languages();
 
-        $this->mainLanguage = key($this->languages);
-
         if ($this->isMultilanguage = (count($this->languages) > 1)) {
             $this->namespaceMap += [
                 $this->xhtml = 'http://www.w3.org/1999/xhtml' => 'xhtml'
@@ -112,7 +103,7 @@ class AdminSitemapXmlController extends Controller
         foreach ($pages as $page) {
             $value = ['url' => ['loc' => web_url(
                 $page->full_slug = $page->getFullSlug(), [], $this->isMultilanguage
-                ? $this->mainLanguage
+                ? key($this->languages)
                 : null
             )]];
 
@@ -217,7 +208,7 @@ class AdminSitemapXmlController extends Controller
     {
         $value = ['url' => ['loc' => web_url(
             [$page->full_slug, $item->slug], [], $this->isMultilanguage
-            ? $this->mainLanguage
+            ? key($this->languages)
             : null
         )]];
 

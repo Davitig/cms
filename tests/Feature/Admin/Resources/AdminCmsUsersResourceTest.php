@@ -4,20 +4,24 @@ namespace Tests\Feature\Admin\Resources;
 
 use App\Models\CmsUser;
 use App\Models\CmsUserRole;
-use Tests\TestCase;
+use Tests\Feature\Admin\TestAdmin;
 
-class AdminCmsUsersResourceTest extends TestCase
+class AdminCmsUsersResourceTest extends TestAdmin
 {
     public function test_admin_cms_users_resource_index()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('cmsUsers.index'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('cmsUsers.index'));
 
         $response->assertOk();
     }
 
     public function test_admin_cms_users_resource_create()
     {
-        $response = $this->actingAs($this->getUser())->get(cms_route('cmsUsers.create'));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('cmsUsers.create'));
 
         $response->assertOk();
     }
@@ -27,7 +31,9 @@ class AdminCmsUsersResourceTest extends TestCase
      */
     public function test_admin_cms_users_resource_store()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('cmsUsers.store'), [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('cmsUsers.store'), [
             'email' => fake()->safeEmail(),
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
@@ -41,9 +47,11 @@ class AdminCmsUsersResourceTest extends TestCase
 
     public function test_admin_cms_users_resource_edit()
     {
-        $id = (new CmsUser)->orderDesc()->valueOrFail('id');
-
-        $response = $this->actingAs($this->getUser())->get(cms_route('cmsUsers.edit', [$id]));
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->get(cms_route('cmsUsers.edit', [
+            (new CmsUser)->orderDesc()->valueOrFail('id')
+        ]));
 
         $response->assertOk();
     }
@@ -53,9 +61,11 @@ class AdminCmsUsersResourceTest extends TestCase
      */
     public function test_admin_cms_users_resource_update()
     {
-        $id = (new CmsUser)->orderDesc()->valueOrFail('id');
-
-        $response = $this->actingAs($this->getUser())->put(cms_route('cmsUsers.update', [$id]), [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('cmsUsers.update', [
+            (new CmsUser)->orderDesc()->valueOrFail('id')
+        ]), [
             'email' => fake()->safeEmail(),
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
@@ -67,7 +77,9 @@ class AdminCmsUsersResourceTest extends TestCase
 
     public function test_admin_cms_users_resource_validation()
     {
-        $response = $this->actingAs($this->getUser())->post(cms_route('cmsUsers.store'), [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('cmsUsers.store'), [
             // empty data
         ]);
 
@@ -78,7 +90,9 @@ class AdminCmsUsersResourceTest extends TestCase
 
     public function test_admin_cms_users_resource_destroy()
     {
-        $response = $this->actingAs($this->getUser())->delete(cms_route('cmsUsers.destroy', [
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->delete(cms_route('cmsUsers.destroy', [
             (new CmsUser)->orderDesc()->valueOrFail('id')
         ]));
 
