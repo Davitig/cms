@@ -67,20 +67,11 @@
                             </div>
                             <!-- .form-group -->
                             <div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <input type="text" name="captcha" autocomplete="off" class="form-control" placeholder="{{$trans->get('enter_code', 'Enter the code')}}" data-trans="enter_code" data-trans-attr="placeholder">
-                                        @if ($error = $errors->first('captcha'))
-                                            <span class="text-danger">{{$error}}</span>
-                                        @endif
-                                    </div>
-                                    <img src="{{captcha_src('flat')}}" height="40" id="captcha-img" alt="captcha">
-                                    <a href="#" id="captcha-reload">
-                                        <img src="{{asset('assets/libs/images/reload.png')}}" width="20" height="20" alt="reload">
-                                    </a>
-                                </div>
+                                {!! app('captcha')->display() !!}
+                                @if ($error = $errors->first('g-recaptcha-response'))
+                                    <div class="text-danger">{{$error}}</div>
+                                @endif
                             </div>
-                            <!-- .form-group -->
                         </div>
                         <!-- .col-md-6 -->
                         <div class="col-md-6">
@@ -138,23 +129,7 @@
         <!-- #feedback -->
     </div>
     <!-- .container -->
-    <script type="text/javascript">
-        $(function(){
-            @if ($alert || $errors->hasAny())
-            $('html, body').animate({
-                scrollTop: $('#feedback').offset().top
-            }, 0);
-            @endif
-
-            let i = 0;
-            $('#captcha-reload').on('click', function(e) {
-                e.preventDefault();
-                i++;
-
-                let captcha = '{{captcha_src('flat')}}' + i;
-
-                $('#captcha-img').attr('src', captcha);
-            });
-        });
-    </script>
 @endsection
+@push('head')
+    {!! app('captcha')->renderJs() !!}
+@endpush

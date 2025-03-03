@@ -17,7 +17,19 @@ class FeedbackRequest extends Request
             'name' => 'required',
             'email' => 'required|string|email',
             'text' => 'required',
-            'captcha' => 'required|captcha'
+            'g-recaptcha-response' => 'required|captcha'
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'g-recaptcha-response' => 'captcha',
         ];
     }
 }
