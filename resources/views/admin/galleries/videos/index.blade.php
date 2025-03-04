@@ -118,7 +118,7 @@
                         @foreach ($parentSimilar as $item)
                             <li{!!$item->id != $parent->id ? '' : ' class="active"'!!}>
                                 <a href="{{ cms_route($item->type . '.index', [$item->id]) }}">
-                                    <i class="fa fa-folder{{$item->id != $parent->id ? '' : '-open'}}-o"></i>
+                                    <i class="fa fa-folder{{$item->id != $parent->id ? '' : '-open'}}"></i>
                                     <span>{{$item->title}}</span>
                                 </a>
                             </li>

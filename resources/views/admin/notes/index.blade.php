@@ -3,7 +3,7 @@
     <div class="page-title">
         <div class="title-env">
             <h1 class="title">
-                <i class="fa fa-file-text-o"></i>
+                <i class="fa fa-file-text"></i>
                 Notes
             </h1>
             <p class="description">Management of the notes</p>
@@ -14,7 +14,7 @@
                     <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
                 </li>
                 <li class="active">
-                    <i class="fa fa-file-text-o"></i>
+                    <i class="fa fa-file-text"></i>
                     <strong>Notes</strong>
                 </li>
             </ol>
@@ -23,7 +23,7 @@
     <div class="notes-env">
         <div class="notes-header">
             <a class="btn btn-secondary btn-icon btn-icon-standalone" id="add-note">
-                <i class="fa fa-file-text-o"></i>
+                <i class="fa fa-file-text"></i>
                 <span>New Note</span>
             </a>
             <button id="save-note" class="btn btn-secondary btn-icon-standalone dn" disabled>

@@ -9,7 +9,7 @@
     <title>CMS</title>
     <link rel="shortcut icon" href="{{ asset('assets/libs/images/favicon.ico') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/css/fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/css/fonts/fontawesome-6.7.2/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/js/datatables/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/js/fancybox/jquery.fancybox.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/js/stacktable/stacktable.css') }}">

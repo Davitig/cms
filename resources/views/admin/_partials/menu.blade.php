@@ -45,7 +45,7 @@
 @if ($userRouteAccess('filemanager'))
     <li>
         <a href="{{ cms_route('filemanager') }}"{!! $routeMatches(['filemanager']) ? ' class="active"' : '' !!}>
-            <i class="fa fa-files-o" title="File Manager"></i>
+            <i class="fa fa-file-import" title="File Manager"></i>
             <span class="title">File Manager</span>
         </a>
     </li>
@@ -122,7 +122,7 @@
             @if ($userRouteAccess('slider.index'))
                 <li>
                     <a href="{{ cms_route('slider.index') }}"{!! $routeMatches(['slider']) ? ' class="active"' : '' !!}>
-                        <i class="fa fa-photo" title="Slider"></i>
+                        <i class="fa fa-image" title="Slider"></i>
                         <span class="title">Slider</span>
                     </a>
                 </li>
@@ -138,7 +138,7 @@
             @if ($userRouteAccess('notes.index'))
                 <li>
                     <a href="{{ cms_route('notes.index') }}"{!! $routeMatches(['notes']) ? ' class="active"' : '' !!}>
-                        <i class="fa fa-file-text-o" title="notes"></i>
+                        <i class="fa fa-file-text" title="notes"></i>
                         <span class="title">Notes</span>
                     </a>
                 </li>

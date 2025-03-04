@@ -223,12 +223,12 @@ return [
         'pages' => 'fa fa-indent',
 
         'collections' => 'fa fa-list-alt',
-        'articles' => 'fa fa-newspaper-o',
+        'articles' => 'fa fa-newspaper',
         'events' => 'fa fa-globe',
         'faq' => 'fa fa-question-circle',
 
         'galleries' => 'fa fa-th',
-        'photos' => 'fa fa-photo',
+        'photos' => 'fa fa-image',
         'videos' => 'fa fa-play-circle',
 
         'roles' => 'fa fa-key',

@@ -3,7 +3,7 @@
 <div class="page-title">
     <div class="title-env">
         <h1 class="title">
-            <i class="fa fa-files-o"></i>
+            <i class="fa fa-file-import"></i>
             File Manager
         </h1>
         <p class="description">File Manager, which contains all the application files</p>
@@ -14,7 +14,7 @@
                 <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
             </li>
             <li class="active">
-                <i class="fa fa-files-o"></i>
+                <i class="fa fa-file-import"></i>
                 <strong>File Manager</strong>
             </li>
         </ol>
