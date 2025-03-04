@@ -7,9 +7,15 @@ use App\Http\Requests\Admin\CmsUserRequest;
 use App\Models\CmsUser;
 use App\Models\CmsUserRole;
 use Closure;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class AdminCmsUsersController extends Controller implements HasMiddleware
@@ -97,11 +103,13 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
             $input['password'] = bcrypt($input['password']);
         }
 
-        $model = $this->model->create($input);
+        $id = $this->model->create($input)->id;
 
-        app('db')->table('cms_settings')->insert(['cms_user_id' => $model->id]);
+        $this->storePhoto($id, $request->file('photo'));
 
-        return redirect(cms_route('cmsUsers.edit', [$model->id]))
+        app('db')->table('cms_settings')->insert(['cms_user_id' => $id]);
+
+        return redirect(cms_route('cmsUsers.edit', [$id]))
             ->with('alert', fill_data('success', trans('general.created')));
     }
 
@@ -130,6 +138,8 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
 
         $data['roles'] = (new CmsUserRole)->pluck('role', 'id');
 
+        $data['photoExists'] = $this->checkUserPhotoExists($id);
+
         return view('admin.cms_users.edit', $data);
     }
 
@@ -149,6 +159,8 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
         }
 
         $this->model->findOrFail($id)->update($input);
+
+        $this->storePhoto($id, $request->file('photo'));
 
         unset($input['password'], $input['password_confirmation']);
 
@@ -184,5 +196,74 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
         }
 
         return back()->with('alert', fill_data('success', trans('database.deleted')));
+    }
+
+    /**
+     * Display the user photo.
+     *
+     * @param  \Illuminate\Filesystem\FilesystemManager  $filesystem
+     * @param  string  $id
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|null
+     */
+    public function getPhoto(FilesystemManager $filesystem, string $id)
+    {
+        $filesystem = $filesystem->disk('cms_users');
+
+        $path = $filesystem->getUserPhotosDirectory($id, 'photo.png');
+
+        if ($filesystem->exists($path)) {
+            $path = $filesystem->path($path);
+        } else {
+            $path = public_path('assets/libs/images/user-2.png');
+
+            if (! (new Filesystem)->exists($path)) {
+                return null;
+            }
+        }
+
+        try {
+            return response()->file($path);
+        } catch (FileNotFoundException) {
+            return null;
+        }
+    }
+
+    /**
+     * Store the user photo in storage.
+     *
+     * @param  string  $id
+     * @param  \Illuminate\Http\UploadedFile|null  $file
+     * @return bool
+     */
+    protected function storePhoto(string $id, ?UploadedFile $file): bool
+    {
+        if (is_null($file)) {
+            return false;
+        }
+
+        $filesystem = Storage::disk('cms_users');
+
+        $path = $filesystem->getUserPhotosDirectory($id);
+
+        $filesystem->makeDirectory($path);
+
+        Image::read($file)->scale(null, 150)->save(
+            $filesystem->path($path) . '/photo.png'
+        );
+
+        return true;
+    }
+
+    /**
+     * Check if a user photo exists.
+     *
+     * @param  string  $id
+     * @return bool
+     */
+    protected function checkUserPhotoExists(string $id): bool
+    {
+        $filesystem = Storage::disk('cms_users');
+
+        return $filesystem->exists($filesystem->getUserPhotosDirectory($id, 'photo.png'));
     }
 }

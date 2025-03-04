@@ -121,7 +121,7 @@
                     </li>
                     <li class="dropdown user-profile">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{{ asset('assets/libs/images/user-2.png') }}" alt="user-image" class="img-circle img-inline userpic-32"
+                            <img src="{{ asset('assets/libs/images/user-2.png') }}" alt="User Photo" class="img-circle img-inline userpic-32"
                                  width="28">
                             <span>
                                 User

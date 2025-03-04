@@ -4,6 +4,8 @@ namespace Tests\Feature\Admin\Resources;
 
 use App\Models\CmsUser;
 use App\Models\CmsUserRole;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminCmsUsersResourceTest extends TestAdmin
@@ -73,6 +75,25 @@ class AdminCmsUsersResourceTest extends TestAdmin
         ]);
 
         $response->assertFound()->assertSessionHasNoErrors();
+    }
+
+    public function test_admin_cms_users_resource_photo_upload()
+    {
+        Storage::fake('cms_users');
+
+        $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('cmsUsers.update', [
+            $id = (new CmsUser)->orderDesc()->valueOrFail('id')
+        ]), [
+            'email' => fake()->safeEmail(),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
+            'cms_user_role_id' => (new CmsUserRole)->valueOrFail('id'),
+            'photo' => UploadedFile::fake()->image('photo.png')
+        ]);
+
+        Storage::disk('cms_users')->assertExists('id_' . $id . '/photo.png');
     }
 
     public function test_admin_cms_users_resource_validation()

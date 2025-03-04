@@ -26,11 +26,9 @@
     <div class="row">
         <div class="col-sm-3">
             <div class="user-info-sidebar">
-            @if ($current->photo)
                 <div class="user-img">
-                    <img src="{{$current->photo}}" alt="user-img" class="img-cirlce img-responsive img-thumbnail">
+                    <img src="{{cms_route('cmsUsers.photo', [$current->id])}}" alt="User photo" class="img-cirlce img-responsive img-thumbnail">
                 </div>
-            @endif
                 <div class="user-name">
                     {{$current->first_name}} {{$current->last_name}}
                     <span class="user-status is-online"></span>

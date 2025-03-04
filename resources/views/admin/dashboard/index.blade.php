@@ -175,7 +175,7 @@
             <div class="xe-widget xe-todo-list">
                 <div class="xe-header">
                     <a href="{{$userRouteAccess('collections.index') ? cms_route('notes.index') : '#'}}" class="xe-icon">
-                        <i class="fa fa-file-text-o"></i>
+                        <i class="fa fa-file-text"></i>
                     </a>
                     <div class="xe-label">
                         <span>Last 5 note</span>

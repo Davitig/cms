@@ -24,7 +24,28 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrap();
 
+        $this->setFilesystemLocalCmsUsersMacro();
+
         $this->logExecutedDBQueries();
+    }
+
+    /**
+     * Set the filesystem local cms users macro.
+     *
+     * @return void
+     */
+    protected function setFilesystemLocalCmsUsersMacro(): void
+    {
+        $this->app['filesystem']->macro('getUserPhotosDirectory',
+            function (int|string $id, ?string $fileName = null) {
+                $idDir = 'id_' . $id;
+
+                $photosDir = $this->getConfig()['directories']['photos'] ?? null;
+
+                return $photosDir
+                    ? $idDir . '/' . $photosDir . ($fileName ? '/' . $fileName : '')
+                    : $idDir;
+            });
     }
 
     /**

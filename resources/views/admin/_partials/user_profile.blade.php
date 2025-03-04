@@ -13,7 +13,7 @@
 </li>
 <li class="dropdown user-profile">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        <img src="{{ auth('cms')->user()->photo }}" alt="user-image" class="img-circle img-inline userpic-32" width="28">
+        <img src="{{ cms_route('cmsUsers.photo', [auth('cms')->id()]) }}" alt="User Photo" class="img-circle img-inline userpic-32" width="30" height="30">
         <span>
             {{auth('cms')->user()->first_name}} {{auth('cms')->user()->last_name}}
             <i class="fa fa-angle-down"></i>

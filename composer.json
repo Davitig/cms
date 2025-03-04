@@ -19,6 +19,7 @@
         "anhskohbo/no-captcha": "3.7.*",
         "barryvdh/laravel-elfinder": "0.5.4",
         "cocur/slugify": "4.6.0",
+        "intervention/image-laravel": "1.5.5",
         "league/glide": "3.0.0-RC2",
         "php-curl-class/php-curl-class": "11.0.*",
         "sabre/xml": "4.0.*",

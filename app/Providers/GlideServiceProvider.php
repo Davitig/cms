@@ -16,14 +16,12 @@ class GlideServiceProvider extends ServiceProvider implements DeferrableProvider
     public function register(): void
     {
         $this->app->singleton(Server::class, function ($app) {
-            $filesystem = $app[Filesystem::class];
-
             $source = (array) $app['config']->get('elfinder.public');
             $source = key($source);
 
             return (new ServerFactory([
                 'source'                 => public_path($source),
-                'cache'                  => $filesystem->getDriver(),
+                'cache'                  => $app[Filesystem::class]->getDriver(),
                 'cache_path_prefix'      => 'images/cache',
                 'group_cache_in_folders' => false
             ]))->getServer();

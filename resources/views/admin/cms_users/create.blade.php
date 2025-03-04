@@ -23,7 +23,21 @@
     <div class="panel panel-headerless">
         <div class="panel-body">
             {{ html()->modelForm($current, 'post', cms_route('cmsUsers.store'))
-            ->class('form-horizontal')->open() }}
+            ->acceptsFiles()->class('form-horizontal')->open() }}
+            <div class="member-form-add-header">
+                <div class="row">
+                    <div class="col-md-10 col-sm-8">
+                        <div class="user-img">
+                            <div id="photo-upload-btn" class="droppable-area dz-clickable mrg0 border-0">
+                                <span class="photo-upload-text">Upload Photo</span>
+                                <img src="#" width="150" height="150" id="user-photo" class="img-circle vat hidden" alt="Photo">
+                            </div>
+                            {{ html()->file('photo')->id('photo-input')->class('hidden') }}
+                        </div>
+                        <div class="photo-msg text-danger">{{$errors->first('photo')}}</div>
+                    </div>
+                </div>
+            </div>
             @include('admin.cms_users.form', [
                 'submit'        => trans('general.create'),
                 'submitAndBack' => trans('general.create_n_close'),
@@ -33,3 +47,4 @@
         </div>
     </div>
 @endsection
+@include('admin.cms_users.scripts')

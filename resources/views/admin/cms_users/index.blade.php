@@ -76,9 +76,7 @@
             @foreach($items as $item)
                 <tr id="item{{$item->id}}" class="item">
                     <td class="user-image">
-                        @if ($item->photo)
-                            <img src="{{$item->photo}}" width="40" height="40" class="img-circle" alt="{{$item->first_name}} {{$item->last_name}}">
-                        @endif
+                        <img src="{{ cms_route('cmsUsers.photo', [$item->id]) }}" width="40" height="40" class="img-circle" alt="{{$item->first_name}} {{$item->last_name}}">
                     </td>
                     <td class="user-name">
                         <a href="{{cms_route('cmsUsers.edit', [$item->id])}}" class="name{{auth('cms')->id() == $item->id ? ' active' : ''}}">{{$item->first_name}} {{$item->last_name}}</a>

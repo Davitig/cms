@@ -140,7 +140,9 @@ $(function () {
             type: 'POST',
             url: form.attr('action'),
             dataType: 'json',
-            data: form.serialize(),
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
             success: function (res) {
                 // toastr alert message
                 if (typeof toastr === 'object' && res?.result) {

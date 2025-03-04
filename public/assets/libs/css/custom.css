@@ -31,6 +31,7 @@ iframe {border:0;}
 .border-left-red, .alert.border-left-red {border-left: 5px solid #cc3f44;}
 .border-left-info, .alert.border-left-info {border-left: 5px solid #40bbea;}
 .border-left-gray, .alert.border-left-gray {border-left: 5px solid #ddd;}
+.border-0 {border:0;}
 .border-1 {border:1px solid transparent;}
 .border-radius-1 {border-radius:1px;}
 .border-radius-2 {border-radius:2px;}
@@ -193,6 +194,7 @@ select .sub-item {padding-left:20px;}
 /* users list & form */
 .user-info-sidebar {padding:20px;margin-bottom:20px;background:#fff;}
 .members-table tbody tr td {padding:12px 15px;}
+.members-table tbody tr td.user-image img {min-height:40px;}
 .members-table tbody tr td .name.active {color:#006600;}
 .members-table tbody tr td.action-links a+form {padding-top:5px;}
 .member-form-inputs .row + .row {margin-top:0;}
