@@ -25,7 +25,8 @@ class CmsUser extends Model
      * @var array
      */
     protected $fillable = [
-        'email', 'cms_user_role_id', 'first_name', 'last_name', 'phone', 'address', 'blocked', 'photo', 'password'
+        'email', 'cms_user_role_id', 'first_name', 'last_name', 'phone', 'address',
+        'blocked', 'password'
     ];
 
     /**
@@ -45,17 +46,6 @@ class CmsUser extends Model
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    /**
-     * Get the mutated attribute.
-     *
-     * @param  string|null  $value
-     * @return string
-     */
-    public function getPhotoAttribute(?string $value): string
-    {
-        return $value ?: asset('assets/libs/images/user-2.png');
-    }
 
     /**
      * Determine if the user has full access.

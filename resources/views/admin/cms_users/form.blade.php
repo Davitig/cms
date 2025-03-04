@@ -60,6 +60,9 @@
         </div>
     @else
         {{ html()->hidden('cms_user_role_id') }}
+        @if ($error = $errors->first('cms_user_role_id'))
+            <span class="text-danger">{{$error}}</span>
+        @endif
     @endif
 
     <div class="row">
@@ -82,7 +85,7 @@
                 <label class="col-sm-4 control-label">Address:</label>
                 <div class="col-sm-8">
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-building-o"></i></span>
+                        <span class="input-group-addon"><i class="fa fa-building"></i></span>
                         {{ html()->text('address')->id('address')->class('form-control') }}
                     </div>
                     @if ($error)
@@ -105,21 +108,6 @@
 
         <div class="form-group-separator"></div>
     @endif
-
-    <div class="form-group">
-        <label class="col-sm-2 control-label text-left">Photo:</label>
-        <div class="col-sm-6">
-            <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-image"></i></span>
-                {{ html()->text('photo')->id('photo')->class('form-control') }}
-                <div class="input-group-btn popup" data-browse="photo">
-                    <span class="btn btn-info">Browse</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group-separator"></div>
 
     <div id="change-password" class="form-group{{ ! $current->id ? '' : ' collapse' . ($errors->has('password') ? ' in' : '')}}">
         <div class="col-sm-6">

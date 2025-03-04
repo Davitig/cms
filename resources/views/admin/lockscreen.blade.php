@@ -7,7 +7,7 @@
                         <input type="hidden" name="_method" value="put">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="user-thumb">
-                            <img src="{{auth('cms')->user()->photo}}" width="128" class="img-circle" alt="User Photo">
+                            <img src="{{cms_route('cmsUsers.photo', [auth('cms')->id()])}}" width="130" class="img-circle" alt="User Photo">
                         </div>
                         <div class="form-group">
                             <h3>Welcome back, {{auth('cms')->user()->first_name}}!</h3>

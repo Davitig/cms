@@ -7,9 +7,15 @@ use App\Http\Requests\Admin\CmsUserRequest;
 use App\Models\CmsUser;
 use App\Models\CmsUserRole;
 use Closure;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class AdminCmsUsersController extends Controller implements HasMiddleware
@@ -92,12 +98,14 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
         $input = $request->all();
 
         if (! $request->filled('password')) {
-            unset($input['password']);
+            unset($input['password'], $input['password_confirmation']);
         } else {
             $input['password'] = bcrypt($input['password']);
         }
 
         $model = $this->model->create($input);
+
+        $this->storePhoto($model, $request->file('photo'));
 
         app('db')->table('cms_settings')->insert(['cms_user_id' => $model->id]);
 
@@ -130,6 +138,8 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
 
         $data['roles'] = (new CmsUserRole)->pluck('role', 'id');
 
+        $data['photoExists'] = $this->photoExists($id);
+
         return view('admin.cms_users.edit', $data);
     }
 
@@ -148,7 +158,13 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
             $input['password'] = bcrypt($input['password']);
         }
 
-        $this->model->findOrFail($id)->update($input);
+        $model = tap($this->model->findOrFail($id))->update($input);
+
+        if ($request->boolean('remove_photo')) {
+            $this->deletePhoto($model);
+        } else {
+            $input['photo_updated'] = $this->storePhoto($model, $request->file('photo'));
+        }
 
         unset($input['password'], $input['password_confirmation']);
 
@@ -177,12 +193,111 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
             throw new AccessDeniedHttpException('Forbidden');
         }
 
-        $this->model->whereKey($id)->delete();
+        if ($this->model->findOrFail($id)->delete()) {
+            $this->deleteFilesDirectory($id);
+        }
 
         if (request()->expectsJson()) {
             return response()->json(fill_data('success', trans('database.deleted')));
         }
 
         return back()->with('alert', fill_data('success', trans('database.deleted')));
+    }
+
+    /**
+     * Display the photo of the resource.
+     *
+     * @param  \Illuminate\Filesystem\FilesystemManager  $filesystem
+     * @param  string  $id
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|null
+     */
+    public function getPhoto(FilesystemManager $filesystem, string $id)
+    {
+        $filesystem = $filesystem->disk('cms_users');
+
+        $path = $filesystem->getPathUsingId($id, 'photos/photo.png');
+
+        if ($filesystem->exists($path)) {
+            $path = $filesystem->path($path);
+        } else {
+            $path = public_path('assets/libs/images/user-2.png');
+
+            if (! (new Filesystem)->exists($path)) {
+                return null;
+            }
+        }
+
+        try {
+            return response()->file($path);
+        } catch (FileNotFoundException) {
+            return null;
+        }
+    }
+
+    /**
+     * Store a newly created resource photo in storage.
+     *
+     * @param  \App\Models\CmsUser  $model
+     * @param  \Illuminate\Http\UploadedFile|null  $file
+     * @return bool
+     */
+    protected function storePhoto(CmsUser $model, ?UploadedFile $file): bool
+    {
+        if (is_null($file) || is_null($model->id)) {
+            return false;
+        }
+
+        $filesystem = Storage::disk('cms_users');
+
+        $filesystem->makeDirectory(
+            $path = $filesystem->getPathUsingId($model->id, 'photos')
+        );
+
+        Image::read($file)->scale(null, 150)->save(
+            $filesystem->path($path) . '/photo.png'
+        );
+
+        return true;
+    }
+
+    /**
+     * Remove the specified resource photo from filesystem.
+     *
+     * @param  \App\Models\CmsUser  $model
+     * @return bool
+     */
+    protected function deletePhoto(CmsUser $model): bool
+    {
+        $filesystem = Storage::disk('cms_users');
+
+        return $filesystem->delete(
+            $filesystem->getPathUsingId($model->id, 'photos/photo.png')
+        );
+    }
+
+    /**
+     * Remove the specified resource directory from filesystem.
+     *
+     * @param  string  $id
+     * @return bool
+     */
+    protected function deleteFilesDirectory(string $id): bool
+    {
+        $filesystem = Storage::disk('cms_users');
+
+        return $filesystem->deleteDirectory($filesystem->getPathUsingId($id));
+    }
+
+    /**
+     * Determine if the specified resource photo exists.
+     *
+     * @param  string  $id
+     * @return bool
+     */
+    protected function photoExists(string $id): bool
+    {
+        $filesystem = Storage::disk('cms_users');
+
+        return $filesystem->exists($filesystem->getPathUsingId($id, 'photos/photo.png'));
     }
 }

@@ -13,7 +13,7 @@ return [
 
     'public' => [
         'files' => [
-            'alias' => 'Public files',
+            'alias' => 'Public Files',
         ],
     ],
 
@@ -41,7 +41,9 @@ return [
     |    ]
     */
     'disks' => [
-
+        'cms_users' => [
+            'alias' => 'CMS Users'
+        ]
     ],
 
     /*
@@ -107,7 +109,7 @@ return [
             /*
              * image
              */
-            'image/png', 'image/jpeg', 'image/gif', 'image/x-icon', 'image/svg+xml',
+            'image/png', 'image/jpeg', 'image/gif', 'image/x-icon', 'image/svg+xml', 'image/webp',
 
             /*
              * application

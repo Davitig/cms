@@ -24,7 +24,23 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrap();
 
+        $this->setFilesystemMacroGetPathUsingId();
+
         $this->logExecutedDBQueries();
+    }
+
+    /**
+     * Set the filesystem macro to get directory using id.
+     *
+     * @return void
+     */
+    protected function setFilesystemMacroGetPathUsingId(): void
+    {
+        $this->app['filesystem']->macro('getPathUsingId',
+            function (int|string $id, string $path = '') {
+                return 'id_' . $id . ($path ? '/' . $path : $path);
+            }
+        );
     }
 
     /**

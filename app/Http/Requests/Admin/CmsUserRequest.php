@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use App\Http\Requests\Request;
 use App\Models\CmsUserRole;
+use Illuminate\Validation\Rules\File;
 
 class CmsUserRequest extends Request
 {
@@ -21,6 +22,7 @@ class CmsUserRequest extends Request
             'first_name' => 'required|max:35',
             'last_name' => 'required|max:35',
             'cms_user_role_id' => 'required|integer',
+            'photo' => ['nullable', File::image()->max(5 * 1024)],
             'password' => array_merge(
                 $this->isMethod('POST') ? ['required'] : ['nullable'],
                 ['min:8', 'confirmed']

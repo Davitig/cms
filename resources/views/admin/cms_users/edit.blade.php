@@ -23,7 +23,7 @@
     <div class="panel panel-headerless">
         <div class="panel-body">
             {{ html()->modelForm($current, 'put', cms_route('cmsUsers.update', [$current->id]))
-            ->class('form-horizontal ' . $cmsSettings->get('ajax_form'))->open() }}
+            ->acceptsFiles()->class('form-horizontal ' . $cmsSettings->get('ajax_form'))->open() }}
             <div class="member-form-add-header">
                 <div class="row">
                     <div class="col-md-2 col-sm-4 pull-right-sm">
@@ -34,15 +34,25 @@
                         </div>
                     </div>
                     <div class="col-md-10 col-sm-8">
-                        @if ($current->photo)
-                            <div class="user-img">
-                                <img src="{{$current->photo}}" width="128" class="img-circle" alt="Photo">
+                        <div class="user-img">
+                            <div id="photo-upload-btn" class="droppable-area dz-clickable mrg0 border-0">
+                                <span class="photo-upload-text{{ $photoExists ? ' hidden' : '' }}">Upload Photo</span>
+                                <img src="{{$photoExists ? cms_route('cmsUsers.photo', [$current->id] + (request(['t'])) + (session('alert') ? ['t' => time()] : [])) : '#'}}"
+                                     width="150" height="150" id="user-photo" class="img-circle vat{{ $photoExists ? '' : ' hidden' }}" alt="Photo">
                             </div>
-                        @endif
+                            {{ html()->file('photo')->id('photo-input')->class('hidden') }}
+                        </div>
                         <div class="user-name">
                             <a href="{{$routeShow}}">{{$current->first_name}} {{$current->last_name}}</a>
                             <span>{{ucfirst($current->role)}}</span>
                         </div>
+                        <div class="checkbox">
+                            <label>
+                                {{ html()->checkbox('remove_photo')->id('remove-user-photo') }}
+                                Remove photo
+                            </label>
+                        </div>
+                        <div class="photo-msg text-danger">{{$errors->first('photo')}}</div>
                     </div>
                 </div>
             </div>
@@ -54,21 +64,23 @@
             {{ html()->form()->close() }}
         </div>
     </div>
-    @push('body.bottom')
-        <script type="text/javascript">
-            $(function() {
-                $('form.ajax-form').on('ajaxFormSuccess', function() {
-                    let first_name = $('#first_name', this).val();
-                    let last_name = $('#last_name', this).val();
-                    let photo = $('#photo', this).val();
-
-                    $('.user-name a', this).text(first_name + ' ' + last_name);
-                    $('.user-name span', this).text($('[name="cms_user_role_id"] option:selected', this).text());
-                    $('.user-img img', this).attr('src', photo);
-
-                    $('#password, #password_confirmation', this).val('');
-                });
-            });
-        </script>
-    @endpush
 @endsection
+@push('body.bottom')
+    <script type="text/javascript">
+        $(function() {
+            $('form.ajax-form').on('ajaxFormSuccess', function() {
+                let first_name = $('#first_name', this).val();
+                let last_name = $('#last_name', this).val();
+
+                $('.user-name a', this).text(first_name + ' ' + last_name);
+                let roleText = $('[name="cms_user_role_id"] option:selected', this).text();
+                if (! roleText) {
+                    $('.user-name span', this).text();
+                }
+
+                $('#password, #password_confirmation', this).val('');
+            });
+        });
+    </script>
+@endpush
+@include('admin.cms_users.scripts')
