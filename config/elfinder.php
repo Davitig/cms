@@ -13,7 +13,7 @@ return [
 
     'public' => [
         'files' => [
-            'alias' => 'Public files',
+            'alias' => 'Public Files',
         ],
     ],
 
@@ -41,7 +41,9 @@ return [
     |    ]
     */
     'disks' => [
-
+        'cms_users' => [
+            'alias' => 'CMS Users'
+        ]
     ],
 
     /*

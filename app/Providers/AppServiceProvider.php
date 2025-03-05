@@ -36,9 +36,15 @@ class AppServiceProvider extends ServiceProvider
      */
     protected function setFilesystemLocalCmsUsersMacro(): void
     {
+        // get user directory
+        $this->app['filesystem']->macro('getUserDirectory', function (int|string $id) {
+            return 'id_' . $id;
+        });
+
+        // get user photos directory
         $this->app['filesystem']->macro('getUserPhotosDirectory',
             function (int|string $id, ?string $fileName = null) {
-                $idDir = 'id_' . $id;
+                $idDir = $this->getUserDirectory($id);
 
                 $photosDir = $this->getConfig()['directories']['photos'] ?? null;
 

@@ -20,14 +20,12 @@ class VideoRequest extends Request
     }
 
     /**
-     * {@inheritDoc}
+     * Prepare the data for validation.
+     *
+     * @return void
      */
-    public function all($keys = null): array
+    protected function prepareForValidation()
     {
-        $input = parent::all();
-
-        $this->boolifyInput($input, ['visible']);
-
-        return $input;
+        $this->boolifyInput('visible');
     }
 }

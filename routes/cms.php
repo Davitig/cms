@@ -171,6 +171,8 @@ Route::middleware('cms.auth')->group(function ($router) {
     // CMS users
     $router->get('cms-users/{cmsUser}/photo', [AdminCmsUsersController::class, 'getPhoto'])
         ->name('cmsUsers.photo');
+    $router->delete('cms-users/{cmsUser}/photo', [AdminCmsUsersController::class, 'deletePhoto'])
+        ->name('cmsUsers.photo');
     $router->resource('cms-users', AdminCmsUsersController::class)
         ->names(resource_names('cmsUsers'));
 

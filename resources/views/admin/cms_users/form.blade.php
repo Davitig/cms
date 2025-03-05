@@ -60,6 +60,9 @@
         </div>
     @else
         {{ html()->hidden('cms_user_role_id') }}
+        @if ($error = $errors->first('cms_user_role_id'))
+            <span class="text-danger">{{$error}}</span>
+        @endif
     @endif
 
     <div class="row">

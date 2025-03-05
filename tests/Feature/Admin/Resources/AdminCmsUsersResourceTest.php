@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin\Resources;
 
 use App\Models\CmsUser;
 use App\Models\CmsUserRole;
+use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\Feature\Admin\TestAdmin;
@@ -79,7 +80,7 @@ class AdminCmsUsersResourceTest extends TestAdmin
 
     public function test_admin_cms_users_resource_photo_upload()
     {
-        Storage::fake('cms_users');
+        $filesystem = Storage::fake('cms_users');
 
         $this->actingAs(
             $this->getFullAccessCmsUser()
@@ -93,7 +94,39 @@ class AdminCmsUsersResourceTest extends TestAdmin
             'photo' => UploadedFile::fake()->image('photo.png')
         ]);
 
-        Storage::disk('cms_users')->assertExists('id_' . $id . '/photo.png');
+        Storage::disk('cms_users')->assertExists(
+            $filesystem->getUserDirectory($id) . '/photo.png'
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function test_admin_cms_users_resource_photo_delete()
+    {
+        $filesystem = Storage::fake('cms_users');
+
+        $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->post(cms_route('cmsUsers.store'), [
+            'email' => fake()->safeEmail(),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
+            'cms_user_role_id' => (new CmsUserRole)->valueOrFail('id'),
+            'password' => $password = bcrypt(fake()->password(8, 8)),
+            'password_confirmation' => $password,
+            'photo' => UploadedFile::fake()->image('photo.png')
+        ]);
+
+        $id = (new CmsUser)->orderDesc()->valueOrFail('id');
+
+        if (! $filesystem->exists($filesystem->getUserDirectory($id) . '/photo.png')) {
+            throw new Exception('Uploaded photo not found');
+        }
+
+        $filesystem->delete($filesystem->getUserDirectory($id . '/photo.png'));
+
+        $filesystem->assertMissing($filesystem->getUserDirectory($id) . '/photo.png');
     }
 
     public function test_admin_cms_users_resource_validation()

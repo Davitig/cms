@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Admin;
 
 use App\Http\Requests\Request;
-use App\Models\CmsUserRole;
 use Illuminate\Validation\Rules\File;
 
 class CmsUserRequest extends Request
@@ -21,7 +20,7 @@ class CmsUserRequest extends Request
             'email' => 'required|string|email|max:255|unique:cms_users,email,'.$id,
             'first_name' => 'required|max:35',
             'last_name' => 'required|max:35',
-            'cms_user_role_id' => 'required|integer',
+            'cms_user_role_id' => 'required|integer|exists:cms_user_roles,id',
             'photo' => ['nullable', File::image()->max(5 * 1024)],
             'password' => array_merge(
                 $this->isMethod('POST') ? ['required'] : ['nullable'],
@@ -31,30 +30,20 @@ class CmsUserRequest extends Request
     }
 
     /**
-     * {@inheritDoc}
+     * Prepare the data for validation.
+     *
+     * @return void
      */
-    public function all($keys = null): array
+    protected function prepareForValidation()
     {
-        $input = parent::all();
-
-        $id = $this->route('cms_user');
+        $this->boolifyInput('blocked');
 
         $user = $this->user('cms');
 
-        $input['blocked'] = $this->filled('blocked') ? 1 : 0;
-
-        $roleIds = (new CmsUserRole)->pluck('id')->toArray();
-
-        if ($user->id == $id) {
-            $input['cms_user_role_id'] = $user->cms_user_role_id;
-            $input['full_access'] = $user->full_access;
-            $input['blocked'] = 0;
-        } elseif (! $user->hasFullAccess() || ! in_array($this->get('cms_user_role_id'), $roleIds)) {
-            $input['cms_user_role_id'] = null;
-            $input['full_access'] = 0;
+        if ($user->id == $this->route('cms_user')) {
+            $this->offsetSet('cms_user_role_id', $user->cms_user_role_id);
+            $this->offsetSet('blocked', 0);
         }
-
-        return $input;
     }
 
     /**
@@ -67,6 +56,10 @@ class CmsUserRequest extends Request
         if (! $this->filled('password')) {
             $this->offsetUnset('password');
             $this->offsetUnset('password_confirmation');
+        }
+
+        if (! $this->user('cms')->hasFullAccess()) {
+            $this->offsetUnset('cms_user_role_id');
         }
     }
 }

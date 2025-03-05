@@ -98,7 +98,7 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
         $input = $request->all();
 
         if (! $request->filled('password')) {
-            unset($input['password']);
+            unset($input['password'], $input['password_confirmation']);
         } else {
             $input['password'] = bcrypt($input['password']);
         }
@@ -138,7 +138,7 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
 
         $data['roles'] = (new CmsUserRole)->pluck('role', 'id');
 
-        $data['photoExists'] = $this->checkUserPhotoExists($id);
+        $data['photoExists'] = $this->photoExists($id);
 
         return view('admin.cms_users.edit', $data);
     }
@@ -160,7 +160,11 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
 
         $this->model->findOrFail($id)->update($input);
 
-        $this->storePhoto($id, $request->file('photo'));
+        if ($request->boolean('remove_photo')) {
+            $this->deletePhoto($id);
+        } else {
+            $this->storePhoto($id, $request->file('photo'));
+        }
 
         unset($input['password'], $input['password_confirmation']);
 
@@ -189,7 +193,9 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
             throw new AccessDeniedHttpException('Forbidden');
         }
 
-        $this->model->whereKey($id)->delete();
+        if ($this->model->findOrFail($id)->delete()) {
+            $this->deleteUserFilesDirectory($id);
+        }
 
         if (request()->expectsJson()) {
             return response()->json(fill_data('success', trans('database.deleted')));
@@ -199,7 +205,26 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
     }
 
     /**
-     * Display the user photo.
+     * Remove the specified resource photo from filesystem.
+     *
+     * @param  string  $id
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
+    public function deletePhoto(string $id)
+    {
+        $filesystem = Storage::disk('cms_users');
+
+        $filesystem->delete($filesystem->getUserPhotosDirectory($id, 'photo.png'));
+
+        if (request()->expectsJson()) {
+            return response()->json(fill_data('success', trans('database.deleted')));
+        }
+
+        return back()->with('alert', fill_data('success', trans('database.deleted')));
+    }
+
+    /**
+     * Display the photo of the resource.
      *
      * @param  \Illuminate\Filesystem\FilesystemManager  $filesystem
      * @param  string  $id
@@ -229,15 +254,15 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
     }
 
     /**
-     * Store the user photo in storage.
+     * Store a newly created resource photo in storage.
      *
-     * @param  string  $id
+     * @param  int  $id
      * @param  \Illuminate\Http\UploadedFile|null  $file
      * @return bool
      */
-    protected function storePhoto(string $id, ?UploadedFile $file): bool
+    protected function storePhoto(int $id, ?UploadedFile $file): bool
     {
-        if (is_null($file)) {
+        if (is_null($file) || is_null($id)) {
             return false;
         }
 
@@ -255,12 +280,25 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
     }
 
     /**
-     * Check if a user photo exists.
+     * Remove the specified resource directory from filesystem.
      *
      * @param  string  $id
      * @return bool
      */
-    protected function checkUserPhotoExists(string $id): bool
+    protected function deleteUserFilesDirectory(string $id): bool
+    {
+        $filesystem = Storage::disk('cms_users');
+
+        return $filesystem->deleteDirectory($filesystem->getUserDirectory($id));
+    }
+
+    /**
+     * Determine if the specified resource photo exists.
+     *
+     * @param  string  $id
+     * @return bool
+     */
+    protected function photoExists(string $id): bool
     {
         $filesystem = Storage::disk('cms_users');
 

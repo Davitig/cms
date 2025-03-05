@@ -16,9 +16,21 @@ class TranslationRequest extends Request
         $id = $this->route('translation') ?: $this->get('id');
 
         return [
-            'code' => 'required|max:18|regex:/^\w+$/|unique:translations,code,' . $id,
+            'code' => 'required|max:18|regex:/^[a-zA-Z_]+$/|unique:translations,code,' . $id,
             'title' => 'required',
             'value' => 'required'
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'regex' => 'The :attribute field must only contain letters and underscores.'
         ];
     }
 }

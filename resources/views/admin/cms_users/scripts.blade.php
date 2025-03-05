@@ -4,15 +4,28 @@
             $('#photo-upload-btn').on('click', function () {
                 $('#photo-input').trigger('click');
             });
+            let removePhotoChecked = false;
+            $('#remove-user-photo').on('change', function () {
+                removePhotoChecked = $(this).prop('checked');
+            });
+            $('form.ajax-form').on('ajaxFormSuccess', function() {
+                if (removePhotoChecked) {
+                    $('#photo-input').val('');
+                    $('#user-photo').attr('src', '#').addClass('hidden');
+                    $('.photo-upload-text').removeClass('hidden');
+                    $('#remove-user-photo').prop('checked', false);
+                    removePhotoChecked = false;
+                }
+            });
             $('#photo-input').on('change', function() {
-                let allowedExtension = [
-                    'image/jpeg', 'image/jpg', 'image/png','image/gif','image/bmp', 'image/webp'
-                ];
                 if (! this.files || ! this.files[0]) {
                     $('.photo-msg').text('Error selecting a file');
 
                     return;
                 }
+                let allowedExtension = [
+                    'image/jpeg', 'image/jpg', 'image/png','image/gif','image/bmp', 'image/webp'
+                ];
                 if (allowedExtension.indexOf(this.files[0].type) < 0) {
                     $('.photo-msg').text('Extension type ' + this.files[0].type + ' not allowed');
 

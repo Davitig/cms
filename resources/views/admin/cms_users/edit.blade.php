@@ -36,9 +36,7 @@
                     <div class="col-md-10 col-sm-8">
                         <div class="user-img">
                             <div id="photo-upload-btn" class="droppable-area dz-clickable mrg0 border-0">
-                                @if (! $photoExists)
-                                    <span class="photo-upload-text">Upload Photo</span>
-                                @endif
+                                <span class="photo-upload-text{{ $photoExists ? ' hidden' : '' }}">Upload Photo</span>
                                 <img src="{{$photoExists ? cms_route('cmsUsers.photo', [$current->id] + (session('alert') ? ['t' => time()] : [])) : '#'}}"
                                      width="150" height="150" id="user-photo" class="img-circle vat{{ $photoExists ? '' : ' hidden' }}" alt="Photo">
                             </div>
@@ -47,6 +45,12 @@
                         <div class="user-name">
                             <a href="{{$routeShow}}">{{$current->first_name}} {{$current->last_name}}</a>
                             <span>{{ucfirst($current->role)}}</span>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                {{ html()->checkbox('remove_photo')->id('remove-user-photo') }}
+                                Remove photo
+                            </label>
                         </div>
                         <div class="photo-msg text-danger">{{$errors->first('photo')}}</div>
                     </div>
