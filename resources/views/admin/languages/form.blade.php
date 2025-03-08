@@ -51,6 +51,15 @@
             </div>
         </div>
     </div>
+    <div class="col-xs-4">
+        <div class="form-group">
+            <label class="col-sm-6 control-label">Main:</label>
+            <div class="col-sm-6">
+                {{ html()->checkbox('main')->id('main')
+                ->class('iswitch iswitch-secondary')->data('lang', 1) }}
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="form-group-separator"></div>

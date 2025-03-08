@@ -6,13 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\LanguageRequest;
 use App\Models\Language;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 
 class AdminLanguagesController extends Controller
 {
-    use Positionable, VisibilityTrait {
-        VisibilityTrait::visibility as langVisibility;
-    }
+    use Positionable, VisibilityTrait;
 
     /**
      * Create a new controller instance.
@@ -33,6 +30,8 @@ class AdminLanguagesController extends Controller
         $data['langVisibleCount'] = $data['items']->filter(
             fn ($item) => $item->visible
         )->count();
+
+        $data['routesAreCached'] = app()->routesAreCached();
 
         return view('admin.languages.index', $data);
     }
@@ -57,9 +56,11 @@ class AdminLanguagesController extends Controller
      */
     public function store(LanguageRequest $request)
     {
-        $model = $this->model->create($request->all());
+        if ($request->boolean('main')) {
+            $this->uncheckAllMain();
+        }
 
-        $this->cacheRoutesIfCached();
+        $model = $this->model->create($request->all());
 
         return redirect(cms_route('languages.edit', [$model->id]))
             ->with('alert', fill_data('success', trans('general.created')));
@@ -87,11 +88,11 @@ class AdminLanguagesController extends Controller
      */
     public function update(LanguageRequest $request, string $id)
     {
-        $this->model->findOrFail($id)->update($input = $request->all());
-
-        if ($request->boolean('visible')) {
-            $this->cacheRoutesIfCached();
+        if ($request->boolean('main')) {
+            $this->uncheckAllMain();
         }
+
+        $this->model->findOrFail($id)->update($input = $request->all());
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(
@@ -110,9 +111,7 @@ class AdminLanguagesController extends Controller
      */
     public function destroy(string $id)
     {
-        if ($this->model->destroy($id)) {
-            $this->cacheRoutesIfCached();
-        }
+        $this->model->destroy($id);
 
         $url = null;
 
@@ -144,30 +143,31 @@ class AdminLanguagesController extends Controller
     }
 
     /**
-     * Update visibility of the specified resource.
+     * Update the specified resource "main" attribute in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  string  $id
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
-     *
-     * @throws \ErrorException
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
-    public function visibility(Request $request, string $id)
+    public function updateMain(Request $request)
     {
-        $this->cacheRoutesIfCached();
+        if ($id = $request->get('id')) {
+            $this->uncheckAllMain();
 
-        return $this->langVisibility($request, $id);
+            return response()->json(
+                $this->model->findOrFail($id)->update(['main' => 1])
+            );
+        }
+
+        return response(trans('general.invalid_input'), 422);
     }
 
     /**
-     * Call route cache command if routes are cached.
+     * Uncheck the "main" attribute from all the main-checked resources.
      *
-     * @return void
+     * @return bool
      */
-    protected function cacheRoutesIfCached()
+    protected function uncheckAllMain(): bool
     {
-        if (app()->routesAreCached()) {
-            Artisan::call('route:cache');
-        }
+        return $this->model->whereMain(1)->update(['main' => 0]);
     }
 }

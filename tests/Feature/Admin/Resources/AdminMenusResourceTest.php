@@ -74,38 +74,6 @@ class AdminMenusResourceTest extends TestAdmin
         $response->assertFound()->assertSessionHasErrors(['title']);
     }
 
-    /**
-     * @throws \JsonException
-     */
-    public function test_admin_menus_set_main()
-    {
-        (new Menu)->create(['title' => 'Menu Title']);
-
-        $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->post(cms_route('menus.setMain'), [
-            'id' => (new Menu)->valueOrFail('id')
-        ]);
-
-        $response->assertOk()->assertSessionHasNoErrors();
-    }
-
-    public function test_admin_menus_main_is_unique()
-    {
-        $this->assertEquals(1, (new Menu)->whereMain(1)->count());
-    }
-
-    public function test_admin_menus_set_main_validate_id_required()
-    {
-        $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->post(cms_route('menus.setMain'), [
-            // empty data
-        ]);
-
-        $response->assertUnprocessable();
-    }
-
     public function test_admin_menus_resource_destroy()
     {
         $response = $this->actingAs(
@@ -117,5 +85,56 @@ class AdminMenusResourceTest extends TestAdmin
         (new Menu)->newQuery()->delete();
 
         $response->assertFound();
+    }
+
+    /**
+     * @throws \JsonException
+     */
+    public function test_admin_menus_update_main()
+    {
+        $model = (new Menu)->create(['title' => 'Menu Title']);
+
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('menus.updateMain'), [
+            'id' => $model->id
+        ]);
+
+        $model->delete();
+
+        $response->assertOk()->assertSessionHasNoErrors();
+    }
+
+    public function test_admin_languages_main_is_unique()
+    {
+        $model = (new Menu)->create([
+            'title' => 'Menu title', 'main' => 1
+        ]);
+
+        $newModel = (new Menu)->create([
+            'title' => 'New menu title', 'main' => 1
+        ]);
+
+        $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('menus.updateMain'), [
+            'id' => $model->id
+        ]);
+
+        $this->assertEquals(1, (new Menu)->whereMain(1)->count());
+
+        $model->delete();
+        $newModel->delete();
+    }
+
+    public function test_admin_menus_update_main_validate_id_required()
+    {
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('menus.updateMain'), [
+            // empty data
+        ]);
+
+        $response->assertUnprocessable();
     }
 }

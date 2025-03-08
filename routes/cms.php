@@ -53,6 +53,8 @@ Route::middleware('cms.auth')->group(function ($router) {
 
     // languages
     $router->controller(AdminLanguagesController::class)->group(function ($router) {
+        $router->put('languages/update-main', 'updateMain')
+            ->name('languages.updateMain');
         $router->put('languages/{id}/visibility', 'visibility')
             ->name('languages.visibility');
         $router->put('languages/position',  'updatePosition')
@@ -63,8 +65,8 @@ Route::middleware('cms.auth')->group(function ($router) {
     });
 
     // menus
-    $router->post('menus/set-main', [AdminMenusController::class, 'setMain'])
-        ->name('menus.setMain');
+    $router->put('menus/update-main', [AdminMenusController::class, 'updateMain'])
+        ->name('menus.updateMain');
     $router->resource('menus', AdminMenusController::class)
         ->names(resource_names('menus'))
         ->except(['show']);
@@ -170,8 +172,6 @@ Route::middleware('cms.auth')->group(function ($router) {
 
     // CMS users
     $router->get('cms-users/{cmsUser}/photo', [AdminCmsUsersController::class, 'getPhoto'])
-        ->name('cmsUsers.photo');
-    $router->delete('cms-users/{cmsUser}/photo', [AdminCmsUsersController::class, 'deletePhoto'])
         ->name('cmsUsers.photo');
     $router->resource('cms-users', AdminCmsUsersController::class)
         ->names(resource_names('cmsUsers'));

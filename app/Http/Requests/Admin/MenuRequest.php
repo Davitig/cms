@@ -17,4 +17,14 @@ class MenuRequest extends Request
             'title' => 'required|max:250'
         ];
     }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->boolifyInput('main');
+    }
 }

@@ -3,13 +3,14 @@
 namespace App\Support;
 
 use App\Models\Alt\Contracts\Collection as CollectionContract;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Page\Page;
 use Closure;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Collection;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class DynamicRouteRegistrar
 {
@@ -124,11 +125,11 @@ class DynamicRouteRegistrar
     public function __construct(protected Application $app) {}
 
     /**
-     * Bootstrap services.
+     * Handle the dynamic routes.
      *
      * @return void
      */
-    public function boot(): void
+    public function handle(): void
     {
         $config = $this->app['config'];
 
@@ -147,6 +148,8 @@ class DynamicRouteRegistrar
         if (! $this->segmentsCount = count($this->segments)) {
             return;
         }
+
+        $this->checkLanguageForMaintenance($language);
 
         $this->router = $this->app['router'];
 
@@ -558,5 +561,18 @@ class DynamicRouteRegistrar
         }
 
         return ['uses' => 'Web' . str($type)->studly() . 'Controller@' . $method];
+    }
+
+    /**
+     * Check the language for maintenance.
+     *
+     * @param  string|null  $language
+     * @return void
+     */
+    protected function checkLanguageForMaintenance(?string $language): void
+    {
+        if (is_null($language) || ! array_key_exists($language, languages(true))) {
+            throw new ServiceUnavailableHttpException;
+        }
     }
 }

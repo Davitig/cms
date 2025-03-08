@@ -31,6 +31,6 @@ class LanguageRequest extends Request
     {
         $this->offsetSet('language', strtolower($this->get('language')));
 
-        $this->boolifyInput('visible');
+        $this->boolifyInput('visible', 'main');
     }
 }

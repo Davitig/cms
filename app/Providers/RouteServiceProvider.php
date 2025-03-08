@@ -36,13 +36,15 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function loadWebRoutes(Router $router): void
     {
-        $router->group([], base_path('routes/web.php'));
+        $router->middleware('web.maintenance')
+            ->group(base_path('routes/web.php'));
 
         if (is_multilanguage()) {
-            foreach (languages(true) as $lang => $value) {
-                $router->prefix($lang)->name($lang . '.')->group(
-                    base_path('routes/web.php')
-                );
+            foreach (languages() as $lang => $value) {
+                $router->middleware('web.maintenance')
+                    ->prefix($lang)->name($lang . '.')->group(
+                        base_path('routes/web.php')
+                    );
             }
         }
     }
@@ -55,9 +57,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function loadCMSRoutes(Router $router): void
     {
-        $router->prefix(cms_slug())->name(cms_route_name())->group(function ($router) {
-            $router->group([], base_path('routes/cms.php'));
-        });
+        $router->prefix(cms_slug())->name(cms_route_name())
+            ->group(base_path('routes/cms.php'));
 
         if (is_multilanguage()) {
             $cmsSlug = cms_slug();
@@ -65,9 +66,7 @@ class RouteServiceProvider extends ServiceProvider
             foreach (languages() as $lang => $value) {
                 $router->prefix($lang . '/' . $cmsSlug)->name(
                     $lang . '.' . cms_route_name()
-                )->group(function ($router) {
-                    $router->group([], base_path('routes/cms.php'));
-                });
+                )->group(base_path('routes/cms.php'));
             }
         }
     }

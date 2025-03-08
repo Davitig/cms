@@ -20,7 +20,7 @@ class RouteServiceProvider extends ServiceProvider
         parent::loadCachedRoutes();
 
         $this->app->booted(function ($app) {
-            (new DynamicRouteRegistrar($app))->boot();
+            (new DynamicRouteRegistrar($app))->handle();
         });
     }
 
@@ -33,6 +33,6 @@ class RouteServiceProvider extends ServiceProvider
     {
         parent::loadRoutes();
 
-        (new DynamicRouteRegistrar($this->app))->boot();
+        (new DynamicRouteRegistrar($this->app))->handle();
     }
 }

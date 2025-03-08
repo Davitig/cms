@@ -48,7 +48,7 @@ class AdminLanguagesResourceTest extends TestAdmin
         )->post(cms_route('languages.store'), [
             'language' => 'te',
             'short_name' => 'te',
-            'full_name' => 'Test language name',
+            'full_name' => 'Test language',
         ]);
 
         $response->assertFound()->assertSessionHasNoErrors();
@@ -73,7 +73,7 @@ class AdminLanguagesResourceTest extends TestAdmin
         )->put(cms_route('languages.update', [$this->getLanguageId('te')]), [
             'language' => 'te',
             'short_name' => 'te',
-            'full_name' => 'Test language full name',
+            'full_name' => 'Test language',
         ]);
 
         $response->assertFound()->assertSessionHasNoErrors();
@@ -112,5 +112,68 @@ class AdminLanguagesResourceTest extends TestAdmin
         ]);
 
         $response->assertFound()->assertSessionHasErrors(['language', 'short_name']);
+    }
+
+    /**
+     * @throws \JsonException
+     */
+    public function test_admin_languages_update_main()
+    {
+        (new Language)->whereLanguage('te')->delete();
+
+        $model = (new Language)->create([
+            'language' => 'te',
+            'short_name' => 'te',
+            'full_name' => 'Test language',
+        ]);
+
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('languages.updateMain'), [
+            'id' => $model->id
+        ]);
+
+        $model->delete();
+
+        $response->assertOk()->assertSessionHasNoErrors();
+    }
+
+    public function test_admin_languages_main_is_unique()
+    {
+        $model = (new Language)->create([
+            'language' => 'te',
+            'short_name' => 'te',
+            'full_name' => 'Test language',
+            'main' => 1
+        ]);
+
+        $newModel = (new Language)->create([
+            'language' => 't1',
+            'short_name' => 't1',
+            'full_name' => 'New test language',
+            'main' => 1
+        ]);
+
+        $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('languages.updateMain'), [
+            'id' => $model->id
+        ]);
+
+        $this->assertEquals(1, (new Language)->whereMain(1)->count());
+
+        $model->delete();
+        $newModel->delete();
+    }
+
+    public function test_admin_languages_update_main_validate_id_required()
+    {
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser()
+        )->put(cms_route('languages.updateMain'), [
+            // empty data
+        ]);
+
+        $response->assertUnprocessable();
     }
 }

@@ -46,6 +46,10 @@ class AdminMenusController extends Controller
      */
     public function store(MenuRequest $request)
     {
+        if ($request->boolean('main')) {
+            $this->uncheckAllMain();
+        }
+
         $model = $this->model->create($request->all());
 
         return redirect(cms_route('menus.edit', [$model->id]))
@@ -74,6 +78,10 @@ class AdminMenusController extends Controller
      */
     public function update(MenuRequest $request, string $id)
     {
+        if ($request->boolean('main')) {
+            $this->uncheckAllMain();
+        }
+
         $this->model->findOrFail($id)->update($input = $request->all());
 
         if ($request->expectsJson()) {
@@ -103,15 +111,15 @@ class AdminMenusController extends Controller
     }
 
     /**
-     * Set the specified menu to main.
+     * Update the specified resource "main" attribute in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
-    public function setMain(Request $request)
+    public function updateMain(Request $request)
     {
         if ($id = $request->get('id')) {
-            $this->model->where('main', 1)->update(['main' => 0]);
+            $this->uncheckAllMain();
 
             return response()->json(
                 $this->model->findOrFail($id)->update(['main' => 1])
@@ -119,5 +127,15 @@ class AdminMenusController extends Controller
         }
 
         return response(trans('general.invalid_input'), 422);
+    }
+
+    /**
+     * Uncheck the "main" attribute from all the main-checked resources.
+     *
+     * @return bool
+     */
+    protected function uncheckAllMain(): bool
+    {
+        return $this->model->whereMain(1)->update(['main' => 0]);
     }
 }

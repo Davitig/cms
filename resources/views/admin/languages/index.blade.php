@@ -36,12 +36,19 @@
                 <span>{{ trans('general.create') }}</span>
             </a>
             <strong class="text-black padl">Drag and Drop to sort the languages order</strong>
-            <strong class="language-visible text-danger padl{{ $langVisibleCount ? ' hidden' : '' }}">
-                Website will be unavailable when languages are not visible or doesn't exist
-            </strong>
+            @if ($routesAreCached)
+                <div class="alert alert-info">
+                    Routes are cached.
+                    Any language changes will not take effect until you clear or refresh the routes cache
+                </div>
+            @endif
+            <div class="language-visible alert alert-danger{{ $langVisibleCount ? ' hidden' : '' }}">
+                Website will be in maintenance mode when languages are not visible or doesn't exist
+            </div>
             <table id="items" class="table table-striped">
                 <thead>
                 <tr>
+                    <th>Main</th>
                     <th>Full Name</th>
                     <th>Short Name</th>
                     <th>Language Code</th>
@@ -52,6 +59,9 @@
                 <tbody id="sortable">
                 @forelse ($items as $item)
                     <tr id="item{{$item->id}}" class="item" data-id="{{$item->id}}">
+                        <td>
+                            <input type="radio" name="main" data-id="{{$item->id}}" class="cbr cbr-success"{{$item->main ? ' checked' : ''}}>
+                        </td>
                         <td class="full-name pointer">
                             <img src="{{ asset('assets/libs/images/flags/'.$item->language.'.png') }}" width="30" height="20" alt="{{$item->language}} Flag">
                             <span>{{ $item->full_name }}</span>
@@ -86,56 +96,64 @@
             </table>
         </div>
     </div>
-    @push('body.bottom')
-        <script type="text/javascript">
-            $(function() {
-                let langSelected = {{(int) language_selected()}};
-                let activeLangSelector = $('.language-switcher > a img');
-                let langMenuSelector = $('.dropdown-menu.languages');
-                let sortableSelector = $('#sortable');
-                sortableSelector.sortable();
-                sortableSelector.on('sortupdate', function () {
-                    let ids = [];
-                    let input = {data: []};
-                    $.each(sortableSelector.sortable('toArray', {attribute: 'data-id'}), function (i, id) {
-                        ids[id] = i;
-                        input.data.push({id: id});
-                    });
-                    input['_method'] = 'put';
-                    input['_token'] = '{{csrf_token()}}';
-                    $.post('{{cms_route('languages.updatePosition')}}', input, function () {
-                        toastr['success']('Positions has been updated successfully');
-                        if (! langSelected) {
-                            let flag = sortableSelector.children(':first').find('.full-name img').attr('src');
-                            activeLangSelector.attr('src', flag);
-                        }
-                        let langItems = langMenuSelector.children('li').each(function (i, e) {
-                            $(e).data('pos', ids[parseInt($(e).data('id'))]);
-                        }).sort(function (a, b) {
-                            return parseInt($(a).data('pos')) - parseInt($(b).data('pos'));
-                        });
-                        langMenuSelector.html('');
-                        langItems.each(function (i, e) {
-                            langMenuSelector.append(e);
-                        });
-                    }, 'json').fail(function (xhr) {
-                        alert(xhr.responseText);
-                    });
-                });
-                // toggle message when all languages are invisible
-                let langVisibleCount = {{ $langVisibleCount }};
-                let langVisibleSelector = $('.language-visible');
-                $('form.visibility').on('visibilityResponse', function (e, res) {
-                    langVisibleCount += res ? res : -1;
-                    if (langVisibleCount > 0) {
-                        langVisibleSelector.addClass('hidden');
-                    } else {
-                        langVisibleSelector.removeClass('hidden');
-                    }
-                })
-            });
-        </script>
-        <script src="{{ asset('assets/libs/js/jquery-ui/jquery-ui.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/js/jquery-ui/jquery.ui.touch-punch.min.js') }}"></script>
-    @endpush
 @endsection
+@push('body.bottom')
+    <script type="text/javascript">
+        $('#items').on('click', '.cbr-radio', function() {
+            let id = $(this).find('input').data('id');
+            let data = {'id':id, '_token':'{{csrf_token()}}', '_method':'put'};
+            $.post('{{cms_route('languages.updateMain')}}', data, function() {
+            }, 'json').fail(function(xhr) {
+                alert(xhr.responseText);
+            });
+        });
+        $(function() {
+            let langSelected = {{(int) language_selected()}};
+            let activeLangSelector = $('.language-switcher > a img');
+            let langMenuSelector = $('.dropdown-menu.languages');
+            let sortableSelector = $('#sortable');
+            sortableSelector.sortable();
+            sortableSelector.on('sortupdate', function () {
+                let ids = [];
+                let input = {data: []};
+                $.each(sortableSelector.sortable('toArray', {attribute: 'data-id'}), function (i, id) {
+                    ids[id] = i;
+                    input.data.push({id: id});
+                });
+                input['_method'] = 'put';
+                input['_token'] = '{{csrf_token()}}';
+                $.post('{{cms_route('languages.updatePosition')}}', input, function () {
+                    toastr['success']('Positions has been updated successfully');
+                    if (! langSelected) {
+                        let flag = sortableSelector.children(':first').find('.full-name img').attr('src');
+                        activeLangSelector.attr('src', flag);
+                    }
+                    let langItems = langMenuSelector.children('li').each(function (i, e) {
+                        $(e).data('pos', ids[parseInt($(e).data('id'))]);
+                    }).sort(function (a, b) {
+                        return parseInt($(a).data('pos')) - parseInt($(b).data('pos'));
+                    });
+                    langMenuSelector.html('');
+                    langItems.each(function (i, e) {
+                        langMenuSelector.append(e);
+                    });
+                }, 'json').fail(function (xhr) {
+                    alert(xhr.responseText);
+                });
+            });
+            // toggle message when all languages are invisible
+            let langVisibleCount = {{ $langVisibleCount }};
+            let langVisibleSelector = $('.language-visible');
+            $('form.visibility').on('visibilityResponse', function (e, res) {
+                langVisibleCount += res ? res : -1;
+                if (langVisibleCount > 0) {
+                    langVisibleSelector.addClass('hidden');
+                } else {
+                    langVisibleSelector.removeClass('hidden');
+                }
+            })
+        });
+    </script>
+    <script src="{{ asset('assets/libs/js/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/js/jquery-ui/jquery.ui.touch-punch.min.js') }}"></script>
+@endpush

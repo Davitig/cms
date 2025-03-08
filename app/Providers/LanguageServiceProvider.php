@@ -6,7 +6,6 @@ use App\Models\Language;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
-use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class LanguageServiceProvider extends ServiceProvider
 {
@@ -70,13 +69,17 @@ class LanguageServiceProvider extends ServiceProvider
         $config->set(['_app.language_selected' => $langSelected]);
 
         if ($langSelected) {
-            $config->set(['_app.language' => $activeLanguage = $firstSegment]);
+            $config->set(['_app.language' => $activeLanguage = $firstSegment ?: null]);
 
             $this->segmentsCount--;
 
             array_shift($this->segments);
         } else {
-            $config->set(['_app.language' => $activeLanguage = key($languages)]);
+            $config->set([
+                '_app.language' => $activeLanguage = key(array_filter(
+                    $languages, fn ($lang) => $lang['main']
+                ) ?: $languages) ?: null
+            ]);
         }
 
         $cmsActivated = current($this->segments) == $config->get('cms.slug');
@@ -84,29 +87,31 @@ class LanguageServiceProvider extends ServiceProvider
         $config->set(['_cms.activated' => $cmsActivated]);
 
         if (! $cmsActivated && ! $this->app->runningInConsole()) {
-            $visibleLanguages = array_filter($languages, fn ($lang) => $lang['visible']);
-
-            if (empty($visibleLanguages)
-                || ! array_key_exists($activeLanguage, $visibleLanguages)
-            ) {
-                throw new ServiceUnavailableHttpException;
-            }
-
             $config->set(['app.locale' => $activeLanguage]);
-
-            $queryString = $request->query();
-        } else {
-            $queryString = $request->except('lang');
         }
 
-        // set active URL for each language.
+        $config->set([
+            '_app.languages' => $this->addAllLanguagesToActiveUrl($languages, $request)
+        ]);
+    }
+
+    /**
+     * Add all languages to the active URL.
+     *
+     * @param  array  $languages
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    protected function addAllLanguagesToActiveUrl(array $languages, Request $request): array
+    {
+        // add all languages to the active URL.
         foreach ($languages as $language => $value) {
             $languages[$language]['url'] = trim(
-                    $request->root() . '/' . $language . '/' . implode('/', $this->segments),
-                    '/'
-                ) . query_string($queryString);
+                $request->root() . '/' . $language . '/' . implode('/', $this->segments),
+                '/'
+            );
         }
 
-        $config->set(['_app.languages' => $languages]);
+        return $languages;
     }
 }

@@ -162,7 +162,7 @@ $(function () {
                                 item = $(e);
                                 if (item.val() !== element) {
                                     if (item.is(':checkbox')) {
-                                        item.prop('checked', element === 1);
+                                        item.prop('checked', Boolean(element));
                                     } else {
                                         item.val(element);
                                         if (item.is('select')) {

@@ -75,16 +75,16 @@
             </table>
         </div>
     </div>
-    @push('body.bottom')
-        <script type="text/javascript">
-            $('#items').on('click', '.cbr-radio', function() {
-                let id = $(this).find('input').data('id');
-                let data = {'id':id, '_token':"{{csrf_token()}}"};
-                $.post('{{cms_route('menus.setMain')}}', data, function() {
-                }, 'json').fail(function(xhr) {
-                    alert(xhr.responseText);
-                });
-            });
-        </script>
-    @endpush
 @endsection
+@push('body.bottom')
+    <script type="text/javascript">
+        $('#items').on('click', '.cbr-radio', function() {
+            let id = $(this).find('input').data('id');
+            let data = {'id':id, '_token':'{{csrf_token()}}', '_method':'put'};
+            $.post('{{cms_route('menus.updateMain')}}', data, function() {
+            }, 'json').fail(function(xhr) {
+                alert(xhr.responseText);
+            });
+        });
+    </script>
+@endpush
