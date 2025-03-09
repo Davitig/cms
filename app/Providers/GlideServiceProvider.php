@@ -22,7 +22,7 @@ class GlideServiceProvider extends ServiceProvider implements DeferrableProvider
             return (new ServerFactory([
                 'source'                 => public_path($source),
                 'cache'                  => $app[Filesystem::class]->getDriver(),
-                'cache_path_prefix'      => 'images/cache',
+                'cache_path_prefix'      => 'glide/cache',
                 'group_cache_in_folders' => false
             ]))->getServer();
         });

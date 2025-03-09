@@ -5,17 +5,17 @@
 | elFinder
 |--------------------------------------------------------------------------
 |
-| Override base controller.
+| Override base controller methods.
 |
 */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Barryvdh\Elfinder\Connector;
 use Barryvdh\Elfinder\ElfinderController as Elfinder;
 use Illuminate\Filesystem\FilesystemAdapter;
 
-class ElfinderController extends Elfinder
+class AdminElfinderController extends Elfinder
 {
     /**
      * Show connector.
@@ -26,9 +26,9 @@ class ElfinderController extends Elfinder
      */
     public function showConnector()
     {
-        $roots = $this->app->config->get('elfinder.roots', []);
+        $roots = $this->app['config']->get('elfinder.roots', []);
         if (empty($roots)) {
-            $globalOptions = $this->app->config->get('elfinder.roots_options');
+            $globalOptions = $this->app['config']->get('elfinder.roots_options');
 
             $public = (array) $this->app['config']->get('elfinder.public', []);
             foreach ($public as $key => $root) {
@@ -40,18 +40,23 @@ class ElfinderController extends Elfinder
                     'driver' => 'LocalFileSystem', // driver for accessing file system (REQUIRED)
                     'path' => public_path($key), // path to files (REQUIRED)
                     'URL' => url($key), // URL to files (REQUIRED)
-                    'accessControl' => $this->app->config->get('elfinder.access') // filter callback (OPTIONAL)
+                    'accessControl' => $this->app['config']->get('elfinder.access') // filter callback (OPTIONAL)
                 ];
                 $roots[] = array_merge($defaults, $root, $globalOptions);
             }
 
-            if (! $this->app->request->boolean('hide_disks')) {
+            if (! $this->app['request']->boolean('hide_disks')) {
                 $disks = (array) $this->app['config']->get('elfinder.disks', []);
                 foreach ($disks as $key => $root) {
+                    if (! $this->cmsUserHasAccessToDisk()) {
+                        continue;
+                    }
+
                     if (is_string($root)) {
                         $key = $root;
                         $root = [];
                     }
+
                     $disk = app('filesystem')->disk($key);
                     if ($disk instanceof FilesystemAdapter) {
                         $defaults = [
@@ -65,12 +70,28 @@ class ElfinderController extends Elfinder
             }
         }
 
-        $opts = $this->app->config->get('elfinder.options', array());
+        $opts = $this->app['config']->get('elfinder.options', array());
         $opts = array_merge(['roots' => $roots], $opts);
 
         // run elFinder
         $connector = new Connector(new \elFinder($opts));
         $connector->run();
         return $connector->getResponse();
+    }
+
+    /**
+     * Determine if the CMS user has access to the disk.
+     *
+     * @return bool
+     */
+    protected function cmsUserHasAccessToDisk(): bool
+    {
+        if (is_null($user = $this->app['auth']->guard('cms')->user())
+            || ! $user->hasFullAccess()
+        ) {
+            return false;
+        }
+
+        return true;
     }
 }

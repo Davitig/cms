@@ -42,7 +42,7 @@
                 <span>{{ trans('general.create') }}</span>
             </a>
             <button id="save-tree" data-token="{{csrf_token()}}" class="btn btn-secondary btn-icon-standalone dn" disabled>
-                <i><b class="icon-var fa-save"></b></i>
+                <i><b class="fa fa-save"></b></i>
                 <span>{{ trans('general.save') }}</span>
             </button>
             <div id="items" data-parent-slug="">
@@ -77,7 +77,7 @@
                                                 <a href="{{$typeUrl = (array_key_exists($item->type, cms_config('pages.explicit'))
                                                 ? cms_route($item->type . '.index') : (array_key_exists($item->type, cms_config('pages.implicit'))
                                                 ? cms_route($item->collection_type . '.index', [$item->type_id]) : '#'))}}" class="btn btn-{{$typeUrl == '#' ? 'white disabled' : 'info'}}">
-                                                    <span class="{{icon_type($type, 'fa fa-file-text-o')}}"></span>
+                                                    <span class="{{icon_type($type, 'fa fa-file-text')}}"></span>
                                                 </a>
                                             </span>
                                             <a href="{{ cms_route('pages.create', [$menu->id, 'parent_id' => $item->id]) }}" class="btn btn-secondary" title="{{trans('general.create')}}">

@@ -28,6 +28,7 @@ return [
     'delete' => 'Delete',
     'close' => 'Close',
     'send' => 'Send',
+    'upload' => 'Upload',
     'visibility' => 'Visibility',
     'move' => 'Move',
     'move_next_page' => 'Move to the next page',
@@ -41,6 +42,7 @@ return [
     'deleted' => 'deleted successfully.',
     'saved' => 'saved successfully',
     'sent' => 'sent successfully',
+    'uploaded' => 'uploaded successfully',
 
     // errors
     'error' => 'error',

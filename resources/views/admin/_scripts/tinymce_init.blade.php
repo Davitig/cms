@@ -37,7 +37,7 @@
     function elFinderBrowser (callback, value, meta) {
         tinymce.activeEditor.windowManager.openUrl({
             title: 'elFinder File Manager',
-            url: '{{ cms_route('filemanager.tinymce4') . '?iframe=1' }}',
+            url: '{{ cms_route('filemanager.tinymce5') . '?iframe=1' }}',
             /**
              * On message will be triggered by the child window
              *

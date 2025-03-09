@@ -520,9 +520,10 @@ function glide(string $path, string $type): string
  *
  * @param  int  $bytes
  * @param  int  $precision
+ * @param  string  $separator
  * @return string
  */
-function format_bytes(int $bytes, int $precision = 2): string
+function format_bytes(int $bytes, int $precision = 2, string $separator = ' '): string
 {
     $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
@@ -532,7 +533,7 @@ function format_bytes(int $bytes, int $precision = 2): string
 
     $bytes /= pow(1024, $pow);
 
-    return round($bytes, $precision) . ' ' . $units[$pow];
+    return round($bytes, $precision) . $separator . $units[$pow];
 }
 
 /**

@@ -3,16 +3,23 @@
 <head>
     <meta charset="utf-8">
     <title>elFinder 2.1</title>
-    <link rel="stylesheet" href="{{ asset('assets/libs/js/jquery-ui/jquery-ui.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset($dir.'/css/elfinder.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset($dir.'/css/theme.css') }}">
-    <script src="{{ asset('assets/libs/js/jquery-1.11.3.min.js') }}"></script>
-    <script src="{{ asset('assets/libs/js/jquery-ui/jquery-ui.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('assets/libs/js/jquery-ui-1.14.1/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ asset($dir.'/css/elfinder.min.css') }}">
+    <link rel="stylesheet" href="{{ asset($dir.'/css/theme.css') }}">
+    <script src="{{ asset('assets/libs/js/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/js/jquery-ui-1.14.1/jquery-ui.min.js') }}"></script>
     <script src="{{ asset($dir.'/js/elfinder.min.js') }}"></script>
+    @if ($locale)
+        <!-- elFinder translation (OPTIONAL) -->
+        <script src="{{ asset($dir."/js/i18n/elfinder.$locale.js") }}"></script>
+    @endif
     <script type="text/javascript">
         $(function () {
             $('#elfinder').elfinder({
                 // set your elFinder options here
+                @if ($locale)
+                lang: '{{ $locale }}', // locale
+                @endif
                 customData: {
                     _token: '{{ csrf_token() }}'
                 },
@@ -22,6 +29,7 @@
                         oncomplete: 'destroy'
                     }
                 },
+                soundPath: '{{ asset($dir.'/sounds') }}',
                 getFileCallback: function(file) {
                     parent.$('#{{ $input_id }}')
                         .val(decodeURIComponent(file.url))
@@ -34,7 +42,6 @@
             }).elfinder('instance');
         });
     </script>
-    @include('vendor.elfinder._head')
 </head>
 <body>
     <div id="elfinder"></div>

@@ -18,7 +18,7 @@ return [
     | CMS Slug
     |--------------------------------------------------------------------------
     |
-    | Here you should specify the cms slug for the application.
+    | Here you should specify the CMS slug for the application.
     |
     */
 

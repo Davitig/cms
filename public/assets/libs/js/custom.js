@@ -1,3 +1,15 @@
+function formatBytes(bytes, precision = 2, separator = ' ')
+{
+    let units = ['B', 'KB', 'MB', 'GB', 'TB'];
+
+    bytes = Math.max(bytes, 0).toFixed(precision);
+    let pow = Math.floor((bytes ? Math.log(bytes) : 0) / Math.log(1024));
+    pow = Math.min(pow, units.length - 1);
+
+    bytes /= Math.pow(1024, pow);
+
+    return Math.round(bytes).toFixed(precision) + separator + units[pow];
+}
 function getDateTimeString(date) {
     const dateObj = date ? new Date(date) : new Date;
     const y = dateObj.getFullYear();

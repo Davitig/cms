@@ -18,7 +18,7 @@ class AdminWebSettingsController extends Controller implements HasMiddleware
     }
 
     /**
-     * Display the specified resource.
+     * Display a listing of the resource.
      *
      * @return \Illuminate\Contracts\View\View
      */
@@ -30,7 +30,7 @@ class AdminWebSettingsController extends Controller implements HasMiddleware
     }
 
     /**
-     * Update the "web_settings" table.
+     * Save the resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse

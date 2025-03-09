@@ -45,15 +45,23 @@ class ElfinderServiceProvider extends ServiceProvider
             $config['prefix'] = language() . '/' . $config['prefix'];
         }
 
-        $config['namespace'] = 'App\Http\Controllers';
+        $config['namespace'] = 'App\Http\Controllers\Admin';
         $config['middleware'][] = 'cms.auth';
         $config['as'] = cms_route_name();
 
         $router->group($config, function($router) {
-            $router->get('index', ['as' => 'filemanager.index', 'uses' => 'ElfinderController@showIndex']);
-            $router->any('connector', ['as' => 'filemanager.connector', 'uses' => 'ElfinderController@showConnector']);
-            $router->get('popup/{input_id}', ['as' => 'filemanager.popup', 'uses' => 'ElfinderController@showPopup']);
-            $router->get('tinymce4', ['as' => 'filemanager.tinymce4', 'uses' => 'ElfinderController@showTinyMCE4']);
+            $router->get('index', [
+                'as' => 'filemanager.index', 'uses' => 'AdminElfinderController@showIndex'
+            ]);
+            $router->any('connector', [
+                'as' => 'filemanager.connector', 'uses' => 'AdminElfinderController@showConnector'
+            ]);
+            $router->get('popup/{input_id}', [
+                'as' => 'filemanager.popup', 'uses' => 'AdminElfinderController@showPopup'
+            ]);
+            $router->get('tinymce4', [
+                'as' => 'filemanager.tinymce5', 'uses' => 'AdminElfinderController@showTinyMCE5'
+            ]);
         });
     }
 }

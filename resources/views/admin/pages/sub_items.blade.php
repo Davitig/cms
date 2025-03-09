@@ -30,7 +30,7 @@
                                     <a href="{{$typeUrl = (array_key_exists($item->type, cms_config('pages.explicit'))
                                     ? cms_route($item->type . '.index') : (array_key_exists($item->type, cms_config('pages.implicit'))
                                     ? cms_route($item->collection_type . '.index', [$item->type_id]) : '#'))}}" class="btn btn-{{$typeUrl == '#' ? 'white disabled' : 'info'}}">
-                                        <span class="{{icon_type($type, 'fa fa-file-text-o')}}"></span>
+                                        <span class="{{icon_type($type, 'fa fa-file-text')}}"></span>
                                     </a>
                                 </span>
                                 <a href="{{ cms_route('pages.create', [$item->menu_id, 'parent_id' => $item->id]) }}" class="btn btn-secondary" title="{{trans('general.create')}}">

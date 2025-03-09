@@ -35,7 +35,7 @@ class AdminFilemanagerTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser()
-        )->get(cms_route('filemanager.tinymce4'));
+        )->get(cms_route('filemanager.tinymce5'));
 
         $response->assertOk();
     }

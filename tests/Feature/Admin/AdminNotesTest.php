@@ -21,7 +21,7 @@ class AdminNotesTest extends TestAdmin
             $this->getFullAccessCmsUser()
         )->put(cms_route('notes.save'), [
             'title' => fake()->word(),
-            'description' => fake()->paragraph(),
+            'description' => fake()->sentence(),
             'content' => fake()->text()
         ]);
 
