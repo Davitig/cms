@@ -23,16 +23,14 @@ class LanguageRequest extends Request
     }
 
     /**
-     * {@inheritDoc}
+     * Prepare the data for validation.
+     *
+     * @return void
      */
-    public function all($keys = null): array
+    protected function prepareForValidation()
     {
-        $input = parent::all();
+        $this->offsetSet('language', strtolower($this->get('language')));
 
-        $input['language'] = strtolower($this->get('language'));
-
-        $this->boolifyInput($input, ['visible']);
-
-        return $input;
+        $this->boolifyInput('visible');
     }
 }

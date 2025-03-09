@@ -38,18 +38,16 @@ class GalleryRequest extends Request
     }
 
     /**
-     * {@inheritDoc}
+     * Prepare the data for validation.
+     *
+     * @return void
      */
-    public function all($keys = null): array
+    protected function prepareForValidation()
     {
-        $input = parent::all();
-
-        $this->slugifyInput($input, 'slug', ['title']);
+        $this->slugifyInput('slug', ['title']);
 
         if ($this->method() != 'POST') {
-            unset($input['type']);
+            $this->offsetUnset('type');
         }
-
-        return $input;
     }
 }

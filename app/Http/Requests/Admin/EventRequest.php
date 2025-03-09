@@ -22,16 +22,14 @@ class EventRequest extends Request
     }
 
     /**
-     * {@inheritDoc}
+     * Prepare the data for validation.
+     *
+     * @return void
      */
-    public function all($keys = null): array
+    protected function prepareForValidation()
     {
-        $input = parent::all();
+        $this->slugifyInput('slug', ['title']);
 
-        $this->slugifyInput($input, 'slug', ['title']);
-
-        $this->boolifyInput($input, ['visible']);
-
-        return $input;
+        $this->boolifyInput('visible');
     }
 }

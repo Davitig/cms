@@ -33,39 +33,39 @@ abstract class Request extends FormRequest
     }
 
     /**
-     * Slugify specified input value.
+     * Slugify the given key value.
      *
-     * @param  array  $input
      * @param  string  $key
      * @param  array  $altKeys
      * @return void
      */
-    protected function slugifyInput(array &$input, string $key, array $altKeys = []): void
+    protected function slugifyInput(string $key, array $altKeys = []): void
     {
-        if (! empty($input[$key])) {
-            $input[$key] = (new Slugify)->slugify($input[$key]);
+        if ($value = $this->get($key)) {
+            $this->offsetSet($key, (new Slugify)->slugify($value));
 
             return;
         }
 
         foreach ($altKeys as $altKey) {
-            if (! empty($input[$altKey])) {
-                $input[$key] = (new Slugify)->slugify($input[$altKey]);
+            if ($value = $this->get($altKey)) {
+                $this->offsetSet($key, (new Slugify)->slugify($value));
+
+                return;
             }
         }
     }
 
     /**
-     * Boolify specified input values.
+     * Boolify the given key value(s).
      *
-     * @param array $input
-     * @param array $keys
+     * @param  string|array  $keys
      * @return void
      */
-    protected function boolifyInput(array &$input, array $keys): void
+    protected function boolifyInput(string|array $keys): void
     {
-        foreach ($keys as $key) {
-            $input[$key] = (int) ($input[$key] ?? 0);
+        foreach (is_array($keys) ? $keys : func_get_args() as $key) {
+            $this->offsetSet($key, $this->boolean($key));
         }
     }
 }

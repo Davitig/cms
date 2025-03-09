@@ -34,16 +34,14 @@ class CollectionRequest extends Request
     }
 
     /**
-     * {@inheritDoc}
+     * Prepare the data for validation.
+     *
+     * @return void
      */
-    public function all($keys = null): array
+    protected function prepareForValidation()
     {
-        $input = parent::all();
-
         if ($this->method() != 'POST') {
-            unset($input['type']);
+            $this->offsetUnset('type');
         }
-
-        return $input;
     }
 }

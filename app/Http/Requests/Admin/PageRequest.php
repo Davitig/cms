@@ -26,7 +26,7 @@ class PageRequest extends Request
     }
 
     /**
-     * Perform action before validation.
+     * Handle a before validation attempt.
      *
      * @param  \Illuminate\Contracts\Validation\Validator  $validator
      * @return void
@@ -39,20 +39,18 @@ class PageRequest extends Request
     }
 
     /**
-     * {@inheritDoc}
+     * Prepare the data for validation.
+     *
+     * @return void
      */
-    public function all($keys = null): array
+    protected function prepareForValidation()
     {
-        $input = parent::all();
-
         if (! $this->filled('short_title')) {
-            $input['short_title'] = $this->get('title');
+            $this->offsetSet('short_title', $this->get('title'));
         }
 
-        $this->slugifyInput($input, 'slug', ['short_title']);
+        $this->slugifyInput('slug', ['short_title']);
 
-        $this->boolifyInput($input, ['visible']);
-
-        return $input;
+        $this->boolifyInput('visible');
     }
 }
