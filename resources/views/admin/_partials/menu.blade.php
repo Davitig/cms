@@ -5,12 +5,12 @@
     </a>
 </li>
 @if ($userRouteAccess('menus.index', 'pages.index'))
-    <li{!! ($hasRouteMatch = $routeMatches(['menus', 'pages', 'pages.files'])) ? ' class="has-sub expanded"' : '' !!}>
+    <li{!! $routeMatches(['menus', 'pages', 'pages.files']) ? ' class="has-sub expanded"' : '' !!}>
         <a href="{{ $url = cms_route('menus.index') }}">
             <i class="fa fa-sitemap" title="Site Map"></i>
             <span class="title">Site Map</span>
         </a>
-        <ul{!! $hasRouteMatch ? ' style="display:block;"' : '' !!}>
+        <ul>
             @if (! empty($menus) && $userRouteAccess('pages.index'))
                 @foreach ($menus as $item)
                     <li>
@@ -58,12 +58,12 @@
         </a>
     </li>
 @endif
-<li{!! $hasRouteMatch = $routeMatches(['cmsUsers', 'cmsUserRoles']) ? ' class="has-sub expanded"' : '' !!}>
+<li{!! $routeMatches(['cmsUsers', 'cmsUserRoles']) ? ' class="has-sub expanded"' : '' !!}>
     <a href="{{ $url = cms_route('cmsUsers.index') }}">
         <i class="fa fa-users" title="User Groups"></i>
         <span class="title">User Groups</span>
     </a>
-    <ul{!! $hasRouteMatch ? ' style="display:block;"' : '' !!}>
+    <ul>
         @if (auth('cms')->user()->hasFullAccess())
             <li>
                 <a href="{{ cms_route('cmsUserRoles.index') }}"{!! $routeMatches(['cmsUserRoles']) ? ' class="active"' : '' !!}>
@@ -81,12 +81,12 @@
     </ul>
 </li>
 @if ($userRouteAccess('cmsSettings', 'webSettings', 'translations'))
-<li{!! $hasRouteMatch = $routeMatches(['cmsSettings', 'webSettings', 'translations']) ? ' class="has-sub expanded"' : '' !!}>
+<li{!! $routeMatches(['cmsSettings', 'webSettings', 'translations']) ? ' class="has-sub expanded"' : '' !!}>
     <a href="{{ $url = cms_route('cmsSettings.index') }}">
         <i class="fa fa-gears" title="Settings"></i>
         <span class="title">Settings</span>
     </a>
-    <ul{!! $hasRouteMatch ? ' style="display:block;"' : '' !!}>
+    <ul>
         @if ($userRouteAccess('cmsSettings'))
         <li>
             <a href="{{ $url }}"{!! $routeMatches(['cmsSettings']) ? ' class="active"' : '' !!}>
@@ -113,12 +113,12 @@
 </li>
 @endif
 @if ($userRouteAccess('calendar.index', 'slider.index', 'notes.index'))
-    <li{!! $hasRouteMatch = $routeMatches(['calendar', 'slider', 'notes']) ? ' class="has-sub expanded"' : '' !!}>
+    <li{!! $routeMatches(['calendar', 'slider', 'notes']) ? ' class="has-sub expanded"' : '' !!}>
         <a href="{{ $url = cms_route('calendar.index') }}">
             <i class="fa fa-flask" title="Extra"></i>
             <span class="title">Extra</span>
         </a>
-        <ul{!! $hasRouteMatch ? ' style="display:block;"' : '' !!}>
+        <ul>
             @if ($userRouteAccess('slider.index'))
                 <li>
                     <a href="{{ cms_route('slider.index') }}"{!! $routeMatches(['slider']) ? ' class="active"' : '' !!}>

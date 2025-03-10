@@ -61,7 +61,7 @@
                                             </div>
                                             <div class="col-sm-5 col-xs-2">
                                                 <div class="btn-action toggleable pull-right">
-                                                    <div class="btn btn-gray item-id disabled">#{{$item->id}}</div>
+                                                    <div class="btn btn-gray item-id">#{{$item->id}}</div>
                                                     <a href="#" class="transfer btn btn-white" title="Transfer to another collection" data-id="{{$item->id}}">
                                                         <span class="{{$iconParent}}"></span>
                                                     </a>
@@ -83,7 +83,7 @@
                                                     {{ html()->form()->close() }}
                                                 </div>
                                                 <a href="#" class="btn btn-primary btn-toggle pull-right">
-                                                    <span class="fa fa-toggle-left"></span>
+                                                    <span class="fa fa-arrow-left"></span>
                                                 </a>
                                             </div>
                                         </div>
