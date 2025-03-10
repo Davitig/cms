@@ -11,7 +11,7 @@ class AdminVideosResourceTest extends TestAdminResources
     public function test_admin_videos_resource_index()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('videos.index', [
             $this->getGalleryModel('videos')->id
         ]));
@@ -22,7 +22,7 @@ class AdminVideosResourceTest extends TestAdminResources
     public function test_admin_videos_resource_create()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->getJson(cms_route('videos.create', [
             $this->getGalleryModel('videos')->id
         ]));
@@ -36,7 +36,7 @@ class AdminVideosResourceTest extends TestAdminResources
     public function test_admin_videos_resource_store()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('videos.store', [
             $this->getGalleryModel('videos')->id
         ]), [
@@ -50,7 +50,7 @@ class AdminVideosResourceTest extends TestAdminResources
     public function test_admin_videos_resource_edit()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->getJson(cms_route('videos.edit', [
             $this->getGalleryModel('videos')->id, (new Video)->valueOrFail('id')
         ]));
@@ -66,7 +66,7 @@ class AdminVideosResourceTest extends TestAdminResources
         $video = (new Video)->firstOrFail();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('videos.update', [
             $video->gallery_id, $video->id
         ]), [
@@ -80,7 +80,7 @@ class AdminVideosResourceTest extends TestAdminResources
     public function test_admin_videos_resource_validate_required()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('videos.store', [
             $this->getGalleryModel('videos')->id
         ]), [
@@ -93,7 +93,7 @@ class AdminVideosResourceTest extends TestAdminResources
     public function test_admin_videos_resource_visibility()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('videos.visibility', [
             (new Video)->valueOrFail('id')
         ]));
@@ -104,7 +104,7 @@ class AdminVideosResourceTest extends TestAdminResources
     public function test_admin_videos_resource_update_position()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('videos.updatePosition'));
 
         $response->assertFound();
@@ -115,7 +115,7 @@ class AdminVideosResourceTest extends TestAdminResources
         $video = (new Video)->firstOrFail();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('videos.destroy', [
             $video->gallery_id, $video->id
         ]));

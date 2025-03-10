@@ -9,7 +9,7 @@ class AdminCollectionsResourceTest extends TestAdminResources
     public function test_admin_collections_resource_index()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('collections.index'));
 
         $response->assertOk();
@@ -18,7 +18,7 @@ class AdminCollectionsResourceTest extends TestAdminResources
     public function test_admin_collections_resource_create()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('collections.create'));
 
         $response->assertOk();
@@ -30,7 +30,7 @@ class AdminCollectionsResourceTest extends TestAdminResources
     public function test_admin_collections_resource_store()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('collections.store'), [
             'title' => 'List of articles',
             'type' => 'articles',
@@ -48,7 +48,7 @@ class AdminCollectionsResourceTest extends TestAdminResources
     public function test_admin_collections_resource_edit()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('collections.edit', [(new Collection)->valueOrFail('id')]));
 
         $response->assertOk();
@@ -60,7 +60,7 @@ class AdminCollectionsResourceTest extends TestAdminResources
     public function test_admin_collections_resource_update()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('collections.update', [
             (new Collection)->orderDesc()->valueOrFail('id')
         ]), [
@@ -79,7 +79,7 @@ class AdminCollectionsResourceTest extends TestAdminResources
     public function test_admin_collections_resource_validate_invalid_selection()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('collections.store'), [
             'admin_order_by' => 'id',
             'web_order_by' => 'title'
@@ -91,7 +91,7 @@ class AdminCollectionsResourceTest extends TestAdminResources
     public function test_admin_collections_resource_destroy()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('collections.destroy', [
             $this->createCollectionModel('articles')->id
         ]));

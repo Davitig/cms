@@ -41,7 +41,7 @@ class AdminLoginTest extends TestAdmin
     public function test_admin_logout(): void
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('logout'));
 
         $response->assertRedirect(cms_route('login'));

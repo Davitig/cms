@@ -14,7 +14,7 @@ class AdminCmsUsersResourceTest extends TestAdmin
     public function test_admin_cms_users_resource_index()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('cmsUsers.index'));
 
         $response->assertOk();
@@ -23,7 +23,7 @@ class AdminCmsUsersResourceTest extends TestAdmin
     public function test_admin_cms_users_resource_create()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('cmsUsers.create'));
 
         $response->assertOk();
@@ -35,7 +35,7 @@ class AdminCmsUsersResourceTest extends TestAdmin
     public function test_admin_cms_users_resource_store()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('cmsUsers.store'), [
             'email' => fake()->safeEmail(),
             'first_name' => fake()->firstName(),
@@ -51,7 +51,7 @@ class AdminCmsUsersResourceTest extends TestAdmin
     public function test_admin_cms_users_resource_edit()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('cmsUsers.edit', [
             (new CmsUser)->orderDesc()->valueOrFail('id')
         ]));
@@ -65,7 +65,7 @@ class AdminCmsUsersResourceTest extends TestAdmin
     public function test_admin_cms_users_resource_update()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('cmsUsers.update', [
             (new CmsUser)->orderDesc()->valueOrFail('id')
         ]), [
@@ -83,7 +83,7 @@ class AdminCmsUsersResourceTest extends TestAdmin
         $filesystem = Storage::fake('cms_users');
 
         $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('cmsUsers.update', [
             $id = (new CmsUser)->orderDesc()->valueOrFail('id')
         ]), [
@@ -107,7 +107,7 @@ class AdminCmsUsersResourceTest extends TestAdmin
         $filesystem = Storage::fake('cms_users');
 
         $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('cmsUsers.store'), [
             'email' => fake()->safeEmail(),
             'first_name' => fake()->firstName(),
@@ -132,7 +132,7 @@ class AdminCmsUsersResourceTest extends TestAdmin
     public function test_admin_cms_users_resource_validation()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('cmsUsers.store'), [
             // empty data
         ]);
@@ -145,7 +145,7 @@ class AdminCmsUsersResourceTest extends TestAdmin
     public function test_admin_cms_users_resource_destroy()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('cmsUsers.destroy', [
             (new CmsUser)->orderDesc()->valueOrFail('id')
         ]));

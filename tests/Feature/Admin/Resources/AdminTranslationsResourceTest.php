@@ -9,7 +9,7 @@ class AdminTranslationsResourceTest extends TestAdminResources
     public function test_admin_translations_resource_index()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('translations.index'));
 
         $response->assertOk();
@@ -18,7 +18,7 @@ class AdminTranslationsResourceTest extends TestAdminResources
     public function test_admin_translations_resource_create()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->getJson(cms_route('translations.create'));
 
         $response->assertOk();
@@ -30,7 +30,7 @@ class AdminTranslationsResourceTest extends TestAdminResources
     public function test_admin_translations_resource_store()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('translations.store'), [
             'title' => $word = fake()->word(),
             'code' => str($word)->snake()->toString(),
@@ -43,7 +43,7 @@ class AdminTranslationsResourceTest extends TestAdminResources
     public function test_admin_translations_resource_edit()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->getJson(cms_route('translations.edit', [
             (new Translation)->valueOrFail('id')
         ]));
@@ -57,7 +57,7 @@ class AdminTranslationsResourceTest extends TestAdminResources
     public function test_admin_translations_resource_update()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('translations.update', [
             (new Translation)->valueOrFail('id')
         ]), [
@@ -72,7 +72,7 @@ class AdminTranslationsResourceTest extends TestAdminResources
     public function test_admin_translations_resource_validate_required()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('translations.store'), [
             'title' => fake()->word()
         ]);
@@ -83,7 +83,7 @@ class AdminTranslationsResourceTest extends TestAdminResources
     public function test_admin_translations_resource_form_get()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(
             cms_route('translations.form', [
                 'code' => (new Translation)->valueOrFail('code')
@@ -96,7 +96,7 @@ class AdminTranslationsResourceTest extends TestAdminResources
     public function test_admin_translations_resource_form_post()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(
             cms_route('translations.form.post'), [
                 'id' => (new Translation)->valueOrFail('id'),
@@ -112,7 +112,7 @@ class AdminTranslationsResourceTest extends TestAdminResources
     public function test_admin_translations_resource_destroy()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('translations.destroy', [
             (new Translation)->valueOrFail('id')
         ]));

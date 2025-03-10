@@ -21,7 +21,7 @@ class AdminLanguagesResourceTest extends TestAdmin
     public function test_admin_languages_resource_index()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('languages.index'));
 
         $response->assertOk();
@@ -30,7 +30,7 @@ class AdminLanguagesResourceTest extends TestAdmin
     public function test_admin_languages_resource_create()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('languages.create'));
 
         $response->assertOk();
@@ -44,7 +44,7 @@ class AdminLanguagesResourceTest extends TestAdmin
         (new Language)->whereLanguage('te')->delete();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('languages.store'), [
             'language' => 'te',
             'short_name' => 'te',
@@ -57,7 +57,7 @@ class AdminLanguagesResourceTest extends TestAdmin
     public function test_admin_languages_resource_edit()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('languages.edit', [$this->getLanguageId('te')]));
 
         $response->assertOk();
@@ -69,7 +69,7 @@ class AdminLanguagesResourceTest extends TestAdmin
     public function test_admin_languages_resource_update()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('languages.update', [$this->getLanguageId('te')]), [
             'language' => 'te',
             'short_name' => 'te',
@@ -82,7 +82,7 @@ class AdminLanguagesResourceTest extends TestAdmin
     public function test_admin_languages_resource_destroy()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('languages.destroy', [$this->getLanguageId('te')]));
 
         $response->assertFound()->assertSessionHasNoErrors();
@@ -91,7 +91,7 @@ class AdminLanguagesResourceTest extends TestAdmin
     public function test_admin_languages_resource_validate_unique()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('languages.store'), [
             'language' => 'en',
             'short_name' => 'en',
@@ -104,7 +104,7 @@ class AdminLanguagesResourceTest extends TestAdmin
     public function test_admin_languages_resource_validate_string_length()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('languages.store'), [
             'language' => 'e',
             'short_name' => 'e',
@@ -128,7 +128,7 @@ class AdminLanguagesResourceTest extends TestAdmin
         ]);
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('languages.updateMain'), [
             'id' => $model->id
         ]);
@@ -155,7 +155,7 @@ class AdminLanguagesResourceTest extends TestAdmin
         ]);
 
         $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('languages.updateMain'), [
             'id' => $model->id
         ]);
@@ -169,7 +169,7 @@ class AdminLanguagesResourceTest extends TestAdmin
     public function test_admin_languages_update_main_validate_id_required()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('languages.updateMain'), [
             // empty data
         ]);

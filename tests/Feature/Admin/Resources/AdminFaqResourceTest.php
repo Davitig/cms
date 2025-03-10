@@ -10,7 +10,7 @@ class AdminFaqResourceTest extends TestAdminResources
     public function test_admin_faq_resource_index()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('faq.index', [
             $this->getCollectionModel('faq')->id
         ]));
@@ -21,7 +21,7 @@ class AdminFaqResourceTest extends TestAdminResources
     public function test_admin_faq_resource_create()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('faq.create', [
             $this->getCollectionModel('faq')->id
         ]));
@@ -35,7 +35,7 @@ class AdminFaqResourceTest extends TestAdminResources
     public function test_admin_faq_resource_store()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('faq.store', [
             $this->getCollectionModel('faq')->id
         ]), [
@@ -48,7 +48,7 @@ class AdminFaqResourceTest extends TestAdminResources
     public function test_admin_faq_resource_edit()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('faq.edit', [
             $this->getCollectionModel('faq')->id, (new Faq)->valueOrFail('id')
         ]));
@@ -64,7 +64,7 @@ class AdminFaqResourceTest extends TestAdminResources
         $faq = (new Faq)->firstOrFail();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('faq.update', [
             $faq->collection_id, $faq->id
         ]), [
@@ -77,7 +77,7 @@ class AdminFaqResourceTest extends TestAdminResources
     public function test_admin_faq_resource_validate_title_required()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('faq.store', [
             $this->getCollectionModel('faq')->id
         ]), [
@@ -90,7 +90,7 @@ class AdminFaqResourceTest extends TestAdminResources
     public function test_admin_faq_resource_visibility()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('faq.visibility', [
             (new Faq)->valueOrFail('id')
         ]));
@@ -101,7 +101,7 @@ class AdminFaqResourceTest extends TestAdminResources
     public function test_admin_faq_resource_update_position()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('faq.updatePosition'));
 
         $response->assertFound();
@@ -118,7 +118,7 @@ class AdminFaqResourceTest extends TestAdminResources
         }
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('faq.transfer', [
             $faq->collection_id
         ]), [
@@ -135,7 +135,7 @@ class AdminFaqResourceTest extends TestAdminResources
         $faq = (new Faq)->firstOrFail();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('faq.destroy', [
             $faq->collection_id, $faq->id
         ]));

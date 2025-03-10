@@ -10,7 +10,7 @@ class AdminArticlesResourceTest extends TestAdminResources
     public function test_admin_articles_resource_index()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('articles.index', [
             $this->getCollectionModel('articles')->id
         ]));
@@ -21,7 +21,7 @@ class AdminArticlesResourceTest extends TestAdminResources
     public function test_admin_articles_resource_create()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('articles.create', [
             $this->getCollectionModel('articles')->id
         ]));
@@ -35,7 +35,7 @@ class AdminArticlesResourceTest extends TestAdminResources
     public function test_admin_articles_resource_store()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('articles.store', [
             $this->getCollectionModel('articles')->id
         ]), [
@@ -49,7 +49,7 @@ class AdminArticlesResourceTest extends TestAdminResources
     public function test_admin_articles_resource_edit()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('articles.edit', [
             $this->getCollectionModel('articles')->id, (new Article)->valueOrFail('id')
         ]));
@@ -65,7 +65,7 @@ class AdminArticlesResourceTest extends TestAdminResources
         $article = (new Article)->firstOrFail();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('articles.update', [
             $article->collection_id, $article->id
         ]), [
@@ -79,7 +79,7 @@ class AdminArticlesResourceTest extends TestAdminResources
     public function test_admin_articles_resource_validate_title_required()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('articles.store', [
             $this->getCollectionModel('articles')->id
         ]), [
@@ -92,7 +92,7 @@ class AdminArticlesResourceTest extends TestAdminResources
     public function test_admin_articles_resource_validate_slug_unique()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('articles.store', [
             $this->getCollectionModel('articles')->id
         ]), [
@@ -105,7 +105,7 @@ class AdminArticlesResourceTest extends TestAdminResources
     public function test_admin_articles_resource_visibility()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('articles.visibility', [
             (new Article)->valueOrFail('id')
         ]));
@@ -116,7 +116,7 @@ class AdminArticlesResourceTest extends TestAdminResources
     public function test_admin_articles_resource_update_position()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('articles.updatePosition'));
 
         $response->assertFound();
@@ -133,7 +133,7 @@ class AdminArticlesResourceTest extends TestAdminResources
         }
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('articles.transfer', [
             $article->collection_id
         ]), [
@@ -150,7 +150,7 @@ class AdminArticlesResourceTest extends TestAdminResources
         $article = (new Article)->firstOrFail();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('articles.destroy', [
             $article->collection_id, $article->id
         ]));

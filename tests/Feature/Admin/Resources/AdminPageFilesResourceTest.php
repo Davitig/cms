@@ -11,7 +11,7 @@ class AdminPageFilesResourceTest extends TestAdminResources
     public function test_admin_page_files_resource_index()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('pages.files.index', [
             $this->getPageModel()->id
         ]));
@@ -22,7 +22,7 @@ class AdminPageFilesResourceTest extends TestAdminResources
     public function test_admin_page_files_resource_create()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->getJson(cms_route('pages.files.create', [
             $this->getPageModel()->id
         ]));
@@ -36,7 +36,7 @@ class AdminPageFilesResourceTest extends TestAdminResources
     public function test_admin_page_files_resource_store()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('pages.files.store', [
             $this->getPageModel()->id
         ]), [
@@ -50,7 +50,7 @@ class AdminPageFilesResourceTest extends TestAdminResources
     public function test_admin_page_files_resource_edit()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->getJson(cms_route('pages.files.edit', [
             $this->getPageModel()->id, (new PageFile)->valueOrFail('id')
         ]));
@@ -64,7 +64,7 @@ class AdminPageFilesResourceTest extends TestAdminResources
     public function test_admin_page_files_resource_update()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('pages.files.update', [
             $this->getPageModel()->id, (new PageFile)->valueOrFail('id')
         ]), [
@@ -78,7 +78,7 @@ class AdminPageFilesResourceTest extends TestAdminResources
     public function test_admin_page_files_resource_validate_required()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('pages.files.store', [
             $this->getPageModel()->id
         ]), [
@@ -91,7 +91,7 @@ class AdminPageFilesResourceTest extends TestAdminResources
     public function test_admin_page_files_resource_visibility()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('pages.files.visibility', [
             (new PageFile)->valueOrFail('id')
         ]));
@@ -102,7 +102,7 @@ class AdminPageFilesResourceTest extends TestAdminResources
     public function test_admin_page_files_resource_update_position()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('pages.files.updatePosition'));
 
         $response->assertFound();
@@ -111,7 +111,7 @@ class AdminPageFilesResourceTest extends TestAdminResources
     public function test_admin_page_files_resource_destroy()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('pages.files.destroy', [
             $this->getPageModel()->id, (new PageFile)->valueOrFail('id')
         ]));

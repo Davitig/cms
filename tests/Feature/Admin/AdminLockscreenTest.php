@@ -7,7 +7,7 @@ class AdminLockscreenTest extends TestAdmin
     public function test_admin_lockscreen_is_unlocked()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('lockscreen'));
 
         $response->assertFound();
@@ -16,7 +16,7 @@ class AdminLockscreenTest extends TestAdmin
     public function test_admin_lockscreen_lock()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('lockscreen.lock'));
 
         $response->assertRedirect(cms_route('dashboard'))->assertSessionHas('lockscreen', 1);
@@ -25,7 +25,7 @@ class AdminLockscreenTest extends TestAdmin
     public function test_admin_lockscreen_is_locked()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->withSession([
             'lockscreen' => 1,
         ])->get(cms_route('dashboard'));
@@ -36,7 +36,7 @@ class AdminLockscreenTest extends TestAdmin
     public function test_admin_lockscreen_invalid_unlocking()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('lockscreen.unlock'), [
             'password' => str()->random(10),
         ]);
@@ -50,7 +50,7 @@ class AdminLockscreenTest extends TestAdmin
     public function test_admin_lockscreen_successful_unlocking()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('lockscreen.unlock'), [
             'password' => 'password',
         ]);

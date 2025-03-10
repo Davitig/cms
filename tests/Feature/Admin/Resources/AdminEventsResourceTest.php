@@ -10,7 +10,7 @@ class AdminEventsResourceTest extends TestAdminResources
     public function test_admin_events_resource_index()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('events.index', [
             $this->getCollectionModel('events')->id
         ]));
@@ -21,7 +21,7 @@ class AdminEventsResourceTest extends TestAdminResources
     public function test_admin_events_resource_create()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('events.create', [
             $this->getCollectionModel('events')->id
         ]));
@@ -35,7 +35,7 @@ class AdminEventsResourceTest extends TestAdminResources
     public function test_admin_events_resource_store()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('events.store', [
             $this->getCollectionModel('events')->id
         ]), [
@@ -49,7 +49,7 @@ class AdminEventsResourceTest extends TestAdminResources
     public function test_admin_events_resource_edit()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('events.edit', [
             $this->getCollectionModel('events')->id, (new Event)->valueOrFail('id')
         ]));
@@ -65,7 +65,7 @@ class AdminEventsResourceTest extends TestAdminResources
         $event = (new Event)->firstOrFail();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('events.update', [
             $event->collection_id, $event->id
         ]), [
@@ -79,7 +79,7 @@ class AdminEventsResourceTest extends TestAdminResources
     public function test_admin_events_resource_validate_title_required()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('events.store', [
             $this->getCollectionModel('events')->id
         ]), [
@@ -92,7 +92,7 @@ class AdminEventsResourceTest extends TestAdminResources
     public function test_admin_events_resource_validate_slug_unique()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('events.store', [
             $this->getCollectionModel('events')->id
         ]), [
@@ -105,7 +105,7 @@ class AdminEventsResourceTest extends TestAdminResources
     public function test_admin_events_resource_visibility()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('events.visibility', [
             (new Event)->valueOrFail('id')
         ]));
@@ -116,7 +116,7 @@ class AdminEventsResourceTest extends TestAdminResources
     public function test_admin_events_resource_update_position()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('events.updatePosition'));
 
         $response->assertFound();
@@ -133,7 +133,7 @@ class AdminEventsResourceTest extends TestAdminResources
         }
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('events.transfer', [
             $event->collection_id
         ]), [
@@ -150,7 +150,7 @@ class AdminEventsResourceTest extends TestAdminResources
         $event = (new Event)->firstOrFail();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('events.destroy', [
             $event->collection_id, $event->id
         ]));

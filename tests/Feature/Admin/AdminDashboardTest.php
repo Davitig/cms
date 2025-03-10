@@ -7,7 +7,7 @@ class AdminDashboardTest extends TestAdmin
     public function test_admin_dashboard()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('dashboard'));
 
         $response->assertOk();

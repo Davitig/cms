@@ -9,7 +9,7 @@ class AdminNotesTest extends TestAdmin
     public function test_admin_notes_index()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('notes.index'));
 
         $response->assertOk();
@@ -18,7 +18,7 @@ class AdminNotesTest extends TestAdmin
     public function test_admin_notes_store()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('notes.save'), [
             'title' => fake()->word(),
             'description' => fake()->sentence(),
@@ -26,24 +26,35 @@ class AdminNotesTest extends TestAdmin
         ]);
 
         $response->assertFound();
+
+        (new Note)->newQuery()->delete();
     }
 
     public function test_admin_notes_update()
     {
-        $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('notes.save'), [
-            'id' => (new Note)->valueOrFail('id'),
+        $cmsUser = $this->getFullAccessCmsUser();
+
+        $model = (new Note)->create([
+            'cms_user_id' => $cmsUser->id,
+            'title' => fake()->word(),
+            'description' => fake()->sentence(),
+            'content' => fake()->text()
+        ]);
+
+        $response = $this->actingAs($cmsUser, 'cms')->put(cms_route('notes.save'), [
+            'id'  => $model->id,
             'title' => fake()->word()
         ]);
 
         $response->assertFound();
+
+        $model->delete();
     }
 
     public function test_admin_notes_validate_title_required()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('notes.save'), [
             // empty data
         ]);
@@ -53,10 +64,17 @@ class AdminNotesTest extends TestAdmin
 
     public function test_admin_notes_destroy()
     {
-        $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->delete(cms_route('notes.destroy'), [
-            'id' => (new Note)->valueOrFail('id')
+        $cmsUser = $this->getFullAccessCmsUser();
+
+        $model = (new Note)->create([
+            'cms_user_id' => $cmsUser->id,
+            'title' => fake()->word(),
+            'description' => fake()->sentence(),
+            'content' => fake()->text()
+        ]);
+
+        $response = $this->actingAs($cmsUser, 'cms')->delete(cms_route('notes.destroy'), [
+            'id' => $model->id
         ]);
 
         $response->assertFound();

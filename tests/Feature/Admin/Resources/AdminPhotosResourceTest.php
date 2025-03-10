@@ -11,7 +11,7 @@ class AdminPhotosResourceTest extends TestAdminResources
     public function test_admin_photos_resource_index()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('photos.index', [
             $this->getGalleryModel('photos')->id
         ]));
@@ -22,7 +22,7 @@ class AdminPhotosResourceTest extends TestAdminResources
     public function test_admin_photos_resource_create()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->getJson(cms_route('photos.create', [
             $this->getGalleryModel('photos')->id
         ]));
@@ -36,7 +36,7 @@ class AdminPhotosResourceTest extends TestAdminResources
     public function test_admin_photos_resource_store()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('photos.store', [
             $this->getGalleryModel('photos')->id
         ]), [
@@ -50,7 +50,7 @@ class AdminPhotosResourceTest extends TestAdminResources
     public function test_admin_photos_resource_edit()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->getJson(cms_route('photos.edit', [
             $this->getGalleryModel('photos')->id, (new Photo)->valueOrFail('id')
         ]));
@@ -66,7 +66,7 @@ class AdminPhotosResourceTest extends TestAdminResources
         $photo = (new Photo)->firstOrFail();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('photos.update', [
             $photo->gallery_id, $photo->id
         ]), [
@@ -80,7 +80,7 @@ class AdminPhotosResourceTest extends TestAdminResources
     public function test_admin_photos_resource_validate_required()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('photos.store', [
             $this->getGalleryModel('photos')->id
         ]), [
@@ -93,7 +93,7 @@ class AdminPhotosResourceTest extends TestAdminResources
     public function test_admin_photos_resource_visibility()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('photos.visibility', [
             (new Photo)->valueOrFail('id')
         ]));
@@ -104,7 +104,7 @@ class AdminPhotosResourceTest extends TestAdminResources
     public function test_admin_photos_resource_update_position()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('photos.updatePosition'));
 
         $response->assertFound();
@@ -115,7 +115,7 @@ class AdminPhotosResourceTest extends TestAdminResources
         $photo = (new Photo)->firstOrFail();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('photos.destroy', [
             $photo->gallery_id, $photo->id
         ]));
