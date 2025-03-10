@@ -1,5 +1,4 @@
 /*** CUSTOM ***/
-
 iframe {border:0;}
 .ovh {overflow:hidden;}
 .dn {display:none;} .dib {display:inline-block;}
@@ -97,7 +96,7 @@ select .sub-item {padding-left:20px;}
 .btn-action .btn {margin-bottom:0;}
 .btn-toggle {margin-bottom:0;}
 @media (max-width:1200px) {
-    #items .item .btn-action.toggleable {display:none;position:absolute;top:0;right:60px;z-index:1;}
+    #items .item .btn-action.toggleable {display:none;position:absolute;top:0;right:70px;z-index:1;}
     #items .item .btn-action.toggleable .btn {margin-bottom:5px;}
 }
 @media (min-width:1200px) {
@@ -115,11 +114,23 @@ select .sub-item {padding-left:20px;}
 .logo .name {font-size:26px;line-height:1;font-family:Ubuntu, sans-serif;text-transform:uppercase;}
 .sidebar-menu .logo-env {padding:26px 45px;}
 .sidebar-menu .logo-env .name {color:#fff;}
+.horizontal-menu .logo .name {color:#000;}
 @media (max-width:768px) {
     .horizontal-menu .logo .name {color:#fff;}
 }
-.horizontal-menu .logo .name {color:#000;}
+@media screen and (max-width: 768px) {
+    .navbar.horizontal-menu .navbar-inner .navbar-nav li.expanded > a {color:#fff;}
+    .navbar.horizontal-menu .navbar-inner .navbar-nav ul li a.active {color:#fff;}
+}
+.navbar.horizontal-menu .navbar-inner .navbar-nav > .has-sub.expanded > a {color:#313232;}
+.navbar.horizontal-menu .navbar-inner .navbar-nav ul > li > a.active {color:#313232;}
 .sidebar-menu .main-menu a.active {color:#fff}
+@media (max-width: 992px) {
+    .sidebar-menu .main-menu .has-sub.expanded > a {color:#fff;}
+}
+@media (min-width: 992px) {
+    .sidebar-menu .main-menu .has-sub.expanded > ul {display:block;}
+}
 
 /* user navbar */
 @media (max-width:768px) {
@@ -186,7 +197,7 @@ select .sub-item {padding-left:20px;}
 .nav.tabs-vertical.custom {padding-top:40px;}
 @media (max-width:992px) {
     .nav.tabs-vertical.custom {display:table;width:100%;padding-top:0;}
-    .nav.tabs-vertical.custom > li {display:table-cell;}
+    .nav.tabs-vertical.custom > li {display:block;}
     .nav.tabs-vertical.custom > li > a {margin-right:5px;}
 }
 #panel-accordion .collapsed {margin-bottom:10px;}
