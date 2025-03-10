@@ -23,7 +23,7 @@ class ArticleLanguage extends Model
      * @var array
      */
     protected $fillable = [
-        'article_id', 'language_id', 'title', 'short_title', 'description', 'content', 'meta_title', 'meta_desc'
+        'article_id', 'language_id', 'title', 'description', 'content', 'meta_title', 'meta_desc'
     ];
 
     /**

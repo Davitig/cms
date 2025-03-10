@@ -23,7 +23,7 @@ class FaqLanguage extends Model
      * @var array
      */
     protected $fillable = [
-        'faq_id', 'language_id', 'title', 'short_title', 'description', 'meta_title', 'meta_desc'
+        'faq_id', 'language_id', 'title', 'description', 'meta_title', 'meta_desc'
     ];
 
     /**

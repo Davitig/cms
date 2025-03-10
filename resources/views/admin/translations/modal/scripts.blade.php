@@ -53,6 +53,9 @@ $(function () {
                 }
                 $.each(xhr.responseJSON.errors, function (index, element) {
                     let field = $('#' + index + lang, form);
+                    if (index === 'code') {
+                        element += ' (current code: "' + field.val() + '")';
+                    }
                     let errorMsg = '<div class="trans-text-danger">'+element+'</div>';
                     field.after(errorMsg);
                 });

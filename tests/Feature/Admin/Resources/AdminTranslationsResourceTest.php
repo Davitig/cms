@@ -3,14 +3,37 @@
 namespace Tests\Feature\Admin\Resources;
 
 use App\Models\Translation;
+use Database\Factories\TranslationFactory;
+use Database\Factories\TranslationLanguageFactory;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\Sequence;
+use Tests\Feature\Admin\TestAdmin;
 
-class AdminTranslationsResourceTest extends TestAdminResources
+class AdminTranslationsResourceTest extends TestAdmin
 {
+    /**
+     * Create a new translation.
+     *
+     * @param  int|null  $times
+     * @return \App\Models\Translation|\Illuminate\Database\Eloquent\Collection
+     */
+    public function createTranslation(?int $times = null): Translation|Collection
+    {
+        return TranslationFactory::new()->count($times)->has(
+            TranslationLanguageFactory::times(count(languages()))
+                ->state(new Sequence(...apply_languages([]))), 'languages'
+        )->create();
+    }
+
     public function test_admin_translations_resource_index()
     {
+        $translations = $this->createTranslation(5);
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('translations.index'));
+
+        $translations->map->delete();
 
         $response->assertOk();
     }
@@ -18,7 +41,7 @@ class AdminTranslationsResourceTest extends TestAdminResources
     public function test_admin_translations_resource_create()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->getJson(cms_route('translations.create'));
 
         $response->assertOk();
@@ -30,23 +53,27 @@ class AdminTranslationsResourceTest extends TestAdminResources
     public function test_admin_translations_resource_store()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('translations.store'), [
             'title' => $word = fake()->word(),
             'code' => str($word)->snake()->toString(),
             'value' => $word
         ]);
 
+        (new Translation)->orderDesc()->firstOrFail()->delete();
+
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
     public function test_admin_translations_resource_edit()
     {
+        $translation = $this->createTranslation();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->getJson(cms_route('translations.edit', [
-            (new Translation)->valueOrFail('id')
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->getJson(cms_route('translations.edit', [$translation->id]));
+
+        $translation->delete();
 
         $response->assertOk();
     }
@@ -56,15 +83,17 @@ class AdminTranslationsResourceTest extends TestAdminResources
      */
     public function test_admin_translations_resource_update()
     {
+        $translation = $this->createTranslation();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('translations.update', [
-            (new Translation)->valueOrFail('id')
-        ]), [
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('translations.update', [$translation->id]), [
             'title' => $word = fake()->word(),
             'code' => str($word)->snake()->toString(),
             'value' => $word
         ]);
+
+        $translation->delete();
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
@@ -72,7 +101,7 @@ class AdminTranslationsResourceTest extends TestAdminResources
     public function test_admin_translations_resource_validate_required()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('translations.store'), [
             'title' => fake()->word()
         ]);
@@ -82,40 +111,46 @@ class AdminTranslationsResourceTest extends TestAdminResources
 
     public function test_admin_translations_resource_form_get()
     {
+        $translation = $this->createTranslation();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->get(
-            cms_route('translations.form', [
-                'code' => (new Translation)->valueOrFail('code')
-            ])
-        );
+            $this->getFullAccessCmsUser(), 'cms'
+        )->get(cms_route('translations.form', [
+            'code' => $translation->code
+        ]));
+
+        $translation->delete();
 
         $response->assertOk();
     }
 
     public function test_admin_translations_resource_form_post()
     {
+        $translation = $this->createTranslation();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->post(
-            cms_route('translations.form.post'), [
-                'id' => (new Translation)->valueOrFail('id'),
-                'title' => $word = fake()->word(),
-                'code' => str($word)->snake()->toString(),
-                'value' => $word
-            ]
-        );
+            $this->getFullAccessCmsUser(), 'cms'
+        )->post(cms_route('translations.form.post'), [
+            'id' => $translation->id,
+            'title' => $word = fake()->word(),
+            'code' => str($word)->snake()->toString(),
+            'value' => $word
+        ]);
+
+        $translation->delete();
 
         $response->assertOk()->assertJson([]);
     }
 
     public function test_admin_translations_resource_destroy()
     {
+        $translation = $this->createTranslation();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->delete(cms_route('translations.destroy', [
-            (new Translation)->valueOrFail('id')
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->delete(cms_route('translations.destroy', [$translation->id]));
+
+        $translation->delete();
 
         $response->assertFound();
     }

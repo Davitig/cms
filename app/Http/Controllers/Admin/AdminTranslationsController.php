@@ -10,8 +10,6 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 
 class AdminTranslationsController extends Controller implements HasMiddleware
 {
-    use LanguageRelationsTrait;
-
     /**
      * Create a new controller instance.
      */
@@ -61,7 +59,7 @@ class AdminTranslationsController extends Controller implements HasMiddleware
     {
         $model = $this->model->create($input = $request->all());
 
-        $this->createLanguageRelations('languages', $input, $model->id);
+        $model->languages()->createMany(apply_languages($input));
 
         return redirect(cms_route('translations.edit', [$model->id]))
             ->with('alert', fill_data('success', trans('general.created')));
@@ -93,12 +91,10 @@ class AdminTranslationsController extends Controller implements HasMiddleware
      */
     public function update(TranslationRequest $request, string $id)
     {
-        $input = $request->all();
-        unset($input['code']);
-
-        $this->model->findOrFail($id)->update($input);
-
-        $this->updateOrCreateLanguageRelations('languages', $input, $id);
+        tap($this->model->findOrFail($id))
+            ->update($input = $request->except(['code']))
+            ->languages()
+            ->updateOrCreate(apply_languages(), $input);
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(
@@ -165,17 +161,14 @@ class AdminTranslationsController extends Controller implements HasMiddleware
         $input = $request->all('id', 'code', 'title', 'value', 'type');
 
         if (is_null($input['id'])) {
-            $id = $this->model->create($input)->id;
-
-            $this->createLanguageRelations('languages', $input, $id);
+            $this->model->create($input)->languages()->createMany(apply_languages($input));
         } else {
-            $model = $this->model->findOrFail($input['id']);
-
             unset($input['code']);
 
-            $model->update($input);
-
-            $this->updateOrCreateLanguageRelations('languages', $input, $input['id']);
+            tap($this->model->findOrFail($input['id']))
+                ->update($input)
+                ->languages()
+                ->updateOrCreate(apply_languages(), $input);
         }
 
         return response()->json($input);

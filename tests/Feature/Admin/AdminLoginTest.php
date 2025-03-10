@@ -2,6 +2,10 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Models\CmsUser;
+use Database\Factories\CmsUserFactory;
+use Database\Factories\CmsUserRoleFactory;
+
 class AdminLoginTest extends TestAdmin
 {
     public function test_admin_access_needs_authentication(): void
@@ -30,10 +34,20 @@ class AdminLoginTest extends TestAdmin
 
     public function test_admin_login_success(): void
     {
+        $cmsUserRole = CmsUserRoleFactory::new()->create();
+
+        $cmsUser = CmsUserFactory::new()
+            ->role($cmsUserRole->id)
+            ->loginParams('test@example.com', 'password')
+            ->create();
+
         $response = $this->post(cms_route('login.post'), [
-            'email' => 'full-access-test@example.com',
+            'email' => 'test@example.com',
             'password' => 'password'
         ]);
+
+        $cmsUser->delete();
+        $cmsUserRole->delete();
 
         $response->assertRedirect(cms_route('dashboard'));
     }
@@ -41,7 +55,7 @@ class AdminLoginTest extends TestAdmin
     public function test_admin_logout(): void
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('logout'));
 
         $response->assertRedirect(cms_route('login'));

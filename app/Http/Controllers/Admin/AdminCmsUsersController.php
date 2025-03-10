@@ -97,9 +97,7 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
     {
         $input = $request->all();
 
-        if (! $request->filled('password')) {
-            unset($input['password'], $input['password_confirmation']);
-        } else {
+        if ($request->filled('password')) {
             $input['password'] = bcrypt($input['password']);
         }
 

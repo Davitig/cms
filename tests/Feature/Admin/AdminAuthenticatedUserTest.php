@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Models\CmsUser;
 use App\Models\CmsUserRole;
 use App\Models\Permission;
 use Illuminate\Support\Arr;
@@ -52,9 +51,9 @@ class AdminAuthenticatedUserTest extends TestAdmin
             ]);
         }
 
-        $user = (new CmsUser)->roleId($roleId)->joinRole()->firstOrFail();
-
-        $response = $this->actingAs($user, 'cms')->get(cms_route($routeName));
+        $response = $this->actingAs(
+            $this->getCustomAccessCmsUser(), 'cms'
+        )->get(cms_route($routeName));
 
         $response->assertOk();
     }

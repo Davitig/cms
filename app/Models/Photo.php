@@ -50,11 +50,10 @@ class Photo extends Model implements Fileable
     /**
      * Set languages a one-to-many relationship.
      *
-     * @param  bool  $relation
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\PhotoLanguage
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function languages(bool $relation = true): HasMany|PhotoLanguage
+    public function languages(): HasMany
     {
-        return $relation ? $this->hasMany(PhotoLanguage::class) : new PhotoLanguage;
+        return $this->hasMany(PhotoLanguage::class);
     }
 }

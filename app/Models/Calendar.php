@@ -24,11 +24,11 @@ class Calendar extends Model
     ];
 
     /**
-     * The list of the available colors.
+     * The list of colors.
      *
      * @var array
      */
-    protected array $colors = [
+    protected static array $colors = [
         'red', 'blue', 'green', 'orange', 'turquoise', 'purple', 'black', 'gray'
     ];
 
@@ -37,9 +37,9 @@ class Calendar extends Model
      *
      * @return string
      */
-    public function getRandomColor(): string
+    public static function getRandomColor(): string
     {
-        return $this->colors[rand(0, count($this->colors) - 1)];
+        return static::$colors[rand(0, count(static::$colors) - 1)];
     }
 
     /**

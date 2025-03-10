@@ -44,12 +44,11 @@ class PageFile extends Model implements Fileable
     /**
      * Set languages a one-to-many relationship.
      *
-     * @param  bool  $relation
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\Page\PageFileLanguage
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function languages(bool $relation = true): HasMany|PageFileLanguage
+    public function languages(): HasMany
     {
-        return $relation ? $this->hasMany(PageFileLanguage::class) : new PageFileLanguage;
+        return $this->hasMany(PageFileLanguage::class);
     }
 
     /**

@@ -12,29 +12,9 @@ trait HasLanguage
     /**
      * Set languages a one-to-many relationship.
      *
-     * @param  bool  $relation
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\Illuminate\Database\Eloquent\Model
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    abstract public function languages(bool $relation = true): HasMany|Model;
-
-    /**
-     * Merge the language attributes into the model.
-     *
-     * @param  array  $attributes
-     * @return static
-     */
-    public function mergeLanguageAttributes(array $attributes): static
-    {
-        $attributes = array_intersect_key(
-            $attributes, array_flip($this->languages(false)->getFillable())
-        );
-
-        foreach ($attributes as $key => $value) {
-            $this->setAttribute($key, $value);
-        }
-
-        return $this;
-    }
+    abstract public function languages(): HasMany;
 
     /**
      * Add a languages cross join to the query.
@@ -60,7 +40,7 @@ trait HasLanguage
     ): Builder
     {
         $table = $this->getTable();
-        $languageTable = $this->languages(false)->getTable();
+        $languageTable = $this->languages()->getRelated()->getTable();
 
         return $query->when($currentLang === false, function ($q) {
             return $q->crossMainLanguages()->orderBy('languages.position');

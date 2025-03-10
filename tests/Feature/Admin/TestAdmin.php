@@ -4,7 +4,10 @@ namespace Tests\Feature\Admin;
 
 use App\Models\CmsUser;
 use App\Models\CmsUserRole;
-use InvalidArgumentException;
+use Database\Factories\CmsUserFactory;
+use Database\Factories\CmsUserRoleFactory;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 abstract class TestAdmin extends TestCase
@@ -13,54 +16,46 @@ abstract class TestAdmin extends TestCase
     {
         parent::setUp();
 
+        DB::update('ALTER TABLE cms_user_roles AUTO_INCREMENT = 1');
+        DB::update('ALTER TABLE cms_users AUTO_INCREMENT = 1');
+
         $this->app['config']['_cms.activated'] = true;
 
-        $this->createCmsUser('full');
+        $this->createCmsUser();
 
-        $this->createCmsUser('custom');
+        $this->createCmsUser(false);
+    }
+
+    protected function tearDown(): void
+    {
+        (new CmsUser)->newQuery()->delete();
+        (new CmsUserRole)->newQuery()->delete();
+
+        parent::tearDown();
     }
 
     protected function getFullAccessCmsUser(): CmsUser
     {
-        return (new CmsUser)->whereEmail('full-access-test@example.com')
+        return (new CmsUser)->roleId((new CmsUserRole)->fullAccess()->valueOrFail('id'))
             ->joinRole()
             ->firstOrFail();
     }
 
     protected function getCustomAccessCmsUser(): CmsUser
     {
-        return (new CmsUser)->whereEmail('custom-access-test@example.com')
+        return (new CmsUser)->roleId((new CmsUserRole)->customAccess()->valueOrFail('id'))
             ->joinRole()
             ->firstOrFail();
     }
 
-    protected function createCmsUser(string $access): CmsUser
+    protected function createCmsUser(bool $fullAccess = true, ?int $times = null): CmsUser|Collection
     {
-        if (! in_array($access, ['full', 'custom'])) {
-            throw new InvalidArgumentException('Invalid access value');
+        if (! $roleId = (new CmsUserRole)->when(
+            $fullAccess, fn ($q) => $q->fullAccess(), fn ($q) => $q->customAccess()
+        )->value('id')) {
+            $roleId = CmsUserRoleFactory::new()->fullAccess($fullAccess)->create()->id;
         }
 
-        $model = (new CmsUser)->whereEmail($access . '-access-test@example.com')->first();
-
-        if (is_null($model)) {
-            if (! $roleId = (new CmsUserRole)->when(
-                $access == 'full', fn ($q) => $q->fullAccess(), fn ($q) => $q->customAccess()
-            )->value('id')) {
-                $roleId = (new CmsUserRole)->create([
-                    'role' => $access . ' access test',
-                    'full_access' => (int) ($access == 'full')
-                ])->id;
-            }
-
-            return (new CmsUser)->create([
-                'email' => $access . '-access-test@example.com',
-                'cms_user_role_id' => $roleId,
-                'first_name' => 'Test',
-                'last_name' => 'Test',
-                'password' => bcrypt('password')
-            ]);
-        }
-
-        return $model;
+        return CmsUserFactory::new()->count($times)->role($roleId)->create();
     }
 }

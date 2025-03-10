@@ -42,7 +42,9 @@ trait PositionableTrait
 
             if ($hasSubItems) {
                 $attributes['parent_id'] = $parentId;
-            } elseif (isset($item['pos'])) {
+            }
+
+            if (isset($item['pos'])) {
                 $position = $item['pos'];
             }
 
@@ -103,9 +105,7 @@ trait PositionableTrait
             return false;
         }
 
-        $newData = $this->where(['position' => $newPos])->first(['id']);
-
-        if (! $newData) {
+        if (is_null($newData = $this->where(['position' => $newPos])->first(['id']))) {
             return false;
         }
 

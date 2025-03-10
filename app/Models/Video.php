@@ -39,11 +39,10 @@ class Video extends Model implements Fileable
     /**
      * Set languages a one-to-many relationship.
      *
-     * @param  bool  $relation
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\VideoLanguage
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function languages(bool $relation = true): HasMany|VideoLanguage
+    public function languages(): HasMany
     {
-        return $relation ? $this->hasMany(VideoLanguage::class) : new VideoLanguage;
+        return $this->hasMany(VideoLanguage::class);
     }
 }

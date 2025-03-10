@@ -3,25 +3,15 @@
 namespace Tests\Feature\Admin\Resources;
 
 use App\Models\Language;
+use Database\Factories\LanguageFactory;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminLanguagesResourceTest extends TestAdmin
 {
-    /**
-     * Get the language id.
-     *
-     * @param  string  $language
-     * @return int
-     */
-    protected function getLanguageId(string $language): int
-    {
-        return (new Language)->whereLanguage($language)->valueOrFail('id');
-    }
-
     public function test_admin_languages_resource_index()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('languages.index'));
 
         $response->assertOk();
@@ -30,7 +20,7 @@ class AdminLanguagesResourceTest extends TestAdmin
     public function test_admin_languages_resource_create()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('languages.create'));
 
         $response->assertOk();
@@ -44,21 +34,28 @@ class AdminLanguagesResourceTest extends TestAdmin
         (new Language)->whereLanguage('te')->delete();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('languages.store'), [
             'language' => 'te',
             'short_name' => 'te',
             'full_name' => 'Test language',
         ]);
 
+        (new Language)->whereLanguage('te')->delete();
+
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
     public function test_admin_languages_resource_edit()
     {
+        // delete languages created from the setUp()
+        (new Language)->newQuery()->delete();
+
+        $language = LanguageFactory::new()->create();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->get(cms_route('languages.edit', [$this->getLanguageId('te')]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->get(cms_route('languages.edit', [$language->id]));
 
         $response->assertOk();
     }
@@ -68,9 +65,14 @@ class AdminLanguagesResourceTest extends TestAdmin
      */
     public function test_admin_languages_resource_update()
     {
+        // delete languages created from the setUp()
+        (new Language)->newQuery()->delete();
+
+        $language = LanguageFactory::new()->create();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('languages.update', [$this->getLanguageId('te')]), [
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('languages.update', [$language->id]), [
             'language' => 'te',
             'short_name' => 'te',
             'full_name' => 'Test language',
@@ -81,21 +83,29 @@ class AdminLanguagesResourceTest extends TestAdmin
 
     public function test_admin_languages_resource_destroy()
     {
+        // delete languages created from the setUp()
+        (new Language)->newQuery()->delete();
+
+        $language = LanguageFactory::new()->create();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->delete(cms_route('languages.destroy', [$this->getLanguageId('te')]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->delete(cms_route('languages.destroy', [$language->id]));
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
     public function test_admin_languages_resource_validate_unique()
     {
+        // delete languages created from the setUp()
+        (new Language)->newQuery()->delete();
+
+        $language = LanguageFactory::new()->create();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('languages.store'), [
-            'language' => 'en',
-            'short_name' => 'en',
-            'full_name' => 'English',
+            'language' => $language->language
         ]);
 
         $response->assertFound()->assertSessionHasErrors(['language']);
@@ -104,7 +114,7 @@ class AdminLanguagesResourceTest extends TestAdmin
     public function test_admin_languages_resource_validate_string_length()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('languages.store'), [
             'language' => 'e',
             'short_name' => 'e',
@@ -119,57 +129,36 @@ class AdminLanguagesResourceTest extends TestAdmin
      */
     public function test_admin_languages_update_main()
     {
-        (new Language)->whereLanguage('te')->delete();
+        // delete languages created from the setUp()
+        (new Language)->newQuery()->delete();
 
-        $model = (new Language)->create([
-            'language' => 'te',
-            'short_name' => 'te',
-            'full_name' => 'Test language',
-        ]);
+        $language = LanguageFactory::new()->create();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('languages.updateMain'), [
-            'id' => $model->id
-        ]);
-
-        $model->delete();
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('languages.updateMain'), ['id' => $language->id]);
 
         $response->assertOk()->assertSessionHasNoErrors();
     }
 
     public function test_admin_languages_main_is_unique()
     {
-        $model = (new Language)->create([
-            'language' => 'te',
-            'short_name' => 'te',
-            'full_name' => 'Test language',
-            'main' => 1
-        ]);
+        // delete languages created from the setUp()
+        (new Language)->newQuery()->delete();
 
-        $newModel = (new Language)->create([
-            'language' => 't1',
-            'short_name' => 't1',
-            'full_name' => 'New test language',
-            'main' => 1
-        ]);
+        $languages = LanguageFactory::new()->times(2)->main(1)->create();
 
         $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('languages.updateMain'), [
-            'id' => $model->id
-        ]);
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('languages.updateMain'), ['id' => $languages->first()->id]);
 
         $this->assertEquals(1, (new Language)->whereMain(1)->count());
-
-        $model->delete();
-        $newModel->delete();
     }
 
     public function test_admin_languages_update_main_validate_id_required()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('languages.updateMain'), [
             // empty data
         ]);

@@ -1,4 +1,4 @@
-<input type="hidden" name="code" value="{{$current->code}}">
+<input type="hidden" name="code" value="{{$current->code}}" id="code{{ $current->language }}">
 <div class="trans-body clearfix">
     <div class="trans-form-group">
         <label class="trans-control-label required">Title:</label>
@@ -12,12 +12,12 @@
     </div>
     <div class="trans-form-group">
         <label class="trans-control-label required">Value:</label>
-        <div class="">
+        <div>
             {{ html()->text('value')->id('value' . $current->language)->class('trans-form-control') }}
             @if ($error = $errors->first('value'))
                 <div class="text-danger">{{$error}}</div>
             @endif
-            <div class="desc">Value contains the translated text that will be displayed on the website</div>
+            <div class="desc">The value contains the translated text that will be displayed to public</div>
         </div>
     </div>
     <div class="trans-form-group">

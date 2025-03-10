@@ -44,12 +44,11 @@ class Slider extends Model implements Fileable
     /**
      * Set languages a one-to-many relationship.
      *
-     * @param  bool  $relation
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\SliderLanguage
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function languages(bool $relation = true): HasMany|SliderLanguage
+    public function languages(): HasMany
     {
-        return $relation ? $this->hasMany(SliderLanguage::class) : new SliderLanguage;
+        return $this->hasMany(SliderLanguage::class);
     }
 
     /**

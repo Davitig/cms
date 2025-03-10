@@ -24,12 +24,32 @@ class CmsUserFactory extends Factory
     {
         return [
             'email' => fake()->unique()->safeEmail(),
-            'cms_user_role_id' => 1,
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'blocked' => 0,
             'password' => static::$password ??= Hash::make('password')
         ];
+    }
+
+    /**
+     * Indicates the role ID.
+     */
+    public function role(int $roleId): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'cms_user_role_id' => $roleId,
+        ]);
+    }
+
+    /**
+     * Indicates the login parameters.
+     */
+    public function loginParams(string $email, string $password): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'email' => $email,
+            'password' => bcrypt($password)
+        ]);
     }
 
     /**

@@ -44,12 +44,11 @@ class ArticleFile extends Model implements Fileable
     /**
      * Set languages a one-to-many relationship.
      *
-     * @param  bool  $relation
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\Article\ArticleFileLanguage
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function languages(bool $relation = true): HasMany|ArticleFileLanguage
+    public function languages(): HasMany
     {
-        return $relation ? $this->hasMany(ArticleFileLanguage::class) : new ArticleFileLanguage;
+        return $this->hasMany(ArticleFileLanguage::class);
     }
 
     /**

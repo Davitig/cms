@@ -358,7 +358,7 @@ saveTreeBtn.on('positionSaved', function() {
 });
 
 function positionable(url, orderBy, page, hasMorePages, selectors) {
-    const aTagStart = '<a href="#" class="move btn btn-gray fa-long-arrow-';
+    const aTagStart = '<a href="#" class="move btn btn-gray fa fa-arrow-';
     const aTagPrev = 'left left" data-move="prev" title="Move to prev page"';
     const aTagNext = 'right right" data-move="next" title="Move to next page"';
     const aTagEnd = '></a>';
@@ -375,12 +375,14 @@ function positionable(url, orderBy, page, hasMorePages, selectors) {
     page = parseInt(page);
 
     if (page) {
-        if (hasMorePages) {
-            $('.btn-action', nestable).prepend(aTagStart + aTagNext + aTagEnd);
-        }
-        if (page > 1) {
-            $('.btn-action', nestable).prepend(aTagStart + aTagPrev + aTagEnd);
-        }
+        $.each(nestables, function (i, nestable) {
+            if (hasMorePages) {
+                $('.btn-action', nestable).prepend(aTagStart + aTagNext + aTagEnd);
+            }
+            if (page > 1) {
+                $('.btn-action', nestable).prepend(aTagStart + aTagPrev + aTagEnd);
+            }
+        });
     }
 
     $.each(nestables, function (i, nestable) {

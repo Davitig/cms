@@ -115,17 +115,17 @@ class AdminLanguagesController extends Controller
 
         $url = null;
 
-        $language = language(true);
+        if (! is_null($language = language(true))) {
+            $languages = languages();
 
-        $languages = languages();
+            unset($languages[$language['language']]);
 
-        unset($languages[$language['language']]);
-
-        if (language_selected()) {
-            if (count($languages) <= 1) {
-                $url = cms_route('languages.index', [], false);
-            } elseif ($language['id'] == $id) {
-                $url = cms_route('languages.index', [], key($languages));
+            if (language_selected()) {
+                if (count($languages) <= 1) {
+                    $url = cms_route('languages.index', [], false);
+                } elseif ($language['id'] == $id) {
+                    $url = cms_route('languages.index', [], key($languages));
+                }
             }
         }
 
@@ -135,9 +135,7 @@ class AdminLanguagesController extends Controller
             ));
         }
 
-        $url ??= cms_route('languages.index');
-
-        return redirect($url)->with('alert', fill_data(
+        return redirect($url ?: cms_route('languages.index'))->with('alert', fill_data(
             'success', trans('database.deleted')
         ));
     }

@@ -9,7 +9,7 @@ use App\Models\Event\Event;
 
 class AdminEventsController extends Controller
 {
-    use Positionable, VisibilityTrait, Transferable, LanguageRelationsTrait;
+    use Positionable, VisibilityTrait, Transferable;
 
     /**
      * Create a new controller instance.
@@ -62,7 +62,7 @@ class AdminEventsController extends Controller
 
         $model = $this->model->create($input);
 
-        $this->createLanguageRelations('languages', $input, $model->id);
+        $model->languages()->createMany(apply_languages($input));
 
         return redirect(cms_route('events.edit', [$collectionId, $model->id]))
             ->with('alert', fill_data('success', trans('general.created')));
@@ -96,9 +96,10 @@ class AdminEventsController extends Controller
      */
     public function update(EventRequest $request, string $collectionId, string $id)
     {
-        $this->model->findOrFail($id)->update($input = $request->all());
-
-        $this->updateOrCreateLanguageRelations('languages', $input, $id);
+        tap($this->model->findOrFail($id))
+            ->update($input = $request->all())
+            ->languages()
+            ->updateOrCreate(apply_languages(), $input);
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

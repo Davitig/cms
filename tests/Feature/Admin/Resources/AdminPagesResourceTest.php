@@ -2,43 +2,63 @@
 
 namespace Tests\Feature\Admin\Resources;
 
-use App\Models\Collection;
-use App\Models\Menu;
 use App\Models\Page\Page;
+use Database\Factories\CollectionFactory;
+use Database\Factories\MenuFactory;
+use Database\Factories\Page\PageFactory;
+use Database\Factories\Page\PageLanguageFactory;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminPagesResourceTest extends TestAdmin
 {
     /**
-     * Get the menu id.
+     * Create a new pages.
      *
-     * @return int
+     * @param  int|null  $times
+     * @param  bool  $createPages
+     * @return array
      */
-    protected function getMenuId(): int
+    public function createPages(?int $times = null, bool $createPages = true): array
     {
-        return (new Menu)->value('id') ?: (new Menu)->create([
-            'title' => 'List of Pages'
-        ])->id;
+        $menu = MenuFactory::new()->create();
+
+        if ($createPages) {
+            $pages = PageFactory::new()->count($times)->menuId($menu->id)->has(
+                PageLanguageFactory::times(count(languages()))
+                    ->state(new Sequence(...apply_languages([]))),
+                'languages'
+            )->create();
+        } else {
+            $pages = null;
+        }
+
+        return array_merge([$menu], ($pages ? [$pages] : []));
     }
 
     public function test_admin_pages_resource_index()
     {
+        list($menu, $pages) = $this->createPages(5);
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->get(cms_route('pages.index', [
-            $this->getMenuId()
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->get(cms_route('pages.index', [$menu->id]));
+
+        $pages->map->delete();
+        $menu->delete();
 
         $response->assertOk();
     }
 
     public function test_admin_pages_resource_create()
     {
+        $menu = MenuFactory::new()->create();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->get(cms_route('pages.create', [
-            $this->getMenuId()
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->get(cms_route('pages.create', [$menu->id]));
+
+        $menu->delete();
 
         $response->assertOk();
     }
@@ -48,25 +68,31 @@ class AdminPagesResourceTest extends TestAdmin
      */
     public function test_admin_pages_resource_store()
     {
+        $menu = MenuFactory::new()->create();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->post(cms_route('pages.store', [
-            $this->getMenuId()
-        ]), [
+            $this->getFullAccessCmsUser(), 'cms'
+        )->post(cms_route('pages.store', [$menu->id]), [
             'title' => fake()->sentence(2),
             'type' => 'page'
         ]);
+
+        (new Page)->menuId($menu->id)->firstOrFail()->delete();
+        $menu->delete();
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
     public function test_admin_pages_resource_edit()
     {
+        list($menu, $page) = $this->createPages();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->get(cms_route('pages.edit', [
-            $this->getMenuId(), (new Page)->valueOrFail('id')
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->get(cms_route('pages.edit', [$menu->id, $page->id]));
+
+        $page->delete();
+        $menu->delete();
 
         $response->assertOk();
     }
@@ -76,110 +102,130 @@ class AdminPagesResourceTest extends TestAdmin
      */
     public function test_admin_pages_resource_update()
     {
-        $page = (new Page)->firstOrFail();
+        list($menu, $page) = $this->createPages();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('pages.update', [
-            $page->menu_id, $page->id
-        ]), [
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('pages.update', [$menu->id, $page->id]), [
             'title' => fake()->sentence(2),
             'type' => 'page'
         ]);
+
+        $page->delete();
+        $menu->delete();
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
     public function test_admin_pages_resource_validate_title_required()
     {
+        $menu = MenuFactory::new()->create();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->post(cms_route('pages.store', [
-            $this->getMenuId(), (new Page)->valueOrFail('id')
-        ]), [
+            $this->getFullAccessCmsUser(), 'cms'
+        )->post(cms_route('pages.store', [$menu->id]), [
             'slug' => fake()->slug(2)
         ]);
+
+        $menu->delete();
 
         $response->assertFound()->assertSessionHasErrors(['title']);
     }
 
     public function test_admin_pages_resource_validate_slug_unique()
     {
+        list($menu, $page) = $this->createPages();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->post(cms_route('pages.store', [
-            $this->getMenuId(), (new Page)->valueOrFail('id')
-        ]), [
-            'slug' => (new Page)->valueOrFail('slug')
+            $this->getFullAccessCmsUser(), 'cms'
+        )->post(cms_route('pages.store', [$menu->id, $page->id]), [
+            'slug' => $page->slug
         ]);
+
+        $page->delete();
+        $menu->delete();
 
         $response->assertFound()->assertSessionHasErrors(['slug']);
     }
 
     public function test_admin_pages_resource_visibility()
     {
+        list($menu, $page) = $this->createPages();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('pages.visibility', [
-            (new Page)->valueOrFail('id')
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('pages.visibility', [$page->id]));
+
+        $page->delete();
+        $menu->delete();
 
         $response->assertFound();
     }
 
     public function test_admin_pages_resource_update_position()
     {
-        $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('pages.updatePosition'));
+        list($menu, $pages) = $this->createPages(3);
 
-        $response->assertFound();
+        $newData = $ids = [];
+
+        foreach ($pages as $page) {
+            $newData[] = ['id' => $ids[] = $page->id, 'pos' => $page->position + 1];
+        }
+
+        $this->actingAs(
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('pages.updatePosition'), ['data' => $newData]);
+
+        $updatedData = (new Page)->whereKey($ids)
+            ->get(['id', 'position as pos'])
+            ->toArray();
+
+        $pages->map->delete();
+        $menu->delete();
+
+        $this->assertSame($newData, $updatedData);
     }
 
     public function test_admin_pages_resource_transfer()
     {
-        $page = (new Page)->firstOrFail();
+        list($menu, $page) = $this->createPages();
 
-        $menuId = (new Menu)->whereKeyNot($page->menu_id)->value('id');
+        $newMenu = MenuFactory::new()->create();
 
-        if (is_null($menuId)) {
-            $menuId = (new Menu)->create(['title' => fake()->sentence(2)])->id;
-        }
-
-        $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('pages.transfer', [
-            $page->menu_id
-        ]), [
+        $this->actingAs(
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('pages.transfer', [$menu->id]), [
             'id' => $page->id,
             'column' => 'menu_id',
-            'column_value' => $menuId
+            'column_value' => $newMenu->id
         ]);
 
-        $response->assertFound();
+        $updatedPageMenuId = (new Page)->whereKey($page->id)->value('menu_id');
+
+        $page->delete();
+        $menu->delete();
+        $newMenu->delete();
+
+        $this->assertSame($newMenu->id, $updatedPageMenuId);
     }
 
     public function test_admin_pages_resource_get_listable_types()
     {
-        $collection = (new Collection)->create([
-            'title' => 'Articles', 'type' => 'articles'
-        ]);
+        $collection = CollectionFactory::new()->create();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->get(
-            cms_route('pages.getListableTypes', ['type' => 'collections'])
-        );
-
-        $this->assertArrayHasKey($collection->id, $response->json());
+            $this->getFullAccessCmsUser(), 'cms'
+        )->get(cms_route('pages.getListableTypes', ['type' => 'collections']));
 
         $collection->delete();
+
+        $this->assertArrayHasKey($collection->id, $response->json());
     }
 
     public function test_admin_pages_resource_get_templates()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('pages.templates'));
 
         $response->assertOk()->assertJsonIsArray();
@@ -187,26 +233,31 @@ class AdminPagesResourceTest extends TestAdmin
 
     public function test_admin_pages_resource_collapse()
     {
-        $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('pages.collapse'), [
-            'id' => (new Page)->valueOrFail('id'),
-        ]);
+        list($menu, $page) = $this->createPages();
 
-        $response->assertOk()->assertJson([]);
+        $this->actingAs(
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('pages.collapse'), ['id' => $page->id]);
+
+        $oldCollapse = $page->collapse;
+        $newCollapse = (new Page)->whereKey($page->id)->value('collapse');
+
+        $page->delete();
+        $menu->delete();
+
+        $this->assertNotSame($oldCollapse, $newCollapse);
     }
 
     public function test_admin_pages_resource_destroy()
     {
-        $page = (new Page)->firstOrFail();
+        list($menu, $page) = $this->createPages();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->delete(cms_route('pages.destroy', [
-            $page->menu_id, $page->id
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->delete(cms_route('pages.destroy', [$menu->id, $page->id]));
 
-        (new Menu)->newQuery()->delete();
+        $page->delete();
+        $menu->delete();
 
         $response->assertFound();
     }

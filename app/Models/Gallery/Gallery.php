@@ -41,12 +41,11 @@ class Gallery extends Model implements Collection
     /**
      * Set languages a one-to-many relationship.
      *
-     * @param  bool  $relation
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\Gallery\GalleryLanguage
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function languages(bool $relation = true): HasMany|GalleryLanguage
+    public function languages(): HasMany
     {
-        return $relation ? $this->hasMany(GalleryLanguage::class) : new GalleryLanguage;
+        return $this->hasMany(GalleryLanguage::class);
     }
 
     /**

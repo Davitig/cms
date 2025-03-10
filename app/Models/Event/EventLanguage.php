@@ -23,7 +23,7 @@ class EventLanguage extends Model
      * @var array
      */
     protected $fillable = [
-        'event_id', 'language_id', 'title', 'short_title', 'description', 'content', 'meta_title', 'meta_desc'
+        'event_id', 'language_id', 'title', 'description', 'content', 'meta_title', 'meta_desc'
     ];
 
     /**

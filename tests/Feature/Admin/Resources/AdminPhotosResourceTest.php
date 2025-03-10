@@ -2,30 +2,66 @@
 
 namespace Tests\Feature\Admin\Resources;
 
-use App\Models\Collection;
-use App\Models\Gallery\Gallery;
 use App\Models\Photo;
+use Database\Factories\CollectionFactory;
+use Database\Factories\GalleryFactory;
+use Database\Factories\Photo\PhotoFactory;
+use Database\Factories\Photo\PhotoLanguageFactory;
+use Illuminate\Database\Eloquent\Factories\Sequence;
+use Tests\Feature\Admin\TestAdmin;
 
-class AdminPhotosResourceTest extends TestAdminResources
+class AdminPhotosResourceTest extends TestAdmin
 {
+    /**
+     * Create a new photo files.
+     *
+     * @param  int|null  $times
+     * @param  bool  $createPhotos
+     * @return array
+     */
+    public function createPhotos(?int $times = null, bool $createPhotos = true): array
+    {
+        $collection = CollectionFactory::new()->galleryType()->create();
+        $gallery = GalleryFactory::new()->collectionId($collection->id)->photoType()->create();
+
+        if ($createPhotos) {
+            $photos = PhotoFactory::new()->count($times)->has(
+                PhotoLanguageFactory::times(count(languages()))
+                    ->state(new Sequence(...apply_languages([]))),
+                'languages'
+            )->create(['gallery_id' => $gallery->id]);
+        } else {
+            $photos = null;
+        }
+
+        return array_merge([$collection, $gallery], ($photos ? [$photos] : []));
+    }
+
     public function test_admin_photos_resource_index()
     {
+        list($collection, $gallery, $photos) = $this->createPhotos(5);
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->get(cms_route('photos.index', [
-            $this->getGalleryModel('photos')->id
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->get(cms_route('photos.index', [$gallery->id]));
+
+        $photos->map->delete();
+        $gallery->delete();
+        $collection->delete();
 
         $response->assertOk();
     }
 
     public function test_admin_photos_resource_create()
     {
+        list($collection, $gallery) = $this->createPhotos(null, false);
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->getJson(cms_route('photos.create', [
-            $this->getGalleryModel('photos')->id
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->getJson(cms_route('photos.create', [$gallery->id]));
+
+        $gallery->delete();
+        $collection->delete();
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -35,25 +71,33 @@ class AdminPhotosResourceTest extends TestAdminResources
      */
     public function test_admin_photos_resource_store()
     {
+        list($collection, $gallery) = $this->createPhotos(null, false);
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->post(cms_route('photos.store', [
-            $this->getGalleryModel('photos')->id
-        ]), [
+            $this->getFullAccessCmsUser(), 'cms'
+        )->post(cms_route('photos.store', [$gallery->id]), [
             'title' => fake()->sentence(2),
             'file' => fake()->imageUrl()
         ]);
+
+        (new Photo)->galleryId($gallery->id)->firstOrFail()->delete();
+        $gallery->delete();
+        $collection->delete();
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
     public function test_admin_photos_resource_edit()
     {
+        list($collection, $gallery, $photo) = $this->createPhotos();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->getJson(cms_route('photos.edit', [
-            $this->getGalleryModel('photos')->id, (new Photo)->valueOrFail('id')
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->getJson(cms_route('photos.edit', [$gallery->id, $photo->id]));
+
+        $photo->delete();
+        $gallery->delete();
+        $collection->delete();
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -63,62 +107,89 @@ class AdminPhotosResourceTest extends TestAdminResources
      */
     public function test_admin_photos_resource_update()
     {
-        $photo = (new Photo)->firstOrFail();
+        list($collection, $gallery, $photo) = $this->createPhotos();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('photos.update', [
-            $photo->gallery_id, $photo->id
-        ]), [
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('photos.update', [$gallery->id, $photo->id]), [
             'title' => fake()->sentence(2),
             'file' => fake()->imageUrl()
         ]);
+
+        $photo->delete();
+        $gallery->delete();
+        $collection->delete();
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
     public function test_admin_photos_resource_validate_required()
     {
+        list($collection, $gallery) = $this->createPhotos(null, false);
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->post(cms_route('photos.store', [
-            $this->getGalleryModel('photos')->id
-        ]), [
-            // empty data
+            $this->getFullAccessCmsUser(), 'cms'
+        )->post(cms_route('photos.store', [$gallery->id]), [
+            'file' => fake()->imageUrl()
         ]);
 
-        $response->assertFound()->assertSessionHasErrors(['title', 'file']);
+        $gallery->delete();
+        $collection->delete();
+
+        $response->assertFound()->assertSessionHasErrors(['title']);
     }
 
     public function test_admin_photos_resource_visibility()
     {
+        list($collection, $gallery, $photo) = $this->createPhotos();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('photos.visibility', [
-            (new Photo)->valueOrFail('id')
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('photos.visibility', [$photo->id]));
+
+        $photo->delete();
+        $gallery->delete();
+        $collection->delete();
 
         $response->assertFound();
     }
 
     public function test_admin_photos_resource_update_position()
     {
-        $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('photos.updatePosition'));
+        list($collection, $gallery, $photos) = $this->createPhotos(3);
 
-        $response->assertFound();
+        $newData = $ids = [];
+
+        foreach ($photos as $photo) {
+            $newData[] = ['id' => $ids[] = $photo->id, 'pos' => $photo->position + 1];
+        }
+
+        $this->actingAs(
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('photos.updatePosition'), ['data' => $newData]);
+
+        $updatedData = (new Photo)->whereKey($ids)
+            ->get(['id', 'position as pos'])
+            ->toArray();
+
+        $photos->map->delete();
+        $gallery->delete();
+        $collection->delete();
+
+        $this->assertSame($newData, $updatedData);
     }
 
     public function test_admin_photos_resource_destroy()
     {
-        $photo = (new Photo)->firstOrFail();
+        list($collection, $gallery, $photo) = $this->createPhotos();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->delete(cms_route('photos.destroy', [
-            $photo->gallery_id, $photo->id
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->delete(cms_route('photos.destroy', [$gallery->id, $photo->id]));
+
+        $photo->delete();
+        $gallery->delete();
+        $collection->delete();
 
         $response->assertFound();
     }

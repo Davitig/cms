@@ -44,12 +44,11 @@ class EventFile extends Model implements Fileable
     /**
      * Set languages a one-to-many relationship.
      *
-     * @param  bool  $relation
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\Event\EventFileLanguage
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function languages(bool $relation = true): HasMany|EventFileLanguage
+    public function languages(): HasMany
     {
-        return $relation ? $this->hasMany(EventFileLanguage::class) : new EventFileLanguage;
+        return $this->hasMany(EventFileLanguage::class);
     }
 
     /**

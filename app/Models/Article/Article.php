@@ -39,11 +39,10 @@ class Article extends Model
     /**
      * Set languages a one-to-many relationship.
      *
-     * @param  bool  $relation
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\Article\ArticleLanguage
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function languages(bool $relation = true): HasMany|ArticleLanguage
+    public function languages(): HasMany
     {
-        return $relation ? $this->hasMany(ArticleLanguage::class) : new ArticleLanguage;
+        return $this->hasMany(ArticleLanguage::class);
     }
 }

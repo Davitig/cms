@@ -2,15 +2,17 @@
 
 namespace Tests\Feature\Admin\Resources;
 
-use App\Models\CmsUserRole;
+use Database\Factories\CmsUserRoleFactory;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminCmsUserRolesResourceTest extends TestAdmin
 {
     public function test_admin_cms_user_roles_resource_index()
     {
+        CmsUserRoleFactory::new()->times(5)->create();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('cmsUserRoles.index'));
 
         $response->assertOk();
@@ -19,7 +21,7 @@ class AdminCmsUserRolesResourceTest extends TestAdmin
     public function test_admin_cms_user_roles_resource_create()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('cmsUserRoles.create'));
 
         $response->assertOk();
@@ -31,7 +33,7 @@ class AdminCmsUserRolesResourceTest extends TestAdmin
     public function test_admin_cms_user_roles_resource_store()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('cmsUserRoles.store'), [
             'role' => 'Role name',
             'full_access' => 0
@@ -42,11 +44,11 @@ class AdminCmsUserRolesResourceTest extends TestAdmin
 
     public function test_admin_cms_user_roles_resource_edit()
     {
+        $cmsUserRole = CmsUserRoleFactory::new()->create();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->get(cms_route('cmsUserRoles.edit', [
-            (new CmsUserRole)->valueOrFail('id')
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->get(cms_route('cmsUserRoles.edit', [$cmsUserRole->id]));
 
         $response->assertOk();
     }
@@ -56,11 +58,11 @@ class AdminCmsUserRolesResourceTest extends TestAdmin
      */
     public function test_admin_cms_user_roles_resource_update()
     {
+        $cmsUserRole = CmsUserRoleFactory::new()->create();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('cmsUserRoles.update', [
-            (new CmsUserRole)->valueOrFail('id')
-        ]), [
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('cmsUserRoles.update', [$cmsUserRole->id]), [
             'role' => 'New role name'
         ]);
 
@@ -70,7 +72,7 @@ class AdminCmsUserRolesResourceTest extends TestAdmin
     public function test_admin_cms_user_roles_resource_validate_role_required()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('cmsUserRoles.store'), [
             // empty data
         ]);
@@ -80,11 +82,11 @@ class AdminCmsUserRolesResourceTest extends TestAdmin
 
     public function test_admin_cms_user_roles_resource_destroy()
     {
+        $cmsUserRole = CmsUserRoleFactory::new()->create();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->delete(cms_route('cmsUserRoles.destroy', [
-            (new CmsUserRole)->orderByDesc('id')->valueOrFail('id')
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->delete(cms_route('cmsUserRoles.destroy', [$cmsUserRole->id]));
 
         $response->assertFound();
     }

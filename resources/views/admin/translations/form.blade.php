@@ -18,7 +18,7 @@
         @if ($error)
             <span class="text-danger">{{$error}}</span>
         @endif
-        <div class="desc">The value contains the translated text that will be displayed on the website</div>
+        <div class="desc">The value contains the translated text that will be displayed to public</div>
     </div>
 </div>
 

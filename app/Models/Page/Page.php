@@ -35,12 +35,11 @@ class Page extends Model
     /**
      * Set languages a one-to-many relationship.
      *
-     * @param  bool  $relation
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\Page\PageLanguage
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function languages(bool $relation = true): HasMany|PageLanguage
+    public function languages(): HasMany
     {
-        return $relation ? $this->hasMany(PageLanguage::class) : new PageLanguage;
+        return $this->hasMany(PageLanguage::class);
     }
 
     /**

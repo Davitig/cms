@@ -2,29 +2,66 @@
 
 namespace Tests\Feature\Admin\Resources;
 
-use App\Models\Article\Article;
 use App\Models\Article\ArticleFile;
+use Database\Factories\Article\ArticleFactory;
+use Database\Factories\Article\ArticleFileFactory;
+use Database\Factories\Article\ArticleFileLanguageFactory;
+use Database\Factories\CollectionFactory;
+use Illuminate\Database\Eloquent\Factories\Sequence;
+use Tests\Feature\Admin\TestAdmin;
 
-class AdminArticleFilesResourceTest extends TestAdminResources
+class AdminArticleFilesResourceTest extends TestAdmin
 {
+    /**
+     * Create a new article files.
+     *
+     * @param  int|null  $times
+     * @param  bool  $createFiles
+     * @return array
+     */
+    public function createArticleFiles(?int $times = null, bool $createFiles = true): array
+    {
+        $collection = CollectionFactory::new()->articleType()->create();
+
+        $article = ArticleFactory::new()->create(['collection_id' => $collection->id]);
+
+        if ($createFiles) {
+            $files = ArticleFileFactory::new()->count($times)->has(
+                ArticleFileLanguageFactory::times(count(languages()))
+                    ->state(new Sequence(...apply_languages([]))),
+                'languages'
+            )->create(['article_id' => $article->id]);
+        } else {
+            $files = null;
+        }
+
+        return array_merge([$collection, $article], ($files ? [$files] : []));
+    }
+
     public function test_admin_article_files_resource_index()
     {
+        list($collection, $article) = $this->createArticleFiles(5);
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->get(cms_route('articles.files.index', [
-            $this->getArticleModel()->id
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->get(cms_route('articles.files.index', [$article->id]));
+
+        $article->delete();
+        $collection->delete();
 
         $response->assertOk();
     }
 
     public function test_admin_article_files_resource_create()
     {
+        list($collection, $article) = $this->createArticleFiles(null, false);
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->getJson(cms_route('articles.files.create', [
-            $this->getArticleModel()->id
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->getJson(cms_route('articles.files.create', [$article->id]));
+
+        $article->delete();
+        $collection->delete();
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -34,25 +71,31 @@ class AdminArticleFilesResourceTest extends TestAdminResources
      */
     public function test_admin_article_files_resource_store()
     {
+        list($collection, $article) = $this->createArticleFiles(null, false);
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->post(cms_route('articles.files.store', [
-            $this->getArticleModel()->id
-        ]), [
+            $this->getFullAccessCmsUser(), 'cms'
+        )->post(cms_route('articles.files.store', [$article->id]), [
             'title' => fake()->sentence(2),
             'file' => fake()->imageUrl()
         ]);
+
+        $article->delete();
+        $collection->delete();
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
     public function test_admin_article_files_resource_edit()
     {
+        list($collection, $article, $file) = $this->createArticleFiles();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->getJson(cms_route('articles.files.edit', [
-            $this->getArticleModel()->id, (new ArticleFile)->valueOrFail('id')
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->getJson(cms_route('articles.files.edit', [$article->id, $file->id]));
+
+        $article->delete();
+        $collection->delete();
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -62,60 +105,85 @@ class AdminArticleFilesResourceTest extends TestAdminResources
      */
     public function test_admin_article_files_resource_update()
     {
+        list($collection, $article, $file) = $this->createArticleFiles();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('articles.files.update', [
-            $this->getArticleModel()->id, (new ArticleFile)->valueOrFail('id')
-        ]), [
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('articles.files.update', [$article->id, $file->id]), [
             'title' => fake()->sentence(2),
             'file' => fake()->imageUrl()
         ]);
+
+        $article->delete();
+        $collection->delete();
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
     public function test_admin_article_files_resource_validate_required()
     {
+        list($collection, $article) = $this->createArticleFiles(null, false);
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->post(cms_route('articles.files.store', [
-            $this->getArticleModel()->id
-        ]), [
-            // empty data
+            $this->getFullAccessCmsUser(), 'cms'
+        )->post(cms_route('articles.files.store', [$article->id]), [
+            'file' => fake()->imageUrl()
         ]);
 
-        $response->assertFound()->assertSessionHasErrors(['title', 'file']);
+        $article->delete();
+        $collection->delete();
+
+        $response->assertFound()->assertSessionHasErrors(['title']);
     }
 
     public function test_admin_article_files_resource_visibility()
     {
+        list($collection, $article, $file) = $this->createArticleFiles();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('articles.files.visibility', [
-            (new ArticleFile)->valueOrFail('id')
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('articles.files.visibility', [$file->id]));
+
+        $article->delete();
+        $collection->delete();
 
         $response->assertFound();
     }
 
     public function test_admin_article_files_resource_update_position()
     {
-        $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('articles.files.updatePosition'));
+        list($collection, $article, $files) = $this->createArticleFiles(3);
 
-        $response->assertFound();
+        $newData = $ids = [];
+
+        foreach ($files as $file) {
+            $newData[] = ['id' => $ids[] = $file->id, 'pos' => $file->position + 1];
+        }
+
+        $this->actingAs(
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('articles.files.updatePosition'), ['data' => $newData]);
+
+        $updatedData = (new ArticleFile)->whereKey($ids)
+            ->get(['id', 'position as pos'])
+            ->toArray();
+
+        $article->delete();
+        $collection->delete();
+
+        $this->assertSame($newData, $updatedData);
     }
 
     public function test_admin_article_files_resource_destroy()
     {
-        $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->delete(cms_route('articles.files.destroy', [
-            $this->getArticleModel()->id, (new ArticleFile)->valueOrFail('id')
-        ]));
+        list($collection, $article, $file) = $this->createArticleFiles();
 
-        (new Article)->newQuery()->delete();
+        $response = $this->actingAs(
+            $this->getFullAccessCmsUser(), 'cms'
+        )->delete(cms_route('articles.files.destroy', [$article->id, $file->id]));
+
+        $article->delete();
+        $collection->delete();
 
         $response->assertFound();
     }

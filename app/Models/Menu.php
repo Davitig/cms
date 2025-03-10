@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Alt\Traits\QueriesTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model
 {
+    use QueriesTrait;
+
     /**
      * The table associated with the model.
      *

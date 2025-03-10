@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class AdminGalleriesController extends Controller
 {
-    use Positionable, VisibilityTrait, Transferable, LanguageRelationsTrait;
+    use Positionable, VisibilityTrait, Transferable;
 
     /**
      * Create a new controller instance.
@@ -67,7 +67,7 @@ class AdminGalleriesController extends Controller
 
         $model = $this->model->create($input);
 
-        $this->createLanguageRelations('languages', $input, $model->id);
+        $model->languages()->createMany(apply_languages($input));
 
         return redirect(cms_route('galleries.edit', [$collectionId, $model->id]))
             ->with('alert', fill_data('success', trans('general.created')));
@@ -101,9 +101,10 @@ class AdminGalleriesController extends Controller
      */
     public function update(GalleryRequest $request, string $collectionId, string $id)
     {
-        $this->model->findOrFail($id)->update($input = $request->all());
-
-        $this->updateOrCreateLanguageRelations('languages', $input, $id);
+        tap($this->model->findOrFail($id))
+            ->update($input = $request->all())
+            ->languages()
+            ->updateOrCreate(apply_languages(), $input);
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

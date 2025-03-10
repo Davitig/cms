@@ -31,12 +31,11 @@ class Translation extends Model
     /**
      * Set languages a one-to-many relationship.
      *
-     * @param  bool  $relation
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\TranslationLanguage
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function languages(bool $relation = true): HasMany|TranslationLanguage
+    public function languages(): HasMany
     {
-        return $relation ? $this->hasMany(TranslationLanguage::class) : new TranslationLanguage;
+        return $this->hasMany(TranslationLanguage::class);
     }
 
     /**

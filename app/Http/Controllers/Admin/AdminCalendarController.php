@@ -56,7 +56,7 @@ class AdminCalendarController extends Controller
             $this->model->findOrFail($id)->update($this->request->all());
         } else {
             $input = $this->request->all();
-            $input['color'] = $this->model->getRandomColor();
+            $input['color'] = $this->model::getRandomColor();
             $input['cms_user_id'] = $this->request->user('cms')->id;
 
             $this->model = $this->model->create($input);

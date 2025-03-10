@@ -39,12 +39,35 @@ function language(mixed $key = null, ?string $value = null): mixed
 function languages(bool $visible = false): array
 {
     if (! $visible) {
-        return config('_app.languages', []);
+        return (array) config('_app.languages', []);
     }
 
-    return array_filter(config('_app.languages', []), function (array $language) {
+    return array_filter((array) config('_app.languages', []), function (array $language) {
         return $language['visible'];
     });
+}
+
+/**
+ * Apply the languages to the given array.
+ *
+ * @param  array|null  $data
+ * @return mixed
+ */
+function apply_languages(?array $data = null): array
+{
+    if (is_null($data)) {
+        return ['language_id' => language(true, 'id')];
+    }
+
+    $languages = [];
+
+    foreach (languages() as $language) {
+        $data['language_id'] = $language['id'];
+
+        $languages[] = $data;
+    }
+
+    return $languages;
 }
 
 /**

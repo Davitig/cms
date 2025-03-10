@@ -7,7 +7,7 @@ class AdminCmsSettingsTest extends TestAdmin
     public function test_admin_cms_settings_index()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('cmsSettings.index'));
 
         $response->assertOk();
@@ -16,7 +16,7 @@ class AdminCmsSettingsTest extends TestAdmin
     public function test_admin_cms_settings_update()
     {
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
+            $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('cmsSettings.update'), [
             'horizontal_menu' => 1
         ]);

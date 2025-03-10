@@ -39,11 +39,10 @@ class Event extends Model
     /**
      * Set languages a one-to-many relationship.
      *
-     * @param  bool  $relation
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\Article\ArticleLanguage
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function languages(bool $relation = true): HasMany|EventLanguage
+    public function languages(): HasMany
     {
-        return $relation ? $this->hasMany(EventLanguage::class) : new EventLanguage;
+        return $this->hasMany(EventLanguage::class);
     }
 }

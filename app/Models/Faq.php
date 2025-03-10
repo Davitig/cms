@@ -38,11 +38,10 @@ class Faq extends Model
     /**
      * Set languages a one-to-many relationship.
      *
-     * @param  bool  $relation
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\App\Models\FaqLanguage
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function languages(bool $relation = true): HasMany|FaqLanguage
+    public function languages(): HasMany
     {
-        return $relation ? $this->hasMany(FaqLanguage::class) : new FaqLanguage;
+        return $this->hasMany(FaqLanguage::class);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Admin\LanguageRelationsTrait;
 use App\Http\Controllers\Admin\Positionable;
 use App\Http\Controllers\Admin\VisibilityTrait;
 use App\Models\Alt\Contracts\Fileable;
@@ -13,7 +12,7 @@ use Illuminate\Http\Request;
 
 class AdminFilesController extends Controller
 {
-    use Positionable, VisibilityTrait, LanguageRelationsTrait;
+    use Positionable, VisibilityTrait;
 
     /**
      * Foreign key name.
@@ -96,7 +95,7 @@ class AdminFilesController extends Controller
 
         $model = $this->model->create($input);
 
-        $this->createLanguageRelations('languages', $input, $model->id);
+        $model->languages()->createMany(apply_languages($input));
 
         if ($request->expectsJson()) {
             $view = view($viewPath, ['item' => $model, 'itemInput' => $input])->render();
@@ -148,9 +147,10 @@ class AdminFilesController extends Controller
      */
     public function updateData(FormRequest $request, string $foreignId, string $id, string $redirectUrl)
     {
-        $this->model->findOrFail($id)->update($input = $request->all());
-
-        $this->updateOrCreateLanguageRelations('languages', $input, $id);
+        tap($this->model->findOrFail($id))
+            ->update($input = $request->all())
+            ->languages()
+            ->updateOrCreate(apply_languages(), $input);
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(

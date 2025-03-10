@@ -23,7 +23,7 @@ class GalleryLanguage extends Model
      * @var array
      */
     protected $fillable = [
-        'gallery_id', 'language_id', 'title', 'short_title', 'description', 'meta_title', 'meta_desc'
+        'gallery_id', 'language_id', 'title', 'description', 'meta_title', 'meta_desc'
     ];
 
     /**

@@ -2,30 +2,66 @@
 
 namespace Tests\Feature\Admin\Resources;
 
-use App\Models\Collection;
-use App\Models\Gallery\Gallery;
 use App\Models\Video;
+use Database\Factories\CollectionFactory;
+use Database\Factories\GalleryFactory;
+use Database\Factories\Video\VideoFactory;
+use Database\Factories\Video\VideoLanguageFactory;
+use Illuminate\Database\Eloquent\Factories\Sequence;
+use Tests\Feature\Admin\TestAdmin;
 
-class AdminVideosResourceTest extends TestAdminResources
+class AdminVideosResourceTest extends TestAdmin
 {
+    /**
+     * Create a new video files.
+     *
+     * @param  int|null  $times
+     * @param  bool  $createVideos
+     * @return array
+     */
+    public function createVideos(?int $times = null, bool $createVideos = true): array
+    {
+        $collection = CollectionFactory::new()->galleryType()->create();
+        $gallery = GalleryFactory::new()->collectionId($collection->id)->videoType()->create();
+
+        if ($createVideos) {
+            $videos = VideoFactory::new()->count($times)->has(
+                VideoLanguageFactory::times(count(languages()))
+                    ->state(new Sequence(...apply_languages([]))),
+                'languages'
+            )->create(['gallery_id' => $gallery->id]);
+        } else {
+            $videos = null;
+        }
+
+        return array_merge([$collection, $gallery], ($videos ? [$videos] : []));
+    }
+
     public function test_admin_videos_resource_index()
     {
+        list($collection, $gallery, $videos) = $this->createVideos(5);
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->get(cms_route('videos.index', [
-            $this->getGalleryModel('videos')->id
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->get(cms_route('videos.index', [$gallery->id]));
+
+        $videos->map->delete();
+        $gallery->delete();
+        $collection->delete();
 
         $response->assertOk();
     }
 
     public function test_admin_videos_resource_create()
     {
+        list($collection, $gallery) = $this->createVideos(null, false);
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->getJson(cms_route('videos.create', [
-            $this->getGalleryModel('videos')->id
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->getJson(cms_route('videos.create', [$gallery->id]));
+
+        $gallery->delete();
+        $collection->delete();
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -35,25 +71,33 @@ class AdminVideosResourceTest extends TestAdminResources
      */
     public function test_admin_videos_resource_store()
     {
+        list($collection, $gallery) = $this->createVideos(null, false);
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->post(cms_route('videos.store', [
-            $this->getGalleryModel('videos')->id
-        ]), [
+            $this->getFullAccessCmsUser(), 'cms'
+        )->post(cms_route('videos.store', [$gallery->id]), [
             'title' => fake()->sentence(2),
             'file' => fake()->imageUrl()
         ]);
+
+        (new Video)->galleryId($gallery->id)->firstOrFail()->delete();
+        $gallery->delete();
+        $collection->delete();
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
     public function test_admin_videos_resource_edit()
     {
+        list($collection, $gallery, $video) = $this->createVideos();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->getJson(cms_route('videos.edit', [
-            $this->getGalleryModel('videos')->id, (new Video)->valueOrFail('id')
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->getJson(cms_route('videos.edit', [$gallery->id, $video->id]));
+
+        $video->delete();
+        $gallery->delete();
+        $collection->delete();
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -63,62 +107,89 @@ class AdminVideosResourceTest extends TestAdminResources
      */
     public function test_admin_videos_resource_update()
     {
-        $video = (new Video)->firstOrFail();
+        list($collection, $gallery, $video) = $this->createVideos();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('videos.update', [
-            $video->gallery_id, $video->id
-        ]), [
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('videos.update', [$gallery->id, $video->id]), [
             'title' => fake()->sentence(2),
             'file' => fake()->imageUrl()
         ]);
+
+        $video->delete();
+        $gallery->delete();
+        $collection->delete();
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
     public function test_admin_videos_resource_validate_required()
     {
+        list($collection, $gallery) = $this->createVideos(null, false);
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->post(cms_route('videos.store', [
-            $this->getGalleryModel('videos')->id
-        ]), [
-            // empty data
+            $this->getFullAccessCmsUser(), 'cms'
+        )->post(cms_route('videos.store', [$gallery->id]), [
+            'file' => fake()->imageUrl()
         ]);
 
-        $response->assertFound()->assertSessionHasErrors(['title', 'file']);
+        $gallery->delete();
+        $collection->delete();
+
+        $response->assertFound()->assertSessionHasErrors(['title']);
     }
 
     public function test_admin_videos_resource_visibility()
     {
+        list($collection, $gallery, $video) = $this->createVideos();
+
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('videos.visibility', [
-            (new Video)->valueOrFail('id')
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('videos.visibility', [$video->id]));
+
+        $video->delete();
+        $gallery->delete();
+        $collection->delete();
 
         $response->assertFound();
     }
 
     public function test_admin_videos_resource_update_position()
     {
-        $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->put(cms_route('videos.updatePosition'));
+        list($collection, $gallery, $videos) = $this->createVideos(3);
 
-        $response->assertFound();
+        $newData = $ids = [];
+
+        foreach ($videos as $video) {
+            $newData[] = ['id' => $ids[] = $video->id, 'pos' => $video->position + 1];
+        }
+
+        $this->actingAs(
+            $this->getFullAccessCmsUser(), 'cms'
+        )->put(cms_route('videos.updatePosition'), ['data' => $newData]);
+
+        $updatedData = (new Video)->whereKey($ids)
+            ->get(['id', 'position as pos'])
+            ->toArray();
+
+        $videos->map->delete();
+        $gallery->delete();
+        $collection->delete();
+
+        $this->assertSame($newData, $updatedData);
     }
 
     public function test_admin_videos_resource_destroy()
     {
-        $video = (new Video)->firstOrFail();
+        list($collection, $gallery, $video) = $this->createVideos();
 
         $response = $this->actingAs(
-            $this->getFullAccessCmsUser()
-        )->delete(cms_route('videos.destroy', [
-            $video->gallery_id, $video->id
-        ]));
+            $this->getFullAccessCmsUser(), 'cms'
+        )->delete(cms_route('videos.destroy', [$gallery->id, $video->id]));
+
+        $video->delete();
+        $gallery->delete();
+        $collection->delete();
 
         $response->assertFound();
     }

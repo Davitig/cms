@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Builder;
 trait LanguageTrait
 {
     /**
+     * Add a where "foreign_key" clause to the query.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int  $foreignKey
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    abstract public function scopeForeignKey(Builder $query, int $foreignKey): Builder;
+
+    /**
      * Build a query by foreign model.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
@@ -32,25 +41,5 @@ trait LanguageTrait
             'language_id',
             is_numeric($currentLang) ? $currentLang : language($currentLang, 'id')
         );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function create(array $attributes = [])
-    {
-        if (isset($attributes['language_id'])) {
-            return parent::create($attributes);
-        }
-
-        $models = [];
-
-        foreach(languages() as $value) {
-            $attributes['language_id'] = $value['id'];
-
-            $models[$attributes['language_id']] = parent::create($attributes);
-        }
-
-        return $models;
     }
 }
