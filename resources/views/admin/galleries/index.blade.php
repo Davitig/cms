@@ -44,8 +44,8 @@
                         <span>{{ trans('general.create') }}</span>
                     </a>
                     <button id="save-tree" data-token="{{csrf_token()}}" class="btn btn-secondary btn-icon-standalone dn" disabled>
-                        <i><b class="icon-let fa-save"></b></i>
-                        <span>{{ trans('general.save') }}</span>
+                        <i><b class="fa fa-save"></b></i>
+                        <span>{{ trans('general.update_position') }}</span>
                     </button>
                     <div id="items">
                         <ul id="nestable-list" class="uk-nestable" data-uk-nestable="{maxDepth:1}">

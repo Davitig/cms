@@ -63,9 +63,7 @@ trait HasSubModels
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getSubModels(
-        array|string $columns = ['*'],
-        ?int         $parentId = null,
-        bool|int     $recursive = false
+        array|string $columns = ['*'], ?int $parentId = null, bool|int $recursive = false
     ): Collection
     {
         $columns = (array) $columns;

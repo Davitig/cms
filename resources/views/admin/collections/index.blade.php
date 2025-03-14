@@ -42,8 +42,8 @@
                 <thead>
                 <tr class="replace-inputs">
                     <th>Name</th>
-                    <th>Description</th>
                     <th>Type</th>
+                    <th>Description</th>
                     <th>ID</th>
                     <th>Actions</th>
                 </tr>
@@ -52,8 +52,8 @@
                 @foreach ($items as $item)
                     <tr id="item{{$item->id}}" class="item">
                         <td>{{ $item->title }}</td>
-                        <td>{{ $item->description }}</td>
                         <td>{{ $item->type }}</td>
+                        <td>{{ $item->description }}</td>
                         <td>{{ $item->id }}</td>
                         <td>
                             <div class="btn-action">
@@ -85,8 +85,8 @@
                     // 'order': [0, 'desc']
                 }).yadcf([
                     {column_number : 0, filter_type: 'text', filter_default_label : 'Type a name'},
-                    {column_number : 1, filter_type: 'text', filter_default_label : 'Type a description'},
                     {column_number : 2, filter_default_label : 'All types'},
+                    {column_number : 1, filter_type: 'text', filter_default_label : 'Type a description'},
                     {column_number : 3, filter_type: 'text', filter_default_label : 'ID'}
                 ]);
 

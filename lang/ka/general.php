@@ -34,6 +34,7 @@ return [
     'move_next_page' => 'შემდეგ გვერდზე გადატანა',
     'move_prev_page' => 'წინა გვერდზე გადატანა',
     'reset_default' => 'საწყისი მდგომარეობა',
+    'update_position' => 'პოზიციის განახლება',
 
     // success
     'success' => 'შესრულდა',

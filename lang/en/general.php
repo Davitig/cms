@@ -34,6 +34,7 @@ return [
     'move_next_page' => 'Move to the next page',
     'move_prev_page' => 'Move to the previous page',
     'reset_default' => 'Reset to default',
+    'update_position' => 'Update position',
 
     // success
     'success' => 'success',

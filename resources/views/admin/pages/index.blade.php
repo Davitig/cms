@@ -43,7 +43,7 @@
             </a>
             <button id="save-tree" data-token="{{csrf_token()}}" class="btn btn-secondary btn-icon-standalone dn" disabled>
                 <i><b class="fa fa-save"></b></i>
-                <span>{{ trans('general.save') }}</span>
+                <span>{{ trans('general.update_position') }}</span>
             </button>
             <div id="items" data-parent-slug="">
                 <ul id="nestable-list" class="uk-nestable" data-uk-nestable>

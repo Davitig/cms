@@ -362,7 +362,7 @@ function positionable(url, orderBy, page, hasMorePages, selectors) {
     const aTagPrev = 'left left" data-move="prev" title="Move to prev page"';
     const aTagNext = 'right right" data-move="next" title="Move to next page"';
     const aTagEnd = '></a>';
-    let saveBtnIcon = $('.icon-var', saveTreeBtn);
+    let saveBtnIcon = $('.fa-save', saveTreeBtn);
     let postHidden = {'_method':'put', '_token':saveTreeBtn.data('token')};
     let nestables = [];
     if (selectors === undefined || selectors.length === 0) {
@@ -389,14 +389,14 @@ function positionable(url, orderBy, page, hasMorePages, selectors) {
         nestable.on('nestable-stop', function () {
             $('.move', nestable).remove();
             saveTreeBtn.show().prop('disabled', false);
-            saveBtnIcon.removeClass('fa-spin fa-check').addClass('fa-save');
+            saveBtnIcon.removeClass('fa-spinner fa-spin fa-check').addClass('fa-save');
         });
         // Position move
         nestable.on('click',  'a.move', function (e) {
             e.preventDefault();
             let move = $(this).data('move');
             let item = $(this).closest('li');
-            let input = [{'id':item.data('id'), 'pos':item.data('pos')}];
+            let input = [{'id':item.data('id'), 'pos':item.attr('data-pos')}];
             let items;
 
             if (move === 'next') {
@@ -406,10 +406,11 @@ function positionable(url, orderBy, page, hasMorePages, selectors) {
             }
 
             items.each(function (i, e) {
-                input.push({'id':$(e).data('id'), 'pos':$(e).data('pos')});
+                input.push({'id':$(e).data('id'), 'pos':$(e).attr('data-pos')});
             });
 
             input = $.extend({'data':input, 'move':move, 'orderBy':orderBy}, postHidden);
+
 
             $.post(url, input, function () {
                 page = move === 'next' ? page + 1 : page - 1;
@@ -428,7 +429,7 @@ function positionable(url, orderBy, page, hasMorePages, selectors) {
     // Position save
     saveTreeBtn.on('click', function () {
         $(this).prop('disabled', true);
-        saveBtnIcon.addClass('fa-spin');
+        saveBtnIcon.addClass('fa-spinner fa-spin').removeClass('fa-save fa-check');
 
         if (page) {
             $('.move').remove();
@@ -464,18 +465,16 @@ function positionable(url, orderBy, page, hasMorePages, selectors) {
         input = $.extend(input, postHidden);
 
         $.post(url, input, function () {
-            saveBtnIcon.removeClass('fa-spin fa-save').addClass('fa-check');
+            saveBtnIcon.removeClass('fa-spinner fa-spin fa-save').addClass('fa-check');
 
             if (orderBy) {
                 $(input.data).each(function (i, e) {
-                    $('.item'+e.id).data('pos', e.pos);
+                    $('#item'+e.id).attr('data-pos', e.pos);
                 });
             }
 
             saveTreeBtn.trigger('positionSaved');
         }, 'json').fail(function (xhr) {
-            saveBtnIcon.removeClass('fa-spin fa-save').addClass('fa-remove');
-
             alert(xhr.responseText);
         }).always(function () {
             saveTreeBtn.delay(400).fadeOut(500);

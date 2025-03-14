@@ -89,7 +89,7 @@ select .sub-item {padding-left:20px;}
 /* action buttons */
 #items .uk-nestable-item [data-nestable-action="toggle"] {float:left;padding:14px 5px 0 10px;}
 #items .item {position:relative;}
-#items .item .btn {min-width:40px;margin-left:2px;margin-right:2px;}
+#items .item .btn {min-width:40px;margin-left:2px;margin-right:2px;padding:13px 18px;}
 #items .item .btn.item-id {width:auto;}
 #items .item .btn-action.toggleable {white-space:nowrap;}
 .btn-action form {display:inline-block;}
@@ -172,7 +172,6 @@ select .sub-item {padding-left:20px;}
 /* uk-nestable */
 .uk-nestable .item-id {margin-right:5px;}
 .uk-nestable-item .uk-nestable-handle {padding:13px;}
-.uk-nestable-item .btn {padding:13px 18px;}
 .uk-nestable-item {clear:both;}
 .uk-nestable-item .list-label {display:block;padding:8px 13px;overflow:hidden;}
 .uk-nestable-item .list-label a {padding:6px 0;width:100%;display:inline-block;line-height:1.2;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}

@@ -17,10 +17,7 @@ trait PositionableTrait
      * @return bool
      */
     public function updatePosition(
-        array $data,
-        int   $parentId = 0,
-        array $params = [],
-        bool  $hasSubItems = false
+        array $data, int $parentId = 0, array $params = [], bool $hasSubItems = false
     ): bool
     {
         if (empty($data)
@@ -69,51 +66,68 @@ trait PositionableTrait
      */
     private function movePosition(array $data, array $params = []): bool|array
     {
-        if (! isset($params['move']) || ! isset($params['orderBy'])) {
+        $data = array_filter(
+            $data, fn ($value) => ! empty($value['pos'] && ! empty($value['id']))
+        );
+
+        if (empty($data) || ! isset($params['move']) || ! isset($params['orderBy'])) {
             return $data;
         }
 
-        if ($params['move'] == 'next') {
-            if ($params['orderBy'] == 'desc') {
-                $posFunc = function (&$value) {
-                    return $value['pos']++;
-                };
+        $target = array_shift($data);
+
+        if (! empty($data)) {
+            $startPos = last($data)['pos'];
+
+            if ($params['move'] == 'next') {
+                if ($params['orderBy'] == 'desc') {
+                    $target['pos'] = $startPos - 1; $queryOperator = '<';
+                    $queryOrderBy = 'desc'; $posFunc = fn (&$value) => $value['pos']++;
+                } else {
+                    $target['pos'] = $startPos + 1; $queryOperator = '>';
+                    $queryOrderBy = 'asc'; $posFunc = fn (&$value) => $value['pos']--;
+                }
             } else {
-                $posFunc = function (&$value) {
-                    return $value['pos']--;
-                };
+                if ($params['orderBy'] == 'desc') {
+                    $target['pos'] = $startPos + 1; $queryOperator = '>';
+                    $queryOrderBy = 'asc'; $posFunc = fn (&$value) => $value['pos']--;
+                } else {
+                    $target['pos'] = $startPos - 1; $queryOperator = '<';
+                    $queryOrderBy = 'desc'; $posFunc = fn (&$value) => $value['pos']++;
+                }
             }
 
-            $newPos = end($data)['pos'] - 1;
-        } else {
-            if ($params['orderBy'] == 'asc') {
-                $posFunc = function (&$value) {
-                    return $value['pos']++;
-                };
-            } else {
-                $posFunc = function (&$value) {
-                    return $value['pos']--;
-                };
-            }
-
-            $newPos = end($data)['pos'] + 1;
-        }
-
-        try {
             array_walk($data, $posFunc);
-        } catch (Exception) {
-            return false;
+        } else {
+            $startPos = $target['pos'];
+
+            if ($params['move'] == 'next') {
+                if ($params['orderBy'] == 'desc') {
+                    $target['pos'] = $startPos - 1; $queryOperator = '<'; $queryOrderBy = 'desc';
+                } else {
+                    $target['pos'] = $startPos + 1; $queryOperator = '>'; $queryOrderBy = 'asc';
+                }
+            } else {
+                if ($params['orderBy'] == 'desc') {
+                    $target['pos'] = $startPos + 1; $queryOperator = '>'; $queryOrderBy = 'asc';
+                } else {
+                    $target['pos'] = $startPos - 1; $queryOperator = '<'; $queryOrderBy = 'desc';
+                }
+            }
         }
 
-        if (is_null($newData = $this->where(['position' => $newPos])->first(['id']))) {
+        if (is_null($newData = $this->where('position', $queryOperator, $startPos)
+            ->orderBy('position', $queryOrderBy)
+            ->first(['id']))) {
             return false;
         }
 
         $dataCount = count($data);
 
-        $data[0]['pos'] = $newPos;
-        $data[$dataCount]['pos'] = $params['move'] == 'next' ? $newPos + 1 : $newPos - 1;
         $data[$dataCount]['id'] = $newData['id'];
+        $data[$dataCount]['pos'] = $startPos;
+        $data['target']['id'] = $target['id'];
+        $data['target']['pos'] = $target['pos'];
 
         return $data;
     }
@@ -141,7 +155,10 @@ trait PositionableTrait
     }
 
     /**
-     * {@inheritDoc}
+     * Save a new model with increment position and return the instance.
+     *
+     * @param  array  $attributes
+     * @return \Illuminate\Database\Eloquent\Model
      */
     public function create(array $attributes = [])
     {

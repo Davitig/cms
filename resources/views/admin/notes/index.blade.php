@@ -27,7 +27,7 @@
                 <span>New Note</span>
             </a>
             <button id="save-note" class="btn btn-secondary btn-icon-standalone dn" disabled>
-                <i><b class="icon-let fa-save"></b></i>
+                <i><b class="fa fa-save"></b></i>
                 <span>{{ trans('general.save') }}</span>
             </button>
         </div>
