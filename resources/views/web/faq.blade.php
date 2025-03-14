@@ -28,6 +28,24 @@
         <!-- .content -->
     </article>
     <!-- #item -->
+    <div id="items" class="row">
+        @foreach ($items as $item)
+            <article class="col-sm-4">
+                <div class="content clearfix">
+                    <header class="title">
+                        <h2>{{ $item->title}}</h2>
+                    </header>
+                    <!-- .title -->
+                    <div class="desc">
+                        {!! $item->description !!}
+                    </div>
+                    <!-- .desc -->
+                </div>
+                <!-- .content -->
+            </article>
+            <!-- .col-sm-4 -->
+        @endforeach
+    </div>
 </div>
 <!-- .container -->
 @endsection
