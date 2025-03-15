@@ -21,7 +21,7 @@ class AdminSliderResourceTest extends TestAdmin
     {
         return SliderFactory::new()->count($times)->has(
             SliderLanguageFactory::times(count(languages()))
-                ->state(new Sequence(...apply_languages([]))), 'languages'
+                ->sequence(...apply_languages([])), 'languages'
         )->create();
     }
 

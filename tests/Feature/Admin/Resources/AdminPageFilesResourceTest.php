@@ -28,7 +28,7 @@ class AdminPageFilesResourceTest extends TestAdmin
         if ($createFiles) {
             $files = PageFileFactory::new()->count($times)->has(
                 PageFileLanguageFactory::times(count(languages()))
-                    ->state(new Sequence(...apply_languages([]))),
+                    ->sequence(...apply_languages([])),
                 'languages'
             )->create(['page_id' => $page->id]);
         } else {
@@ -40,7 +40,7 @@ class AdminPageFilesResourceTest extends TestAdmin
 
     public function test_admin_page_files_resource_index()
     {
-        list($menu, $page) = $this->createPageFiles(5);
+        [$menu, $page] = $this->createPageFiles(5);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -54,7 +54,7 @@ class AdminPageFilesResourceTest extends TestAdmin
 
     public function test_admin_page_files_resource_create()
     {
-        list($menu, $page) = $this->createPageFiles(null, false);
+        [$menu, $page] = $this->createPageFiles(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -71,7 +71,7 @@ class AdminPageFilesResourceTest extends TestAdmin
      */
     public function test_admin_page_files_resource_store()
     {
-        list($menu, $page) = $this->createPageFiles(null, false);
+        [$menu, $page] = $this->createPageFiles(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -88,7 +88,7 @@ class AdminPageFilesResourceTest extends TestAdmin
 
     public function test_admin_page_files_resource_edit()
     {
-        list($menu, $page, $file) = $this->createPageFiles();
+        [$menu, $page, $file] = $this->createPageFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -105,7 +105,7 @@ class AdminPageFilesResourceTest extends TestAdmin
      */
     public function test_admin_page_files_resource_update()
     {
-        list($menu, $page, $file) = $this->createPageFiles();
+        [$menu, $page, $file] = $this->createPageFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -124,7 +124,7 @@ class AdminPageFilesResourceTest extends TestAdmin
 
     public function test_admin_page_files_resource_validate_required()
     {
-        list($menu, $page) = $this->createPageFiles(null, false);
+        [$menu, $page] = $this->createPageFiles(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -142,7 +142,7 @@ class AdminPageFilesResourceTest extends TestAdmin
 
     public function test_admin_page_files_resource_visibility()
     {
-        list($menu, $page, $file) = $this->createPageFiles();
+        [$menu, $page, $file] = $this->createPageFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -156,7 +156,7 @@ class AdminPageFilesResourceTest extends TestAdmin
 
     public function test_admin_page_files_resource_update_position()
     {
-        list($menu, $page, $files) = $this->createPageFiles(3);
+        [$menu, $page, $files] = $this->createPageFiles(3);
 
         $newData = $ids = [];
 
@@ -180,7 +180,7 @@ class AdminPageFilesResourceTest extends TestAdmin
 
     public function test_admin_page_files_resource_destroy()
     {
-        list($menu, $page, $file) = $this->createPageFiles();
+        [$menu, $page, $file] = $this->createPageFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'

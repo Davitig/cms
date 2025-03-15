@@ -28,7 +28,7 @@ class AdminEventFilesResourceTest extends TestAdmin
         if ($createFiles) {
             $files = EventFileFactory::new()->count($times)->has(
                 EventFileLanguageFactory::times(count(languages()))
-                    ->state(new Sequence(...apply_languages([]))),
+                    ->sequence(...apply_languages([])),
                 'languages'
             )->create(['event_id' => $event->id]);
         } else {
@@ -40,7 +40,7 @@ class AdminEventFilesResourceTest extends TestAdmin
 
     public function test_admin_event_files_resource_index()
     {
-        list($collection, $event) = $this->createEventFiles(5);
+        [$collection, $event] = $this->createEventFiles(5);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -54,7 +54,7 @@ class AdminEventFilesResourceTest extends TestAdmin
 
     public function test_admin_event_files_resource_create()
     {
-        list($collection, $event) = $this->createEventFiles(null, false);
+        [$collection, $event] = $this->createEventFiles(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -71,7 +71,7 @@ class AdminEventFilesResourceTest extends TestAdmin
      */
     public function test_admin_event_files_resource_store()
     {
-        list($collection, $event) = $this->createEventFiles(null, false);
+        [$collection, $event] = $this->createEventFiles(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -88,7 +88,7 @@ class AdminEventFilesResourceTest extends TestAdmin
 
     public function test_admin_event_files_resource_edit()
     {
-        list($collection, $event, $file) = $this->createEventFiles();
+        [$collection, $event, $file] = $this->createEventFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -105,7 +105,7 @@ class AdminEventFilesResourceTest extends TestAdmin
      */
     public function test_admin_event_files_resource_update()
     {
-        list($collection, $event, $file) = $this->createEventFiles();
+        [$collection, $event, $file] = $this->createEventFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -124,7 +124,7 @@ class AdminEventFilesResourceTest extends TestAdmin
 
     public function test_admin_event_files_resource_validate_required()
     {
-        list($collection, $event) = $this->createEventFiles(null, false);
+        [$collection, $event] = $this->createEventFiles(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -142,7 +142,7 @@ class AdminEventFilesResourceTest extends TestAdmin
 
     public function test_admin_event_files_resource_visibility()
     {
-        list($collection, $event, $file) = $this->createEventFiles();
+        [$collection, $event, $file] = $this->createEventFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -156,7 +156,7 @@ class AdminEventFilesResourceTest extends TestAdmin
 
     public function test_admin_event_files_resource_update_position()
     {
-        list($collection, $event, $files) = $this->createEventFiles(3);
+        [$collection, $event, $files] = $this->createEventFiles(3);
 
         $newData = $ids = [];
 
@@ -180,7 +180,7 @@ class AdminEventFilesResourceTest extends TestAdmin
 
     public function test_admin_event_files_resource_destroy()
     {
-        list($collection, $event, $file) = $this->createEventFiles();
+        [$collection, $event, $file] = $this->createEventFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'

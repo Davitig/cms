@@ -27,7 +27,7 @@ class AdminVideosResourceTest extends TestAdmin
         if ($createVideos) {
             $videos = VideoFactory::new()->count($times)->has(
                 VideoLanguageFactory::times(count(languages()))
-                    ->state(new Sequence(...apply_languages([]))),
+                    ->sequence(...apply_languages([])),
                 'languages'
             )->create(['gallery_id' => $gallery->id]);
         } else {
@@ -39,7 +39,7 @@ class AdminVideosResourceTest extends TestAdmin
 
     public function test_admin_videos_resource_index()
     {
-        list($collection, $gallery, $videos) = $this->createVideos(5);
+        [$collection, $gallery, $videos] = $this->createVideos(5);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -54,7 +54,7 @@ class AdminVideosResourceTest extends TestAdmin
 
     public function test_admin_videos_resource_create()
     {
-        list($collection, $gallery) = $this->createVideos(null, false);
+        [$collection, $gallery] = $this->createVideos(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -71,7 +71,7 @@ class AdminVideosResourceTest extends TestAdmin
      */
     public function test_admin_videos_resource_store()
     {
-        list($collection, $gallery) = $this->createVideos(null, false);
+        [$collection, $gallery] = $this->createVideos(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -89,7 +89,7 @@ class AdminVideosResourceTest extends TestAdmin
 
     public function test_admin_videos_resource_edit()
     {
-        list($collection, $gallery, $video) = $this->createVideos();
+        [$collection, $gallery, $video] = $this->createVideos();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -107,7 +107,7 @@ class AdminVideosResourceTest extends TestAdmin
      */
     public function test_admin_videos_resource_update()
     {
-        list($collection, $gallery, $video) = $this->createVideos();
+        [$collection, $gallery, $video] = $this->createVideos();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -125,7 +125,7 @@ class AdminVideosResourceTest extends TestAdmin
 
     public function test_admin_videos_resource_validate_required()
     {
-        list($collection, $gallery) = $this->createVideos(null, false);
+        [$collection, $gallery] = $this->createVideos(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -141,7 +141,7 @@ class AdminVideosResourceTest extends TestAdmin
 
     public function test_admin_videos_resource_visibility()
     {
-        list($collection, $gallery, $video) = $this->createVideos();
+        [$collection, $gallery, $video] = $this->createVideos();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -156,7 +156,7 @@ class AdminVideosResourceTest extends TestAdmin
 
     public function test_admin_videos_resource_update_position()
     {
-        list($collection, $gallery, $videos) = $this->createVideos(3);
+        [$collection, $gallery, $videos] = $this->createVideos(3);
 
         $newData = $ids = [];
 
@@ -181,7 +181,7 @@ class AdminVideosResourceTest extends TestAdmin
 
     public function test_admin_videos_resource_destroy()
     {
-        list($collection, $gallery, $video) = $this->createVideos();
+        [$collection, $gallery, $video] = $this->createVideos();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'

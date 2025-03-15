@@ -27,7 +27,7 @@ class AdminPhotosResourceTest extends TestAdmin
         if ($createPhotos) {
             $photos = PhotoFactory::new()->count($times)->has(
                 PhotoLanguageFactory::times(count(languages()))
-                    ->state(new Sequence(...apply_languages([]))),
+                    ->sequence(...apply_languages([])),
                 'languages'
             )->create(['gallery_id' => $gallery->id]);
         } else {
@@ -39,7 +39,7 @@ class AdminPhotosResourceTest extends TestAdmin
 
     public function test_admin_photos_resource_index()
     {
-        list($collection, $gallery, $photos) = $this->createPhotos(5);
+        [$collection, $gallery, $photos] = $this->createPhotos(5);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -54,7 +54,7 @@ class AdminPhotosResourceTest extends TestAdmin
 
     public function test_admin_photos_resource_create()
     {
-        list($collection, $gallery) = $this->createPhotos(null, false);
+        [$collection, $gallery] = $this->createPhotos(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -71,7 +71,7 @@ class AdminPhotosResourceTest extends TestAdmin
      */
     public function test_admin_photos_resource_store()
     {
-        list($collection, $gallery) = $this->createPhotos(null, false);
+        [$collection, $gallery] = $this->createPhotos(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -89,7 +89,7 @@ class AdminPhotosResourceTest extends TestAdmin
 
     public function test_admin_photos_resource_edit()
     {
-        list($collection, $gallery, $photo) = $this->createPhotos();
+        [$collection, $gallery, $photo] = $this->createPhotos();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -107,7 +107,7 @@ class AdminPhotosResourceTest extends TestAdmin
      */
     public function test_admin_photos_resource_update()
     {
-        list($collection, $gallery, $photo) = $this->createPhotos();
+        [$collection, $gallery, $photo] = $this->createPhotos();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -125,7 +125,7 @@ class AdminPhotosResourceTest extends TestAdmin
 
     public function test_admin_photos_resource_validate_required()
     {
-        list($collection, $gallery) = $this->createPhotos(null, false);
+        [$collection, $gallery] = $this->createPhotos(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -141,7 +141,7 @@ class AdminPhotosResourceTest extends TestAdmin
 
     public function test_admin_photos_resource_visibility()
     {
-        list($collection, $gallery, $photo) = $this->createPhotos();
+        [$collection, $gallery, $photo] = $this->createPhotos();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -156,7 +156,7 @@ class AdminPhotosResourceTest extends TestAdmin
 
     public function test_admin_photos_resource_update_position()
     {
-        list($collection, $gallery, $photos) = $this->createPhotos(3);
+        [$collection, $gallery, $photos] = $this->createPhotos(3);
 
         $newData = $ids = [];
 
@@ -181,7 +181,7 @@ class AdminPhotosResourceTest extends TestAdmin
 
     public function test_admin_photos_resource_destroy()
     {
-        list($collection, $gallery, $photo) = $this->createPhotos();
+        [$collection, $gallery, $photo] = $this->createPhotos();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'

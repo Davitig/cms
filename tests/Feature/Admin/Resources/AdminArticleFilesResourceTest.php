@@ -28,7 +28,7 @@ class AdminArticleFilesResourceTest extends TestAdmin
         if ($createFiles) {
             $files = ArticleFileFactory::new()->count($times)->has(
                 ArticleFileLanguageFactory::times(count(languages()))
-                    ->state(new Sequence(...apply_languages([]))),
+                    ->sequence(...apply_languages([])),
                 'languages'
             )->create(['article_id' => $article->id]);
         } else {
@@ -40,7 +40,7 @@ class AdminArticleFilesResourceTest extends TestAdmin
 
     public function test_admin_article_files_resource_index()
     {
-        list($collection, $article) = $this->createArticleFiles(5);
+        [$collection, $article] = $this->createArticleFiles(5);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -54,7 +54,7 @@ class AdminArticleFilesResourceTest extends TestAdmin
 
     public function test_admin_article_files_resource_create()
     {
-        list($collection, $article) = $this->createArticleFiles(null, false);
+        [$collection, $article] = $this->createArticleFiles(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -71,7 +71,7 @@ class AdminArticleFilesResourceTest extends TestAdmin
      */
     public function test_admin_article_files_resource_store()
     {
-        list($collection, $article) = $this->createArticleFiles(null, false);
+        [$collection, $article] = $this->createArticleFiles(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -88,7 +88,7 @@ class AdminArticleFilesResourceTest extends TestAdmin
 
     public function test_admin_article_files_resource_edit()
     {
-        list($collection, $article, $file) = $this->createArticleFiles();
+        [$collection, $article, $file] = $this->createArticleFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -105,7 +105,7 @@ class AdminArticleFilesResourceTest extends TestAdmin
      */
     public function test_admin_article_files_resource_update()
     {
-        list($collection, $article, $file) = $this->createArticleFiles();
+        [$collection, $article, $file] = $this->createArticleFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -122,7 +122,7 @@ class AdminArticleFilesResourceTest extends TestAdmin
 
     public function test_admin_article_files_resource_validate_required()
     {
-        list($collection, $article) = $this->createArticleFiles(null, false);
+        [$collection, $article] = $this->createArticleFiles(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -138,7 +138,7 @@ class AdminArticleFilesResourceTest extends TestAdmin
 
     public function test_admin_article_files_resource_visibility()
     {
-        list($collection, $article, $file) = $this->createArticleFiles();
+        [$collection, $article, $file] = $this->createArticleFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -152,7 +152,7 @@ class AdminArticleFilesResourceTest extends TestAdmin
 
     public function test_admin_article_files_resource_update_position()
     {
-        list($collection, $article, $files) = $this->createArticleFiles(3);
+        [$collection, $article, $files] = $this->createArticleFiles(3);
 
         $newData = $ids = [];
 
@@ -176,7 +176,7 @@ class AdminArticleFilesResourceTest extends TestAdmin
 
     public function test_admin_article_files_resource_destroy()
     {
-        list($collection, $article, $file) = $this->createArticleFiles();
+        [$collection, $article, $file] = $this->createArticleFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'

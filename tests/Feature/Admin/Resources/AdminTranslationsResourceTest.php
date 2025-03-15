@@ -21,7 +21,7 @@ class AdminTranslationsResourceTest extends TestAdmin
     {
         return TranslationFactory::new()->count($times)->has(
             TranslationLanguageFactory::times(count(languages()))
-                ->state(new Sequence(...apply_languages([]))), 'languages'
+                ->sequence(...apply_languages([])), 'languages'
         )->create();
     }
 

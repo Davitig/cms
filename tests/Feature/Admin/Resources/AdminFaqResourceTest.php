@@ -23,7 +23,7 @@ class AdminFaqResourceTest extends TestAdmin
 
         $faq = FaqFactory::new()->count($times)->has(
             FaqLanguageFactory::times(count(languages()))
-                ->state(new Sequence(...apply_languages([]))),
+                ->sequence(...apply_languages([])),
             'languages'
         )->create(['collection_id' => $collection->id]);
 
@@ -32,7 +32,7 @@ class AdminFaqResourceTest extends TestAdmin
 
     public function test_admin_faq_resource_index()
     {
-        list($collection, $faqList) = $this->createFaq(5);
+        [$collection, $faqList] = $this->createFaq(5);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -78,7 +78,7 @@ class AdminFaqResourceTest extends TestAdmin
 
     public function test_admin_faq_resource_edit()
     {
-        list($collection, $faq) = $this->createFaq();
+        [$collection, $faq] = $this->createFaq();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -95,7 +95,7 @@ class AdminFaqResourceTest extends TestAdmin
      */
     public function test_admin_faq_resource_update()
     {
-        list($collection, $faq) = $this->createFaq();
+        [$collection, $faq] = $this->createFaq();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -126,7 +126,7 @@ class AdminFaqResourceTest extends TestAdmin
 
     public function test_admin_faq_resource_visibility()
     {
-        list($collection, $faq) = $this->createFaq();
+        [$collection, $faq] = $this->createFaq();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -140,7 +140,7 @@ class AdminFaqResourceTest extends TestAdmin
 
     public function test_admin_faq_resource_update_position()
     {
-        list($collection, $faqList) = $this->createFaq(3);
+        [$collection, $faqList] = $this->createFaq(3);
 
         $newData = $ids = [];
 
@@ -164,7 +164,7 @@ class AdminFaqResourceTest extends TestAdmin
 
     public function test_admin_faq_resource_transfer()
     {
-        list($collection, $faq) = $this->createFaq();
+        [$collection, $faq] = $this->createFaq();
 
         $newCollection = CollectionFactory::new()->articleType()->create();
 
@@ -187,7 +187,7 @@ class AdminFaqResourceTest extends TestAdmin
 
     public function test_admin_faq_resource_destroy()
     {
-        list($collection, $faq) = $this->createFaq();
+        [$collection, $faq] = $this->createFaq();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'

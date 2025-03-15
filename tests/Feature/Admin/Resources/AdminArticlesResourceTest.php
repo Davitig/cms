@@ -23,7 +23,7 @@ class AdminArticlesResourceTest extends TestAdmin
 
         $articles = ArticleFactory::new()->count($times)->has(
             ArticleLanguageFactory::times(count(languages()))
-                ->state(new Sequence(...apply_languages([]))),
+                ->sequence(...apply_languages([])),
             'languages'
         )->create(['collection_id' => $collection->id]);
 
@@ -32,7 +32,7 @@ class AdminArticlesResourceTest extends TestAdmin
 
     public function test_admin_articles_resource_index()
     {
-        list($collection, $articles) = $this->createArticles(5);
+        [$collection, $articles] = $this->createArticles(5);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -79,7 +79,7 @@ class AdminArticlesResourceTest extends TestAdmin
 
     public function test_admin_articles_resource_edit()
     {
-        list($collection, $article) = $this->createArticles();
+        [$collection, $article] = $this->createArticles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -96,7 +96,7 @@ class AdminArticlesResourceTest extends TestAdmin
      */
     public function test_admin_articles_resource_update()
     {
-        list($collection, $article) = $this->createArticles();
+        [$collection, $article] = $this->createArticles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -128,7 +128,7 @@ class AdminArticlesResourceTest extends TestAdmin
 
     public function test_admin_articles_resource_validate_slug_unique()
     {
-        list($collection, $article) = $this->createArticles();
+        [$collection, $article] = $this->createArticles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -144,7 +144,7 @@ class AdminArticlesResourceTest extends TestAdmin
 
     public function test_admin_articles_resource_visibility()
     {
-        list($collection, $article) = $this->createArticles();
+        [$collection, $article] = $this->createArticles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -158,7 +158,7 @@ class AdminArticlesResourceTest extends TestAdmin
 
     public function test_admin_articles_resource_update_position()
     {
-        list($collection, $articles) = $this->createArticles(3);
+        [$collection, $articles] = $this->createArticles(3);
 
         $newData = $ids = [];
 
@@ -182,7 +182,7 @@ class AdminArticlesResourceTest extends TestAdmin
 
     public function test_admin_articles_resource_transfer()
     {
-        list($collection, $article) = $this->createArticles();
+        [$collection, $article] = $this->createArticles();
 
         $newCollection = CollectionFactory::new()->articleType()->create();
 
@@ -206,7 +206,7 @@ class AdminArticlesResourceTest extends TestAdmin
 
     public function test_admin_articles_resource_destroy()
     {
-        list($collection, $article) = $this->createArticles();
+        [$collection, $article] = $this->createArticles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'

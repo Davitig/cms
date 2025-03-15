@@ -7,7 +7,6 @@ use Database\Factories\CollectionFactory;
 use Database\Factories\MenuFactory;
 use Database\Factories\Page\PageFactory;
 use Database\Factories\Page\PageLanguageFactory;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminPagesResourceTest extends TestAdmin
@@ -26,7 +25,7 @@ class AdminPagesResourceTest extends TestAdmin
         if ($createPages) {
             $pages = PageFactory::new()->count($times)->menuId($menu->id)->has(
                 PageLanguageFactory::times(count(languages()))
-                    ->state(new Sequence(...apply_languages([]))),
+                    ->sequence(...apply_languages([])),
                 'languages'
             )->create();
         } else {
@@ -38,7 +37,7 @@ class AdminPagesResourceTest extends TestAdmin
 
     public function test_admin_pages_resource_index()
     {
-        list($menu, $pages) = $this->createPages(5);
+        [$menu, $pages] = $this->createPages(5);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -85,7 +84,7 @@ class AdminPagesResourceTest extends TestAdmin
 
     public function test_admin_pages_resource_edit()
     {
-        list($menu, $page) = $this->createPages();
+        [$menu, $page] = $this->createPages();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -102,7 +101,7 @@ class AdminPagesResourceTest extends TestAdmin
      */
     public function test_admin_pages_resource_update()
     {
-        list($menu, $page) = $this->createPages();
+        [$menu, $page] = $this->createPages();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -134,7 +133,7 @@ class AdminPagesResourceTest extends TestAdmin
 
     public function test_admin_pages_resource_validate_slug_unique()
     {
-        list($menu, $page) = $this->createPages();
+        [$menu, $page] = $this->createPages();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -150,7 +149,7 @@ class AdminPagesResourceTest extends TestAdmin
 
     public function test_admin_pages_resource_visibility()
     {
-        list($menu, $page) = $this->createPages();
+        [$menu, $page] = $this->createPages();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -164,7 +163,7 @@ class AdminPagesResourceTest extends TestAdmin
 
     public function test_admin_pages_resource_update_position()
     {
-        list($menu, $pages) = $this->createPages(3);
+        [$menu, $pages] = $this->createPages(3);
 
         $newData = $ids = [];
 
@@ -188,7 +187,7 @@ class AdminPagesResourceTest extends TestAdmin
 
     public function test_admin_pages_resource_transfer()
     {
-        list($menu, $page) = $this->createPages();
+        [$menu, $page] = $this->createPages();
 
         $newMenu = MenuFactory::new()->create();
 
@@ -233,7 +232,7 @@ class AdminPagesResourceTest extends TestAdmin
 
     public function test_admin_pages_resource_collapse()
     {
-        list($menu, $page) = $this->createPages();
+        [$menu, $page] = $this->createPages();
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -250,7 +249,7 @@ class AdminPagesResourceTest extends TestAdmin
 
     public function test_admin_pages_resource_destroy()
     {
-        list($menu, $page) = $this->createPages();
+        [$menu, $page] = $this->createPages();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'

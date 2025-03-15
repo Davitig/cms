@@ -23,7 +23,7 @@ class AdminGalleriesResourceTest extends TestAdmin
 
         $galleries = GalleryFactory::new()->count($times)->collectionId($collection->id)->has(
             GalleryLanguageFactory::times(count(languages()))
-                ->state(new Sequence(...apply_languages([]))),
+                ->sequence(...apply_languages([])),
             'languages'
         )->create();
 
@@ -32,7 +32,7 @@ class AdminGalleriesResourceTest extends TestAdmin
 
     public function test_admin_galleries_resource_index()
     {
-        list($collection, $galleries) = $this->createGalleries(5);
+        [$collection, $galleries] = $this->createGalleries(5);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -86,7 +86,7 @@ class AdminGalleriesResourceTest extends TestAdmin
 
     public function test_admin_galleries_resource_edit()
     {
-        list($collection, $gallery) = $this->createGalleries();
+        [$collection, $gallery] = $this->createGalleries();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -103,7 +103,7 @@ class AdminGalleriesResourceTest extends TestAdmin
      */
     public function test_admin_galleries_resource_update()
     {
-        list($collection, $gallery) = $this->createGalleries();
+        [$collection, $gallery] = $this->createGalleries();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -141,7 +141,7 @@ class AdminGalleriesResourceTest extends TestAdmin
 
     public function test_admin_galleries_resource_validate_slug_unique()
     {
-        list($collection, $gallery) = $this->createGalleries();
+        [$collection, $gallery] = $this->createGalleries();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -173,7 +173,7 @@ class AdminGalleriesResourceTest extends TestAdmin
 
     public function test_admin_galleries_resource_visibility()
     {
-        list($collection, $gallery) = $this->createGalleries();
+        [$collection, $gallery] = $this->createGalleries();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -187,7 +187,7 @@ class AdminGalleriesResourceTest extends TestAdmin
 
     public function test_admin_galleries_resource_update_position()
     {
-        list($collection, $galleries) = $this->createGalleries(3);
+        [$collection, $galleries] = $this->createGalleries(3);
 
         $newData = $ids = [];
 
@@ -211,7 +211,7 @@ class AdminGalleriesResourceTest extends TestAdmin
 
     public function test_admin_galleries_resource_transfer()
     {
-        list($collection, $gallery) = $this->createGalleries();
+        [$collection, $gallery] = $this->createGalleries();
 
         $newCollection = CollectionFactory::new()->articleType()->create();
 
@@ -235,7 +235,7 @@ class AdminGalleriesResourceTest extends TestAdmin
 
     public function test_admin_galleries_resource_destroy()
     {
-        list($collection, $gallery) = $this->createGalleries();
+        [$collection, $gallery] = $this->createGalleries();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'

@@ -23,7 +23,7 @@ class AdminEventsResourceTest extends TestAdmin
 
         $events = EventFactory::new()->count($times)->has(
             EventLanguageFactory::times(count(languages()))
-                ->state(new Sequence(...apply_languages([]))),
+                ->sequence(...apply_languages([])),
             'languages'
         )->create(['collection_id' => $collection->id]);
 
@@ -32,7 +32,7 @@ class AdminEventsResourceTest extends TestAdmin
 
     public function test_admin_events_resource_index()
     {
-        list($collection, $events) = $this->createEvents(5);
+        [$collection, $events] = $this->createEvents(5);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -79,7 +79,7 @@ class AdminEventsResourceTest extends TestAdmin
 
     public function test_admin_events_resource_edit()
     {
-        list($collection, $event) = $this->createEvents();
+        [$collection, $event] = $this->createEvents();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -96,7 +96,7 @@ class AdminEventsResourceTest extends TestAdmin
      */
     public function test_admin_events_resource_update()
     {
-        list($collection, $event) = $this->createEvents();
+        [$collection, $event] = $this->createEvents();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -128,7 +128,7 @@ class AdminEventsResourceTest extends TestAdmin
 
     public function test_admin_events_resource_validate_slug_unique()
     {
-        list($collection, $event) = $this->createEvents();
+        [$collection, $event] = $this->createEvents();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -144,7 +144,7 @@ class AdminEventsResourceTest extends TestAdmin
 
     public function test_admin_events_resource_visibility()
     {
-        list($collection, $event) = $this->createEvents();
+        [$collection, $event] = $this->createEvents();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -158,7 +158,7 @@ class AdminEventsResourceTest extends TestAdmin
 
     public function test_admin_events_resource_update_position()
     {
-        list($collection, $events) = $this->createEvents(3);
+        [$collection, $events] = $this->createEvents(3);
 
         $newData = $ids = [];
 
@@ -182,7 +182,7 @@ class AdminEventsResourceTest extends TestAdmin
 
     public function test_admin_events_resource_transfer()
     {
-        list($collection, $event) = $this->createEvents();
+        [$collection, $event] = $this->createEvents();
 
         $newCollection = CollectionFactory::new()->eventType()->create();
 
@@ -206,7 +206,7 @@ class AdminEventsResourceTest extends TestAdmin
 
     public function test_admin_events_resource_destroy()
     {
-        list($collection, $event) = $this->createEvents();
+        [$collection, $event] = $this->createEvents();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
