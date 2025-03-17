@@ -2,6 +2,7 @@
 
 namespace App\Models\Article;
 
+use App\Models\Alt\Contracts\Collection;
 use App\Models\Alt\Traits\FileableTrait;
 use App\Models\Alt\Traits\HasCollection;
 use App\Models\Alt\Traits\HasLanguage;
@@ -9,7 +10,7 @@ use App\Models\Alt\Traits\QueriesTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Article extends Model
+class Article extends Model implements Collection
 {
     use QueriesTrait, HasCollection, HasLanguage, FileableTrait;
 

@@ -22,7 +22,7 @@ class AdminArticlesResourceTest extends TestAdmin
         $collection = CollectionFactory::new()->articleType()->create();
 
         $articles = ArticleFactory::new()->count($times)->has(
-            ArticleLanguageFactory::times(count(languages()))
+            ArticleLanguageFactory::times(language()->count())
                 ->sequence(...apply_languages([])),
             'languages'
         )->create(['collection_id' => $collection->id]);

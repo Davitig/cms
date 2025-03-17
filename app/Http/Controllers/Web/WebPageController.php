@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\Page\Page;
 use App\Models\Page\PageFile;
 
 class WebPageController extends Controller
@@ -11,12 +10,12 @@ class WebPageController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Page\Page  $page
+     * @param  array<\App\Models\Page\Page>  $pages
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(Page $page)
+    public function index(array $pages)
     {
-        $data['current'] = $page;
+        $data['current'] = $page = last($pages);
 
         $data['files'] = (new PageFile)->getFiles($page->id);
 

@@ -31,7 +31,7 @@ class WebCurrentDataComposer
 
         if (! $current instanceof Model) {
             $trans = &$view->trans;
-            $trans ??= new TranslationCollection();
+            $trans ??= new TranslationCollection;
 
             if (is_object($current) && isset($current->title)) {
                 $title = $current->title;
@@ -64,7 +64,7 @@ class WebCurrentDataComposer
     {
         $path = trim(request()->getPathInfo(), '/');
 
-        if (str_starts_with($path, $language = language())) {
+        if (str_starts_with($path, $language = language()->active())) {
             $path = substr($path, strlen($language) + 1);
         }
 

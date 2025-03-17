@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Alt\Contracts\Collection;
 use App\Models\Alt\Traits\HasCollection;
 use App\Models\Alt\Traits\HasLanguage;
 use App\Models\Alt\Traits\QueriesTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Faq extends Model
+class Faq extends Model implements Collection
 {
     use QueriesTrait, HasCollection, HasLanguage;
 

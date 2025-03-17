@@ -27,7 +27,7 @@ class AdminEventFilesResourceTest extends TestAdmin
 
         if ($createFiles) {
             $files = EventFileFactory::new()->count($times)->has(
-                EventFileLanguageFactory::times(count(languages()))
+                EventFileLanguageFactory::times(language()->count())
                     ->sequence(...apply_languages([])),
                 'languages'
             )->create(['event_id' => $event->id]);

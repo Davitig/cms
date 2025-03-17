@@ -60,7 +60,7 @@ class AdminRouteMatchesComposer
         $currentFullRouteName = $route->getName();
 
         $currentRouteName = str_replace(
-            language() . '.' . cms_route_name(), '', $currentFullRouteName
+            language()->active() . '.' . cms_route_name(), '', $currentFullRouteName
         );
 
         if ($currentRouteName == $currentFullRouteName) {
@@ -101,8 +101,7 @@ class AdminRouteMatchesComposer
                 }
 
                 if ($routeName == $currentRouteName
-                    && (! $routeParam || $routeParam == $currentRouteParam)
-                ) {
+                    && (! $routeParam || $routeParam == $currentRouteParam)) {
                     return true;
                 }
             }

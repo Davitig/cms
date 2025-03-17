@@ -22,7 +22,7 @@ class AdminEventsResourceTest extends TestAdmin
         $collection = CollectionFactory::new()->eventType()->create();
 
         $events = EventFactory::new()->count($times)->has(
-            EventLanguageFactory::times(count(languages()))
+            EventLanguageFactory::times(language()->count())
                 ->sequence(...apply_languages([])),
             'languages'
         )->create(['collection_id' => $collection->id]);

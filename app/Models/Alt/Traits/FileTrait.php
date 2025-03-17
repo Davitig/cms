@@ -2,11 +2,9 @@
 
 namespace App\Models\Alt\Traits;
 
-use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Filesystem\Filesystem;
 
 trait FileTrait
 {
@@ -28,7 +26,7 @@ trait FileTrait
             return $files;
         }
 
-        $imageExt = ['png', 'jpg', 'jpeg', 'gif', 'bmp'];
+        $imageExt = ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp'];
 
         $images = new Collection; $mixed = new Collection;
 
@@ -88,36 +86,5 @@ trait FileTrait
     public function scopeWhereVisible(Builder $query, int $value = 1): Builder
     {
         return $query->where($this->qualifyColumn('visible'), $value);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function create(array $attributes = [])
-    {
-        if (empty($attributes['position'])) {
-            $attributes['position'] = $this->max('position') + 1;
-        }
-
-        return parent::create($attributes);
-    }
-
-    /**
-     * Get the file size.
-     *
-     * @param  string|null  $file
-     * @return string
-     */
-    public function getFileSize(?string $file = null): string
-    {
-        try {
-            $size = (new Filesystem)->size(
-                base_path(trim(parse_url($file ?: $this->file, PHP_URL_PATH), '/'))
-            );
-        } catch (Exception $e) {
-            $size = 0;
-        }
-
-        return format_bytes($size);
     }
 }

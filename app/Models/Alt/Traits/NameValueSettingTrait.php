@@ -66,7 +66,7 @@ trait NameValueSettingTrait
     public function scopeFindByName(Builder $query, string $column): static
     {
         return $query->whereName($column)->firstOrNew([], [
-            'name' => $column, 'value' => $this->defaultNamedValues()[$column]
+            'name' => $column, 'value' => $this->defaultNamedValues()[$column] ?? null
         ])->forceFill(array_filter(
             [$this->getKeyName() => null] + array_fill_keys($this->getDates(), null)
         ));

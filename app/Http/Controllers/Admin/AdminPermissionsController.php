@@ -84,8 +84,7 @@ class AdminPermissionsController extends Controller implements HasMiddleware
                 if (in_array($groupName, Permission::$routeGroupsHidden)
                     || in_array($groupName, Permission::$routeGroupsAllowed)
                     || in_array($routeName, Permission::$routeNamesHidden)
-                    || in_array($routeName, Permission::$routeNamesAllowed)
-                ) {
+                    || in_array($routeName, Permission::$routeNamesAllowed)) {
                     continue;
                 }
 

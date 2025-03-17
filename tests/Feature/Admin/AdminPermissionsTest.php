@@ -17,9 +17,6 @@ class AdminPermissionsTest extends TestAdmin
         $response->assertOk();
     }
 
-    /**
-     * @throws \Exception
-     */
     public function test_admin_permissions_store()
     {
         $model = $this->getCustomAccessCmsUser();

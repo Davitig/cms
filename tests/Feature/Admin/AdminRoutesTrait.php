@@ -15,8 +15,7 @@ trait AdminRoutesTrait
         foreach ($this->app['router']->getRoutes()->getRoutesByName() as $name => $route) {
             if (! str_starts_with($name, $cmsSlug)
                 || ! empty($route->parameterNames())
-                || ! in_array('GET', $route->methods())
-            ) {
+                || ! in_array('GET', $route->methods())) {
                 continue;
             }
 

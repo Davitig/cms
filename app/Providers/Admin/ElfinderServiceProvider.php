@@ -2,7 +2,10 @@
 
 namespace App\Providers\Admin;
 
+use App\Http\Controllers\Admin\AdminElfinderController;
 use Barryvdh\Elfinder\ElfinderServiceProvider as ServiceProvider;
+use Closure;
+use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
 use ReflectionClass;
 
@@ -41,27 +44,41 @@ class ElfinderServiceProvider extends ServiceProvider
 
         $config['prefix'] = isset($config['prefix']) ? cms_slug($config['prefix']) : cms_slug();
 
-        if (language_selected()) {
-            $config['prefix'] = language() . '/' . $config['prefix'];
-        }
-
-        $config['namespace'] = 'App\Http\Controllers\Admin';
         $config['middleware'][] = 'cms.auth';
         $config['as'] = cms_route_name();
 
-        $router->group($config, function($router) {
-            $router->get('index', [
-                'as' => 'filemanager.index', 'uses' => 'AdminElfinderController@showIndex'
-            ]);
-            $router->any('connector', [
-                'as' => 'filemanager.connector', 'uses' => 'AdminElfinderController@showConnector'
-            ]);
-            $router->get('popup/{input_id}', [
-                'as' => 'filemanager.popup', 'uses' => 'AdminElfinderController@showPopup'
-            ]);
-            $router->get('tinymce4', [
-                'as' => 'filemanager.tinymce5', 'uses' => 'AdminElfinderController@showTinyMCE5'
-            ]);
+        $this->defineRoutes($router, $config);
+
+        if (language()->containsMany()) {
+            $config['prefix'] = '{lang}/' . $config['prefix'];
+            $config['as'] = 'lang.' . $config['prefix'];
+            $languages = language()->all()->keys()->toArray();
+
+            $this->defineRoutes($router, $config, function (Route $route) use ($languages) {
+                $route->whereIn('lang', $languages);
+            });
+        }
+    }
+
+    /**
+     * Define the elFinder routes.
+     *
+     * @param  \Illuminate\Routing\Router  $router
+     * @param  array  $config
+     * @param  \Closure|null  $values
+     * @return void
+     */
+    protected function defineRoutes(Router $router, array $config, Closure $values = null): void
+    {
+        $router->group($config, function(Router $router) use ($values) {
+            $router->get('index', [AdminElfinderController::class, 'showIndex'])
+                ->name('filemanager.index')->when($values);
+            $router->get('connector', [AdminElfinderController::class, 'showConnector'])
+                ->name('filemanager.connector')->when($values);;
+            $router->get('popup/{input_id}', [AdminElfinderController::class, 'showPopup'])
+                ->name('filemanager.popup')->when($values);;
+            $router->get('tinymce5', [AdminElfinderController::class, 'showTinyMCE5'])
+                ->name('filemanager.tinymce5')->when($values);;
         });
     }
 }

@@ -22,7 +22,7 @@ class AdminFaqResourceTest extends TestAdmin
         $collection = CollectionFactory::new()->faqType()->create();
 
         $faq = FaqFactory::new()->count($times)->has(
-            FaqLanguageFactory::times(count(languages()))
+            FaqLanguageFactory::times(language()->count())
                 ->sequence(...apply_languages([])),
             'languages'
         )->create(['collection_id' => $collection->id]);

@@ -26,7 +26,7 @@ class AdminPhotosResourceTest extends TestAdmin
 
         if ($createPhotos) {
             $photos = PhotoFactory::new()->count($times)->has(
-                PhotoLanguageFactory::times(count(languages()))
+                PhotoLanguageFactory::times(language()->count())
                     ->sequence(...apply_languages([])),
                 'languages'
             )->create(['gallery_id' => $gallery->id]);

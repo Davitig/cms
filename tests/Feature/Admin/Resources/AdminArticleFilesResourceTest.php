@@ -27,7 +27,7 @@ class AdminArticleFilesResourceTest extends TestAdmin
 
         if ($createFiles) {
             $files = ArticleFileFactory::new()->count($times)->has(
-                ArticleFileLanguageFactory::times(count(languages()))
+                ArticleFileLanguageFactory::times(language()->count())
                     ->sequence(...apply_languages([])),
                 'languages'
             )->create(['article_id' => $article->id]);

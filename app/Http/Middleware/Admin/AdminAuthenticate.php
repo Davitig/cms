@@ -14,17 +14,13 @@ class AdminAuthenticate
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     * @return \Symfony\Component\HttpFoundation\Response
      *
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = $request->user('cms');
-
-        if (is_null($user)) {
+        if (is_null($user = $request->user('cms'))) {
             if ($request->expectsJson()) {
                 return response()->json('Unauthorized.', 401);
             }
@@ -64,7 +60,7 @@ class AdminAuthenticate
             return;
         }
 
-        $routeName = str_replace(language() . '.' . cms_route_name(), '', $fullRouteName);
+        $routeName = str_replace(language()->active() . '.' . cms_route_name(), '', $fullRouteName);
 
         if ($routeName == $fullRouteName) {
             $routeName = str_replace(cms_route_name(), '', $routeName);
@@ -74,8 +70,7 @@ class AdminAuthenticate
 
         if (! in_array($routeGroup, Permission::$routeGroupsAllowed)
             && ! in_array($routeName, Permission::$routeNamesAllowed)
-            && ! (new Permission)->roleId($user->cms_user_role_id)->hasAccess($routeName)
-        ) {
+            && ! (new Permission)->roleId($user->cms_user_role_id)->hasAccess($routeName)) {
             throw new AccessDeniedHttpException('Forbidden');
         }
     }

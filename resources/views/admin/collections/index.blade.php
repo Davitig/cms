@@ -74,29 +74,7 @@
                 @endforeach
                 </tbody>
             </table>
+            {!! $items->links() !!}
         </div>
     </div>
-    @push('body.bottom')
-        <script type="text/javascript">
-            $(function() {
-                let table = $('#items');
-                table.dataTable({
-                    pageLength: 50,
-                    // 'order': [0, 'desc']
-                }).yadcf([
-                    {column_number : 0, filter_type: 'text', filter_default_label : 'Type a name'},
-                    {column_number : 2, filter_default_label : 'All types'},
-                    {column_number : 1, filter_type: 'text', filter_default_label : 'Type a description'},
-                    {column_number : 3, filter_type: 'text', filter_default_label : 'ID'}
-                ]);
-
-                @if ($type = request('type'))
-                yadcf.exFilterColumn(table, [
-                    [2, '{{$type}}']
-                ]);
-                @endif
-            });
-        </script>
-        <script src="{{ asset('assets/libs/js/datatables/yadcf/jquery.dataTables.yadcf.js') }}"></script>
-    @endpush
 @endsection

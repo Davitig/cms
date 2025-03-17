@@ -20,7 +20,7 @@ class AdminTranslationsResourceTest extends TestAdmin
     public function createTranslation(?int $times = null): Translation|Collection
     {
         return TranslationFactory::new()->count($times)->has(
-            TranslationLanguageFactory::times(count(languages()))
+            TranslationLanguageFactory::times(language()->count())
                 ->sequence(...apply_languages([])), 'languages'
         )->create();
     }

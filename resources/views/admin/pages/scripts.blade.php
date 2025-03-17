@@ -24,9 +24,9 @@
             let typeValue, templateValue;
 
             typeSelect.on('change', function() {
-                // Get the attached types list
+                // Get the collection types list
                 if (typeValue !== this.value) {
-                    getListableTypes(this.value);
+                    getCollectionTypes(this.value);
                 }
 
                 typeValue = this.value;
@@ -38,15 +38,15 @@
                 templateValue = this.value;
             });
 
-            // Get the attached types list
-            function getListableTypes(value) {
+            // Get the collection types list
+            function getCollectionTypes(value) {
                 typeId.addClass('hidden');
                 typeIdSelect.html('<option value=""></option>');
 
-                if (["{!!implode('","', (array) cms_pages('listable'))!!}"].indexOf(value) >= 0) {
-                    $('label', typeId).text(value);
+                if (["{!! implode('","', array_keys((array) cms_pages('collections'))) !!}"].indexOf(value) >= 0) {
+                    $('label', typeId).text(String(value).charAt(0).toUpperCase() + String(value).slice(1));
 
-                    $.get('{{cms_route('pages.getListableTypes')}}', {"type": value}, function (data) {
+                    $.get('{{cms_route('pages.getCollectionTypes')}}', {"type": value}, function (data) {
                         typeIdSelect.html('<option value=""></option>');
                         typeId.removeClass('hidden');
 

@@ -73,11 +73,10 @@
                                             <a href="{{ cms_route('pages.files.index', [$item->id]) }}" class="btn btn-{{$item->files_exists ? 'turquoise' : 'white'}}" title="{{trans('general.files')}}">
                                                 <span class="{{icon_type('files')}}"></span>
                                             </a>
-                                            <span title="{{ucfirst($type = $item->collection_type ?: $item->type)}}">
-                                                <a href="{{$typeUrl = (array_key_exists($item->type, cms_config('pages.explicit'))
-                                                ? cms_route($item->type . '.index') : (array_key_exists($item->type, cms_config('pages.implicit'))
-                                                ? cms_route($item->collection_type . '.index', [$item->type_id]) : '#'))}}" class="btn btn-{{$typeUrl == '#' ? 'white disabled' : 'info'}}">
-                                                    <span class="{{icon_type($type, 'fa fa-file-text')}}"></span>
+                                            <span title="{{ucfirst($item->type)}}">
+                                                <a href="{{$typeUrl = (array_key_exists($item->type, cms_pages('extended'))
+                                                || array_key_exists($item->type, cms_pages('collections')) ? cms_route($item->type . '.index', [$item->type_id]) : '#')}}" class="btn btn-{{$typeUrl == '#' ? 'white disabled' : 'info'}}">
+                                                    <span class="{{icon_type($item->type, 'fa fa-file-text')}}"></span>
                                                 </a>
                                             </span>
                                             <a href="{{ cms_route('pages.create', [$menu->id, 'parent_id' => $item->id]) }}" class="btn btn-secondary" title="{{trans('general.create')}}">

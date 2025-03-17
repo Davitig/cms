@@ -108,9 +108,6 @@ class AdminCmsUsersResourceTest extends TestAdmin
         );
     }
 
-    /**
-     * @throws \Exception
-     */
     public function test_admin_cms_users_resource_photo_delete()
     {
         $cmsUserRole = CmsUserRoleFactory::new()->create();

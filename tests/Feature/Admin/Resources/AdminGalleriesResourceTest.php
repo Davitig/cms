@@ -22,7 +22,7 @@ class AdminGalleriesResourceTest extends TestAdmin
         $collection = CollectionFactory::new()->galleryType()->create();
 
         $galleries = GalleryFactory::new()->count($times)->collectionId($collection->id)->has(
-            GalleryLanguageFactory::times(count(languages()))
+            GalleryLanguageFactory::times(language()->count())
                 ->sequence(...apply_languages([])),
             'languages'
         )->create();

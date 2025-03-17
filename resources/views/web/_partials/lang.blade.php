@@ -1,9 +1,9 @@
-@if (is_multilanguage(true))
+@if (language()->containsManyVisible())
     <ul class="nav navbar-nav navbar-right text-uppercase">
-        @php($currentLang = language())
-        @foreach (languages(true) as $key => $value)
+        @php($currentLang = language()->active())
+        @foreach (language()->allVisible() as $key => $value)
             <li{!!$key == $currentLang ? ' class="active"' : ''!!}>
-                <a href="{{$value['url']}}">{{$value['short_name']}}</a>
+                <a href="{{url($value['path'])}}">{{$value['short_name']}}</a>
             </li>
         @endforeach
     </ul>

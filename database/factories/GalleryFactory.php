@@ -31,11 +31,11 @@ class GalleryFactory extends Factory
      */
     public function definition(): array
     {
-        $types = array_keys((array) deep_collection('galleries.types'));
+        $types = array_keys((array) cms_config('galleries.types'));
 
-        $orderList = array_keys((array) deep_collection('galleries.order_by'));
+        $orderList = array_keys((array) cms_config('galleries.order_by'));
 
-        $sortList = array_keys((array) deep_collection('galleries.sort'));
+        $sortList = array_keys((array) cms_config('galleries.sort'));
 
         return [
             'slug' => fake()->unique()->slug(),

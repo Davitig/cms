@@ -36,24 +36,24 @@ return [
     'pages' => [
         'types' => [
             'page' => 'Page',
-            'collections' => 'Collections',
             'feedback' => 'Feedback',
-            'search' => 'Search'
+            'search' => 'Search',
+            'articles' => 'Articles',
+            'events' => 'Events',
+            'faq' => 'FAQ',
+            'galleries' => 'Galleries'
         ],
         'templates' => [
             // 'page' => [
             //     'about' => 'About'
             // ]
         ],
-        'listable' => [
-            'collections'
-        ],
-        'implicit' => [
-            'collections' => App\Models\Collection::class,
+        'extended' => [],
+        'collections' => [
+            'articles' => App\Models\Article\Article::class,
+            'events' => App\Models\Event\Event::class,
+            'faq' => App\Models\Faq::class,
             'galleries' => App\Models\Gallery\Gallery::class
-        ],
-        'explicit' => [
-            //
         ]
     ],
 
@@ -63,19 +63,18 @@ return [
     |--------------------------------------------------------------------------
     |
     | This array used to specify custom controllers for any types.
-    | Default controller: "App\Http\Controllers\Web\Web`Type`Controller"
+    | Default controller: "App\Http\Controllers\Web\Web{Type}Controller"
     |
     */
-    'controllers' => [
-    ],
+    'controllers' => [],
 
     /*
     |--------------------------------------------------------------------------
-    | CMS File Routes
+    | File Routes
     |--------------------------------------------------------------------------
     |
-    | Here you can specify file routes, which will also get additional routes.
-    | Additional routes: "visibility", "position"
+    | Here you can specify file routes, which also inherits additional routes:
+    | "visibility", "position"
     |
     */
 
@@ -98,14 +97,8 @@ return [
         'types' => [
             'articles' => 'Articles',
             'events' => 'Events',
-            'galleries' => 'Galleries',
-            'faq' => 'FAQ'
-        ],
-        'models' => [
-            'articles' => App\Models\Article\Article::class,
-            'events' => App\Models\Event\Event::class,
-            'galleries' => App\Models\Gallery\Gallery::class,
-            'faq' => App\Models\Faq::class
+            'faq' => 'FAQ',
+            'galleries' => 'Galleries'
         ],
         'order_by' => [
             'position' => 'Position',
@@ -119,27 +112,25 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Inner Collections
+    | Galleries
     |--------------------------------------------------------------------------
     |
-    | The array of the collection types that has a parent collection.
+    | This array used to specify gallery types and its settings.
     |
     */
 
-    'deep_collections' => [
-        'galleries' => [
-            'types' => [
-                'photos' => 'Photos',
-                'videos' => 'Videos'
-            ],
-            'order_by' => [
-                'position' => 'Position',
-                'created_at' => 'Creation date'
-            ],
-            'sort' => [
-                'desc' => 'Descending',
-                'asc' => 'Ascending'
-            ]
+    'galleries' => [
+        'types' => [
+            'photos' => 'Photos',
+            'videos' => 'Videos'
+        ],
+        'order_by' => [
+            'position' => 'Position',
+            'created_at' => 'Creation date'
+        ],
+        'sort' => [
+            'desc' => 'Descending',
+            'asc' => 'Ascending'
         ]
     ],
 
@@ -153,12 +144,11 @@ return [
     |
     | [request methods] => [type => controller method]
     |
-    | E.g. "post", "put", "delete"
-    |
+    | Note: Request method must be uppercase.
     */
 
     'type_methods' => [
-        'post' => [
+        'POST' => [
             'feedback' => 'send'
         ]
     ],
@@ -172,12 +162,13 @@ return [
     |
     | [request methods] => [types@method] => [URI => controller method]
     |
+    | Note: Request method must be uppercase.
     */
 
     'tabs' => [
-        // 'get' => [
+        // 'GET' => [
         //     'articles@show' => [
-        //         'comments' => 'getComments'
+        //         'comments' => 'getComments',
         //         'comments/{id}' => 'getComments'
         //     ]
         // ]
@@ -207,10 +198,10 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | CMS Route Type Icons
+    | Type Icons
     |--------------------------------------------------------------------------
     |
-    | Set icons for all CMS route types.
+    | Set icons for types.
     |
     */
 

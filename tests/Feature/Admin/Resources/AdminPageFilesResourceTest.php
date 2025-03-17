@@ -27,7 +27,7 @@ class AdminPageFilesResourceTest extends TestAdmin
 
         if ($createFiles) {
             $files = PageFileFactory::new()->count($times)->has(
-                PageFileLanguageFactory::times(count(languages()))
+                PageFileLanguageFactory::times(language()->count())
                     ->sequence(...apply_languages([])),
                 'languages'
             )->create(['page_id' => $page->id]);

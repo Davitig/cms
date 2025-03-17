@@ -6,8 +6,7 @@
     <meta name="description" content="cms">
     @stack('head.title')
     <link rel="shortcut icon" href="{{ asset('assets/libs/images/favicon.ico') }}">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Arimo:400,700,400italic">
-    <link rel="stylesheet" href="{{ asset('assets/libs/css/fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/css/fonts/fontawesome-6.7.2/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/css/xenon-core.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/css/xenon-components.css') }}">
@@ -98,12 +97,12 @@
                     </li>
                     <li class="dropdown hover-line language-switcher">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{{ asset('assets/libs/images/flags/'.language().'.png') }}" width="30" height="20" alt="{{language(true, 'full_name')}}">
+                            <img src="{{ asset('assets/libs/images/flags/'.language()->active().'.png') }}" width="30" height="20" alt="{{language()->getActive('full_name')}}">
                         </a>
                         <ul class="dropdown-menu languages">
-                            @foreach (languages() as $key => $value)
+                            @foreach (language()->all() as $key => $value)
                                 <li data-id="{{$value['id']}}">
-                                    <a href="{{$value['url']}}">
+                                    <a href="{{url($value['path'])}}">
                                         <img src="{{ asset('assets/libs/images/flags/'.$key.'.png') }}" width="30" height="20" alt="{{$value['full_name']}}">
                                         {{ $value['full_name'] }}
                                     </a>

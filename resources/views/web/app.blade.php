@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{language()}}">
+<html lang="{{language()->active()}}">
 @include('web._partials.head')
 <body>
 <div id="root">

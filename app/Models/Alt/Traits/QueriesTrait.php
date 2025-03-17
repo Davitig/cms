@@ -40,13 +40,7 @@ trait QueriesTrait
      */
     public function scopeAddQualifiedSelect(Builder $query, ...$columns): Builder
     {
-        foreach (Arr::flatten($columns) as $as => $column) {
-            $columns[$as] = str_contains($column, '.')
-                ? $column
-                : $this->qualifyColumn($column);
-        }
-
-        return $query->addSelect($columns);
+        return $query->addSelect($this->qualifyColumns(Arr::flatten($columns)));
     }
 
     /**
@@ -82,7 +76,9 @@ trait QueriesTrait
     {
         $collection = $query->get($columns);
 
-        $collection->isEmpty() and throw new RecordsNotFoundException;
+        if ($collection->isEmpty()) {
+            throw new RecordsNotFoundException;
+        }
 
         return $collection;
     }

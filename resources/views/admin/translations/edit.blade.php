@@ -30,12 +30,12 @@
         </div>
         <div class="panel-body">
             <div class="tab-content">
-                @php($activeLang = request('lang', language()))
+                @php($activeLang = request('lang', language()->active()))
                 @foreach ($items as $current)
                     <div class="tab-pane{{$activeLang == $current->language ? ' active' : ''}}" id="item-{{$current->language}}">
                         {{ html()->modelForm($current, 'put', cms_route('translations.update', [
                             $current->id
-                        ], is_multilanguage() ? ($current->language ?: $activeLang) : null))
+                        ], language()->containsMany() ? ($current->language ?: $activeLang) : null))
                         ->class('form-horizontal ' . $cmsSettings->get('ajax_form'))
                         ->data('lang', $current->language)->open() }}
                         @include('admin.translations.form', [

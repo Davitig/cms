@@ -87,8 +87,7 @@ class AdminElfinderController extends Elfinder
     protected function cmsUserHasAccessToDisk(): bool
     {
         if (is_null($user = $this->app['auth']->guard('cms')->user())
-            || ! $user->hasFullAccess()
-        ) {
+            || ! $user->hasFullAccess()) {
             return false;
         }
 

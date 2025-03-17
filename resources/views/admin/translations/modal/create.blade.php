@@ -5,7 +5,7 @@
             <button type="button" class="trans-close-btn" data-dismiss="trans-modal">
                 <span>&times;</span>
             </button>
-            <div class="trans-title">Translation{{is_multilanguage() ? ' - ' . language(true, 'full_name') : ''}}</div>
+            <div class="trans-title">Translation{{language()->containsMany() ? ' - ' . language()->getActive('full_name') : ''}}</div>
         </div>
         {{ html()->modelForm($current, 'post', cms_route('translations.form.post'))->id('trans-form')->open() }}
         @include('admin.translations.modal.form')

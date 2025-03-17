@@ -126,22 +126,6 @@ trait HasCollection
     }
 
     /**
-     * Build a query based on the collection id and slug.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  int  $collectionId
-     * @param  string  $slug
-     * @param  int|null  $id
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeByCollectionSlug(
-        Builder $query, int $collectionId, string $slug, ?int $id = null
-    ): Builder
-    {
-        return $query->collectionId($collectionId)->bySlug($slug, $id);
-    }
-
-    /**
      * Add a where "collection_id" clause to the query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query

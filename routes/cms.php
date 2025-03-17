@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminArticlesController;
 use App\Http\Controllers\Admin\AdminCalendarController;
+use App\Http\Controllers\Admin\AdminCmsSettingsController;
 use App\Http\Controllers\Admin\AdminCmsUserRolesController;
 use App\Http\Controllers\Admin\AdminCmsUsersController;
 use App\Http\Controllers\Admin\AdminCollectionsController;
@@ -17,7 +18,6 @@ use App\Http\Controllers\Admin\AdminNotesController;
 use App\Http\Controllers\Admin\AdminPagesController;
 use App\Http\Controllers\Admin\AdminPermissionsController;
 use App\Http\Controllers\Admin\AdminPhotosController;
-use App\Http\Controllers\Admin\AdminCmsSettingsController;
 use App\Http\Controllers\Admin\AdminSitemapXmlController;
 use App\Http\Controllers\Admin\AdminSliderController;
 use App\Http\Controllers\Admin\AdminTranslationsController;
@@ -73,8 +73,8 @@ Route::middleware('cms.auth')->group(function ($router) {
 
     // pages
     $router->controller(AdminPagesController::class)->group(function ($router) {
-        $router->get('pages/listable-types', 'getListableTypes')
-            ->name('pages.getListableTypes');
+        $router->get('pages/collection-types', 'getCollectionTypes')
+            ->name('pages.getCollectionTypes');
         $router->put('pages/{id}/visibility', 'visibility')->name('pages.visibility');
         $router->put('pages/position', 'updatePosition')->name('pages.updatePosition');
         $router->get('pages/templates', 'getTemplates')->name('pages.templates');

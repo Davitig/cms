@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Page\Page;
 use DOMDocument;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Sabre\Xml\Service;
 
 class AdminSitemapXmlController extends Controller
@@ -34,11 +34,11 @@ class AdminSitemapXmlController extends Controller
     protected string $xhtml;
 
     /**
-     * List of the application languages.
+     * The collection of the application languages.
      *
-     * @var array
+     * @var \Illuminate\Database\Eloquent\Collection
      */
-    protected array $languages = [];
+    protected Collection $languages;
 
     /**
      * Indicates if the application is multilanguage.
@@ -48,44 +48,35 @@ class AdminSitemapXmlController extends Controller
     protected bool $isMultilanguage = false;
 
     /**
-     * List of the listable types.
+     * List of the collection types.
      *
      * @var array
      */
-    protected array $listableTypes = [];
+    protected array $collectionTypes = [];
 
     /**
-     * List of the implicit types.
+     * List of the extended types.
      *
      * @var array
      */
-    protected array $implicitTypes = [];
-
-    /**
-     * List of the explicit types.
-     *
-     * @var array
-     */
-    protected array $explicitTypes = [];
+    protected array $extendedTypes = [];
 
     /**
      * Create a new controller instance.
      */
     public function __construct()
     {
-        $this->languages = languages();
+        $this->languages = language()->all();
 
-        if ($this->isMultilanguage = (count($this->languages) > 1)) {
+        if ($this->isMultilanguage = ($this->languages->count() > 1)) {
             $this->namespaceMap += [
                 $this->xhtml = 'http://www.w3.org/1999/xhtml' => 'xhtml'
             ];
         }
 
-        $this->listableTypes = (array) cms_pages('listable');
+        $this->collectionTypes = (array) cms_pages('collections');
 
-        $this->implicitTypes = (array) cms_pages('implicit');
-
-        $this->explicitTypes = (array) cms_pages('explicit');
+        $this->extendedTypes = (array) cms_pages('extended');
     }
 
     /**
@@ -103,20 +94,20 @@ class AdminSitemapXmlController extends Controller
         foreach ($pages as $page) {
             $value = ['url' => ['loc' => web_url(
                 $page->full_slug = $page->getFullSlug(), [], $this->isMultilanguage
-                ? key($this->languages)
+                ? $this->languages->keys()->first()
                 : null
             )]];
 
             if ($this->isMultilanguage) {
-                foreach ($this->languages as $langValue => $values) {
+                foreach ($this->languages as $langValue => $model) {
                     $value['url'][] = $this->getLanguageLinks($page, null, $langValue);
                 }
             }
 
             $this->data[] = $value;
 
-            $this->setImplicitModels($page);
-            $this->setExplicitModels($page);
+            $this->setCollectionModels($page);
+            $this->setExtendedModels($page);
         }
 
         $xml = new Service;
@@ -135,53 +126,45 @@ class AdminSitemapXmlController extends Controller
     }
 
     /**
-     * Set an implicit models to the XML data.
+     * Set a collection models to the XML data.
      *
      * @param  \App\Models\Page\Page $page
      * @return void
      */
-    protected function setImplicitModels(Page $page): void
+    protected function setCollectionModels(Page $page): void
     {
-        if (! in_array($page->type, $this->listableTypes)
-            && ! array_key_exists($page->type, $this->implicitTypes)
-        ) {
+        if (! array_key_exists($page->type, $this->collectionTypes)) {
             return;
         }
 
-        $implicitModel = (new $this->implicitTypes[$page->type])->find($page->type_id);
+        $items = (new $this->collectionTypes[$page->type])->collectionId($page->type_id)
+            ->whereVisible()
+            ->orderDesc()
+            ->get();
 
-        if (! is_null($implicitModel)) {
-            $model = cms_config('collections.models.' . $implicitModel->type);
-
-            $items = (new $model)->where(
-                Str::singular($implicitModel->getTable()) . '_' . $implicitModel->getKeyName(),
-                $implicitModel->id
-            )->whereVisible()->orderDesc()->get();
-
-            foreach ($items as $item) {
-                // entity without a show endpoint
-                if (empty($item->slug)) {
-                    continue;
-                }
-
-                $this->data[] = $this->getUrls($page, $item);
+        foreach ($items as $item) {
+            // entity without details endpoint
+            if (empty($item->slug)) {
+                continue;
             }
+
+            $this->data[] = $this->getUrls($page, $item);
         }
     }
 
     /**
-     * Set an explicit models to the XML data.
+     * Set an extended models to the XML data.
      *
      * @param  \App\Models\Page\Page $page
      * @return void
      */
-    protected function setExplicitModels(Page $page): void
+    protected function setExtendedModels(Page $page): void
     {
-        if (! array_key_exists($page->type, $this->explicitTypes)) {
+        if (! array_key_exists($page->type, $this->extendedTypes)) {
             return;
         }
 
-        $model = (new $this->explicitTypes[$page->type]);
+        $model = (new $this->extendedTypes[$page->type]);
 
         if (! is_null($model)) {
             $items = (new $model)->whereVisible()->orderDesc()->get();
@@ -208,12 +191,12 @@ class AdminSitemapXmlController extends Controller
     {
         $value = ['url' => ['loc' => web_url(
             [$page->full_slug, $item->slug], [], $this->isMultilanguage
-            ? key($this->languages)
+            ? $this->languages->keys()->first()
             : null
         )]];
 
         if ($this->isMultilanguage) {
-            foreach ($this->languages as $langValue => $values) {
+            foreach ($this->languages as $langValue => $model) {
                 $value['url'][] = $this->getLanguageLinks(
                     $page, $item->slug, $langValue
                 );
@@ -226,7 +209,7 @@ class AdminSitemapXmlController extends Controller
 
 
     /**
-     * Get an array of xml language links.
+     * Get an array of XML language links.
      *
      * @param  \App\Models\Page\Page $page
      * @param  string|null  $slug

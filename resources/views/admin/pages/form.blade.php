@@ -67,7 +67,7 @@
                     <div class="col-lg-8 col-sm-10">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-ellipsis-v"></i></span>
-                            {{ html()->select('type_id', ['' => ''] + $listableTypes)
+                            {{ html()->select('type_id', ['' => ''] + $collectionTypes)
                             ->id('type_id' . $current->language)->class('form-control select')
                             ->data('lang', 1) }}
                         </div>

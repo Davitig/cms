@@ -23,7 +23,7 @@ class CmsUserRequest extends Request
             'cms_user_role_id' => 'required|integer|exists:cms_user_roles,id',
             'photo' => ['nullable', File::image()->max(5 * 1024)],
             'password' => array_merge(
-                $this->isMethod('POST') ? ['required'] : ['nullable'],
+                $this->isMethod($this::METHOD_POST) ? ['required'] : ['nullable'],
                 ['min:8', 'confirmed']
             )
         ];

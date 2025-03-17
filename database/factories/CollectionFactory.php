@@ -36,6 +36,20 @@ class CollectionFactory extends Factory
     }
 
     /**
+     * Indicate that the collection is a random type.
+     */
+    public function randomType(): Factory
+    {
+        $types = (array) cms_config('collections.types');
+
+        return $this->state(function (array $attributes) use ($types) {
+            return [
+                'type' => $types[array_rand($types)],
+            ];
+        });
+    }
+
+    /**
      * Indicate that the collection is articles' type.
      */
     public function articleType(): Factory

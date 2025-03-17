@@ -58,10 +58,8 @@ class AppServiceProvider extends ServiceProvider
         $separator = '------------------------------' . PHP_EOL;
 
         if (file_exists($filename)) {
-            @unlink($filename);
+            file_put_contents($filename, $separator, LOCK_EX);
         }
-
-        file_put_contents($filename, $separator);
 
         Event::listen(QueryExecuted::class, function($query) use ($filename, $separator) {
             $conn     = 'Connection: ' . $query->connectionName . PHP_EOL;
@@ -70,9 +68,7 @@ class AppServiceProvider extends ServiceProvider
             $time     = 'Time: ' . $query->time . ' ms' . PHP_EOL;
             $data     = $conn . $sql . $bindings . $time . $separator;
 
-            $flags = FILE_APPEND | LOCK_EX;
-
-            file_put_contents($filename, $data, $flags);
+            file_put_contents($filename, $data, FILE_APPEND | LOCK_EX);
         });
     }
 }

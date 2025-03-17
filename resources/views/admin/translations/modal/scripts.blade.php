@@ -20,7 +20,7 @@ $(function () {
                     })
                 ).fadeIn(300);
 
-                if (! lang || lang === '{{$currentLang = language()}}') {
+                if (! lang || lang === '{{$currentLang = language()->active()}}') {
                     let trans = $('[data-trans="'+data.code+'"]');
                     let attrName = trans.data('trans-attr');
                     if (! attrName) {
@@ -30,7 +30,7 @@ $(function () {
                     }
                 }
                 if (! lang) {
-                @if (is_multilanguage())
+                @if (language()->containsMany())
                     transModalSelector.removeClass('fade');
                     let ev = jQuery.Event('click');
                     ev.f2 = true;

@@ -11,9 +11,10 @@
     <meta property="og:description" content="{{$current->meta_desc}}">
     <meta property="og:image" content="{{$current->image}}">
     <title>{{$current->title}}</title>
+    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
     <link rel="canonical" href="{{$url}}">
-    @if (is_multilanguage())
-        @foreach (languages() as $key => $value)
+    @if (language()->containsMany())
+        @foreach (language()->all() as $key => $value)
             <link rel="alternate" hreflang="{{$key}}" href="{{web_url($current->slug, [], $key)}}">
         @endforeach
     @endif

@@ -9,7 +9,7 @@
     <!-- #breadcrumb -->
     <div class="container">
         <article id="item" class="jumbotron clearfix">
-            @if($current->image)
+            @if ($current->image)
                 <div class="img">
                     <img src="{{$current->image}}" class="img-responsive" alt="{{$current->title}}">
                 </div>

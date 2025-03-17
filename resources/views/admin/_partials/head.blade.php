@@ -3,7 +3,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Content Management System">
-    <meta name="author" content="Davit Gvritishvili <gvritishvili.davit@gmail.com>">
     <meta name="robots" content="noindex, nofollow">
     <meta name="version" content="{{cms_config('version')}}">
     <title>CMS</title>

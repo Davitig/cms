@@ -49,6 +49,18 @@ class Gallery extends Model implements Collection
     }
 
     /**
+     * Build a public dynamic route query.
+     *
+     * @param  string  $slug
+     * @param  int  $collectionId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function publicDynamicRoute(string $slug, int $collectionId): Builder
+    {
+        return (new static)->bySlug($slug, $collectionId);
+    }
+
+    /**
      * Add a new where 'type' clause to the query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query

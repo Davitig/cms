@@ -3,37 +3,29 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Collection;
 use App\Models\Event\Event;
 use App\Models\Event\EventFile;
 
 class WebEventsController extends Controller
 {
     /**
-     * The Event instance.
-     *
-     * @var \App\Models\Event\Event
-     */
-    protected Event $model;
-
-    /**
      * Create a new controller instance.
      *
      * @param  \App\Models\Event\Event  $model
      */
-    public function __construct(Event $model)
-    {
-        $this->model = $model;
-    }
+    public function __construct(protected Event $model) {}
 
     /**
      * Display a listing of the resource.
      *
-     * @param  array<\App\Models\Page\Page, \App\Models\Collection>  $models
+     * @param  array<\App\Models\Page\Page>  $pages
+     * @param  \App\Models\Collection  $collection
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(array $models)
+    public function index(array $pages, Collection $collection)
     {
-        [$data['current'], $collection] = $models;
+        $data['current'] = last($pages);
 
         $data['items'] = $this->model->getPublicCollection($collection);
 
@@ -43,15 +35,16 @@ class WebEventsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  array<\App\Models\Page\Page, \App\Models\Collection>  $models
+     * @param  array<\App\Models\Page\Page>  $pages
+     * @param  \App\Models\Collection  $collection
      * @param  string  $slug
      * @return \Illuminate\Contracts\View\View
      */
-    public function show(array $models, string $slug)
+    public function show(array $pages, Collection $collection, string $slug)
     {
-        [$data['parent'], $collection] = $models;
+        $data['parent'] = array($pages);
 
-        $data['current'] = $this->model->byCollectionSlug($collection->id, $slug)->firstOrFail();
+        $data['current'] = $this->model->bySlug($slug, $collection->id)->firstOrFail();
 
         $data['files'] = (new EventFile)->getFiles($data['current']->id);
 

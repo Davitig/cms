@@ -20,7 +20,7 @@ class AdminSliderResourceTest extends TestAdmin
     public function createSlider(?int $times = null): Slider|Collection
     {
         return SliderFactory::new()->count($times)->has(
-            SliderLanguageFactory::times(count(languages()))
+            SliderLanguageFactory::times(language()->count())
                 ->sequence(...apply_languages([])), 'languages'
         )->create();
     }

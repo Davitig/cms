@@ -40,8 +40,9 @@
                 let reader = new FileReader();
 
                 reader.onload = function (e) {
-                    $('#user-photo').attr('src', e.target.result).removeClass('hidden');
                     $('.photo-upload-text').addClass('hidden');
+                    $('#user-photo').attr('src', e.target.result).removeClass('hidden');
+                    $('.user-photo').attr('src', e.target.result);
                 }
 
                 reader.readAsDataURL(this.files[0]);

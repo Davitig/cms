@@ -115,12 +115,12 @@ class AdminLanguagesController extends Controller
 
         $url = null;
 
-        if (! is_null($language = language(true))) {
-            $languages = languages();
+        if (! is_null($language = language()->getActive())) {
+            $languages = language()->all();
 
             unset($languages[$language['language']]);
 
-            if (language_selected()) {
+            if (language()->isSelected()) {
                 if (count($languages) <= 1) {
                     $url = cms_route('languages.index', [], false);
                 } elseif ($language['id'] == $id) {

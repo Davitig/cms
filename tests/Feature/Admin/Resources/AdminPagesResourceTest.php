@@ -24,7 +24,7 @@ class AdminPagesResourceTest extends TestAdmin
 
         if ($createPages) {
             $pages = PageFactory::new()->count($times)->menuId($menu->id)->has(
-                PageLanguageFactory::times(count(languages()))
+                PageLanguageFactory::times(language()->count())
                     ->sequence(...apply_languages([])),
                 'languages'
             )->create();
@@ -208,13 +208,13 @@ class AdminPagesResourceTest extends TestAdmin
         $this->assertSame($newMenu->id, $updatedPageMenuId);
     }
 
-    public function test_admin_pages_resource_get_listable_types()
+    public function test_admin_pages_resource_get_collection_types()
     {
-        $collection = CollectionFactory::new()->create();
+        $collection = CollectionFactory::new()->articleType()->create();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('pages.getListableTypes', ['type' => 'collections']));
+        )->get(cms_route('pages.getCollectionTypes', ['type' => 'articles']));
 
         $collection->delete();
 

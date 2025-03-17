@@ -23,7 +23,7 @@ trait PageableTrait
             ->leftJoin('page_languages', function ($q) {
                 return $q->on('page_languages.page_id', 'pages.id')
                     ->where(function ($q) {
-                        return $q->where('page_languages.language', language())
+                        return $q->where('page_languages.language', language()->active())
                             ->orWhereNull('page_languages.language');
                     });
             })->where('pages.visible', 1)->addSelect([

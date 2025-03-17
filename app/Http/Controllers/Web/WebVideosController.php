@@ -9,32 +9,22 @@ use App\Models\Video;
 class WebVideosController extends Controller
 {
     /**
-     * The Video instance.
-     *
-     * @var \App\Models\Video
-     */
-    protected Video $model;
-
-    /**
      * Create a new controller instance.
      *
      * @param  \App\Models\Video  $model
      */
-    public function __construct(Video $model)
-    {
-        $this->model = $model;
-    }
+    public function __construct(protected Video $model) {}
 
     /**
      * Display a listing of the resource.
      *
-     * @param  array<\App\Models\Page\Page, \App\Models\Collection>  $models
+     * @param  array  $pages
      * @param  \App\Models\Gallery\Gallery  $gallery
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(array $models, Gallery $gallery)
+    public function index(array $pages, Gallery $gallery)
     {
-        [$data['parent'], $collection] = $models;
+        $data['parent'] = last($pages);
 
         $data['current'] = $gallery;
 

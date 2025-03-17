@@ -33,7 +33,7 @@
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-ellipsis-h"></i></span>
-            {{ html()->select('type', deep_collection('galleries.types'))
+            {{ html()->select('type', cms_config('galleries.types'))
             ->id('type' . $current->language)->class('form-control select')
             ->ifNotNull($current->id, function ($html) {
                 return $html->attribute('disabled');
@@ -54,7 +54,7 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-list-ol"></i></span>
-                    {{ html()->select('admin_order_by', deep_collection('galleries.order_by'))
+                    {{ html()->select('admin_order_by', cms_config('galleries.order_by'))
                     ->id('admin_order_by')->class('form-control select') }}
                 </div>
                 @if ($error)
@@ -70,7 +70,7 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-list-ol"></i></span>
-                    {{ html()->select('web_order_by', deep_collection('galleries.order_by'))
+                    {{ html()->select('web_order_by', cms_config('galleries.order_by'))
                     ->id('web_order_by')->class('form-control select') }}
                 </div>
                 @if ($error)
@@ -90,7 +90,7 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-sort"></i></span>
-                    {{ html()->select('admin_sort', deep_collection('galleries.sort'))
+                    {{ html()->select('admin_sort', cms_config('galleries.sort'))
                     ->id('admin_sort' . $current->language)->class('form-control select')->data('lang', 1) }}
                 </div>
                 @if ($error)
@@ -106,7 +106,7 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-sort"></i></span>
-                    {{ html()->select('web_sort', deep_collection('galleries.sort'))
+                    {{ html()->select('web_sort', cms_config('galleries.sort'))
                     ->id('web_sort' . $current->language)->class('form-control select')->data('lang', 1) }}
                 </div>
                 @if ($error)

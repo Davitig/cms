@@ -6,7 +6,7 @@
             <i class="fa fa-file-import"></i>
             File Manager
         </h1>
-        <p class="description">File Manager, which contains all the application files</p>
+        <p class="description">File Manager containing all the application files</p>
     </div>
     <div class="breadcrumb-env">
         <ol class="breadcrumb bc-1">

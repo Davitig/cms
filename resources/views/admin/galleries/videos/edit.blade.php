@@ -4,14 +4,14 @@
             <div class="modal-content">
                 <div class="tab-content">
                     @foreach ($items as $current)
-                        <div class="tab-pane{{language() == $current->language ? ' active' : ''}}" id="modal-item-{{$current->language}}">
+                        <div class="tab-pane{{language()->active() == $current->language ? ' active' : ''}}" id="modal-item-{{$current->language}}">
                             <div class="modal-gallery-image embed-responsive embed-responsive-16by9">
                                 <iframe src="{{get_youtube_embed($current->file)}}" frameborder="0" allowfullscreen class="embed-responsive-item"></iframe>
                             </div>
                             {{ html()->modelForm($current,
                                 'put', cms_route('videos.update', [
                                     $current->gallery_id, $current->id
-                                ], is_multilanguage() ? $current->language : null)
+                                ], language()->containsMany() ? $current->language : null)
                             )->class('form-horizontal ' . $cmsSettings->get('ajax_form'))
                             ->data('lang', $current->language)->open() }}
                             <div class="modal-body">
@@ -23,13 +23,13 @@
                         </div>
                     @endforeach
                 </div>
-                @if (is_multilanguage())
+                @if (language()->containsMany())
                     <ul class="modal-footer modal-gallery-top-controls nav nav-tabs">
                         @foreach ($items as $current)
-                            <li{!!language() == $current->language ? ' class="active"' : ''!!}>
+                            <li{!!language()->active() == $current->language ? ' class="active"' : ''!!}>
                                 <a href="#modal-item-{{$current->language}}" data-toggle="tab">
                                     <span class="visible-xs">{{$current->language}}</span>
-                                    <span class="hidden-xs">{{language($current->language, 'full_name')}}</span>
+                                    <span class="hidden-xs">{{language()->get($current->language, 'full_name')}}</span>
                                 </a>
                             </li>
                         @endforeach

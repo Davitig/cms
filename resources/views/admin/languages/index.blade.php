@@ -108,7 +108,7 @@
             });
         });
         $(function() {
-            let langSelected = {{(int) language_selected()}};
+            let langSelected = {{(int) language()->isSelected()}};
             let activeLangSelector = $('.language-switcher > a img');
             let langMenuSelector = $('.dropdown-menu.languages');
             let sortableSelector = $('#sortable');

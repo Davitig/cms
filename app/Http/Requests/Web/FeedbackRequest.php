@@ -17,7 +17,7 @@ class FeedbackRequest extends Request
             'name' => 'required',
             'email' => 'required|string|email',
             'text' => 'required',
-            'g-recaptcha-response' => 'required|captcha'
+            // 'g-recaptcha-response' => 'required|captcha'
         ];
     }
 

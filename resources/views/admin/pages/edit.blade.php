@@ -41,12 +41,12 @@
             </div>
             <div class="panel-body">
                 <div class="tab-content">
-                    @php($activeLang = request('lang', language()))
+                    @php($activeLang = request('lang', language()->active()))
                     @foreach ($items as $current)
                         <div class="tab-pane{{$activeLang == $current->language ? ' active' : ''}}" id="item-{{$current->language}}">
                             {{ html()->modelForm($current, 'put', cms_route('pages.update', [
                                 $current->menu_id, $current->id
-                            ], is_multilanguage() ? ($current->language ?: $activeLang) : null))
+                            ], language()->containsMany() ? ($current->language ?: $activeLang) : null))
                             ->class('form-horizontal ' . $cmsSettings->get('ajax_form'))
                             ->data('lang', $current->language)->open() }}
                             @include('admin.pages.form', [
@@ -66,16 +66,9 @@
                     <i class="{{icon_type('files')}}"></i> {{trans('general.files')}}
                 </a>
             </li>
-            @if ($current->collection_type)
-                <li class="listable">
-                    <a href="{{cms_route($current->collection_type.'.index', [$current->type_id])}}">
-                        <i class="{{icon_type($current->collection_type)}}"></i> {{ucfirst($current->collection_type)}}
-                    </a>
-                </li>
-            @endif
-            @if (array_key_exists($current->type, cms_pages('explicit')))
-                <li class="modules">
-                    <a href="{{cms_route($current->type.'.index')}}">
+            @if (array_key_exists($current->type, cms_pages('collections')) || in_array($current->type, cms_pages('extended')))
+                <li class="extended">
+                    <a href="{{cms_route($current->type.'.index', [$current->type_id])}}">
                         <i class="{{icon_type($current->type)}}"></i> {{ucfirst($current->type)}}
                     </a>
                 </li>
@@ -85,12 +78,11 @@
     @push('body.bottom')
         <script type="text/javascript">
             $('form.ajax-form').on('ajaxFormSuccess', function (e, res) {
-                let listableTypes = $('#form-tabs');
-                $('.listable', listableTypes).remove();
-                $('.modules', listableTypes).remove();
+                let extendedTypes = $('#form-tabs');
+                $('.extended', extendedTypes).remove();
 
                 if (res?.data?.typeHtml !== undefined) {
-                    listableTypes.append(res?.data?.typeHtml);
+                    extendedTypes.append(res?.data?.typeHtml);
                 }
             });
         </script>

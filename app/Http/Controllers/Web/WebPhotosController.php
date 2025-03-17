@@ -9,32 +9,22 @@ use App\Models\Photo;
 class WebPhotosController extends Controller
 {
     /**
-     * The Photo instance.
-     *
-     * @var \App\Models\Photo
-     */
-    protected Photo $model;
-
-    /**
      * Create a new controller instance.
      *
      * @param  \App\Models\Photo  $model
      */
-    public function __construct(Photo $model)
-    {
-        $this->model = $model;
-    }
+    public function __construct(protected Photo $model) {}
 
     /**
      * Display a listing of the resource.
      *
-     * @param  array<\App\Models\Page\Page, \App\Models\Collection>  $models
+     * @param  array  $pages
      * @param  \App\Models\Gallery\Gallery  $gallery
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(array $models, Gallery $gallery)
+    public function index(array $pages, Gallery $gallery)
     {
-        [$data['parent'], $collection] = $models;
+        $data['parent'] = last($pages);
 
         $data['current'] = $gallery;
 

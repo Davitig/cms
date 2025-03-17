@@ -4,7 +4,6 @@ namespace App\Models\Alt\Traits;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait HasLanguage
@@ -67,7 +66,9 @@ trait HasLanguage
     {
         return function ($q) use ($column, $currentLang) {
             return $q->where(
-                $column, is_numeric($currentLang) ? $currentLang : language($currentLang, 'id')
+                $column, is_numeric($currentLang)
+                    ? $currentLang
+                    : language()->getBy($currentLang, 'id')
             );
         };
     }

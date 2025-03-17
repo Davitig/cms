@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{language()}}">
+<html lang="{{language()->active()}}">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -27,7 +27,7 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li>
-                            <a href="{{web_url('/', [], is_multilanguage(true))}}">{{trans('general.home')}}</a>
+                            <a href="{{web_url('/', [], language()->containsManyVisible())}}">{{trans('general.home')}}</a>
                         </li>
                     </ul>
                     @include('web._partials.lang')

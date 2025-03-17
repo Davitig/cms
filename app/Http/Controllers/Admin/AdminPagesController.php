@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PageRequest;
+use App\Models\Collection;
 use App\Models\Menu;
 use App\Models\Page\Page;
 use Illuminate\Http\Request;
@@ -46,7 +47,7 @@ class AdminPagesController extends Controller
 
         $data['types'] = cms_pages('types');
 
-        $data['listableTypes'] = [];
+        $data['collectionTypes'] = [];
 
         return view('admin.pages.create', $data);
     }
@@ -88,7 +89,7 @@ class AdminPagesController extends Controller
 
         $data['types'] = cms_pages('types');
 
-        $data['listableTypes'] = $this->getListableTypes($data['items']->first()->type);
+        $data['collectionTypes'] = $this->getCollectionTypes($data['items']->first()->type);
 
         return view('admin.pages.edit', $data);
     }
@@ -111,27 +112,10 @@ class AdminPagesController extends Controller
             ->updateOrCreate(apply_languages(), $input);
 
         if ($request->expectsJson()) {
-            if (array_key_exists(
-                $type = $request->get('type'), (array) cms_pages('implicit')
-            )) {
-                $typeId = $request->get('type_id');
-
-                $implicitModel = cms_pages('implicit.' . $type);
-
-                if ($implicitModel) {
-                    $implicitModelType = (new $implicitModel)->whereKey($typeId)->value('type');
-
-                    $input['page_type'] = $implicitModelType;
-
-                    $input['typeHtml'] = view(
-                        'admin.pages._implicit_type', ['input' => $input]
-                    )->render();
-                }
-            } elseif (array_key_exists(
-                $request->get('type'), (array) cms_pages('explicit')
-            )) {
+            if (array_key_exists($type = $request->get('type'), (array) cms_pages('collections'))
+                || in_array($type, (array) cms_pages('extended'))) {
                 $input['typeHtml'] = view(
-                    'admin.pages._module_type', ['input' => $input]
+                    'admin.pages._extended_type', ['input' => $input]
                 )->render();
             }
 
@@ -162,22 +146,22 @@ class AdminPagesController extends Controller
     }
 
     /**
-     * Get the listable types.
+     * Get the collection types.
      *
      * @param  string|null  $type
      * @return array
      */
-    public function getListableTypes(?string $type = null)
+    public function getCollectionTypes(?string $type = null)
     {
         if (! $type ??= $this->request->get('type')) {
             return [];
         }
 
-        if (! $model = cms_pages('implicit.' . $type)) {
+        if (! cms_pages('collections.' . $type)) {
             return [];
         }
 
-        return (new $model)->pluck('title', 'id')->toArray();
+        return (new Collection)->byType($type)->pluck('title', 'id')->toArray();
     }
 
     /**

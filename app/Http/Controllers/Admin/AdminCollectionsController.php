@@ -21,7 +21,7 @@ class AdminCollectionsController extends Controller
      */
     public function index()
     {
-        $data['items'] = $this->model->get();
+        $data['items'] = $this->model->paginate(50);
 
         return view('admin.collections.index', $data);
     }

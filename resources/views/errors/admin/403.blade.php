@@ -1,8 +1,8 @@
+@push('head.title')
+    <title>403 Forbidden</title>
+@endpush
 @extends('errors.admin.layout')
 @section('content')
-    @push('head.title')
-        <title>403 Forbidden</title>
-    @endpush
     <div class="page-title">
         <div class="title-env">
             <h1 class="title">

@@ -3,36 +3,28 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Collection;
 use App\Models\Faq;
 
 class WebFaqController extends Controller
 {
     /**
-     * The Faq instance.
-     *
-     * @var \App\Models\Faq
-     */
-    protected Faq $model;
-
-    /**
      * Create a new controller instance.
      *
      * @param  \App\Models\Faq  $model
      */
-    public function __construct(Faq $model)
-    {
-        $this->model = $model;
-    }
+    public function __construct(protected Faq $model) {}
 
     /**
      * Display a listing of the resource.
      *
-     * @param  array<\App\Models\Page\Page, \App\Models\Collection>  $models
+     * @param  array<\App\Models\Page\Page>  $pages
+     * @param  \App\Models\Collection  $collection
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(array $models)
+    public function index(array $pages, Collection $collection)
     {
-        [$data['current'], $collection] = $models;
+        $data['current'] = last($pages);
 
         $data['items'] = $this->model->getPublicCollection($collection);
 

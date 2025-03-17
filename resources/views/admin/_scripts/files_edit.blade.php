@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    let currentLang = '{{language()}}';
+    let currentLang = '{{language()->active()}}';
     let formSelector = $('#form-modal .{{$cmsSettings->get('ajax_form')}}');
 
     formSelector.on('ajaxFormSuccess', function () {

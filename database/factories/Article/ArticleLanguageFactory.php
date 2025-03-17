@@ -18,7 +18,8 @@ class ArticleLanguageFactory extends Factory
     {
         return [
             'title' => fake()->sentence(2),
-            'description' => fake()->text()
+            'description' => fake()->text(),
+            'content' => fake()->text()
         ];
     }
 }

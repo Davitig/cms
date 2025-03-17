@@ -5,11 +5,11 @@
             <button type="button" class="trans-close-btn" data-dismiss="trans-modal">
                 <span>&times;</span>
             </button>
-            @if (is_multilanguage())
+            @if ($langContainsMany = language()->containsMany())
                 <div class="trans-nav clearfix">
                     @foreach ($items as $current)
-                        <div class="trans-nav-item{{language() == $current->language ? ' active' : ''}}">
-                            <a href="#item-{{$current->language}}">{{language($current->language, 'full_name')}}</a>
+                        <div class="trans-nav-item{{language()->active() == $current->language ? ' active' : ''}}">
+                            <a href="#item-{{$current->language}}">{{language()->get($current->language, 'full_name')}}</a>
                         </div>
                     @endforeach
                 </div>
@@ -19,9 +19,9 @@
         </div>
         <div class="trans-tab-content">
             @foreach ($items as $current)
-                <div class="trans-tab-pane{{language() == $current->language ? ' active' : ''}}" id="item-{{$current->language}}">
+                <div class="trans-tab-pane{{language()->active() == $current->language ? ' active' : ''}}" id="item-{{$current->language}}">
                     {{ html()->modelForm($current,
-                        'post', cms_route('translations.form.post', [], count(languages()) > 1 ? $current->language : null)
+                        'post', cms_route('translations.form.post', [], $langContainsMany ? $current->language : null)
                     )->class('form-horizontal')->data('lang', $current->language)->open() }}
                     <input type="hidden" name="id" value="{{$current->id}}">
                     @include('admin.translations.modal.form')

@@ -1,50 +1,17 @@
 <?php
 
+use App\Services\LanguageService;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Uri;
 
 /**
- * Get the application language.
+ * Get the language service.
  *
- * @param  bool|string|null  $key
- * @param  string|null  $value
- * @return mixed
+ * @return \App\Services\LanguageService
  */
-function language(mixed $key = null, ?string $value = null): mixed
+function language(): LanguageService
 {
-    if (! $lang = (string) config('_app.language')) {
-        return null;
-    }
-
-    if (is_null($key)) {
-        return $lang;
-    }
-
-    if (is_bool($key)) {
-        $key = $lang;
-    }
-
-    if (! is_null($value)) {
-        return languages()[$key][$value];
-    }
-
-    return languages()[$key];
-}
-
-/**
- * Get the application languages.
- *
- * @param  bool  $visible
- * @return array
- */
-function languages(bool $visible = false): array
-{
-    if (! $visible) {
-        return (array) config('_app.languages', []);
-    }
-
-    return array_filter((array) config('_app.languages', []), function (array $language) {
-        return $language['visible'];
-    });
+    return app(LanguageService::class);
 }
 
 /**
@@ -56,39 +23,18 @@ function languages(bool $visible = false): array
 function apply_languages(?array $data = null): array
 {
     if (is_null($data)) {
-        return ['language_id' => language(true, 'id')];
+        return ['language_id' => language()->getActive('id')];
     }
 
     $languages = [];
 
-    foreach (languages() as $language) {
+    foreach (language()->all() as $language) {
         $data['language_id'] = $language['id'];
 
         $languages[] = $data;
     }
 
     return $languages;
-}
-
-/**
- * Determine if the language is set in the URL.
- *
- * @return bool
- */
-function language_selected(): bool
-{
-    return config('_app.language_selected', false);
-}
-
-/**
- * Determine if the application is multilanguage.
- *
- * @param  bool  $visible
- * @return bool
- */
-function is_multilanguage(bool $visible = false): bool
-{
-    return count(languages($visible)) > 1;
 }
 
 /**
@@ -115,7 +61,7 @@ function cms_slug(?string $path = null, bool $language = false): string
     if ($language) {
         $language = is_string($language)
             ? $language
-            : (language_selected() ? language() : '');
+            : (language()->isSelected() ? language()->active() : '');
 
         $slug = trim($language . '/' . $slug, '/');
     }
@@ -286,13 +232,12 @@ function language_prefix(?string $path = null, mixed $language = null): string
     if (is_string($language)) {
         $path = $language . '/' . $path;
     } elseif ($language !== false
-        && ($language === true || language_selected())
-        && count(languages()) > 1
-    ) {
-        $path = language() . '/' . $path;
+        && ($language === true || language()->isSelected())
+        && count(language()->all()) > 1) {
+        $path = language()->active() . '/' . $path;
     }
 
-    return $path;
+    return trim($path, '/');
 }
 
 /**
@@ -304,45 +249,46 @@ function language_prefix(?string $path = null, mixed $language = null): string
  */
 function language_to_url(string $url, mixed $language = null): string
 {
-    if (! ($withLanguage = ! empty($language)) && ! language_selected()) {
-        return trim($url, '/');
+    $uri = Uri::of($url);
+
+    $path = $uri->path();
+
+    if (! empty($query = $uri->query()->value())) {
+        $query = '?' . $query;
     }
 
-    $segments = parse_url($url);
-
-    $path = $segments['path'] ?? '';
-
-    $query = isset($segments['query']) ? '?' . $segments['query'] : '';
-
-    if (! isset($segments['host'])) {
+    if (is_null($host = $uri->host())) {
         return language_prefix($path . $query, $language);
     }
 
-    $baseUrl = $schemeAndHttpHost = '';
+    $schemeAndHost = $baseUrl = '';
 
-    if (isset($segments['scheme'])) {
-        $schemeAndHttpHost = $segments['scheme'] . '://' . $segments['host'];
+    if (! is_null($scheme = $uri->scheme())) {
+        $schemeAndHost = $scheme . '://' . $host;
     }
 
-    if (! empty($path) || $withLanguage) {
-        if (str($path)->startsWith($baseUrl = request()->getBaseUrl())
-            && $schemeAndHttpHost == request()->getSchemeAndHttpHost()
-        ) {
-            $path = substr($path, strlen($baseUrl));
+    if (! empty(trim($path, '/'))) {
+        if ($schemeAndHost == request()->getSchemeAndHttpHost()
+            && str($path)->startsWith($baseUrl = trim(request()->getBaseUrl(), '/'))) {
+            $path = mb_substr($path, mb_strlen($baseUrl));
         } else {
             $baseUrl = '';
         }
 
         $path = array_filter(explode('/', $path));
 
-        if (array_key_exists((string) current($path), languages())) {
+        if (language()->exists((string) current($path))) {
             array_shift($path);
         }
 
-        $path = language_prefix(implode('/', $path) . $query, $language);
+        $path = implode('/', $path);
     }
 
-    return trim($schemeAndHttpHost . $baseUrl . '/' . $path, '/');
+    $baseUrl = $baseUrl ? '/' . trim($baseUrl, '/') . '/' : '/';
+
+    $path = language_prefix($path, $language);
+
+    return $schemeAndHost . $baseUrl . $path . $query;
 }
 
 /**
@@ -472,38 +418,6 @@ function cms_pages(?string $key = null, mixed $default = []): mixed
 }
 
 /**
- * Get the CMS collections config.
- *
- * @param  string|null  $key
- * @param  mixed  $default
- * @return mixed
- */
-function cms_collections(?string $key = null, mixed $default = []): mixed
-{
-    if (! is_null($key)) {
-        return cms_config('collections.' . $key, $default);
-    }
-
-    return cms_config('collections', $default);
-}
-
-/**
- * Get the CMS deep collections config.
- *
- * @param  string|null  $key
- * @param  mixed  $default
- * @return mixed
- */
-function deep_collection(?string $key = null, mixed $default = []): mixed
-{
-    if (! is_null($key)) {
-        return cms_config('deep_collections.' . $key, $default);
-    }
-
-    return cms_config('deep_collections', $default);
-}
-
-/**
  * Get the CMS icon name.
  *
  * @param  string  $key
@@ -536,27 +450,6 @@ function glide(string $path, string $type): string
     }
 
     return $path;
-}
-
-/**
- * Convert bytes to human-readable format.
- *
- * @param  int  $bytes
- * @param  int  $precision
- * @param  string  $separator
- * @return string
- */
-function format_bytes(int $bytes, int $precision = 2, string $separator = ' '): string
-{
-    $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-
-    $bytes = (float) max($bytes, 0);
-    $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-    $pow = min($pow, count($units) - 1);
-
-    $bytes /= pow(1024, $pow);
-
-    return round($bytes, $precision) . $separator . $units[$pow];
 }
 
 /**

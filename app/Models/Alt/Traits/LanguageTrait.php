@@ -39,7 +39,7 @@ trait LanguageTrait
     {
         return $query->where(
             'language_id',
-            is_numeric($currentLang) ? $currentLang : language($currentLang, 'id')
+            is_numeric($currentLang) ? $currentLang : language()->getBy($currentLang, 'id')
         );
     }
 }

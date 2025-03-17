@@ -16,13 +16,13 @@ class GalleryRequest extends Request
     {
         $id = $this->route('gallery');
 
-        $orderList = array_keys(deep_collection('galleries.order_by'));
+        $orderList = array_keys((array) cms_config('galleries.order_by'));
 
-        $sortList = array_keys(deep_collection('galleries.sort'));
+        $sortList = array_keys((array) cms_config('galleries.sort'));
 
-        $typeRule = $this->method() == 'POST'
+        $typeRule = $this->isMethod($this::METHOD_POST)
             ? ['type' => ['required', Rule::in(
-                array_keys(deep_collection('galleries.types'))
+                array_keys((array) cms_config('galleries.types'))
             )]] : [];
 
         return $typeRule + [
@@ -46,7 +46,7 @@ class GalleryRequest extends Request
     {
         $this->slugifyInput('slug', ['title']);
 
-        if ($this->method() != 'POST') {
+        if (! $this->isMethod($this::METHOD_POST)) {
             $this->offsetUnset('type');
         }
     }

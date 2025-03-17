@@ -9,7 +9,7 @@
     <!-- #breadcrumb -->
     <div class="container">
         <div id="feedback" class="jumbotron">
-            @if($current->image)
+            @if ($current->image)
                 <div class="img">
                     <img src="{{$current->image}}" class="img-responsive" alt="{{$current->title}}">
                 </div>
@@ -32,7 +32,7 @@
                 </div>
             @endif
             <div id="feedback">
-                <form action="{{web_url($current->slug)}}" method="POST">
+                <form action="{{url()->current()}}" method="POST">
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
                     <div class="row">
                         <div class="col-md-6">
@@ -67,6 +67,7 @@
                             </div>
                             <!-- .form-group -->
                             <div class="form-group">
+                                <label class="control-label">Captcha</label>
                                 {!! app('captcha')->display() !!}
                                 @if ($error = $errors->first('g-recaptcha-response'))
                                     <div class="text-danger">{{$error}}</div>

@@ -14,13 +14,14 @@ class CollectionRequest extends Request
      */
     public function rules(): array
     {
-        $orderList = array_keys(cms_collections('order_by'));
+        $orderList = array_keys((array) cms_config('collections.order_by'));
 
-        $sortList = array_keys(cms_collections('sort'));
+        $sortList = array_keys((array) cms_config('collections.sort'));
 
-        $typeRule = $this->method() == 'POST'
-            ? ['type' => ['required', Rule::in(array_keys(cms_collections('types')))]]
-            : [];
+        $typeRule = $this->isMethod($this::METHOD_POST)
+            ? ['type' => ['required', Rule::in(
+                array_keys((array) cms_config('collections.types'))
+            )]] : [];
 
         return $typeRule + [
             'title' => 'required',
@@ -40,7 +41,7 @@ class CollectionRequest extends Request
      */
     protected function prepareForValidation()
     {
-        if ($this->method() != 'POST') {
+        if (! $this->isMethod($this::METHOD_POST)) {
             $this->offsetUnset('type');
         }
     }

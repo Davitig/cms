@@ -26,7 +26,6 @@ $(function () {
     });
 
     let style = document.createElement('style');
-    style.type = 'text/css';
     style.innerHTML += `
 .trans-modal-bg {position: fixed; left: 0; top: 0; width: 100%; height: 100%; background: #000; opacity: .2; z-index: 1000;}
 .trans-modal .clearfix:after {content: ""; clear: both; display: table;}

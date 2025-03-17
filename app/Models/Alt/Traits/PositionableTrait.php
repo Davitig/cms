@@ -21,8 +21,7 @@ trait PositionableTrait
     ): bool
     {
         if (empty($data)
-            || ! $hasSubItems && ! is_array($data = $this->movePosition($data, $params))
-        ) {
+            || ! $hasSubItems && ! is_array($data = $this->movePosition($data, $params))) {
             return false;
         }
 

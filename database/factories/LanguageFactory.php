@@ -34,24 +34,82 @@ class LanguageFactory extends Factory
     }
 
     /**
-     * Indicates the main boolean.
+     * Indicates the language codes.
      */
-    public function main(int $value): static
+    public function language(?string $language = null): static
     {
         return $this->state(fn (array $attributes) => [
-            'main' => $value
+            'language' => $language ??= fake()->unique()->languageCode(),
+            'short_name' => $language,
+            'full_name' => $language
         ]);
     }
 
     /**
-     * Indicates the language code.
+     * Indicates the language code sequences.
      */
-    public function languageCode(?string $code = null): static
+    public function languages(array $languages, ?string $main = null): static
     {
+        $sequence = [];
+
+        foreach ($languages as $language) {
+            $sequence[] = [
+                'language' => $language, 'short_name' => $language, 'full_name' => $language
+            ] + ($language == $main ? ['main' => 1] : []);
+        }
+
+        return $this->times(count($languages))->sequence(...$sequence);
+    }
+
+    /**
+     * Indicates the main.
+     */
+    public function main(int $value, ?string $language = null): static
+    {
+        return $this->state(function (array $attributes) use ($value, $language) {
+            if (! is_null($language) && $language != $attributes['language']) {
+                $value = $value == 1 ? 0 : 1;
+            }
+
+            return [
+                'main' => $value
+            ];
+        });
+    }
+
+    /**
+     * Indicates the visible.
+     */
+    public function visible(string|array|null $languages = null): static
+    {
+        if (is_null($languages)) {
+            return $this->state(fn (array $attributes) => [
+                'visible' => 1
+            ]);
+        }
+
+        $languages = is_array($languages) ? $languages : func_get_args();
+
         return $this->state(fn (array $attributes) => [
-            'language' => $code ??= fake()->unique()->languageCode(),
-            'short_name' => $code,
-            'full_name' => $code
+            'visible' => in_array($attributes['language'], $languages) ? 1 : 0
+        ]);
+    }
+
+    /**
+     * Indicates the non-visible.
+     */
+    public function notVisible(string|array|null $languages = null): static
+    {
+        if (is_null($languages)) {
+            return $this->state(fn (array $attributes) => [
+                'visible' => 0
+            ]);
+        }
+
+        $languages = is_array($languages) ? $languages : func_get_args();
+
+        return $this->state(fn (array $attributes) => [
+            'visible' => in_array($attributes['language'], $languages) ? 0 : 1
         ]);
     }
 }

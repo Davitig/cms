@@ -26,7 +26,7 @@ class AdminVideosResourceTest extends TestAdmin
 
         if ($createVideos) {
             $videos = VideoFactory::new()->count($times)->has(
-                VideoLanguageFactory::times(count(languages()))
+                VideoLanguageFactory::times(language()->count())
                     ->sequence(...apply_languages([])),
                 'languages'
             )->create(['gallery_id' => $gallery->id]);

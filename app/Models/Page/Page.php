@@ -43,6 +43,18 @@ class Page extends Model
     }
 
     /**
+     * Build a public dynamic route query.
+     *
+     * @param  string  $slug
+     * @param  int  $parentId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function publicDynamicRoute(string $slug, int $parentId): Builder
+    {
+        return (new static)->bySlugRoute($slug, $parentId);
+    }
+
+    /**
      * Build an admin query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
@@ -56,10 +68,7 @@ class Page extends Model
     {
         return $query->when(! is_null($menuId), function ($q) use ($menuId) {
             return $q->menuId($menuId);
-        })->joinLanguage($currentLang)
-            ->joinCollection()
-            ->filesExists()
-            ->positionAsc();
+        })->joinLanguage($currentLang)->filesExists()->positionAsc();
     }
 
     /**
@@ -138,27 +147,6 @@ class Page extends Model
     public function scopeWhereVisible(Builder $query, int $value = 1): Builder
     {
         return $query->where($this->qualifyColumn('visible'), $value);
-    }
-
-    /**
-     * Add a "collection" join to the query.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeJoinCollection(Builder $query): Builder
-    {
-        $table = (new Collection)->getTable();
-
-        $columns = [
-            $table . '.title as collection_title',
-            $table . '.type as collection_type',
-        ];
-
-        return $query->leftJoin($table, function ($q) use ($table) {
-            return $q->where($this->qualifyColumn('type'), 'collections')
-                ->on('type_id', $table . '.id');
-        })->addSelect($columns);
     }
 
     /**

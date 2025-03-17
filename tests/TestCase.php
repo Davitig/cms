@@ -3,10 +3,10 @@
 namespace Tests;
 
 use App\Models\Language;
+use App\Services\LanguageService;
 use Database\Factories\LanguageFactory;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\DB;
-use InvalidArgumentException;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -17,32 +17,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $envActiveLanguage = $this->getEnvActiveLanguage();
-
-        $envLanguages = $this->getEnvLanguageList();
-
-        (new Language)->newQuery()->delete();
-
-        DB::update('ALTER TABLE languages AUTO_INCREMENT = 1');
-
-        $languages = LanguageFactory::new()->when($envLanguages, function ($factory, $envLanguages) {
-            return $factory->times(count($envLanguages))->sequence(...$envLanguages);
-        }, fn ($factory) => $factory->times(5))->create()
-            ->mapWithKeys(function (Language $language) {
-                return [$language->language => $language->toArray() + ['url' => '']];
-            })->toArray();
-
-        $this->app['config']->set('_app.languages', $languages);
-
-        if (! is_null($envActiveLanguage) && array_key_exists($envActiveLanguage, $languages)) {
-            $this->activeLanguage = $envActiveLanguage;
-        } else {
-            $this->activeLanguage = key(array_filter(
-                $languages, fn ($lang) => $lang['main']
-            ) ?: $languages) ?: null;
-        }
-
-        $this->app['config']->set('_app.language', $this->activeLanguage);
+        $this->registerLanguageService();
     }
 
     /**
@@ -56,36 +31,43 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
-     * Get the active language.
+     * Register language service.
      *
-     * @return string|null
+     * @return void
      */
-    protected function getActiveLanguage(): ?string
+    protected function registerLanguageService(): void
     {
-        return $this->activeLanguage;
+        $envLanguages = $this->getEnvLanguageList();
+
+        $envActiveLanguage = $this->getEnvActiveLanguage();
+
+        (new Language)->newQuery()->delete();
+
+        DB::update('ALTER TABLE languages AUTO_INCREMENT = 1');
+
+        $this->app->instance(LanguageService::class, new LanguageService(
+            LanguageFactory::new()->when($envLanguages,
+                fn ($factory) => $factory->languages($envLanguages, $envActiveLanguage),
+                fn ($factory) => $factory->times(5)
+            )->create(), $this->app['request']->path()
+        ));
     }
 
     /**
      * Get the language list of an environment variable.
      *
-     * @return array|null
+     * @return array
      */
-    protected function getEnvLanguageList(): ?array
+    protected function getEnvLanguageList(): array
     {
         if (empty($langParams = getenv('lang_list'))) {
-            return null;
+            return [];
         }
 
         $languages = [];
 
         foreach (explode(',', $langParams) as $lang) {
-            if (mb_strlen($lang) != 2) {
-                throw new InvalidArgumentException(
-                    'Language env variable value must be 2 characters'
-                );
-            }
-
-            $languages[] = ['language' => $lang, 'short_name' => $lang, 'full_name' => $lang];
+            $languages[] = $lang;
         }
 
         return $languages;
@@ -98,16 +80,6 @@ abstract class TestCase extends BaseTestCase
      */
     protected function getEnvActiveLanguage(): ?string
     {
-        if (empty($lang = getenv('lang_active'))) {
-            return null;
-        }
-
-        if (mb_strlen($lang) != 2) {
-            throw new InvalidArgumentException(
-                'Active language env variable value must be 2 characters'
-            );
-        }
-
-        return $lang;
+        return getenv('lang_active');
     }
 }

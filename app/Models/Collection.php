@@ -29,6 +29,18 @@ class Collection extends Model
     ];
 
     /**
+     * Build a public dynamic route query.
+     *
+     * @param  int  $id
+     * @param  string  $type
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function publicDynamicRoute(int $id, string $type): Builder
+    {
+        return (new static)->whereKey($id)->byType($type);
+    }
+
+    /**
      * Add a new where 'type' clause to the query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query

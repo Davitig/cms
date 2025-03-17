@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -19,13 +20,32 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * Bootstrap services.
      */
-    public function boot(): void
+    public function boot(Request $request): void
     {
+        $this->setCmsRouteActivated($request);
+
         Route::middleware('web')->group(function (Router $router) {
             $this->loadWebRoutes($router);
 
             $this->loadCMSRoutes($router);
         });
+    }
+
+    /**
+     * Set CMS route is activated if the slug has matched in a request path.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     */
+    protected function setCmsRouteActivated(Request $request): void
+    {
+        $segments = $request->segments();
+
+        if (language()->isSelected()) {
+            next($segments);
+        }
+
+        $this->app['config']->set('_cms.activated', current($segments) == cms_slug());
     }
 
     /**
@@ -36,16 +56,14 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function loadWebRoutes(Router $router): void
     {
-        $router->middleware('web.maintenance')
-            ->group(base_path('routes/web.php'));
+        $router->group([], base_path('routes/web.php'));
 
-        if (is_multilanguage()) {
-            foreach (languages() as $lang => $value) {
-                $router->middleware('web.maintenance')
-                    ->prefix($lang)->name($lang . '.')->group(
-                        base_path('routes/web.php')
-                    );
-            }
+        if (language()->containsMany()) {
+            $router->middleware('web.lang')
+                ->prefix('{lang}')
+                ->name('lang.')
+                ->whereIn('lang', language()->all()->keys()->toArray())
+                ->group(base_path('routes/web.php'));
         }
     }
 
@@ -60,14 +78,12 @@ class RouteServiceProvider extends ServiceProvider
         $router->prefix(cms_slug())->name(cms_route_name())
             ->group(base_path('routes/cms.php'));
 
-        if (is_multilanguage()) {
-            $cmsSlug = cms_slug();
-
-            foreach (languages() as $lang => $value) {
-                $router->prefix($lang . '/' . $cmsSlug)->name(
-                    $lang . '.' . cms_route_name()
-                )->group(base_path('routes/cms.php'));
-            }
+        if (language()->containsMany()) {
+            $router->middleware('cms.lang')
+                ->prefix('{lang}/' . cms_slug())
+                ->name('lang.')
+                ->whereIn('lang', language()->all()->keys()->toArray())
+                ->group(base_path('routes/cms.php'));
         }
     }
 }
