@@ -33,7 +33,17 @@ class FaqFactory extends Factory
     {
         return [
             'position' => $this->position++,
-            'visible' => rand(0, 1)
+            'visible' => 1
         ];
+    }
+
+    /**
+     * Indicates the collection ID.
+     */
+    public function collectionId(int $value): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'collection_id' => $value,
+        ]);
     }
 }

@@ -19,7 +19,7 @@ class AdminVideosResourceTest extends TestAdmin
      * @param  bool  $createVideos
      * @return array
      */
-    public function createVideos(?int $times = null, bool $createVideos = true): array
+    protected function createVideos(?int $times = null, bool $createVideos = true): array
     {
         $collection = CollectionFactory::new()->galleryType()->create();
         $gallery = GalleryFactory::new()->collectionId($collection->id)->videoType()->create();

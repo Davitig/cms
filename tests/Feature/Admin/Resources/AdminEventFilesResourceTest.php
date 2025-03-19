@@ -19,7 +19,7 @@ class AdminEventFilesResourceTest extends TestAdmin
      * @param  bool  $createFiles
      * @return array
      */
-    public function createEventFiles(?int $times = null, bool $createFiles = true): array
+    protected function createEventFiles(?int $times = null, bool $createFiles = true): array
     {
         $collection = CollectionFactory::new()->eventType()->create();
 

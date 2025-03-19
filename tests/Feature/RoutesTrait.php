@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Feature\Admin;
+namespace Tests\Feature;
 
 use App\Models\Permission;
 
-trait AdminRoutesTrait
+trait RoutesTrait
 {
     protected function getAllCMSRouteNames(): array
     {

@@ -7,7 +7,6 @@ use Database\Factories\MenuFactory;
 use Database\Factories\Page\PageFactory;
 use Database\Factories\Page\PageFileFactory;
 use Database\Factories\Page\PageFileLanguageFactory;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminPageFilesResourceTest extends TestAdmin
@@ -19,7 +18,7 @@ class AdminPageFilesResourceTest extends TestAdmin
      * @param  bool  $createFiles
      * @return array
      */
-    public function createPageFiles(?int $times = null, bool $createFiles = true): array
+    protected function createPageFiles(?int $times = null, bool $createFiles = true): array
     {
         $menu = MenuFactory::new()->create();
 

@@ -19,7 +19,7 @@ class AdminArticleFilesResourceTest extends TestAdmin
      * @param  bool  $createFiles
      * @return array
      */
-    public function createArticleFiles(?int $times = null, bool $createFiles = true): array
+    protected function createArticleFiles(?int $times = null, bool $createFiles = true): array
     {
         $collection = CollectionFactory::new()->articleType()->create();
 

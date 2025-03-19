@@ -17,7 +17,7 @@ class AdminTranslationsResourceTest extends TestAdmin
      * @param  int|null  $times
      * @return \App\Models\Translation|\Illuminate\Database\Eloquent\Collection
      */
-    public function createTranslation(?int $times = null): Translation|Collection
+    protected function createTranslation(?int $times = null): Translation|Collection
     {
         return TranslationFactory::new()->count($times)->has(
             TranslationLanguageFactory::times(language()->count())

@@ -24,10 +24,20 @@ class ArticleFactory extends Factory
     public function definition(): array
     {
         return [
-            'slug' => fake()->unique()->slug(),
+            'slug' => fake()->unique()->slug(2),
             'position' => $this->position++,
-            'visible' => rand(0, 1),
+            'visible' => 1,
             'image' => fake()->imageUrl()
         ];
+    }
+
+    /**
+     * Indicates the collection ID.
+     */
+    public function collectionId(int $value): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'collection_id' => $value,
+        ]);
     }
 }

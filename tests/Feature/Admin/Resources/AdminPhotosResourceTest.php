@@ -19,7 +19,7 @@ class AdminPhotosResourceTest extends TestAdmin
      * @param  bool  $createPhotos
      * @return array
      */
-    public function createPhotos(?int $times = null, bool $createPhotos = true): array
+    protected function createPhotos(?int $times = null, bool $createPhotos = true): array
     {
         $collection = CollectionFactory::new()->galleryType()->create();
         $gallery = GalleryFactory::new()->collectionId($collection->id)->photoType()->create();

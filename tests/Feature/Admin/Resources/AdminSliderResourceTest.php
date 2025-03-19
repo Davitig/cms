@@ -17,7 +17,7 @@ class AdminSliderResourceTest extends TestAdmin
      * @param  int|null  $times
      * @return \App\Models\Slider|\Illuminate\Database\Eloquent\Collection
      */
-    public function createSlider(?int $times = null): Slider|Collection
+    protected function createSlider(?int $times = null): Slider|Collection
     {
         return SliderFactory::new()->count($times)->has(
             SliderLanguageFactory::times(language()->count())

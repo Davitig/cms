@@ -24,22 +24,61 @@ class PageFactory extends Factory
     public function definition(): array
     {
         return [
-            'slug' => fake()->unique()->slug(),
+            'slug' => fake()->unique()->slug(2),
             'position' => $this->position++,
-            'visible' => rand(0, 1),
+            'visible' => 1,
             'type' => 'page',
-            'image' => fake()->imageUrl(),
-            'collapse' => rand(0, 1),
+            'image' => fake()->imageUrl()
         ];
     }
 
     /**
      * Indicates the menu ID.
      */
-    public function menuId(int $menuId): static
+    public function menuId(int $value): static
     {
         return $this->state(fn (array $attributes) => [
-            'menu_id' => $menuId,
+            'menu_id' => $value,
+        ]);
+    }
+
+    /**
+     * Indicates the visible.
+     */
+    public function visible(int $value = 1): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'visible' => $value
+        ]);
+    }
+
+    /**
+     * Indicates the parent ID.
+     */
+    public function parentId(int $value): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'parent_id' => $value,
+        ]);
+    }
+
+    /**
+     * Indicates the type.
+     */
+    public function type(string $value): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'type' => $value,
+        ]);
+    }
+
+    /**
+     * Indicates the type ID.
+     */
+    public function typeId(int $value): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'type_id' => $value,
         ]);
     }
 }

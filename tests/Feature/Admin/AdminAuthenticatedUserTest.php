@@ -5,10 +5,11 @@ namespace Tests\Feature\Admin;
 use App\Models\CmsUserRole;
 use App\Models\Permission;
 use Illuminate\Support\Arr;
+use Tests\Feature\RoutesTrait;
 
 class AdminAuthenticatedUserTest extends TestAdmin
 {
-    use AdminRoutesTrait;
+    use RoutesTrait;
 
     public function test_admin_user_authenticated()
     {

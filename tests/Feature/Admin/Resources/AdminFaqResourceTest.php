@@ -6,7 +6,6 @@ use App\Models\Faq;
 use Database\Factories\CollectionFactory;
 use Database\Factories\Faq\FaqFactory;
 use Database\Factories\Faq\FaqLanguageFactory;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminFaqResourceTest extends TestAdmin
@@ -17,7 +16,7 @@ class AdminFaqResourceTest extends TestAdmin
      * @param  int|null  $times
      * @return array
      */
-    public function createFaq(?int $times = null): array
+    protected function createFaq(?int $times = null): array
     {
         $collection = CollectionFactory::new()->faqType()->create();
 
@@ -25,7 +24,7 @@ class AdminFaqResourceTest extends TestAdmin
             FaqLanguageFactory::times(language()->count())
                 ->sequence(...apply_languages([])),
             'languages'
-        )->create(['collection_id' => $collection->id]);
+        )->collectionId($collection->id)->create();
 
         return [$collection, $faq];
     }

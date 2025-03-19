@@ -6,7 +6,6 @@ use App\Models\Gallery\Gallery;
 use Database\Factories\CollectionFactory;
 use Database\Factories\GalleryFactory;
 use Database\Factories\GalleryLanguageFactory;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminGalleriesResourceTest extends TestAdmin
@@ -17,7 +16,7 @@ class AdminGalleriesResourceTest extends TestAdmin
      * @param  int|null  $times
      * @return array
      */
-    public function createGalleries(?int $times = null): array
+    protected function createGalleries(?int $times = null): array
     {
         $collection = CollectionFactory::new()->galleryType()->create();
 

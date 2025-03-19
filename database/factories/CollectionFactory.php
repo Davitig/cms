@@ -42,11 +42,9 @@ class CollectionFactory extends Factory
     {
         $types = (array) cms_config('collections.types');
 
-        return $this->state(function (array $attributes) use ($types) {
-            return [
-                'type' => $types[array_rand($types)],
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'type' => $types[array_rand($types)]
+        ]);
     }
 
     /**
@@ -54,11 +52,9 @@ class CollectionFactory extends Factory
      */
     public function articleType(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'type' => 'articles',
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'type' => 'articles',
+        ]);
     }
 
     /**
@@ -66,11 +62,9 @@ class CollectionFactory extends Factory
      */
     public function eventType(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'type' => 'events',
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'type' => 'events',
+        ]);
     }
 
     /**
@@ -78,11 +72,9 @@ class CollectionFactory extends Factory
      */
     public function galleryType(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'type' => 'galleries',
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'type' => 'galleries',
+        ]);
     }
 
     /**
@@ -90,10 +82,8 @@ class CollectionFactory extends Factory
      */
     public function faqType(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'type' => 'faq',
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'type' => 'faq',
+        ]);
     }
 }

@@ -3,10 +3,11 @@
 namespace Tests\Feature\Admin;
 
 use Illuminate\Support\Arr;
+use Tests\Feature\RoutesTrait;
 
 class AdminPermissionsTest extends TestAdmin
 {
-    use AdminRoutesTrait;
+    use RoutesTrait;
 
     public function test_admin_permissions_index()
     {

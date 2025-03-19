@@ -38,9 +38,9 @@ class GalleryFactory extends Factory
         $sortList = array_keys((array) cms_config('galleries.sort'));
 
         return [
-            'slug' => fake()->unique()->slug(),
+            'slug' => fake()->unique()->slug(2),
             'position' => $this->position++,
-            'visible' => rand(0, 1),
+            'visible' => 1,
             'type' => $types[array_rand($types)],
             'admin_order_by' => $orderList[array_rand($orderList)],
             'admin_sort' => $sortList[array_rand($orderList)],
@@ -62,15 +62,23 @@ class GalleryFactory extends Factory
     }
 
     /**
+     * Indicates the type.
+     */
+    public function type(string $value): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'type' => $value
+        ]);
+    }
+
+    /**
      * Indicate that the gallery is photos' type.
      */
     public function photoType(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'type' => 'photos',
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'type' => 'photos'
+        ]);
     }
 
     /**
@@ -78,10 +86,8 @@ class GalleryFactory extends Factory
      */
     public function videoType(): Factory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'type' => 'videos',
-            ];
-        });
+        return $this->state(fn (array $attributes) => [
+            'type' => 'videos'
+        ]);
     }
 }

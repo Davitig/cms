@@ -6,7 +6,6 @@ use App\Models\Article\Article;
 use Database\Factories\Article\ArticleFactory;
 use Database\Factories\Article\ArticleLanguageFactory;
 use Database\Factories\CollectionFactory;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminArticlesResourceTest extends TestAdmin
@@ -17,7 +16,7 @@ class AdminArticlesResourceTest extends TestAdmin
      * @param  int|null  $times
      * @return array
      */
-    public function createArticles(?int $times = null): array
+    protected function createArticles(?int $times = null): array
     {
         $collection = CollectionFactory::new()->articleType()->create();
 
@@ -25,7 +24,7 @@ class AdminArticlesResourceTest extends TestAdmin
             ArticleLanguageFactory::times(language()->count())
                 ->sequence(...apply_languages([])),
             'languages'
-        )->create(['collection_id' => $collection->id]);
+        )->collectionId($collection->id)->create();
 
         return [$collection, $articles];
     }

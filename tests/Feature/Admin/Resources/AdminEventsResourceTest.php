@@ -6,7 +6,6 @@ use App\Models\Event\Event;
 use Database\Factories\CollectionFactory;
 use Database\Factories\Event\EventFactory;
 use Database\Factories\Event\EventLanguageFactory;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminEventsResourceTest extends TestAdmin
@@ -17,7 +16,7 @@ class AdminEventsResourceTest extends TestAdmin
      * @param  int|null  $times
      * @return array
      */
-    public function createEvents(?int $times = null): array
+    protected function createEvents(?int $times = null): array
     {
         $collection = CollectionFactory::new()->eventType()->create();
 
@@ -25,7 +24,7 @@ class AdminEventsResourceTest extends TestAdmin
             EventLanguageFactory::times(language()->count())
                 ->sequence(...apply_languages([])),
             'languages'
-        )->create(['collection_id' => $collection->id]);
+        )->collectionId($collection->id)->create();
 
         return [$collection, $events];
     }

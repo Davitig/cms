@@ -18,7 +18,7 @@ class AdminPagesResourceTest extends TestAdmin
      * @param  bool  $createPages
      * @return array
      */
-    public function createPages(?int $times = null, bool $createPages = true): array
+    protected function createPages(?int $times = null, bool $createPages = true): array
     {
         $menu = MenuFactory::new()->create();
 

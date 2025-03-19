@@ -17,16 +17,16 @@ class MenuFactory extends Factory
     public function definition(): array
     {
         return [
-            'main' => rand(0, 1),
+            'main' => 1,
             'title' => fake()->sentence(2),
             'description' => fake()->sentence()
         ];
     }
 
     /**
-     * Indicates the main boolean.
+     * Indicates the main.
      */
-    public function main(int $value): static
+    public function main(int $value = 1): static
     {
         return $this->state(fn (array $attributes) => [
             'main' => $value
