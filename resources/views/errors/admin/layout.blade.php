@@ -22,14 +22,21 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="user-info">
+                        <div class="user-image">
+                            <a href="{{ cms_route('cmsUsers.show', [auth('cms')->id()]) }}">
+                                <img src="{{ cms_route('cmsUsers.photo', [auth('cms')->id()]) }}" width="130" height="130" class="user-photo img-circle" alt="User Photo">
+                            </a>
+                        </div>
                         <div class="user-details">
                             <h3>
-                                <a href="{{cms_route('cmsUsers.index')}}">CMS User</a>
+                                <a href="{{ cms_route('cmsUsers.show', [auth('cms')->id()]) }}">
+                                    {{ auth('cms')->user()->first_name }}
+                                </a>
                                 <!-- Available statuses: is-online, is-idle, is-busy and is-offline -->
                                 <span class="user-status is-online"></span>
                             </h3>
                             <div class="user-links">
-                                <a href="{{cms_route('cmsUsers.index')}}" class="btn btn-primary">CMS User</a>
+                                <a href="{{cms_route('cmsUsers.edit', [auth('cms')->id()])}}" class="btn btn-primary">Edit Profile</a>
                             </div>
                         </div>
                     </div>
@@ -119,11 +126,11 @@
                         </a>
                     </li>
                     <li class="dropdown user-profile">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{{ asset('assets/libs/images/user-2.png') }}" alt="User Photo" class="img-circle img-inline userpic-32"
+                        <a href="{{ cms_route('cmsUsers.edit', [auth('cms')->id()]) }}" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="{{ cms_route('cmsUsers.photo', [auth('cms')->id()]) }}" alt="User Photo" class="img-circle img-inline userpic-32"
                                  width="28">
                             <span>
-                                User
+                                {{ auth('cms')->user()->first_name }}
                                 <i class="fa fa-angle-down"></i>
                             </span>
                         </a>
@@ -132,6 +139,18 @@
                                 <a href="{{cms_route('cmsUsers.index')}}">
                                     <i class="{{icon_type('cmsUsers')}}"></i>
                                     CMS Users
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{cms_route('cmsUsers.edit', [auth('cms')->id()])}}">
+                                    <i class="fa fa-edit"></i>
+                                    Edit
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#help">
+                                    <i class="fa fa-info"></i>
+                                    Help
                                 </a>
                             </li>
                             <li class="last">

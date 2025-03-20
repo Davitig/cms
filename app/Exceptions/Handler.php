@@ -7,6 +7,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
@@ -91,7 +92,9 @@ class Handler extends ExceptionHandler
      */
     protected function getHttpExceptionView(HttpExceptionInterface $e): ?string
     {
-        $view = 'errors::' . (cms_activated() ? 'admin' : 'web') . '.' . $e->getStatusCode();
+        $dir = cms_activated() && Auth::guard('cms')->check() ? 'admin' : 'web';
+
+        $view = 'errors::' . $dir . '.' . $e->getStatusCode();
 
         if (view()->exists($view)) {
             return $view;
