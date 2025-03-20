@@ -27,7 +27,7 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li>
-                            <a href="{{web_url('/', [], language()->containsManyVisible())}}">{{trans('general.home')}}</a>
+                            <a href="{{web_url('/', [], language()->containsMany() ? language()->available() : null)}}">{{trans('general.home')}}</a>
                         </li>
                     </ul>
                     @include('web._partials.lang')

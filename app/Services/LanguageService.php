@@ -57,7 +57,7 @@ class LanguageService
     {
         try {
             return new static((new Language)->positionAsc()->get(), $path);
-        } catch (Exception $e) {
+        } catch (Exception) {
             return new static(new Collection, $path);
         }
     }
@@ -75,9 +75,9 @@ class LanguageService
             return [$language['language'] => $language];
         });
 
-        $this->main = current(($languages->filter(
+        $this->main = (current($languages->filter(
             fn ($item) => $item['main']
-        )->keys()->toArray()) ?: $languages->keys()->toArray()) ?: null;
+        )->keys()->toArray()) ?: null);
 
         $activeLanguage = current($segments = explode('/', $path));
 
@@ -88,14 +88,12 @@ class LanguageService
 
             array_shift($segments);
         } else {
-            $this->active = $this->main;
+            $this->active = $this->main ?: $languages->first()['language'] ?? null;
         }
 
-        foreach ($languages as $language => $model) {
-            $languages[$language]['path'] = trim(
-                $language . '/' . implode('/', $segments), '/'
-            );
-        }
+        $path = implode('/', $segments);
+
+        $languages->map(fn ($item, $language) => $item['path'] = $language . '/' . $path);
 
         $this->languages = $languages;
     }
@@ -118,6 +116,10 @@ class LanguageService
      */
     public function getMain(?string $attribute = null): ?string
     {
+        if (is_null($this->main())) {
+            return null;
+        }
+
         return $this->get($this->main(), $attribute);
     }
 
@@ -129,6 +131,16 @@ class LanguageService
     public function mainIsActive(): bool
     {
         return $this->main() == $this->active();
+    }
+
+    /**
+     * Determine if the main language is visible.
+     *
+     * @return bool
+     */
+    public function mainIsVisible(): bool
+    {
+        return $this->main() && $this->visibleExists($this->main());
     }
 
     /**
@@ -149,6 +161,10 @@ class LanguageService
      */
     public function getActive(?string $attribute = null): mixed
     {
+        if (is_null($this->active())) {
+            return null;
+        }
+
         return $this->get($this->active(), $attribute);
     }
 
@@ -164,6 +180,47 @@ class LanguageService
     }
 
     /**
+     * Determine if the active language is visible.
+     *
+     * @return bool
+     */
+    public function activeIsVisible(): bool
+    {
+        return $this->active() && $this->visibleExists($this->active());
+    }
+
+    /**
+     * Get the available language.
+     *
+     * @return string|null
+     */
+    public function available(): ?string
+    {
+        if ($this->activeIsVisible()) {
+            return $this->active();
+        }
+
+        if ($this->mainIsVisible()) {
+            return $this->main();
+        }
+
+        return $this->firstVisible();
+    }
+
+    /**
+     * Get the available language item.
+     *
+     * @param  string|null  $attribute
+     * @return string|null
+     */
+    public function getAvailable(?string $attribute = null): mixed
+    {
+        return $this->getActive($attribute)
+            ?: $this->getMain($attribute)
+                ?: $this->getFirstVisible($attribute);
+    }
+
+    /**
      * Determine if the language is selected in a request path.
      *
      * @return bool
@@ -171,6 +228,56 @@ class LanguageService
     public function isSelected(): bool
     {
         return $this->isSelected;
+    }
+
+    /**
+     * Get the first language.
+     *
+     * @return string|null
+     */
+    public function first(): ?string
+    {
+        return $this->getFirst()['language'] ?? null;
+    }
+
+    /**
+     * Get the first language item.
+     *
+     * @param  string|null  $attribute
+     * @return mixed
+     */
+    public function getFirst(?string $attribute = null): mixed
+    {
+        if (! is_null($attribute)) {
+            return $this->all()->first()[$attribute] ?? null;
+        }
+
+        return $this->all()->first();
+    }
+
+    /**
+     * Get the first visible language.
+     *
+     * @return string|null
+     */
+    public function firstVisible(): ?string
+    {
+        return $this->getFirstVisible()['language'] ?? null;
+    }
+
+    /**
+     * Get the first visible language item.
+     *
+     * @param  string|null  $attribute
+     * @return mixed
+     */
+    public function getFirstVisible(?string $attribute = null): mixed
+    {
+        if (! is_null($attribute)) {
+            return $this->allVisible()->first()[$attribute] ?? null;
+        }
+
+        return $this->allVisible()->first();
     }
 
     /**
@@ -212,6 +319,22 @@ class LanguageService
     }
 
     /**
+     * Get a visible language item from the collection by key.
+     *
+     * @param  string  $language
+     * @param  string|null  $attribute
+     * @return mixed
+     */
+    public function getVisible(string $language, ?string $attribute = null): mixed
+    {
+        if (! is_null($attribute)) {
+            return $this->allVisible()->get($language)[$attribute] ?? null;
+        }
+
+        return $this->allVisible()->get($language);
+    }
+
+    /**
      * Get a language item from the collection by key type.
      *
      * @param  bool|string  $language
@@ -226,7 +349,25 @@ class LanguageService
             return $this->getMain($attribute);
         }
 
-        return $this->all()->get($language, $attribute);
+        return $this->get($language, $attribute);
+    }
+
+    /**
+     * Get a visible language item from the collection by key type.
+     *
+     * @param  bool|string  $language
+     * @param  string|null  $attribute
+     * @return mixed
+     */
+    public function getVisibleBy(bool|string $language, ?string $attribute = null): mixed
+    {
+        if ($language === true) {
+            return $this->getActive($attribute);
+        } elseif ($language === false) {
+            return $this->getMain($attribute);
+        }
+
+        return $this->getVisible($language, $attribute);
     }
 
     /**

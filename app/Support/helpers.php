@@ -231,8 +231,7 @@ function language_prefix(?string $path = null, mixed $language = null): string
 
     if (is_string($language)) {
         $path = $language . '/' . $path;
-    } elseif ($language !== false
-        && ($language === true || language()->isSelected())
+    } elseif (($language === true || language()->isSelected())
         && count(language()->all()) > 1) {
         $path = language()->active() . '/' . $path;
     }

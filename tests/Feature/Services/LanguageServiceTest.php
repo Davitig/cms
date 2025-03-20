@@ -64,6 +64,7 @@ class LanguageServiceTest extends TestCase
 
         return new LanguageService(
             LanguageFactory::new()->languages($this->languages)
+                ->main(1, 'en')
                 ->when(! is_null($callback), $callback)
                 ->create(),
             $this->activeLanguage . '/foo/bar'

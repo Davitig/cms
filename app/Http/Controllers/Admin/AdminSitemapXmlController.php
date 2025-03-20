@@ -143,7 +143,6 @@ class AdminSitemapXmlController extends Controller
             ->get();
 
         foreach ($items as $item) {
-            // entity without details endpoint
             if (empty($item->slug)) {
                 continue;
             }
@@ -164,19 +163,14 @@ class AdminSitemapXmlController extends Controller
             return;
         }
 
-        $model = (new $this->extendedTypes[$page->type]);
+        $items = (new $this->extendedTypes[$page->type])->whereVisible()->orderDesc()->get();
 
-        if (! is_null($model)) {
-            $items = (new $model)->whereVisible()->orderDesc()->get();
-
-            foreach ($items as $item) {
-                // entity without a show endpoint
-                if (empty($item->slug)) {
-                    continue;
-                }
-
-                $this->data[] = $this->getUrls($page, $item);
+        foreach ($items as $item) {
+            if (empty($item->slug)) {
+                continue;
             }
+
+            $this->data[] = $this->getUrls($page, $item);
         }
     }
 

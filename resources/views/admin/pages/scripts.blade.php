@@ -17,6 +17,9 @@
 
             let typeId = $('.panel form .type-id');
             let typeIdSelect = $('select', typeId);
+            let typeIdText = '<div class="type-id-msg">List is empty. Add from <a href="{{ cms_route('collections.index') }}"'
+                + ' class="text-info" target="_blank">collections</a></div>';
+            let typeIdElement = typeId.find('.input-group').parent();
 
             let template = $('.panel form .template');
             let templateSelect = $('select', template);
@@ -55,6 +58,12 @@
                         });
 
                         typeIdSelect.select2('val', '');
+
+                        typeIdElement.find('.type-id-msg').remove();
+
+                        if (Array.isArray(data)) {
+                            typeIdElement.append(typeIdText);
+                        }
                     }, 'json').fail(function (xhr) {
                         alert(xhr.responseText);
                     });

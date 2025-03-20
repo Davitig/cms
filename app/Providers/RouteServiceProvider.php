@@ -56,7 +56,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function loadWebRoutes(Router $router): void
     {
-        $router->group([], base_path('routes/web.php'));
+        $router->middleware('web.lang')
+            ->group(base_path('routes/web.php'));
 
         if (language()->containsMany()) {
             $router->middleware('web.lang')

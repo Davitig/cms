@@ -49,7 +49,7 @@
                 </a>
             </li>
         @endif
-        @if (in_array($foreignModel->type, cms_pages('extended')))
+        @if (array_key_exists($foreignModel->type, cms_pages('extended')))
             <li>
                 <a href="{{cms_route($foreignModel->type . '.index')}}">
                     <span class="visible-xs"><i class="{{$iconType = icon_type($foreignModel->type)}}"></i></span>

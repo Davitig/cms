@@ -65,12 +65,14 @@ trait PositionableTrait
      */
     private function movePosition(array $data, array $params = []): bool|array
     {
-        $data = array_filter(
-            $data, fn ($value) => ! empty($value['pos'] && ! empty($value['id']))
-        );
-
-        if (empty($data) || ! isset($params['move']) || ! isset($params['orderBy'])) {
+        if (! isset($params['move']) || ! isset($params['orderBy'])) {
             return $data;
+        }
+
+        if (empty($data = array_filter(
+            $data, fn ($value) => ! empty($value['pos']) && ! empty($value['id'])
+        ))) {
+            return false;
         }
 
         $target = array_shift($data);

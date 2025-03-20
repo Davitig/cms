@@ -18,9 +18,7 @@ class WebValidateLanguage
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $language = $request->route()->parameter('lang');
-
-        if (language()->visibleIsEmpty() || ! language()->visibleExists($language)) {
+        if (! language()->activeIsVisible()) {
             throw new ServiceUnavailableHttpException;
         }
 

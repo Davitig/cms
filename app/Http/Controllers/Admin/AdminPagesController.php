@@ -112,8 +112,10 @@ class AdminPagesController extends Controller
             ->updateOrCreate(apply_languages(), $input);
 
         if ($request->expectsJson()) {
-            if (array_key_exists($type = $request->get('type'), (array) cms_pages('collections'))
-                || in_array($type, (array) cms_pages('extended'))) {
+            $type = $request->get('type');
+
+            if (array_key_exists($type, (array) cms_pages('collections'))
+                || array_key_exists($type, (array) cms_pages('extended'))) {
                 $input['typeHtml'] = view(
                     'admin.pages._extended_type', ['input' => $input]
                 )->render();
