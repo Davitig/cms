@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Providers\Admin\EloquentCmsUserProvider;
+use App\Auth\EloquentCmsUserProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 

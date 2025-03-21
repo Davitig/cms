@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers\Admin;
+namespace App\Auth;
 
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;

@@ -37,7 +37,7 @@
                         <div class="user-img">
                             <div id="photo-upload-btn" class="droppable-area dz-clickable mrg0 border-0">
                                 <span class="photo-upload-text{{ $photoExists ? ' hidden' : '' }}">Upload Photo</span>
-                                <img src="{{$photoExists ? cms_route('cmsUsers.photo', [$current->id] + (request(['t'])) + (session('alert') ? ['t' => time()] : [])) : '#'}}"
+                                <img src="{{$photoExists ? cms_route('cmsUsers.photo', [$current->id]) : '#'}}"
                                      width="150" height="150" id="user-photo" class="img-circle vat{{ $photoExists ? '' : ' hidden' }}" alt="Photo">
                             </div>
                             {{ html()->file('photo')->id('photo-input')->class('hidden') }}

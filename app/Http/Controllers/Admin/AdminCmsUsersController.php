@@ -225,7 +225,7 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
         }
 
         try {
-            return response()->file($path);
+            return response()->file($path, ['Cache-Control' => 'max-age=86400']); // 1 day
         } catch (FileNotFoundException) {
             return null;
         }
