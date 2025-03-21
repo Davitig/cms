@@ -21,10 +21,7 @@
                 + ' class="text-info" target="_blank">collections</a></div>';
             let typeIdElement = typeId.find('.input-group').parent();
 
-            let template = $('.panel form .template');
-            let templateSelect = $('select', template);
-
-            let typeValue, templateValue;
+            let typeValue;
 
             typeSelect.on('change', function() {
                 // Get the collection types list
@@ -33,12 +30,6 @@
                 }
 
                 typeValue = this.value;
-
-                if (templateValue !== this.value) {
-                    getTemplates(this.value)
-                }
-
-                templateValue = this.value;
             });
 
             // Get the collection types list
@@ -68,31 +59,6 @@
                         alert(xhr.responseText);
                     });
                 }
-            }
-
-            // Get the template list
-            function getTemplates(value) {
-                if (["{!!implode('","', array_keys((array) cms_pages('templates')))!!}"].indexOf(value) >= 0) {
-                    $.get('{{cms_route('pages.templates')}}', {"type": value}, function (data) {
-                        templateSelect.html('<option value=""></option>');
-
-                        if (!$.isEmptyObject(data)) {
-                            template.removeClass('hidden');
-
-                            $.each(data, function (key, value) {
-                                templateSelect.append('<option value="' + key + '">' + value + '</option>');
-                            });
-                        } else {
-                            template.addClass('hidden');
-                        }
-                    }, 'json').fail(function (xhr) {
-                        alert(xhr.responseText);
-                    });
-                } else {
-                    template.addClass('hidden');
-                }
-
-                templateSelect.select2('val', '');
             }
         });
     </script>

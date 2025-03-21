@@ -20,7 +20,6 @@ return new class extends Migration
             $table->unsignedBigInteger('parent_id')->default(0);
             $table->string('type', 64)->default('page');
             $table->unsignedBigInteger('type_id')->nullable();
-            $table->string('template', 64)->nullable();
             $table->boolean('collapse')->default(0);
             $table->string('image')->nullable();
             $table->timestamps();

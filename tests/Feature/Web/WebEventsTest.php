@@ -2,10 +2,11 @@
 
 namespace Tests\Feature\Web;
 
-use Database\Factories\CollectionFactory;
 use Database\Factories\Event\EventFactory;
 use Database\Factories\Event\EventLanguageFactory;
+use Database\Factories\CollectionFactory;
 use Database\Factories\MenuFactory;
+use Symfony\Component\HttpFoundation\Request;
 use Tests\Feature\DynamicRoutesTrait;
 use Tests\TestCase;
 
@@ -38,7 +39,7 @@ class WebEventsTest extends TestCase
             null, fn ($factory) => $factory->type('events')->typeId($collection->id)
         );
 
-        $data = $this->getDynamicPageRouteActions($page->slug);
+        $route = $this->getDynamicPageRouteActions($page->slug);
 
         $response = $this->get($page->slug);
 
@@ -46,14 +47,90 @@ class WebEventsTest extends TestCase
         $menu->delete();
         $collection->delete();
 
-        $this->assertSame($data, [
+        $this->assertSame($this->getActionsFromRoute($route), [
             'controller' => 'WebEventsController', 'method' => 'index'
         ]);
 
         $response->assertOk();
     }
 
-    public function test_sub_pages_event_index()
+    public function test_event_index_custom_request_method()
+    {
+        $collection = CollectionFactory::new()->eventType()->create();
+
+        [$menu, $page] = $this->createPages(
+            null, fn ($factory) => $factory->type('events')->typeId($collection->id)
+        );
+
+        $this->app['config']->set('cms.type_request_methods', [
+            Request::METHOD_POST => ['events@index' => 'testPostMethod']
+        ]);
+
+        $route = $this->getDynamicPageRouteActions($page->slug, Request::METHOD_POST);
+
+        $response = $this->get($page->slug);
+
+        $page->delete();
+        $menu->delete();
+        $collection->delete();
+
+        $this->assertSame($this->getActionsFromRoute($route), [
+            'controller' => 'WebEventsController', 'method' => 'testPostMethod'
+        ]);
+
+        $response->assertOk();
+    }
+
+    public function test_event_index_tabs()
+    {
+        $collection = CollectionFactory::new()->eventType()->create();
+
+        [$menu, $page] = $this->createPages(
+            null, fn ($factory) => $factory->type('events')->typeId($collection->id)
+        );
+
+        $this->app['config']->set('cms.tabs.GET.events@index', [
+            'test-uri' => 'testTabMethod'
+        ]);
+
+        $route = $this->getDynamicPageRouteActions($page->slug . '/test-uri');
+
+        $page->delete();
+        $menu->delete();
+        $collection->delete();
+
+        $this->assertSame($this->getActionsFromRoute($route), [
+            'controller' => 'WebEventsController', 'method' => 'testTabMethod'
+        ]);
+    }
+
+    public function test_event_index_tabs_with_parameter()
+    {
+        $collection = CollectionFactory::new()->eventType()->create();
+
+        [$menu, $page] = $this->createPages(
+            null, fn ($factory) => $factory->type('events')->typeId($collection->id)
+        );
+
+        $this->app['config']->set('cms.tabs.POST.events@index', [
+            'test-uri/{id}' => 'testTabPostMethodWithParameter'
+        ]);
+
+        $route = $this->getDynamicPageRouteActions(
+            $page->slug . '/test-uri/' . rand(5, 10), Request::METHOD_POST
+        );
+
+        $page->delete();
+        $menu->delete();
+        $collection->delete();
+
+        $this->assertSame($this->getActionsFromRoute($route), [
+            'controller' => 'WebEventsController',
+            'method' => 'testTabPostMethodWithParameter'
+        ]);
+    }
+
+    public function test_event_index_sub_pages()
     {
         $collection = CollectionFactory::new()->eventType()->create();
 
@@ -63,7 +140,7 @@ class WebEventsTest extends TestCase
             fn ($factory) => $factory->type('events')->typeId($collection->id)
         );
 
-        $data = $this->getDynamicPageRouteActions(
+        $route = $this->getDynamicPageRouteActions(
             $path = implode('/', array_map(fn ($page) => $page->slug, $pages))
         );
 
@@ -73,7 +150,7 @@ class WebEventsTest extends TestCase
         $menu->delete();
         $collection->delete();
 
-        $this->assertSame($data, [
+        $this->assertSame($this->getActionsFromRoute($route), [
             'controller' => 'WebEventsController', 'method' => 'index'
         ]);
 
@@ -88,7 +165,7 @@ class WebEventsTest extends TestCase
             null, fn ($factory) => $factory->type('events')->typeId($collection->id)
         );
 
-        $data = $this->getDynamicPageRouteActions($path = $page->slug . '/' . $event->slug);
+        $route = $this->getDynamicPageRouteActions($path = $page->slug . '/' . $event->slug);
 
         $response = $this->get($path);
 
@@ -97,14 +174,98 @@ class WebEventsTest extends TestCase
         $event->delete();
         $collection->delete();
 
-        $this->assertSame($data, [
+        $this->assertSame($this->getActionsFromRoute($route), [
             'controller' => 'WebEventsController', 'method' => 'show'
         ]);
 
         $response->assertOk();
     }
 
-    public function test_sub_pages_event_show()
+    public function test_event_show_custom_request_method()
+    {
+        [$collection, $event] = $this->createEvent();
+
+        [$menu, $page] = $this->createPages(
+            null, fn ($factory) => $factory->type('events')->typeId($collection->id)
+        );
+
+        $this->app['config']->set('cms.type_request_methods', [
+            Request::METHOD_PUT => ['events@show' => 'testPutMethod']
+        ]);
+
+        $route = $this->getDynamicPageRouteActions(
+            $path = $page->slug . '/' . $event->slug, Request::METHOD_PUT
+        );
+
+        $response = $this->get($path);
+
+        $page->delete();
+        $menu->delete();
+        $event->delete();
+        $collection->delete();
+
+        $this->assertSame($this->getActionsFromRoute($route), [
+            'controller' => 'WebEventsController', 'method' => 'testPutMethod'
+        ]);
+
+        $response->assertOk();
+    }
+
+    public function test_event_show_tabs()
+    {
+        [$collection, $event] = $this->createEvent();
+
+        [$menu, $page] = $this->createPages(
+            null, fn ($factory) => $factory->type('events')->typeId($collection->id)
+        );
+
+        $this->app['config']->set('cms.tabs.PUT.events@show', [
+            'test-uri' => 'testTabPutMethod'
+        ]);
+
+        $route = $this->getDynamicPageRouteActions(
+            $page->slug . '/' . $event->slug . '/test-uri', Request::METHOD_PUT
+        );
+
+        $page->delete();
+        $menu->delete();
+        $event->delete();
+        $collection->delete();
+
+        $this->assertSame($this->getActionsFromRoute($route), [
+            'controller' => 'WebEventsController', 'method' => 'testTabPutMethod'
+        ]);
+    }
+
+    public function test_event_show_tabs_with_parameter()
+    {
+        [$collection, $event] = $this->createEvent();
+
+        [$menu, $page] = $this->createPages(
+            null, fn ($factory) => $factory->type('events')->typeId($collection->id)
+        );
+
+        $this->app['config']->set('cms.tabs.DELETE.events@show', [
+            'test-uri/{id}' => 'testTabDeleteMethodWithParameter'
+        ]);
+
+        $route = $this->getDynamicPageRouteActions(
+            $page->slug . '/' . $event->slug . '/test-uri/' . rand(5, 10),
+            Request::METHOD_DELETE
+        );
+
+        $page->delete();
+        $menu->delete();
+        $event->delete();
+        $collection->delete();
+
+        $this->assertSame($this->getActionsFromRoute($route), [
+            'controller' => 'WebEventsController',
+            'method' => 'testTabDeleteMethodWithParameter'
+        ]);
+    }
+
+    public function test_event_show_sub_pages()
     {
         [$collection, $event] = $this->createEvent();
 
@@ -114,9 +275,9 @@ class WebEventsTest extends TestCase
             fn ($factory) => $factory->type('events')->typeId($collection->id)
         );
 
-        $data = $this->getDynamicPageRouteActions(
+        $route = $this->getDynamicPageRouteActions(
             $path = implode('/', array_map(fn ($page) => $page->slug, $pages))
-            . '/' . $event->slug
+                . '/' . $event->slug
         );
 
         $response = $this->get($path);
@@ -126,7 +287,7 @@ class WebEventsTest extends TestCase
         $event->delete();
         $collection->delete();
 
-        $this->assertSame($data, [
+        $this->assertSame($this->getActionsFromRoute($route), [
             'controller' => 'WebEventsController', 'method' => 'show'
         ]);
 

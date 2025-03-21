@@ -221,15 +221,6 @@ class AdminPagesResourceTest extends TestAdmin
         $this->assertArrayHasKey($collection->id, $response->json());
     }
 
-    public function test_admin_pages_resource_get_templates()
-    {
-        $response = $this->actingAs(
-            $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('pages.templates'));
-
-        $response->assertOk()->assertJsonIsArray();
-    }
-
     public function test_admin_pages_resource_collapse()
     {
         [$menu, $page] = $this->createPages();

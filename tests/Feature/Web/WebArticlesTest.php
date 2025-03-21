@@ -6,6 +6,7 @@ use Database\Factories\Article\ArticleFactory;
 use Database\Factories\Article\ArticleLanguageFactory;
 use Database\Factories\CollectionFactory;
 use Database\Factories\MenuFactory;
+use Symfony\Component\HttpFoundation\Request;
 use Tests\Feature\DynamicRoutesTrait;
 use Tests\TestCase;
 
@@ -38,7 +39,7 @@ class WebArticlesTest extends TestCase
             null, fn ($factory) => $factory->type('articles')->typeId($collection->id)
         );
 
-        $data = $this->getDynamicPageRouteActions($page->slug);
+        $route = $this->getDynamicPageRouteActions($page->slug);
 
         $response = $this->get($page->slug);
 
@@ -46,14 +47,90 @@ class WebArticlesTest extends TestCase
         $menu->delete();
         $collection->delete();
 
-        $this->assertSame($data, [
+        $this->assertSame($this->getActionsFromRoute($route), [
             'controller' => 'WebArticlesController', 'method' => 'index'
         ]);
 
         $response->assertOk();
     }
 
-    public function test_sub_pages_article_index()
+    public function test_article_index_custom_request_method()
+    {
+        $collection = CollectionFactory::new()->articleType()->create();
+
+        [$menu, $page] = $this->createPages(
+            null, fn ($factory) => $factory->type('articles')->typeId($collection->id)
+        );
+
+        $this->app['config']->set('cms.type_request_methods', [
+            Request::METHOD_POST => ['articles@index' => 'testPostMethod']
+        ]);
+
+        $route = $this->getDynamicPageRouteActions($page->slug, Request::METHOD_POST);
+
+        $response = $this->get($page->slug);
+
+        $page->delete();
+        $menu->delete();
+        $collection->delete();
+
+        $this->assertSame($this->getActionsFromRoute($route), [
+            'controller' => 'WebArticlesController', 'method' => 'testPostMethod'
+        ]);
+
+        $response->assertOk();
+    }
+
+    public function test_article_index_tabs()
+    {
+        $collection = CollectionFactory::new()->articleType()->create();
+
+        [$menu, $page] = $this->createPages(
+            null, fn ($factory) => $factory->type('articles')->typeId($collection->id)
+        );
+
+        $this->app['config']->set('cms.tabs.GET.articles@index', [
+            'test-uri' => 'testTabMethod'
+        ]);
+
+        $route = $this->getDynamicPageRouteActions($page->slug . '/test-uri');
+
+        $page->delete();
+        $menu->delete();
+        $collection->delete();
+
+        $this->assertSame($this->getActionsFromRoute($route), [
+            'controller' => 'WebArticlesController', 'method' => 'testTabMethod'
+        ]);
+    }
+
+    public function test_article_index_tabs_with_parameter()
+    {
+        $collection = CollectionFactory::new()->articleType()->create();
+
+        [$menu, $page] = $this->createPages(
+            null, fn ($factory) => $factory->type('articles')->typeId($collection->id)
+        );
+
+        $this->app['config']->set('cms.tabs.POST.articles@index', [
+            'test-uri/{id}' => 'testTabPostMethodWithParameter'
+        ]);
+
+        $route = $this->getDynamicPageRouteActions(
+            $page->slug . '/test-uri/' . rand(5, 10), Request::METHOD_POST
+        );
+
+        $page->delete();
+        $menu->delete();
+        $collection->delete();
+
+        $this->assertSame($this->getActionsFromRoute($route), [
+            'controller' => 'WebArticlesController',
+            'method' => 'testTabPostMethodWithParameter'
+        ]);
+    }
+
+    public function test_article_index_sub_pages()
     {
         $collection = CollectionFactory::new()->articleType()->create();
 
@@ -63,7 +140,7 @@ class WebArticlesTest extends TestCase
             fn ($factory) => $factory->type('articles')->typeId($collection->id)
         );
 
-        $data = $this->getDynamicPageRouteActions(
+        $route = $this->getDynamicPageRouteActions(
             $path = implode('/', array_map(fn ($page) => $page->slug, $pages))
         );
 
@@ -73,7 +150,7 @@ class WebArticlesTest extends TestCase
         $menu->delete();
         $collection->delete();
 
-        $this->assertSame($data, [
+        $this->assertSame($this->getActionsFromRoute($route), [
             'controller' => 'WebArticlesController', 'method' => 'index'
         ]);
 
@@ -88,7 +165,7 @@ class WebArticlesTest extends TestCase
             null, fn ($factory) => $factory->type('articles')->typeId($collection->id)
         );
 
-        $data = $this->getDynamicPageRouteActions($path = $page->slug . '/' . $article->slug);
+        $route = $this->getDynamicPageRouteActions($path = $page->slug . '/' . $article->slug);
 
         $response = $this->get($path);
 
@@ -97,14 +174,98 @@ class WebArticlesTest extends TestCase
         $article->delete();
         $collection->delete();
 
-        $this->assertSame($data, [
+        $this->assertSame($this->getActionsFromRoute($route), [
             'controller' => 'WebArticlesController', 'method' => 'show'
         ]);
 
         $response->assertOk();
     }
 
-    public function test_sub_pages_article_show()
+    public function test_article_show_custom_request_method()
+    {
+        [$collection, $article] = $this->createArticle();
+
+        [$menu, $page] = $this->createPages(
+            null, fn ($factory) => $factory->type('articles')->typeId($collection->id)
+        );
+
+        $this->app['config']->set('cms.type_request_methods', [
+            Request::METHOD_PUT => ['articles@show' => 'testPutMethod']
+        ]);
+
+        $route = $this->getDynamicPageRouteActions(
+            $path = $page->slug . '/' . $article->slug, Request::METHOD_PUT
+        );
+
+        $response = $this->get($path);
+
+        $page->delete();
+        $menu->delete();
+        $article->delete();
+        $collection->delete();
+
+        $this->assertSame($this->getActionsFromRoute($route), [
+            'controller' => 'WebArticlesController', 'method' => 'testPutMethod'
+        ]);
+
+        $response->assertOk();
+    }
+
+    public function test_article_show_tabs()
+    {
+        [$collection, $article] = $this->createArticle();
+
+        [$menu, $page] = $this->createPages(
+            null, fn ($factory) => $factory->type('articles')->typeId($collection->id)
+        );
+
+        $this->app['config']->set('cms.tabs.PUT.articles@show', [
+            'test-uri' => 'testTabPutMethod'
+        ]);
+
+        $route = $this->getDynamicPageRouteActions(
+            $page->slug . '/' . $article->slug . '/test-uri', Request::METHOD_PUT
+        );
+
+        $page->delete();
+        $menu->delete();
+        $article->delete();
+        $collection->delete();
+
+        $this->assertSame($this->getActionsFromRoute($route), [
+            'controller' => 'WebArticlesController', 'method' => 'testTabPutMethod'
+        ]);
+    }
+
+    public function test_article_show_tabs_with_parameter()
+    {
+        [$collection, $article] = $this->createArticle();
+
+        [$menu, $page] = $this->createPages(
+            null, fn ($factory) => $factory->type('articles')->typeId($collection->id)
+        );
+
+        $this->app['config']->set('cms.tabs.DELETE.articles@show', [
+            'test-uri/{id}' => 'testTabDeleteMethodWithParameter'
+        ]);
+
+        $route = $this->getDynamicPageRouteActions(
+            $page->slug . '/' . $article->slug . '/test-uri/' . rand(5, 10),
+            Request::METHOD_DELETE
+        );
+
+        $page->delete();
+        $menu->delete();
+        $article->delete();
+        $collection->delete();
+
+        $this->assertSame($this->getActionsFromRoute($route), [
+            'controller' => 'WebArticlesController',
+            'method' => 'testTabDeleteMethodWithParameter'
+        ]);
+    }
+
+    public function test_article_show_sub_pages()
     {
         [$collection, $article] = $this->createArticle();
 
@@ -114,7 +275,7 @@ class WebArticlesTest extends TestCase
             fn ($factory) => $factory->type('articles')->typeId($collection->id)
         );
 
-        $data = $this->getDynamicPageRouteActions(
+        $route = $this->getDynamicPageRouteActions(
             $path = implode('/', array_map(fn ($page) => $page->slug, $pages))
             . '/' . $article->slug
         );
@@ -126,7 +287,7 @@ class WebArticlesTest extends TestCase
         $article->delete();
         $collection->delete();
 
-        $this->assertSame($data, [
+        $this->assertSame($this->getActionsFromRoute($route), [
             'controller' => 'WebArticlesController', 'method' => 'show'
         ]);
 

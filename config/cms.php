@@ -43,18 +43,13 @@ return [
             'faq' => 'FAQ',
             'galleries' => 'Galleries'
         ],
-        'templates' => [
-            // 'page' => [
-            //     'about' => 'About'
-            // ]
-        ],
-        'extended' => [],
         'collections' => [
             'articles' => App\Models\Article\Article::class,
             'events' => App\Models\Event\Event::class,
             'faq' => App\Models\Faq::class,
             'galleries' => App\Models\Gallery\Gallery::class
-        ]
+        ],
+        'extended' => [],
     ],
 
     /*
@@ -136,20 +131,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Request Methods For Types
+    | Type Request Methods
     |--------------------------------------------------------------------------
     |
-    | This array used to specify request methods with types, that will allow
-    | to send a specified requests.
+    | This array used to specify request methods, that will allow to send a
+    | specified requests on the selected type.
     |
-    | [request methods] => [type => controller method]
+    | [request method] => [type@method => newMethod]
     |
-    | Note: Request method must be uppercase.
+    | Note: Default type method [index] will be applied if not specified.
+    | Note: Request method names must be uppercase.
     */
 
-    'type_methods' => [
+    'type_request_methods' => [
         'POST' => [
-            'feedback' => 'send'
+            'feedback@index' => 'send'
         ]
     ],
 
@@ -158,10 +154,12 @@ return [
     | Tabs
     |--------------------------------------------------------------------------
     |
-    | This array used to specify types, that will allow adding tab like URIs.
+    | This array used to specify types, that will allow additional
+    | tab like URIs.
     |
-    | [request methods] => [types@method] => [URI => controller method]
+    | [request methods] => [type@method] => [URI => newMethod]
     |
+    | Note: Default type method [index] will be applied if not specified.
     | Note: Request method must be uppercase.
     */
 

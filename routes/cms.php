@@ -77,7 +77,6 @@ Route::middleware('cms.auth')->group(function ($router) {
             ->name('pages.getCollectionTypes');
         $router->put('pages/{id}/visibility', 'visibility')->name('pages.visibility');
         $router->put('pages/position', 'updatePosition')->name('pages.updatePosition');
-        $router->get('pages/templates', 'getTemplates')->name('pages.templates');
         $router->put('pages/transfer/{menu}', 'transfer')->name('pages.transfer');
         $router->put('pages/collapse', 'collapse')->name('pages.collapse');
         $router->resource('menus.pages', AdminPagesController::class)

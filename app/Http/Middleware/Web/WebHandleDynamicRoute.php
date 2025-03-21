@@ -50,7 +50,7 @@ class WebHandleDynamicRoute
      *
      * @var array
      */
-    protected array $typeMethods = [];
+    protected array $typeRequestMethods = [];
 
     /**
      * The current request method.
@@ -119,7 +119,7 @@ class WebHandleDynamicRoute
             $this->segmentsCount--;
         }
 
-        $this->typeMethods = (array) $this->config->get('cms.type_methods');
+        $this->typeRequestMethods = (array) $this->config->get('cms.type_request_methods');
 
         $this->tabs = (array) $this->config->get('cms.tabs');
 
@@ -163,7 +163,7 @@ class WebHandleDynamicRoute
 
         for ($i = 0; $i < $this->segmentsCount; $i++) {
             $page = Page::publicDynamicRoute($this->segments[$i], $parentId)
-                ->addQualifiedSelect('id', 'slug', 'type', 'template')
+                ->addQualifiedSelect('id', 'slug', 'type')
                 ->first();
 
             if (is_null($page)) {
@@ -210,9 +210,7 @@ class WebHandleDynamicRoute
             return false;
         }
 
-        $this->setRoute(
-            $page->type, $page->template ?: 'index', array_merge([$pages], $tabs)
-        );
+        $this->setRoute($page->type, 'index', array_merge([$pages], $tabs));
 
         return true;
     }
@@ -265,9 +263,11 @@ class WebHandleDynamicRoute
 
         $segmentsLeft = $this->segmentsCount - count($pages);
 
-        $model = Collection::publicDynamicRoute(
+        if (is_null($model = Collection::publicDynamicRoute(
             $page->type_id, $page->type
-        )->addQualifiedSelect('*')->firstOrFail();
+        )->addQualifiedSelect('*')->first())) {
+            return false;
+        }
 
         $tabs = [];
 
@@ -318,7 +318,11 @@ class WebHandleDynamicRoute
 
         $parameters[] = $model = Gallery::publicDynamicRoute(
             $this->segments[$this->segmentsCount - $segmentsLeft], $collectionModel->id
-        )->addQualifiedSelect('*')->firstOrFail();
+        )->addQualifiedSelect('*')->first();
+
+        if (is_null($model)) {
+            return false;
+        }
 
         if ($segmentsLeft > 1
             && ! $tabs = $this->bindTab($model->type, 'index', $segmentsLeft - 1)) {
@@ -346,14 +350,15 @@ class WebHandleDynamicRoute
             return [];
         }
 
-        $type .= '@' . $typeMethod;
-
         foreach ($this->tabs[$this->requestMethod] as $key => $value) {
             if (! str_contains($key, '@')) {
                 $this->tabs[$this->requestMethod][$key . '@index'] = $value;
+
                 unset($this->tabs[$this->requestMethod][$key]);
             }
         }
+
+        $type .= '@' . $typeMethod;
 
         if (! array_key_exists($type, $this->tabs[$this->requestMethod])) {
             return [];
@@ -402,6 +407,33 @@ class WebHandleDynamicRoute
     }
 
     /**
+     * Get the type request method action.
+     *
+     * @param  string  $type
+     * @param  string  $actionMethod
+     * @return string|null
+     */
+    protected function getTypeRequestMethodAction(string $type, string $actionMethod): ?string
+    {
+        if (! array_key_exists($this->requestMethod, $this->typeRequestMethods)
+            || empty($types = $this->typeRequestMethods[$this->requestMethod])) {
+            return null;
+        }
+
+        foreach ($types as $action => $typeRequestMethod) {
+            if (! str_contains($action, '@')) {
+                $action .= '@index';
+            }
+
+            if ($action == $type . '@' . $actionMethod) {
+                return $typeRequestMethod;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Set the current route.
      *
      * @param  string  $type
@@ -412,9 +444,10 @@ class WebHandleDynamicRoute
     protected function setRoute(string $type, string $actionMethod, array $parameters): void
     {
         if (is_null($this->tabActionMethod)) {
-            if (array_key_exists($this->requestMethod, $this->typeMethods)
-                && array_key_exists($type, $types = $this->typeMethods[$this->requestMethod])) {
-                $actionMethod = $types[$type];
+            if (! is_null($typeRequestMethodAction = $this->getTypeRequestMethodAction(
+                $type, $actionMethod
+            ))) {
+                $actionMethod = $typeRequestMethodAction;
             } elseif ($this->requestMethod != SymfonyRequest::METHOD_GET
                 && $this->requestMethod != SymfonyRequest::METHOD_HEAD) {
                 throw new MethodNotAllowedHttpException([

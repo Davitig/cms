@@ -167,16 +167,6 @@ class AdminPagesController extends Controller
     }
 
     /**
-     * Get the templates.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getTemplates()
-    {
-        return response()->json(cms_pages('templates.' . $this->request->get('type')));
-    }
-
-    /**
      * Collapse specified page.
      *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response

@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tests\Feature\DynamicRoutesTrait;
 use Tests\TestCase;
 
-class WebGalleriesTest extends TestCase
+class WebPhotosTest extends TestCase
 {
     use DynamicRoutesTrait;
 
@@ -34,108 +34,91 @@ class WebGalleriesTest extends TestCase
         return [$collection, $gallery];
     }
 
-    public function test_galleries_index()
+    public function test_photos_show()
     {
-        $collection = CollectionFactory::new()->galleryType()->create();
+        [$collection, $gallery] = $this->createGallery('photos');
 
         [$menu, $page] = $this->createPages(
             null, fn ($factory) => $factory->type('galleries')->typeId($collection->id)
         );
 
-        $route = $this->getDynamicPageRouteActions($page->slug);
+        $route = $this->getDynamicPageRouteActions($path = $page->slug . '/' . $gallery->slug);
 
-        $response = $this->get($page->slug);
+        $response = $this->get($path);
 
         $page->delete();
         $menu->delete();
+        $gallery->delete();
         $collection->delete();
 
         $this->assertSame($this->getActionsFromRoute($route), [
-            'controller' => 'WebGalleriesController', 'method' => 'index'
+            'controller' => 'WebPhotosController', 'method' => 'index'
         ]);
 
         $response->assertOk();
     }
 
-    public function test_galleries_index_custom_request_method()
+    public function test_photos_show_custom_request_method()
     {
-        $collection = CollectionFactory::new()->galleryType()->create();
+        [$collection, $gallery] = $this->createGallery('photos');
 
         [$menu, $page] = $this->createPages(
             null, fn ($factory) => $factory->type('galleries')->typeId($collection->id)
         );
 
         $this->app['config']->set('cms.type_request_methods', [
-            Request::METHOD_POST => ['galleries@index' => 'testPostMethod']
+            Request::METHOD_PUT => ['photos@index' => 'testPutMethod']
         ]);
 
-        $route = $this->getDynamicPageRouteActions($page->slug, Request::METHOD_POST);
+        $route = $this->getDynamicPageRouteActions(
+            $path = $page->slug . '/' . $gallery->slug, Request::METHOD_PUT
+        );
 
-        $response = $this->get($page->slug);
+        $response = $this->get($path);
 
         $page->delete();
         $menu->delete();
+        $gallery->delete();
         $collection->delete();
 
         $this->assertSame($this->getActionsFromRoute($route), [
-            'controller' => 'WebGalleriesController', 'method' => 'testPostMethod'
+            'controller' => 'WebPhotosController', 'method' => 'testPutMethod'
         ]);
 
         $response->assertOk();
     }
 
-    public function test_galleries_index_tabs()
+    public function test_photos_show_tabs_with_parameter()
     {
-        $collection = CollectionFactory::new()->galleryType()->create();
+        [$collection, $event] = $this->createGallery('photos');
 
         [$menu, $page] = $this->createPages(
             null, fn ($factory) => $factory->type('galleries')->typeId($collection->id)
         );
 
-        $this->app['config']->set('cms.tabs.GET.galleries@index', [
-            'test-uri' => 'testTabMethod'
-        ]);
-
-        $route = $this->getDynamicPageRouteActions($page->slug . '/test-uri');
-
-        $page->delete();
-        $menu->delete();
-        $collection->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
-            'controller' => 'WebGalleriesController', 'method' => 'testTabMethod'
-        ]);
-    }
-
-    public function test_galleries_index_tabs_with_parameter()
-    {
-        $collection = CollectionFactory::new()->galleryType()->create();
-
-        [$menu, $page] = $this->createPages(
-            null, fn ($factory) => $factory->type('galleries')->typeId($collection->id)
-        );
-
-        $this->app['config']->set('cms.tabs.PUT.galleries@index', [
-            'test-uri/{id}' => 'testTabPutMethodWithParameter'
+        $this->app['config']->set('cms.tabs.POST.photos@index', [
+            'test-uri/{id}' => 'testTabPostMethodWithParameter'
         ]);
 
         $route = $this->getDynamicPageRouteActions(
-            $page->slug . '/test-uri/' . rand(5, 10), Request::METHOD_PUT
+            $page->slug . '/' . $event->slug . '/test-uri/' . rand(5, 10),
+            Request::METHOD_POST
         );
 
         $page->delete();
         $menu->delete();
+        $event->delete();
         $collection->delete();
 
         $this->assertSame($this->getActionsFromRoute($route), [
-            'controller' => 'WebGalleriesController',
-            'method' => 'testTabPutMethodWithParameter'
+            'controller' => 'WebPhotosController',
+            'method' => 'testTabPostMethodWithParameter'
         ]);
     }
 
-    public function test_galleries_index_sub_pages()
+    public function test_photos_show_sub_pages()
     {
-        $collection = CollectionFactory::new()->galleryType()->create();
+        [$collection, $gallery] = $this->createGallery('photos');
 
         $menu = MenuFactory::new()->create();
         $pages = $this->createSubPages(
@@ -145,16 +128,18 @@ class WebGalleriesTest extends TestCase
 
         $route = $this->getDynamicPageRouteActions(
             $path = implode('/', array_map(fn ($page) => $page->slug, $pages))
+                . '/' . $gallery->slug
         );
 
         $response = $this->get($path);
 
         array_map(fn ($page) => $page->delete(), $pages);
         $menu->delete();
+        $gallery->delete();
         $collection->delete();
 
         $this->assertSame($this->getActionsFromRoute($route), [
-            'controller' => 'WebGalleriesController', 'method' => 'index'
+            'controller' => 'WebPhotosController', 'method' => 'index'
         ]);
 
         $response->assertOk();

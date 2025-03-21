@@ -11,6 +11,7 @@ use Database\Factories\Page\PageLanguageFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 trait DynamicRoutesTrait
 {
@@ -80,28 +81,44 @@ trait DynamicRoutesTrait
      * Get the dynamic page route actions.
      *
      * @param  string  $path
-     * @return array
+     * @param  string  $method
+     * @return \Illuminate\Routing\Route
      */
-    protected function getDynamicPageRouteActions(string $path): array
+    protected function getDynamicPageRouteActions(
+        string $path, string $method = SymfonyRequest::METHOD_GET
+    ): Route
     {
-        $request = Request::createFromBase(Request::create($path));
+        $request = Request::createFromBase(Request::create($path, $method));
 
-        $request->setRouteResolver(function () use ($request) {
-            return (new Route('GET', '{any}', []))->where('any', '.*')->bind($request);
+        $request->setRouteResolver(function () use ($request, $method) {
+            return (new Route($method, '{any}', []))->where('any', '.*')->bind($request);
         });
 
-        $data = [];
+        $route = [];
 
         $middleware = (new WebHandleDynamicRoute($this->app['config']));
 
-        $middleware->handle($request, function ($request) use (&$data) {
-            $data['controller'] = str($request->route()->getActionName())
-                ->afterLast('\\')->beforeLast('@')->toString();
-
-            $data['method'] = $request->route()->getActionMethod();
+        $middleware->handle($request, function ($request) use (&$route) {
+            $route = $request->route();
 
             return response('');
         });
+
+        return $route;
+    }
+
+    /**
+     * Get an actions from the Route instance.
+     *
+     * @param  \Illuminate\Routing\Route  $route
+     * @return array
+     */
+    protected function getActionsFromRoute(Route $route): array
+    {
+        $data['controller'] = str($route->getActionName())
+            ->afterLast('\\')->beforeLast('@')->toString();
+
+        $data['method'] = $route->getActionMethod();
 
         return $data;
     }

@@ -29,7 +29,7 @@ class Page extends Model
      * @var array
      */
     protected $fillable = [
-        'menu_id', 'slug', 'position', 'visible', 'parent_id', 'type', 'type_id', 'template', 'collapse', 'image'
+        'menu_id', 'slug', 'position', 'visible', 'parent_id', 'type', 'type_id', 'collapse', 'image'
     ];
 
     /**
