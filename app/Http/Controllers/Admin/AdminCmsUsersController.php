@@ -7,13 +7,13 @@ use App\Http\Requests\Admin\CmsUserRequest;
 use App\Models\CmsUser;
 use App\Models\CmsUserRole;
 use Closure;
+use Illuminate\Container\Attributes\Storage;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Filesystem\FilesystemManager;
+use Illuminate\Filesystem\LocalFilesystemAdapter;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Laravel\Facades\Image;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -204,14 +204,12 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
     /**
      * Display the photo of the resource.
      *
-     * @param  \Illuminate\Filesystem\FilesystemManager  $filesystem
+     * @param  \Illuminate\Filesystem\LocalFilesystemAdapter  $filesystem
      * @param  string  $id
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|null
      */
-    public function getPhoto(FilesystemManager $filesystem, string $id)
+    public function getPhoto(#[Storage('cms_users')] LocalFilesystemAdapter $filesystem, string $id)
     {
-        $filesystem = $filesystem->disk('cms_users');
-
         $path = $filesystem->getPathUsingId($id, 'photos/photo.png');
 
         if ($filesystem->exists($path)) {

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 trait LanguageTrait
 {
     /**
-     * Add a where "foreign_key" clause to the query.
+     * Add a where foreign key clause to the query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $foreignKey
