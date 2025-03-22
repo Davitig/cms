@@ -26,9 +26,7 @@ trait QueriesTrait
             return $fillable;
         }
 
-        $tablePrefix = $this->getTable() . '.';
-
-        return array_map(fn ($value) => $tablePrefix . $value, $fillable);
+        return $this->qualifyColumns($fillable);
     }
 
     /**

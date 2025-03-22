@@ -7,8 +7,9 @@ use App\Http\Requests\Admin\CmsUserRequest;
 use App\Models\CmsUser;
 use App\Models\CmsUserRole;
 use Closure;
+use Illuminate\Container\Attributes\Storage as StorageAttr;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Filesystem\FilesystemManager;
+use Illuminate\Filesystem\LocalFilesystemAdapter;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -204,14 +205,12 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
     /**
      * Display the photo of the resource.
      *
-     * @param  \Illuminate\Filesystem\FilesystemManager  $filesystem
+     * @param  \Illuminate\Filesystem\LocalFilesystemAdapter  $filesystem
      * @param  string  $id
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|null
      */
-    public function getPhoto(FilesystemManager $filesystem, string $id)
+    public function getPhoto(#[StorageAttr('cms_users')] LocalFilesystemAdapter $filesystem, string $id)
     {
-        $filesystem = $filesystem->disk('cms_users');
-
         $path = $filesystem->getPathUsingId($id, 'photos/photo.png');
 
         if ($filesystem->exists($path)) {
