@@ -28,7 +28,7 @@
             @if ($alert = session('alert'))
                 <div class="alert alert-{{$alert['result'] ? 'success' : 'danger'}}">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    {{$trans->get($alert['message'])}}
+                    {{$alert['message']}}
                 </div>
             @endif
             <div id="feedback">
@@ -67,11 +67,14 @@
                             </div>
                             <!-- .form-group -->
                             <div class="form-group">
-                                <label class="control-label">Captcha</label>
-                                {!! app('captcha')->display() !!}
-                                @if ($error = $errors->first('g-recaptcha-response'))
-                                    <div class="text-danger">{{$error}}</div>
-                                @endif
+                                <input type="text" name="captcha" autocomplete="off" class="form-control" placeholder="{{$trans->get('enter_code', 'Enter the code')}}" data-trans="enter_code" data-trans-attr="placeholder">
+                                <img src="{{ captcha_src('flat') }}" height="40" class="captcha-img" alt="captcha">
+                                <a href="#" class="captcha-reload">
+                                    <img src="{{asset('assets/libs/images/reload.png')}}" width="20" height="20" alt="reload">
+                                </a>
+                                @error('captcha')
+                                    <div class="text-danger">{{$message}}</div>
+                                @enderror
                             </div>
                         </div>
                         <!-- .col-md-6 -->
@@ -131,6 +134,4 @@
     </div>
     <!-- .container -->
 @endsection
-@push('head')
-    {!! app('captcha')->renderJs() !!}
-@endpush
+@include('web._scripts.captcha')

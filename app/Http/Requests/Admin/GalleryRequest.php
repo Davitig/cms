@@ -16,13 +16,13 @@ class GalleryRequest extends Request
     {
         $id = $this->route('gallery');
 
-        $orderList = array_keys((array) cms_config('galleries.order_by'));
+        $orderList = array_keys((array) cms_config('listable.galleries.order_by'));
 
-        $sortList = array_keys((array) cms_config('galleries.sort'));
+        $sortList = array_keys((array) cms_config('listable.galleries.sort'));
 
         $typeRule = $this->isMethod($this::METHOD_POST)
             ? ['type' => ['required', Rule::in(
-                array_keys((array) cms_config('galleries.types'))
+                array_keys((array) cms_config('listable.galleries.types'))
             )]] : [];
 
         return $typeRule + [

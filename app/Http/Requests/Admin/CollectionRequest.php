@@ -14,13 +14,13 @@ class CollectionRequest extends Request
      */
     public function rules(): array
     {
-        $orderList = array_keys((array) cms_config('collections.order_by'));
+        $orderList = array_keys((array) cms_config('listable.collections.order_by'));
 
-        $sortList = array_keys((array) cms_config('collections.sort'));
+        $sortList = array_keys((array) cms_config('listable.collections.sort'));
 
         $typeRule = $this->isMethod($this::METHOD_POST)
             ? ['type' => ['required', Rule::in(
-                array_keys((array) cms_config('collections.types'))
+                array_keys((array) cms_config('listable.collections.types'))
             )]] : [];
 
         return $typeRule + [

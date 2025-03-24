@@ -50,6 +50,7 @@ return [
     'error_occurred' => 'An error has occurred',
     'not_found' => 'not found',
     'invalid_input' => 'Invalid input',
+    'send_failure' => 'Sending failed',
 
     // types
     'menus' => 'Menus',

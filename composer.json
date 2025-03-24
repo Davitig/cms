@@ -16,11 +16,11 @@
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "laravel/ui": "^4.6",
-        "anhskohbo/no-captcha": "3.7.*",
         "barryvdh/laravel-elfinder": "0.5.4",
         "cocur/slugify": "4.6.0",
         "intervention/image-laravel": "1.5.5",
         "league/glide": "3.0.0-RC2",
+        "mews/captcha": "3.4.5",
         "php-curl-class/php-curl-class": "11.0.*",
         "sabre/xml": "4.0.*",
         "spatie/laravel-html": "3.11.*",
@@ -75,8 +75,8 @@
     "extra": {
         "laravel": {
             "dont-discover": [
-                "anhskohbo/no-captcha",
-                "barryvdh/laravel-elfinder"
+                "barryvdh/laravel-elfinder",
+                "mews/captcha"
             ]
         }
     },

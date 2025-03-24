@@ -16,11 +16,11 @@ class CollectionFactory extends Factory
      */
     public function definition(): array
     {
-        $types = array_keys((array) cms_config('collections.types'));
+        $types = array_keys((array) cms_config('listable.collections.types'));
 
-        $orderList = array_keys((array) cms_config('collections.order_by'));
+        $orderList = array_keys((array) cms_config('listable.collections.order_by'));
 
-        $sortList = array_keys((array) cms_config('collections.sort'));
+        $sortList = array_keys((array) cms_config('listable.collections.sort'));
 
         return [
             'title' => fake()->sentence(2),
@@ -40,7 +40,7 @@ class CollectionFactory extends Factory
      */
     public function randomType(): Factory
     {
-        $types = (array) cms_config('collections.types');
+        $types = (array) cms_config('listable.collections.types');
 
         return $this->state(fn (array $attributes) => [
             'type' => $types[array_rand($types)]

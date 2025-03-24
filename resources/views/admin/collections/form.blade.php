@@ -18,7 +18,7 @@
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-ellipsis-h"></i></span>
-            {{ html()->select('type', cms_config('collections.types'))->id('type')->class('form-control select')
+            {{ html()->select('type', cms_config('listable.collections.types'))->id('type')->class('form-control select')
             ->ifNotNull($current->id, function ($html) {
                 return $html->attribute('disabled');
             }) }}
@@ -38,7 +38,7 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-list-ol"></i></span>
-                    {{ html()->select('admin_order_by', $orderBy = cms_config('collections.order_by'))
+                    {{ html()->select('admin_order_by', $orderBy = cms_config('listable.collections.order_by'))
                     ->id('admin_order_by')->class('form-control select') }}
                 </div>
                 @if ($error)
@@ -72,7 +72,7 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-sort"></i></span>
-                    {{ html()->select('admin_sort', cms_config('collections.sort'))->id('admin_sort')->class('form-control select') }}
+                    {{ html()->select('admin_sort', cms_config('listable.collections.sort'))->id('admin_sort')->class('form-control select') }}
                 </div>
                 @if ($error)
                     <span class="text-danger">{{$error}}</span>
@@ -86,7 +86,7 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-sort"></i></span>
-                    {{ html()->select('web_sort', cms_config('collections.sort'))->class('form-control select') }}
+                    {{ html()->select('web_sort', cms_config('listable.collections.sort'))->class('form-control select') }}
                 </div>
                 @if ($error)
                     <span class="text-danger">{{$error}}</span>

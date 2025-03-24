@@ -283,7 +283,7 @@ class WebHandleDynamicRoute
             return true;
         }
 
-        if (! array_key_exists($page->type, (array) cms_config())) {
+        if (! array_key_exists($page->type, (array) $this->config->get('cms.listable'))) {
             $parameters[] = $model;
             $parameters[] = $this->segments[$this->segmentsCount - $segmentsLeft];
 

@@ -81,51 +81,44 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Collections
+    | Listable
     |--------------------------------------------------------------------------
     |
-    | This array used to specify collection types and its settings.
+    | This array used to specify listable types and its settings.
+    | Listable types data will be separated by its holder.
     |
     */
 
-    'collections' => [
-        'types' => [
-            'articles' => 'Articles',
-            'events' => 'Events',
-            'faq' => 'FAQ',
-            'galleries' => 'Galleries'
+    'listable' => [
+        'collections' => [
+            'types' => [
+                'articles' => 'Articles',
+                'events' => 'Events',
+                'faq' => 'FAQ',
+                'galleries' => 'Galleries'
+            ],
+            'order_by' => [
+                'position' => 'Position',
+                'created_at' => 'Creation date'
+            ],
+            'sort' => [
+                'desc' => 'Descending',
+                'asc' => 'Ascending'
+            ]
         ],
-        'order_by' => [
-            'position' => 'Position',
-            'created_at' => 'Creation date'
-        ],
-        'sort' => [
-            'desc' => 'Descending',
-            'asc' => 'Ascending'
-        ]
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Galleries
-    |--------------------------------------------------------------------------
-    |
-    | This array used to specify gallery types and its settings.
-    |
-    */
-
-    'galleries' => [
-        'types' => [
-            'photos' => 'Photos',
-            'videos' => 'Videos'
-        ],
-        'order_by' => [
-            'position' => 'Position',
-            'created_at' => 'Creation date'
-        ],
-        'sort' => [
-            'desc' => 'Descending',
-            'asc' => 'Ascending'
+        'galleries' => [
+            'types' => [
+                'photos' => 'Photos',
+                'videos' => 'Videos'
+            ],
+            'order_by' => [
+                'position' => 'Position',
+                'created_at' => 'Creation date'
+            ],
+            'sort' => [
+                'desc' => 'Descending',
+                'asc' => 'Ascending'
+            ]
         ]
     ],
 

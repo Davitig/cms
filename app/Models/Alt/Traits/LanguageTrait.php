@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Builder;
 trait LanguageTrait
 {
     /**
-     * Add a where foreign key clause to the query.
+     * Add a where language foreign key clause to the query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $foreignKey
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    abstract public function scopeForeignKey(Builder $query, int $foreignKey): Builder;
+    abstract public function scopeLanguageForeignKey(Builder $query, int $foreignKey): Builder;
 
     /**
      * Build a query by foreign model.
@@ -25,7 +25,7 @@ trait LanguageTrait
      */
     public function scopeByForeignLanguage(Builder $query, int $id, mixed $currentLang = true): Builder
     {
-        return $query->foreignKey($id)->whereLanguage($currentLang);
+        return $query->languageForeignKey($id)->whereLanguage($currentLang);
     }
 
     /**

@@ -33,7 +33,7 @@ class ArticleLanguage extends Model
      * @param  int  $foreignKey
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeForeignKey(Builder $query, int $foreignKey): Builder
+    public function scopeLanguageForeignKey(Builder $query, int $foreignKey): Builder
     {
         return $query->where('article_id', $foreignKey);
     }

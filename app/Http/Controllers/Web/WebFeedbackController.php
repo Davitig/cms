@@ -4,20 +4,13 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\FeedbackRequest;
+use App\Mail\FeedbackSubmitted;
 use App\Models\Page\PageFile;
-use App\Models\Setting\WebSetting;
 use Exception;
-use Illuminate\Contracts\Mail\Mailer;
-use Illuminate\Http\Request;
+use Illuminate\Mail\MailManager;
 
 class WebFeedbackController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     */
-    public function __construct(protected Request $request) {}
 
     /**
      * Display the specified resource.
@@ -35,31 +28,20 @@ class WebFeedbackController extends Controller
     }
 
     /**
-     * Send an e-mail.
+     * Send the message.
      *
      * @param  \App\Http\Requests\Web\FeedbackRequest  $request
-     * @param  \Illuminate\Contracts\Mail\Mailer  $mail
-     * @param  array  $pages
+     * @param  \Illuminate\Mail\MailManager  $mail
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function send(FeedbackRequest $request, Mailer $mail, array $pages)
+    public function send(FeedbackRequest $request, MailManager $mail)
     {
-        $email = (new WebSetting)->findByName('email')->value;
-
-        $data = $request->all(['name', 'email', 'phone', 'text']);
-
-        $subject = $request->getHost() . ' - feedback';
-
         try {
-            $mail->send('web.mail.feedback', $data, function ($m) use ($data, $email, $subject) {
-                $m->from(config('mail.username'), $this->request->getHost())
-                  ->to($email)
-                  ->subject($subject);
-            });
+            $mail->send(new FeedbackSubmitted($request->validated()));
 
-            $message = fill_data(true, trans('send_success'));
+            $message = fill_data(true, trans('general.send_success'));
         } catch (Exception) {
-            $message = fill_data(false, trans('send_failure'));
+            $message = fill_data(false, trans('general.send_failure'));
         }
 
         return back()->with('alert', $message);
