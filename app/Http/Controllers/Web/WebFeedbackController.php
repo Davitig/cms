@@ -39,7 +39,7 @@ class WebFeedbackController extends Controller
         try {
             $mail->send(new FeedbackSubmitted($request->validated()));
 
-            $message = fill_data(true, trans('general.send_success'));
+            $message = fill_data(true, trans('general.sent'));
         } catch (Exception) {
             $message = fill_data(false, trans('general.send_failure'));
         }

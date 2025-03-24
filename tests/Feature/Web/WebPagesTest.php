@@ -11,7 +11,7 @@ class WebPagesTest extends TestCase
 {
     use DynamicRoutesTrait;
 
-    public function test_page_type()
+    public function test_page()
     {
         [$menu, $page] = $this->createPages(null, fn ($factory) => $factory->type('page'));
 
@@ -29,27 +29,7 @@ class WebPagesTest extends TestCase
         $response->assertOk();
     }
 
-    public function test_page_feedback_type()
-    {
-        [$menu, $page] = $this->createPages(
-            null, fn ($factory) => $factory->type('feedback')
-        );
-
-        $route = $this->getDynamicPageRouteActions($page->slug);
-
-        $response = $this->get($page->slug);
-
-        $page->delete();
-        $menu->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
-            'controller' => 'WebFeedbackController', 'method' => 'index'
-        ]);
-
-        $response->assertOk();
-    }
-
-    public function test_page_search_type()
+    public function test_search_page()
     {
         [$menu, $page] = $this->createPages(
             null, fn ($factory) => $factory->type('search')

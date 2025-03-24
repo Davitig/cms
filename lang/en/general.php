@@ -49,8 +49,8 @@ return [
     'error' => 'error',
     'error_occurred' => 'An error has occurred',
     'not_found' => 'not found',
-    'invalid_input' => 'Invalid input',
-    'send_failure' => 'Sending failed',
+    'invalid_input' => 'invalid input',
+    'send_failure' => 'sending failed',
 
     // types
     'menus' => 'Menus',
