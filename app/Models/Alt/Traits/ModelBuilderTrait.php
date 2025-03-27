@@ -8,8 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Support\Arr;
 
-trait QueriesTrait
+trait ModelBuilderTrait
 {
+    /**
+     * Merge the array of model attributes without checking.
+     *
+     * @param  array  $attributes
+     * @return static
+     */
+    public function mergeRawAttributes(array $attributes): static
+    {
+        $this->setRawAttributes(array_merge($attributes, $this->getAttributes()));
+
+        return $this;
+    }
+
     /**
      * Get the fillable attributes for the model including statically defined columns.
      *

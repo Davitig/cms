@@ -10,18 +10,15 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminEventsController;
 use App\Http\Controllers\Admin\AdminFaqController;
 use App\Http\Controllers\Admin\AdminFilemanagerController;
-use App\Http\Controllers\Admin\AdminGalleriesController;
 use App\Http\Controllers\Admin\AdminLanguagesController;
 use App\Http\Controllers\Admin\AdminLockscreenController;
 use App\Http\Controllers\Admin\AdminMenusController;
 use App\Http\Controllers\Admin\AdminNotesController;
 use App\Http\Controllers\Admin\AdminPagesController;
 use App\Http\Controllers\Admin\AdminPermissionsController;
-use App\Http\Controllers\Admin\AdminPhotosController;
 use App\Http\Controllers\Admin\AdminSitemapXmlController;
 use App\Http\Controllers\Admin\AdminSliderController;
 use App\Http\Controllers\Admin\AdminTranslationsController;
-use App\Http\Controllers\Admin\AdminVideosController;
 use App\Http\Controllers\Admin\AdminWebSettingsController;
 use App\Http\Controllers\Admin\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
@@ -73,8 +70,8 @@ Route::middleware('cms.auth')->group(function ($router) {
 
     // pages
     $router->controller(AdminPagesController::class)->group(function ($router) {
-        $router->get('pages/collection-types', 'getCollectionTypes')
-            ->name('pages.getCollectionTypes');
+        $router->get('pages/listable-types', 'getListableTypes')
+            ->name('pages.getListableTypes');
         $router->put('pages/{id}/visibility', 'visibility')->name('pages.visibility');
         $router->put('pages/position', 'updatePosition')->name('pages.updatePosition');
         $router->put('pages/transfer/{menu}', 'transfer')->name('pages.transfer');
@@ -116,34 +113,6 @@ Route::middleware('cms.auth')->group(function ($router) {
         $router->put('faq/transfer/{collection}', 'transfer')->name('faq.transfer');
         $router->resource('collections.faq', AdminFaqController::class)
             ->names(resource_names('faq'))
-            ->except(['show']);
-    });
-
-    // collection galleries
-    $router->controller(AdminGalleriesController::class)->group(function ($router) {
-        $router->put('galleries/{id}/visibility', 'visibility')->name('galleries.visibility');
-        $router->put('galleries/position', 'updatePosition')->name('galleries.updatePosition');
-        $router->put('galleries/transfer/{collection}', 'transfer')->name('galleries.transfer');
-        $router->resource('collections.galleries', AdminGalleriesController::class)
-            ->names(resource_names('galleries'))
-            ->except(['show']);
-    });
-
-    // gallery photos
-    $router->controller(AdminPhotosController::class)->group(function ($router) {
-        $router->put('photos/{id}/visibility', 'visibility')->name('photos.visibility');
-        $router->put('photos/position', 'updatePosition')->name('photos.updatePosition');
-        $router->resource('galleries.photos', AdminPhotosController::class)
-            ->names(resource_names('photos'))
-            ->except(['show']);
-    });
-
-    // gallery videos
-    $router->controller(AdminVideosController::class)->group(function ($router) {
-        $router->put('videos/{id}/visibility', 'visibility')->name('videos.visibility');
-        $router->put('videos/position', 'updatePosition')->name('videos.updatePosition');
-        $router->resource('galleries.videos', AdminVideosController::class)
-            ->names(resource_names('videos'))
             ->except(['show']);
     });
 

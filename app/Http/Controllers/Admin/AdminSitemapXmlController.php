@@ -48,11 +48,11 @@ class AdminSitemapXmlController extends Controller
     protected bool $isMultilanguage = false;
 
     /**
-     * List of the collection types.
+     * List of the listable types.
      *
      * @var array
      */
-    protected array $collectionTypes = [];
+    protected array $listableTypes = [];
 
     /**
      * List of the extended types.
@@ -74,7 +74,7 @@ class AdminSitemapXmlController extends Controller
             ];
         }
 
-        $this->collectionTypes = (array) cms_pages('collections');
+        $this->listableTypes = (array) cms_pages('listable');
 
         $this->extendedTypes = (array) cms_pages('extended');
     }
@@ -106,7 +106,7 @@ class AdminSitemapXmlController extends Controller
 
             $this->data[] = $value;
 
-            $this->setCollectionModels($page);
+            $this->setListableModels($page);
             $this->setExtendedModels($page);
         }
 
@@ -126,18 +126,29 @@ class AdminSitemapXmlController extends Controller
     }
 
     /**
-     * Set a collection models to the XML data.
+     * Set a listable models to the XML data.
      *
      * @param  \App\Models\Page\Page $page
      * @return void
      */
-    protected function setCollectionModels(Page $page): void
+    protected function setListableModels(Page $page): void
     {
-        if (! array_key_exists($page->type, $this->collectionTypes)) {
+        $listableType = null;
+
+        foreach ($this->listableTypes as $type => $values) {
+            if (array_key_exists($page->type, (array) $values)) {
+                $listableType = $type;
+
+                break;
+            }
+        }
+
+        if (is_null($listableType)) {
             return;
         }
 
-        $items = (new $this->collectionTypes[$page->type])->collectionId($page->type_id)
+        $items = (new $this->listableTypes[$listableType][$page->type])
+            ->collectionId($page->type_id)
             ->whereVisible()
             ->orderDesc()
             ->get();

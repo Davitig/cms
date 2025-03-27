@@ -40,14 +40,14 @@ return [
             'search' => 'Search',
             'articles' => 'Articles',
             'events' => 'Events',
-            'faq' => 'FAQ',
-            'galleries' => 'Galleries'
+            'faq' => 'FAQ'
         ],
-        'collections' => [
-            'articles' => App\Models\Article\Article::class,
-            'events' => App\Models\Event\Event::class,
-            'faq' => App\Models\Faq::class,
-            'galleries' => App\Models\Gallery\Gallery::class
+        'listable' => [
+            'collections' => [
+                'articles' => App\Models\Article\Article::class,
+                'events' => App\Models\Event\Event::class,
+                'faq' => App\Models\Faq::class
+            ]
         ],
         'extended' => [],
     ],
@@ -91,25 +91,11 @@ return [
 
     'listable' => [
         'collections' => [
+            'model' => App\Models\Collection::class,
             'types' => [
                 'articles' => 'Articles',
                 'events' => 'Events',
-                'faq' => 'FAQ',
-                'galleries' => 'Galleries'
-            ],
-            'order_by' => [
-                'position' => 'Position',
-                'created_at' => 'Creation date'
-            ],
-            'sort' => [
-                'desc' => 'Descending',
-                'asc' => 'Ascending'
-            ]
-        ],
-        'galleries' => [
-            'types' => [
-                'photos' => 'Photos',
-                'videos' => 'Videos'
+                'faq' => 'FAQ'
             ],
             'order_by' => [
                 'position' => 'Position',

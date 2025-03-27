@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Arr; @endphp
 @push('head')
     <link rel="stylesheet" href="{{ asset('assets/libs/js/select2/select2.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/js/select2/select2-bootstrap.css') }}">
@@ -24,23 +25,24 @@
             let typeValue;
 
             typeSelect.on('change', function() {
-                // Get the collection types list
+                // Get the listable types
                 if (typeValue !== this.value) {
-                    getCollectionTypes(this.value);
+                    getListableTypes(this.value);
                 }
 
                 typeValue = this.value;
             });
 
-            // Get the collection types list
-            function getCollectionTypes(value) {
+            // Get the listable types
+            function getListableTypes(value) {
                 typeId.addClass('hidden');
                 typeIdSelect.html('<option value=""></option>');
 
-                if (["{!! implode('","', array_keys((array) cms_pages('collections'))) !!}"].indexOf(value) >= 0) {
+                @php($listableTypes = Arr::mapWithKeys(cms_pages('listable'), fn ($item) => array_keys($item)))
+                if (["{!! implode('","', $listableTypes) !!}"].indexOf(value) >= 0) {
                     $('label', typeId).text(String(value).charAt(0).toUpperCase() + String(value).slice(1));
 
-                    $.get('{{cms_route('pages.getCollectionTypes')}}', {"type": value}, function (data) {
+                    $.get('{{cms_route('pages.getListableTypes')}}', {"type": value}, function (data) {
                         typeIdSelect.html('<option value=""></option>');
                         typeId.removeClass('hidden');
 

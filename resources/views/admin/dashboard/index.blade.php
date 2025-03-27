@@ -97,62 +97,6 @@
         </div>
     </div>
     <div class="col-sm-3">
-        <div class="xe-widget xe-counter-block xe-counter-block-info"  data-count=".num" data-from="0" data-to="{{$totalAlbums = ($photoAlbumTotal + $videoAlbumTotal)}}" data-duration="3">
-            <div class="xe-upper">
-                <a href="{{$userRouteAccess('collections.index') ? cms_route('collections.index', ['type' => 'galleries']) : '#'}}" class="xe-icon">
-                    <i class="{{icon_type('galleries')}}"></i>
-                </a>
-                <div class="xe-label">
-                    <strong class="num">{{$totalAlbums}}</strong>
-                    <span>Total gallery items</span>
-                </div>
-            </div>
-            <div class="xe-lower">
-                <div class="border"></div>
-                <span>Details</span>
-                <strong>{{$galleriesTotal}} Total galleries</strong>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-3">
-        <div class="xe-widget xe-counter-block xe-counter-block-danger"  data-count=".num" data-from="0" data-to="{{$photosTotal}}" data-duration="3">
-            <div class="xe-upper">
-                <a href="{{$userRouteAccess('collections.index') ? cms_route('collections.index', ['type' => 'galleries']) : '#'}}" class="xe-icon">
-                    <i class="{{icon_type('photos')}}"></i>
-                </a>
-                <div class="xe-label">
-                    <strong class="num">{{$photosTotal}}</strong>
-                    <span>Total photos</span>
-                </div>
-            </div>
-            <div class="xe-lower">
-                <div class="border"></div>
-                <span>Details</span>
-                <strong>{{$photoAlbumTotal}} Total photo albums</strong>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-3">
-        <div class="xe-widget xe-counter-block xe-counter-block-purple"  data-count=".num" data-from="0" data-to="{{$videosTotal}}" data-duration="3">
-            <div class="xe-upper">
-                <a href="{{$userRouteAccess('collections.index') ? cms_route('collections.index', ['type' => 'galleries']) : '#'}}" class="xe-icon">
-                    <i class="{{icon_type('videos')}}"></i>
-                </a>
-                <div class="xe-label">
-                    <strong class="num">{{$videosTotal}}</strong>
-                    <span>Total videos</span>
-                </div>
-            </div>
-            <div class="xe-lower">
-                <div class="border"></div>
-                <span>Details</span>
-                <strong>{{$videoAlbumTotal}} Total video albums</strong>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-3">
         <div class="xe-widget xe-counter-block xe-counter-block-orange"  data-count=".num" data-from="0" data-to="{{$calendarTotal}}" data-duration="3">
             <div class="xe-upper">
                 <a href="{{$userRouteAccess('calendar.index') ? cms_route('calendar.index') : '#'}}" class="xe-icon">

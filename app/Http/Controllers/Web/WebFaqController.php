@@ -24,7 +24,7 @@ class WebFaqController extends Controller
      */
     public function index(array $pages, Collection $collection)
     {
-        $data['current'] = last($pages);
+        $data['current'] = end($pages);
 
         $data['items'] = $this->model->getPublicCollection($collection);
 

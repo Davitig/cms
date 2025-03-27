@@ -60,7 +60,9 @@ class AdminAuthenticate
             return;
         }
 
-        $routeName = str_replace(language()->active() . '.' . cms_route_name(), '', $fullRouteName);
+        $routeName = str_replace(
+            language()->active() . '.' . cms_route_name(), '', $fullRouteName
+        );
 
         if ($routeName == $fullRouteName) {
             $routeName = str_replace(cms_route_name(), '', $routeName);

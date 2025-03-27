@@ -214,7 +214,7 @@ class AdminPagesResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('pages.getCollectionTypes', ['type' => 'articles']));
+        )->get(cms_route('pages.getListableTypes', ['type' => 'articles']));
 
         $collection->delete();
 

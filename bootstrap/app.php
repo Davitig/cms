@@ -18,9 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             // cms
+            'cms.lang' => \App\Http\Middleware\Admin\AdminValidateLanguage::class,
             'cms.auth' => \App\Http\Middleware\Admin\AdminAuthenticate::class,
             'cms.guest' => \App\Http\Middleware\Admin\AdminRedirectIfAuthenticated::class,
-            'cms.lang' => \App\Http\Middleware\Admin\AdminValidateLanguage::class,
             'cms.withFullAccess' => \App\Http\Middleware\Admin\AdminCmsUserWithFullAccess::class,
             'cms.lockscreen' => \App\Http\Middleware\Admin\AdminLockscreen::class,
             // web

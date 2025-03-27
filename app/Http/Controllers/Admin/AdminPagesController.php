@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PageRequest;
-use App\Models\Collection;
 use App\Models\Menu;
 use App\Models\Page\Page;
 use Illuminate\Http\Request;
@@ -47,7 +46,7 @@ class AdminPagesController extends Controller
 
         $data['types'] = cms_pages('types');
 
-        $data['collectionTypes'] = [];
+        $data['listableTypes'] = [];
 
         return view('admin.pages.create', $data);
     }
@@ -89,7 +88,7 @@ class AdminPagesController extends Controller
 
         $data['types'] = cms_pages('types');
 
-        $data['collectionTypes'] = $this->getCollectionTypes($data['items']->first()->type);
+        $data['listableTypes'] = $this->getListableTypes($data['items']->first()->type);
 
         return view('admin.pages.edit', $data);
     }
@@ -114,7 +113,7 @@ class AdminPagesController extends Controller
         if ($request->expectsJson()) {
             $type = $request->get('type');
 
-            if (array_key_exists($type, (array) cms_pages('collections'))
+            if (array_key_exists($type, (array) cms_pages('listable.collections'))
                 || array_key_exists($type, (array) cms_pages('extended'))) {
                 $input['typeHtml'] = view(
                     'admin.pages._extended_type', ['input' => $input]
@@ -148,22 +147,34 @@ class AdminPagesController extends Controller
     }
 
     /**
-     * Get the collection types.
+     * Get the listable types.
      *
      * @param  string|null  $type
      * @return array
      */
-    public function getCollectionTypes(?string $type = null)
+    public function getListableTypes(?string $type = null)
     {
         if (! $type ??= $this->request->get('type')) {
             return [];
         }
 
-        if (! cms_pages('collections.' . $type)) {
+        $listableType = null;
+
+        $listableTypes = (array) cms_config('listable');
+
+        foreach ($listableTypes as $key => $value) {
+            if (array_key_exists($type, (array) cms_pages('listable.' . $key))) {
+                $listableType = $key;
+
+                break;
+            }
+        }
+
+        if (is_null($listableType) || ! $model = $listableTypes[$listableType]['model']) {
             return [];
         }
 
-        return (new Collection)->byType($type)->pluck('title', 'id')->toArray();
+        return (new $model)->byType($type)->pluck('title', 'id')->toArray();
     }
 
     /**

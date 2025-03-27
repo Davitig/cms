@@ -6,13 +6,13 @@ use App\Models\Alt\Contracts\Collection;
 use App\Models\Alt\Traits\FileableTrait;
 use App\Models\Alt\Traits\HasCollection;
 use App\Models\Alt\Traits\HasLanguage;
-use App\Models\Alt\Traits\QueriesTrait;
+use App\Models\Alt\Traits\ModelBuilderTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Article extends Model implements Collection
 {
-    use QueriesTrait, HasCollection, HasLanguage, FileableTrait;
+    use ModelBuilderTrait, HasCollection, HasLanguage, FileableTrait;
 
     /**
      * Type of the collection.

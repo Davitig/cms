@@ -6,15 +6,14 @@ use App\Models\Alt\Traits\FileableTrait;
 use App\Models\Alt\Traits\HasLanguage;
 use App\Models\Alt\Traits\HasSubModels;
 use App\Models\Alt\Traits\PositionableTrait;
-use App\Models\Alt\Traits\QueriesTrait;
-use App\Models\Collection;
+use App\Models\Alt\Traits\ModelBuilderTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Page extends Model
 {
-    use QueriesTrait, HasLanguage, PositionableTrait, FileableTrait, HasSubModels;
+    use ModelBuilderTrait, HasLanguage, PositionableTrait, FileableTrait, HasSubModels;
 
     /**
      * The table associated with the model.
@@ -51,7 +50,8 @@ class Page extends Model
      */
     public static function publicDynamicRoute(string $slug, int $parentId): Builder
     {
-        return (new static)->bySlugRoute($slug, $parentId);
+        return (new static)->bySlugRoute($slug, $parentId)
+            ->addQualifiedSelect('id', 'slug', 'type');
     }
 
     /**

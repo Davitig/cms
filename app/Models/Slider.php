@@ -5,14 +5,14 @@ namespace App\Models;
 use App\Models\Alt\Contracts\Fileable;
 use App\Models\Alt\Traits\HasLanguage;
 use App\Models\Alt\Traits\PositionableTrait;
-use App\Models\Alt\Traits\QueriesTrait;
+use App\Models\Alt\Traits\ModelBuilderTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Slider extends Model implements Fileable
 {
-    use QueriesTrait, HasLanguage, PositionableTrait;
+    use ModelBuilderTrait, HasLanguage, PositionableTrait;
 
     /**
      * The table associated with the model.

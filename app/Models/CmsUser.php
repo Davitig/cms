@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Traits\QueriesTrait;
+use App\Models\Alt\Traits\ModelBuilderTrait;
 use App\Models\Alt\User\User as Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class CmsUser extends Model
 {
-    use QueriesTrait;
+    use ModelBuilderTrait;
 
     /**
      * The table associated with the model.

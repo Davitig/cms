@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Admin\Positionable;
 use App\Http\Controllers\Admin\VisibilityTrait;
 use App\Models\Alt\Contracts\Fileable;
-use App\Models\Alt\Traits\HasGallery;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
@@ -26,9 +25,7 @@ class AdminFilesController extends Controller
      */
     public function __construct(protected Fileable $model, protected Request $request)
     {
-        $this->foreignKey = in_array(HasGallery::class, class_uses($model))
-            ? (string) $model->getGalleryKeyName()
-            : str($this->model->getTable())->beforeLast('_')->singular()
+        $this->foreignKey = str($this->model->getTable())->beforeLast('_')->singular()
             . '_' . $this->model->getKeyName();
     }
 

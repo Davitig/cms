@@ -3,14 +3,14 @@
 namespace App\Models;
 
 use App\Models\Alt\Traits\HasLanguage;
-use App\Models\Alt\Traits\QueriesTrait;
+use App\Models\Alt\Traits\ModelBuilderTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Translation extends Model
 {
-    use QueriesTrait, HasLanguage;
+    use ModelBuilderTrait, HasLanguage;
 
     /**
      * The table associated with the model.

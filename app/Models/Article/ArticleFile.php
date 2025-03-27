@@ -5,14 +5,14 @@ namespace App\Models\Article;
 use App\Models\Alt\Contracts\Fileable;
 use App\Models\Alt\Traits\FileTrait;
 use App\Models\Alt\Traits\HasLanguage;
-use App\Models\Alt\Traits\QueriesTrait;
+use App\Models\Alt\Traits\ModelBuilderTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ArticleFile extends Model implements Fileable
 {
-    use QueriesTrait, FileTrait, HasLanguage;
+    use ModelBuilderTrait, FileTrait, HasLanguage;
 
     /**
      * The table associated with the model.

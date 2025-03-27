@@ -2,7 +2,6 @@
 
 namespace App\Models\Alt\Traits;
 
-use Exception;
 use Illuminate\Database\Eloquent\Builder;
 
 trait PositionableTrait
@@ -137,22 +136,28 @@ trait PositionableTrait
      * Add an "order by" position asc clause to the query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  bool  $qualify
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopePositionAsc(Builder $query): Builder
+    public function scopePositionAsc(Builder $query, bool $qualify = false): Builder
     {
-        return $query->orderBy('position');
+        return $query->orderBy(
+            $qualify ? $this->qualifyColumn('position') : 'position',
+        );
     }
 
     /**
      * Add an "order by" position desc clause to the query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  bool  $qualify
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopePositionDesc(Builder $query): Builder
+    public function scopePositionDesc(Builder $query, bool $qualify = false): Builder
     {
-        return $query->orderByDesc('position');
+        return $query->orderByDesc(
+            $qualify ? $this->qualifyColumn('position') : 'position',
+        );
     }
 
     /**

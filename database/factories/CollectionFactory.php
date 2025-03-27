@@ -68,16 +68,6 @@ class CollectionFactory extends Factory
     }
 
     /**
-     * Indicate that the collection is galleries type.
-     */
-    public function galleryType(): Factory
-    {
-        return $this->state(fn (array $attributes) => [
-            'type' => 'galleries',
-        ]);
-    }
-
-    /**
      * Indicate that the collection is faq type.
      */
     public function faqType(): Factory

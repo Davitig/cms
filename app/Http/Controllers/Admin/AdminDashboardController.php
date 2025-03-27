@@ -35,17 +35,6 @@ class AdminDashboardController extends Controller
         $data['articlesTotalDistinct'] = $db->table('articles')->count($db->raw('DISTINCT collection_id'));
         $data['articlesTotal'] = $db->table('articles')->count();
 
-        // galleries
-        $data['galleriesTotal'] = $db->table('collections')->where('type', 'galleries')->count();
-
-        // photos
-        $data['photoAlbumTotal'] = $db->table('galleries')->where('type', 'photos')->count();
-        $data['photosTotal'] = $db->table('photos')->count();
-
-        // videos
-        $data['videoAlbumTotal'] = $db->table('galleries')->where('type', 'videos')->count();
-        $data['videosTotal'] = $db->table('videos')->count();
-
         // calendar
         $data['calendarTotal'] = $db->table('calendar')->count();
 

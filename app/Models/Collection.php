@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Traits\QueriesTrait;
+use App\Models\Alt\Traits\ModelBuilderTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Collection extends Model
 {
-    use QueriesTrait;
+    use ModelBuilderTrait;
 
     /**
      * The table associated with the model.
@@ -37,7 +37,7 @@ class Collection extends Model
      */
     public static function publicDynamicRoute(int $id, string $type): Builder
     {
-        return (new static)->whereKey($id)->byType($type);
+        return (new static)->whereKey($id)->byType($type)->addQualifiedSelect('*');
     }
 
     /**

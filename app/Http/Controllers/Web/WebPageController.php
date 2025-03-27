@@ -15,7 +15,7 @@ class WebPageController extends Controller
      */
     public function index(array $pages)
     {
-        $data['current'] = $page = last($pages);
+        $data['current'] = $page = end($pages);
 
         $data['files'] = (new PageFile)->getFiles($page->id);
 

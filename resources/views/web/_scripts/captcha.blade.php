@@ -1,7 +1,7 @@
 @push('body.bottom')
     <script type="text/javascript">
         $(function(){
-            @if ($alert || $errors->hasAny())
+            @if (isset($alert) || $errors->hasAny())
             $('html, body').animate({
                 scrollTop: $('#{{ $scrollTop ?? 'feedback' }}').offset().top
             }, 0);

@@ -14,7 +14,7 @@ class WebSearchController extends Controller
      */
     public function index(array $pages)
     {
-        $data['current'] = last($pages);
+        $data['current'] = end($pages);
 
         // search action...
 

@@ -58,20 +58,24 @@ trait HasSubModels
      * Get sub models.
      *
      * @param  array|string  $columns
-     * @param  int|null  $parentId
      * @param  bool|int  $recursive
+     * @param  int|null  $value
+     * @param  string  $key
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getSubModels(
-        array|string $columns = ['*'], ?int $parentId = null, bool|int $recursive = false
+        array|string $columns = ['*'],
+        bool|int     $recursive = false,
+        ?int         $value = null,
+        string       $key = 'parent_id'
     ): Collection
     {
         $columns = (array) $columns;
 
-        $columns = current($columns) == '*' ? $columns : array_merge($columns, ['id']);
+        $columns = current($columns) == '*' ? $columns : array_merge($columns, [$this->getKeyName()]);
 
         $models = $this->forPublic()->where(
-            'parent_id', $parentId ?: $this->getKey()
+            $key, $value ?: $this->getKey()
         )->positionAsc()->get($columns);
 
         if (is_int($recursive) && $recursive > 0) {
@@ -96,7 +100,7 @@ trait HasSubModels
             return false;
         }
 
-        return $this->parentId($parentId)->where('id', '<>', $id)->exists();
+        return $this->parentId($parentId)->whereKeyNot($id)->exists();
     }
 
     /**

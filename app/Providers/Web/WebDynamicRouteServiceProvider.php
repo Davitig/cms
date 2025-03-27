@@ -24,7 +24,7 @@ class WebDynamicRouteServiceProvider extends ServiceProvider
         $router->middleware('web')->group(function (Router $router) {
             $router->any('{any}', fn () => throw new NotFoundHttpException)
                 ->where('any', '.*')
-                ->middleware('web.dynamicRoute');
+                ->middleware('web.lang', 'web.dynamicRoute');
         });
     }
 }

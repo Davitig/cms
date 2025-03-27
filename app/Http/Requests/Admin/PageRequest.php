@@ -34,7 +34,7 @@ class PageRequest extends Request
     protected function beforeValidation(Validator $validator): void
     {
         $validator->sometimes('type_id', 'required', function ($input) {
-            return array_key_exists($input->type, cms_pages('collections'));
+            return array_key_exists($input->type, cms_pages('listable.collections'));
         });
     }
 

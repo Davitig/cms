@@ -66,7 +66,7 @@
                     <i class="{{icon_type('files')}}"></i> {{trans('general.files')}}
                 </a>
             </li>
-            @if (array_key_exists($current->type, cms_pages('collections'))
+            @if (array_key_exists($current->type, cms_pages('listable.collections'))
             || array_key_exists($current->type, cms_pages('extended')))
                 <li class="extended">
                     <a href="{{cms_route($current->type.'.index', [$current->type_id])}}">
@@ -76,17 +76,17 @@
             @endif
         </ul>
     </div>
-    @push('body.bottom')
-        <script type="text/javascript">
-            $('form.ajax-form').on('ajaxFormSuccess', function (e, res) {
-                let extendedTypes = $('#form-tabs');
-                $('.extended', extendedTypes).remove();
-
-                if (res?.data?.typeHtml !== undefined) {
-                    extendedTypes.append(res?.data?.typeHtml);
-                }
-            });
-        </script>
-    @endpush
-    @include('admin.pages.scripts')
 @endsection
+@push('body.bottom')
+    <script type="text/javascript">
+        $('form.ajax-form').on('ajaxFormSuccess', function (e, res) {
+            let extendedTypes = $('#form-tabs');
+            $('.extended', extendedTypes).remove();
+
+            if (res?.data?.typeHtml !== undefined) {
+                extendedTypes.append(res?.data?.typeHtml);
+            }
+        });
+    </script>
+@endpush
+@include('admin.pages.scripts')

@@ -2,18 +2,16 @@
 
 namespace App\Http\Middleware\Web;
 
-use App\Models\Collection;
-use App\Models\Gallery\Gallery;
 use App\Models\Page\Page;
 use Closure;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class WebHandleDynamicRoute
 {
@@ -46,18 +44,18 @@ class WebHandleDynamicRoute
     protected int $segmentsCount = 0;
 
     /**
-     * The array of types that will allow specified request methods.
-     *
-     * @var array
-     */
-    protected array $typeRequestMethods = [];
-
-    /**
      * The current request method.
      *
      * @var string
      */
     protected string $requestMethod;
+
+    /**
+     * The array of types that will allow specified request methods.
+     *
+     * @var array
+     */
+    protected array $typeRequestMethods = [];
 
     /**
      * The array of types that will allow additional tab like URIs.
@@ -111,7 +109,7 @@ class WebHandleDynamicRoute
             return false;
         }
 
-        $this->checkLanguageForMaintenance($language = language()->active());
+        $language = language()->active();
 
         if (current($this->segments) == $language) {
             array_shift($this->segments);
@@ -119,11 +117,11 @@ class WebHandleDynamicRoute
             $this->segmentsCount--;
         }
 
+        $this->requestMethod = $requestMethod;
+
         $this->typeRequestMethods = (array) $this->config->get('cms.type_request_methods');
 
         $this->tabs = (array) $this->config->get('cms.tabs');
-
-        $this->requestMethod = $requestMethod;
 
         $this->setDynamicRoute();
 
@@ -141,13 +139,17 @@ class WebHandleDynamicRoute
             return;
         }
 
-        $this->setBreadcrumb($pages);
+        if (($result = $this->setListableRoute($pages)) !== false) {
+            if ($result === true) {
+                $this->setBreadcrumb($pages);
+            }
 
-        if ($this->setCollectionRoute($pages)) {
             return;
         }
 
-        $this->setPageRoute($pages);
+        if ($this->setPageRoute($pages) === true) {
+            $this->setBreadcrumb($pages);
+        }
     }
 
     /**
@@ -162,9 +164,7 @@ class WebHandleDynamicRoute
         $parentId = 0;
 
         for ($i = 0; $i < $this->segmentsCount; $i++) {
-            $page = Page::publicDynamicRoute($this->segments[$i], $parentId)
-                ->addQualifiedSelect('id', 'slug', 'type')
-                ->first();
+            $page = Page::publicDynamicRoute($this->segments[$i], $parentId)->first();
 
             if (is_null($page)) {
                 return $pages;
@@ -190,9 +190,9 @@ class WebHandleDynamicRoute
      * Set the page route.
      *
      * @param  array  $pages
-     * @return bool
+     * @return bool|null
      */
-    protected function setPageRoute(array $pages): bool
+    protected function setPageRoute(array $pages): ?bool
     {
         if (! ($page = end($pages)) instanceof Page) {
             return false;
@@ -207,7 +207,7 @@ class WebHandleDynamicRoute
                 return true;
             }
 
-            return false;
+            return null;
         }
 
         $this->setRoute($page->type, 'index', array_merge([$pages], $tabs));
@@ -219,24 +219,22 @@ class WebHandleDynamicRoute
      * Set the extended page route.
      *
      * @param  array  $pages
-     * @return bool
+     * @return bool|null
      */
-    protected function setExtendedPageRoute(array $pages): bool
+    protected function setExtendedPageRoute(array $pages): ?bool
     {
         if (! ($page = end($pages)) instanceof Page
             || ! array_key_exists(
                 $page->type, (array) $this->config->get('cms.pages.extended')
-            )) {
+            ) || ! $segmentsLeft = ($this->segmentsCount - count($pages))) {
             return false;
         }
-
-        $segmentsLeft = $this->segmentsCount - count($pages);
 
         $tabs = [];
 
         if ($segmentsLeft > 1
             && ! $tabs = $this->bindTab($page->type, 'show', $segmentsLeft - 1)) {
-            return false;
+            return null;
         }
 
         $this->setRoute($page->type, 'show', array_merge(
@@ -247,91 +245,85 @@ class WebHandleDynamicRoute
     }
 
     /**
-     * Set the collection route.
+     * Set the listable route.
      *
      * @param  array  $pages
-     * @return bool
+     * @return bool|null
      */
-    protected function setCollectionRoute(array $pages): bool
+    protected function setListableRoute(array $pages): ?bool
     {
-        if (! ($page = end($pages)) instanceof Page
-            || ! array_key_exists(
-                $page->type, (array) $this->config->get('cms.pages.collections')
-            )) {
+        if (! ($page = end($pages)) instanceof Page) {
             return false;
         }
 
+        $listableType = null;
+
+        foreach ((array) $this->config->get('cms.pages.listable') as $type => $values) {
+            if (array_key_exists($page->type, (array) $values)) {
+                $listableType = $type;
+
+                break;
+            }
+        }
+
+        if (is_null($listableType)) {
+            return false;
+        }
+
+        $model = $this->config->get('cms.listable')[$listableType]['model'] ?? null;
+
+        if (is_null($model)) {
+            throw new InvalidArgumentException("Listable type '$listableType.model' not provided.");
+        }
+
+        $model = (new $model)::publicDynamicRoute($page->type_id, $page->type)->first();
+
+        if (is_null($model)) {
+            return null;
+        }
+
+        if ($this->setListableTypeRoute($pages, $model) === true) {
+            return true;
+        }
+
+        return null;
+    }
+
+    /**
+     * Set the listable type route.
+     *
+     * @param  array  $pages
+     * @param  \Illuminate\Database\Eloquent\Model  $listableModel
+     * @return bool|null
+     */
+    protected function setListableTypeRoute(array $pages, Model $listableModel): ?bool
+    {
         $segmentsLeft = $this->segmentsCount - count($pages);
-
-        if (is_null($model = Collection::publicDynamicRoute(
-            $page->type_id, $page->type
-        )->addQualifiedSelect('*')->first())) {
-            return false;
-        }
 
         $tabs = [];
 
         $parameters = [$pages];
+        $parameters[] = $listableModel;
 
         if (! $segmentsLeft
-            || $tabs = $this->bindTab($model->type, 'index', $segmentsLeft)) {
-            $parameters[] = $model;
+            || $tabs = $this->bindTab($listableModel->type, 'index', $segmentsLeft)) {
             $parameters = array_merge($parameters, $tabs);
 
-            $this->setRoute($model->type, 'index', $parameters);
+            $this->setRoute($listableModel->type, 'index', $parameters);
 
             return true;
         }
 
-        if (! array_key_exists($page->type, (array) $this->config->get('cms.listable'))) {
-            $parameters[] = $model;
-            $parameters[] = $this->segments[$this->segmentsCount - $segmentsLeft];
-
-            if ($segmentsLeft > 1
-                && ! $tabs = $this->bindTab($model->type, 'show', $segmentsLeft - 1)) {
-                return false;
-            }
-
-            $parameters = array_merge($parameters, $tabs);
-
-            $this->setRoute($model->type, 'show', $parameters);
-
-            return true;
-        }
-
-        return $this->setGalleryRoute($model, $segmentsLeft, $parameters);
-    }
-
-    /**
-     * Set the deep collection route.
-     *
-     * @param  \Illuminate\Database\Eloquent\Model  $collectionModel
-     * @param  int  $segmentsLeft
-     * @param  array  $parameters
-     * @return bool
-     */
-    protected function setGalleryRoute(
-        Model $collectionModel, int $segmentsLeft, array $parameters = []
-    ): bool
-    {
-        $tabs = [];
-
-        $parameters[] = $model = Gallery::publicDynamicRoute(
-            $this->segments[$this->segmentsCount - $segmentsLeft], $collectionModel->id
-        )->addQualifiedSelect('*')->first();
-
-        if (is_null($model)) {
-            return false;
-        }
+        $parameters[] = $this->segments[$this->segmentsCount - $segmentsLeft];
 
         if ($segmentsLeft > 1
-            && ! $tabs = $this->bindTab($model->type, 'index', $segmentsLeft - 1)) {
-            return true;
+            && ! $tabs = $this->bindTab($listableModel->type, 'show', $segmentsLeft - 1)) {
+            return null;
         }
 
         $parameters = array_merge($parameters, $tabs);
 
-        $this->setRoute($model->type, 'index', $parameters);
+        $this->setRoute($listableModel->type, 'show', $parameters);
 
         return true;
     }
@@ -504,18 +496,5 @@ class WebHandleDynamicRoute
         }
 
         return $this->namespace . '\\' . 'Web' . str($type)->studly() . 'Controller';
-    }
-
-    /**
-     * Throw service unavailable http exception if non-visible language is selected.
-     *
-     * @param  string|null  $language
-     * @return void
-     */
-    protected function checkLanguageForMaintenance(?string $language): void
-    {
-        if (is_null($language) || ! language()->allVisible()->offsetExists($language)) {
-            throw new ServiceUnavailableHttpException;
-        }
     }
 }
