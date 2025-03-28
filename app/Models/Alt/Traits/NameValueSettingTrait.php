@@ -35,6 +35,25 @@ trait NameValueSettingTrait
     }
 
     /**
+     * Filter a given attribute by its type.
+     *
+     * @param  mixed  $attribute
+     * @return mixed
+     */
+    protected function filterAttribute(mixed $attribute): mixed
+    {
+        if (is_numeric($attribute)) {
+            if ($attribute = filter_var($attribute, FILTER_VALIDATE_INT)) {
+                return $attribute;
+            } elseif ($attribute = filter_var($attribute, FILTER_VALIDATE_FLOAT)) {
+                return $attribute;
+            }
+        }
+
+        return $attribute;
+    }
+
+    /**
      * Get the result of the settings record.
      *
      * @return \Illuminate\Support\Collection
@@ -44,13 +63,7 @@ trait NameValueSettingTrait
         $data = $this->pluck('value', 'name')->toArray();
 
         foreach ($data as $key => $value) {
-            if (is_numeric($value)) {
-                if ($validatedValue = filter_var($value, FILTER_VALIDATE_INT)) {
-                    $data[$key] = $validatedValue;
-                } elseif ($validatedValue = filter_var($value, FILTER_VALIDATE_FLOAT)) {
-                    $data[$key] = $validatedValue;
-                }
-            }
+            $data[$key] = $this->filterAttribute($value);
         }
 
         return new Collection(array_merge($this->defaultNamedValues(), $data));
@@ -94,11 +107,9 @@ trait NameValueSettingTrait
             $input = array_merge($input, $uncheckedValues);
         }
 
-        foreach ($input as $key => $value) {
-            if (! array_key_exists($key, $this->defaultNamedValues())) {
-                continue;
-            }
+        $input = array_intersect_key($input, $this->defaultNamedValues());
 
+        foreach ($input as $key => $value) {
             $model = $this->where('name', $key)->first();
 
             if (! is_null($model)) {
