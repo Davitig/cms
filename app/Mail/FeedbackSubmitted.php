@@ -3,6 +3,8 @@
 namespace App\Mail;
 
 use App\Models\Setting\WebSetting;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Mail\Attachment;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
@@ -13,7 +15,7 @@ class FeedbackSubmitted extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(protected array $data) {}
+    public function __construct(protected array $data, protected array $files = []) {}
 
     /**
      * Get the message envelope.
@@ -48,7 +50,17 @@ class FeedbackSubmitted extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        $attachments = [];
+
+        foreach ($this->files as $file) {
+            if ($file instanceof UploadedFile) {
+                $attachments[] = Attachment::fromData(
+                    fn () => $file->get(), $file->getClientOriginalName()
+                );
+            }
+        }
+
+        return $attachments;
     }
 
     /**

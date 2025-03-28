@@ -23,35 +23,31 @@ trait HasSubModels
      * Get sibling models.
      *
      * @param  array|string  $columns
-     * @param  int|null  $id
-     * @param  int|null  $parentId
      * @param  bool|int  $recursive
+     * @param  int|null  $value
+     * @param  string  $key
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getSiblingModels(
         array|string $columns = ['*'],
-        ?int         $parentId = null,
-        ?int         $id = null,
-        bool|int     $recursive = false
+        bool|int     $recursive = false,
+        ?int         $value = null,
+        string       $key = 'parent_id'
     ): Collection
     {
-        if (! $parentId ??= $this->parent_id || ! $id ??= $this->getKey()) {
+        if (! $id ??= $this->getKey()) {
             return $this->newCollection();
         }
 
         $models = $this->forPublic()
-            ->parentId($parentId)
+            ->where($key, $value ?: $this->parent_id)
             ->whereKeyNot($id)
             ->positionAsc()
             ->get($columns);
 
-        if ($models->count() > 1) {
-            return $recursive ? $models->each(function ($item) use ($columns, $recursive) {
-                $item->subModels = $this->getSubModels($columns, $recursive, $item->id);
-            }) : $models;
-        }
-
-        return $models->make();
+        return $recursive ? $models->each(function ($item) use ($columns, $recursive) {
+            $item->subModels = $this->getSubModels($columns, $recursive, $item->id);
+        }) : $models;
     }
 
     /**
@@ -72,7 +68,8 @@ trait HasSubModels
     {
         $columns = (array) $columns;
 
-        $columns = current($columns) == '*' ? $columns : array_merge($columns, [$this->getKeyName()]);
+        $columns = current($columns) == '*'
+            ? $columns : array_merge($columns, [$this->getKeyName()]);
 
         $models = $this->forPublic()->where(
             $key, $value ?: $this->getKey()
@@ -96,7 +93,9 @@ trait HasSubModels
      */
     public function hasSiblingModel(?int $parentId = null, ?int $id = null): bool
     {
-        if (! $parentId ??= $this->parent_id || ! $id ??= $this->getKey()) {
+        $parentId ??= $this->parent_id;
+
+        if (! $id ??= $this->getKey()) {
             return false;
         }
 
