@@ -231,8 +231,8 @@ function language_prefix(?string $path = null, mixed $language = null): string
 
     if (is_string($language)) {
         $path = $language . '/' . $path;
-    } elseif (($language === true || language()->isSelected())
-        && count(language()->all()) > 1) {
+    } elseif (($language === true || language()->isSelected()) &&
+        count(language()->all()) > 1) {
         $path = language()->active() . '/' . $path;
     }
 
@@ -267,8 +267,8 @@ function language_to_url(string $url, mixed $language = null): string
     }
 
     if (! empty(trim($path, '/'))) {
-        if ($schemeAndHost == request()->getSchemeAndHttpHost()
-            && str($path)->startsWith($baseUrl = trim(request()->getBaseUrl(), '/'))) {
+        if ($schemeAndHost == request()->getSchemeAndHttpHost() &&
+            str($path)->startsWith($baseUrl = trim(request()->getBaseUrl(), '/'))) {
             $path = mb_substr($path, mb_strlen($baseUrl));
         } else {
             $baseUrl = '';
@@ -341,9 +341,9 @@ function make_sub_items(
  */
 function has_sub_items(object $item): bool
 {
-    return isset($item->sub_items)
-        && $item->sub_items instanceof Collection
-        && $item->sub_items->isNotEmpty();
+    return isset($item->sub_items) &&
+        $item->sub_items instanceof Collection &&
+        $item->sub_items->isNotEmpty();
 }
 
 /**

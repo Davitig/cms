@@ -40,8 +40,8 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
                 return $next($request);
             }, only: ['create', 'store']),
             new Middleware(function (Request $request, Closure $next) {
-                if (! $request->user('cms')->hasFullAccess()
-                    && $request->user('cms')->id != $request->route('cms_user')) {
+                if (! $request->user('cms')->hasFullAccess() &&
+                    $request->user('cms')->id != $request->route('cms_user')) {
                     throw new AccessDeniedHttpException('Forbidden');
                 }
 

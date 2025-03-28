@@ -19,8 +19,8 @@ trait PositionableTrait
         array $data, int $parentId = 0, array $params = [], bool $hasSubItems = false
     ): bool
     {
-        if (empty($data)
-            || ! $hasSubItems && ! is_array($data = $this->movePosition($data, $params))) {
+        if (empty($data) ||
+            ! $hasSubItems && ! is_array($data = $this->movePosition($data, $params))) {
             return false;
         }
 
@@ -69,8 +69,7 @@ trait PositionableTrait
         }
 
         if (empty($data = array_filter(
-            $data, fn ($value) => ! empty($value['pos']) && ! empty($value['id'])
-        ))) {
+            $data, fn ($value) => ! empty($value['pos']) && ! empty($value['id'])))) {
             return false;
         }
 

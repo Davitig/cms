@@ -223,17 +223,16 @@ class WebHandleDynamicRoute
      */
     protected function setExtendedPageRoute(array $pages): ?bool
     {
-        if (! ($page = end($pages)) instanceof Page
-            || ! array_key_exists(
-                $page->type, (array) $this->config->get('cms.pages.extended')
-            ) || ! $segmentsLeft = ($this->segmentsCount - count($pages))) {
+        if (! ($page = end($pages)) instanceof Page ||
+            ! array_key_exists($page->type, (array) $this->config->get('cms.pages.extended')) ||
+            ! $segmentsLeft = ($this->segmentsCount - count($pages))) {
             return false;
         }
 
         $tabs = [];
 
-        if ($segmentsLeft > 1
-            && ! $tabs = $this->bindTab($page->type, 'show', $segmentsLeft - 1)) {
+        if ($segmentsLeft > 1 &&
+            ! $tabs = $this->bindTab($page->type, 'show', $segmentsLeft - 1)) {
             return null;
         }
 
@@ -305,8 +304,8 @@ class WebHandleDynamicRoute
         $parameters = [$pages];
         $parameters[] = $listableModel;
 
-        if (! $segmentsLeft
-            || $tabs = $this->bindTab($listableModel->type, 'index', $segmentsLeft)) {
+        if (! $segmentsLeft ||
+            $tabs = $this->bindTab($listableModel->type, 'index', $segmentsLeft)) {
             $parameters = array_merge($parameters, $tabs);
 
             $this->setRoute($listableModel->type, 'index', $parameters);
@@ -316,8 +315,8 @@ class WebHandleDynamicRoute
 
         $parameters[] = $this->segments[$this->segmentsCount - $segmentsLeft];
 
-        if ($segmentsLeft > 1
-            && ! $tabs = $this->bindTab($listableModel->type, 'show', $segmentsLeft - 1)) {
+        if ($segmentsLeft > 1 &&
+            ! $tabs = $this->bindTab($listableModel->type, 'show', $segmentsLeft - 1)) {
             return null;
         }
 
@@ -373,20 +372,20 @@ class WebHandleDynamicRoute
 
             $localTabs = explode('/', $path);
 
-            if (($paramsLeft = (count($localTabs) - count($publicTabs)))
-                && $paramsLeft - $optionalParam) {
+            if (($paramsLeft = (count($localTabs) - count($publicTabs))) &&
+                $paramsLeft - $optionalParam) {
                 continue;
             }
 
             for ($i = 0; $i < $segmentsLeft; $i++) {
-                if ($localTabs[$i] == $publicTabs[$i]
-                    || str($localTabs[$i])->containsAll(['{', '}'])) {
+                if ($localTabs[$i] == $publicTabs[$i] ||
+                    str($localTabs[$i])->containsAll(['{', '}'])) {
                     $tabs[] = $publicTabs[$i];
                 }
             }
 
-            if (($paramsLeft = (count($localTabs) - count($tabs)))
-                && $paramsLeft - $optionalParam) {
+            if (($paramsLeft = (count($localTabs) - count($tabs))) &&
+                $paramsLeft - $optionalParam) {
                 continue;
             }
 
@@ -407,8 +406,8 @@ class WebHandleDynamicRoute
      */
     protected function getTypeRequestMethodAction(string $type, string $actionMethod): ?string
     {
-        if (! array_key_exists($this->requestMethod, $this->typeRequestMethods)
-            || empty($types = $this->typeRequestMethods[$this->requestMethod])) {
+        if (! array_key_exists($this->requestMethod, $this->typeRequestMethods) ||
+            empty($types = $this->typeRequestMethods[$this->requestMethod])) {
             return null;
         }
 
@@ -437,11 +436,10 @@ class WebHandleDynamicRoute
     {
         if (is_null($this->tabActionMethod)) {
             if (! is_null($typeRequestMethodAction = $this->getTypeRequestMethodAction(
-                $type, $actionMethod
-            ))) {
+                $type, $actionMethod))) {
                 $actionMethod = $typeRequestMethodAction;
-            } elseif ($this->requestMethod != SymfonyRequest::METHOD_GET
-                && $this->requestMethod != SymfonyRequest::METHOD_HEAD) {
+            } elseif ($this->requestMethod != SymfonyRequest::METHOD_GET &&
+                $this->requestMethod != SymfonyRequest::METHOD_HEAD) {
                 throw new MethodNotAllowedHttpException([
                     SymfonyRequest::METHOD_GET, SymfonyRequest::METHOD_HEAD
                 ]);

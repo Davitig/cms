@@ -50,8 +50,8 @@ class AdminPermissionsController extends Controller implements HasMiddleware
             array_flip(Permission::$routeGroupsAllowed)
         ), function ($routes) {
             return array_filter($routes, function ($route) {
-                return ! in_array($route, Permission::$routeNamesHidden)
-                    && ! in_array($route, Permission::$routeNamesAllowed);
+                return ! in_array($route, Permission::$routeNamesHidden) &&
+                    ! in_array($route, Permission::$routeNamesAllowed);
             });
         });
 
@@ -81,10 +81,10 @@ class AdminPermissionsController extends Controller implements HasMiddleware
 
         foreach ((array) $this->request->get('permissions') as $groupName => $routes) {
             foreach ((array) $routes as $routeName) {
-                if (in_array($groupName, Permission::$routeGroupsHidden)
-                    || in_array($groupName, Permission::$routeGroupsAllowed)
-                    || in_array($routeName, Permission::$routeNamesHidden)
-                    || in_array($routeName, Permission::$routeNamesAllowed)) {
+                if (in_array($groupName, Permission::$routeGroupsHidden) ||
+                    in_array($groupName, Permission::$routeGroupsAllowed) ||
+                    in_array($routeName, Permission::$routeNamesHidden) ||
+                    in_array($routeName, Permission::$routeNamesAllowed)) {
                     continue;
                 }
 

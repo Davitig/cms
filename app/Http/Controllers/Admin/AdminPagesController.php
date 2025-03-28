@@ -113,8 +113,8 @@ class AdminPagesController extends Controller
         if ($request->expectsJson()) {
             $type = $request->get('type');
 
-            if (array_key_exists($type, (array) cms_pages('listable.collections'))
-                || array_key_exists($type, (array) cms_pages('extended'))) {
+            if (array_key_exists($type, (array) cms_pages('listable.collections')) ||
+                array_key_exists($type, (array) cms_pages('extended'))) {
                 $input['typeHtml'] = view(
                     'admin.pages._extended_type', ['input' => $input]
                 )->render();

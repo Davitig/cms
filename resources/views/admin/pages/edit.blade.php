@@ -66,8 +66,8 @@
                     <i class="{{icon_type('files')}}"></i> {{trans('general.files')}}
                 </a>
             </li>
-            @if (array_key_exists($current->type, cms_pages('listable.collections'))
-            || array_key_exists($current->type, cms_pages('extended')))
+            @if (array_key_exists($current->type, cms_pages('listable.collections')) ||
+                 array_key_exists($current->type, cms_pages('extended')))
                 <li class="extended">
                     <a href="{{cms_route($current->type.'.index', [$current->type_id])}}">
                         <i class="{{icon_type($current->type)}}"></i> {{ucfirst($current->type)}}

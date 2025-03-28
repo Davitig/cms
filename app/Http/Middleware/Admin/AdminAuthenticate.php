@@ -70,9 +70,9 @@ class AdminAuthenticate
 
         $routeGroup = substr($routeName, 0, strpos($routeName, '.'));
 
-        if (! in_array($routeGroup, Permission::$routeGroupsAllowed)
-            && ! in_array($routeName, Permission::$routeNamesAllowed)
-            && ! (new Permission)->roleId($user->cms_user_role_id)->hasAccess($routeName)) {
+        if (! in_array($routeGroup, Permission::$routeGroupsAllowed) &&
+            ! in_array($routeName, Permission::$routeNamesAllowed) &&
+            ! (new Permission)->roleId($user->cms_user_role_id)->hasAccess($routeName)) {
             throw new AccessDeniedHttpException('Forbidden');
         }
     }

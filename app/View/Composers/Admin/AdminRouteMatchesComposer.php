@@ -100,8 +100,8 @@ class AdminRouteMatchesComposer
                     $routeName = $key;
                 }
 
-                if ($routeName == $currentRouteName
-                    && (! $routeParam || $routeParam == $currentRouteParam)) {
+                if ($routeName == $currentRouteName &&
+                    (! $routeParam || $routeParam == $currentRouteParam)) {
                     return true;
                 }
             }

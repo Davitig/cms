@@ -74,8 +74,8 @@
                                                 <span class="{{icon_type('files')}}"></span>
                                             </a>
                                             <span title="{{ucfirst($item->type)}}">
-                                                <a href="{{$typeUrl = (array_key_exists($item->type, cms_pages('extended'))
-                                                || array_key_exists($item->type, cms_pages('listable.collections')) ? cms_route($item->type . '.index', [$item->type_id]) : '#')}}" class="btn btn-{{$typeUrl == '#' ? 'white disabled' : 'info'}}">
+                                                <a href="{{$typeUrl = (array_key_exists($item->type, cms_pages('extended')) || array_key_exists($item->type, cms_pages('listable.collections'))
+                                                ? cms_route($item->type . '.index', [$item->type_id]) : '#')}}" class="btn btn-{{$typeUrl == '#' ? 'white disabled' : 'info'}}">
                                                     <span class="{{icon_type($item->type, 'fa fa-file-text')}}"></span>
                                                 </a>
                                             </span>

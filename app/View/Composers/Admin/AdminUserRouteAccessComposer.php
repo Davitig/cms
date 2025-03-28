@@ -69,8 +69,8 @@ class AdminUserRouteAccessComposer
 
             $baseName = false;
 
-            if (count($routeNames) > 1
-                && $baseName = is_bool($baseName = end($routeNames)) && $baseName) {
+            if (count($routeNames) > 1 &&
+                $baseName = is_bool($baseName = end($routeNames)) && $baseName) {
                 array_pop($routeNames);
 
                 array_walk($routeNamesAllowed, function (&$value) {
