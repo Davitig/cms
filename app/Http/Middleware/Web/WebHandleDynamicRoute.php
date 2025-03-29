@@ -23,13 +23,6 @@ class WebHandleDynamicRoute
     protected string $namespace = 'App\Http\Controllers\Web';
 
     /**
-     * The current route instance.
-     *
-     * @var \Illuminate\Routing\Route
-     */
-    protected Route $route;
-
-    /**
      * The array of request path segments.
      *
      * @var array
@@ -74,9 +67,10 @@ class WebHandleDynamicRoute
     /**
      * Create a new middleware instance.
      *
+     * @param  \Illuminate\Routing\Route  $route
      * @param  \Illuminate\Contracts\Config\Repository  $config
      */
-    public function __construct(protected Repository $config) {}
+    public function __construct(protected Route $route, protected Repository $config) {}
 
     /**
      * Handle an incoming request.
@@ -85,8 +79,6 @@ class WebHandleDynamicRoute
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $this->route = $request->route();
-
         $this->route->forgetParameter('any');
 
         $this->build($request->segments(), $request->method());
@@ -203,7 +195,7 @@ class WebHandleDynamicRoute
         $tabs = [];
 
         if ($segmentsLeft && ! $tabs = $this->bindTab($page->type, 'index', $segmentsLeft)) {
-            if ($this->setExtendedPageRoute($pages)) {
+            if ($this->setExtendedPageRoute($pages) === true) {
                 return true;
             }
 

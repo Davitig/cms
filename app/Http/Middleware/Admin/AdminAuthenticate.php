@@ -6,8 +6,10 @@ use App\Models\CmsUser;
 use App\Models\Permission;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class AdminAuthenticate
 {
@@ -40,7 +42,11 @@ class AdminAuthenticate
             return $redirect->to(cms_route('lockscreen'));
         }
 
-        $this->checkRoutePermission($user, $request->route()->getName());
+        if (! ($route = $request->route()) instanceof Route) {
+            throw new RouteNotFoundException;
+        }
+
+        $this->checkRoutePermission($user, $route->getName());
 
         return $next($request);
     }
@@ -60,12 +66,12 @@ class AdminAuthenticate
             return;
         }
 
-        $routeName = str_replace(
-            language()->active() . '.' . cms_route_name(), '', $fullRouteName
-        );
+        $routeName = str($fullRouteName)->replaceFirst(
+            language()->active() . '.' . cms_route_name(), ''
+        )->toString();
 
         if ($routeName == $fullRouteName) {
-            $routeName = str_replace(cms_route_name(), '', $routeName);
+            $routeName = str($fullRouteName)->replaceFirst(cms_route_name(), '')->toString();
         }
 
         $routeGroup = substr($routeName, 0, strpos($routeName, '.'));

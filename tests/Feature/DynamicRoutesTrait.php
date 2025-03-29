@@ -96,7 +96,7 @@ trait DynamicRoutesTrait
 
         $route = [];
 
-        $middleware = (new WebHandleDynamicRoute($this->app['config']));
+        $middleware = (new WebHandleDynamicRoute($request->route(), $this->app['config']));
 
         $middleware->handle($request, function ($request) use (&$route) {
             $route = $request->route();

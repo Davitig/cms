@@ -4,7 +4,7 @@ namespace App\View\Composers\Admin;
 
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 
 class AdminRouteMatchesComposer
 {
@@ -18,11 +18,11 @@ class AdminRouteMatchesComposer
     /**
      * Create a new view composer instance.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Routing\Route  $route
      */
-    public function __construct(Request $request)
+    public function __construct(protected Route $route)
     {
-        $this->routeMatcher = $this->getRouteMatcher($request);
+        $this->routeMatcher = $this->getRouteMatcher();
     }
 
     /**
@@ -48,16 +48,11 @@ class AdminRouteMatchesComposer
      *       "Param-Routes" {param} is present.
      * NOTE: Third parameter is true by default, which indicates resource routes.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Closure
      */
-    protected function getRouteMatcher(Request $request): Closure
+    protected function getRouteMatcher(): Closure
     {
-        if (is_null($route = $request->route())) {
-            return fn () => false;
-        }
-
-        $currentFullRouteName = $route->getName();
+        $currentFullRouteName = $this->route->getName();
 
         $currentRouteName = str_replace(
             language()->active() . '.' . cms_route_name(), '', $currentFullRouteName
@@ -67,7 +62,7 @@ class AdminRouteMatchesComposer
             $currentRouteName = str_replace(cms_route_name(), '', $currentRouteName);
         }
 
-        $params = $route->parameters();
+        $params = $this->route->parameters();
 
         $resourceMethod = null;
 

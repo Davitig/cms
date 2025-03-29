@@ -14,7 +14,7 @@ use Tests\TestCase;
 
 class WebComposersTest extends TestCase
 {
-    protected function testWebComposer(string $composerClass, ...$someOfArgs)
+    protected function testComposer(string $composerClass, ...$someOfArgs)
     {
         $composer = $this->app->make($composerClass);
 
@@ -27,12 +27,12 @@ class WebComposersTest extends TestCase
 
     public function test_web_settings_composer()
     {
-        $this->testWebComposer(WebSettingsComposer::class, 'settings');
+        $this->testComposer(WebSettingsComposer::class, 'settings');
     }
 
     public function test_web_translations_composer()
     {
-        $this->testWebComposer(WebTranslationsComposer::class, 'trans');
+        $this->testComposer(WebTranslationsComposer::class, 'trans');
     }
 
     public function test_web_current_data_composer()
@@ -48,7 +48,7 @@ class WebComposersTest extends TestCase
 
     public function test_web_pages_composer()
     {
-        $this->testWebComposer(WebPagesComposer::class, 'pageItems');
+        $this->testComposer(WebPagesComposer::class, 'pageItems');
     }
 
     public function test_web_breadcrumb_composer()

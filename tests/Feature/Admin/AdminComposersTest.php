@@ -9,12 +9,15 @@ use App\View\Composers\Admin\AdminRouteMatchesComposer;
 use App\View\Composers\Admin\AdminSitemapXmlComposer;
 use App\View\Composers\Admin\AdminUserRouteAccessComposer;
 use Illuminate\Contracts\View\View;
+use Illuminate\Routing\Route;
 
 class AdminComposersTest extends TestAdmin
 {
-    protected function testAdminComposer(string $composerClass, ...$someOfArgs)
+    protected function testComposer(string|object $composer, ...$someOfArgs): void
     {
-        $composer = $this->app->make($composerClass);
+        if (is_string($composer)) {
+            $composer = $this->app->make($composer);
+        }
 
         $mock = $this->mock(View::class);
 
@@ -25,31 +28,33 @@ class AdminComposersTest extends TestAdmin
 
     public function test_admin_cms_settings_composer()
     {
-        $this->testAdminComposer(AdminCmsSettingsComposer::class, 'cmsSettings');
+        $this->testComposer(AdminCmsSettingsComposer::class, 'cmsSettings');
     }
 
     public function test_admin_menus_composer()
     {
-        $this->testAdminComposer(AdminMenuComposer::class, 'menus');
+        $this->testComposer(AdminMenuComposer::class, 'menus');
     }
 
     public function test_admin_calendar_composer()
     {
-        $this->testAdminComposer(AdminCalendarComposer::class, 'calendarEvents');
+        $this->testComposer(AdminCalendarComposer::class, 'calendarEvents');
     }
 
     public function test_admin_route_matcher_composer()
     {
-        $this->testAdminComposer(AdminRouteMatchesComposer::class, 'routeMatches');
+        $this->testComposer(new AdminRouteMatchesComposer(
+            (new Route(['GET'], '/', fn () => null))->bind($this->app['request'])
+        ), 'routeMatches');
     }
 
     public function test_admin_route_access_composer()
     {
-        $this->testAdminComposer(AdminUserRouteAccessComposer::class, 'userRouteAccess');
+        $this->testComposer(AdminUserRouteAccessComposer::class, 'userRouteAccess');
     }
 
     public function test_admin_sitemap_xml_composer()
     {
-        $this->testAdminComposer(AdminSitemapXmlComposer::class, 'sitemapXmlTime');
+        $this->testComposer(AdminSitemapXmlComposer::class, 'sitemapXmlTime');
     }
 }

@@ -35,17 +35,17 @@ class AdminLanguagesResourceTest extends TestAdmin
      */
     public function test_admin_languages_resource_store()
     {
-        (new Language)->whereLanguage('te')->delete();
+        (new Language)->whereLanguage('aa')->delete();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('languages.store'), [
-            'language' => 'te',
-            'short_name' => 'te',
+            'language' => 'aa',
+            'short_name' => 'aa',
             'full_name' => 'Test language',
         ]);
 
-        (new Language)->whereLanguage('te')->delete();
+        (new Language)->whereLanguage('aa')->delete();
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
@@ -73,8 +73,8 @@ class AdminLanguagesResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('languages.update', [$language->id]), [
-            'language' => 'te',
-            'short_name' => 'te',
+            'language' => 'aa',
+            'short_name' => 'aa',
             'full_name' => 'Test language',
         ]);
 
