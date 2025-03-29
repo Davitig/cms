@@ -26,7 +26,19 @@ class WebSetting extends Model
     ];
 
     /**
-     * {@inheritdoc}
+     * Determine if the model has languages' relation.
+     *
+     * @return bool
+     */
+    public function hasLanguages(): bool
+    {
+        return false;
+    }
+
+    /**
+     * Get the list of default named values.
+     *
+     * @return array
      */
     public function defaultNamedValues(): array
     {

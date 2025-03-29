@@ -8,8 +8,10 @@ return new class extends Migration
 {
     protected array $tableNames = [
         // strings
-        'web_settings' => 'string'
+        'web_settings' => 'string',
     ];
+
+    protected array $languageTableNames = [];
 
     /**
      * Run the migrations.
@@ -18,11 +20,24 @@ return new class extends Migration
     {
         foreach ($this->tableNames as $tableName => $columnType) {
             if (! Schema::hasTable($tableName)) {
-                Schema::create($tableName, function (Blueprint $table) use ($columnType) {
+                Schema::create($tableName, function (Blueprint $table) use ($tableName, $columnType) {
                     $table->smallIncrements('id');
-                    $table->string('name')->unique();
+
+                    if ($hasLanguage = in_array($tableName, $this->languageTableNames)) {
+                        $table->unsignedTinyInteger('language_id');
+                    }
+
+                    $table->string('name');
                     $table->$columnType('value')->nullable();
                     $table->timestamps();
+
+                    if ($hasLanguage) {
+                        $table->unique(['language_id', 'name']);
+
+                        $table->foreign('language_id')->references('id')->on('languages');
+                    } else {
+                        $table->unique(['name']);
+                    }
                 });
             }
         }

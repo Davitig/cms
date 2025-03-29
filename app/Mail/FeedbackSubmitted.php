@@ -70,6 +70,6 @@ class FeedbackSubmitted extends Mailable
      */
     public function getRecipient(): ?string
     {
-        return (new WebSetting)->findByName('email')->value;
+        return (new WebSetting)->whereName('email')->value('value');
     }
 }

@@ -15,6 +15,13 @@ trait NameValueSettingTrait
     protected bool $ignoreUnchecked = false;
 
     /**
+     * Determine if the model has languages' relation.
+     *
+     * @return bool
+     */
+    abstract public function hasLanguages(): bool;
+
+    /**
      * Get the list of default named values.
      *
      * @return array
@@ -56,30 +63,75 @@ trait NameValueSettingTrait
     /**
      * Get the result of the settings record.
      *
+     * @param  mixed  $currentLang
      * @return \Illuminate\Support\Collection
      */
-    public function getSettings(): Collection
+    public function getSettings(mixed $currentLang = true): Collection
     {
-        $data = $this->pluck('value', 'name')->toArray();
+        $data = $this->when($this->hasLanguages() && $currentLang,
+            function ($q) use ($currentLang) {
+                return $q->where('language_id', is_numeric($currentLang)
+                    ? $currentLang
+                    : language()->getBy($currentLang, 'id'));
+            }
+        )->when($this->hasLanguages(), function ($q) {
+            return $q->get()->groupBy('language_id')->map->pluck('value', 'name');
+        }, function ($q) {
+            return $q->pluck('value', 'name');
+        })->toArray();
 
         foreach ($data as $key => $value) {
-            $data[$key] = $this->filterAttribute($value);
+            if ($this->hasLanguages()) {
+                foreach ($value as $langKey => $langValue) {
+                    $data[$key][$langKey] = $this->filterAttribute($langValue);
+                }
+
+                $data[$key] = new Collection(array_merge($this->defaultNamedValues(), $data[$key]));
+            } else {
+                $data[$key] = $this->filterAttribute($value);
+            }
         }
 
-        return new Collection(array_merge($this->defaultNamedValues(), $data));
+        if (! $this->hasLanguages()) {
+            $data = array_merge($this->defaultNamedValues(), $data);
+        } elseif (empty($data)) {
+            foreach (language()->all() as $language) {
+                $data[$language['id']] = $this->defaultNamedValues();
+            }
+        }
+
+        return new Collection($data);
     }
 
     /**
-     * Find a record by its name.
+     * Add a where "name" clause to the query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $column
+     * @param  string  $name
+     * @param  mixed  $currentLang
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWhereName(Builder $query, string $name, mixed $currentLang = true): Builder
+    {
+        return $query->when($this->hasLanguages() && $currentLang, function ($q) use ($currentLang) {
+            return $q->where('language_id', is_numeric($currentLang)
+                ? $currentLang
+                : language()->getBy($currentLang, 'id'));
+        })->where('name', $name);
+    }
+
+    /**
+     * Find a record by its name or return default.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $name
+     * @param  mixed  $currentLang
      * @return static
      */
-    public function scopeFindByName(Builder $query, string $column): static
+    public function scopeFindByName(Builder $query, string $name, mixed $currentLang = true): static
     {
-        return $query->whereName($column)->firstOrNew([], [
-            'name' => $column, 'value' => $this->defaultNamedValues()[$column] ?? null
+        return $query->whereName($name, $currentLang)->firstOrNew([], [
+            'name' => $name, 'value' => $this->defaultNamedValues()[$name] ?? null
         ])->forceFill(array_filter(
             [$this->getKeyName() => null] + array_fill_keys($this->getDates(), null)
         ));
@@ -89,9 +141,10 @@ trait NameValueSettingTrait
      * Save the settings model to the database.
      *
      * @param  array  $input
+     * @param  mixed  $currentLang
      * @return int
      */
-    public function saveSettings(array $input): int
+    public function saveSettings(array $input, mixed $currentLang = true): int
     {
         $count = 0;
 
@@ -109,16 +162,37 @@ trait NameValueSettingTrait
 
         $input = array_intersect_key($input, $this->defaultNamedValues());
 
+        $activeLangId = is_numeric($currentLang) ? $currentLang : language()->getActive('id');
+        $languageIds = language()->all()->pluck('id')->toArray();
+
         foreach ($input as $key => $value) {
-            $model = $this->where('name', $key)->first();
+            $model = $this->when($this->hasLanguages(), function ($q) use ($activeLangId) {
+                return $q->where('language_id', $activeLangId);
+            })->where('name', $key)->first();
 
             if (! is_null($model)) {
                 $model->update(['value' => $value]);
             } else {
-                $this->create([
-                    'name' => $key,
-                    'value' => $value
-                ]);
+                if ($this->hasLanguages()) {
+                    foreach ($languageIds as $languageId) {
+                        if ($this->where('language_id', $languageId)
+                            ->whereName($key)
+                            ->exists()) {
+                            continue;
+                        }
+
+                        $this->create([
+                            'language_id' => $languageId,
+                            'name' => $key,
+                            'value' => $value
+                        ]);
+                    }
+                } else {
+                    $this->create([
+                        'name' => $key,
+                        'value' => $value
+                    ]);
+                }
             }
 
             $count++;
