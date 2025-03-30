@@ -82,7 +82,7 @@ class RouteServiceProvider extends ServiceProvider
         if (language()->containsMany()) {
             $router->middleware('cms.lang')
                 ->prefix('{lang}/' . cms_slug())
-                ->name('lang.')
+                ->name('lang.' . cms_route_name())
                 ->whereIn('lang', language()->all()->keys()->toArray())
                 ->group(base_path('routes/cms.php'));
         }
