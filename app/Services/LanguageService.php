@@ -337,16 +337,18 @@ class LanguageService
     /**
      * Get a language item from the collection by key type.
      *
-     * @param  bool|string  $language
+     * @param  mixed  $language
      * @param  string|null  $attribute
      * @return mixed
      */
-    public function getBy(bool|string $language, ?string $attribute = null): mixed
+    public function getBy(mixed $language, ?string $attribute = null): mixed
     {
         if ($language === true) {
             return $this->getActive($attribute);
         } elseif ($language === false) {
             return $this->getMain($attribute);
+        } elseif (is_int($language)) {
+            return $this->getByKey($language, $attribute);
         }
 
         return $this->get($language, $attribute);
@@ -355,19 +357,57 @@ class LanguageService
     /**
      * Get a visible language item from the collection by key type.
      *
-     * @param  bool|string  $language
+     * @param  mixed  $language
      * @param  string|null  $attribute
      * @return mixed
      */
-    public function getVisibleBy(bool|string $language, ?string $attribute = null): mixed
+    public function getVisibleBy(mixed $language, ?string $attribute = null): mixed
     {
         if ($language === true) {
             return $this->getActive($attribute);
         } elseif ($language === false) {
             return $this->getMain($attribute);
+        } elseif (is_int($language)) {
+            return $this->getVisibleByKey($language, $attribute);
         }
 
         return $this->getVisible($language, $attribute);
+    }
+
+    /**
+     * Get a language item from the collection by primary key.
+     *
+     * @param  int  $key
+     * @param  string|null  $attribute
+     * @return mixed
+     */
+    public function getByKey(int $key, ?string $attribute = null): mixed
+    {
+        $result = $this->all()->where('id', $key)->first();
+
+        if (! is_null($attribute) && ! is_null($result)) {
+            return $result[$attribute] ?? null;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get a visible language item from the collection by primary key.
+     *
+     * @param  int  $key
+     * @param  string|null  $attribute
+     * @return mixed
+     */
+    public function getVisibleByKey(int $key, ?string $attribute = null): mixed
+    {
+        $result = $this->allVisible()->where('id', $key)->first();
+
+        if (! is_null($attribute) && ! is_null($result)) {
+            return $result[$attribute] ?? null;
+        }
+
+        return $result;
     }
 
     /**
