@@ -35,9 +35,9 @@
             ->class('form-horizontal')->open() }}
             {{ html()->hidden('parent_id') }}
             @include('admin.pages.form', [
-                'submit'        => trans('general.create'),
+                'submit' => trans('general.create'),
                 'submitAndBack' => trans('general.create_n_close'),
-                'icon'          => 'save'
+                'icon' => 'save'
             ])
             {{ html()->form()->close() }}
         </div>

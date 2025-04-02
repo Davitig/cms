@@ -29,9 +29,9 @@
                 'post', cms_route('collections.store')
             )->class('form-horizontal')->open() }}
             @include('admin.collections.form', [
-                'submit'        => trans('general.create'),
+                'submit' => trans('general.create'),
                 'submitAndBack' => trans('general.create_n_close'),
-                'icon'          => 'save'
+                'icon' => 'save'
             ])
             {{ html()->form()->close() }}
         </div>

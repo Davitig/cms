@@ -36,9 +36,9 @@
         <div class="panel-body">
             {{ html()->modelForm($current, 'post', cms_route('menus.store'))->class('form-horizontal')->open() }}
             @include('admin.menus.form', [
-                'submit'        => trans('general.create'),
+                'submit' => trans('general.create'),
                 'submitAndBack' => trans('general.create_n_close'),
-                'icon'          => 'save'
+                'icon' => 'save'
             ])
             {{ html()->form()->close() }}
         </div>

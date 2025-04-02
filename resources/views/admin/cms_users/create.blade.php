@@ -39,9 +39,9 @@
                 </div>
             </div>
             @include('admin.cms_users.form', [
-                'submit'        => trans('general.create'),
+                'submit' => trans('general.create'),
                 'submitAndBack' => trans('general.create_n_close'),
-                'icon'          => 'save'
+                'icon' => 'save'
             ])
             {{ html()->form()->close() }}
         </div>

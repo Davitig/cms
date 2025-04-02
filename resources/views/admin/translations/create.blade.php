@@ -32,9 +32,9 @@
                 'post', cms_route('translations.store')
             )->class('form-horizontal')->open() }}
             @include('admin.translations.form', [
-                'submit'        => trans('general.create'),
+                'submit' => trans('general.create'),
                 'submitAndBack' => trans('general.create_n_close'),
-                'icon'          => 'save'
+                'icon' => 'save'
             ])
             {{ html()->form()->close() }}
         </div>

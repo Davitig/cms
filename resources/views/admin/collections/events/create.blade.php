@@ -35,9 +35,9 @@
                 'post', cms_route('events.store', [$current->collection_id])
            )->class('form-horizontal')->open() }}
             @include('admin.collections.events.form', [
-                'submit'        => trans('general.create'),
+                'submit' => trans('general.create'),
                 'submitAndBack' => trans('general.create_n_close'),
-                'icon'          => 'save'
+                'icon' => 'save'
             ])
             {{ html()->form()->close() }}
         </div>

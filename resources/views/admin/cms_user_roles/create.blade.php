@@ -36,9 +36,9 @@
     <div class="panel-body">
         {{ html()->modelForm($current, 'post', cms_route('cmsUserRoles.store'))->class('form-horizontal')->open() }}
             @include('admin.cms_user_roles.form', [
-                'submit'        => trans('general.create'),
+                'submit' => trans('general.create'),
                 'submitAndBack' => trans('general.create_n_close'),
-                'icon'          => 'save'
+                'icon' => 'save'
             ])
         {{ html()->form()->close() }}
     </div>

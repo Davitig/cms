@@ -36,9 +36,8 @@
                 'put', cms_route('cmsUserRoles.update', [$current->id])
             )->class('form-horizontal ' . $cmsSettings->get('ajax_form'))->open() }}
             @include('admin.cms_user_roles.form', [
-                'submit'        => trans('general.update'),
-                'submitAndBack' => trans('general.update_n_back'),
-                'icon'          => 'save'
+                'submit' => trans('general.update'),
+                'icon' => 'save'
             ])
             {{ html()->form()->close() }}
         </div>

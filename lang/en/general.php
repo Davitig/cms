@@ -18,10 +18,7 @@ return [
 
     // actions
     'create' => 'Create',
-    'create_n_close' => 'Create & Go Back',
-    'edit' => 'Edit',
     'update' => 'Update',
-    'update_n_back' => 'Update & Go Back',
     'submit' => 'Submit',
     'save' => 'Save',
     'back' => 'Go back',

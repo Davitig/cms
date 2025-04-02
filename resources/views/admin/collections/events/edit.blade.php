@@ -49,9 +49,8 @@
                             ->class('form-horizontal ' . $cmsSettings->get('ajax_form'))
                             ->data('lang', $current->language)->open() }}
                             @include('admin.collections.events.form', [
-                                'submit'        => trans('general.update'),
-                                'submitAndBack' => trans('general.update_n_back'),
-                                'icon'          => 'save'
+                                'submit' => trans('general.update'),
+                                'icon' => 'save'
                             ])
                             {{ html()->form()->close() }}
                         </div>
