@@ -7,7 +7,9 @@ use Closure;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Pipeline;
 use Illuminate\Routing\Route;
+use Illuminate\Routing\Router;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,10 +69,13 @@ class WebHandleDynamicRoute
     /**
      * Create a new middleware instance.
      *
+     * @param  \Illuminate\Routing\Router  $router
      * @param  \Illuminate\Routing\Route  $route
      * @param  \Illuminate\Contracts\Config\Repository  $config
      */
-    public function __construct(protected Route $route, protected Repository $config) {}
+    public function __construct(
+        protected Router $router, protected Route $route, protected Repository $config
+    ) {}
 
     /**
      * Handle an incoming request.
@@ -81,11 +86,43 @@ class WebHandleDynamicRoute
     {
         $this->route->forgetParameter('any');
 
+        $originalControllerClass = $this->route->getControllerClass();
+
         $this->build($request->segments(), $request->method());
 
         $request->setRouteResolver(fn () => $this->route);
 
-        return $next($request);
+        return $this->runRouteWithinMiddleware($request, $next, $originalControllerClass);
+    }
+
+    /**
+     * Run the given request within middleware.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @param  mixed  $originalControllerClass
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function runRouteWithinMiddleware(
+        Request $request, Closure $next, ?string $originalControllerClass
+    ): Response
+    {
+        if ($originalControllerClass == $this->route->getControllerClass()) {
+            return $next($request);
+        }
+
+        $middleware = $this->route->controllerMiddleware();
+
+        if (empty($middleware)) {
+            return $next($request);
+        }
+
+        $middleware = $this->router->resolveMiddleware($middleware);
+
+        return app(Pipeline::class)
+            ->send($request)
+            ->through(Router::uniqueMiddleware($middleware))
+            ->then(fn ($request) => $next($request));
     }
 
     /**
