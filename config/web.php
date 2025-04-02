@@ -11,6 +11,8 @@ return [
     |
     */
 
+    'enable_glide' => false,
+
     'glide_base_url' => 'img',
 
     'glide' => [

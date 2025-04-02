@@ -2,13 +2,15 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\Web\WebGlideServerController;
+use Illuminate\Config\Repository;
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Illuminate\Contracts\Support\DeferrableProvider;
+use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use League\Glide\Server;
 use League\Glide\ServerFactory;
 
-class GlideServiceProvider extends ServiceProvider implements DeferrableProvider
+class GlideServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -31,18 +33,12 @@ class GlideServiceProvider extends ServiceProvider implements DeferrableProvider
     /**
      * Bootstrap services.
      */
-    public function boot(): void
+    public function boot(Repository $config, Router $router): void
     {
-        //
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides(): array
-    {
-        return [Server::class];
+        if ($config->get('web.enable_glide')) {
+            $router->get($config->get('web.glide_base_url') . '/{path}', [
+                WebGlideServerController::class, 'show'
+            ])->name('glide')->where('path', '.+');
+        }
     }
 }

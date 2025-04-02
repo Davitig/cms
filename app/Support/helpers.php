@@ -441,7 +441,7 @@ function glide(string $path, string $type): string
     $files = current($files) . '/';
 
     if (($pos = strpos($path, $files)) !== false) {
-        $baseUrl = '/' . config('web.glide_base_url') . '/';
+        $baseUrl = config('web.glide_base_url') . '/';
 
         $query = '?type=' . $type;
 
