@@ -3,13 +3,13 @@
         $activeLang = request('lang', language()->active());
         $langCount = language()->count();
     @endphp
-    @foreach ($items as $current)
-        <li{!! $activeLang == $current->language ? ' class="active"' : '' !!}>
-            <a href="#item-{{$current->language}}" data-toggle="tab">
-                <img src="{{ asset('assets/libs/images/flags/'.$current->language.'.png') }}" width="23" height="13" alt="{{$current->language}}">
-                {{-- <span class="visible-xs">{{strtoupper($current->language)}}</span> --}}
+    @foreach (language()->all() as $language)
+        <li{!! $activeLang == $language->language ? ' class="active"' : '' !!}>
+            <a href="#item-{{$language->language}}" data-toggle="tab" data-lang="{{ $language->language }}">
+                <img src="{{ asset('assets/libs/images/flags/'.$language->language.'.png') }}" width="23" height="13" alt="{{$language->language}}">
+                {{-- <span class="visible-xs">{{strtoupper($language->language)}}</span> --}}
                 <span class="hidden-xs">
-                    {{strtoupper(language()->get($current->language, ($langCount > 5 ? 'short' : 'full') . '_name'))}}
+                    {{strtoupper(language()->get($language->language, ($langCount > 5 ? 'short' : 'full') . '_name'))}}
                 </span>
             </a>
         </li>

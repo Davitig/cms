@@ -18,7 +18,7 @@ class SliderLanguage extends Model
     protected $table = 'slider_languages';
 
     /**
-     * The attributes that are mass assignable for the Language model.
+     * The attributes that are mass assignable.
      *
      * @var array
      */

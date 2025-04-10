@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CmsUserRequest;
 use App\Models\CmsUser;
 use App\Models\CmsUserRole;
+use App\Scopes\CmsUserFilter;
 use Closure;
 use Illuminate\Container\Attributes\Storage as StorageAttr;
 use Illuminate\Filesystem\Filesystem;
@@ -64,7 +65,8 @@ class AdminCmsUsersController extends Controller implements HasMiddleware
 
                 return $q->whereKey($request->user('cms')->id);
             }
-        )->joinRole()->adminFilter($request)
+        )->joinRole()
+            ->tap(new CmsUserFilter($request))
             ->orderDesc()
             ->paginate(20);
 

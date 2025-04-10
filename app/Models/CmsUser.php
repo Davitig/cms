@@ -6,7 +6,6 @@ use App\Models\Alt\Traits\ModelBuilderTrait;
 use App\Models\Alt\User\User as Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\Request;
 
 class CmsUser extends Model
 {
@@ -125,27 +124,5 @@ class CmsUser extends Model
         return $query->leftJoin(
             'cms_user_roles', 'cms_user_roles.id', 'cms_users.cms_user_role_id'
         )->addSelect(['role', 'full_access', 'cms_users.*']);
-    }
-
-    /**
-     * Filter a query by specific parameters.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeAdminFilter(Builder $query, Request $request): Builder
-    {
-        $blockedValue = (int) $request->boolean('blocked');
-
-        return $query->when($request->get('name'), function ($q, $value) {
-            return $q->whereRaw("CONCAT(first_name, ' ', last_name) like ?", ["%{$value}%"]);
-        })->when($request->get('email'), function ($q, $value) {
-            return $q->where('email', 'like', "%{$value}%");
-        })->when($request->get('role'), function ($q, $value) {
-            return $q->where('cms_user_role_id', $value);
-        })->when($request->filled('blocked'), function ($q) use ($blockedValue) {
-            return $q->where('blocked', $blockedValue);
-        });
     }
 }

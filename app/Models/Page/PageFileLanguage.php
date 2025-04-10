@@ -18,7 +18,7 @@ class PageFileLanguage extends Model
     protected $table = 'page_file_languages';
 
     /**
-     * The attributes that are mass assignable for the Language model.
+     * The attributes that are mass assignable.
      *
      * @var array
      */
