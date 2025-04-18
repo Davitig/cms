@@ -17,8 +17,8 @@ return new class extends Migration
             $table->unsignedTinyInteger('visible')->default(1);
             $table->unsignedTinyInteger('position')->default(1);
             $table->unsignedTinyInteger('main')->default(0);
-            $table->string('short_name');
-            $table->string('full_name');
+            $table->string('short_name', 32);
+            $table->string('full_name', 32);
             $table->timestamps();
         });
     }
