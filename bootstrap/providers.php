@@ -7,6 +7,7 @@ return [
     App\Providers\ExceptionHandlerServiceProvider::class,
     App\Providers\GlideServiceProvider::class,
     App\Providers\ViewComposerServiceProvider::class,
+    Barryvdh\Debugbar\ServiceProvider::class,
     Cocur\Slugify\Bridge\Laravel\SlugifyServiceProvider::class,
     Mews\Captcha\CaptchaServiceProvider::class,
 ];
