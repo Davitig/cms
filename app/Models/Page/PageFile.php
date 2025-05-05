@@ -5,14 +5,14 @@ namespace App\Models\Page;
 use App\Models\Alt\Contracts\Fileable;
 use App\Models\Alt\Traits\FileTrait;
 use App\Models\Alt\Traits\HasLanguage;
-use App\Models\Alt\Traits\ModelBuilderTrait;
+use App\Models\Alt\Traits\QueriesTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PageFile extends Model implements Fileable
 {
-    use ModelBuilderTrait, HasLanguage, FileTrait;
+    use QueriesTrait, HasLanguage, FileTrait;
 
     /**
      * The table associated with the model.

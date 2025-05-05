@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Traits\ModelBuilderTrait;
+use App\Models\Alt\Traits\QueriesTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Collection extends Model
 {
-    use ModelBuilderTrait;
+    use QueriesTrait;
 
     /**
      * The table associated with the model.
