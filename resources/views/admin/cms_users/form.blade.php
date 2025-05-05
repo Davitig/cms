@@ -4,7 +4,7 @@
         <div class="col-sm-10">
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-at"></i></span>
-                {{ html()->text('email')->id('email')->class('form-control') }}
+                {{ html()->text('email')->id('email_inp')->class('form-control') }}
             </div>
             @if ($error)
                 <span class="text-danger">{{$error}}</span>
@@ -19,7 +19,7 @@
                 <div class="col-sm-8">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-header"></i></span>
-                        {{ html()->text('first_name')->id('first_name')->class('form-control') }}
+                        {{ html()->text('first_name')->id('first_name_inp')->class('form-control') }}
                     </div>
                     @if ($error)
                         <span class="text-danger">{{$error}}</span>
@@ -33,7 +33,7 @@
                 <div class="col-sm-8">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-header"></i></span>
-                        {{ html()->text('last_name')->id('last_name')->class('form-control') }}
+                        {{ html()->text('last_name')->id('last_name_inp')->class('form-control') }}
                     </div>
                     @if ($error)
                         <span class="text-danger">{{$error}}</span>
@@ -51,7 +51,7 @@
             <div class="col-sm-10">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="{{ icon_type('roles') }}"></i></span>
-                    {{ html()->select('cms_user_role_id', $roles)->id('cms_user_role_id')->class('form-control') }}
+                    {{ html()->select('cms_user_role_id', $roles)->id('cms_user_role_id_inp')->class('form-control') }}
                 </div>
                 @if ($error)
                     <span class="text-danger">{{$error}}</span>
@@ -72,7 +72,7 @@
                 <div class="col-sm-8">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-                        {{ html()->text('phone')->id('phone')->class('form-control') }}
+                        {{ html()->text('phone')->id('phone_inp')->class('form-control') }}
                     </div>
                     @if ($error)
                         <span class="text-danger">{{$error}}</span>
@@ -86,7 +86,7 @@
                 <div class="col-sm-8">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-building"></i></span>
-                        {{ html()->text('address')->id('address')->class('form-control') }}
+                        {{ html()->text('address')->id('address_inp')->class('form-control') }}
                     </div>
                     @if ($error)
                         <span class="text-danger">{{$error}}</span>
@@ -102,7 +102,7 @@
         <div class="form-group">
             <label class="col-sm-2 control-label text-left">Block:</label>
             <div class="col-sm-10">
-                {{ html()->checkbox('blocked')->id('blocked')->class('iswitch iswitch-secondary') }}
+                {{ html()->checkbox('blocked')->id('blocked_inp')->class('iswitch iswitch-secondary') }}
             </div>
         </div>
 

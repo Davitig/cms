@@ -3,7 +3,7 @@
     <div class="trans-form-group">
         <label class="trans-control-label required">Title:</label>
         <div>
-            {{ html()->text('title')->id('title' . $current->language)->class('trans-form-control')->data('lang', 1) }}
+            {{ html()->text('title')->id('title_inp' . $current->language)->class('trans-form-control')->data('lang', 1) }}
             @if ($error = $errors->first('title'))
                 <div class="text-danger">{{$error}}</div>
             @endif
@@ -13,7 +13,7 @@
     <div class="trans-form-group">
         <label class="trans-control-label required">Value:</label>
         <div>
-            {{ html()->text('value')->id('value' . $current->language)->class('trans-form-control') }}
+            {{ html()->text('value')->id('value_inp' . $current->language)->class('trans-form-control') }}
             @if ($error = $errors->first('value'))
                 <div class="text-danger">{{$error}}</div>
             @endif
@@ -24,7 +24,7 @@
         <label class="trans-control-label">Type:</label>
         <div class="">
             {{ html()->select('type', ['' => 'Global'] + $transTypes)
-            ->id('type' . $current->language)->class('trans-form-control')->data('lang', 1) }}
+            ->id('type_inp' . $current->language)->class('trans-form-control')->data('lang', 1) }}
         </div>
     </div>
 </div>
