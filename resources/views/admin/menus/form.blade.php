@@ -3,7 +3,7 @@
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-header"></i></span>
-            {{ html()->text('title')->id('title')->class('form-control') }}
+            {{ html()->text('title')->id('title_inp')->class('form-control') }}
         </div>
         @if ($error)
             <span class="text-danger">{{$error}}</span>
@@ -27,7 +27,7 @@
         <div class="form-group">
             <label class="col-sm-6 control-label">Main:</label>
             <div class="col-sm-6">
-                {{ html()->checkbox('main')->id('main')
+                {{ html()->checkbox('main')->id('main_inp')
                 ->class('iswitch iswitch-secondary')->data('lang', 1) }}
             </div>
         </div>

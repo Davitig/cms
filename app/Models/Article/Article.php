@@ -38,7 +38,7 @@ class Article extends Model implements Collection
     ];
 
     /**
-     * Set languages a one-to-many relationship.
+     * Languages' one-to-many relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

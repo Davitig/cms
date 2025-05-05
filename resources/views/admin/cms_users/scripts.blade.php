@@ -2,22 +2,22 @@
     <script type="text/javascript">
         $(function () {
             $('#photo-upload-btn').on('click', function () {
-                $('#photo-input').trigger('click');
+                $('#photo_inp').trigger('click');
             });
             let removePhotoChecked = false;
-            $('#remove-user-photo').on('change', function () {
+            $('#remove_photo_inp').on('change', function () {
                 removePhotoChecked = $(this).prop('checked');
             });
             $('form.ajax-form').on('ajaxFormSuccess', function () {
                 if (removePhotoChecked) {
-                    $('#photo-input').val('');
+                    $('#photo_inp').val('');
                     $('#user-photo').attr('src', '#').addClass('hidden');
                     $('.photo-upload-text').removeClass('hidden');
-                    $('#remove-user-photo').prop('checked', false);
+                    $('#remove_photo_inp').prop('checked', false);
                     removePhotoChecked = false;
                 }
             });
-            $('#photo-input').on('change', function() {
+            $('#photo_inp').on('change', function() {
                 if (! this.files || ! this.files[0]) {
                     $('.photo-msg').text('Error selecting a file');
 

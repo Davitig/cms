@@ -3,7 +3,7 @@
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-header"></i></span>
-            {{ html()->text('role')->id('role')->class('form-control') }}
+            {{ html()->text('role')->id('role_inp')->class('form-control') }}
         </div>
         @if ($error)
             <span class="text-danger">{{$error}}</span>
@@ -21,7 +21,7 @@
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-ellipsis-h"></i></span>
                     {{ html()->select('full_access', [0 => 'Custom', 1 => 'Full Access'])
-                    ->id('full_access' . $current->language)->class('form-control select')->data('lang', 1) }}
+                    ->id('full_access_inp' . $current->language)->class('form-control select')->data('lang', 1) }}
                 </div>
                 @if ($error)
                     <span class="text-danger">{{$error}}</span>

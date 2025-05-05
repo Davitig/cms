@@ -40,7 +40,7 @@
                                 <img src="{{$photoExists ? cms_route('cmsUsers.photo', [$current->id]) : '#'}}"
                                      width="150" height="150" id="user-photo" class="img-circle vat{{ $photoExists ? '' : ' hidden' }}" alt="Photo">
                             </div>
-                            {{ html()->file('photo')->id('photo-input')->class('hidden') }}
+                            {{ html()->file('photo')->id('photo_inp')->class('hidden') }}
                         </div>
                         <div class="user-name">
                             <a href="{{$routeShow}}">{{$current->first_name}} {{$current->last_name}}</a>
@@ -48,7 +48,7 @@
                         </div>
                         <div class="checkbox">
                             <label>
-                                {{ html()->checkbox('remove_photo')->id('remove-user-photo') }}
+                                {{ html()->checkbox('remove_photo')->id('remove_photo_inp') }}
                                 Remove photo
                             </label>
                         </div>

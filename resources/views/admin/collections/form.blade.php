@@ -3,7 +3,7 @@
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-header"></i></span>
-            {{ html()->text('title')->id('title')->class('form-control') }}
+            {{ html()->text('title')->id('title_inp')->class('form-control') }}
         </div>
         @if ($error)
             <span class="text-danger">{{$error}}</span>
@@ -18,7 +18,8 @@
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-ellipsis-h"></i></span>
-            {{ html()->select('type', cms_config('listable.collections.types'))->id('type')->class('form-control select')
+            {{ html()->select('type', cms_config('listable.collections.types'))
+            ->id('type_inp')->class('form-control select')
             ->ifNotNull($current->id, function ($html) {
                 return $html->attribute('disabled');
             }) }}
@@ -39,7 +40,7 @@
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-list-ol"></i></span>
                     {{ html()->select('admin_order_by', $orderBy = cms_config('listable.collections.order_by'))
-                    ->id('admin_order_by')->class('form-control select') }}
+                    ->id('admin_order_by_inp')->class('form-control select') }}
                 </div>
                 @if ($error)
                     <span class="text-danger">{{$error}}</span>
@@ -53,7 +54,7 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-list-ol"></i></span>
-                    {{ html()->select('web_order_by', $orderBy)->id('web_order_by')->class('form-control select') }}
+                    {{ html()->select('web_order_by', $orderBy)->id('web_order_by_inp')->class('form-control select') }}
                 </div>
                 @if ($error)
                     <span class="text-danger">{{$error}}</span>
@@ -72,7 +73,8 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-sort"></i></span>
-                    {{ html()->select('admin_sort', cms_config('listable.collections.sort'))->id('admin_sort')->class('form-control select') }}
+                    {{ html()->select('admin_sort', cms_config('listable.collections.sort'))
+                    ->id('admin_sort_inp')->class('form-control select') }}
                 </div>
                 @if ($error)
                     <span class="text-danger">{{$error}}</span>

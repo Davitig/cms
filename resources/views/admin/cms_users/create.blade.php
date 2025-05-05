@@ -32,7 +32,7 @@
                                 <span class="photo-upload-text">Upload Photo</span>
                                 <img src="#" width="150" height="150" id="user-photo" class="img-circle vat hidden" alt="Photo">
                             </div>
-                            {{ html()->file('photo')->id('photo-input')->class('hidden') }}
+                            {{ html()->file('photo')->id('photo_inp')->class('hidden') }}
                         </div>
                         <div class="photo-msg text-danger">{{$errors->first('photo')}}</div>
                     </div>

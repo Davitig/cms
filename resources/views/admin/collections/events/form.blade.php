@@ -3,7 +3,7 @@
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-header"></i></span>
-            {{ html()->text('title')->id('title' . $current->title)->class('form-control') }}
+            {{ html()->text('title')->id('title_inp' . $current->title)->class('form-control') }}
         </div>
         @if ($error)
             <span class="text-danger">{{$error}}</span>
@@ -18,7 +18,7 @@
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-link"></i></span>
-            {{ html()->text('slug')->id('slug' . $current->language)->class('form-control')->data('lang', 1) }}
+            {{ html()->text('slug')->id('slug_inp' . $current->language)->class('form-control')->data('lang', 1) }}
         </div>
         @if ($error)
             <span class="text-danger">{{$error}}</span>
@@ -33,8 +33,8 @@
     <div class="col-lg-6 col-sm-10">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-image"></i></span>
-            {{ html()->text('image')->id('image' . $current->language)->class('form-control')->data('lang', 1) }}
-            <div class="input-group-btn popup" data-browse="image{{$current->language}}">
+            {{ html()->text('image')->id('image_inp' . $current->language)->class('form-control')->data('lang', 1) }}
+            <div class="input-group-btn popup" data-browse="image_inp{{$current->language}}">
                 <span class="btn btn-info">Browse</span>
             </div>
         </div>
@@ -46,7 +46,7 @@
 <div class="form-group">
     <label class="col-sm-2 control-label">Description:</label>
     <div class="col-sm-10">
-        {{ html()->textarea('description')->id('description' . $current->language)
+        {{ html()->textarea('description')->id('description_inp' . $current->language)
         ->class('form-control text-editor')->rows(5) }}
     </div>
 </div>
@@ -56,7 +56,7 @@
 <div class="form-group">
     <label class="col-sm-2 control-label">Content:</label>
     <div class="col-sm-10">
-        {{ html()->textarea('content')->id('content' . $current->language)->class('form-control text-editor')->rows(10) }}
+        {{ html()->textarea('content')->id('content_inp' . $current->language)->class('form-control text-editor')->rows(10) }}
     </div>
 </div>
 
@@ -65,7 +65,7 @@
 <div class="form-group">
     <label class="col-sm-2 control-label">Meta Title:</label>
     <div class="col-sm-10">
-        {{ html()->text('meta_title')->id('meta_title' . $current->language)->class('form-control') }}
+        {{ html()->text('meta_title')->id('meta_title_inp' . $current->language)->class('form-control') }}
     </div>
 </div>
 
@@ -74,7 +74,7 @@
 <div class="form-group">
     <label class="col-sm-2 control-label">Meta Description:</label>
     <div class="col-sm-10">
-        {{ html()->text('meta_desc')->id('meta_desc' . $current->language)->class('form-control') }}
+        {{ html()->text('meta_desc')->id('meta_desc_inp' . $current->language)->class('form-control') }}
     </div>
 </div>
 
@@ -85,7 +85,7 @@
         <div class="form-group">
             <label class="col-sm-6 control-label">Visible:</label>
             <div class="col-sm-6">
-                {{ html()->checkbox('visible')->id('visible' . $current->language)
+                {{ html()->checkbox('visible')->id('visible_inp' . $current->language)
                 ->class('iswitch iswitch-secondary')->data('lang', 1) }}
             </div>
         </div>

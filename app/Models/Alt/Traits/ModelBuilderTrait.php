@@ -24,7 +24,7 @@ trait ModelBuilderTrait
     }
 
     /**
-     * Get the fillable attributes for the model including statically defined columns.
+     * Get the fillable attributes for the model, including statically defined columns.
      *
      * @param  bool  $qualifyColumns
      * @return array<string>

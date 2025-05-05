@@ -1,7 +1,7 @@
 <div class="form-group{{($error = $errors->first('title')) ? ' validate-has-error' : '' }}">
     <label class="col-sm-2 control-label required">Title:</label>
     <div class="col-sm-6">
-        {{ html()->text('title')->id('title' . $current->language)->class('form-control')->data('lang', 1) }}
+        {{ html()->text('title')->id('title_inp' . $current->language)->class('form-control')->data('lang', 1) }}
         @if ($error)
             <span class="text-danger">{{$error}}</span>
         @endif
@@ -14,7 +14,7 @@
 <div class="form-group{{($error = $errors->first('value')) ? ' validate-has-error' : '' }}">
     <label class="col-sm-2 control-label required">Value:</label>
     <div class="col-sm-6">
-        {{ html()->text('value')->id('value' . $current->language)->class('form-control') }}
+        {{ html()->text('value')->id('value_inp' . $current->language)->class('form-control') }}
         @if ($error)
             <span class="text-danger">{{$error}}</span>
         @endif
@@ -27,7 +27,7 @@
 <div class="form-group{{($error = $errors->first('code')) ? ' validate-has-error' : '' }}">
     <label class="col-sm-2 control-label required">Code:</label>
     <div class="col-sm-6">
-        {{ html()->text('code')->id('code' . $current->language)
+        {{ html()->text('code')->id('code_inp' . $current->language)
         ->class('form-control')
         ->ifNotNull($current->code, function ($html) {
             return $html->isReadonly();
@@ -45,7 +45,7 @@
     <label class="col-sm-2 control-label">Type:</label>
     <div class="col-sm-6">
         {{ html()->select('type', ['' => 'Global'] + $transTypes)
-        ->id('type' . $current->language)->class('form-control')->data('lang', 1) }}
+        ->id('type_inp' . $current->language)->class('form-control')->data('lang', 1) }}
     </div>
 </div>
 

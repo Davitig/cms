@@ -166,7 +166,7 @@ $(function () {
                 // fill form inputs
                 if (res?.data && typeof res.data === 'object') {
                     $.each(res.data, function (index, element) {
-                        let item = $('#' + index + lang, form);
+                        let item = $('#' + index + '_inp' + lang, form);
 
                         if (item.data('lang')) {
                             let inputGeneral = $(ajaxFormSelector + ' [name="' + index + '"]');
@@ -176,7 +176,9 @@ $(function () {
                                     if (item.is(':checkbox')) {
                                         item.prop('checked', Boolean(element));
                                     } else {
-                                        item.val(element);
+                                        if (item.attr('name')) {
+                                            item.val(element);
+                                        }
                                         if (item.is('select')) {
                                             item.trigger('change');
                                         }
@@ -185,7 +187,9 @@ $(function () {
                             });
                         } else if (item.val() !== element) {
                             if (! item.is(':checkbox')) {
-                                item.val(element);
+                                if (item.attr('name')) {
+                                    item.val(element);
+                                }
                             }
                         }
                     });
@@ -201,11 +205,11 @@ $(function () {
                 }
                 $.each(xhr.responseJSON.errors, function (index, element) {
                     let field;
-                    let arrayField = index.substr(0, index.indexOf('.'));
+                    let arrayField = index.substring(0, index.indexOf('.'));
                     if (arrayField) {
                         field = $('.' + arrayField + lang, form).first();
                     } else {
-                        field = $('#' + index + lang, form);
+                        field = $('#' + index + '_inp' + lang, form);
                     }
                     field.closest('.form-group').addClass('validate-has-error');
 
@@ -417,7 +421,7 @@ function positionable(url, orderBy, page, hasMorePages, selectors) {
                 let href = window.location.href;
                 let hrefQueryStart = href.indexOf('?');
                 if (hrefQueryStart > 1) {
-                    href = href.substr(0, hrefQueryStart);
+                    href = href.substring(0, hrefQueryStart);
                 }
                 window.location.href = href + '?page=' + page;
             }, 'json').fail(function (xhr) {
