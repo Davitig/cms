@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cms_users', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('email')->unique();
             $table->unsignedTinyInteger('cms_user_role_id');
             $table->string('first_name', 35);

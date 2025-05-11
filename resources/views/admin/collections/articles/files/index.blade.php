@@ -26,11 +26,13 @@
         </div>
     </div>
     <ul class="nav nav-tabs nav-tabs-justified">
-        @include('admin._partials.forms.lang_tabs_linked', [
-            'items' => $foreignModels, 'routeName' => 'articles.edit', 'params' => [
-                $foreignModel->collection_id, $foreignModel->id
-            ]
-        ])
+        <li>
+            <a href="{{cms_route('articles.edit', [$foreignModel->collection_id, $foreignModel->id])}}">
+                <img src="{{ asset('assets/libs/images/flags/'.language()->active().'.png') }}" width="23" height="13" alt="{{language()->active()}}">
+                {{-- <span class="visible-xs">{{$language->language}}</span> --}}
+                <span class="hidden-xs">Article</span>
+            </a>
+        </li>
         <li class="active">
             <a href="#" data-toggle="tab">
                 <span class="visible-xs"><i class="{{$icon}}"></i></span>

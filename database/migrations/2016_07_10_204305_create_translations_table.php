@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('translations', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('code', 18)->unique();
             $table->string('title');
             $table->string('type', 32)->nullable();
@@ -20,7 +20,7 @@ return new class extends Migration
         });
 
         Schema::create('translation_languages', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('translation_id');
             $table->unsignedTinyInteger('language_id');
             $table->string('value');

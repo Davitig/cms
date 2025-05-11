@@ -108,7 +108,7 @@
         @include('admin._scripts.transfer', ['route' => cms_route('pages.transfer', [$menu->id]), 'column' => 'menu_id', 'list' => $menus, 'id' => $menu->id, 'recursive' => true])
         <script type="text/javascript">
             $(function() {
-                positionable('{{ cms_route('pages.updatePosition') }}');
+                positionable('{{ cms_route('pages.updatePosition') }}', 'asc');
 
                 // Collapse parent pages
                 $('#items').on('click', '[data-nestable-action]', function() {

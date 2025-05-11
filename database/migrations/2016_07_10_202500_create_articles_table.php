@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('articles', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('collection_id');
             $table->string('slug')->unique();
             $table->boolean('visible')->default(1);
@@ -24,7 +24,7 @@ return new class extends Migration
         });
 
         Schema::create('article_languages', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('article_id');
             $table->unsignedTinyInteger('language_id');
             $table->string('title');

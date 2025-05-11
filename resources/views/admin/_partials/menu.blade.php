@@ -34,6 +34,14 @@
         </ul>
     </li>
 @endif
+@if ($userRouteAccess('products.index'))
+    <li>
+        <a href="{{ cms_route('products.index') }}"{!! $routeMatches(['products']) ? ' class="active"' : '' !!}>
+            <i class="{{icon_type('products')}}" title="Products"></i>
+            <span class="title">Products</span>
+        </a>
+    </li>
+@endif
 @if ($userRouteAccess('collections.index'))
     <li>
         <a href="{{ cms_route('collections.index') }}"{!! $routeMatches(['collections']) ? ' class="active"' : '' !!}>

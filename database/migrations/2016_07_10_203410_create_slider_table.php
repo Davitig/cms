@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('slider', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->boolean('visible')->default(1);
             $table->unsignedBigInteger('position')->default(1);
             $table->string('file', 800)->nullable();
@@ -21,7 +21,7 @@ return new class extends Migration
         });
 
         Schema::create('slider_languages', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('slider_id');
             $table->unsignedTinyInteger('language_id');
             $table->string('title');
