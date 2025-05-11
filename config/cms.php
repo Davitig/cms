@@ -38,6 +38,7 @@ return [
             'page' => 'Page',
             'feedback' => 'Feedback',
             'search' => 'Search',
+            'products' => 'Products',
             'articles' => 'Articles',
             'events' => 'Events',
             'faq' => 'FAQ'
@@ -49,7 +50,9 @@ return [
                 'faq' => App\Models\Faq::class
             ]
         ],
-        'extended' => [],
+        'extended' => [
+            'products' => App\Models\Product\Product::class
+        ],
     ],
 
     /*
@@ -75,6 +78,7 @@ return [
 
     'file_routes' => [
         'pages' => App\Http\Controllers\Admin\AdminPageFilesController::class,
+        'products' => App\Http\Controllers\Admin\AdminProductFilesController::class,
         'articles' => App\Http\Controllers\Admin\AdminArticleFilesController::class,
         'events' => App\Http\Controllers\Admin\AdminEventFilesController::class
     ],
@@ -189,6 +193,8 @@ return [
 
         'menus' => 'fa fa-list',
         'pages' => 'fa fa-indent',
+
+        'products' => 'fa fa-shopping-bag',
 
         'collections' => 'fa fa-list-alt',
         'articles' => 'fa fa-newspaper',

@@ -11,12 +11,12 @@ return [
     |
     */
 
-    'enable_glide' => false,
+    'enable_glide' => true,
 
     'glide_base_url' => 'img',
 
     'glide' => [
-        // 'type_name' => ['w' => 300, 'h' => 200, 'fit' => 'crop'],
+        'products_tmb' => ['w' => 50, 'h' => 50, 'fit' => 'crop'],
     ],
 
     'glide_crop' => [

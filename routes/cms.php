@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\AdminMenusController;
 use App\Http\Controllers\Admin\AdminNotesController;
 use App\Http\Controllers\Admin\AdminPagesController;
 use App\Http\Controllers\Admin\AdminPermissionsController;
+use App\Http\Controllers\Admin\AdminProductsController;
 use App\Http\Controllers\Admin\AdminSitemapXmlController;
 use App\Http\Controllers\Admin\AdminSliderController;
 use App\Http\Controllers\Admin\AdminTranslationsController;
@@ -78,6 +79,15 @@ Route::middleware('cms.auth')->group(function ($router) {
         $router->put('pages/collapse', 'collapse')->name('pages.collapse');
         $router->resource('menus.pages', AdminPagesController::class)
             ->names(resource_names('pages'))
+            ->except(['show']);
+    });
+
+    // products
+    $router->controller(AdminProductsController::class)->group(function ($router) {
+        $router->put('products/{id}/visibility', 'visibility')->name('products.visibility');
+        $router->put('products/position', 'updatePosition')->name('products.updatePosition');
+        $router->resource('products', AdminProductsController::class)
+            ->names(resource_names('products'))
             ->except(['show']);
     });
 
