@@ -22,11 +22,11 @@ trait NameValueSettingTrait
     abstract public function hasLanguages(): bool;
 
     /**
-     * Get the list of default named values.
+     * Get the list of default name values.
      *
      * @return array
      */
-    abstract public function defaultNamedValues(): array;
+    abstract public function defaultNameValues(): array;
 
     /**
      * Set whether unchecked boolean values should be ignored from saving.
@@ -86,17 +86,17 @@ trait NameValueSettingTrait
                     $data[$key][$langKey] = $this->filterAttribute($langValue);
                 }
 
-                $data[$key] = new Collection(array_merge($this->defaultNamedValues(), $data[$key]));
+                $data[$key] = new Collection(array_merge($this->defaultNameValues(), $data[$key]));
             } else {
                 $data[$key] = $this->filterAttribute($value);
             }
         }
 
         if (! $this->hasLanguages()) {
-            $data = array_merge($this->defaultNamedValues(), $data);
+            $data = array_merge($this->defaultNameValues(), $data);
         } elseif (empty($data)) {
             foreach (language()->all() as $language) {
-                $data[$language['id']] = $this->defaultNamedValues();
+                $data[$language['id']] = $this->defaultNameValues();
             }
         }
 
@@ -131,7 +131,7 @@ trait NameValueSettingTrait
     public function scopeFindByName(Builder $query, string $name, mixed $currentLang = true): static
     {
         return $query->whereName($name, $currentLang)->firstOrNew([], [
-            'name' => $name, 'value' => $this->defaultNamedValues()[$name] ?? null
+            'name' => $name, 'value' => $this->defaultNameValues()[$name] ?? null
         ])->forceFill(array_filter(
             [$this->getKeyName() => null] + array_fill_keys($this->getDates(), null)
         ));
@@ -150,7 +150,7 @@ trait NameValueSettingTrait
 
         if (! $this->ignoreUnchecked) {
             $uncheckedValues = array_filter(
-                $this->defaultNamedValues(),
+                $this->defaultNameValues(),
                 fn ($value, $key) => ! array_key_exists($key, $input) && is_int($value),
                 ARRAY_FILTER_USE_BOTH
             );
@@ -160,7 +160,7 @@ trait NameValueSettingTrait
             $input = array_merge($input, $uncheckedValues);
         }
 
-        $input = array_intersect_key($input, $this->defaultNamedValues());
+        $input = array_intersect_key($input, $this->defaultNameValues());
 
         $activeLangId = is_numeric($currentLang) ? $currentLang : language()->getActive('id');
         $languageIds = language()->all()->pluck('id')->toArray();

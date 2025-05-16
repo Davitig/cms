@@ -36,11 +36,11 @@ class WebSetting extends Model
     }
 
     /**
-     * Get the list of default named values.
+     * Get the list of default name values.
      *
      * @return array
      */
-    public function defaultNamedValues(): array
+    public function defaultNameValues(): array
     {
         return [
             'email' => '',
