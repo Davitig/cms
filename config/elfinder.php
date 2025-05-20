@@ -44,7 +44,7 @@ return [
         'cms_users' => [
             'alias' => 'CMS Users',
             'tmbURL' =>  env('APP_URL') . '/storage/.tmb',
-            'tmbPath' => storage_path('app/private/files/.tmb')
+            'tmbPath' => storage_path('app/private/.tmb')
         ]
     ],
 

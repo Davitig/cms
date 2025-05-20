@@ -32,7 +32,7 @@ return [
 
         'cms_users' => [
             'driver' => 'local',
-            'root' => storage_path('app/private/files/cms_users'),
+            'root' => storage_path('app/private/cms_users'),
             'serve' => false,
             'throw' => false,
             'report' => false,
