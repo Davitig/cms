@@ -32,4 +32,14 @@ class MenuFactory extends Factory
             'main' => $value
         ]);
     }
+
+    /**
+     * Indicates the title.
+     */
+    public function title(string $title, ?string $desc = null): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'title' => $title
+        ] + ($desc ? ['description' => $desc] : []));
+    }
 }

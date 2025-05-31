@@ -63,7 +63,7 @@ class AdminCmsSettingsController extends Controller
         unset($columns['id']);
 
         $attributes = $request->all();
-        $checkboxes = ['layout_boxed', 'horizontal_menu_click', 'horizontal_menu_minimal', 'ajax_form'];
+        $checkboxes = ['layout_boxed', 'horizontal_menu_click', 'horizontal_menu_type', 'ajax_form'];
 
         foreach ($checkboxes as $value) {
             if (! isset($attributes[$value])) {

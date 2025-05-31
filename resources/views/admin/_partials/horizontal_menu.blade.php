@@ -1,4 +1,4 @@
-<nav class="navbar horizontal-menu{{$cmsSettings->get('layout_boxed') ? '' : ' navbar-fixed-top'}} {{$cmsSettings->get('horizontal_menu_minimal')}}"><!-- set fixed position by adding class "navbar-fixed-top" -->
+<nav class="navbar horizontal-menu{{$cmsSettings->get('layout_boxed') ? '' : ' navbar-fixed-top'}} {{$cmsSettings->get('horizontal_menu_type')}}"><!-- set fixed position by adding class "navbar-fixed-top" -->
     <div class="navbar-inner">
         <!-- Navbar Brand -->
         <div class="navbar-brand">

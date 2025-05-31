@@ -53,6 +53,17 @@ class CmsUserFactory extends Factory
     }
 
     /**
+     * Indicates the full name.
+     */
+    public function fullName(string $firstName, string $lastName): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'first_name' => $firstName,
+            'last_name' => $lastName
+        ]);
+    }
+
+    /**
      * Indicate that the model's email address should be unverified.
      */
     public function unverified(): static

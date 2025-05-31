@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\CmsUserRole;
+use Database\Factories\CmsUserRoleFactory;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class CmsUserRolesTableSeeder extends Seeder
 {
@@ -12,17 +13,10 @@ class CmsUserRolesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('cms_user_roles')->truncate();
+        (new CmsUserRole)->truncate();
 
-        DB::table('cms_user_roles')->insert([
-            [
-                'role' => 'Administrator',
-                'full_access' => 1
-            ],
-            [
-                'role' => 'Member',
-                'full_access' => 0
-            ]
-        ]);
+        CmsUserRoleFactory::new()->role('Administrator')->fullAccess()->create();
+
+        CmsUserRoleFactory::new()->role('Member')->create();
     }
 }

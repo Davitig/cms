@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Language;
+use Database\Factories\LanguageFactory;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class LanguageTableSeeder extends Seeder
 {
@@ -12,21 +13,10 @@ class LanguageTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('languages')->truncate();
+        (new Language)->truncate();
 
-        DB::table('languages')->insert([
-            [
-                'language' => 'en',
-                'position' => 1,
-                'short_name' => 'en',
-                'full_name' => 'English'
-            ],
-            [
-                'language' => 'ka',
-                'position' => 2,
-                'short_name' => 'ge',
-                'full_name' => 'Georgian'
-            ]
-        ]);
+        LanguageFactory::new()->language('en', 'en', 'English')
+            ->main()
+            ->create();
     }
 }

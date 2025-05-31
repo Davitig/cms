@@ -2,7 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Support\Facades\DB;
+use App\Models\Menu;
+use Database\Factories\MenuFactory;
 
 class MenusTableSeeder extends DatabaseSeeder
 {
@@ -11,15 +12,8 @@ class MenusTableSeeder extends DatabaseSeeder
      */
     public function run(): void
     {
-        DB::table('menus')->truncate();
+        (new Menu)->truncate();
 
-        DB::table('menus')->insert([
-            [
-                'main' => 1,
-                'title' => 'Main Pages',
-                'description' => 'List of main pages',
-                'created_at' => date('Y-m-d H:i:s')
-            ]
-        ]);
+        MenuFactory::new()->main()->title('Main Pages', 'List of main pages')->create();
     }
 }

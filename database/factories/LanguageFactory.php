@@ -36,12 +36,14 @@ class LanguageFactory extends Factory
     /**
      * Indicates the language codes.
      */
-    public function language(?string $language = null): static
+    public function language(
+        ?string $language = null, ?string $shortName = null, ?string $fullName = null
+    ): static
     {
         return $this->state(fn (array $attributes) => [
-            'language' => $language ??= fake()->unique()->languageCode(),
-            'short_name' => $language,
-            'full_name' => $language
+            'language' => $language ?: fake()->unique()->languageCode(),
+            'short_name' => $shortName ?: $language,
+            'full_name' => $fullName ?: $language
         ]);
     }
 
@@ -52,10 +54,12 @@ class LanguageFactory extends Factory
     {
         $sequence = [];
 
-        foreach ($languages as $language) {
+        foreach ($languages as $code => $name) {
+            $code = is_string($code) ? $code : $name;
+
             $sequence[] = [
-                'language' => $language, 'short_name' => $language, 'full_name' => $language
-            ] + ($language == $main ? ['main' => 1] : []);
+                'language' => $code, 'short_name' => $code, 'full_name' => $name
+            ] + ($code == $main ? ['main' => 1] : []);
         }
 
         return $this->times(count($languages))->sequence(...$sequence);
@@ -64,7 +68,7 @@ class LanguageFactory extends Factory
     /**
      * Indicates the main.
      */
-    public function main(int $value, ?string $language = null): static
+    public function main(int $value = 1, ?string $language = null): static
     {
         return $this->state(function (array $attributes) use ($value, $language) {
             if (! is_null($language) && $language != $attributes['language']) {

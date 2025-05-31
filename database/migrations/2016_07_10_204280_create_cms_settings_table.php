@@ -16,10 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('cms_user_id')->unique();
             $table->string('sidebar_position', 64)->default('fixed');
             $table->string('sidebar_direction', 64)->default('left-sidebar');
-            $table->boolean('horizontal_menu')->default(1);
-            $table->string('horizontal_menu_minimal', 64)
-                ->default('navbar-minimal')
-                ->nullable();
+            $table->boolean('horizontal_menu')->default(0);
+            $table->string('horizontal_menu_type', 64)->nullable();
             $table->string('horizontal_menu_click', 64)->nullable();
             $table->string('skin_sidebar', 64)->nullable();
             $table->string('skin_user_menu', 64)->nullable();

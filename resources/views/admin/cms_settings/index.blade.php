@@ -94,8 +94,8 @@
                             <div class="form-group">
                                 <label class="col-sm-6 control-label">Horizontal menu minimal:</label>
                                 <div class="col-sm-4">
-                                    {{ html()->checkbox('horizontal_menu_minimal', $cmsSettings->get('horizontal_menu_minimal'), 'navbar-minimal')
-                                    ->class('horizontal_menu_minimal iswitch iswitch-secondary') }}
+                                    {{ html()->checkbox('horizontal_menu_type', $cmsSettings->get('horizontal_menu_type'), 'navbar-minimal')
+                                    ->class('horizontal_menu_type iswitch iswitch-secondary') }}
                                 </div>
                             </div>
                         </div>

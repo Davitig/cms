@@ -203,6 +203,7 @@ $(function () {
 
                     return;
                 }
+                $('.form-group', form).removeClass('validate-has-error');
                 $.each(xhr.responseJSON.errors, function (index, element) {
                     let field;
                     let arrayField = index.substring(0, index.indexOf('.'));
@@ -211,7 +212,10 @@ $(function () {
                     } else {
                         field = $('#' + index + '_inp' + lang, form);
                     }
-                    field.closest('.form-group').addClass('validate-has-error');
+
+                    if (field.data('error-highlight') !== false) {
+                        field.closest('.form-group').addClass('validate-has-error');
+                    }
 
                     let errorMsg = '<div class="text-danger">'+element+'</div>';
                     if (field.parent().hasClass('input-group')) {

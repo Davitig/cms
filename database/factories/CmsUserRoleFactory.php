@@ -23,6 +23,16 @@ class CmsUserRoleFactory extends Factory
     }
 
     /**
+     * Indicates the role.
+     */
+    public function role(string $role): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => $role
+        ]);
+    }
+
+    /**
      * Indicates the full access.
      */
     public function fullAccess(bool $fullAccess = true): static

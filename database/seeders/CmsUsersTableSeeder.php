@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\CmsUser;
+use App\Models\CmsUserRole;
+use Database\Factories\CmsUserFactory;
 use Illuminate\Support\Facades\DB;
 
 class CmsUsersTableSeeder extends DatabaseSeeder
@@ -13,32 +16,23 @@ class CmsUsersTableSeeder extends DatabaseSeeder
     {
         $currentDate = date('Y-m-d H:i:s');
 
-        DB::table('cms_users')->truncate();
+        (new CmsUser)->truncate();
 
-        DB::table('cms_users')->insert([
-            [
-                'email' => $email = 'admin@example.com',
-                'cms_user_role_id' => 1,
-                'first_name' => 'Admin',
-                'last_name' => 'Admin',
-                'blocked' => 0,
-                'password' => bcrypt($this->command->ask(
-                    'Enter password for cms user: ' . $email
-                )),
-                'created_at' => $currentDate
-            ],
-            [
-                'email' => $email = 'test@example.com',
-                'cms_user_role_id' => 2,
-                'first_name' => 'Test',
-                'last_name' => 'Test',
-                'blocked' => 0,
-                'password' => bcrypt($this->command->ask(
-                    'Enter password for cms user: ' . $email
-                )),
-                'created_at' => $currentDate
-            ]
-        ]);
+        CmsUserFactory::new()->loginParams(
+            $email = 'admin@example.com', $this->command->ask(
+                'Enter password for cms user: ' . $email
+            )
+        )->fullName('Admin', 'Admin')->role(
+            (new CmsUserRole)->fullAccess()->value('id')
+        )->create(['created_at' => $currentDate]);
+
+        CmsUserFactory::new()->loginParams(
+            $email = 'member@example.com', $this->command->ask(
+                'Enter password for cms user: ' . $email
+            )
+        )->fullName('Member', 'Member')->role(
+            (new CmsUserRole)->customAccess()->value('id')
+        )->create(['created_at' => $currentDate]);
 
         DB::table('cms_settings')->truncate();
 
