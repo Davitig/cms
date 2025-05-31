@@ -6,11 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+
+    /**
+     * The list of setting tables.
+     *
+     * @var array|string[]
+     */
     protected array $tableNames = [
-        // strings
+        // string column types
         'web_settings' => 'string',
     ];
 
+    /**
+     * The list of language related setting tables.
+     *
+     * @var array|string[]
+     */
     protected array $languageTableNames = [];
 
     /**

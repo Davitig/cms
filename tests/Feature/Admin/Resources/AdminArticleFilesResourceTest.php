@@ -7,7 +7,6 @@ use Database\Factories\Article\ArticleFactory;
 use Database\Factories\Article\ArticleFileFactory;
 use Database\Factories\Article\ArticleFileLanguageFactory;
 use Database\Factories\CollectionFactory;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminArticleFilesResourceTest extends TestAdmin

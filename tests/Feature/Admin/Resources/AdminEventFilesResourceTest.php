@@ -3,11 +3,10 @@
 namespace Tests\Feature\Admin\Resources;
 
 use App\Models\Event\EventFile;
+use Database\Factories\CollectionFactory;
 use Database\Factories\Event\EventFactory;
 use Database\Factories\Event\EventFileFactory;
 use Database\Factories\Event\EventFileLanguageFactory;
-use Database\Factories\CollectionFactory;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminEventFilesResourceTest extends TestAdmin

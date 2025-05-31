@@ -6,7 +6,6 @@ use App\Models\Translation;
 use Database\Factories\TranslationFactory;
 use Database\Factories\TranslationLanguageFactory;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminTranslationsResourceTest extends TestAdmin

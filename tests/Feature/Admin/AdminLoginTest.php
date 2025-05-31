@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Models\CmsUser;
 use Database\Factories\CmsUserFactory;
 use Database\Factories\CmsUserRoleFactory;
 
