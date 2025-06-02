@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('slug')->unique();
-            $table->boolean('visible')->default(1);
+            $table->boolean('visible')->default(0);
             $table->unsignedBigInteger('position')->default(1);
             $table->decimal('price');
             $table->unsignedInteger('quantity')->default(0);

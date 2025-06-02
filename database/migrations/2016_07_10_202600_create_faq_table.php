@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('faq', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('collection_id');
-            $table->boolean('visible')->default(1);
+            $table->boolean('visible')->default(0);
             $table->unsignedBigInteger('position')->default(1);
             $table->timestamps();
 

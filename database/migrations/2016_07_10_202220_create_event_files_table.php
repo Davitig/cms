@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('event_files', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('event_id');
-            $table->boolean('visible')->default(1);
+            $table->boolean('visible')->default(0);
             $table->unsignedSmallInteger('position')->default(1);
             $table->timestamps();
 

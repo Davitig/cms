@@ -27,7 +27,7 @@ readonly class CmsUserFilter
         return $query->when($this->request->get('name'), function ($q, $value) {
             return $q->whereRaw("CONCAT(first_name, ' ', last_name) like ?", ["%{$value}%"]);
         })->when($this->request->get('email'), function ($q, $value) {
-            return $q->where('email', 'like', "%{$value}%");
+            return $q->whereLike('email', "%{$value}%");
         })->when($this->request->get('role'), function ($q, $value) {
             return $q->where('cms_user_role_id', $value);
         })->when($this->request->filled('blocked'), function ($q) use ($blockedValue) {

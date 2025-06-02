@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('page_files', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('page_id');
-            $table->boolean('visible')->default(1);
+            $table->boolean('visible')->default(0);
             $table->unsignedSmallInteger('position')->default(1);
             $table->timestamps();
 

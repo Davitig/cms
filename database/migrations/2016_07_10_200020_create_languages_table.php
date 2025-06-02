@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('languages', function (Blueprint $table) {
             $table->tinyIncrements('id');
             $table->char('language', 2)->unique();
-            $table->unsignedTinyInteger('visible')->default(1);
+            $table->unsignedTinyInteger('visible')->default(0);
             $table->unsignedTinyInteger('position')->default(1);
             $table->unsignedTinyInteger('main')->default(0);
             $table->string('short_name', 32);

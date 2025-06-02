@@ -196,6 +196,7 @@ select .sub-item {padding-left:20px;}
 .nav.nav-tabs li .visible-xs {text-transform:uppercase;}
 /* set fixed width to .tab-content unless its not display table-cell overwritten by vertical nav */
 .tabs-vertical-env.custom .tab-content {width:1300px;padding:0;}
+.tab-content.pad0.mrg0 {padding:0;margin:0;}
 @media (max-width:992px) {
     .nav.tabs-vertical.custom {display:table;width:100%;padding-top:0;}
     .nav.tabs-vertical.custom > li {display:block;}

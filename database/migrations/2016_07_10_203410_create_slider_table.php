@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('slider', function (Blueprint $table) {
             $table->id();
-            $table->boolean('visible')->default(1);
+            $table->boolean('visible')->default(0);
             $table->unsignedBigInteger('position')->default(1);
             $table->string('file', 800)->nullable();
             $table->string('link', 800)->nullable();
