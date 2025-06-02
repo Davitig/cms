@@ -20,13 +20,13 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * Bootstrap services.
      */
-    public function boot(Request $request): void
+    public function boot(Request $request, Router $router): void
     {
         $this->setCmsRouteActivated($request);
 
-        Route::middleware('web')->group(function (Router $router) {
-            $this->loadWebRoutes($router);
+        $this->loadWebRoutes($router);
 
+        Route::middleware('web')->group(function (Router $router) {
             $this->loadCMSRoutes($router);
         });
     }

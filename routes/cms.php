@@ -22,12 +22,13 @@ use App\Http\Controllers\Admin\AdminSliderController;
 use App\Http\Controllers\Admin\AdminTranslationsController;
 use App\Http\Controllers\Admin\AdminWebSettingsController;
 use App\Http\Controllers\Admin\Auth\AdminLoginController;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 
 // Authentication
-Route::controller(AdminLoginController::class)->group(function ($router) {
+Route::controller(AdminLoginController::class)->group(function (Router $router) {
     // login
-    $router->middleware('cms.guest')->group(function ($router) {
+    $router->middleware('cms.guest')->group(function (Router $router) {
         $router->get('login', 'showLoginForm')->name('login');
         $router->post('login', 'login')->name('login.post');
     });
@@ -38,19 +39,19 @@ Route::controller(AdminLoginController::class)->group(function ($router) {
 
 // lockscreen
 Route::middleware('cms.lockscreen')->controller(AdminLockscreenController::class)
-    ->group(function ($router) {
+    ->group(function (Router $router) {
         $router->get('lockscreen', 'index')->name('lockscreen');
         $router->post('lockscreen', 'lock')->name('lockscreen.lock');
         $router->put('lockscreen', 'unlock')->name('lockscreen.unlock');
     });
 
 // Authenticated
-Route::middleware('cms.auth')->group(function ($router) {
+Route::middleware('cms.auth')->group(function (Router $router) {
     // dashboard
     $router->get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     // languages
-    $router->controller(AdminLanguagesController::class)->group(function ($router) {
+    $router->controller(AdminLanguagesController::class)->group(function (Router $router) {
         $router->put('languages/update-main', 'updateMain')
             ->name('languages.updateMain');
         $router->put('languages/{id}/visibility', 'visibility')
@@ -70,7 +71,7 @@ Route::middleware('cms.auth')->group(function ($router) {
         ->except(['show']);
 
     // pages
-    $router->controller(AdminPagesController::class)->group(function ($router) {
+    $router->controller(AdminPagesController::class)->group(function (Router $router) {
         $router->get('pages/listable-types', 'getListableTypes')
             ->name('pages.getListableTypes');
         $router->put('pages/{id}/visibility', 'visibility')->name('pages.visibility');
@@ -83,7 +84,7 @@ Route::middleware('cms.auth')->group(function ($router) {
     });
 
     // products
-    $router->controller(AdminProductsController::class)->group(function ($router) {
+    $router->controller(AdminProductsController::class)->group(function (Router $router) {
         $router->put('products/{id}/visibility', 'visibility')->name('products.visibility');
         $router->put('products/position', 'updatePosition')->name('products.updatePosition');
         $router->resource('products', AdminProductsController::class)
@@ -97,7 +98,7 @@ Route::middleware('cms.auth')->group(function ($router) {
         ->except(['show']);
 
     // collection articles
-    $router->controller(AdminArticlesController::class)->group(function ($router) {
+    $router->controller(AdminArticlesController::class)->group(function (Router $router) {
         $router->put('articles/{id}/visibility', 'visibility')->name('articles.visibility');
         $router->put('articles/position', 'updatePosition')->name('articles.updatePosition');
         $router->put('articles/transfer/{collection}', 'transfer')->name('articles.transfer');
@@ -107,7 +108,7 @@ Route::middleware('cms.auth')->group(function ($router) {
     });
 
     // collection events
-    $router->controller(AdminEventsController::class)->group(function ($router) {
+    $router->controller(AdminEventsController::class)->group(function (Router $router) {
         $router->put('events/{id}/visibility', 'visibility')->name('events.visibility');
         $router->put('events/position', 'updatePosition')->name('events.updatePosition');
         $router->put('events/transfer/{collection}', 'transfer')->name('events.transfer');
@@ -117,7 +118,7 @@ Route::middleware('cms.auth')->group(function ($router) {
     });
 
     // collection faq
-    $router->controller(AdminFaqController::class)->group(function ($router) {
+    $router->controller(AdminFaqController::class)->group(function (Router $router) {
         $router->put('faq/{id}/visibility', 'visibility')->name('faq.visibility');
         $router->put('faq/position', 'updatePosition')->name('faq.updatePosition');
         $router->put('faq/transfer/{collection}', 'transfer')->name('faq.transfer');
@@ -159,7 +160,7 @@ Route::middleware('cms.auth')->group(function ($router) {
         ->name('filemanager');
 
     // slider
-    $router->controller(AdminSliderController::class)->group(function ($router) {
+    $router->controller(AdminSliderController::class)->group(function (Router $router) {
         $router->put('slider/{id}/visibility', 'visibility')->name('slider.visibility');
         $router->put('slider/position', 'updatePosition')->name('slider.updatePosition');
         $router->resource('slider', AdminSliderController::class)
@@ -168,7 +169,7 @@ Route::middleware('cms.auth')->group(function ($router) {
     });
 
     // translations
-    $router->controller(AdminTranslationsController::class)->group(function ($router) {
+    $router->controller(AdminTranslationsController::class)->group(function (Router $router) {
         $router->get('translations/form', 'getForm')->name('translations.form');
         $router->post('translations/form', 'setData')->name('translations.form.post');
         $router->resource('translations', AdminTranslationsController::class)
@@ -177,14 +178,14 @@ Route::middleware('cms.auth')->group(function ($router) {
     });
 
     // notes
-    $router->controller(AdminNotesController::class)->group(function ($router) {
+    $router->controller(AdminNotesController::class)->group(function (Router $router) {
         $router->get('notes', 'index')->name('notes.index');
         $router->put('notes', 'save')->name('notes.save');
         $router->delete('notes', 'destroy')->name('notes.destroy');
     });
 
     // calendar
-    $router->controller(AdminCalendarController::class)->group(function ($router) {
+    $router->controller(AdminCalendarController::class)->group(function (Router $router) {
         $router->get('calendar', 'index')->name('calendar.index');
         $router->post('calendar/events', 'events')->name('calendar.events');
         $router->put('calendar', 'save')->name('calendar.save');
