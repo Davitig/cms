@@ -200,11 +200,11 @@ class WebHandleDynamicRoute
             }
 
             if ($i > 0) {
-                $page->parent_slug = $pages[$i - 1]->full_slug;
+                $page->parent_slug = $pages[$i - 1]->url_path;
 
-                $page->full_slug = $page->parent_slug . '/' . $page->slug;
+                $page->url_path = $page->parent_slug . '/' . $page->slug;
             } else {
-                $page->full_slug = $page->slug;
+                $page->url_path = $page->slug;
             }
 
             $parentId = $page->id;

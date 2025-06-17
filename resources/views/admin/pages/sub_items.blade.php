@@ -12,7 +12,7 @@
                         <div class="col-sm-5 col-xs-2">
                             <div class="btn-action toggleable pull-right">
                                 <div class="btn btn-gray item-id">#{{$item->id}}</div>
-                                <a href="{{web_url($item->full_slug)}}" class="link btn btn-white" title="Go to page" data-slug="{{$item->slug}}" target="_blank">
+                                <a href="{{web_url($item->url_path)}}" class="link btn btn-white" title="Go to page" data-slug="{{$item->slug}}" target="_blank">
                                     <span class="fa fa-link"></span>
                                 </a>
                                 <a href="#" class="transfer btn btn-white" title="Transfer to another menu" data-id="{{$item->id}}">

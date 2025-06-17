@@ -93,7 +93,7 @@ class AdminSitemapXmlController extends Controller
 
         foreach ($pages as $page) {
             $value = ['url' => ['loc' => web_url(
-                $page->full_slug = $page->getFullSlug(), [], $this->isMultilanguage
+                $page->url_path = $page->getUrlPath(), [], $this->isMultilanguage
                 ? $this->languages->keys()->first()
                 : null
             )]];
@@ -195,7 +195,7 @@ class AdminSitemapXmlController extends Controller
     protected function getUrls(Page $page, Model $item): array
     {
         $value = ['url' => ['loc' => web_url(
-            [$page->full_slug, $item->slug], [], $this->isMultilanguage
+            [$page->url_path, $item->slug], [], $this->isMultilanguage
             ? $this->languages->keys()->first()
             : null
         )]];
@@ -228,7 +228,7 @@ class AdminSitemapXmlController extends Controller
             'attributes' => [
                 'rel' => 'alternate',
                 'hreflang' => $langValue,
-                'href' => web_url([$page->full_slug, $slug], [], $langValue)
+                'href' => web_url([$page->url_path, $slug], [], $langValue)
             ]
         ];
     }

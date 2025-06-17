@@ -118,27 +118,27 @@ trait HasSubModels
     }
 
     /**
-     * Get model full slug.
+     * Get model url path.
      *
      * @param  int|null  $value
      * @param  string|null  $column
      * @return string|null
      */
-    public function getFullSlug(?int $value = null, ?string $column = null): ?string
+    public function getUrlPath(?int $value = null, ?string $column = null): ?string
     {
-        return $this->fullSlug($value, $column)->full_slug;
+        return $this->urlPath($value, $column)->url_path;
     }
 
     /**
-     * Set model full slug.
+     * Set model url path.
      *
      * @param  int|null  $value
      * @param  string|null  $column
      * @return $this
      */
-    public function fullSlug(?int $value = null, ?string $column = null): static
+    public function urlPath(?int $value = null, ?string $column = null): static
     {
-        $this->full_slug ??= $this->slug;
+        $this->url_path ??= $this->slug;
 
         if (! $value ??= $this->parent_id) {
             return $this;
@@ -154,8 +154,8 @@ trait HasSubModels
             return $this;
         }
 
-        $this->full_slug = trim($model->slug . '/' . $this->full_slug, '/');
+        $this->url_path = trim($model->slug . '/' . $this->url_path, '/');
 
-        return $this->fullSlug($model->parent_id, $column);
+        return $this->urlPath($model->parent_id, $column);
     }
 }

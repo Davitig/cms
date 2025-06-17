@@ -315,9 +315,9 @@ function make_sub_items(
             continue;
         }
 
-        $item->full_slug = $prevSlug ? $prevSlug . '/' . $item->slug : $item->slug;
+        $item->url_path = $prevSlug ? $prevSlug . '/' . $item->slug : $item->slug;
 
-        $item->sub_items = make_sub_items($items, false, $item->id, $item->full_slug);
+        $item->sub_items = make_sub_items($items, false, $item->id, $item->url_path);
 
         if (! $baseAll) {
             $data[] = $item;

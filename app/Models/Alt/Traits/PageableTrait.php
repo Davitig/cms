@@ -34,27 +34,27 @@ trait PageableTrait
     }
 
     /**
-     * Get model full slug.
+     * Get model url path.
      *
      * @param  int|null  $value
      * @param  string|null  $column
      * @return string|null
      */
-    public function getFullSlug(?int $value = null, ?string $column = null): ?string
+    public function getUrlPath(?int $value = null, ?string $column = null): ?string
     {
-        return $this->fullSlug($value, $column)->full_slug;
+        return $this->urlPath($value, $column)->url_path;
     }
 
     /**
-     * Set model full slug.
+     * Set model url path.
      *
      * @param  int|null  $value
      * @param  string|null  $column
      * @return $this
      */
-    public function fullSlug(?int $value = null, ?string $column = null): static
+    public function urlPath(?int $value = null, ?string $column = null): static
     {
-        $this->full_slug ??= $this->slug;
+        $this->url_path ??= $this->slug;
 
         if (is_null($column)) {
             $column = is_null($value) && $this->collection_id
@@ -72,7 +72,7 @@ trait PageableTrait
             return $this;
         }
 
-        $this->full_slug = trim($model->getFullSlug() . '/' . $this->full_slug,'/');
+        $this->url_path = trim($model->getUrlPath() . '/' . $this->url_path,'/');
 
         return $this;
     }
