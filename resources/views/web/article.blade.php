@@ -1,11 +1,6 @@
 @extends('web.app')
 @section('content')
-    <div id="breadcrumb">
-        <div class="container">
-            @include('web._partials.breadcrumb')
-        </div>
-        <!-- .container -->
-    </div>
+    @include('web._partials.breadcrumb')
     <!-- #breadcrumb -->
     <div class="container">
         <article id="item" class="jumbotron clearfix">

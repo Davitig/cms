@@ -1,23 +1,13 @@
-<header id="header">
-    <nav class="navbar navbar-default">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+<header id="header" class="border-bottom">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                {{-- <a class="navbar-brand" href="#">Logo</a> --}}
+                <div class="collapse navbar-collapse">
+                    @include('web._partials.pages')
+                    @include('web._partials.lang')
+                </div>
             </div>
-            <!-- .navbar-header -->
-            <div id="navbar" class="navbar-collapse collapse">
-                @include('web._partials.pages')
-                @include('web._partials.lang')
-            </div>
-            <!-- #navbar -->
-        </div>
-        <!-- .container -->
-    </nav>
-    <!-- .navbar -->
+        </nav>
+    </div>
 </header>
-<!-- #header -->

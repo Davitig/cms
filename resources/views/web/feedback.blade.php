@@ -1,12 +1,6 @@
 @extends('web.app')
 @section('content')
-    <div id="breadcrumb">
-        <div class="container">
-            @include('web._partials.breadcrumb')
-        </div>
-        <!-- .container -->
-    </div>
-    <!-- #breadcrumb -->
+    @include('web._partials.breadcrumb')
     <div class="container">
         <div id="feedback" class="jumbotron">
             @if ($current->image)
@@ -73,7 +67,7 @@
                                     <img src="{{asset('assets/libs/images/reload.png')}}" width="20" height="20" alt="reload">
                                 </a>
                                 @error('captcha')
-                                    <div class="text-danger">{{$message}}</div>
+                                <div class="text-danger">{{$message}}</div>
                                 @enderror
                             </div>
                         </div>

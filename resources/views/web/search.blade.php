@@ -1,12 +1,6 @@
 @extends('web.app')
 @section('content')
-    <div id="breadcrumb">
-        <div class="container">
-            @include('web._partials.breadcrumb')
-        </div>
-        <!-- .container -->
-    </div>
-    <!-- #breadcrumb -->
+    @include('web._partials.breadcrumb')
     <div class="container">
         <form action="{{url()->current()}}" method="GET">
             <div class="input-group">

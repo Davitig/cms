@@ -13,7 +13,7 @@
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-image"></i></span>
             {{ html()->text('file')->id('file_inp' . $current->language)->class('form-control')->data('lang', 1) }}
-            <div class="input-group-btn popup" data-browse="file{{$current->language}}">
+            <div class="input-group-btn popup" data-browse="file_inp{{$current->language}}">
                 <span class="btn btn-info">Browse</span>
             </div>
         </div>

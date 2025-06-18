@@ -52,7 +52,7 @@ $(function () {
                     return;
                 }
                 $.each(xhr.responseJSON.errors, function (index, element) {
-                    let field = $('#' + index + lang, form);
+                    let field = $('#' + index + '_inp' + lang, form);
                     if (index === 'code') {
                         element += ' (current code: "' + field.val() + '")';
                     }

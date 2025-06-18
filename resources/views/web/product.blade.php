@@ -1,12 +1,6 @@
 @extends('web.app')
 @section('content')
-    <div id="breadcrumb">
-        <div class="container">
-            @include('web._partials.breadcrumb')
-        </div>
-        <!-- .container -->
-    </div>
-    <!-- #breadcrumb -->
+    @include('web._partials.breadcrumb')
     <div class="container">
         <article id="item" class="jumbotron clearfix">
             @if ($current->image)
