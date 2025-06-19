@@ -89,7 +89,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5">No Result</td>
+                        <td colspan="6">No Result</td>
                     </tr>
                 @endforelse
                 </tbody>
