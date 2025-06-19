@@ -26,7 +26,7 @@ class CollectionFactory extends Factory
             'title' => fake()->sentence(2),
             'type' => $types[array_rand($types)],
             'admin_order_by' => $orderList[array_rand($orderList)],
-            'admin_sort' => $sortList[array_rand($orderList)],
+            'admin_sort' => $sortList[array_rand($sortList)],
             'admin_per_page' => rand(10, 50),
             'web_order_by' => $orderList[array_rand($orderList)],
             'web_sort' => $sortList[array_rand($sortList)],

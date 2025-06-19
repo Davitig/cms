@@ -24,7 +24,7 @@
                     <div class="user-info">
                         <div class="user-image">
                             <a href="{{ cms_route('cmsUsers.show', [auth('cms')->id()]) }}">
-                                <img src="{{ cms_route('cmsUsers.photo', [auth('cms')->id()]) }}" width="130" height="130" class="user-photo img-circle" alt="User Photo">
+                                <img src="{{ cms_route('cmsUsers.photo', [auth('cms')->id()]) }}" width="130" height="130" class="img-circle" alt="User Photo">
                             </a>
                         </div>
                         <div class="user-details">

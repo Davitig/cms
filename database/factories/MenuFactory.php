@@ -17,7 +17,7 @@ class MenuFactory extends Factory
     public function definition(): array
     {
         return [
-            'main' => 1,
+            'main' => 0,
             'title' => fake()->sentence(2),
             'description' => fake()->sentence()
         ];

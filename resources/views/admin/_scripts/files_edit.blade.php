@@ -1,6 +1,6 @@
 <script type="text/javascript">
     let currentLang = '{{language()->active()}}';
-    let formSelector = $('#form-modal .{{$cmsSettings->get('ajax_form')}}');
+    let formSelector = $('#form-modal form');
 
     formSelector.on('ajaxFormSuccess', function () {
         $(this).find('[name="file"]').trigger('fileSet');

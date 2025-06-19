@@ -14,5 +14,6 @@
             {{ html()->form()->close() }}
         </div>
     </div>
+    {{-- keep script inside modal --}}
+    @include('admin._scripts.files_create')
 </div>
-@include('admin._scripts.files_create')
