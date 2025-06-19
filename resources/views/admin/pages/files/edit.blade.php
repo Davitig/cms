@@ -48,5 +48,6 @@
             @endif
         </div>
     </div>
+    {{-- keep script inside modal --}}
+    @include('admin._scripts.files_edit')
 </div>
-@include('admin._scripts.files_edit')

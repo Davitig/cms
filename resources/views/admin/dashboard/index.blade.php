@@ -23,7 +23,7 @@
     </div>
     <div class="col-sm-3">
         <div class="xe-widget xe-counter" data-count=".num" data-from="0" data-to="{{$pagesTotal}}" data-duration="3">
-            <a href="{{is_null($mainPage) ? ($userRouteAccess('menus.index') ? cms_route('menus.index') : '#') : ($userRouteAccess('pages.index') ? cms_route('pages.index', [$mainPage->id]) : '#')}}" class="xe-icon">
+            <a href="{{ $userRouteAccess('pages.index') ? cms_route('pages.index', [$mainMenuId]) : '#' }}" class="xe-icon">
                 <i class="{{icon_type('pages')}}"></i>
             </a>
             <div class="xe-label">
@@ -118,7 +118,7 @@
         <div class="col-sm-3">
             <div class="xe-widget xe-todo-list">
                 <div class="xe-header">
-                    <a href="{{$userRouteAccess('collections.index') ? cms_route('notes.index') : '#'}}" class="xe-icon">
+                    <a href="{{$userRouteAccess('notes.index') ? cms_route('notes.index') : '#'}}" class="xe-icon">
                         <i class="fa fa-file-text"></i>
                     </a>
                     <div class="xe-label">

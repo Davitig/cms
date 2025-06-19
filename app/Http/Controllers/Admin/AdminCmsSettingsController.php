@@ -79,6 +79,7 @@ class AdminCmsSettingsController extends Controller
         $table = app('db')->table('cms_settings');
 
         if ($table->where('cms_user_id', $userId)->exists()) {
+            // where clause will be inherited
             $table->update($attributes);
         } else {
             $table->insert($attributes);
