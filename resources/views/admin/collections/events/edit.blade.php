@@ -25,7 +25,7 @@
     </div>
     <div class="tabs-vertical-env custom">
         <ul class="nav nav-tabs nav-tabs-justified">
-            @include('admin._partials.forms.lang_tabs')
+            @include('admin._partials.lang.tabs')
         </ul>
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -42,7 +42,8 @@
                 <div class="tab-content">
                     @php($activeLang = request('lang', language()->active()))
                     @foreach ($items as $current)
-                        <div class="tab-pane{{$activeLang == $current->language ? ' active' : ''}}" id="item-{{$current->language}}">
+                        <div class="tab-pane{{$activeLang == $current->language ? ' active' : ''}}"
+                             id="item-{{$current->language}}">
                             {{ html()->modelForm($current, 'put', cms_route('events.update', [
                                 $current->collection_id, $current->id
                             ], language()->containsMany() ? ($current->language ?: $activeLang) : null))

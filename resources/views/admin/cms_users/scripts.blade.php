@@ -1,18 +1,14 @@
 @push('body.bottom')
     <script type="text/javascript">
         $(function () {
-            $('#photo-upload-btn').on('click', function () {
-                $('#photo_inp').trigger('click');
-            });
             let removePhotoChecked = false;
             $('#remove_photo_inp').on('change', function () {
                 removePhotoChecked = $(this).prop('checked');
+                $('.user-photo').attr('src', '{{ asset('assets/default/img/avatar.png') }}');
             });
             $('form.ajax-form').on('ajaxFormSuccess', function () {
                 if (removePhotoChecked) {
                     $('#photo_inp').val('');
-                    $('#user-photo').attr('src', '#').addClass('hidden');
-                    $('.photo-upload-text').removeClass('hidden');
                     $('#remove_photo_inp').prop('checked', false);
                     removePhotoChecked = false;
                 }
@@ -35,8 +31,7 @@
                 let reader = new FileReader();
 
                 reader.onload = function (e) {
-                    $('.photo-upload-text').addClass('hidden');
-                    $('#user-photo').attr('src', e.target.result).removeClass('hidden');
+                    $('.user-photo').attr('src', e.target.result);
                 }
 
                 reader.readAsDataURL(this.files[0]);

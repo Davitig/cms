@@ -3,7 +3,7 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\Calendar;
-use App\Models\CmsUser;
+use App\Models\CmsUser\CmsUser;
 use Database\Factories\CalendarFactory;
 
 class AdminCalendarTest extends TestAdmin

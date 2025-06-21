@@ -1,145 +1,108 @@
-<div class="member-form-inputs">
-    <div class="form-group{{($error = $errors->first('email')) ? ' validate-has-error' : '' }}">
-        <label class="col-sm-2 control-label text-left required">Email:</label>
-        <div class="col-sm-10">
-            <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-at"></i></span>
-                {{ html()->text('email')->id('email_inp')->class('form-control') }}
-            </div>
-            @if ($error)
-                <span class="text-danger">{{$error}}</span>
-            @endif
+<div class="row gy-4 gx-6 mb-6">
+    <div class="col-md-6">
+        <label for="email_inp" class="form-label">E-mail</label>
+        <div class="input-group input-group-merge">
+            <span class="input-group-text">
+                <i class="icon-base fa-regular fa-envelope"></i>
+            </span>
+            {{ html()->text('email')->id('email_inp')->class('form-control') }}
         </div>
+        @error('email')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
     </div>
-
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="form-group{{($error = $errors->first('first_name')) ? ' validate-has-error' : '' }}">
-                <label class="col-sm-4 control-label text-left required">First name:</label>
-                <div class="col-sm-8">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-header"></i></span>
-                        {{ html()->text('first_name')->id('first_name_inp')->class('form-control') }}
-                    </div>
-                    @if ($error)
-                        <span class="text-danger">{{$error}}</span>
-                    @endif
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="form-group{{($error = $errors->first('last_name')) ? ' validate-has-error' : '' }}">
-                <label class="col-sm-4 control-label required">Last name:</label>
-                <div class="col-sm-8">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-header"></i></span>
-                        {{ html()->text('last_name')->id('last_name_inp')->class('form-control') }}
-                    </div>
-                    @if ($error)
-                        <span class="text-danger">{{$error}}</span>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </div>
-
     @if (auth('cms')->user()->hasFullAccess() && auth('cms')->id() != $current->id)
-        <div class="form-group-separator"></div>
-
-        <div class="form-group{{($error = $errors->first('cms_user_role_id')) ? ' validate-has-error' : '' }}">
-            <label class="col-sm-2 control-label text-left required">Role:</label>
-            <div class="col-sm-10">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="{{ icon_type('roles') }}"></i></span>
-                    {{ html()->select('cms_user_role_id', $roles)->id('cms_user_role_id_inp')->class('form-control') }}
-                </div>
-                @if ($error)
-                    <span class="text-danger">{{$error}}</span>
-                @endif
-            </div>
+    <div class="col-md-6">
+        <label for="cms_user_role_id_inp" class="form-label">Role</label>
+        <div class="input-group input-group-merge">
+            <span class="input-group-text">
+                <i class="icon-base fa fa-user-pen"></i>
+            </span>
+            {{ html()->select('cms_user_role_id', $roles)->id('cms_user_role_id_inp')->class('form-control') }}
         </div>
+    </div>
     @else
         {{ html()->hidden('cms_user_role_id') }}
-        @if ($error = $errors->first('cms_user_role_id'))
-            <span class="text-danger">{{$error}}</span>
-        @endif
     @endif
-
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="form-group{{($error = $errors->first('phone')) ? ' validate-has-error' : '' }}">
-                <label class="col-sm-4 control-label text-left">Phone:</label>
-                <div class="col-sm-8">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-                        {{ html()->text('phone')->id('phone_inp')->class('form-control') }}
-                    </div>
-                    @if ($error)
-                        <span class="text-danger">{{$error}}</span>
-                    @endif
-                </div>
-            </div>
+    @error('cms_user_role_id')
+    <div class="text-danger">{{ $message }}</div>
+    @enderror
+    <div class="col-md-6">
+        <label for="first_name_inp" class="form-label">First Name</label>
+        <div class="input-group input-group-merge">
+            <span class="input-group-text">
+                <i class="icon-base fa fa-user-tie"></i>
+            </span>
+            {{ html()->text('first_name')->id('first_name_inp')->class('form-control') }}
         </div>
-        <div class="col-sm-6">
-            <div class="form-group{{($error = $errors->first('address')) ? ' validate-has-error' : '' }}">
-                <label class="col-sm-4 control-label">Address:</label>
-                <div class="col-sm-8">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-building"></i></span>
-                        {{ html()->text('address')->id('address_inp')->class('form-control') }}
-                    </div>
-                    @if ($error)
-                        <span class="text-danger">{{$error}}</span>
-                    @endif
-                </div>
-            </div>
+        @error('first_name')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
+    </div>
+    <div class="col-md-6">
+        <label for="last_name_inp" class="form-label">Last Name</label>
+        <div class="input-group input-group-merge">
+            <span class="input-group-text">
+                <i class="icon-base fa fa-user-tie"></i>
+            </span>
+            {{ html()->text('last_name')->id('last_name_inp')->class('form-control') }}
+        </div>
+        @error('last_name')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
+    </div>
+    <div class="col-md-6">
+        <label for="phone_inp" class="form-label">Phone Number</label>
+        <div class="input-group input-group-merge">
+            <span class="input-group-text">
+                <i class="icon-base fa fa-phone"></i>
+            </span>
+            {{ html()->text('phone')->id('phone_inp')->class('form-control') }}
         </div>
     </div>
-
-    <div class="form-group-separator"></div>
-
-    @if (auth('cms')->id() != $current->id)
-        <div class="form-group">
-            <label class="col-sm-2 control-label text-left">Block:</label>
-            <div class="col-sm-10">
-                {{ html()->checkbox('blocked')->id('blocked_inp')->class('iswitch iswitch-secondary') }}
-            </div>
-        </div>
-
-        <div class="form-group-separator"></div>
-    @endif
-
-    <div id="change-password" class="form-group{{ ! $current->id ? '' : ' collapse' . ($errors->has('password') ? ' in' : '')}}">
-        <div class="col-sm-6">
-            <div class="form-group{{($error = $errors->first('password')) ? ' validate-has-error' : '' }}">
-                <label class="col-sm-4 control-label text-left{{$current->id ? '' : ' required'}}">Password:</label>
-                <div class="col-sm-8">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                        <input type="password" name="password" id="password" class="form-control">
-                    </div>
-                    @if ($error)
-                        <span class="text-danger">{{$error}}</span>
-                    @endif
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="form-group">
-                <label class="col-sm-4 control-label{{$current->id ? '' : ' required'}}">Repeat Password:</label>
-                <div class="col-sm-8">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control">
-                    </div>
-                </div>
-            </div>
+    <div class="col-md-6">
+        <label for="address_inp" class="form-label">Address</label>
+        <div class="input-group input-group-merge">
+            <span class="input-group-text">
+                <i class="icon-base fa fa-address-book"></i>
+            </span>
+            {{ html()->text('address')->id('address_inp')->class('form-control') }}
         </div>
     </div>
-
-    <button type="submit" class="btn btn-secondary">{{$submit}}</button>
-    <a href="{{ cms_route('cmsUsers.index') }}" class="btn btn-blue">{{ trans('general.back') }}</a>
-    @if ($current->id)
-        <div class="btn btn-info pull-right" data-toggle="collapse" data-target="#change-password">Change Password</div>
+    <div class="col-md-12">
+        <label class="switch switch-warning">
+            {{ html()->checkbox('suspended')->id('suspended_inp')->class('switch-input') }}
+            <span class="switch-toggle-slider">
+            <span class="switch-on"></span>
+            <span class="switch-off"></span>
+        </span>
+            <span class="switch-label">Suspend</span>
+        </label>
+    </div>
+    @if (! $current->id)
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="password_inp" class="form-label">Password</label>
+                    <input type="password" name="password" id="password" class="form-control">
+                    @error('password')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="col-md-6">
+                    <label for="password_inp" class="form-label">Repeat Password</label>
+                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control">
+                </div>
+            </div>
+            <h6 class="text-body mt-4">Password Requirements:</h6>
+            <ul class="ps-4 mb-0">
+                <li class="mb-4">Minimum 8 characters long</li>
+                <li>At least one number</li>
+            </ul>
+        </div>
     @endif
+</div>
+<div class="mt-2">
+    <button type="submit" class="btn btn-primary me-3">Save changes</button>
+    <a href="{{ cms_route('cmsUsers.' . ($current->id ? 'show' : 'index'), [$current->id]) }}" class="btn btn-label-secondary">Cancel</a>
 </div>

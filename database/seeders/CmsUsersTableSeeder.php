@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\CmsUser;
-use App\Models\CmsUserRole;
+use App\Models\CmsUser\CmsUser;
+use App\Models\CmsUser\CmsUserRole;
 use Database\Factories\CmsUserFactory;
 use Illuminate\Support\Facades\DB;
 

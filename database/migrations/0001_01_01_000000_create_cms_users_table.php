@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('last_name', 35);
             $table->string('phone', 30)->nullable();
             $table->string('address')->nullable();
-            $table->boolean('blocked')->default(0);
+            $table->boolean('suspended')->default(0);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

@@ -1,66 +1,107 @@
 @extends('admin.app')
 @section('content')
-<div class="page-title">
-    <div class="title-env">
-        <h1 class="title">
-            <i class="{{$icon = icon_type('cmsUsers')}}"></i>
-            Profile
-        </h1>
-        <p class="description">Profile of the CMS user</p>
-    </div>
-    <div class="breadcrumb-env">
-        <ol class="breadcrumb bc-1">
-            <li>
-                <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
-            </li>
-            <li>
-                <a href="{{ cms_route('cmsUsers.index') }}"><i class="{{$icon}}"></i>CMS Users</a>
-            </li>
-            <li class="active">
-                <strong>{{$current->first_name}} {{$current->last_name}}</strong>
-            </li>
-        </ol>
-    </div>
-</div>
-<section class="profile-env">
+    <!-- Header -->
     <div class="row">
-        <div class="col-sm-3">
-            <div class="user-info-sidebar">
-                <div class="user-img">
-                    <img src="{{cms_route('cmsUsers.photo', [$current->id])}}" alt="User photo" class="img-cirlce img-responsive img-thumbnail">
+        <div class="col-12">
+            <div class="card mb-6">
+                <div class="user-profile-header-banner">
+                    <img src="{{ asset('assets/img/pages/profile-banner.png') }}" alt="Banner image" class="rounded-top" />
                 </div>
-                <div class="user-name">
-                    {{$current->first_name}} {{$current->last_name}}
-                    <span class="user-status is-online"></span>
+                <div class="user-profile-header d-flex flex-column flex-lg-row text-sm-start text-center mb-5">
+                    <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto">
+                        <img src="{{ cms_route('cmsUsers.photo', [$current->id]) }}" alt="user image"
+                             class="d-block h-auto ms-0 ms-sm-6 rounded user-profile-img bg-white" />
+                    </div>
+                    <div class="flex-grow-1 mt-3 mt-lg-5">
+                        <div
+                            class="d-flex align-items-md-end align-items-sm-start align-items-center justify-content-md-between justify-content-start mx-5 flex-md-row flex-column gap-4">
+                            <div class="user-profile-info">
+                                <h4 class="mb-2 mt-lg-6">{{$current->first_name}} {{$current->last_name}}</h4>
+                                <ul class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-4 my-2">
+                                    @if ($current->created_at)
+                                        <li class="list-inline-item d-flex gap-2 align-items-center">
+                                            <i class="icon-base fa-regular fa-calendar-check icon-md"></i>
+                                            <span class="fw-medium">Joined {{ $current->created_at->format('F Y') }}</span>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </div>
+                            <a href="javascript:void(0)" class="btn btn-primary mb-1">
+                                <i class="icon-base fa fa-user-check icon-14px me-2"></i>
+                                Connected
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <span class="btn-block text-center">
-                    <strong>{{ucfirst($current->role)}}</strong>
-                </span>
-            @if (auth('cms')->user()->hasFullAccess() || auth('cms')->id() == $current->id)
-                <a href="{{cms_route('cmsUsers.edit', [$current->id])}}" class="btn-block text-center">{{trans('general.edit')}}</a>
-            @endif
-                <hr>
-                <ul class="list-unstyled user-info-list">
-                    <li>
-                        <i class="fa fa-envelope"></i>
-                        {{$current->email}}
-                    </li>
-                    <li>
-                        <i class="fa fa-phone-square"></i>
-                        {{$current->phone}}
-                    </li>
-                    <li>
-                        <i class="fa fa-building"></i>
-                        {{$current->address}}
-                    </li>
-                </ul>
             </div>
         </div>
-        <div class="col-sm-9">
-            <section class="user-timeline-stories">
-                <article class="timeline-story">...</article>
-            </section>
+    </div>
+    <!--/ Header -->
+    <!-- Navbar pills -->
+    <div class="row">
+        <div class="col-md-12">
+            @include('admin.cms_users.navbar')
         </div>
     </div>
-</section>
+    <!--/ Navbar pills -->
+    <!-- User Profile Content -->
+    <div class="row">
+        <div class="col-xl-4 col-lg-5 col-md-5">
+            <!-- About User -->
+            <div class="card mb-6">
+                <div class="card-body">
+                    <p class="card-text text-uppercase text-body-secondary small mb-0">About</p>
+                    <ul class="list-unstyled my-3 py-1">
+                        <li class="d-flex align-items-center mb-4">
+                            <i class="icon-base fa-regular fa-user icon-sm"></i>
+                            <span class="fw-medium mx-2">Full Name:</span>
+                            <span>{{ $current->first_name }} {{ $current->last_name }}</span>
+                        </li>
+                        <li class="d-flex align-items-center mb-4">
+                            <i class="icon-base fa fa-{{ $current->suspended ? 'times' : 'check' }} icon-sm"></i>
+                            <span class="fw-medium mx-2">Status:</span>
+                            <span>{{ $current->suspended ? 'suspended' : 'active' }}</span>
+                        </li>
+                        <li class="d-flex align-items-center mb-4">
+                            <i class="icon-base fa fa-user-pen icon-sm"></i>
+                            <span class="fw-medium mx-2">Role:</span>
+                            <span>{{ $current->role }}</span>
+                        </li>
+                    </ul>
+                    <p class="card-text text-uppercase text-body-secondary small mb-0">Contacts</p>
+                    <ul class="list-unstyled my-3 py-1">
+                        <li class="d-flex align-items-center mb-4">
+                            <i class="icon-base fa fa-phone icon-sm"></i>
+                            <span class="fw-medium mx-2">Contact:</span>
+                            <span>{{ $current->phone }}</span>
+                        </li>
+                        <li class="d-flex align-items-center mb-4">
+                            <i class="icon-base fa-regular fa-envelope icon-sm"></i>
+                            <span class="fw-medium mx-2">Email:</span>
+                            <span>{{ $current->email }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--/ About User -->
+        </div>
+        <div class="col-xl-8 col-lg-7 col-md-7">
+            <!-- Activity Timeline -->
+            <div class="card card-action mb-6">
+                <div class="card-header align-items-center">
+                    <h5 class="card-action-title mb-0">
+                        <i class="icon-base ti tabler-chart-bar-popular icon-lg me-4"></i>Activity Timeline
+                    </h5>
+                </div>
+                <div class="card-body pt-3">
+                </div>
+            </div>
+            <!--/ Activity Timeline -->
+        </div>
+    </div>
+    <!--/ User Profile Content -->
 @endsection
+@push('head')
+    <!-- Page CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/page-profile.css') }}">
+@endpush

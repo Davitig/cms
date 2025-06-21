@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Models\CmsUser;
+use App\Models\CmsUser\CmsUser;
 use App\Models\Note;
 use Database\Factories\NoteFactory;
 

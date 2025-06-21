@@ -25,11 +25,9 @@ class AdminLanguagesController extends Controller
      */
     public function index()
     {
-        $data['items'] = $this->model->positionAsc()->get();
+        $data['items'] = $this->model->positionAsc()->paginate(100);
 
-        $data['langVisibleCount'] = $data['items']->filter(
-            fn ($item) => $item->visible
-        )->count();
+        $data['hasVisibleLang'] = $this->model->whereVisible()->exists();
 
         $data['routesAreCached'] = app()->routesAreCached();
 

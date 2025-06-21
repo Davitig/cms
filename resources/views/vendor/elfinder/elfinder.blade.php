@@ -25,7 +25,7 @@
                 customData: {
                     _token: '{{ csrf_token() }}'
                 },
-                url: '{{ cms_route('filemanager.connector') }}',  // connector URL
+                url: '{{ cms_route('fileManager.connector') }}',  // connector URL
                 soundPath: '{{ asset($dir.'/sounds') }}',
                 height: 600,
                 getFileCallback: function(file, instance) {

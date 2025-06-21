@@ -1,65 +1,39 @@
-<div class="form-group{{($error = $errors->first('title')) ? ' validate-has-error' : '' }}">
-    <label class="col-sm-2 control-label required">Title:</label>
-    <div class="col-sm-6">
+<div class="row g-4 mb-4">
+    <div>
+        <label for="title_inp" class="form-label">Name</label>
         {{ html()->text('title')->id('title_inp' . $current->language)->class('form-control')->data('lang', 1) }}
-        @if ($error)
-            <span class="text-danger">{{$error}}</span>
-        @endif
-        <div class="desc">The title for the "value." It's visible only for CMS Users</div>
+        @error('title')
+        <span class="text-danger">{{$message}}</span>
+        @enderror
+        <div class="form-text">The title for the "value." Visible only in Admin</div>
     </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group{{($error = $errors->first('value')) ? ' validate-has-error' : '' }}">
-    <label class="col-sm-2 control-label required">Value:</label>
-    <div class="col-sm-6">
-        {{ html()->text('value')->id('value_inp' . $current->language)->class('form-control') }}
-        @if ($error)
-            <span class="text-danger">{{$error}}</span>
-        @endif
-        <div class="desc">The value contains the translated text that will be displayed to public</div>
+    <div>
+        <label for="value_inp" class="form-label">Value</label>
+        {{ html()->text('value')->id('value_inp' . $current->language)->class('form-control')->data('lang', 1) }}
+        @error('value')
+        <span class="text-danger">{{$message}}</span>
+        @enderror
+        <div class="form-text">The value contains the translated text that will be displayed to public</div>
     </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group{{($error = $errors->first('code')) ? ' validate-has-error' : '' }}">
-    <label class="col-sm-2 control-label required">Code:</label>
-    <div class="col-sm-6">
-        {{ html()->text('code')->id('code_inp' . $current->language)
-        ->class('form-control')
+    <div>
+        <label for="code_inp" class="form-label">Code</label>
+        {{ html()->text('code')->id('code_inp' . $current->language)->class('form-control')->data('lang', 1)
         ->ifNotNull($current->code, function ($html) {
-            return $html->isReadonly();
+            return $html->disabled();
         }) }}
-        @if ($error)
-            <span class="text-danger">{{$error}}</span>
+        @if ($current->code)
+            <input type="hidden" name="code" value="{{ $current->code }}">
         @endif
-        <div class="desc">The code is the identifier for the "value" (Not changeable after creation)</div>
+        @error('code')
+        <span class="text-danger">{{$message}}</span>
+        @enderror
+        <div class="form-text">The code is identifier for the "value"</div>
     </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group">
-    <label class="col-sm-2 control-label">Type:</label>
-    <div class="col-sm-6">
+    <div>
+        <label for="type_inp" class="form-label">Type</label>
         {{ html()->select('type', ['' => 'Global'] + $transTypes)
         ->id('type_inp' . $current->language)->class('form-control')->data('lang', 1) }}
     </div>
 </div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group">
-    <div class="col-sm-10 btn-action pull-right">
-        <button type="submit" class="btn btn-secondary btn-icon-standalone" title="{{ $submit }}">
-            <i class="fa fa-{{ $icon }}"></i>
-            <span>{{ $submit }}</span>
-        </button>
-        <a href="{{ cms_route('translations.index') }}" class="btn btn-blue btn-icon-standalone" title="{{ trans('general.back') }}">
-            <i class="fa fa-arrow-left"></i>
-            <span>{{ trans('general.back') }}</span>
-        </a>
-    </div>
-</div>
+<button type="submit" class="btn btn-primary me-4">Submit</button>
+<a href="{{ cms_route('translations.index') }}" class="btn btn-label-secondary">Cancel</a>

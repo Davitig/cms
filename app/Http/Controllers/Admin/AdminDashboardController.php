@@ -38,9 +38,6 @@ class AdminDashboardController extends Controller
         // calendar
         $data['calendarTotal'] = $db->table('calendar')->count();
 
-        // notes
-        $data['notes'] = $db->table('notes')->orderBy('id', 'desc')->take(5)->get();
-
         return view('admin.dashboard.index', $data);
     }
 }

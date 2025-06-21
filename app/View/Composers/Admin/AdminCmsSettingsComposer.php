@@ -2,7 +2,7 @@
 
 namespace App\View\Composers\Admin;
 
-use App\Models\CmsUser;
+use App\Models\CmsUser\CmsUser;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
@@ -12,7 +12,7 @@ class AdminCmsSettingsComposer
     /**
      * The CmsUser instance.
      *
-     * @var \App\Models\CmsUser|null
+     * @var \App\Models\CmsUser\CmsUser|null
      */
     protected ?CmsUser $user = null;
 
@@ -60,16 +60,6 @@ class AdminCmsSettingsComposer
         $settings = app('db')->table('cms_settings')
             ->where('cms_user_id', $this->user->id)
             ->first();
-
-        if (! is_null($settings)) {
-            $settings->body = <<< EOT
-$settings->sidebar_direction $settings->layout_boxed $settings->skin_sidebar
-$settings->skin_user_menu $settings->skin_horizontal
-EOT;
-            $settings->body = preg_replace(
-                '/\s+/', ' ', trim($settings->body)
-            );
-        }
 
         return new Collection($settings);
     }

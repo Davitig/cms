@@ -58,7 +58,7 @@ return [
     */
 
     'route' => [
-        'prefix' => 'filemanager',
+        'prefix' => 'file-manager',
         'middleware' => ['web'], //Set to null to disable middleware filter
     ],
 

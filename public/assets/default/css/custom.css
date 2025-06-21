@@ -1,0 +1,28 @@
+/*
+* custom.css
+* File includes only custom css
+******************************************************************************/
+
+/* ! For .layout-navbar-fixed added fix padding top to .layout-page */
+/* Default navbar */
+.layout-navbar-fixed .layout-wrapper:not(.layout-without-menu) .layout-page {
+    padding-top: 64px !important;
+}
+.layout-navbar-fixed .layout-wrapper.layout-horizontal .layout-page {
+    padding-top: 56px !important;
+}
+.layout-navbar-fixed .layout-wrapper:not(.layout-horizontal):not(.layout-without-menu) .layout-page {
+    padding-top: 72px !important;
+}
+/* Navbar page z-index issue solution */
+.content-wrapper .navbar {
+    z-index: auto;
+}
+
+/* Adjust template customizer */
+.base-vertical #template-customizer .template-customizer-open-btn {
+    inset-block-start: 90px !important;
+}
+.base-horizontal #template-customizer .template-customizer-open-btn {
+    inset-block-start: 125px !important;
+}

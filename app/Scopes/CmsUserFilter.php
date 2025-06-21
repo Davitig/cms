@@ -22,7 +22,7 @@ readonly class CmsUserFilter
      */
     public function __invoke(Builder $query): Builder
     {
-        $blockedValue = (int) $this->request->boolean('blocked');
+        $suspendValue = (int) $this->request->boolean('suspended');
 
         return $query->when($this->request->get('name'), function ($q, $value) {
             return $q->whereRaw("CONCAT(first_name, ' ', last_name) like ?", ["%{$value}%"]);
@@ -30,8 +30,8 @@ readonly class CmsUserFilter
             return $q->whereLike('email', "%{$value}%");
         })->when($this->request->get('role'), function ($q, $value) {
             return $q->where('cms_user_role_id', $value);
-        })->when($this->request->filled('blocked'), function ($q) use ($blockedValue) {
-            return $q->where('blocked', $blockedValue);
+        })->when($this->request->filled('suspended'), function ($q) use ($suspendValue) {
+            return $q->where('suspended', $suspendValue);
         });
     }
 }

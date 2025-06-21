@@ -48,7 +48,7 @@ class Permission extends Model
      * @var array
      */
     public static array $routeGroupsAllowed = [
-        'login', 'logout', 'lockscreen', 'cmsUsers', 'cmsSettings'
+        'login', 'logout', 'cmsUsers', 'cmsSettings'
     ];
 
     /**

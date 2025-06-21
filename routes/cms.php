@@ -3,17 +3,13 @@
 use App\Http\Controllers\Admin\AdminArticlesController;
 use App\Http\Controllers\Admin\AdminCalendarController;
 use App\Http\Controllers\Admin\AdminCmsSettingsController;
-use App\Http\Controllers\Admin\AdminCmsUserRolesController;
-use App\Http\Controllers\Admin\AdminCmsUsersController;
 use App\Http\Controllers\Admin\AdminCollectionsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminEventsController;
 use App\Http\Controllers\Admin\AdminFaqController;
-use App\Http\Controllers\Admin\AdminFilemanagerController;
+use App\Http\Controllers\Admin\AdminFileManagerController;
 use App\Http\Controllers\Admin\AdminLanguagesController;
-use App\Http\Controllers\Admin\AdminLockscreenController;
 use App\Http\Controllers\Admin\AdminMenusController;
-use App\Http\Controllers\Admin\AdminNotesController;
 use App\Http\Controllers\Admin\AdminPagesController;
 use App\Http\Controllers\Admin\AdminPermissionsController;
 use App\Http\Controllers\Admin\AdminProductsController;
@@ -22,6 +18,9 @@ use App\Http\Controllers\Admin\AdminSliderController;
 use App\Http\Controllers\Admin\AdminTranslationsController;
 use App\Http\Controllers\Admin\AdminWebSettingsController;
 use App\Http\Controllers\Admin\Auth\AdminLoginController;
+use App\Http\Controllers\Admin\CmsUser\AdminCmsUserController;
+use App\Http\Controllers\Admin\CmsUser\AdminCmsUserRoleController;
+use App\Http\Controllers\Admin\CmsUser\AdminCmsUserSecurityController;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 
@@ -36,14 +35,6 @@ Route::controller(AdminLoginController::class)->group(function (Router $router) 
     // logout
     $router->post('logout', 'logout')->name('logout');
 });
-
-// lockscreen
-Route::middleware('cms.lockscreen')->controller(AdminLockscreenController::class)
-    ->group(function (Router $router) {
-        $router->get('lockscreen', 'index')->name('lockscreen');
-        $router->post('lockscreen', 'lock')->name('lockscreen.lock');
-        $router->put('lockscreen', 'unlock')->name('lockscreen.unlock');
-    });
 
 // Authenticated
 Route::middleware('cms.auth')->group(function (Router $router) {
@@ -139,7 +130,7 @@ Route::middleware('cms.auth')->group(function (Router $router) {
     }
 
     // CMS user roles
-    $router->resource('cms-user-roles', AdminCmsUserRolesController::class)
+    $router->resource('cms-user-roles', AdminCmsUserRoleController::class)
         ->names(resource_names('cmsUserRoles'))
         ->except(['show']);
 
@@ -150,14 +141,19 @@ Route::middleware('cms.auth')->group(function (Router $router) {
         ->name('permissions.store');
 
     // CMS users
-    $router->get('cms-users/{cmsUser}/photo', [AdminCmsUsersController::class, 'getPhoto'])
+    $router->get('cms-users/{cmsUser}/photo', [AdminCmsUserController::class, 'getPhoto'])
         ->name('cmsUsers.photo');
-    $router->resource('cms-users', AdminCmsUsersController::class)
+    $router->get('cms-users/{cmsUser}/security', [AdminCmsUserSecurityController::class, 'index'])
+        ->name('cmsUsers.security');
+    $router->put('cms-users/{cmsUser}/security/password', [
+        AdminCmsUserSecurityController::class, 'updatePassword'
+    ])->name('cmsUsers.password');
+    $router->resource('cms-users', AdminCmsUserController::class)
         ->names(resource_names('cmsUsers'));
 
     // file manager
-    $router->get('filemanager', [AdminFilemanagerController::class, 'index'])
-        ->name('filemanager');
+    $router->get('file-manager', [AdminFileManagerController::class, 'index'])
+        ->name('fileManager');
 
     // slider
     $router->controller(AdminSliderController::class)->group(function (Router $router) {
@@ -175,13 +171,6 @@ Route::middleware('cms.auth')->group(function (Router $router) {
         $router->resource('translations', AdminTranslationsController::class)
             ->names(resource_names('translations'))
             ->except(['show']);
-    });
-
-    // notes
-    $router->controller(AdminNotesController::class)->group(function (Router $router) {
-        $router->get('notes', 'index')->name('notes.index');
-        $router->put('notes', 'save')->name('notes.save');
-        $router->delete('notes', 'destroy')->name('notes.destroy');
     });
 
     // calendar

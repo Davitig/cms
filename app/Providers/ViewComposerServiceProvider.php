@@ -69,8 +69,7 @@ class ViewComposerServiceProvider extends ServiceProvider
 
         // compose menus
         View::composer([
-            'admin._partials.sidebar_menu',
-            'admin._partials.horizontal_menu',
+            'admin._partials.menu',
             'admin.menus.index',
             'admin.pages.index'
         ], AdminMenuComposer::class);
@@ -78,21 +77,20 @@ class ViewComposerServiceProvider extends ServiceProvider
         // compose calendar
         View::composer([
             'admin._partials.user',
-            'admin._partials.horizontal_menu',
+            'admin._partials.menu',
             'admin.dashboard.index'
         ], AdminCalendarComposer::class);
 
         // compose route matcher
-        View::composer('admin._partials.menu', AdminRouteMatchesComposer::class);
+        View::composer([
+            'admin._partials.menu', 'admin.cms_users.navbar'
+        ], AdminRouteMatchesComposer::class);
 
         // compose user route access
         View::composer('admin.*', AdminUserRouteAccessComposer::class);
 
         // compose sitemap xml
-        View::composer([
-            'admin._partials.user',
-            'admin._partials.horizontal_menu'
-        ], AdminSitemapXmlComposer::class);
+        View::composer(['admin._partials.user'], AdminSitemapXmlComposer::class);
     }
 
     /**
