@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\CmsUserRole;
+use App\Models\CmsUser\CmsUserRole;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -40,7 +40,9 @@ class AdminPermissionsController extends Controller implements HasMiddleware
             $data['activeRoleId'] = $roleId;
         }
 
-        $data['currentRoutes'] = $this->model->roleId($data['activeRoleId'])
+        $data['activeRole'] = $data['roles'][$data['activeRoleId']];
+
+        $data['activeRoutes'] = $this->model->roleId($data['activeRoleId'])
             ->pluck('route_name')
             ->toArray();
 
@@ -137,7 +139,6 @@ class AdminPermissionsController extends Controller implements HasMiddleware
             if ($baseRouteName) {
                 $groupedRouteName = $this->getGroupedRouteName($routeName);
 
-                // $routeNameList[$baseRouteName][] = $routeName;
                 if (is_int(key($groupedRouteName))) {
                     $routeNameList[$baseRouteName][] = current($groupedRouteName);
                 } else {

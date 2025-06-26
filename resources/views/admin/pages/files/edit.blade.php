@@ -10,11 +10,11 @@
                                 <img src="{{$current->file}}" class="file{{$current->language}} img-responsive"
                                      alt="{{$current->title}}">
                             @elseif( ! empty($ext))
-                                <img src="{{asset('assets/libs/images/file-ext-icons/'.$ext.'.png')}}"
+                                <img src="{{asset('assets/default/img/file-ext-icons/'.$ext.'.png')}}"
                                      class="file{{$current->language}} not-photo img-responsive"
                                      alt="{{$current->title}}">
                             @else
-                                <img src="{{asset('assets/libs/images/file-ext-icons/www.png')}}"
+                                <img src="{{asset('assets/default/img/file-ext-icons/www.png')}}"
                                      class="file{{$current->language}} not-photo img-responsive"
                                      alt="{{$current->title}}">
                             @endif

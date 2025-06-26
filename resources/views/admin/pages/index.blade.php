@@ -107,21 +107,21 @@
     @push('body.bottom')
         @include('admin._scripts.transfer', ['route' => cms_route('pages.transfer', [$menu->id]), 'column' => 'menu_id', 'list' => $menus, 'id' => $menu->id, 'recursive' => true])
         <script type="text/javascript">
-            $(function() {
+            $(function () {
                 positionable('{{ cms_route('pages.updatePosition') }}', 'asc');
 
                 // Collapse parent pages
-                $('#items').on('click', '[data-nestable-action]', function() {
+                $('#items').on('click', '[data-nestable-action]', function () {
                     let id = $(this).closest('li').data('id');
                     let input = {'id':id, '_method':'put', '_token':"{{csrf_token()}}"};
-                    $.post("{{cms_route('pages.collapse')}}", input, function() {}, 'json')
-                        .fail(function(xhr) {
-                            alert(xhr.responseText);
-                        });
+                    $.post("{{cms_route('pages.collapse')}}", input, function () {
+                    }, 'json').fail(function (xhr) {
+                        notyf(xhr.statusText, 'error');
+                    });
                 });
             });
         </script>
-        <script src="{{ asset('assets/libs/js/uikit/js/uikit.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/js/uikit/js/addons/nestable.min.js') }}"></script>
+        <script src="{{ asset('assets/default/js/uikit/js/uikit.min.js') }}"></script>
+        <script src="{{ asset('assets/default/js/uikit/js/addons/nestable.min.js') }}"></script>
     @endpush
 @endsection

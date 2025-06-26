@@ -1,17 +1,13 @@
-<div class="modal fade" id="form-modal">
-    <div class="modal-dialog">
+<div class="modal fade" id="file-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-gallery-image">
-                <img src="{{$current->file ?: $current->file_default}}" class="img-responsive" alt="File">
+            {{ html()->modelForm($current, 'post', cms_route('products.files.store', [$current->product_id]))
+            ->addClass('ajax-form')->open() }}
+            <div class="modal-header">
+                <div class="modal-title fs-5 fw-medium text-black">Create a new file</div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {{ html()->modelForm($current,
-                'post', cms_route('products.files.store', [$current->product_id])
-            )->class('form-create form-horizontal ' . $cmsSettings->get('ajax_form'))->open() }}
-            <div class="modal-body">
-                <div class="row">
-                    @include('admin.products.files.form')
-                </div>
-            </div>
+            @include('admin.products.files.form')
             {{ html()->form()->close() }}
         </div>
     </div>

@@ -64,10 +64,10 @@
                                 <input type="text" name="captcha" autocomplete="off" class="form-control" placeholder="{{$trans->get('enter_code', 'Enter the code')}}" data-trans="enter_code" data-trans-attr="placeholder">
                                 <img src="{{ captcha_src('flat') }}" height="40" class="captcha-img" alt="captcha">
                                 <a href="#" class="captcha-reload">
-                                    <img src="{{asset('assets/libs/images/reload.png')}}" width="20" height="20" alt="reload">
+                                    <img src="{{asset('assets/default/img/reload.png')}}" width="20" height="20" alt="reload">
                                 </a>
                                 @error('captcha')
-                                <div class="text-danger">{{$message}}</div>
+                                <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>

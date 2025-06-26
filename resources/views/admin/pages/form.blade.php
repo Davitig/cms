@@ -51,7 +51,7 @@
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-ellipsis-h"></i></span>
                     {{ html()->select('type', $types)->id('type_inp' . $current->language)
-                    ->class('form-control select')->data('lang', 1) }}
+                    ->class('form-select select')->data('lang', 1) }}
                 </div>
                 @if ($error)
                     <span class="text-danger">{{$error}}</span>
@@ -68,7 +68,7 @@
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-ellipsis-v"></i></span>
                             {{ html()->select('type_id', ['' => ''] + $listableTypes)
-                            ->id('type_id_inp' . $current->language)->class('form-control select')
+                            ->id('type_id_inp' . $current->language)->class('form-select select')
                             ->data('lang', 1) }}
                         </div>
                         @if ($error)

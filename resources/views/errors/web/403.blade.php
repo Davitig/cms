@@ -8,7 +8,7 @@
     <title>403 Forbidden</title>
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" media="all" href="{{asset('assets/css/main.css')}}">
-    <script src="{{asset('assets/libs/js/jquery-1.11.3.min.js')}}"></script>
+    <script src="{{asset('assets/default/js/jquery/jquery-1.11.3.min.js')}}"></script>
 </head>
 <body>
 <div id="root">

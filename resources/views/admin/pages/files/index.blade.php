@@ -28,7 +28,7 @@
     <ul class="nav nav-tabs nav-tabs-justified">
         <li>
             <a href="{{cms_route('pages.edit', [$foreignModel->menu_id, $foreignModel->id])}}">
-                <img src="{{ asset('assets/libs/images/flags/'.language()->active().'.png') }}" width="23" height="13" alt="{{language()->active()}}">
+                <img src="{{ asset('assets/default/img/flags/'.language()->active().'.png') }}" width="23" height="13" alt="{{language()->active()}}">
                 {{-- <span class="visible-xs">{{$language->language}}</span> --}}
                 <span class="hidden-xs">Page</span>
             </a>
@@ -120,10 +120,10 @@
                                     @if (in_array($ext = pathinfo($item->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
                                         <img src="{{$item->file}}" class="img-responsive" alt="{{$item->title}}">
                                     @elseif(! empty($ext))
-                                        <img src="{{asset('assets/libs/images/file-ext-icons/'.$ext.'.png')}}"
+                                        <img src="{{asset('assets/default/img/file-ext-icons/'.$ext.'.png')}}"
                                              class="img-responsive" alt="{{$item->title}}">
                                     @else
-                                        <img src="{{asset('assets/libs/images/file-ext-icons/www.png')}}"
+                                        <img src="{{asset('assets/default/img/file-ext-icons/www.png')}}"
                                              class="img-responsive" alt="{{$item->title}}">
                                     @endif
                                 </a>
@@ -160,8 +160,8 @@
             'currentPage' => $items->currentPage(),
             'lastPage' => $items->lastPage()
         ])
-        <script src="{{ asset('assets/libs/js/jquery-ui/jquery-ui.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/js/uikit/js/uikit.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/js/uikit/js/addons/nestable.min.js') }}"></script>
+        <script src="{{ asset('assets/default/js/jquery/jquery-ui/jquery-ui.min.js') }}"></script>
+        <script src="{{ asset('assets/default/js/uikit/js/uikit.min.js') }}"></script>
+        <script src="{{ asset('assets/default/js/uikit/js/addons/nestable.min.js') }}"></script>
     @endpush
 @endsection

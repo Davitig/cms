@@ -27,7 +27,7 @@ class EventFile extends Model implements Fileable
      * @var array
      */
     protected $fillable = [
-        'event_id', 'position', 'visible'
+        'event_id', 'visible', 'position'
     ];
 
     /**

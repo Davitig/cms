@@ -67,7 +67,7 @@ class AdminFilesController extends Controller
 
             return response()->json([
                 'result' => true,
-                'view' => view($viewPath, $data)->render()
+                'view' => str(view($viewPath, $data)->render())->squish()
             ]);
         }
 
@@ -95,11 +95,11 @@ class AdminFilesController extends Controller
         $model->languages()->createMany(apply_languages($input));
 
         if ($request->expectsJson()) {
-            $view = view($viewPath, ['item' => $model, 'itemInput' => $input])->render();
-
             return response()->json(
                 fill_data('success', trans('general.created'))
-                + ['view' => preg_replace('/\s+/', ' ', trim($view))]
+                + ['view' => str(
+                    view($viewPath, ['item' => $model, 'itemInput' => $input])->render()
+                )->squish()]
             );
         }
 
@@ -122,11 +122,11 @@ class AdminFilesController extends Controller
         if ($this->request->expectsJson()) {
             $data['items'] = $this->model->joinLanguage(false)
                 ->whereKey($id)
-                ->getOrFail();
+                ->get();
 
             return response()->json([
                 'result' => true,
-                'view' => view($viewPath, $data)->render()
+                'view' => str(view($viewPath, $data)->render())->squish()
             ]);
         }
 
@@ -167,7 +167,7 @@ class AdminFilesController extends Controller
      */
     public function destroyData(string $foreignId, string $id)
     {
-        $this->model->destroy($this->request->get('ids', $id));
+        $this->model->findOrFail($id)->delete();
 
         if (request()->expectsJson()) {
             return response()->json(fill_data(
@@ -176,5 +176,28 @@ class AdminFilesController extends Controller
         }
 
         return back()->with('alert', fill_data('success', trans('database.deleted')));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  string  $foreignId
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
+    public function destroyManyData(string $foreignId)
+    {
+        $deleted = $this->model->destroy($this->request->get('ids'));
+
+        $data = fill_data(
+            (bool) $deleted,
+            trans('database.' . ($deleted ? 'deleted' : 'no_changes')),
+            $deleted
+        );
+
+        if (request()->expectsJson()) {
+            return response()->json($data);
+        }
+
+        return back()->with('alert', $data);
     }
 }

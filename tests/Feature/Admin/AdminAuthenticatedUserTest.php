@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Models\CmsUserRole;
+use App\Models\CmsUser\CmsUserRole;
 use App\Models\Permission;
 use Illuminate\Support\Arr;
 use Tests\Feature\RoutesTrait;

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CmsUser>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CmsUser\CmsUser>
  */
 class CmsUserFactory extends Factory
 {
@@ -26,7 +26,7 @@ class CmsUserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
-            'blocked' => 0,
+            'suspended' => 0,
             'password' => static::$password ??= Hash::make('password')
         ];
     }

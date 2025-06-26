@@ -116,13 +116,13 @@
     @push('body.bottom')
         @include('admin._scripts.transfer', ['route' => cms_route('events.transfer', [$parent->id]), 'column' => 'collection_id', 'list' => $parentSimilar, 'parentId' => $parent->id])
         <script type="text/javascript">
-            $(function() {
+            $(function () {
                 @if ($parent->admin_order_by == 'position')
                 positionable('{{ cms_route('events.updatePosition') }}', '{{$parent->admin_sort}}', '{{request('page', 1)}}', '{{$items->hasMorePages()}}');
                 @endif
             });
         </script>
-        <script src="{{ asset('assets/libs/js/uikit/js/uikit.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/js/uikit/js/addons/nestable.min.js') }}"></script>
+        <script src="{{ asset('assets/default/js/uikit/js/uikit.min.js') }}"></script>
+        <script src="{{ asset('assets/default/js/uikit/js/addons/nestable.min.js') }}"></script>
     @endpush
 @endsection

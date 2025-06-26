@@ -64,7 +64,7 @@ class AdminProductsController extends Controller
     public function edit(string $id)
     {
         $data['items'] = $this->model->whereKey($id)
-            ->forAdmin(false)
+            ->forAdmin(language()->queryStringKey())
             ->getOrFail();
 
         $data['current'] = $data['items']->first();

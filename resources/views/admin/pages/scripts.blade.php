@@ -1,15 +1,15 @@
 @php use Illuminate\Support\Arr; @endphp
 @push('head')
-    <link rel="stylesheet" href="{{ asset('assets/libs/js/select2/select2.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/js/select2/select2-bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/default/js/select2/select2.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/default/js/select2/select2-bootstrap.css') }}">
 @endpush
 @push('body.bottom')
     <script type="text/javascript">
-        $(function() {
+        $(function () {
             $('select.select').select2({
                 placeholder: 'Select item',
                 allowClear: true
-            }).on('select2-open', function() {
+            }).on('select2-open', function () {
                 // Add custom scrollbar
                 $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
             });
@@ -24,7 +24,7 @@
 
             let typeValue;
 
-            typeSelect.on('change', function() {
+            typeSelect.on('change', function () {
                 // Get the listable types
                 if (typeValue !== this.value) {
                     getListableTypes(this.value);
@@ -58,11 +58,11 @@
                             typeIdElement.append(typeIdText);
                         }
                     }, 'json').fail(function (xhr) {
-                        alert(xhr.responseText);
+                        notyf(xhr.statusText, 'error');
                     });
                 }
             }
         });
     </script>
-    <script src="{{ asset('assets/libs/js/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/default/js/select2/select2.min.js') }}"></script>
 @endpush

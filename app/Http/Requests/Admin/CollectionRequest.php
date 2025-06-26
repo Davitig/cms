@@ -18,7 +18,7 @@ class CollectionRequest extends Request
 
         $sortList = array_keys((array) cms_config('listable.collections.sort'));
 
-        $typeRule = $this->isMethod($this::METHOD_POST)
+        $typeRule = $this->isMethod(self::METHOD_POST)
             ? ['type' => ['required', Rule::in(
                 array_keys((array) cms_config('listable.collections.types'))
             )]] : [];
@@ -27,10 +27,10 @@ class CollectionRequest extends Request
             'title' => 'required',
             'admin_order_by' => ['required', Rule::in($orderList)],
             'admin_sort' => ['required', Rule::in($sortList)],
-            'admin_per_page' => 'required|numeric|max:50',
+            'admin_per_page' => 'required|numeric|max:200',
             'web_order_by' => ['required', Rule::in($orderList)],
             'web_sort' => ['required', Rule::in($sortList)],
-            'web_per_page' => 'required|numeric|max:50'
+            'web_per_page' => 'required|numeric|max:200'
         ];
     }
 
@@ -41,7 +41,7 @@ class CollectionRequest extends Request
      */
     protected function prepareForValidation()
     {
-        if (! $this->isMethod($this::METHOD_POST)) {
+        if (! $this->isMethod(self::METHOD_POST)) {
             $this->offsetUnset('type');
         }
     }

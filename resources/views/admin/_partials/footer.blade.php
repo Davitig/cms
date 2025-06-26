@@ -1,18 +1,17 @@
-<!-- Main Footer -->
-<!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
-<!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
-<!-- Or class "fixed" to  always fix the footer to the end of page -->
-<footer class="main-footer sticky">
-    <div class="footer-inner">
-        <!-- Add your copyright text here -->
-        <div class="footer-text">
-            &copy; {{date('Y')}} - {{config('app.name')}} - Version: {{cms_config('version')}}
-        </div>
-        <!-- Go to Top Link, just add rel="go-top" to any link to add this functionality -->
-        <div class="go-up">
-            <a href="#" rel="go-top">
-                <i class="fa fa-angle-up"></i>
-            </a>
+<!-- Footer -->
+<footer class="content-footer footer bg-footer-theme">
+    <div class="container-xxl">
+        <div
+            class="footer-container d-flex align-items-center justify-content-between py-4 flex-md-row flex-column">
+            <div class="text-body">
+                {{date('Y')}} &copy; {{config('app.name')}} - Version: {{cms_config('version')}}
+            </div>
+            <div class="social-icon my-4">
+                <a href="https://github.com/Davitig/cms" class="btn btn-icon btn-sm btn-github" target="_blank">
+                    <i class="icon-base fa-brands fa-github icon-20px"></i>
+                </a>
+            </div>
         </div>
     </div>
 </footer>
+<!-- / Footer -->

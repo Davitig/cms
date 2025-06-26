@@ -1,128 +1,112 @@
 @extends('admin.app')
 @section('content')
-    <div class="page-title">
-        <div class="title-env">
-            <h1 class="title">
-                <i class="{{$icon = icon_type('cmsUsers')}}"></i>
-                CMS Users
-            </h1>
-            <p class="description">Management of the CMS users</p>
-        </div>
-        <div class="breadcrumb-env">
-            <ol class="breadcrumb bc-1">
-                <li>
-                    <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
-                </li>
-                <li class="active">
-                    <i class="{{$icon}}"></i>
-                    <strong>CMS Users</strong>
-                </li>
-            </ol>
-        </div>
-    </div>
-    <ul class="nav nav-tabs">
-        <li{!!($activeRoleId = request()->get('role')) ? '' : ' class="active"'!!}>
-            <a href="{{cms_route('cmsUsers.index', $params = request()->except('role'))}}">CMS Users</a>
-        </li>
-        @if (auth('cms')->user()->hasFullAccess())
-            @foreach ($roles as $id => $role)
-                <li{!!$activeRoleId == $id ? ' class="active"' : ''!!}>
-                    <a href="{{cms_route('cmsUsers.index', $params + ['role' => $id])}}">{{ucfirst($role)}}</a>
-                </li>
-            @endforeach
-        @endif
-    </ul>
-    <div class="tab-content clearfix">
-        @if (auth('cms')->user()->hasFullAccess())
-            <div class="dib padr">
-                <a href="{{ cms_route('cmsUsers.create') }}" class="btn btn-secondary btn-icon-standalone">
-                    <i class="fa fa-user-plus"></i>
-                    <span>{{ trans('general.create') }}</span>
-                </a>
-            </div>
-            <div class="dib vam">
-                <form action="{{cms_route('cmsUsers.index')}}" method="GET">
-                    <input type="hidden" name="role" value="{{$activeRoleId}}">
-                    <div class="dib vam padr mrgb">
+    <nav class="mb-6 ps-1" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ cms_route('dashboard') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">CMS Users</li>
+        </ol>
+    </nav>
+    <div class="card mb-4">
+        <div class="card-header fs-5">Filter</div>
+        <div class="card-body">
+            <form action="{{cms_route('cmsUsers.index')}}" method="GET">
+                <div class="row">
+                    <div class="col-md-2 pe-0 mb-2">
                         <input type="text" name="name" class="form-control" placeholder="First name / Last Name" value="{{request('name')}}">
                     </div>
-                    <div class="dib vam padr mrgb">
-                        <input type="text" name="email" class="form-control" placeholder="Email" value="{{request('email')}}">
+                    <div class="col-md-2 pe-0 mb-2">
+                        <input type="text" name="email" class="form-control" placeholder="E-mail" value="{{request('email')}}">
                     </div>
-                    <div class="dib vam padr mrgb">
-                        {{ html()->select('blocked', [
-                            '' => '-- Block --',
-                            '1' => 'Blocked',
-                            '0' => 'Non-Blocked'
-                        ], request('blocked'))->class('form-control') }}
+                    <div class="col-md-2 pe-0 mb-2">
+                        {{ html()->select('role', [
+                            '' => '-- Role --',
+                        ] + $roles, request('role'))->class('form-select') }}
                     </div>
-                    <button type="submit" class="btn btn-secondary vat">Search</button>
-                    <a href="{{cms_route('cmsUsers.index', request()->only(['role']))}}" class="btn btn-black vat">Reset</a>
-                </form>
-            </div>
-            <a href="{{cms_route('cmsUserRoles.index')}}" class="btn btn-turquoise pull-right">Roles</a>
-        @endif
-        <table class="table stacktable table-hover members-table middle-align">
-            <thead>
-            <tr>
-                <th></th>
-                <th>Name</th>
-                <th>E-Mail</th>
-                <th>ID</th>
-                <th>Settings</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($items as $item)
-                <tr id="item{{$item->id}}" class="item">
-                    <td class="user-image">
-                        <img src="{{ cms_route('cmsUsers.photo', [$item->id]) }}" width="40" height="40" class="img-circle" alt="{{$item->first_name}} {{$item->last_name}}">
-                    </td>
-                    <td class="user-name">
-                        <a href="{{cms_route('cmsUsers.edit', [$item->id])}}" class="name{{auth('cms')->id() == $item->id ? ' active' : ''}}">{{$item->first_name}} {{$item->last_name}}</a>
-                        <span>{{ucfirst($item->role)}}</span>
-                    </td>
-                    <td>
-                        <span class="email">{{$item->email}}</span>
-                    </td>
-                    <td class="user-id">
-                        {{$item->id}}
-                    </td>
-                    <td class="action-links">
-                        <a href="{{cms_route('cmsUsers.show', [$item->id])}}" class="show">
-                            <i class="fa fa-user"></i>
-                            Profile
-                        </a>
-                        @if (auth('cms')->user()->hasFullAccess() || auth('cms')->id() == $item->id)
-                            <a href="{{cms_route('cmsUsers.edit', [$item->id])}}" class="edit">
-                                <i class="fa fa-pencil"></i>
-                                Edit Profile
-                            </a>
-                        @endif
-                        @if (auth('cms')->user()->hasFullAccess() && auth('cms')->id() != $item->id)
-                            {{ html()->form('delete', cms_route('cmsUsers.destroy', [$item->id]))
-                                ->class('form-delete')->data('id', $item->id)->open() }}
-                            <a href="#" class="delete">
-                                <i class="fa fa-user-times"></i>
-                                Delete
-                            </a>
-                            {{ html()->form()->close() }}
-                        @endif
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-        {!! $items->appends(request()->all())->links() !!}
+                    <div class="col-md-2 pe-0 mb-2">
+                        {{ html()->select('suspended', [
+                            '' => '-- Status --',
+                            '0' => 'Active',
+                            '1' => 'Suspended'
+                        ], request('suspended'))->class('form-select') }}
+                    </div>
+                    <div class="col-md-auto">
+                        <button type="submit" class="btn btn-primary me-2">Search</button>
+                        <a href="{{cms_route('cmsUsers.index', request()->only(['role']))}}" class="btn btn-label-secondary">Reset</a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-    @push('body.bottom')
-        <script type="text/javascript">
-            $(function() {
-                $('.members-table a.delete').on('click', function(e) {
-                    e.preventDefault();
-                    $(this).closest('.form-delete').submit();
-                });
-            });
-        </script>
-    @endpush
+    <div class="card">
+        <div class="card-header header-elements">
+            <div class="fs-5">
+                CMS Users
+                <span class="badge badge-center rounded-pill bg-label-primary ms-2">{{ $items->total() }}</span>
+            </div>
+            <div class="card-header-elements ms-auto">
+                <a href="{{ cms_route('cmsUsers.create') }}" class="btn btn-primary">
+                    <i class="icon-base fa fa-plus icon-xs me-sm-1"></i>
+                    <span>Add New Record</span>
+                </a>
+            </div>
+        </div>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>E-Mail</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>ID</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($items as $item)
+                    <tr>
+                        <td>
+                            <img src="{{ cms_route('cmsUsers.photo', [$item->id]) }}" width="40" height="40" alt="Photo" class="rounded-circle me-4" />
+                            <a href="{{cms_route('cmsUsers.show', [$item->id])}}" class="{{auth('cms')->id() == $item->id ? ' active' : ''}}">
+                                {{$item->first_name}} {{$item->last_name}}
+                            </a>
+                        </td>
+                        <td>{{ $item->email }}</td>
+                        <td>{{ ucfirst($item->role) }}</td>
+                        <td>
+                            <span class="badge bg-label-{{ $item->suspended ? 'warning' : 'primary' }} me-1">{{ $item->suspended ? 'Suspended' : 'Active' }}</span>
+                        </td>
+                        <td>{{ $item->id }}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="icon-base fa fa-ellipsis-vertical"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    @if (auth('cms')->user()->hasFullAccess() || auth('cms')->id() == $item->id)
+                                        <a href="{{ cms_route('cmsUsers.edit', [$item]) }}" class="dropdown-item">
+                                            <i class="icon-base fa fa-edit icon-sm me-1"></i>
+                                            Edit
+                                        </a>
+                                    @endif
+                                    @if (auth('cms')->user()->hasFullAccess() && auth('cms')->id() != $item->id)
+                                        {{ html()->form('delete', cms_route('cmsUsers.destroy', [$item->id]))->open() }}
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="icon-base fa fa-trash icon-sm me-1"></i>
+                                            Delete
+                                        </button>
+                                        {{ html()->form()->close() }}
+                                    @endif
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{ $items->links() }}
 @endsection

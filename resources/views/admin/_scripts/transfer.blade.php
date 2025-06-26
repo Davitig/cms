@@ -32,11 +32,11 @@
     </div>
 </div>
 <script type="text/javascript">
-    $(function() {
+    $(function () {
         // Load modal
         let id = 0;
         let transferModal = $('#transfer-modal');
-        $('#items').on('click', '.transfer', function(e) {
+        $('#items').on('click', '.transfer', function (e) {
             e.preventDefault();
 
             id = $(this).data('id');
@@ -46,7 +46,7 @@
         });
 
         // Remove transferred item
-        $('#transfer-form').on('ajaxFormSuccess', function() {
+        $('#transfer-form').on('ajaxFormSuccess', function () {
             let target = $(this).find('#column_value').val();
 
             transferModal.modal('hide');

@@ -2,7 +2,7 @@
 
 namespace App\View\Composers\Admin;
 
-use App\Models\CmsUser;
+use App\Models\CmsSetting;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
@@ -12,9 +12,9 @@ class AdminCmsSettingsComposer
     /**
      * The CmsUser instance.
      *
-     * @var \App\Models\CmsUser|null
+     * @var string|int|null
      */
-    protected ?CmsUser $user = null;
+    protected string|int|null $cmsUserId = null;
 
     /**
      * The instance of the settings.
@@ -30,7 +30,7 @@ class AdminCmsSettingsComposer
      */
     public function __construct(AuthManager $auth)
     {
-        $this->user = $auth->guard('cms')->user();
+        $this->cmsUserId = $auth->guard('cms')->id();
 
         $this->settings = $this->getSettings();
     }
@@ -53,24 +53,12 @@ class AdminCmsSettingsComposer
      */
     protected function getSettings(): Collection
     {
-        if (is_null($this->user)) {
+        if (is_null($this->cmsUserId)) {
             return new Collection;
         }
 
-        $settings = app('db')->table('cms_settings')
-            ->where('cms_user_id', $this->user->id)
-            ->first();
-
-        if (! is_null($settings)) {
-            $settings->body = <<< EOT
-$settings->sidebar_direction $settings->layout_boxed $settings->skin_sidebar
-$settings->skin_user_menu $settings->skin_horizontal
-EOT;
-            $settings->body = preg_replace(
-                '/\s+/', ' ', trim($settings->body)
-            );
-        }
-
-        return new Collection($settings);
+        return new Collection(
+            (new CmsSetting)->cmsUserId($this->cmsUserId)->first()?->toArray()
+        );
     }
 }

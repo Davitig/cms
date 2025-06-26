@@ -370,17 +370,17 @@ function count_sub_items(array|Collection $items): int
 /**
  * Fill an array with data.
  *
- * @param  string  $result
+ * @param  mixed  $result
  * @param  string|null  $message
- * @param  mixed|null  $input
+ * @param  mixed|null  $data
  * @return array
  */
-function fill_data(string $result, ?string $message = null, mixed $input = null): array
+function fill_data(mixed $result, ?string $message = null, mixed $data = null): array
 {
     return [
         'result' => $result,
         'message' => $message,
-        'data' => $input
+        'data' => $data
     ];
 }
 
@@ -417,18 +417,6 @@ function cms_pages(?string $key = null, mixed $default = []): mixed
 }
 
 /**
- * Get the CMS icon name.
- *
- * @param  string  $key
- * @param  mixed|null  $default
- * @return mixed
- */
-function icon_type(string $key, mixed $default = null): mixed
-{
-    return cms_config('icons.' . $key, $default);
-}
-
-/**
  * Get the path for the glide server.
  *
  * @param  string  $path
@@ -452,50 +440,17 @@ function glide(string $path, string $type): string
 }
 
 /**
- * Get YouTube video id from url.
+ * Boolify data values by specified keys.
  *
- * @param  string  $url
- * @param  array  $allowQueryStrings
- * @param  bool  $strict
- * @return string
+ * @param  array  $data
+ * @param  array  $keys
+ * @return array
  */
-function get_youtube_id(string $url, array $allowQueryStrings = [], bool $strict = false): string
+function boolify(array &$data, array $keys)
 {
-    $parts = parse_url($url);
-
-    if (isset($parts['query'])) {
-        parse_str($parts['query'], $queryString);
-
-        $allowQueryStrings = query_string(array_intersect_key(
-            $queryString, array_flip($allowQueryStrings)
-        ), '&');
-
-        if (isset($queryString['v'])) {
-            return $queryString['v'] . $allowQueryStrings;
-        } elseif (isset($queryString['vi'])) {
-            return $queryString['vi'] . $allowQueryStrings;
-        }
-    } else {
-        $allowQueryStrings = '';
+    foreach ($keys as $key) {
+        $data[$key] = (bool) ($data[$key] ?? false);
     }
 
-    if ((! $strict || isset($parts['scheme'])) && isset($parts['path'])) {
-        $path = explode('/', trim($parts['path'], '/'));
-
-        return end($path) . $allowQueryStrings;
-    }
-
-    return '';
-}
-
-/**
- * Convert youtube video url to embed url.
- *
- * @param  string  $url
- * @param  array  $allowQueryStrings
- * @return string
- */
-function get_youtube_embed(string $url, array $allowQueryStrings = []): string
-{
-    return 'https://www.youtube.com/embed/' . get_youtube_id($url, $allowQueryStrings);
+    return $data;
 }

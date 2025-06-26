@@ -34,7 +34,7 @@ class Event extends Model implements Collection
      * @var array
      */
     protected $fillable = [
-        'collection_id', 'slug', 'position', 'visible', 'image'
+        'collection_id', 'slug', 'visible', 'position', 'image'
     ];
 
     /**

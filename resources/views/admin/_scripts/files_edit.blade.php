@@ -1,36 +1,15 @@
 <script type="text/javascript">
-    let currentLang = '{{language()->active()}}';
-    let formSelector = $('#form-modal form');
-
-    formSelector.on('ajaxFormSuccess', function () {
-        $(this).find('[name="file"]').trigger('fileSet');
-        let lang = $(this).data('lang');
-        if (lang !== currentLang) {
+    $('#file-modal form').on('ajaxFormSuccess', function () {
+        if ($(this).data('lang') !== '{{language()->active()}}') {
             return;
         }
-        let title = $('[name="title"]', this).val();
-        let file = $('[name="file"]', this).val();
-        let visible = $('[name="visible"]', this).prop('checked');
 
-        let item = $('.gallery-env #item{{$current->id}}');
-        $('.title', item).text(title);
-        $('.thumb img', item).attr('src', getFileImage(file).file);
+        let item = $('#sortable #item{{ $current->id }}');
+        $('.item-title', item).text($('[name="title"]', this).val());
+        $('.item-img', item).attr('src', getImageOrExtImage($('[name="file"]', this).val()));
 
-        let icon = (visible ? 'fa fa-eye' : 'fa fa-eye-slash');
-        $('.visibility i', item).attr('class', icon);
-    });
-
-    formSelector.find('[name="file"]').on('fileSet', function () {
-        let fileId = $(this).attr('id');
-        let fileValue = $(this).val();
-        let result = getFileImage(fileValue);
-
-        let photoSelector = $('#form-modal img.' + fileId);
-        photoSelector.removeClass('not-photo');
-        if (!result.isPhoto) {
-            photoSelector.addClass('not-photo');
-        }
-        photoSelector.attr('src', result.file);
+        $('.visibility i', item).attr(
+            'class', $('[name="visible"]', this).prop('checked') ? 'fa fa-eye' : 'fa fa-eye-slash'
+        );
     });
 </script>
-@include('admin._scripts.get_file_func')

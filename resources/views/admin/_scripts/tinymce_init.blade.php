@@ -16,17 +16,17 @@
             file_picker_callback: elFinderBrowser,
 
             setup: function(ed) {
-                ed.on("init", function() {
+                ed.on("init", function () {
                     $(this.contentAreaContainer.parentElement).find("div.mce-toolbar-grp").hide();
                 });
-                ed.on('focus blur', function(e) {
+                ed.on('focus blur', function (e) {
                     if (e.type === 'focus') {
                         $(this.contentAreaContainer.parentElement).find("div.mce-toolbar-grp").show();
                     }
                     // Add "table" class to all table tags
                     tinymce.activeEditor.dom.addClass(tinymce.activeEditor.dom.select('table'), 'table');
                 });
-                ed.on('change', function() {
+                ed.on('change', function () {
                     tinymce.triggerSave();
                 });
             }
@@ -37,7 +37,7 @@
     function elFinderBrowser (callback, value, meta) {
         tinymce.activeEditor.windowManager.openUrl({
             title: 'elFinder File Manager',
-            url: '{{ cms_route('filemanager.tinymce5') . '?iframe=1' }}',
+            url: '{{ cms_route('fileManager.tinymce5') . '?iframe=1' }}',
             /**
              * On message will be triggered by the child window
              *

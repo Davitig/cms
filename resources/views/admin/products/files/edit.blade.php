@@ -1,49 +1,16 @@
-<div class="modal fade" id="form-modal">
-    <div class="modal-dialog">
+<div class="modal fade" id="file-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="tab-content">
-                @foreach ($items as $current)
-                    <div class="tab-pane{{language()->active() == $current->language ? ' active' : ''}}" id="modal-item-{{$current->language}}">
-                        <div class="modal-gallery-image">
-                            @if (in_array($ext = pathinfo($current->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
-                                <img src="{{$current->file}}" class="file{{$current->language}} img-responsive" alt="{{$current->title}}">
-                            @elseif( ! empty($ext))
-                                <img src="{{asset('assets/libs/images/file-ext-icons/'.$ext.'.png')}}"
-                                     class="file{{$current->language}} not-photo img-responsive"
-                                     alt="{{$current->title}}">
-                            @else
-                                <img src="{{asset('assets/libs/images/file-ext-icons/www.png')}}"
-                                     class="file{{$current->language}} not-photo img-responsive"
-                                     alt="{{$current->title}}">
-                            @endif
-                        </div>
-                        {{ html()->modelForm($current,
-                            'put', cms_route('products.files.update', [
-                                $current->product_id, $current->id
-                            ], language()->containsMany() ? $current->language : null)
-                        )->class('form-horizontal ' . $cmsSettings->get('ajax_form'))
-                        ->data('lang', $current->language)->open() }}
-                        <div class="modal-body">
-                            <div class="row">
-                                @include('admin.products.files.form')
-                            </div>
-                        </div>
-                        {{ html()->form()->close() }}
-                    </div>
-                @endforeach
+            {{ html()->modelForm($current, 'put', cms_route('products.files.update', [
+                $current->product_id, $current->id
+            ], language()->containsMany() ? $current->language : null))
+            ->class('ajax-form')->data('lang', $current->language)->open() }}
+            <div class="modal-header">
+                <div class="modal-title fs-5 fw-medium text-black">Edit file</div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            @if (language()->containsMany())
-                <ul class="modal-footer modal-gallery-top-controls nav nav-tabs">
-                    @foreach ($items as $current)
-                        <li{!!language()->active() == $current->language ? ' class="active"' : ''!!}>
-                            <a href="#modal-item-{{$current->language}}" data-toggle="tab">
-                                <span class="visible-xs">{{$current->language}}</span>
-                                <span class="hidden-xs">{{language()->get($current->language, 'full_name')}}</span>
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            @endif
+            @include('admin.products.files.form')
+            {{ html()->form()->close() }}
         </div>
     </div>
     {{-- keep script inside modal --}}

@@ -27,7 +27,7 @@ class PageFile extends Model implements Fileable
      * @var array
      */
     protected $fillable = [
-        'page_id', 'position', 'visible'
+        'page_id', 'visible', 'position'
     ];
 
     /**

@@ -27,7 +27,7 @@ class ProductFile extends Model implements Fileable
      * @var array
      */
     protected $fillable = [
-        'product_id', 'position', 'visible'
+        'product_id', 'visible', 'position'
     ];
 
     /**

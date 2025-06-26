@@ -54,7 +54,6 @@ class AdminTranslationsResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('translations.store'), [
-            'title' => $word = fake()->word(),
             'code' => str($word)->snake()->toString(),
             'value' => $word
         ]);
@@ -87,8 +86,7 @@ class AdminTranslationsResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('translations.update', [$translation->id]), [
-            'title' => $word = fake()->word(),
-            'code' => str($word)->snake()->toString(),
+            'code' => str($word = fake()->word())->snake()->toString(),
             'value' => $word
         ]);
 
@@ -102,10 +100,10 @@ class AdminTranslationsResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('translations.store'), [
-            'title' => fake()->word()
+            'value' => fake()->word()
         ]);
 
-        $response->assertFound()->assertSessionHasErrors(['code', 'value']);
+        $response->assertFound()->assertSessionHasErrors(['code']);
     }
 
     public function test_admin_translations_resource_form_get()
@@ -131,8 +129,7 @@ class AdminTranslationsResourceTest extends TestAdmin
             $this->getFullAccessCmsUser(), 'cms'
         )->post(cms_route('translations.form.post'), [
             'id' => $translation->id,
-            'title' => $word = fake()->word(),
-            'code' => str($word)->snake()->toString(),
+            'code' => str($word = fake()->word())->snake()->toString(),
             'value' => $word
         ]);
 

@@ -30,7 +30,7 @@ class AdminTranslationsController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        $data['items'] = $this->model->joinLanguage()->get();
+        $data['items'] = $this->model->joinLanguage()->paginate(50);
 
         return view('admin.translations.index', $data);
     }
@@ -73,9 +73,7 @@ class AdminTranslationsController extends Controller implements HasMiddleware
      */
     public function edit(string $id)
     {
-        $data['items'] = $this->model->joinLanguage(false)
-            ->whereKey($id)
-            ->getOrFail();
+        $data['current'] = $this->model->joinLanguage()->findOrFail($id);
 
         $data['transTypes'] = (array) cms_config('trans_types');
 

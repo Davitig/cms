@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\LanguageRequest;
 use App\Models\Language;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class AdminLanguagesController extends Controller
@@ -25,11 +26,9 @@ class AdminLanguagesController extends Controller
      */
     public function index()
     {
-        $data['items'] = $this->model->positionAsc()->get();
+        $data['items'] = $this->model->positionAsc()->paginate(100);
 
-        $data['langVisibleCount'] = $data['items']->filter(
-            fn ($item) => $item->visible
-        )->count();
+        $data['visibleLangCount'] = $this->model->whereVisible()->count();
 
         $data['routesAreCached'] = app()->routesAreCached();
 
@@ -111,7 +110,11 @@ class AdminLanguagesController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->model->destroy($id);
+        try {
+            $this->model->findOrFail($id)->delete();
+        } catch (QueryException $e) {
+            return $this->deleteResponse(null, (string) ($e->errorInfo[1] ?? null));
+        }
 
         $url = null;
 
@@ -129,15 +132,28 @@ class AdminLanguagesController extends Controller
             }
         }
 
+        return $this->deleteResponse($url);
+    }
+
+    /**
+     * Get the delete response.
+     *
+     * @param  string|null  $url
+     * @param  string|null  $errorCode
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
+    protected function deleteResponse(?string $url, ?string $errorCode = null)
+    {
+        $message = trans('database.' . ($errorCode ? 'error.' . $errorCode : 'deleted'));
+
         if (request()->expectsJson()) {
             return response()->json(fill_data(
-                'success', trans('database.deleted'), ['redirect' => $url]
-            ));
+                (int) ! $errorCode, $message, ['redirect' => $url]
+            ), 422);
         }
 
-        return redirect($url ?: cms_route('languages.index'))->with('alert', fill_data(
-            'success', trans('database.deleted')
-        ));
+        return redirect($url ?: cms_route('languages.index'))
+            ->with('alert', fill_data((int) ! $errorCode, $message));
     }
 
     /**

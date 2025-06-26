@@ -112,4 +112,15 @@ class AdminProductFilesController extends Controller
     {
         return $this->destroyData($productId, $id);
     }
+
+    /**
+     * Remove the specified resources from storage.
+     *
+     * @param  string  $productId
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
+    public function destroyMany(string $productId)
+    {
+        return $this->destroyManyData($productId);
+    }
 }

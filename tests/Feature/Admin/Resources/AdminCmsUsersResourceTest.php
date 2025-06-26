@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Admin\Resources;
 
-use App\Models\CmsUser;
+use App\Models\CmsUser\CmsUser;
 use Database\Factories\CmsUserFactory;
 use Database\Factories\CmsUserRoleFactory;
 use Exception;

@@ -102,6 +102,7 @@ return [
                 'faq' => 'FAQ'
             ],
             'order_by' => [
+                'id' => 'Default',
                 'position' => 'Position',
                 'created_at' => 'Creation date'
             ],

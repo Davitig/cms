@@ -32,6 +32,6 @@ class ProductRequest extends Request
     {
         $this->slugifyInput('slug', ['title']);
 
-        $this->boolifyInput('visible');
+        $this->boolifyInput('visible', 'in_stock');
     }
 }

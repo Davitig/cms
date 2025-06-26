@@ -24,7 +24,7 @@
         </div>
     </div>
     <ul class="nav nav-tabs nav-tabs">
-        @include('admin._partials.forms.lang_active_tab')
+        @include('admin._partials.lang.active_tab')
     </ul>
     <div class="panel panel-default">
         <div class="panel-heading">

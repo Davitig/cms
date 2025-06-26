@@ -1,23 +1,37 @@
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <meta name="description" content="Content Management System">
     <meta name="robots" content="noindex, nofollow">
     <meta name="version" content="{{cms_config('version')}}">
     <title>CMS</title>
-    <link rel="shortcut icon" href="{{ asset('assets/libs/images/favicon.ico') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/css/fonts/fontawesome-6.7.2/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/js/datatables/dataTables.bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/js/fancybox/jquery.fancybox.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/js/stacktable/stacktable.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/js/uikit/uikit.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/css/xenon-core.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/css/xenon-forms.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/css/xenon-components.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/css/xenon-skins.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/css/custom.css') }}">
-    <script src="{{ asset('assets/libs/js/jquery-1.11.1.min.js') }}"></script>
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/default/img/favicon.ico') }}">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&ampdisplay=swap">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/iconify-icons.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/fontawesome.css') }}">
+    <!-- Core CSS -->
+    <!-- build:css assets/vendor/css/theme.css  -->
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/node-waves/node-waves.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/pickr/pickr-themes.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/core.css') }}">
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}">
+    <!-- endbuild -->
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/notyf/notyf.css') }}">
+    <!-- Helpers -->
+    <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
+    <script src="{{ asset('assets/vendor/js/template-customizer.js') }}"></script>
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="{{ asset('assets/js/config.js') }}"></script>
     @stack('head')
+    <!-- Default -->
+    <link rel="stylesheet" href="{{ asset('assets/default/libs/fancybox-6.0/fancybox.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/default/css/custom.css') }}">
 </head>

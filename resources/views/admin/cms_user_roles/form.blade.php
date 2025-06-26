@@ -1,52 +1,24 @@
-<div class="form-group{{($error = $errors->first('role')) ? ' validate-has-error' : '' }}">
-    <label class="col-sm-2 control-label required">Role:</label>
-    <div class="col-sm-10">
-        <div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-header"></i></span>
-            {{ html()->text('role')->id('role_inp')->class('form-control') }}
-        </div>
-        @if ($error)
-            <span class="text-danger">{{$error}}</span>
-        @endif
+<div class="row g-6 mb-6">
+    <div>
+        <label for="role_inp" class="form-label">Role Name</label>
+        {{ html()->text('role')->id('role_inp')->class('form-control') }}
+        @error('role')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
+    <div>
+        <label for="full_access_inp" class="form-label">Access</label>
+        {{ html()->select('full_access', [0 => 'Custom', 1 => 'Full Access'])
+        ->id('full_access_inp' . $current->language)->class('form-select select') }}
+        @error('full_access')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
     </div>
 </div>
-
-<div class="form-group-separator"></div>
-
-<div class="row">
-    <div class="col-lg-6">
-        <div class="form-group{{($error = $errors->first('full_access')) ? ' validate-has-error' : '' }}">
-            <label class="col-lg-4 col-sm-2 control-label required">Access:</label>
-            <div class="col-lg-8 col-sm-10">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-ellipsis-h"></i></span>
-                    {{ html()->select('full_access', [0 => 'Custom', 1 => 'Full Access'])
-                    ->id('full_access_inp' . $current->language)->class('form-control select')->data('lang', 1) }}
-                </div>
-                @if ($error)
-                    <span class="text-danger">{{$error}}</span>
-                @endif
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group">
-    <div class="col-sm-10 btn-action pull-right">
-        <button type="submit" class="btn btn-secondary btn-icon-standalone" title="{{ $submit }}">
-            <i class="fa fa-{{ $icon }}"></i>
-            <span>{{ $submit }}</span>
-        </button>
-        <a href="{{ cms_route('permissions.index', ['role' => $current->id]) }}" id="permissions-btn"
-           class="btn btn-orange btn-icon-standalone{{ ! $current->id || $current->full_access ? ' hidden' : '' }}" title="Permissions">
-            <i class="{{icon_type('permissions')}}"></i>
-            <span>Permissions</span>
-        </a>
-        <a href="{{ cms_route('cmsUserRoles.index') }}" class="btn btn-blue btn-icon-standalone" title="{{ trans('general.back') }}">
-            <i class="fa fa-arrow-left"></i>
-            <span>{{ trans('general.back') }}</span>
-        </a>
-    </div>
-</div>
+<button type="submit" class="btn btn-primary me-4">Submit</button>
+<a href="{{ cms_route('permissions.index', ['role' => $current->id]) }}" id="permissions-btn"
+   class="btn btn-label-{{ $current->permissions_count ? 'warning' : 'danger' }} me-4 {{ ! $current->id || $current->full_access ? ' d-none' : '' }}" title="Permissions">
+    <i class="icon-base fa fa-user-lock icon-sm me-4"></i>
+    <span>Permissions</span>
+</a>
+<a href="{{ cms_route('cmsUserRoles.index') }}" class="btn btn-label-secondary">Cancel</a>

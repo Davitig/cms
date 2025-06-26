@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Models\CmsUser;
-use App\Models\CmsUserRole;
+use App\Models\CmsUser\CmsUser;
+use App\Models\CmsUser\CmsUserRole;
 use Database\Factories\CmsUserFactory;
 use Database\Factories\CmsUserRoleFactory;
 use Illuminate\Database\Eloquent\Collection;

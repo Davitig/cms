@@ -36,7 +36,7 @@ class AdminCollectionsController extends Controller
     {
         $data['current'] = $this->model;
         $data['current']->type = $request->get('type');
-        $data['current']->admin_per_page = 20;
+        $data['current']->admin_per_page = 50;
         $data['current']->web_per_page = 10;
 
         return view('admin.collections.create', $data);

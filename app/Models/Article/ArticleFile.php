@@ -27,7 +27,7 @@ class ArticleFile extends Model implements Fileable
      * @var array
      */
     protected $fillable = [
-        'article_id', 'position', 'visible'
+        'article_id', 'visible', 'position'
     ];
 
     /**

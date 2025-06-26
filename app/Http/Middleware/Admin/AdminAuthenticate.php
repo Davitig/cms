@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware\Admin;
 
-use App\Models\CmsUser;
+use App\Models\CmsUser\CmsUser;
 use App\Models\Permission;
 use Closure;
 use Illuminate\Http\Request;
@@ -22,6 +22,7 @@ class AdminAuthenticate
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // check if the specified guard is authenticated
         if (is_null($user = $request->user('cms'))) {
             if ($request->expectsJson()) {
                 return response()->json('Unauthorized.', 401);
@@ -30,23 +31,13 @@ class AdminAuthenticate
             return redirect()->guest(cms_route('login'));
         }
 
-        if ($user->blocked) {
+        // check if user is suspended
+        if ($user->suspended) {
             throw new AccessDeniedHttpException('Forbidden');
         }
 
-        if ($user->hasLockScreen()) {
-            $redirect = redirect();
-
-            $redirect->setIntendedUrl($request->fullUrl());
-
-            return $redirect->to(cms_route('lockscreen'));
-        }
-
-        if (! ($route = $request->route()) instanceof Route) {
-            throw new RouteNotFoundException;
-        }
-
-        $this->checkRoutePermission($user, $route->getName());
+        // check user route permissions
+        $this->checkRoutePermission($user, $request->route());
 
         return $next($request);
     }
@@ -54,19 +45,22 @@ class AdminAuthenticate
     /**
      * Determine if the user has access to the given route.
      *
-     * @param  \App\Models\CmsUser  $user
-     * @param  string  $fullRouteName
+     * @param  \App\Models\CmsUser\CmsUser  $user
+     * @param  \Illuminate\Routing\Route|null  $route
      * @return void
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
-    private function checkRoutePermission(CmsUser $user, string $fullRouteName): void
+    private function checkRoutePermission(CmsUser $user, ?Route $route): void
     {
         if ($user->hasFullAccess()) {
             return;
         }
 
-        $routeName = str($fullRouteName)->replaceFirst(
+        if (is_null($route)) {
+            throw new RouteNotFoundException;
+        }
+
+        $routeName = str($fullRouteName = $route->getName())->replaceFirst(
             language()->active() . '.' . cms_route_name(), ''
         )->toString();
 

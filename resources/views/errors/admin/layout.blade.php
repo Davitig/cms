@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Content Management System">
     @stack('head.title')
-    <link rel="shortcut icon" href="{{ asset('assets/libs/images/favicon.ico') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/css/fonts/fontawesome-6.7.2/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/css/xenon-core.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/css/xenon-components.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/css/custom.css') }}">
-    <script src="{{ asset('assets/libs/js/jquery-1.11.1.min.js') }}"></script>
+    <link rel="shortcut icon" href="{{ asset('assets/default/img/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ asset('assets/default/css/fonts/fontawesome-6.7.2/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/default/css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/default/css/xenon-core.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/default/css/xenon-components.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/default/css/custom.css') }}">
+    <script src="{{ asset('assets/default/js/jquery/jquery-1.11.1.min.js') }}"></script>
 </head>
 <body class="page-body">
 <div id="container"><div class="settings-pane">
@@ -104,13 +104,13 @@
                     </li>
                     <li class="dropdown hover-line language-switcher">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{{ asset('assets/libs/images/flags/'.language()->active().'.png') }}" width="30" height="20" alt="{{language()->getActive('full_name')}}">
+                            <img src="{{ asset('assets/default/img/flags/'.language()->active().'.png') }}" width="30" height="20" alt="{{language()->getActive('full_name')}}">
                         </a>
                         <ul class="dropdown-menu languages">
                             @foreach (language()->all() as $key => $value)
                                 <li data-id="{{$value['id']}}">
                                     <a href="{{url($value['path'])}}">
-                                        <img src="{{ asset('assets/libs/images/flags/'.$key.'.png') }}" width="30" height="20" alt="{{$value['full_name']}}">
+                                        <img src="{{ asset('assets/default/img/flags/'.$key.'.png') }}" width="30" height="20" alt="{{$value['full_name']}}">
                                         {{ $value['full_name'] }}
                                     </a>
                                 </li>
@@ -188,12 +188,12 @@
         </div>
     </div>
 </div>
-<script src="{{ asset('assets/libs/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('assets/libs/js/TweenMax.min.js') }}"></script>
-<script src="{{ asset('assets/libs/js/resizeable.js') }}"></script>
-<script src="{{ asset('assets/libs/js/joinable.js') }}"></script>
-<script src="{{ asset('assets/libs/js/xenon-api.js') }}"></script>
-<script src="{{ asset('assets/libs/js/xenon-toggles.js') }}"></script>
-<script src="{{ asset('assets/libs/js/xenon-custom.js') }}"></script>
+<script src="{{ asset('assets/default/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/default/js/TweenMax.min.js') }}"></script>
+<script src="{{ asset('assets/default/js/resizeable.js') }}"></script>
+<script src="{{ asset('assets/default/js/joinable.js') }}"></script>
+<script src="{{ asset('assets/default/js/xenon-api.js') }}"></script>
+<script src="{{ asset('assets/default/js/xenon-toggles.js') }}"></script>
+<script src="{{ asset('assets/default/js/xenon-custom.js') }}"></script>
 </body>
 </html>

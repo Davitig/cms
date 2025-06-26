@@ -33,7 +33,7 @@ class Faq extends Model implements Collection
      * @var array
      */
     protected $fillable = [
-        'collection_id', 'position', 'visible'
+        'collection_id', 'visible', 'position'
     ];
 
     /**
