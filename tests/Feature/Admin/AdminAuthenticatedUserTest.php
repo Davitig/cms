@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Models\CmsUserRole;
+use App\Models\CmsUser\CmsUserRole;
 use App\Models\Permission;
 use Illuminate\Support\Arr;
 use Tests\Feature\RoutesTrait;
@@ -15,7 +15,7 @@ class AdminAuthenticatedUserTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('dashboard'));
+        )->get(cms_route('dashboard.index'));
 
         $response->assertOk();
     }

@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <title>elFinder 2.1</title>
-    <link rel="stylesheet" href="{{ asset('assets/libs/js/jquery-ui-1.14.1/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/default/libs/jquery/jquery-ui-1.14.1/jquery-ui.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset($dir.'/css/elfinder.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset($dir.'/css/theme.css') }}">
-    <script src="{{ asset('assets/libs/js/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('assets/libs/js/jquery-ui-1.14.1/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/default/libs/jquery/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('assets/default/libs/jquery/jquery-ui-1.14.1/jquery-ui.min.js') }}"></script>
     <script src="{{ asset($dir.'/js/elfinder.min.js') }}"></script>
     @if ($locale)
         <!-- elFinder translation (OPTIONAL) -->
@@ -27,7 +27,7 @@
                 }, '*');
             }
         };
-        $(function() {
+        $(function () {
             $('#elfinder').elfinder({
                 // set your elFinder options here
                 @if ($locale)
@@ -36,10 +36,10 @@
                 customData: {
                     _token: '{{ csrf_token() }}'
                 },
-                url: '{{ cms_route('filemanager.connector', ['hide_disks' => 1]) }}',  // connector URL
+                url: '{{ cms_route('fileManager.connector', ['hide_disks' => 1]) }}',  // connector URL
                 soundPath: '{{ asset($dir.'/sounds') }}',
                 getFileCallback: function(file) { // editor callback
-                    FileBrowserDialogue.mySubmit(file); // pass selected file path to TinyMCE
+                    FileBrowserDialogue.mySubmit(file); // pass a selected file path to TinyMCE
                 },
                 // width: 880,
                 height: 580,

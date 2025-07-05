@@ -15,8 +15,10 @@ class EventRequest extends Request
     {
         $id = $this->route('event');
 
+        $required = language()->mainIsActive() ? 'required' : '';
+
         return [
-            'slug' => 'required|unique:events,slug,'.$id,
+            'slug' => [$required, 'unique:events,slug,'.$id],
             'title' => 'required',
         ];
     }
@@ -28,6 +30,10 @@ class EventRequest extends Request
      */
     protected function prepareForValidation()
     {
+        if (! language()->mainIsActive()) {
+            return;
+        }
+
         $this->slugifyInput('slug', ['title']);
 
         $this->boolifyInput('visible');

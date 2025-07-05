@@ -15,19 +15,12 @@ class EventFile extends Model implements Fileable
     use QueriesTrait, FileTrait, HasLanguage;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string|null
-     */
-    protected $table = 'event_files';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'event_id', 'position', 'visible'
+        'event_id', 'visible', 'position'
     ];
 
     /**
@@ -58,7 +51,7 @@ class EventFile extends Model implements Fileable
      * @param  int  $foreignKey
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeFileForeignKey(Builder $query, int $foreignKey): Builder
+    public function scopeForeignKey(Builder $query, int $foreignKey): Builder
     {
         return $query->where('event_id', $foreignKey);
     }

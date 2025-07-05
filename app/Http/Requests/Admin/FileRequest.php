@@ -26,6 +26,10 @@ class FileRequest extends Request
      */
     protected function prepareForValidation()
     {
+        if (! language()->mainIsActive()) {
+            return;
+        }
+
         $this->boolifyInput('visible');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\View\Composers\Admin;
 
-use App\Models\CmsUser;
+use App\Models\CmsUser\CmsUser;
 use App\Models\Permission;
 use Closure;
 use Illuminate\Auth\AuthManager;
@@ -45,7 +45,7 @@ class AdminUserRouteAccessComposer
      *
      * NOTE: Boolean true in the array checks routes by base name.
      *
-     * @param  \App\Models\CmsUser|null  $user
+     * @param  \App\Models\CmsUser\CmsUser|null  $user
      * @return \Closure
      */
     protected function getUserRouteAccess(?CmsUser $user): Closure

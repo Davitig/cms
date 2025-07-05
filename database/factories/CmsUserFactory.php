@@ -2,14 +2,21 @@
 
 namespace Database\Factories;
 
+use App\Models\CmsUser\CmsUser;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CmsUser>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CmsUser\CmsUser>
  */
 class CmsUserFactory extends Factory
 {
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var class-string<\Illuminate\Database\Eloquent\Model>
+     */
+    protected $model = CmsUser::class;
+
     /**
      * The current password being used by the factory.
      */
@@ -26,8 +33,8 @@ class CmsUserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
-            'blocked' => 0,
-            'password' => static::$password ??= Hash::make('password')
+            'suspended' => 0,
+            'password' => static::$password ??= bcrypt('password')
         ];
     }
 

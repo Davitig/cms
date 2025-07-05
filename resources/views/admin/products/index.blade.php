@@ -1,100 +1,92 @@
 @extends('admin.app')
 @section('content')
-    <div class="page-title">
-        <div class="title-env">
-            <h1 class="title">
-                <i class="{{$icon = icon_type('products')}}"></i>
+    <nav class="mb-6 ps-1" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ cms_route('dashboard.index') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Products</li>
+        </ol>
+    </nav>
+    <div class="card">
+        <div class="card-header header-elements">
+            <div class="fs-5">
                 Products
-            </h1>
-            <p class="description">Management of the products</p>
-        </div>
-        <div class="breadcrumb-env">
-            <ol class="breadcrumb bc-1">
-                <li>
-                    <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
-                </li>
-                <li class="active">
-                    <i class="{{$icon}}"></i>
-                    <strong>Products</strong>
-                </li>
-            </ol>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="panel-title">Products</h2>
-            <div class="panel-options">
-                <a href="#">
-                    <i class="fa fa-gear"></i>
-                </a>
-                <a href="#" data-toggle="panel">
-                    <span class="collapse-icon">&ndash;</span>
-                    <span class="expand-icon">+</span>
+            </div>
+            <span class="count badge bg-label-primary ms-4">{{ $items->total() }}</span>
+            <div class="card-header-elements ms-auto">
+                <a href="{{ cms_route('products.create') }}" class="btn btn-primary">
+                    <i class="icon-base fa fa-plus icon-xs me-1"></i>
+                    <span>Add New Record</span>
                 </a>
             </div>
         </div>
-        <div class="panel-body">
-            <a href="{{ cms_route('products.create') }}" class="btn btn-secondary btn-icon-standalone">
-                <i class="{{$icon}}"></i>
-                <span>{{ trans('general.create') }}</span>
-            </a>
-            <button id="save-tree" data-token="{{csrf_token()}}" class="btn btn-secondary btn-icon-standalone dn" disabled>
-                <i><b class="fa fa-save"></b></i>
-                <span>{{ trans('general.update_position') }}</span>
-            </button>
-            <div id="items">
-                <ul id="nestable-list" class="uk-nestable" data-uk-nestable="{maxDepth:1}">
-                    @foreach ($items as $item)
-                        <li id="item{{ $item->id }}" class="item" data-id="{{ $item->id }}" data-pos="{{$item->position}}">
-                            <div class="uk-nestable-item clearfix">
-                                <div class="row">
-                                    <div class="col-sm-7 col-xs-10">
-                                        <div class="uk-nestable-handle pull-left"></div>
-                                        @if ($item->image)
-                                            <img src="{{glide($item->image, 'products_tmb')}}" width="45" height="45" class="pull-left" alt="{{$item->title}}">
-                                        @endif
-                                        <div class="list-label"><a href="{{ $editUrl = cms_route('products.edit', [$item->id]) }}">{{ $item->title }}</a></div>
-                                    </div>
-                                    <div class="col-sm-5 col-xs-2">
-                                        <div class="btn-action toggleable pull-right">
-                                            <div class="btn btn-gray item-id">#{{$item->id}}</div>
-                                            {{ html()->form('put', cms_route('products.visibility', [$item->id]))->id('visibility' . $item->id)->class('visibility')->open() }}
-                                            <button type="submit" class="btn btn-{{$item->visible ? 'white' : 'gray'}}" data-id="{{ $item->id }}" title="{{trans('general.visibility')}}">
-                                                <span class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></span>
-                                            </button>
-                                            {{ html()->form()->close() }}
-                                            <a href="{{ cms_route('products.files.index', [$item->id]) }}" class="btn btn-{{$item->files_exists ? 'turquoise' : 'white'}}" title="{{trans('general.files')}}">
-                                                <span class="{{icon_type('files')}}"></span>
-                                            </a>
-                                            <a href="{{ $editUrl }}" class="btn btn-orange" title="{{trans('general.edit')}}">
-                                                <span class="fa fa-edit"></span>
-                                            </a>
-                                            {{ html()->form('delete', cms_route('products.destroy', [$item->id]))->class('form-delete')->open() }}
-                                            <button type="submit" class="btn btn-danger" title="{{trans('general.delete')}}">
-                                                <span class="fa fa-trash"></span>
-                                            </button>
-                                            {{ html()->form()->close() }}
-                                        </div>
-                                        <a href="#" class="btn btn-primary btn-toggle pull-right">
-                                            <span class="fa fa-arrow-left"></span>
-                                        </a>
-                                    </div>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Stock</th>
+                    <th>Price</th>
+                    <th>QTY</th>
+                    <th>ID</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($items as $item)
+                    <tr class="item">
+                        <td>
+                            @if ($item->image)
+                                <img src="{{ $item->image }}" width="40" height="40" alt="Image" class="rounded-2 me-4">
+                            @else
+                                <i class="icon-base fa fa-image icon-40px me-4"></i>
+                            @endif
+                                <a href="{{ $editUrl = cms_route('products.edit', [$item->id]) }}" class="text-black">
+                                    {{ $item->title }}
+                                </a>
+                        </td>
+                        <td>
+                            <i class="icon-base fa-regular fa-circle-{{ $item->in_stock ? 'check' : 'xmark' }} text-{{ $item->in_stock ? 'success' : 'danger' }}"
+                            title="{{ $item->in_stock ? 'In stock' : 'Out of stock' }}"></i>
+                        </td>
+                        <td>{{ $item->price }}</td>
+                        <td>{{ $item->quantity }}</td>
+                        <td>{{ $item->id }}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="icon-base fa fa-ellipsis-vertical"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a href="{{ $editUrl }}" class="dropdown-item">
+                                        <i class="icon-base fa fa-edit me-1"></i>
+                                        Edit
+                                    </a>
+                                    {{ html()->form('put', cms_route('products.visibility', [$item->id]))->id('visibility' . $item->id)->class('visibility')->open() }}
+                                    <button type="submit" class="dropdown-item" title="{{trans('general.visibility')}}">
+                                        <i class="icon-base fa fa-toggle-{{$item->visible ? 'on' : 'off'}} icon-sm me-2"></i>
+                                        Visibility
+                                    </button>
+                                    {{ html()->form()->close() }}
+                                    <a href="{{ cms_route('products.files.index', [$item->id]) }}" class="dropdown-item">
+                                        <i class="icon-base fa fa-paperclip me-1"></i>
+                                        Files
+                                    </a>
+                                    {{ html()->form('delete', cms_route('products.destroy', [$item->id]))->class('form-delete')->open() }}
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="icon-base fa fa-trash me-1"></i>
+                                        Delete
+                                    </button>
+                                    {{ html()->form()->close() }}
                                 </div>
                             </div>
-                        </li>
-                    @endforeach
-                </ul>
-                {!! $items->links() !!}
-            </div>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
-    @push('body.bottom')
-        <script type="text/javascript">
-            $(function() {
-                positionable('{{ cms_route('products.updatePosition') }}', 'desc', '{{request('page', 1)}}', '{{$items->hasMorePages()}}');
-            });
-        </script>
-        <script src="{{ asset('assets/libs/js/uikit/js/uikit.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/js/uikit/js/addons/nestable.min.js') }}"></script>
-    @endpush
+    {{ $items->links() }}
 @endsection

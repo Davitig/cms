@@ -1,15 +1,5 @@
-<input type="hidden" name="code" value="{{$current->code}}" id="code{{ $current->language }}">
+<input type="hidden" name="code" value="{{ $current->code }}" id="code{{ $current->language }}">
 <div class="trans-body clearfix">
-    <div class="trans-form-group">
-        <label class="trans-control-label required">Title:</label>
-        <div>
-            {{ html()->text('title')->id('title_inp' . $current->language)->class('trans-form-control')->data('lang', 1) }}
-            @if ($error = $errors->first('title'))
-                <div class="text-danger">{{$error}}</div>
-            @endif
-            <div class="desc">The title for the "value." It's visible only for CMS Users</div>
-        </div>
-    </div>
     <div class="trans-form-group">
         <label class="trans-control-label required">Value:</label>
         <div>
@@ -17,7 +7,7 @@
             @if ($error = $errors->first('value'))
                 <div class="text-danger">{{$error}}</div>
             @endif
-            <div class="desc">The value contains the translated text that will be displayed to public</div>
+            <div class="form-text">The value field will be displayed to public</div>
         </div>
     </div>
     <div class="trans-form-group">

@@ -23,28 +23,30 @@ trait Transferable
         $input = $request->all(['id', 'column', 'column_value', 'recursive']);
 
         if (! $this->model instanceof Model) {
-            return $this->getTransferResponse($request, 'error', 'Model not found');
+            return $this->getTransferResponse($request, false, 'Model not found', 404);
         }
 
-        if ($id != $input['column_value']) {
-            $model = $this->model->findOrFail($input['id'], ['id']);
-
-            $position = $this->model->where($input['column'], $input['column_value'])->max('position');
-
-            $attributes = [$input['column'] => $input['column_value'], 'position' => $position + 1];
-
-            if ($recursive = ! empty($input['recursive'])) {
-                $attributes['parent_id'] = 0;
-            }
-
-            $model->update($attributes);
-
-            if ($recursive) {
-                $this->transferRecursively($model, $input['column'], $input['column_value']);
-            }
+        if ($id == $input['column_value']) {
+            return $this->getTransferResponse($request, false, trans('database.no_changes'));
         }
 
-        return $this->getTransferResponse($request, 'success', trans('general.updated'));
+        $model = $this->model->findOrFail($input['id'], ['id']);
+
+        $position = $this->model->where($input['column'], $input['column_value'])->max('position');
+
+        $attributes = [$input['column'] => $input['column_value'], 'position' => $position + 1];
+
+        if ($recursive = ! empty($input['recursive'])) {
+            $attributes['parent_id'] = 0;
+        }
+
+        $model->update($attributes);
+
+        if ($recursive) {
+            $this->transferRecursively($model, $input['column'], $input['column_value']);
+        }
+
+        return $this->getTransferResponse($request, true, trans('database.updated'));
     }
 
     /**
@@ -72,18 +74,19 @@ trait Transferable
      * Get the transfer response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  string  $type
+     * @param  bool  $result
      * @param  string|null  $message
+     * @param  int  $status
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     protected function getTransferResponse(
-        Request $request, string $type, ?string $message = null
+        Request $request, bool $result, ?string $message = null, int $status = 200
     ): JsonResponse|RedirectResponse
     {
         if ($request->expectsJson()) {
-            return response()->json(fill_data($type, $message));
+            return response()->json(fill_data($result, $message), $status);
         }
 
-        return back()->with('alert', fill_data($type, $message));
+        return back()->with('alert', fill_data($result, $message));
     }
 }

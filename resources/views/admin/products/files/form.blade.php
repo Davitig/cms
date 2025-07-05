@@ -1,29 +1,26 @@
-<div class="col-md-12">
-    <div class="form-group">
-        <label class="control-label required">Title:</label>
-        <div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-header"></i></span>
-            {{ html()->text('title')->id('title_inp' . $current->language)->class('form-control')->autofocus() }}
-        </div>
+<div class="row">
+    <div class="mb-6">
+        <label for="title_inp" class="form-label required">Title</label>
+        {{ html()->text('title')->id('title_inp' . $current->language)->class('form-control')->autofocus() }}
     </div>
-</div>
-<div class="col-md-12">
-    <div class="form-group">
-        <label class="control-label required">File:</label>
-        <div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-paperclip"></i></span>
+    <div class="mb-6">
+        <label for="file_inp" class="form-label required">File</label>
+        <div class="input-group input-group-merge">
             {{ html()->text('file')->id('file_inp' . $current->language)->class('form-control') }}
-            <div class="input-group-btn popup" data-browse="file_inp{{$current->language}}">
-                <span class="btn btn-info">Browse</span>
-            </div>
+            <button type="button" class="file-manager-popup btn btn-outline-primary" data-browse="file_inp{{$current->language}}">Browse</button>
         </div>
     </div>
-</div>
-<div class="col-md-12">
-    <div class="form-group">
-        <label class="control-label">Visible:</label>
-        {{ html()->checkbox('visible')->id('visible_inp' . $current->language)->class('iswitch iswitch-secondary') }}
+    @ifMainLanguage($current->language)
+    <div class="mb-6">
+        <label class="switch switch-primary">
+            {{ html()->checkbox('visible')->id('visible_inp')->class('switch-input') }}
+            <span class="switch-toggle-slider"></span>
+            <span class="switch-label">Visible</span>
+        </label>
     </div>
+    @endifMainLanguage
 </div>
-<button type="button" class="btn btn-md btn-white" data-dismiss="modal">{{trans('general.close')}}</button>
-<button type="submit" class="btn btn-md btn-secondary">{{trans('general.save')}}</button>
+<div class="d-flex gap-4">
+    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Cancel</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</div>

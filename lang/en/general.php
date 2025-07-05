@@ -14,10 +14,10 @@ return [
     // common
     'home' => 'Home',
     'profile' => 'Profile',
-    'info' => 'Information',
 
     // actions
     'create' => 'Create',
+    'edit' => 'Edit',
     'update' => 'Update',
     'submit' => 'Submit',
     'save' => 'Save',
@@ -34,31 +34,20 @@ return [
     'update_position' => 'Update position',
 
     // success
-    'success' => 'success',
-    'created' => 'created successfully',
-    'updated' => 'updated successfully',
-    'deleted' => 'deleted successfully.',
-    'saved' => 'saved successfully',
-    'sent' => 'sent successfully',
-    'uploaded' => 'uploaded successfully',
+    'success' => 'Success',
+    'created' => 'Created successfully',
+    'updated' => 'Updated successfully',
+    'deleted' => 'Deleted successfully.',
+    'saved' => 'Saved successfully',
+    'sent' => 'Sent successfully',
+    'uploaded' => 'Uploaded successfully',
 
     // errors
-    'error' => 'error',
+    'error' => 'Error',
     'error_occurred' => 'An error has occurred',
-    'not_found' => 'not found',
-    'invalid_input' => 'invalid input',
-    'send_failure' => 'sending failed',
-
-    // types
-    'menus' => 'Menus',
-    'pages' => 'Pages',
-    'collections' => 'Collections',
-    'galleries' => 'Galleries',
-    'events' => 'Events',
-    'articles' => 'Articles',
-    'photos' => 'Photos',
-    'videos' => 'Videos',
-    'files' => 'Files',
+    'not_found' => 'Not found',
+    'invalid_input' => 'Invalid input',
+    'send_failure' => 'Sending failed',
 
     // confirmations
     'confirm_action' => 'Are you sure you want to do this action?',

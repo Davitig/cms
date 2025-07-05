@@ -1,29 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
-@include('admin._partials.head')
-<body class="page-body {{$cmsSettings->get('body')}}{{auth('cms')->user()->hasLockScreen() ? ' lockscreen-page' : ''}}">
-<div id="container">
-    @include('admin._partials.user_top')
-    @if ($cmsSettings->get('horizontal_menu'))
-        @include('admin._partials.horizontal_menu')
-    @endif
-    <div class="page-container">
-        @if (! $cmsSettings->get('horizontal_menu'))
-            @include('admin._partials.sidebar_menu')
+<html
+    lang="en"
+    class="layout-navbar-fixed layout-menu-fixed layout-compact base-{{ ($isHorizontalMenu = $preferences->get('horizontal_menu')) ? 'horizontal' : 'vertical' }}"
+    dir="ltr"
+    data-skin="default"
+    data-assets-path="{{ asset('assets') }}/"
+    data-template="{{ $isHorizontalMenu ? 'horizontal' : 'vertical' }}-menu-template"
+    data-bs-theme="light">
+@include('admin.-partials.head')
+<body>
+<!-- Layout wrapper -->
+<div class="layout-wrapper {{ $isHorizontalMenu ? 'layout-navbar-full layout-horizontal layout-without-menu' : 'layout-content-navbar' }}">
+    <div class="layout-container">
+        @if ($isHorizontalMenu)
+            @include('admin.-partials.navbar')
+        @else
+            @include('admin.-partials.menu')
         @endif
-        <div class="main-content">
-            @if (! $cmsSettings->get('horizontal_menu'))
-                @include('admin._partials.user')
+        <!-- Layout page -->
+        <div class="layout-page">
+            @if (! $isHorizontalMenu)
+                @include('admin.-partials.navbar')
             @endif
-            @yield('content')
-            @include('admin._partials.footer')
+            <!-- Content wrapper -->
+            <div class="content-wrapper">
+                @if ($isHorizontalMenu)
+                    @include('admin.-partials.menu')
+                @endif
+                <!-- Content -->
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    @yield('content')
+                </div>
+                <!--/ Content -->
+                @include('admin.-partials.footer')
+                <div class="content-backdrop fade"></div>
+            </div>
+            <!--/ Content wrapper -->
         </div>
+        <!--/ Layout page -->
     </div>
 </div>
-@include('admin._partials.scripts')
+@include('admin.-partials.scripts')
 @stack('body.bottom')
-@if (session()->has('includeLockscreen'))
-    @include('admin.lockscreen')
-@endif
 </body>
 </html>

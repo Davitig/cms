@@ -1,45 +1,29 @@
 @extends('admin.app')
 @section('content')
-    <div class="page-title">
-        <div class="title-env">
-            <h1 class="title">
-                <i class="{{$icon = icon_type('menus')}}"></i>
-                Menus
-            </h1>
-            <p class="description">Management of the menus</p>
-        </div>
-        <div class="breadcrumb-env">
-            <ol class="breadcrumb bc-1">
-                <li>
-                    <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
-                </li>
-                <li class="active">
-                    <i class="{{$icon}}"></i>
-                    <strong>Menus</strong>
-                </li>
-            </ol>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="panel-title">Edit menu</h2>
-            <div class="panel-options">
-                <a href="#" data-toggle="panel">
-                    <span class="collapse-icon">&ndash;</span>
-                    <span class="expand-icon">+</span>
+    <nav class="mb-6 ps-1" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ cms_route('dashboard.index') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Menus</li>
+        </ol>
+    </nav>
+    <div class="card">
+        <div class="card-header header-elements">
+            <div class="fs-5">Menus</div>
+            <div class="card-header-elements ms-auto">
+                <a href="{{ cms_route('menus.create') }}">
+                    <i class="icon-base fa fa-plus icon-xs"></i>
+                    <span>Add New Record</span>
                 </a>
             </div>
-            <a href="{{cms_route('menus.create')}}" class="pull-right padr">Add more</a>
         </div>
-        <div class="panel-body">
-            {{ html()->modelForm($current,
-                'put', cms_route('menus.update', [$current->id])
-            )->class('form-horizontal ' . $cmsSettings->get('ajax_form'))->open() }}
-            @include('admin.menus.form', [
-                'submit' => trans('general.update'),
-                'icon' => 'save'
-            ])
-            {{ html()->form()->close() }}
+        <div class="card-body">
+            <div class="panel-body">
+                {{ html()->modelForm($current, 'put', cms_route('menus.update', [$current->id]))->open() }}
+                @include('admin.menus.form')
+                {{ html()->form()->close() }}
+            </div>
         </div>
     </div>
 @endsection

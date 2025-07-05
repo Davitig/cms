@@ -3,17 +3,17 @@
 namespace App\View\Composers\Admin;
 
 use App\Models\Menu;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Collection;
 
 class AdminMenuComposer
 {
     /**
      * The Collection instance of the menus.
      *
-     * @var \Illuminate\Database\Eloquent\Collection
+     * @var \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    protected Collection $menus;
+    protected LengthAwarePaginator $menus;
 
     /**
      * Create a new view composer instance.
@@ -38,10 +38,10 @@ class AdminMenuComposer
     /**
      * Get the menus.
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    protected function getMenus(): Collection
+    protected function getMenus(): LengthAwarePaginator
     {
-        return (new Menu)->get();
+        return (new Menu)->paginate(50);
     }
 }

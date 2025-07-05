@@ -16,11 +16,13 @@ class PageRequest extends Request
     {
         $id = $this->route('page');
 
+        $required = language()->mainIsActive() ? 'required' : '';
+
         return [
-            'slug' => 'required|unique:pages,slug,'.$id,
+            'slug' => [$required, 'unique:pages,slug,'.$id],
             'title' => 'required',
             'short_title' => 'required',
-            'type' => 'required',
+            'type' => $required,
             'type_id' => 'nullable|integer'
         ];
     }
@@ -33,6 +35,10 @@ class PageRequest extends Request
      */
     protected function beforeValidation(Validator $validator): void
     {
+        if (! language()->mainIsActive()) {
+            return;
+        }
+
         $validator->sometimes('type_id', 'required', function ($input) {
             return array_key_exists($input->type, cms_pages('listable.collections'));
         });
@@ -47,6 +53,10 @@ class PageRequest extends Request
     {
         if (! $this->filled('short_title')) {
             $this->offsetSet('short_title', $this->get('title'));
+        }
+
+        if (! language()->mainIsActive()) {
+            return;
         }
 
         $this->slugifyInput('slug', ['short_title']);

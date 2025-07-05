@@ -10,67 +10,75 @@ trait PositionableTrait
      * Update the position of the Eloquent models.
      *
      * @param  array  $data
-     * @param  int  $parentId
-     * @param  array  $params
-     * @param  bool  $hasSubItems
-     * @return bool
+     * @param  string  $orderBy
+     * @param  int|null  $parentId
+     * @param  string|null  $move
+     * @return int
      */
-    public function updatePosition(
-        array $data, int $parentId = 0, array $params = [], bool $hasSubItems = false
-    ): bool
+    public function positions(
+        array $data, string $orderBy = 'asc', ?int $parentId = null, ?string $move = null
+    ): int
     {
-        if (empty($data) ||
-            ! $hasSubItems && ! is_array($data = $this->movePosition($data, $params))) {
-            return false;
+        $isMoveAction = false;
+
+        if ($move == 'prev' || $move == 'next') {
+            $data = array_values($this->moveTargetPosition($data, $orderBy, $move));
+
+            $isMoveAction = true;
         }
 
-        $attributes = [];
+        $attributes = $positions = [];
 
-        $position = 0;
+        $count = $position = 0;
 
         foreach($data as $item) {
-            if (! isset($item['id'])) {
-                continue;
-            }
-
-            $position++;
-
-            if ($hasSubItems) {
-                $attributes['parent_id'] = $parentId;
-            }
-
             if (isset($item['pos'])) {
-                $position = $item['pos'];
+                $positions[] = $item['pos'];
+            } else {
+                $positions[] = $position++;
+            }
+        }
+
+        if (! $isMoveAction) {
+            if ($orderBy === 'desc') {
+                rsort($positions);
+            } else {
+                sort($positions);
+            }
+        }
+
+        foreach($positions as $key => $position) {
+            if (! is_null($parentId)) {
+                $attributes['parent_id'] = $parentId;
             }
 
             $attributes['position'] = $position;
 
-            $this->whereKey($item['id'])->update($attributes);
+            $id = $data[$key]['id'];
 
-            if (isset($item['children'])) {
-                $this->updatePosition($item['children'], $item['id'], $params, $hasSubItems);
+            $count += (int) $this->whereKey($id)->update($attributes);
+
+            if (isset($data[$key]['children'])) {
+                $count += $this->positions($data[$key]['children'], $orderBy, $id, $move);
             }
         }
 
-        return true;
+        return $count;
     }
 
     /**
-     * Update the position of the Eloquent models by specified order and direction.
+     * Move the position of the Eloquent model by specified order and direction.
      *
      * @param  array  $data
-     * @param  array  $params
-     * @return array|bool
+     * @param  string  $orderBy
+     * @param  string  $move
+     * @return array
      */
-    private function movePosition(array $data, array $params = []): bool|array
+    private function moveTargetPosition(array $data, string $orderBy, string $move): array
     {
-        if (! isset($params['move']) || ! isset($params['orderBy'])) {
-            return $data;
-        }
-
         if (empty($data = array_filter(
-            $data, fn ($value) => ! empty($value['pos']) && ! empty($value['id'])))) {
-            return false;
+            $data, fn ($value) => ! empty($value['id']) && ! empty($value['pos'])))) {
+            return $data;
         }
 
         $target = array_shift($data);
@@ -78,8 +86,8 @@ trait PositionableTrait
         if (! empty($data)) {
             $startPos = last($data)['pos'];
 
-            if ($params['move'] == 'next') {
-                if ($params['orderBy'] == 'desc') {
+            if ($move == 'next') {
+                if ($orderBy == 'desc') {
                     $target['pos'] = $startPos - 1; $queryOperator = '<';
                     $queryOrderBy = 'desc'; $posFunc = fn (&$value) => $value['pos']++;
                 } else {
@@ -87,7 +95,7 @@ trait PositionableTrait
                     $queryOrderBy = 'asc'; $posFunc = fn (&$value) => $value['pos']--;
                 }
             } else {
-                if ($params['orderBy'] == 'desc') {
+                if ($orderBy == 'desc') {
                     $target['pos'] = $startPos + 1; $queryOperator = '>';
                     $queryOrderBy = 'asc'; $posFunc = fn (&$value) => $value['pos']--;
                 } else {
@@ -100,14 +108,14 @@ trait PositionableTrait
         } else {
             $startPos = $target['pos'];
 
-            if ($params['move'] == 'next') {
-                if ($params['orderBy'] == 'desc') {
+            if ($move == 'next') {
+                if ($orderBy == 'desc') {
                     $target['pos'] = $startPos - 1; $queryOperator = '<'; $queryOrderBy = 'desc';
                 } else {
                     $target['pos'] = $startPos + 1; $queryOperator = '>'; $queryOrderBy = 'asc';
                 }
             } else {
-                if ($params['orderBy'] == 'desc') {
+                if ($orderBy == 'desc') {
                     $target['pos'] = $startPos + 1; $queryOperator = '>'; $queryOrderBy = 'asc';
                 } else {
                     $target['pos'] = $startPos - 1; $queryOperator = '<'; $queryOrderBy = 'desc';
@@ -118,7 +126,7 @@ trait PositionableTrait
         if (is_null($newData = $this->where('position', $queryOperator, $startPos)
             ->orderBy('position', $queryOrderBy)
             ->first(['id']))) {
-            return false;
+            return $data;
         }
 
         $dataCount = count($data);

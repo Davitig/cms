@@ -37,28 +37,39 @@ class LanguageService
     protected bool $isSelected;
 
     /**
+     * URI's query string language.
+     *
+     * @var string|null
+     */
+    protected ?string $queryString;
+
+    /**
      * Create a new language service instance.
      *
      * @param  \Illuminate\Database\Eloquent\Collection  $languages
      * @param  string  $path
+     * @param  string|null  $queryString
      */
-    public function __construct(Collection $languages, string $path)
+    public function __construct(Collection $languages, string $path, ?string $queryString = null)
     {
         $this->configure($languages, $path);
+
+        $this->queryString = $queryString;
     }
 
     /**
      * Create a new language service instance.
      *
      * @param  string  $path
+     * @param  string|null  $queryString
      * @return static
      */
-    public static function make(string $path): static
+    public static function make(string $path, ?string $queryString): static
     {
         try {
-            return new static((new Language)->positionAsc()->get(), $path);
+            return new static((new Language)->positionAsc()->get(), $path, $queryString);
         } catch (Exception) {
-            return new static(new Collection, $path);
+            return new static(new Collection, $path, $queryString);
         }
     }
 
@@ -90,6 +101,8 @@ class LanguageService
         } else {
             $this->active = $this->main ?: $languages->first()['language'] ?? null;
         }
+
+        $this->main ??= $this->active;
 
         $path = implode('/', $segments);
 
@@ -221,6 +234,62 @@ class LanguageService
     }
 
     /**
+     * Get the query string language key.
+     *
+     * @return string|null
+     */
+    public function queryStringKey(): ?string
+    {
+        return config('language.query_string_key');
+    }
+
+    /**
+     * Get the query string language.
+     *
+     * @return string|null
+     */
+    public function queryString(): ?string
+    {
+        return $this->queryString;
+    }
+
+    /**
+     * Get the query string language or active.
+     *
+     * @return string|null
+     */
+    public function queryStringOrActive(): ?string
+    {
+        return $this->queryString ?: $this->active();
+    }
+
+    /**
+     * Get the query string language item.
+     *
+     * @param  string|null  $attribute
+     * @return mixed
+     */
+    public function getByQueryString(?string $attribute = null): mixed
+    {
+        if (is_null($this->queryString())) {
+            return null;
+        }
+
+        return $this->get($this->queryString(), $attribute);
+    }
+
+    /**
+     * Get the language item by query string or active.
+     *
+     * @param  string|null  $attribute
+     * @return mixed
+     */
+    public function getByQueryStringOrActive(?string $attribute = null): mixed
+    {
+        return $this->getByQueryString($attribute) ?: $this->getActive($attribute);
+    }
+
+    /**
      * Determine if the language is selected in a request path.
      *
      * @return bool
@@ -343,15 +412,16 @@ class LanguageService
      */
     public function getBy(mixed $language, ?string $attribute = null): mixed
     {
-        if ($language === true) {
-            return $this->getActive($attribute);
-        } elseif ($language === false) {
-            return $this->getMain($attribute);
-        } elseif (is_int($language)) {
-            return $this->getByKey($language, $attribute);
-        }
-
-        return $this->get($language, $attribute);
+        return match (true) {
+            $language === true => $this->getActive($attribute),
+            $language === false => $this->getMain($attribute),
+            is_int($language) => $this->getByKey($language, $attribute),
+            $language === $this->queryStringKey()
+            => ($lang = $this->queryStringOrActive()) ? $this->get(
+                $lang, $attribute
+            ) : null,
+            default => $this->get($language, $attribute),
+        };
     }
 
     /**
@@ -363,15 +433,15 @@ class LanguageService
      */
     public function getVisibleBy(mixed $language, ?string $attribute = null): mixed
     {
-        if ($language === true) {
-            return $this->getActive($attribute);
-        } elseif ($language === false) {
-            return $this->getMain($attribute);
-        } elseif (is_int($language)) {
-            return $this->getVisibleByKey($language, $attribute);
-        }
-
-        return $this->getVisible($language, $attribute);
+        return match (true) {
+            $language === true => $this->getActive($attribute),
+            $language === false => $this->getMain($attribute),
+            is_int($language) => $this->getVisibleByKey($language, $attribute),
+            $language === $this->queryStringKey() => $this->getVisible(
+                $this->queryStringOrActive(), $attribute
+            ),
+            default => $this->getVisible($language, $attribute),
+        };
     }
 
     /**

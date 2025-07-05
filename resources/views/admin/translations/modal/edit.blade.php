@@ -22,7 +22,7 @@
                 <div class="trans-tab-pane{{language()->active() == $current->language ? ' active' : ''}}" id="item-{{$current->language}}">
                     {{ html()->modelForm($current,
                         'post', cms_route('translations.form.post', [], $langContainsMany ? $current->language : null)
-                    )->class('form-horizontal')->data('lang', $current->language)->open() }}
+                    )->class('form-horizontal')->data('lang', $current->language)->attribute('novalidate')->open() }}
                     <input type="hidden" name="id" value="{{$current->id}}">
                     @include('admin.translations.modal.form')
                     {{ html()->form()->close() }}

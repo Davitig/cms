@@ -8,7 +8,7 @@ class AdminFilemanagerTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('filemanager'));
+        )->get(cms_route('fileManager'));
 
         $response->assertOk();
     }
@@ -17,7 +17,7 @@ class AdminFilemanagerTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('filemanager.index'));
+        )->get(cms_route('fileManager.index'));
 
         $response->assertOk();
     }
@@ -26,7 +26,7 @@ class AdminFilemanagerTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('filemanager.popup', [1]));
+        )->get(cms_route('fileManager.popup', [1]));
 
         $response->assertOk();
     }
@@ -35,7 +35,7 @@ class AdminFilemanagerTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('filemanager.tinymce5'));
+        )->get(cms_route('fileManager.tinymce5'));
 
         $response->assertOk();
     }

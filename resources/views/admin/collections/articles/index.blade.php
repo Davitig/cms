@@ -1,128 +1,115 @@
 @extends('admin.app')
 @section('content')
-    <div class="page-title">
-        <div class="title-env">
-            <h1 class="title">
-                <i class="{{$icon = icon_type('articles')}}"></i>
-                {{ $parent->type }}
-            </h1>
-            <p class="description">{{ $parent->description }}</p>
-        </div>
-        <div class="breadcrumb-env">
-            <ol class="breadcrumb bc-1">
-                <li>
-                    <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
-                </li>
-                <li>
-                    <a href="{{ cms_route('collections.index') }}"><i class="{{$iconParent = icon_type('collections')}}"></i>Collections</a>
-                </li>
-                <li class="active">
-                    <i class="{{$icon}}"></i>
-                    <strong>{{ $parent->title }}</strong>
-                </li>
-            </ol>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-9 pull-right has-sidebar">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title">{{ $parent->title }}</h2>
-                    <div class="panel-options">
-                        <a href="{{cms_route('collections.edit', [$parent->id])}}">
-                            <i class="fa fa-gear"></i>
+    <nav class="mb-6 ps-1" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ cms_route('dashboard.index') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ cms_route('collections.index') }}">Collections</a>
+            </li>
+            <li class="breadcrumb-item active">Articles</li>
+        </ol>
+    </nav>
+    <div class="row flex-lg-row-reverse g-6">
+        <div class="col-lg-9">
+            <div class="card">
+                <div class="card-header header-elements flex-column flex-md-row align-items-md-center align-items-start gap-4">
+                    <div class="d-flex">
+                        <div class="fs-5">Articles</div>
+                        <span class="count badge bg-label-primary ms-4">{{ $items->total() }}</span>
+                    </div>
+                    <div class="card-header-elements ms-md-auto flex-row-reverse flex-md-row">
+                        <a href="{{ cms_route('collections.edit', [$parent->id]) }}" class="btn" title="Edit Collection">
+                            <i class="icon-base fa fa-gear icon-xs"></i>
                         </a>
-                        <a href="#" data-toggle="panel">
-                            <span class="collapse-icon">&ndash;</span>
-                            <span class="expand-icon">+</span>
+                        <a href="{{ cms_route('articles.create', [$parent->id]) }}" class="btn btn-primary">
+                            <i class="icon-base fa fa-plus icon-xs me-1"></i>
+                            <span>Add New Record</span>
                         </a>
                     </div>
                 </div>
-                <div class="panel-body">
-                    <a href="{{ cms_route('articles.create', [$parent->id]) }}" class="btn btn-secondary btn-icon-standalone">
-                        <i class="{{$icon}}"></i>
-                        <span>{{ trans('general.create') }}</span>
-                    </a>
-                    <button id="save-tree" data-token="{{csrf_token()}}" class="btn btn-secondary btn-icon-standalone dn" disabled>
-                        <i><b class="fa fa-save"></b></i>
-                        <span>{{ trans('general.update_position') }}</span>
-                    </button>
-                    <div id="items">
-                        <ul id="nestable-list" class="uk-nestable" data-uk-nestable="{maxDepth:1}">
-                            @foreach ($items as $item)
-                                <li id="item{{ $item->id }}" class="item" data-id="{{ $item->id }}" data-pos="{{$item->position}}">
-                                    <div class="uk-nestable-item clearfix">
-                                        <div class="row">
-                                            <div class="col-sm-7 col-xs-10">
-                                                @if ($parent->admin_order_by == 'position')
-                                                    <div class="uk-nestable-handle pull-left"></div>
-                                                @endif
-                                                <div class="list-label"><a href="{{ $editUrl = cms_route('articles.edit', [$parent->id, $item->id]) }}">{{ $item->title }}</a></div>
-                                            </div>
-                                            <div class="col-sm-5 col-xs-2">
-                                                <div class="btn-action toggleable pull-right">
-                                                    <div class="btn btn-gray item-id">#{{$item->id}}</div>
-                                                    <a href="#" class="transfer btn btn-white" title="Transfer to another collection" data-id="{{$item->id}}">
-                                                        <span class="{{$iconParent}}"></span>
-                                                    </a>
-                                                    {{ html()->form('put', cms_route('articles.visibility', [$item->id]))->id('visibility' . $item->id)->class('visibility')->open() }}
-                                                    <button type="submit" class="btn btn-{{$item->visible ? 'white' : 'gray'}}" data-id="{{ $item->id }}" title="{{trans('general.visibility')}}">
-                                                        <span class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></span>
-                                                    </button>
-                                                    {{ html()->form()->close() }}
-                                                    <a href="{{ cms_route('articles.files.index', [$item->id]) }}" class="btn btn-{{$item->files_exists ? 'turquoise' : 'white'}}" title="{{trans('general.files')}}">
-                                                        <span class="{{icon_type('files')}}"></span>
-                                                    </a>
-                                                    <a href="{{ $editUrl }}" class="btn btn-orange" title="{{trans('general.edit')}}">
-                                                        <span class="fa fa-edit"></span>
-                                                    </a>
-                                                    {{ html()->form('delete', cms_route('articles.destroy', [$parent->id, $item->id]))->class('form-delete')->open() }}
-                                                    <button type="submit" class="btn btn-danger" title="{{trans('general.delete')}}">
-                                                        <span class="fa fa-trash"></span>
-                                                    </button>
-                                                    {{ html()->form()->close() }}
-                                                </div>
-                                                <a href="#" class="btn btn-primary btn-toggle pull-right">
-                                                    <span class="fa fa-arrow-left"></span>
-                                                </a>
-                                            </div>
+                <div id="items" class="card-body">
+                    <ul class="list-group list-group-flush" id="sortable">
+                        @php
+                            $currentPage = $items->currentPage();
+                            $lastPage = $items->lastPage();
+                        @endphp
+                        @foreach($items as $item)
+                            <li id="item{{ $item->id }}" class="item list-group-item ps-0 d-flex justify-content-between align-items-center"
+                                data-id="{{ $item->id }}" data-pos="{{ $item->position }}">
+                                <div>
+                                    @if ($parent->admin_order_by == 'position')
+                                        <i class="handle cursor-move icon-base fa fa-bars icon-sm align-text-bottom me-1"></i>
+                                    @endif
+                                    <a href="{{ $editUrl = cms_route('articles.edit', [$item->collection_id, $item->id]) }}" class="text-black">
+                                        {{ $item->title }}
+                                    </a>
+                                </div>
+                                <div class="actions d-flex align-items-center gap-4">
+                                    <div class="item-id badge bg-label-gray text-black">{{ $item->id }}</div>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <i class="icon-base fa fa-ellipsis-vertical"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a href="{{ $editUrl }}" class="dropdown-item">
+                                                <i class="icon-base fa fa-edit me-1"></i>
+                                                Edit
+                                            </a>
+                                            {{ html()->form('put', cms_route('articles.visibility', [$item->id]))->id('visibility' . $item->id)->class('visibility')->open() }}
+                                            <button type="submit" class="dropdown-item" title="{{trans('general.visibility')}}">
+                                                <i class="icon-base fa fa-toggle-{{$item->visible ? 'on' : 'off'}} icon-sm me-2"></i>
+                                                Visibility
+                                            </button>
+                                            {{ html()->form()->close() }}
+                                            <a href="{{ cms_route('articles.files.index', [$item->id]) }}" class="dropdown-item">
+                                                <i class="icon-base fa fa-paperclip me-1"></i>
+                                                Files
+                                            </a>
+                                            <button class="dropdown-item transfer" title="Transfer to other collection" data-id="{{$item->id}}">
+                                                <i class="icon-base fa fa-list-alt icon-sm me-1"></i>
+                                                Transfer
+                                            </button>
+                                            {{ html()->form('delete', cms_route('articles.destroy', [$item->collection_id, $item->id]))->class('form-delete')->open() }}
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="icon-base fa fa-trash me-1"></i>
+                                                Delete
+                                            </button>
+                                            {{ html()->form()->close() }}
                                         </div>
                                     </div>
-                                </li>
-                            @endforeach
-                        </ul>
-                        {!! $items->links() !!}
-                    </div>
+                                    @if ($lastPage > 1)
+                                        <div class="btn-pos-actions d-flex justify-content-{{ $currentPage > 1 ? 'between' : 'end' }} gap-2">
+                                            @if ($currentPage > 1)
+                                                <a href="#" class="move fa fa-arrow-left opacity-75" data-move="prev" title="Move to prev page"></a>
+                                            @endif
+                                            @if ($currentPage < $lastPage)
+                                                <a href="#" class="move fa fa-arrow-right opacity-75" data-move="next" title="Move to next page"></a>
+                                            @endif
+                                        </div>
+                                    @endif
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                    {{ $items->links() }}
                 </div>
             </div>
         </div>
-        <div class="col-md-3 content-sidebar pull-left">
-            <a href="{{cms_route('collections.create', ['type' => $parent->type])}}" class="btn btn-block btn-secondary btn-icon btn-icon-standalone btn-icon-standalone-right">
-                <i class="{{$iconParent}}"></i>
-                <span>Add Collection</span>
-            </a>
-            <ul class="list-unstyled bg">
-                @foreach ($parentSimilar as $item)
-                    <li{!!$item->id != $parent->id ? '' : ' class="active"'!!}>
-                        <a href="{{ cms_route($item->type . '.index', [$item->id]) }}">
-                            <i class="fa fa-folder{{$item->id != $parent->id ? '' : '-open'}}"></i>
-                            <span>{{$item->title}}</span>
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
+        <div class="col-lg-3">
+            @include('admin.collections.similar_type_menu')
         </div>
     </div>
-    @push('body.bottom')
-        @include('admin._scripts.transfer', ['route' => cms_route('articles.transfer', [$parent->id]), 'column' => 'collection_id', 'list' => $parentSimilar, 'parentId' => $parent->id])
+@endsection
+@push('body.bottom')
+    @include('admin.-scripts.transfer', ['route' => cms_route('articles.transfer', [$parent->id]), 'column' => 'collection_id', 'list' => $parentTypes, 'parentId' => $parent->id])
+    @if ($parent->admin_order_by == 'position')
+        <script src="{{ asset('assets/vendor/libs/sortablejs/sortable.js') }}"></script>
         <script type="text/javascript">
-            $(function() {
-                @if ($parent->admin_order_by == 'position')
-                positionable('{{ cms_route('articles.updatePosition') }}', '{{$parent->admin_sort}}', '{{request('page', 1)}}', '{{$items->hasMorePages()}}');
-                @endif
+            $(function () {
+                sortable('{{cms_route('articles.positions')}}', '{{csrf_token()}}', '{{ $parent->admin_sort }}', {{ $currentPage }});
             });
         </script>
-        <script src="{{ asset('assets/libs/js/uikit/js/uikit.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/js/uikit/js/addons/nestable.min.js') }}"></script>
-    @endpush
-@endsection
+    @endif
+@endpush

@@ -1,11 +1,11 @@
 @extends('web.app')
 @section('content')
-    @include('web._partials.breadcrumb')
+    @include('web.-partials.breadcrumb')
     <div class="container">
-        <div id="feedback" class="jumbotron">
+        <div id="feedback">
             @if ($current->image)
                 <div class="img">
-                    <img src="{{$current->image}}" class="img-responsive" alt="{{$current->title}}">
+                    <img src="{{$current->image}}" class="img-responsive" width="500" height="300" alt="{{$current->title}}">
                 </div>
                 <!-- .img -->
             @endif
@@ -30,7 +30,7 @@
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="pt-2">
                                 {{ html()->text('name')->class('form-control')
                                     ->placeholder($trans->get('name', 'Name'))
                                     ->data('trans', 'name')
@@ -39,8 +39,7 @@
                                     <div class="text-danger">{{$error}}</div>
                                 @endif
                             </div>
-                            <!-- .form-group -->
-                            <div class="form-group">
+                            <div class="pt-2">
                                 {{ html()->text('email')->class('form-control')
                                     ->placeholder($trans->get('email', 'Email'))
                                     ->data('trans', 'email')
@@ -49,8 +48,7 @@
                                     <div class="text-danger">{{$error}}</div>
                                 @endif
                             </div>
-                            <!-- .form-group -->
-                            <div class="form-group">
+                            <div class="pt-2">
                                 {{ html()->text('phone')->class('form-control')
                                     ->placeholder($trans->get('phone', 'Phone'))
                                     ->data('trans', 'phone')
@@ -59,21 +57,22 @@
                                     <div class="text-danger">{{$error}}</div>
                                 @endif
                             </div>
-                            <!-- .form-group -->
-                            <div class="form-group">
+                            <div class="pt-2">
                                 <input type="text" name="captcha" autocomplete="off" class="form-control" placeholder="{{$trans->get('enter_code', 'Enter the code')}}" data-trans="enter_code" data-trans-attr="placeholder">
+                                <div class="pt-2">
                                 <img src="{{ captcha_src('flat') }}" height="40" class="captcha-img" alt="captcha">
                                 <a href="#" class="captcha-reload">
-                                    <img src="{{asset('assets/libs/images/reload.png')}}" width="20" height="20" alt="reload">
+                                    <img src="{{asset('assets/default/img/reload.png')}}" width="20" height="20" alt="reload">
                                 </a>
                                 @error('captcha')
-                                <div class="text-danger">{{$message}}</div>
+                                <div class="text-danger">{{ $message }}</div>
                                 @enderror
+                                </div>
                             </div>
                         </div>
                         <!-- .col-md-6 -->
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="pt-2">
                                 {{ html()->textarea('text')->class('form-control')
                                     ->placeholder($trans->get('text', 'Text'))
                                     ->data('trans', 'text')
@@ -82,15 +81,13 @@
                                     <span class="text-danger">{{$error}}</span>
                                 @endif
                             </div>
-                            <!-- .form-group -->
                         </div>
                         <!-- .col-md-6 -->
                     </div>
                     <!-- .row -->
-                    <div class="form-group">
+                    <div class="pt-2">
                         <button type="submit" class="btn btn-primary" data-trans="send">{{$trans->get('send', 'Send')}}</button>
                     </div>
-                    <!-- .form-group -->
                 </form>
             </div>
             <!-- #feedback -->
@@ -113,7 +110,7 @@
                             @foreach ($files['images'] as $item)
                                 <div class="col-md-3 item">
                                     <a href="{{$item->file}}" title="{{$item->title}}" target="_blank">
-                                        <img src="{{$item->file}}" width="270" height="180" alt="{{$item->title}}">
+                                        <img src="{{$item->file}}" width="140" height="100" alt="{{$item->title}}">
                                     </a>
                                 </div>
                                 <!-- .col-md-3 -->
@@ -128,4 +125,4 @@
     </div>
     <!-- .container -->
 @endsection
-@include('web._scripts.captcha')
+@include('web.-scripts.captcha')

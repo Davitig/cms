@@ -45,7 +45,7 @@ class RouteServiceProvider extends ServiceProvider
             next($segments);
         }
 
-        $this->app['config']->set('_cms.activated', current($segments) == cms_slug());
+        $this->app['config']->set('_cms.booted', current($segments) == cms_slug());
     }
 
     /**

@@ -11,13 +11,6 @@ class Language extends Model
     use PositionableTrait;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string|null
-     */
-    protected $table = 'languages';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array

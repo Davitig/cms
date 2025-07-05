@@ -10,13 +10,6 @@ class WebSetting extends Model
     use NameValueSettingTrait;
 
     /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
-    protected $table = 'web_settings';
-
-    /**
      * The options that are mass assignable.
      *
      * @var array

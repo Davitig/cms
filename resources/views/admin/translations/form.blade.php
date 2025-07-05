@@ -1,65 +1,29 @@
-<div class="form-group{{($error = $errors->first('title')) ? ' validate-has-error' : '' }}">
-    <label class="col-sm-2 control-label required">Title:</label>
-    <div class="col-sm-6">
-        {{ html()->text('title')->id('title_inp' . $current->language)->class('form-control')->data('lang', 1) }}
-        @if ($error)
-            <span class="text-danger">{{$error}}</span>
-        @endif
-        <div class="desc">The title for the "value." It's visible only for CMS Users</div>
-    </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group{{($error = $errors->first('value')) ? ' validate-has-error' : '' }}">
-    <label class="col-sm-2 control-label required">Value:</label>
-    <div class="col-sm-6">
+<div class="row g-6 mb-6">
+    <div>
+        <label for="value_inp" class="form-label required">Value</label>
         {{ html()->text('value')->id('value_inp' . $current->language)->class('form-control') }}
-        @if ($error)
-            <span class="text-danger">{{$error}}</span>
-        @endif
-        <div class="desc">The value contains the translated text that will be displayed to public</div>
+        @error('value')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
+        <div class="form-text">The value field will be displayed to public</div>
     </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group{{($error = $errors->first('code')) ? ' validate-has-error' : '' }}">
-    <label class="col-sm-2 control-label required">Code:</label>
-    <div class="col-sm-6">
-        {{ html()->text('code')->id('code_inp' . $current->language)
-        ->class('form-control')
-        ->ifNotNull($current->code, function ($html) {
-            return $html->isReadonly();
-        }) }}
-        @if ($error)
-            <span class="text-danger">{{$error}}</span>
-        @endif
-        <div class="desc">The code is the identifier for the "value" (Not changeable after creation)</div>
+    @ifMainLanguage($current->language)
+    <div>
+        <label for="code_inp" class="form-label required">Code</label>
+        {{ html()->text('code')->id('code_inp' . $current->language)->class('form-control') }}
+        @error('code')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
+        <div class="form-text">The code field will be used to display the <mark>value</mark> field</div>
     </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group">
-    <label class="col-sm-2 control-label">Type:</label>
-    <div class="col-sm-6">
+    <div>
+        <label for="type_inp" class="form-label">Type</label>
         {{ html()->select('type', ['' => 'Global'] + $transTypes)
-        ->id('type_inp' . $current->language)->class('form-control')->data('lang', 1) }}
+        ->id('type_inp' . $current->language)->class('form-select') }}
     </div>
+    @endifMainLanguage
 </div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group">
-    <div class="col-sm-10 btn-action pull-right">
-        <button type="submit" class="btn btn-secondary btn-icon-standalone" title="{{ $submit }}">
-            <i class="fa fa-{{ $icon }}"></i>
-            <span>{{ $submit }}</span>
-        </button>
-        <a href="{{ cms_route('translations.index') }}" class="btn btn-blue btn-icon-standalone" title="{{ trans('general.back') }}">
-            <i class="fa fa-arrow-left"></i>
-            <span>{{ trans('general.back') }}</span>
-        </a>
-    </div>
+<div class="d-flex gap-4">
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a href="{{ cms_route('translations.index') }}" class="btn btn-label-secondary">Cancel</a>
 </div>

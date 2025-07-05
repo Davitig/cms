@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 
 class AdminDashboardController extends Controller
 {
@@ -15,35 +16,24 @@ class AdminDashboardController extends Controller
     {
         $db = app('db');
 
-        // main
-        $data['menusTotal'] = $db->table('menus')->count();
-
-        $data['pagesTotal'] = $db->table('pages')->count();
-        $data['mainMenuId'] = $db->table('menus')
+        $data['menuId'] = $db->table('menus')
             ->where('main', 1)
             ->union($db->table('menus')->where('main', 0)->select('id'))
             ->limit(1)
             ->value('id');
-        $data['mainPagesTotal'] = $db->table('pages')
-            ->where('menu_id', $data['mainMenuId'])
-            ->count();
 
-        $data['collectionsTotal'] = $db->table('collections')->count();
-        $data['usersTotal'] = $db->table('cms_users')->count();
-
-        // events
-        $data['eventsTotalDistinct'] = $db->table('events')->count($db->raw('DISTINCT collection_id'));
-        $data['eventsTotal'] = $db->table('events')->count();
-
-        // articles
-        $data['articlesTotalDistinct'] = $db->table('articles')->count($db->raw('DISTINCT collection_id'));
-        $data['articlesTotal'] = $db->table('articles')->count();
-
-        // calendar
-        $data['calendarTotal'] = $db->table('calendar')->count();
-
-        // notes
-        $data['notes'] = $db->table('notes')->orderBy('id', 'desc')->take(5)->get();
+        $data += Cache::remember('dashboard', 60, function () use ($db) {
+            return [
+                'menusTotal' => $db->table('menus')->count(),
+                'pagesTotal' => $db->table('pages')->count(),
+                'cmsUsersTotal' => $db->table('cms_users')->count(),
+                'productsTotal' => $db->table('products')->count(),
+                'collectionsTotal' => $db->table('collections')->count(),
+                'articlesTotal' => $db->table('articles')->count(),
+                'eventsTotal' => $db->table('events')->count(),
+                'translationsTotal' => $db->table('translations')->count()
+            ];
+        });
 
         return view('admin.dashboard.index', $data);
     }

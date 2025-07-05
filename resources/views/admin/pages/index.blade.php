@@ -1,127 +1,114 @@
 @extends('admin.app')
 @section('content')
-    <div class="page-title">
-        <div class="title-env">
-            <h1 class="title">
-                <i class="{{$icon = icon_type('pages')}}"></i>
-                {{$menu->title}}
-            </h1>
-            <p class="description">{{ $menu->description }}</p>
-        </div>
-        <div class="breadcrumb-env">
-            <ol class="breadcrumb bc-1">
-                <li>
-                    <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
-                </li>
-                <li>
-                    <a href="{{ cms_route('menus.index') }}"><i class="{{$iconMenus = icon_type('menus')}}"></i>Menus</a>
-                </li>
-                <li class="active">
-                    <i class="{{$icon}}"></i>
-                    <strong>{{$menu->title}}</strong>
-                </li>
-            </ol>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="panel-title">List of {{ $menu->title }} | total {{ count_sub_items($items) }}</h2>
-            <div class="panel-options">
-                <a href="{{cms_route('menus.edit', [$menu->id])}}">
-                    <i class="fa fa-gear"></i>
+    <nav class="mb-6 ps-1" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ cms_route('dashboard.index') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ cms_route('menus.index') }}">Menus</a>
+            </li>
+            <li class="breadcrumb-item active">Pages</li>
+        </ol>
+    </nav>
+    <div class="card">
+        <div class="card-header header-elements flex-column flex-md-row align-items-md-center align-items-start gap-4">
+            <div class="d-flex">
+                <div class="fs-5">{{ $menu->title }}</div>
+                <span class="count badge bg-label-primary ms-4">{{ $itemsCount = $items->count() }}</span>
+            </div>
+            <div class="card-header-elements ms-md-auto flex-row-reverse flex-md-row">
+                <a href="{{ cms_route('menus.edit', [$menu->id]) }}" class="btn" title="Edit Menu">
+                    <i class="icon-base fa fa-gear icon-xs"></i>
                 </a>
-                <a href="#" data-toggle="panel">
-                    <span class="collapse-icon">&ndash;</span>
-                    <span class="expand-icon">+</span>
+                <a href="{{ cms_route('pages.create', [$menu->id]) }}" class="btn btn-primary">
+                    <i class="icon-base fa fa-plus icon-xs me-1"></i>
+                    <span>Add New Record</span>
                 </a>
             </div>
         </div>
-        <div class="panel-body">
-            <a href="{{ cms_route('pages.create', [$menu->id]) }}" class="btn btn-secondary btn-icon-standalone">
-                <i class="{{$icon}}"></i>
-                <span>{{ trans('general.create') }}</span>
-            </a>
-            <button id="save-tree" data-token="{{csrf_token()}}" class="btn btn-secondary btn-icon-standalone dn" disabled>
-                <i><b class="fa fa-save"></b></i>
-                <span>{{ trans('general.update_position') }}</span>
-            </button>
-            <div id="items" data-parent-slug="">
-                <ul id="nestable-list" class="uk-nestable" data-uk-nestable>
-                    @foreach ($items as $item)
-                        <li id="item{{ $item->id }}" class="item{{$item->collapse ? ' uk-collapsed' : ''}}" data-id="{{ $item->id }}" data-pos="{{ $item->position }}" data-parent="0">
-                            <div class="uk-nestable-item clearfix">
-                                <div class="row">
-                                    <div class="col-sm-7 col-xs-10">
-                                        <div class="uk-nestable-handle pull-left"></div>
-                                        <div data-nestable-action="toggle"></div>
-                                        <div class="list-label"><a href="{{ $editUrl = cms_route('pages.edit', [$menu->id, $item->id]) }}">{{ $item->short_title }}</a></div>
-                                    </div>
-                                    <div class="col-sm-5 col-xs-2">
-                                        <div class="btn-action toggleable pull-right">
-                                            <div class="btn btn-gray item-id">#{{$item->id}}</div>
-                                            <a href="{{web_url($item->slug)}}" class="link btn btn-white" title="Go to page" data-slug="{{$item->slug}}" target="_blank">
-                                                <span class="fa fa-link"></span>
-                                            </a>
-                                            <a href="#" class="transfer btn btn-white" title="Transfer to another menu" data-id="{{$item->id}}">
-                                                <span class="{{$iconMenus}}"></span>
-                                            </a>
-                                            {{ html()->form('put', cms_route('pages.visibility', [$item->id]))->id('visibility' . $item->id)->class('visibility')->open() }}
-                                            <button type="submit" class="btn btn-{{$item->visible ? 'white' : 'gray'}}" title="{{trans('general.visibility')}}">
-                                                <span class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></span>
-                                            </button>
-                                            {{ html()->form()->close() }}
-                                            <a href="{{ cms_route('pages.files.index', [$item->id]) }}" class="btn btn-{{$item->files_exists ? 'turquoise' : 'white'}}" title="{{trans('general.files')}}">
-                                                <span class="{{icon_type('files')}}"></span>
-                                            </a>
-                                            <span title="{{ucfirst($item->type)}}">
-                                                <a href="{{$typeUrl = (array_key_exists($item->type, cms_pages('extended')) || array_key_exists($item->type, cms_pages('listable.collections'))
-                                                ? cms_route($item->type . '.index', [$item->type_id]) : '#')}}" class="btn btn-{{$typeUrl == '#' ? 'white disabled' : 'info'}}">
-                                                    <span class="{{icon_type($item->type, 'fa fa-file-text')}}"></span>
-                                                </a>
-                                            </span>
-                                            <a href="{{ cms_route('pages.create', [$menu->id, 'parent_id' => $item->id]) }}" class="btn btn-secondary" title="{{trans('general.create')}}">
-                                                <span class="fa fa-plus"></span>
-                                            </a>
-                                            <a href="{{ $editUrl }}" class="btn btn-orange" title="{{trans('general.edit')}}">
-                                                <span class="fa fa-edit"></span>
-                                            </a>
-                                            {{ html()->form('delete', cms_route('pages.destroy', [$menu->id, $item->id]))->class('form-delete')->open() }}
-                                            <button type="submit" class="btn btn-danger" title="{{trans('general.delete')}}">
-                                                <span class="fa fa-trash"></span>
-                                            </button>
-                                            {{ html()->form()->close() }}
-                                        </div>
-                                        <a href="#" class="btn btn-primary btn-toggle pull-right">
-                                            <span class="fa fa-arrow-left"></span>
+        <div id="items" class="card-body" data-parent-slug="">
+            <ul class="uk-nestable list-group list-group-flush" data-uk-nestable="{handleClass:'uk-nestable-handle'}">
+                @foreach($items as $item)
+                    <li id="item{{ $item->id }}" class="item uk-nestable-item list-group-item ps-0 m-0"
+                        data-id="{{ $item->id }}" data-pos="{{ $item->position }}" data-parent="0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="uk-nestable-handle cursor-move icon-base fa fa-bars icon-sm align-text-bottom me-1"></i>
+                                <a href="{{ $editUrl = cms_route('pages.edit', [$item->menu_id, $item->id]) }}" class="text-black">
+                                    {{ $item->title }}
+                                </a>
+                            </div>
+                            <div class="actions d-flex align-items-center gap-4">
+                                <div class="item-id badge bg-label-gray text-black">{{ $item->id }}</div>
+                                <a href="{{ web_url($item->url_path) }}" class="link" data-slug="{{ $item->slug }}" target="_blank" title="View Website Page">
+                                    <i class="icon-base fa fa-link icon-sm"></i>
+                                </a>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="icon-base fa fa-ellipsis-vertical"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a href="{{ $editUrl }}" class="dropdown-item">
+                                            <i class="icon-base fa fa-edit me-1"></i>
+                                            Edit
                                         </a>
+                                        {{ html()->form('put', cms_route('pages.visibility', [$item->id]))->id('visibility' . $item->id)->class('visibility')->open() }}
+                                        <button type="submit" class="dropdown-item" title="{{trans('general.visibility')}}">
+                                            <i class="icon-base fa fa-toggle-{{$item->visible ? 'on' : 'off'}} icon-sm me-2"></i>
+                                            Visibility
+                                        </button>
+                                        {{ html()->form()->close() }}
+                                        <a href="{{ cms_route('pages.create', [$menu->id, 'parent_id' => $item->id]) }}" class="dropdown-item" title="{{trans('general.create')}}">
+                                            <span class="icon-base fa fa-plus me-1"></span>
+                                            Add Sub Page
+                                        </a>
+                                        <a href="{{ cms_route('pages.files.index', [$item->id]) }}" class="dropdown-item">
+                                            <i class="icon-base fa fa-paperclip me-1"></i>
+                                            Files
+                                        </a>
+                                        <button class="dropdown-item transfer" title="Transfer to other menu" data-id="{{$item->id}}">
+                                            <i class="icon-base fa fa-indent icon-sm me-1"></i>
+                                            Transfer
+                                        </button>
+                                        @if ($typeUrl = (array_key_exists($item->type, cms_pages('extended')) || array_key_exists($item->type, cms_pages('listable.collections'))
+                                        ? cms_route($item->type . '.index', [$item->type_id]) : null))
+                                            <a href="{{$typeUrl}}" class="dropdown-item">
+                                                <span class="icon-base fa fa-circle-right me-1"></span>
+                                                {{ucfirst($item->type)}}
+                                            </a>
+                                        @endif
+                                        {{ html()->form('delete', cms_route('pages.destroy', [$item->menu_id, $item->id]))->class('form-delete')->open() }}
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="icon-base fa fa-trash me-1"></i>
+                                            Delete
+                                        </button>
+                                        {{ html()->form()->close() }}
                                     </div>
                                 </div>
                             </div>
-                            @include('admin.pages.sub_items')
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
+                        </div>
+                        @include('admin.pages.sub_items')
+                    </li>
+                @endforeach
+            </ul>
         </div>
     </div>
-    @push('body.bottom')
-        @include('admin._scripts.transfer', ['route' => cms_route('pages.transfer', [$menu->id]), 'column' => 'menu_id', 'list' => $menus, 'id' => $menu->id, 'recursive' => true])
-        <script type="text/javascript">
-            $(function() {
-                positionable('{{ cms_route('pages.updatePosition') }}', 'asc');
-
-                // Collapse parent pages
-                $('#items').on('click', '[data-nestable-action]', function() {
-                    let id = $(this).closest('li').data('id');
-                    let input = {'id':id, '_method':'put', '_token':"{{csrf_token()}}"};
-                    $.post("{{cms_route('pages.collapse')}}", input, function() {}, 'json')
-                        .fail(function(xhr) {
-                            alert(xhr.responseText);
-                        });
-                });
-            });
-        </script>
-        <script src="{{ asset('assets/libs/js/uikit/js/uikit.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/js/uikit/js/addons/nestable.min.js') }}"></script>
-    @endpush
 @endsection
+@push('head')
+    <link rel="stylesheet" href="{{ asset('assets/default/libs/uikit-2.27.5/css/components/nestable.min.css') }}">
+@endpush
+@push('body.bottom')
+    @include('admin.-scripts.transfer', ['route' => cms_route('pages.transfer', [$menu->id]), 'column' => 'menu_id', 'list' => $menus, 'id' => $menu->id, 'recursive' => true])
+    <script type="text/javascript">
+        $(function () {
+            nestable('{{ cms_route('pages.positions') }}', 'asc', null, '{{ csrf_token() }}');
+
+            $('.uk-nestable').on('positionUpdated', function () {
+                updateSubItems($(this).find('> li'));
+            });
+        });
+    </script>
+    <script src="{{ asset('assets/default/libs/uikit-2.27.5/js/uikit.min.js') }}"></script>
+    <script src="{{ asset('assets/default/libs/uikit-2.27.5/js/components/nestable.min.js') }}"></script>
+@endpush

@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use App\Http\Requests\Request;
 use Illuminate\Validation\Rules\File;
+use Illuminate\Validation\Rules\Password;
 
 class CmsUserRequest extends Request
 {
@@ -17,15 +18,27 @@ class CmsUserRequest extends Request
         $id = $this->route('cms_user');
 
         return [
-            'email' => 'required|string|email|max:255|unique:cms_users,email,'.$id,
-            'first_name' => 'required|max:35',
-            'last_name' => 'required|max:35',
-            'cms_user_role_id' => 'required|integer|exists:cms_user_roles,id',
-            'photo' => ['nullable', File::image()->max(5 * 1024)],
-            'password' => array_merge(
-                $this->isMethod($this::METHOD_POST) ? ['required'] : ['nullable'],
-                ['min:8', 'confirmed']
-            )
+                'email' => 'required|string|email|max:255|unique:cms_users,email,'.$id,
+                'first_name' => 'required|max:35',
+                'last_name' => 'required|max:35',
+                'cms_user_role_id' => 'required|integer|exists:cms_user_roles,id',
+                'photo' => ['nullable', File::image()->max(2 * 1024)]
+            ] + $this->addPasswordRule();
+    }
+
+    /**
+     * Add password validation rule.
+     *
+     * @return array|array[]
+     */
+    protected function addPasswordRule(): array
+    {
+        if (! $this->isMethod(self::METHOD_POST)) {
+            return [];
+        }
+
+        return [
+            'password' => ['required', Password::min(8)->letters()->numbers(), 'confirmed']
         ];
     }
 
@@ -36,13 +49,13 @@ class CmsUserRequest extends Request
      */
     protected function prepareForValidation()
     {
-        $this->boolifyInput('blocked');
+        $this->boolifyInput('suspended');
 
         $user = $this->user('cms');
 
         if ($user->id == $this->route('cms_user')) {
             $this->offsetSet('cms_user_role_id', $user->cms_user_role_id);
-            $this->offsetSet('blocked', 0);
+            $this->offsetSet('suspended', 0);
         }
     }
 

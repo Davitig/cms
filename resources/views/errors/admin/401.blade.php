@@ -1,19 +1,12 @@
 @push('head.title')
-    <title>401 Unauthorized</title>
+    401 Unauthorized
 @endpush
 @extends('errors.admin.layout')
 @section('content')
-    <div class="page-title">
-        <div class="title-env">
-            <h1 class="title">
-                <i class="fa fa-exclamation"></i>
-                401 Unauthorized
-            </h1>
-            <p>The request has not been applied because it lacks valid authentication credentials for the target resource.</p>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-body">
-        </div>
+    <div class="d-flex flex-column align-items-center pt-10">
+        <h1 class="mb-2">401</h1>
+        <h4 class="mb-2">Unauthorized</h4>
+        <p class="mb-6">The request lacks valid authentication credentials for the target resource</p>
+        <a href="{{ cms_route('dashboard.index') }}" class="btn btn-primary mb-10">Go to home</a>
     </div>
 @endsection

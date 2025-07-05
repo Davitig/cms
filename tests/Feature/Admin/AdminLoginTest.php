@@ -9,7 +9,7 @@ class AdminLoginTest extends TestAdmin
 {
     public function test_admin_access_needs_authentication(): void
     {
-        $response = $this->get(cms_route('dashboard'));
+        $response = $this->get(cms_route('dashboard.index'));
 
         $response->assertRedirect(cms_route('login'));
     }
@@ -24,8 +24,8 @@ class AdminLoginTest extends TestAdmin
     public function test_admin_login_invalid_credentials(): void
     {
         $response = $this->post(cms_route('login.post'), [
-            'email' => 'invalid@example.com',
-            'password' => str()->random()
+            'email' => fake()->email(),
+            'password' => fake()->password(8, 8),
         ]);
 
         $response->assertFound()->assertSessionHasErrors(['email']);
@@ -37,18 +37,18 @@ class AdminLoginTest extends TestAdmin
 
         $cmsUser = CmsUserFactory::new()
             ->role($cmsUserRole->id)
-            ->loginParams('test@example.com', 'password')
+            ->loginParams($email = fake()->email(), 'password1')
             ->create();
 
         $response = $this->post(cms_route('login.post'), [
-            'email' => 'test@example.com',
-            'password' => 'password'
+            'email' => $email,
+            'password' => 'password1'
         ]);
 
         $cmsUser->delete();
         $cmsUserRole->delete();
 
-        $response->assertRedirect(cms_route('dashboard'));
+        $response->assertRedirect(cms_route('dashboard.index'));
     }
 
     public function test_admin_logout(): void

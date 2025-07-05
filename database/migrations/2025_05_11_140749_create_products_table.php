@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->boolean('visible')->default(0);
             $table->unsignedBigInteger('position')->default(1);
+            $table->boolean('in_stock')->default(1);
             $table->decimal('price');
             $table->unsignedInteger('quantity')->default(0);
             $table->string('image')->nullable();

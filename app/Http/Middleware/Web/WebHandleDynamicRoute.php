@@ -170,14 +170,14 @@ class WebHandleDynamicRoute
 
         if (($result = $this->setListableRoute($pages)) !== false) {
             if ($result === true) {
-                $this->setBreadcrumb($pages);
+                $this->setSharedInstances($pages);
             }
 
             return;
         }
 
         if ($this->setPageRoute($pages) === true) {
-            $this->setBreadcrumb($pages);
+            $this->setSharedInstances($pages);
         }
     }
 
@@ -485,14 +485,14 @@ class WebHandleDynamicRoute
     }
 
     /**
-     * Set a breadcrumb as shared instance.
+     * Set a shared instance.
      *
-     * @param  array  $pages
+     * @param  array  $items
      * @return void
      */
-    protected function setBreadcrumb(array $pages): void
+    protected function setSharedInstances(array $items): void
     {
-        app()->instance('breadcrumb', collect($pages));
+        app()->instance('breadcrumb', collect($items));
     }
 
     /**
@@ -522,6 +522,6 @@ class WebHandleDynamicRoute
             return $controllers[$type];
         }
 
-        return $this->namespace . '\\' . 'Web' . str($type)->studly() . 'Controller';
+        return $this->namespace . '\\' . 'Web' . str($type)->singular()->studly() . 'Controller';
     }
 }

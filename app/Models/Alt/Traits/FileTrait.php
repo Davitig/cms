@@ -11,13 +11,13 @@ trait FileTrait
     use PositionableTrait;
 
     /**
-     * Add a where file foreign key clause to the query.
+     * Add a where foreign key clause to the query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $foreignKey
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    abstract public function scopeFileForeignKey(Builder $query, int $foreignKey): Builder;
+    abstract public function scopeForeignKey(Builder $query, int $foreignKey): Builder;
 
     /**
      * Get the model files.
@@ -65,7 +65,7 @@ trait FileTrait
     public function scopeForAdmin(Builder $query, int $foreignId, mixed $currentLang = true): Builder
     {
         return $query->joinLanguage($currentLang)
-            ->fileForeignKey($foreignId)
+            ->foreignKey($foreignId)
             ->positionDesc();
     }
 
@@ -80,7 +80,7 @@ trait FileTrait
     public function scopeForPublic(Builder $query, int $foreignId, mixed $currentLang = true): Builder
     {
         return $query->joinLanguage($currentLang)
-            ->fileForeignKey($foreignId)
+            ->foreignKey($foreignId)
             ->whereVisible()
             ->positionDesc();
     }

@@ -1,19 +1,12 @@
 @push('head.title')
-    <title>403 Forbidden</title>
+    403 Forbidden
 @endpush
 @extends('errors.admin.layout')
 @section('content')
-    <div class="page-title">
-        <div class="title-env">
-            <h1 class="title">
-                <i class="fa fa-exclamation"></i>
-                403 Forbidden
-            </h1>
-            <p>You don't have permission to perform this action.</p>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-body">
-        </div>
+    <div class="d-flex flex-column align-items-center pt-10">
+        <h1 class="mb-2">403</h1>
+        <h4 class="mb-2">Forbidden</h4>
+        <p class="mb-6">You don't have permission to perform this action</p>
+        <a href="{{ cms_route('dashboard.index') }}" class="btn btn-primary mb-10">Go to home</a>
     </div>
 @endsection

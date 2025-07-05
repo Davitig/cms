@@ -25,12 +25,16 @@ trait VisibilityTrait
 
         $model = $this->model->findOrFail($id);
 
-        $model->update(['visible' => $visible = (int) ! $model->visible]);
+        $updated = $model->update(['visible' => $visible = (int) ! $model->visible]);
+
+        $data = fill_data(
+            $updated, trans('database.' . ($updated ? 'updated' : 'no_changes')), $visible
+        );
 
         if ($request->expectsJson()) {
-            return response()->json($visible);
+            return response()->json($data);
         }
 
-        return back();
+        return back()->with('alert', $data);
     }
 }

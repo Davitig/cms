@@ -1,19 +1,19 @@
 @extends('web.app')
 @section('content')
-    @include('web._partials.breadcrumb')
+    @include('web.-partials.breadcrumb')
     <div class="container">
         <header class="heading">
             <h1>{{$current->title}}</h1>
             {!!$current->description!!}
         </header>
-        <!-- .jumbotron -->
+        <!-- .heading -->
         <div id="items" class="row">
             @foreach ($items as $item)
-                <article class="col-sm-4">
+                <article class="col-sm-3">
                     @if ($item->image)
                         <div class="img">
                             <a href="{{web_url([$current->url_path, $item->slug])}}">
-                                <img src="{{$item->image}}" class="img-responsive" alt="{{$item->title}}">
+                                <img src="{{$item->image}}" class="img-responsive" width="150" height="100" alt="{{$item->title}}">
                             </a>
                         </div>
                         <!-- .img -->
@@ -32,16 +32,10 @@
                     </div>
                     <!-- .content -->
                 </article>
-                <!-- .col-sm-4 -->
+                <!-- .col-sm-3 -->
             @endforeach
         </div>
         <!-- #items -->
-        @if ($items->lastPage() > 1)
-            <div id="pager">
-                {!! $items->links() !!}
-            </div>
-            <!-- #pager -->
-        @endif
     </div>
     <!-- .container -->
 @endsection

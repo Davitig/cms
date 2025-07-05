@@ -15,19 +15,12 @@ class ArticleFile extends Model implements Fileable
     use QueriesTrait, FileTrait, HasLanguage;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string|null
-     */
-    protected $table = 'article_files';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'article_id', 'position', 'visible'
+        'article_id', 'visible', 'position'
     ];
 
     /**
@@ -58,7 +51,7 @@ class ArticleFile extends Model implements Fileable
      * @param  int  $foreignKey
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeFileForeignKey(Builder $query, int $foreignKey): Builder
+    public function scopeForeignKey(Builder $query, int $foreignKey): Builder
     {
         return $query->where('article_id', $foreignKey);
     }

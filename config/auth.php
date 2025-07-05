@@ -62,7 +62,7 @@ return [
     'providers' => [
         'cms_users' => [
             'driver' => 'cms',
-            'model' => env('AUTH_MODEL', App\Models\CmsUser::class),
+            'model' => env('AUTH_MODEL', App\Models\CmsUser\CmsUser::class),
         ],
 
         // 'users' => [

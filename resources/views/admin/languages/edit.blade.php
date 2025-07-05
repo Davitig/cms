@@ -1,46 +1,31 @@
 @extends('admin.app')
 @section('content')
-    <div class="page-title">
-        <div class="title-env">
-            <h1 class="title">
-                <i class="{{$icon = icon_type('languages')}}"></i>
-                Languages
-            </h1>
-            <p class="description">Management of the languages</p>
-        </div>
-        <div class="breadcrumb-env">
-            <ol class="breadcrumb bc-1">
-                <li>
-                    <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
-                </li>
-                <li class="active">
-                    <i class="{{$icon}}"></i>
-                    <strong>Languages</strong>
-                </li>
-            </ol>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="panel-title">Edit language</h2>
-            <div class="panel-options">
-                <a href="#" data-toggle="panel">
-                    <span class="collapse-icon">&ndash;</span>
-                    <span class="expand-icon">+</span>
+    <nav class="mb-6 ps-1" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ cms_route('dashboard.index') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Languages</li>
+        </ol>
+    </nav>
+    <div class="card">
+        <div class="card-header header-elements">
+            <div class="fs-5">Languages</div>
+            <div class="card-header-elements ms-auto">
+                <a href="{{ cms_route('languages.create') }}">
+                    <i class="icon-base fa fa-plus icon-xs"></i>
+                    <span>Add New Record</span>
                 </a>
             </div>
-            <a href="{{cms_route('languages.create')}}" class="pull-right padr">Add more</a>
         </div>
-        <div class="panel-body">
-            {{ html()->modelForm($current,
-                'put', cms_route('languages.update', [$current->id])
-            )->class('form-horizontal ' . $cmsSettings->get('ajax_form'))->open() }}
-            @include('admin.languages.form', [
-                'submit' => trans('general.update'),
-                'icon' => 'save'
-            ])
-            {{ html()->form()->close() }}
+        <div class="card-body">
+            <div class="panel-body">
+                {{ html()->modelForm($current, 'put', cms_route('languages.update', [$current->id]))
+                ->data('ajax-form', $preferences->get('ajax_form'))->attribute('novalidate')->open() }}
+                @include('admin.languages.form')
+                {{ html()->form()->close() }}
+            </div>
         </div>
     </div>
-    @include('admin.languages.scripts')
 @endsection
+@include('admin.languages.scripts')

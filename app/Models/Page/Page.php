@@ -16,19 +16,12 @@ class Page extends Model
     use QueriesTrait, HasLanguage, PositionableTrait, FileableTrait, HasSubModels;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string|null
-     */
-    protected $table = 'pages';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'menu_id', 'slug', 'position', 'visible', 'parent_id', 'type', 'type_id', 'collapse', 'image'
+        'menu_id', 'slug', 'visible', 'position', 'parent_id', 'type', 'type_id', 'image'
     ];
 
     /**

@@ -14,7 +14,11 @@ class LanguageServiceProvider extends ServiceProvider implements DeferrableProvi
     public function register(): void
     {
         $this->app->singleton(LanguageService::class, static function ($app) {
-            return LanguageService::make($app['request']->path());
+            return LanguageService::make(
+                $app['request']->path(), (string) $app['request']->query(
+                    $app['config']->get('language.query_string_key'),
+                )
+            );
         });
     }
 

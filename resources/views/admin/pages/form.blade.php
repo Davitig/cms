@@ -1,167 +1,83 @@
-<div class="row">
-    <div class="col-lg-6">
-        <div class="form-group{{($error = $errors->first('title')) ? ' validate-has-error' : '' }}">
-            <label class="col-lg-4 col-sm-2 control-label required">Title:</label>
-            <div class="col-lg-8 col-sm-10">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-header"></i></span>
-                    {{ html()->text('title')->id('title_inp' . $current->language)->class('form-control') }}
-                </div>
-                @if ($error)
-                    <span class="text-danger">{{$error}}</span>
-                @endif
-            </div>
-        </div>
+<div class="row g-6 mb-6">
+    <div class="col-md-6">
+        <label for="title_inp" class="form-label required">Title</label>
+        {{ html()->text('title')->id('title_inp' . $current->language)->class('form-control') }}
+        @error('title')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
     </div>
-    <div class="col-lg-6">
-        <div class="form-group{{($error = $errors->first('short_title')) ? ' validate-has-error' : '' }}">
-            <label class="col-lg-4 col-sm-2 control-label required">Short Title:</label>
-            <div class="col-lg-8 col-sm-10">
-                {{ html()->text('short_title')->id('short_title_inp' . $current->language)->class('form-control') }}
-                @if ($error)
-                    <span class="text-danger">{{$error}}</span>
-                @endif
-            </div>
-        </div>
+    <div class="col-md-6">
+        <label for="short_title_inp" class="form-label required">Short Title</label>
+        {{ html()->text('short_title')->id('short_title_inp' . $current->language)->class('form-control') }}
+        @error('short_title')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
     </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group{{($error = $errors->first('slug')) ? ' validate-has-error' : '' }}">
-    <label class="col-sm-2 control-label required">Slug:</label>
-    <div class="col-sm-10">
-        <div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-link"></i></span>
-            {{ html()->text('slug')->id('slug_inp' . $current->language)->class('form-control')->data('lang', 1) }}
-        </div>
-        @if ($error)
-            <span class="text-danger">{{$error}}</span>
-        @endif
-    </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="row">
-    <div class="col-lg-6">
-        <div class="form-group{{($error = $errors->first('type')) ? ' validate-has-error' : '' }}">
-            <label class="col-lg-4 col-sm-2 control-label required">Type:</label>
-            <div class="col-lg-8 col-sm-10">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-ellipsis-h"></i></span>
-                    {{ html()->select('type', $types)->id('type_inp' . $current->language)
-                    ->class('form-control select')->data('lang', 1) }}
-                </div>
-                @if ($error)
-                    <span class="text-danger">{{$error}}</span>
-                @endif
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-6">
+    @ifMainLanguage($current->language)
+    <div>
         <div class="row">
-            <div class="col-lg-12 type-id{{(($error = $errors->first('type_id')) || $current->type_id) ? '' : ' hidden'}}">
-                <div class="form-group{{$error ? ' validate-has-error' : '' }}">
-                    <label class="col-lg-4 col-sm-2 control-label required">{{$current->type_id ? ucfirst($current->type) : 'Type id'}}:</label>
-                    <div class="col-lg-8 col-sm-10">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-ellipsis-v"></i></span>
-                            {{ html()->select('type_id', ['' => ''] + $listableTypes)
-                            ->id('type_id_inp' . $current->language)->class('form-control select')
-                            ->data('lang', 1) }}
-                        </div>
-                        @if ($error)
-                            <span class="text-danger">{{$error}}</span>
-                        @endif
-                    </div>
+            <div class="col-md-6">
+                <label for="slug_inp" class="form-label required">Slug</label>
+                {{ html()->text('slug')->id('slug_inp' . $current->language)->class('form-control') }}
+                @error('slug')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <label for="type_inp" class="form-label required">Type</label>
+        {{ html()->select('type', $types)->id('type_inp' . $current->language)->class('form-select') }}
+        @error('type')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
+    </div>
+    <div class="col-md-6 type-id{{ $current->type_id || $errors->first('type_id') ? '' : ' d-none' }}">
+        <label for="type_id_inp" class="form-label required">{{$current->type_id ? ucfirst($current->type) : ucfirst(old('type', 'Type ID'))}}</label>
+        {{ html()->select('type_id', $listableTypes)->id('type_id_inp' . $current->language)->class('form-select') }}
+        @error('type_id')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
+    </div>
+    <div>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="image_inp" class="form-label">Image</label>
+                <div class="input-group">
+                    {{ html()->text('image')->id('image_inp' . $current->language)->class('form-control') }}
+                    <button type="button" class="file-manager-popup btn btn-outline-primary" data-browse="image_inp{{$current->language}}">Browse</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group">
-    <label class="col-sm-2 control-label">Image:</label>
-    <div class="col-lg-6 col-sm-10">
-        <div class="input-group">
-            <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-image"></i></span>
-                {{ html()->text('image')->id('image_inp' . $current->language)
-                ->class('form-control select')->data('lang', 1) }}
-            </div>
-            <div class="input-group-btn popup" data-browse="image_inp{{$current->language}}">
-                <span class="btn btn-info">Browse</span>
-            </div>
-        </div>
+    @endifMainLanguage
+    <div>
+        <label for="description_inp" class="form-label">Description</label>
+        {{ html()->textarea('description')->id('description_inp' . $current->language)->class('form-control text-editor')->rows(8) }}
     </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group">
-    <label class="col-sm-2 control-label">Description:</label>
-    <div class="col-sm-10">
-        {{ html()->textarea('description')->id('description_inp' . $current->language)
-        ->class('form-control text-editor')->rows(5) }}
+    <div>
+        <label for="content_inp" class="form-label">Content</label>
+        {{ html()->textarea('content')->id('content_inp' . $current->language)->class('form-control text-editor')->rows(12) }}
     </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group">
-    <label class="col-sm-2 control-label">Content:</label>
-    <div class="col-sm-10">
-        {{ html()->textarea('content')->id('content_inp' . $current->language)
-        ->class('form-control text-editor')->rows(10) }}
-    </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group">
-    <label class="col-sm-2 control-label">Meta Title:</label>
-    <div class="col-sm-10">
+    <div>
+        <label for="meta_title_inp" class="form-label">Meta Title</label>
         {{ html()->text('meta_title')->id('meta_title_inp' . $current->language)->class('form-control') }}
     </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group">
-    <label class="col-sm-2 control-label">Meta Description:</label>
-    <div class="col-sm-10">
+    <div>
+        <label for="meta_desc_inp" class="form-label">Meta Description</label>
         {{ html()->text('meta_desc')->id('meta_desc_inp' . $current->language)->class('form-control') }}
     </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="row">
-    <div class="col-xs-4">
-        <div class="form-group">
-            <label class="col-sm-6 control-label">Visible:</label>
-            <div class="col-sm-6">
-                {{ html()->checkbox('visible')->id('visible_inp' . $current->language)
-                ->class('iswitch iswitch-secondary')->data('lang', 1) }}
-            </div>
-        </div>
+    @ifMainLanguage($current->language)
+    <div>
+        <label class="switch switch-primary">
+            {{ html()->checkbox('visible')->id('visible_inp' . $current->language)->class('switch-input') }}
+            <span class="switch-toggle-slider"></span>
+            <span class="switch-label">Visible</span>
+        </label>
     </div>
+    @endifMainLanguage
 </div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group">
-    <div class="col-sm-10 btn-action pull-right">
-        <button type="submit" class="btn btn-secondary btn-icon-standalone" title="{{ $submit }}">
-            <i class="fa fa-{{ $icon }}"></i>
-            <span>{{ $submit }}</span>
-        </button>
-        <a href="{{ cms_route('pages.index', [$current->menu_id]) }}" class="btn btn-blue btn-icon-standalone" title="{{ trans('general.back') }}">
-            <i class="fa fa-arrow-left"></i>
-            <span>{{ trans('general.back') }}</span>
-        </a>
-    </div>
+<div class="d-flex gap-4">
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a href="{{ cms_route('pages.index', [$current->menu_id]) }}" class="btn btn-label-secondary">Cancel</a>
 </div>

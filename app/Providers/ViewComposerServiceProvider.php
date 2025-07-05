@@ -2,17 +2,16 @@
 
 namespace App\Providers;
 
-use App\View\Composers\Admin\AdminCalendarComposer;
-use App\View\Composers\Admin\AdminCmsSettingsComposer;
+use App\View\Composers\Admin\AdminCmsUserPreferencesComposer;
 use App\View\Composers\Admin\AdminMenuComposer;
 use App\View\Composers\Admin\AdminRouteMatchesComposer;
 use App\View\Composers\Admin\AdminSitemapXmlComposer;
 use App\View\Composers\Admin\AdminUserRouteAccessComposer;
 use App\View\Composers\Web\WebBreadcrumbComposer;
 use App\View\Composers\Web\WebCurrentDataComposer;
-use App\View\Composers\Web\WebPagesComposer;
-use App\View\Composers\Web\WebSettingsComposer;
-use App\View\Composers\Web\WebTranslationsComposer;
+use App\View\Composers\Web\WebPageComposer;
+use App\View\Composers\Web\WebSettingComposer;
+use App\View\Composers\Web\WebTranslationComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,16 +25,15 @@ class ViewComposerServiceProvider extends ServiceProvider
     public $singletons = [
         // cms
         AdminMenuComposer::class,
-        AdminCmsSettingsComposer::class,
-        AdminCalendarComposer::class,
+        AdminCmsUserPreferencesComposer::class,
         AdminRouteMatchesComposer::class,
         AdminUserRouteAccessComposer::class,
         AdminSitemapXmlComposer::class,
         // web
-        WebSettingsComposer::class,
-        WebTranslationsComposer::class,
+        WebSettingComposer::class,
+        WebTranslationComposer::class,
         WebCurrentDataComposer::class,
-        WebPagesComposer::class,
+        WebPageComposer::class,
         WebBreadcrumbComposer::class
     ];
 
@@ -65,34 +63,31 @@ class ViewComposerServiceProvider extends ServiceProvider
     protected function registerAdminViewComposers(): void
     {
         // compose CMS settings
-        View::composer('admin.*', AdminCmsSettingsComposer::class);
+        View::composer([
+            'admin.*', 'errors.admin.layout'
+        ], AdminCmsUserPreferencesComposer::class);
 
         // compose menus
         View::composer([
-            'admin._partials.sidebar_menu',
-            'admin._partials.horizontal_menu',
+            'admin.-partials.menu',
+            'admin.-partials.navbar',
             'admin.menus.index',
-            'admin.pages.index'
+            'admin.pages.index',
+            'errors.admin.layout'
         ], AdminMenuComposer::class);
 
-        // compose calendar
-        View::composer([
-            'admin._partials.user',
-            'admin._partials.horizontal_menu',
-            'admin.dashboard.index'
-        ], AdminCalendarComposer::class);
-
         // compose route matcher
-        View::composer('admin._partials.menu', AdminRouteMatchesComposer::class);
+        View::composer([
+            'admin.-partials.menu', 'admin.cms-users.navbar', 'errors.admin.layout'
+        ], AdminRouteMatchesComposer::class);
 
         // compose user route access
-        View::composer('admin.*', AdminUserRouteAccessComposer::class);
+        View::composer([
+            'admin.*', 'errors.admin.layout'
+        ], AdminUserRouteAccessComposer::class);
 
         // compose sitemap xml
-        View::composer([
-            'admin._partials.user',
-            'admin._partials.horizontal_menu'
-        ], AdminSitemapXmlComposer::class);
+        View::composer(['admin.-partials.navbar'], AdminSitemapXmlComposer::class);
     }
 
     /**
@@ -103,18 +98,18 @@ class ViewComposerServiceProvider extends ServiceProvider
     protected function registerWebViewComposers(): void
     {
         // compose settings
-        View::composer('web.*', WebSettingsComposer::class);
+        View::composer('web.*', WebSettingComposer::class);
 
         // compose translations
-        View::composer('web.*', WebTranslationsComposer::class);
+        View::composer('web.*', WebTranslationComposer::class);
 
         // compose current data
         View::composer('web.*', WebCurrentDataComposer::class);
 
         // compose pages
-        View::composer('web._partials.pages', WebPagesComposer::class);
+        View::composer('web.-partials.pages', WebPageComposer::class);
 
         // compose breadcrumb
-        View::composer('web._partials.breadcrumb', WebBreadcrumbComposer::class);
+        View::composer('web.-partials.breadcrumb', WebBreadcrumbComposer::class);
     }
 }

@@ -15,9 +15,12 @@ class ArticleRequest extends Request
     {
         $id = $this->route('article');
 
+        $required = language()->mainIsActive() ? 'required' : '';
+
         return [
-            'slug' => 'required|unique:articles,slug,'.$id,
+            'slug' => [$required, 'unique:articles,slug,'.$id],
             'title' => 'required',
+            'created_at' => [$required, 'date']
         ];
     }
 
@@ -28,6 +31,14 @@ class ArticleRequest extends Request
      */
     protected function prepareForValidation()
     {
+        if ($this->isNotFilled('created_at')) {
+            $this->offsetUnset('created_at');
+        }
+
+        if (! language()->mainIsActive()) {
+            return;
+        }
+
         $this->slugifyInput('slug', ['title']);
 
         $this->boolifyInput('visible');

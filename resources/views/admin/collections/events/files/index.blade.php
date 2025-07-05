@@ -1,147 +1,114 @@
 @extends('admin.app')
 @section('content')
-    <div class="page-title">
-        <div class="title-env">
-            <h1 class="title">
-                <i class="{{$icon = icon_type('files')}}"></i>
-                <span data-substr-limit>{{ $foreignModel->title }}</span>
-            </h1>
-            <p class="description">Management of the files</p>
-        </div>
-        <div class="breadcrumb-env">
-            <ol class="breadcrumb bc-1">
-                <li>
-                    <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
-                </li>
-                <li>
-                    <a href="{{ cms_route('events.index', [$foreignModel->collection_id]) }}">
-                        <i class="{{icon_type('events')}}"></i> Events
-                    </a>
-                </li>
-                <li class="active">
-                    <i class="{{$icon}}"></i>
-                    <strong>Files</strong>
-                </li>
-            </ol>
-        </div>
-    </div>
-    <ul class="nav nav-tabs nav-tabs-justified">
-        <li>
-            <a href="{{cms_route('events.edit', [$foreignModel->collection_id, $foreignModel->id])}}">
-                <img src="{{ asset('assets/libs/images/flags/'.language()->active().'.png') }}" width="23" height="13" alt="{{language()->active()}}">
-                {{-- <span class="visible-xs">{{$language->language}}</span> --}}
-                <span class="hidden-xs">Event</span>
+    <nav class="mb-6 ps-1" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ cms_route('dashboard.index') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ cms_route('collections.index') }}">Collections</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ cms_route('events.index', [$foreignModel->collection_id]) }}">Events</a>
+            </li>
+            <li class="breadcrumb-item active">Files</li>
+        </ol>
+    </nav>
+    <div id="files-block">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center row-gap-4 gap-4 mb-6">
+            <div class="fs-4 text-black">{{ $foreignModel->title }}</div>
+            <a href="{{ cms_route('events.edit', [$foreignModel->collection_id, $foreignModel->id]) }}" class="ms-md-auto text-dark">
+                <i class="icon-base fa fa-caret-left icon-xs"></i>
+                Go back
             </a>
-        </li>
-        <li class="active">
-            <a href="#" data-toggle="tab">
-                <span class="visible-xs"><i class="{{$icon}}"></i></span>
-                <div class="hidden-xs">
-                    <i class="{{$icon}}"></i> {{trans('general.files')}}
-                </div>
-            </a>
-        </li>
-    </ul>
-    <section class="gallery-env files">
-        <div class="row">
-            <div class="col-sm-12 gallery-right">
-                <div class="album-header">
-                    <h2>Files</h2>
-                    <ul class="album-options list-unstyled list-inline">
-                        <li>
-                            <input type="checkbox" class="cbr" id="select-all">
-                            <label>Select all</label>
-                        </li>
-                        <li>
-                            <a href="#" data-modal="add">
-                                <i class="{{$icon}}"></i>
-                                Add File
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" data-action="sort">
-                                <i class="fa fa-arrows"></i>
-                                Re-order
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" data-modal="multiselect">
-                                <i class="fa fa-edit"></i>
-                                Edit
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" data-delete="multiselect">
-                                <i class="fa fa-trash"></i>
-                                Trash
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="album-sorting-info">
-                    <div class="album-sorting-info-inner clearfix">
-                        <a href="#" id="save-tree" data-token="{{csrf_token()}}"
-                           class="btn btn-secondary btn-xs btn-single btn-icon btn-icon-standalone pull-right"
-                           data-action="sort">
-                            <i class="fa fa-save"></i>
-                            <span>Save Current Order</span>
-                        </a>
-                        <i class="fa fa-arrows-alt"></i>
-                        Drag images to sort them
-                    </div>
-                </div>
-                <ul id="nestable-list" class="album-images list-unstyled row" data-insert="prepend"
-                    data-uk-nestable="{maxDepth:1}" id="items">
-                    @foreach($items as $item)
-                        <li id="item{{$item->id}}" data-id="{{$item->id}}" data-pos="{{$item->position}}"
-                            data-url="{{cms_route('events.files.edit', [$item->event_id, $item->id])}}" class="item col-md-2 col-sm-4 col-xs-6">
-                            <div class="album-image">
-                                <a href="#" class="thumb" data-modal="edit">
-                                    @if (in_array($ext = pathinfo($item->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
-                                        <img src="{{$item->file}}" class="img-responsive" alt="{{$item->title}}">
-                                    @elseif(! empty($ext))
-                                        <img src="{{asset('assets/libs/images/file-ext-icons/'.$ext.'.png')}}"
-                                             class="img-responsive" alt="{{$item->title}}">
-                                    @else
-                                        <img src="{{asset('assets/libs/images/file-ext-icons/www.png')}}"
-                                             class="img-responsive" alt="{{$item->title}}">
-                                    @endif
-                                </a>
-                                <a href="#" class="name">
-                                    <span class="title">{{$item->title}}</span>
-                                    <em>{{$item->created_at->format('d F Y')}}</em>
-                                </a>
-                                <div class="image-options">
-                                    <div class="select-item dib">
-                                        <input type="checkbox" data-id="{{$item->id}}" class="cbr">
-                                    </div>
-                                    <a href="#" data-url="{{cms_route('events.files.visibility', [$item->id])}}" class="visibility" title="{{trans('general.visibility')}}">
-                                        <i class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></i>
-                                    </a>
-                                    <a href="#" data-modal="edit" title="{{trans('general.edit')}}"><i class="fa fa-pencil"></i></a>
-                                    <a href="#" data-delete="{{cms_route('events.files.destroy', [$item->event_id, $item->id])}}" data-id="{{$item->id}}" title="{{trans('general.delete')}}">
-                                        <i class="fa fa-trash"></i>
-                                    </a>
-                                </div>
-                                <div class="btn-action"></div>
-                            </div>
-                        </li>
-                    @endforeach
-                </ul>
-                {!! $items->links() !!}
+            <div class="badge bg-label-primary fs-6">
+                Total:
+                <span class="count">{{ $items->total() }}</span>
+            </div>
+            <div class="d-flex btn-group" role="group">
+                <button type="button" class="btn btn-outline-secondary text-dark item-add">
+                    <i class="icon-base fa fa-plus icon-xs me-1"></i>
+                    <span>Add New Record</span>
+                </button>
+                <label class="btn btn-outline-secondary text-dark form-check-dark" for="items-multi-select">
+                    <input type="checkbox" id="items-multi-select" class="form-check-input me-1">
+                    <span>Select All</span>
+                </label>
+                <button type="button" id="edit-selected-items" class="btn btn-outline-secondary text-dark">
+                    <i class="icon-base fa fa-pencil icon-xs me-1"></i>
+                    <span>Edit</span>
+                </button>
+                <button type="button" class="btn btn-outline-secondary text-dark" data-delete-selected
+                        data-url="{{cms_route('events.files.destroyMany', [$foreignModel->id])}}">
+                    <i class="icon-base fa fa-trash icon-xs me-1"></i>
+                    <span>Delete</span>
+                </button>
             </div>
         </div>
-    </section>
-    @push('body.bottom')
-        @include('admin._scripts.album', [
-            'routeCreate' => cms_route('events.files.create', [$foreignModel->id]),
-            'routePosition' => cms_route('events.files.updatePosition'),
-            'sort' => 'desc',
-            'currentPage' => $items->currentPage(),
-            'lastPage' => $items->lastPage()
-        ])
-        <script src="{{ asset('assets/libs/js/jquery-ui/jquery-ui.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/js/uikit/js/uikit.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/js/uikit/js/addons/nestable.min.js') }}"></script>
-    @endpush
+        <div id="sortable" class="row gy-4">
+            @php
+                $currentPage = $items->currentPage();
+                $lastPage = $items->lastPage();
+            @endphp
+            @foreach($items as $item)
+                <div id="item{{ $item->id }}" class="item col-6 col-md-4 col-lg-2" data-id="{{ $item->id }}" data-pos="{{$item->position}}">
+                    <div class="card handle">
+                        <div class="py-3 px-5 d-flex justify-content-between align-items-center">
+                            <div class="item-title fs-5 fw-medium text-black">{{ $item->title }}</div>
+                            @if ($lastPage > 1)
+                                <div class="btn-pos-actions d-flex justify-content-{{ $currentPage > 1 ? 'between' : 'end' }}">
+                                    @if ($currentPage > 1)
+                                        <a href="#" class="move fa fa-arrow-left opacity-75" data-move="prev" title="Move to prev page"></a>
+                                    @endif
+                                    @if ($currentPage < $lastPage)
+                                        <a href="#" class="move fa fa-arrow-right ps-2 opacity-75" data-move="next" title="Move to next page"></a>
+                                    @endif
+                                </div>
+                            @endif
+                        </div>
+                        @if (in_array($ext = pathinfo($item->file, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
+                            <img src="{{$item->file}}" width="100%" height="150"  class="item-img cursor-move" alt="{{ $item->title }}">
+                        @elseif(! empty($ext))
+                            <img src="{{asset('assets/default/img/file-ext-icons/'.$ext.'.png')}}" width="100%" height="150"
+                                 class="item-img cursor-move" alt="{{ $item->title }}">
+                        @else
+                            <img src="{{asset('assets/default/img/file-ext-icons/www.png')}}" width="100%" height="150"
+                                 class="item-img cursor-move" alt="{{ $item->title }}">
+                        @endif
+                        <div class="py-3 px-5 d-flex gap-6">
+                            <a href="#" data-url="{{cms_route('events.files.edit', [$item->event_id, $item->id])}}"
+                               class="item-edit" title="{{trans('general.edit')}}">
+                                <i class="icon-base fa fa-pencil icon-xs"></i>
+                            </a>
+                            {{ html()->form('put', cms_route('events.files.visibility', [$item->id]))
+                            ->id('visibility' . $item->id)->class('visibility')->open() }}
+                            <button type="submit" class="dropdown-item" title="{{trans('general.visibility')}}">
+                                <i class="icon-base fa fa-toggle-{{$item->visible ? 'on' : 'off'}} icon-md text-primary"></i>
+                            </button>
+                            {{ html()->form()->close() }}
+                            {{ html()->form('delete', cms_route('events.files.destroy', [$item->event_id, $item->id]))
+                            ->class('form-delete')->open() }}
+                            <button type="submit" class="dropdown-item">
+                                <i class="icon-base fa fa-trash icon-xs text-primary"></i>
+                            </button>
+                            {{ html()->form()->close() }}
+                            <span class="form-check-dark">
+                                <input class="form-check-input align-bottom item-select" type="checkbox" data-id="{{ $item->id }}">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        {!! $items->links() !!}
+    </div>
 @endsection
+@push('body.bottom')
+    @include('admin.-scripts.files-index', [
+        'routeCreate' => cms_route('events.files.create', [$foreignModel->id]),
+        'routePositions' => cms_route('events.files.positions', [$foreignModel->id]),
+        'sort' => 'desc',
+        'currentPage' => $currentPage,
+        'lastPage' => $lastPage
+    ])
+@endpush
