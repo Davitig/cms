@@ -1,21 +1,18 @@
 <!DOCTYPE html>
 <html lang="{{language()->active()}}">
-@include('web._partials.head')
+@include('web.-partials.head')
 <body>
-<div id="root">
-    @include('web._partials.header')
+<div id="app">
+    @include('web.-partials.header')
     <main id="main">
-        <div id="content">
-            @yield('content')
-        </div>
-        <!-- #content -->
+        @yield('content')
     </main>
     <!-- #main -->
 </div>
-<!-- #root -->
-@include('web._partials.footer')
-@include('web._partials.scripts')
+<!-- #app -->
+@include('web.-partials.footer')
+@include('web.-partials.scripts')
 @stack('body.bottom')
-@include('web._partials.trans_form')
+@include('web.-partials.trans-form')
 </body>
 </html>

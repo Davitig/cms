@@ -1,188 +1,79 @@
-<div class="form-group{{($error = $errors->first('title')) ? ' validate-has-error' : '' }}">
-    <label class="col-sm-2 control-label required">Title:</label>
-    <div class="col-sm-10">
-        <div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-header"></i></span>
-            {{ html()->text('title')->id('title_inp')->class('form-control') }}
-        </div>
-        @if ($error)
-            <span class="text-danger">{{$error}}</span>
-        @endif
+<div class="row g-6 mb-6">
+    <div>
+        <label for="title_inp" class="form-label required">Title</label>
+        {{ html()->text('title')->id('title_inp')->class('form-control') }}
+        @error('title')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
+    <div>
+        <label for="type_inp" class="form-label required">Type</label>
+        {{ html()->select('type', cms_config('listable.collections.types'))
+        ->id('type_inp')->class('form-select')
+        ->ifNotNull($current->id, function ($html) {
+            return $html->attribute('disabled');
+        }) }}
+        @error('type')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
+    <div class="col-md-6">
+        <label for="admin_order_by_inp" class="form-label required">Admin Order By</label>
+        {{ html()->select('admin_order_by', $orderBy = cms_config('listable.collections.order_by'))
+        ->id('admin_order_by_inp')->class('form-select') }}
+        @error('admin_order_by')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
+    </div>
+    <div class="col-md-6">
+        <label for="web_order_by_inp" class="form-label required">Web Order By</label>
+        {{ html()->select('web_order_by', $orderBy)
+        ->id('web_order_by_inp')->class('form-select') }}
+        @error('web_order_by')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
+    </div>
+    <div class="col-md-6">
+        <label for="admin_sort_inp" class="form-label required">Admin Sort</label>
+        {{ html()->select('admin_sort', $sort = cms_config('listable.collections.sort'))
+        ->id('admin_sort_inp')->class('form-select') }}
+        @error('admin_sort')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
+    </div>
+    <div class="col-md-6">
+        <label for="web_sort_inp" class="form-label required">Web Sort</label>
+        {{ html()->select('web_sort', $sort)
+        ->id('web_sort_inp')->class('form-select') }}
+        @error('web_sort')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
+    </div>
+    <div class="col-md-6">
+        <label for="admin_per_page_inp" class="form-label required">Admin Per Page</label>
+        {{ html()->number('admin_per_page')->id('admin_per_page_inp')->class('form-control') }}
+        @error('admin_per_page')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
+    </div>
+    <div class="col-md-6">
+        <label for="web_per_page_inp" class="form-label required">Web Per Page</label>
+        {{ html()->number('web_per_page')->id('web_per_page_inp')->class('form-control') }}
+        @error('web_per_page')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
+    </div>
+    <div>
+        <label for="description_inp" class="form-label">Description</label>
+        {{ html()->textarea('description')->id('description_inp')->class('form-control')->rows(3) }}
     </div>
 </div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group{{($error = $errors->first('type')) ? ' validate-has-error' : '' }}">
-    <label class="col-sm-2 control-label required">Type:</label>
-    <div class="col-sm-10">
-        <div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-ellipsis-h"></i></span>
-            {{ html()->select('type', cms_config('listable.collections.types'))
-            ->id('type_inp')->class('form-control select')
-            ->ifNotNull($current->id, function ($html) {
-                return $html->attribute('disabled');
-            }) }}
-        </div>
-        @if ($error)
-            <span class="text-danger">{{$error}}</span>
-        @endif
-    </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="row">
-    <div class="col-sm-6">
-        <div class="form-group{{($error = $errors->first('admin_order_by')) ? ' validate-has-error' : '' }}">
-            <label class="col-sm-4 control-label required">Admin order by:</label>
-            <div class="col-sm-8">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-list-ol"></i></span>
-                    {{ html()->select('admin_order_by', $orderBy = cms_config('listable.collections.order_by'))
-                    ->id('admin_order_by_inp')->class('form-control select') }}
-                </div>
-                @if ($error)
-                    <span class="text-danger">{{$error}}</span>
-                @endif
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="form-group{{($error = $errors->first('web_order_by')) ? ' validate-has-error' : '' }}">
-            <label class="col-sm-4 control-label required">Web order by:</label>
-            <div class="col-sm-8">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-list-ol"></i></span>
-                    {{ html()->select('web_order_by', $orderBy)->id('web_order_by_inp')->class('form-control select') }}
-                </div>
-                @if ($error)
-                    <span class="text-danger">{{$error}}</span>
-                @endif
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="row">
-    <div class="col-sm-6">
-        <div class="form-group{{($error = $errors->first('admin_sort')) ? ' validate-has-error' : '' }}">
-            <label class="col-sm-4 control-label required">Admin sort:</label>
-            <div class="col-sm-8">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-sort"></i></span>
-                    {{ html()->select('admin_sort', cms_config('listable.collections.sort'))
-                    ->id('admin_sort_inp')->class('form-control select') }}
-                </div>
-                @if ($error)
-                    <span class="text-danger">{{$error}}</span>
-                @endif
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="form-group{{($error = $errors->first('web_sort')) ? ' validate-has-error' : '' }}">
-            <label class="col-sm-4 control-label required">Web sort:</label>
-            <div class="col-sm-8">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-sort"></i></span>
-                    {{ html()->select('web_sort', cms_config('listable.collections.sort'))->class('form-control select') }}
-                </div>
-                @if ($error)
-                    <span class="text-danger">{{$error}}</span>
-                @endif
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="row">
-    <div class="col-sm-6">
-        <div class="form-group{{($error = $errors->first('admin_per_page')) ? ' validate-has-error' : '' }}">
-            <label class="col-sm-4 control-label required">Admin per page:</label>
-            <div class="col-sm-8">
-                <div id="admin_per_page" class="input-group spinner" data-step="1" data-min="1" data-max="50">
-                    <div class="input-group-btn">
-                        <span class="btn btn-info" data-type="decrement">-</span>
-                    </div>
-                    {{ html()->text('admin_per_page')->class('form-control text-center')->isReadonly() }}
-                    <div class="input-group-btn">
-                        <span class="btn btn-info" data-type="increment">+</span>
-                    </div>
-                </div>
-                @if ($error)
-                    <span class="text-danger">{{$error}}</span>
-                @endif
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="form-group{{($error = $errors->first('web_per_page')) ? ' validate-has-error' : '' }}">
-            <label class="col-sm-4 control-label required">Web per page:</label>
-            <div class="col-sm-8">
-                <div id="web_per_page" class="input-group spinner" data-step="1" data-min="1" data-max="50">
-                    <div class="input-group-btn">
-                        <span class="btn btn-info" data-type="decrement">-</span>
-                    </div>
-                    {{ html()->text('web_per_page')->class('form-control text-center')->isReadonly() }}
-                    <div class="input-group-btn">
-                        <span class="btn btn-info" data-type="increment">+</span>
-                    </div>
-                </div>
-                @if ($error)
-                    <span class="text-danger">{{$error}}</span>
-                @endif
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group">
-    <label class="col-sm-2 control-label">Description:</label>
-    <div class="col-sm-10">
-        {{ html()->textarea('description')->class('form-control')->rows(3)->placeholder('Short description') }}
-    </div>
-</div>
-
-<div class="form-group-separator"></div>
-
-<div class="form-group">
-    <div class="col-sm-10 btn-action pull-right">
-        <button type="submit" class="btn btn-secondary btn-icon-standalone" title="{{ $submit }}">
-            <i class="fa fa-{{ $icon }}"></i>
-            <span>{{ $submit }}</span>
-        </button>
-        @if ($current->id)
-            <a href="{{ cms_route($current->type . '.index', [$current->id]) }}" class="btn btn-info btn-icon-standalone" title="{{ trans('general.'.$current->type) }}">
-                <i class="{{icon_type($current->type)}}"></i>
-                <span>{{ucfirst($current->type)}}</span>
-            </a>
-        @endif
-        <a href="{{ cms_route('collections.index') }}" class="btn btn-blue btn-icon-standalone" title="{{ trans('general.back') }}">
-            <i class="fa fa-arrow-left"></i>
-            <span>{{ trans('general.back') }}</span>
+<div class="d-flex gap-4">
+    <button type="submit" class="btn btn-primary">Submit</button>
+    @if ($current->id)
+        <a href="{{ cms_route($current->type . '.index', [$current->id]) }}" class="btn btn-outline-dark" title="Go to {{ ucfirst($current->type) }}">
+            {{ucfirst($current->type)}}
         </a>
-    </div>
+    @endif
+    <a href="{{ cms_route('collections.index') }}" class="btn btn-label-secondary">Cancel</a>
 </div>
-@push('body.bottom')
-    <script type="text/javascript">
-        $(function() {
-            $('select.select').select2({
-                placeholder: 'Select type...',
-                allowClear: true
-            }).on('select2-open', function() {
-                // Adding Custom Scrollbar
-                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-            });
-        });
-    </script>
-    <link rel="stylesheet" href="{{ asset('assets/libs/js/select2/select2.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/libs/js/select2/select2-bootstrap.css') }}">
-    <script src="{{ asset('assets/libs/js/select2/select2.min.js') }}"></script>
-@endpush

@@ -105,4 +105,26 @@ trait QueriesTrait
     {
         return $query->orderByDesc($this->qualifyColumn($this->getCreatedAtColumn()));
     }
+
+    /**
+     * Add an "order by" updated at asc clause to the query.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeUpdatedAsc(Builder $query): Builder
+    {
+        return $query->orderBy($this->qualifyColumn($this->getUpdatedAtColumn()));
+    }
+
+    /**
+     * Add an "order by" updated at desc clause to the query.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeUpdatedDesc(Builder $query): Builder
+    {
+        return $query->orderByDesc($this->qualifyColumn($this->getUpdatedAtColumn()));
+    }
 }

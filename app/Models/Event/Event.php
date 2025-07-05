@@ -15,27 +15,20 @@ class Event extends Model implements Collection
     use QueriesTrait, HasCollection, HasLanguage, FileableTrait;
 
     /**
-     * Type of the collection.
-     *
-     * @var string
-     */
-    const TYPE = 'events';
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string|null
-     */
-    protected $table = 'events';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'collection_id', 'slug', 'position', 'visible', 'image'
+        'collection_id', 'slug', 'visible', 'position', 'image'
     ];
+
+    /**
+     * Type of the collection.
+     *
+     * @var string
+     */
+    const TYPE = 'events';
 
     /**
      * Languages' one-to-many relationship.

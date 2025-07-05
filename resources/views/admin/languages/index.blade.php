@@ -1,159 +1,162 @@
 @extends('admin.app')
 @section('content')
-    <div class="page-title">
-        <div class="title-env">
-            <h1 class="title">
-                <i class="{{$icon = icon_type('languages')}}"></i>
-                Languages
-            </h1>
-            <p class="description">Management of the languages</p>
-        </div>
-        <div class="breadcrumb-env">
-            <ol class="breadcrumb bc-1">
-                <li>
-                    <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
-                </li>
-                <li class="active">
-                    <i class="{{$icon}}"></i>
-                    <strong>Languages</strong>
-                </li>
-            </ol>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="panel-title">List of all languages</h2>
-            <div class="panel-options">
-                <a href="#" data-toggle="panel">
-                    <span class="collapse-icon">&ndash;</span>
-                    <span class="expand-icon">+</span>
+    <nav class="mb-6 ps-1" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ cms_route('dashboard.index') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Languages</li>
+        </ol>
+    </nav>
+    <div class="card">
+        <div class="card-header header-elements flex-column flex-md-row align-items-md-center align-items-start gap-4">
+            <div class="d-flex">
+                <div class="fs-5 me-2">Languages</div>
+                <span class="badge bg-label-primary ms-2">{{ $items->total() }}</span>
+            </div>
+            <div class="card-header-elements ms-md-auto flex-md-row flex-column align-items-md-center align-items-start gap-4">
+                <span class="badge badge-outline-secondary rounded-pill">Drag and Drop to sort the language order</span>
+                <a href="{{ cms_route('languages.create') }}" class="btn btn-primary">
+                    <i class="icon-base fa fa-plus icon-xs me-1"></i>
+                    <span>Add New Record</span>
                 </a>
             </div>
         </div>
-        <div class="panel-body">
-            <a href="{{ cms_route('languages.create') }}" class="btn btn-secondary btn-icon-standalone">
-                <i class="{{$icon}}"></i>
-                <span>{{ trans('general.create') }}</span>
-            </a>
-            <strong class="text-black padl">Drag and Drop to sort the languages order</strong>
+        <div class="card-body">
             @if ($routesAreCached)
-                <div class="alert alert-info">
-                    Routes are cached.
-                    Any language changes will not take effect until you clear or refresh the routes cache
+                <div class="alert alert-outline-info" role="alert">
+                    Routes are cached. Any language changes will not take effect until the route cache is cleared or refreshed
                 </div>
             @endif
-            <div class="language-visible alert alert-danger{{ $langVisibleCount ? ' hidden' : '' }}">
-                Website will be in maintenance mode when languages are not visible or doesn't exist
+            <div class="visibility-alert alert alert-outline-danger{{ $visibleLangCount ? ' d-none' : '' }}" role="alert">
+                Website is in maintenance mode when there is no visible language
             </div>
-            <table id="items" class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Main</th>
-                    <th>Full Name</th>
-                    <th>Short Name</th>
-                    <th>Language Code</th>
-                    <th>ID</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody id="sortable">
-                @forelse ($items as $item)
-                    <tr id="item{{$item->id}}" class="item" data-id="{{$item->id}}">
-                        <td>
-                            <input type="radio" name="main" data-id="{{$item->id}}" class="cbr cbr-success"{{$item->main ? ' checked' : ''}}>
-                        </td>
-                        <td class="full-name pointer">
-                            <img src="{{ asset('assets/libs/images/flags/'.$item->language.'.png') }}" width="30" height="20" alt="{{$item->language}} Flag">
-                            <span>{{ $item->full_name }}</span>
-                        </td>
-                        <td>{{ $item->short_name }}</td>
-                        <td>{{ $item->language }}</td>
-                        <td>{{ $item->id }}</td>
-                        <td>
-                            <div class="btn-action">
-                                {{ html()->form('put', cms_route('languages.visibility', [$item->id]))->id('visibility' . $item->id)->class('visibility')->open() }}
-                                <button type="submit" class="btn btn-{{$item->visible ? 'white' : 'gray'}}" title="{{trans('general.visibility')}}">
-                                    <span class="fa fa-eye{{$item->visible ? '' : '-slash'}}"></span>
-                                </button>
-                                {{ html()->form()->close() }}
-                                <a href="{{ cms_route('languages.edit', [$item->id]) }}" class="btn btn-orange" title="{{trans('general.edit')}}">
-                                    <span class="fa fa-edit"></span>
-                                </a>
-                                {{ html()->form('delete', cms_route('languages.destroy', [$item->id]))->class('form-delete')->open() }}
-                                <button type="submit" class="btn btn-danger" title="{{trans('general.delete')}}">
-                                    <span class="fa fa-trash"></span>
-                                </button>
-                                {{ html()->form()->close() }}
-                            </div>
-                        </td>
-                    </tr>
-                @empty
+            <div id="items" class="table-responsive text-nowrap">
+                <table class="table table-hover">
+                    <thead>
                     <tr>
-                        <td colspan="6">No Result</td>
+                        <th>Main</th>
+                        <th>Full Name</th>
+                        <th>Short Name</th>
+                        <th>Language Code</th>
+                        <th>Visibility</th>
+                        <th>ID</th>
+                        <th>Actions</th>
                     </tr>
-                @endforelse
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody id="sortable">
+                    @forelse ($items as $item)
+                        <tr id="item{{$item->id}}" class="item" data-id="{{$item->id}}">
+                            <td>
+                                <input type="radio" name="main" class="form-check-input" data-id="{{$item->id}}"{{$item->main ? ' checked' : ''}}>
+                            </td>
+                            <td>
+                                <img src="{{ asset('assets/default/img/flags/' . $item->language . '.png') }}" width="25" height="18" class="flag-img me-2" alt="{{$item->language}}">
+                                <span>{{ $item->full_name }}</span>
+                            </td>
+                            <td>{{ $item->short_name }}</td>
+                            <td>
+                                <span class="badge badge-outline-dark">{{ $item->language }}</span>
+                            </td>
+                            <td>
+                                {{ html()->form('put', cms_route('languages.visibility', [$item->id]))->id('visibility' . $item->id)->class('visibility')->open() }}
+                                <button type="submit" class="dropdown-item" title="{{trans('general.visibility')}}">
+                                    <i class="icon-base fa fa-toggle-{{$item->visible ? 'on' : 'off'}} icon-md text-primary"></i>
+                                </button>
+                                {{ html()->form()->close() }}
+                            </td>
+                            <td>{{ $item->id }}</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="icon-base fa fa-ellipsis-vertical"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a href="{{ cms_route('languages.edit', [$item->id]) }}" class="dropdown-item">
+                                            <i class="icon-base fa fa-edit me-1"></i>
+                                            Edit
+                                        </a>
+                                        {{ html()->form('delete', cms_route('languages.destroy', [$item->id]))->class('form-delete')->open() }}
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="icon-base fa fa-trash me-1"></i>
+                                            Delete
+                                        </button>
+                                        {{ html()->form()->close() }}
+                                    </div>
+                                </div>
+                            </td>
+
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7">No Result</td>
+                        </tr>
+                    @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+    {{ $items->links() }}
 @endsection
 @push('body.bottom')
+    <!-- Vendors JS -->
+    <script src="{{ asset('assets/vendor/libs/sortablejs/sortable.js') }}"></script>
     <script type="text/javascript">
-        $('#items').on('click', '.cbr-radio', function() {
-            let id = $(this).find('input').data('id');
-            let data = {'id':id, '_token':'{{csrf_token()}}', '_method':'put'};
-            $.post('{{cms_route('languages.updateMain')}}', data, function() {
-            }, 'json').fail(function(xhr) {
-                alert(xhr.responseText);
-            });
-        });
-        $(function() {
-            let langSelected = {{(int) language()->isSelected()}};
+        $(function () {
+            let langSelected = {{(int) language()->mainIsActive()}};
             let activeLangSelector = $('.language-switcher > a img');
-            let langMenuSelector = $('.dropdown-menu.languages');
-            let sortableSelector = $('#sortable');
-            sortableSelector.sortable();
-            sortableSelector.on('sortupdate', function () {
-                let ids = [];
-                let input = {data: []};
-                $.each(sortableSelector.sortable('toArray', {attribute: 'data-id'}), function (i, id) {
-                    ids[id] = i;
-                    input.data.push({id: id});
-                });
-                input['_method'] = 'put';
-                input['_token'] = '{{csrf_token()}}';
-                $.post('{{cms_route('languages.updatePosition')}}', input, function () {
-                    toastr['success']('Positions has been updated successfully');
-                    if (! langSelected) {
-                        let flag = sortableSelector.children(':first').find('.full-name img').attr('src');
-                        activeLangSelector.attr('src', flag);
+            let langMenuSelector = $('.dropdown-languages');
+            new Sortable(document.getElementById('sortable'), {
+                animation: 150,
+                store: {
+                    // Called onEnd (when the item is dropped).
+                    set: function (sortable) {
+                        let ids = [];
+                        let input = {data: []};
+                        $.each(sortable.toArray(), function (i, id) {
+                            ids[i] = id;
+                            input.data.push({id: id});
+                        });
+                        input['_method'] = 'put';
+                        input['_token'] = '{{csrf_token()}}';
+                        $.post('{{cms_route('languages.positions')}}', input, function () {
+                            notyf('Positions has been updated successfully');
+                            // set the first language in navbar if there is no main language selected
+                            if (! langSelected) {
+                                activeLangSelector.attr('src', $(sortable.el.children[0]).find('.flag-img').attr('src'));
+                            }
+                            // sort languages in navbar
+                            let langItems = langMenuSelector.children('li').sort(function (a, b) {
+                                return ids.indexOf(a.dataset.id) - ids.indexOf(b.dataset.id);
+                            });
+                            langMenuSelector.html('');
+                            langItems.each(function (i, e) {
+                                langMenuSelector.append(e);
+                            });
+                        }, 'json').fail(function (xhr) {
+                            notyf(xhr.statusText, 'error');
+                        });
                     }
-                    let langItems = langMenuSelector.children('li').each(function (i, e) {
-                        $(e).data('pos', ids[parseInt($(e).data('id'))]);
-                    }).sort(function (a, b) {
-                        return parseInt($(a).data('pos')) - parseInt($(b).data('pos'));
-                    });
-                    langMenuSelector.html('');
-                    langItems.each(function (i, e) {
-                        langMenuSelector.append(e);
-                    });
-                }, 'json').fail(function (xhr) {
-                    alert(xhr.responseText);
-                });
+                }
             });
-            // toggle message when all languages are invisible
-            let langVisibleCount = {{ $langVisibleCount }};
-            let langVisibleSelector = $('.language-visible');
+            // toggle message when there is no visible language
+            let visibleLangCount = {{ $visibleLangCount }};
+            let langVisibleSelector = $('.visibility-alert');
             $('form.visibility').on('visibilityResponse', function (e, res) {
-                langVisibleCount += res ? res : -1;
-                if (langVisibleCount > 0) {
-                    langVisibleSelector.addClass('hidden');
+                visibleLangCount += res?.data ? res.data : -1;
+                if (visibleLangCount > 0) {
+                    langVisibleSelector.addClass('d-none');
                 } else {
-                    langVisibleSelector.removeClass('hidden');
+                    langVisibleSelector.removeClass('d-none');
                 }
             })
+            // update the main language in navbar
+            $('#items').on('xhrCheckSuccess', function (res, target) {
+                activeLangSelector.attr('src', target.closest('.item').find('.flag-img').attr('src'));
+                langSelected = 1;
+            });
         });
     </script>
-    <script src="{{ asset('assets/libs/js/jquery-ui/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('assets/libs/js/jquery-ui/jquery.ui.touch-punch.min.js') }}"></script>
 @endpush
+@include('admin.-scripts.checkbox-xhr', ['url' => cms_route('languages.updateMain')])

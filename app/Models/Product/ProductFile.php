@@ -15,19 +15,12 @@ class ProductFile extends Model implements Fileable
     use QueriesTrait, HasLanguage, FileTrait;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string|null
-     */
-    protected $table = 'product_files';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'product_id', 'position', 'visible'
+        'product_id', 'visible', 'position'
     ];
 
     /**
@@ -52,13 +45,13 @@ class ProductFile extends Model implements Fileable
     }
 
     /**
-     * Add a where file foreign key clause to the query.
+     * Add a where foreign key clause to the query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  int  $foreignKey
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeFileForeignKey(Builder $query, int $foreignKey): Builder
+    public function scopeForeignKey(Builder $query, int $foreignKey): Builder
     {
         return $query->where('product_id', $foreignKey);
     }

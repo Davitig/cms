@@ -1,9 +1,10 @@
 <?php
 
 return [
+    App\Providers\Admin\AdminConfigurationProvider::class,
     App\Providers\Admin\ElfinderServiceProvider::class,
     App\Providers\AppServiceProvider::class,
-    App\Providers\EloquentServiceProvider::class,
+    App\Providers\BladeServiceProvider::class,
     App\Providers\ExceptionHandlerServiceProvider::class,
     App\Providers\GlideServiceProvider::class,
     App\Providers\ViewComposerServiceProvider::class,

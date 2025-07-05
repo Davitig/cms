@@ -119,10 +119,26 @@ class AdminSitemapXmlController extends Controller
         $result = $doc->save(public_path('sitemap.xml'));
 
         if ($request->expectsJson()) {
-            return response()->json($result);
+            $sitemapXmlTime = null;
+
+            if ($result && file_exists($file = public_path('sitemap.xml'))) {
+                $sitemapXmlTime = date('d F Y H:i', filectime($file));
+            }
+
+            return response()->json(
+                fill_data(
+                    $result,
+                    trans('general.' . ($result ? 'updated' : 'error_occurred')),
+                    $sitemapXmlTime
+                )
+            );
         }
 
-        return back();
+        if ($result) {
+            return back()->with('alert', fill_data(true, trans('general.updated')));
+        }
+
+        return back()->with('alert', fill_data(false, trans('general.error_occurred')));
     }
 
     /**

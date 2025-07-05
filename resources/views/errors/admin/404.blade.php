@@ -1,19 +1,12 @@
 @push('head.title')
-    <title>404 Not Found</title>
+    404 Not Found
 @endpush
 @extends('errors.admin.layout')
 @section('content')
-    <div class="page-title">
-        <div class="title-env">
-            <h1 class="title">
-                <i class="fa fa-exclamation"></i>
-                404 Not Found
-            </h1>
-            <p>We did not find the page you were looking for.</p>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-body">
-        </div>
+    <div class="d-flex flex-column align-items-center pt-10">
+        <h1 class="mb-2">404</h1>
+        <h4 class="mb-2">Page Not Found️</h4>
+        <p class="mb-6">We couldn't find that page</p>
+        <a href="{{ cms_route('dashboard.index') }}" class="btn btn-primary mb-10">Go to home</a>
     </div>
 @endsection

@@ -16,10 +16,21 @@ class TranslationRequest extends Request
         $id = $this->route('translation') ?: $this->get('id');
 
         return [
-            'code' => 'required|max:18|regex:/^[a-zA-Z_]+$/|unique:translations,code,' . $id,
-            'title' => 'required',
+            'code' => 'required|max:18|regex:/^[a-z_]+$/|unique:translations,code,' . $id,
             'value' => 'required'
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        if (! $this->filled('code')) {
+            $this->offsetSet('code', str($this->get('value'))->snake()->toString());
+        }
     }
 
     /**
@@ -30,7 +41,7 @@ class TranslationRequest extends Request
     public function messages()
     {
         return [
-            'regex' => 'The :attribute field must only contain letters and underscores.'
+            'regex' => 'The :attribute field must only contain lowercase letters and underscores.'
         ];
     }
 }

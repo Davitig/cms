@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Models\CmsUser;
-use App\Models\CmsUserRole;
+use App\Models\CmsUser\CmsUser;
+use App\Models\CmsUser\CmsUserRole;
 use Database\Factories\CmsUserFactory;
 use Database\Factories\CmsUserRoleFactory;
 use Illuminate\Database\Eloquent\Collection;
@@ -19,7 +19,7 @@ abstract class TestAdmin extends TestCase
         DB::update('ALTER TABLE cms_user_roles AUTO_INCREMENT = 1');
         DB::update('ALTER TABLE cms_users AUTO_INCREMENT = 1');
 
-        $this->app['config']['_cms.activated'] = true;
+        $this->app['config']['_cms.booted'] = true;
 
         $this->createCmsUser();
 

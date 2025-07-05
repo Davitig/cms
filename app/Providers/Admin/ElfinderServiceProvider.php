@@ -73,13 +73,13 @@ class ElfinderServiceProvider extends ServiceProvider
     {
         $router->group($config, function(Router $router) use ($values) {
             $router->get('index', [AdminElfinderController::class, 'showIndex'])
-                ->name('filemanager.index')->when($values);
+                ->name('fileManager.index')->when($values);
             $router->any('connector', [AdminElfinderController::class, 'showConnector'])
-                ->name('filemanager.connector')->when($values);;
+                ->name('fileManager.connector')->when($values);;
             $router->get('popup/{input_id}', [AdminElfinderController::class, 'showPopup'])
-                ->name('filemanager.popup')->when($values);;
+                ->name('fileManager.popup')->when($values);;
             $router->get('tinymce5', [AdminElfinderController::class, 'showTinyMCE5'])
-                ->name('filemanager.tinymce5')->when($values);;
+                ->name('fileManager.tinymce5')->when($values);;
         });
     }
 }

@@ -15,19 +15,12 @@ class PageFile extends Model implements Fileable
     use QueriesTrait, HasLanguage, FileTrait;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string|null
-     */
-    protected $table = 'page_files';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'page_id', 'position', 'visible'
+        'page_id', 'visible', 'position'
     ];
 
     /**
@@ -58,7 +51,7 @@ class PageFile extends Model implements Fileable
      * @param  int  $foreignKey
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeFileForeignKey(Builder $query, int $foreignKey): Builder
+    public function scopeForeignKey(Builder $query, int $foreignKey): Builder
     {
         return $query->where('page_id', $foreignKey);
     }

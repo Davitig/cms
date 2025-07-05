@@ -15,11 +15,13 @@ class ProductRequest extends Request
     {
         $id = $this->route('product');
 
+        $required = language()->mainIsActive() ? 'required' : '';
+
         return [
-            'slug' => 'required|unique:products,slug,'.$id,
+            'slug' => [$required, 'unique:products,slug,'.$id],
             'title' => 'required',
-            'price' => 'required|numeric|between:0,999999.99',
-            'quantity' => 'required|integer'
+            'price' => [$required, 'numeric', 'between:0,999999.99'],
+            'quantity' => [$required, 'integer']
         ];
     }
 
@@ -30,8 +32,12 @@ class ProductRequest extends Request
      */
     protected function prepareForValidation()
     {
+        if (! language()->mainIsActive()) {
+            return;
+        }
+
         $this->slugifyInput('slug', ['title']);
 
-        $this->boolifyInput('visible');
+        $this->boolifyInput('visible', 'in_stock');
     }
 }

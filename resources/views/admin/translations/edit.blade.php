@@ -1,47 +1,32 @@
 @extends('admin.app')
 @section('content')
-    <div class="page-title">
-        <div class="title-env">
-            <h1 class="title">
-                <i class="{{$icon = icon_type('articles')}}"></i>
-                Translations
-            </h1>
-            <p class="description">Management of the translations</p>
+    <nav class="mb-6 ps-1" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ cms_route('dashboard.index') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Translations</li>
+        </ol>
+    </nav>
+    @include('admin.-partials.lang.tabs')
+    <div class="card">
+        <div class="card-header header-elements">
+            <div class="fs-5">Translations</div>
+            <div class="card-header-elements ms-auto">
+                <a href="{{ cms_route('translations.create') }}">
+                    <i class="icon-base fa fa-plus icon-xs"></i>
+                    <span>Add New Record</span>
+                </a>
+            </div>
         </div>
-        <div class="breadcrumb-env">
-            <ol class="breadcrumb bc-1">
-                <li>
-                    <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
-                </li>
-                <li class="active">
-                    <i class="{{$icon}}"></i>
-                    <strong>Translations</strong>
-                </li>
-            </ol>
-        </div>
-    </div>
-    <ul class="nav nav-tabs nav-tabs-justified">
-        @include('admin._partials.forms.lang_tabs')
-    </ul>
-    <div class="panel panel-default">
-        <div class="panel-heading clearfix">
-            <h2 class="panel-title">Edit translation</h2>
-            <a href="{{cms_route('translations.create')}}" class="pull-right">Add more</a>
-        </div>
-        <div class="panel-body">
-            <div class="tab-content">
-                @php($activeLang = request('lang', language()->active()))
-                @foreach ($items as $current)
-                    <div class="tab-pane{{$activeLang == $current->language ? ' active' : ''}}" id="item-{{$current->language}}">
-                        {{ html()->modelForm($current, 'put', cms_route('translations.update', [
-                            $current->id
-                        ], language()->containsMany() ? ($current->language ?: $activeLang) : null))
-                        ->class('form-horizontal ' . $cmsSettings->get('ajax_form'))
-                        ->data('lang', $current->language)->open() }}
-                        @include('admin.translations.form', [
-                            'submit' => trans('general.update'),
-                            'icon' => 'save'
-                        ])
+        <div class="card-body">
+            <div class="tab-content p-0">
+                @php($activeLang = language()->queryStringOrActive())
+                @foreach($items as $current)
+                    <div id="item-{{ $current->language }}" class="tab-pane{{ $current->language == $activeLang || ! $activeLang ? ' show active' : '' }}">
+                        {{ html()->modelForm($current, 'put', cms_route('translations.update', [$current->id], $current->language))
+                        ->data('ajax-form', $preferences->get('ajax_form'))->data('lang', $current->language)->attribute('novalidate')->open() }}
+                        @include('admin.translations.form')
                         {{ html()->form()->close() }}
                     </div>
                 @endforeach

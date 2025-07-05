@@ -66,14 +66,4 @@ class CollectionFactory extends Factory
             'type' => 'events',
         ]);
     }
-
-    /**
-     * Indicate that the collection is faq type.
-     */
-    public function faqType(): Factory
-    {
-        return $this->state(fn (array $attributes) => [
-            'type' => 'faq',
-        ]);
-    }
 }

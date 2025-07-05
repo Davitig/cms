@@ -1,80 +1,78 @@
 @extends('admin.app')
 @section('content')
-    <div class="page-title">
-        <div class="title-env">
-            <h1 class="title">
-                <i class="{{$icon = icon_type('collections')}}"></i>
+    <nav class="mb-6 ps-1" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ cms_route('dashboard.index') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Collections</li>
+        </ol>
+    </nav>
+    <div class="card">
+        <div class="card-header header-elements">
+            <div class="fs-5">
                 Collections
-            </h1>
-            <p class="description">Management of the collections</p>
-        </div>
-        <div class="breadcrumb-env">
-            <ol class="breadcrumb bc-1">
-                <li>
-                    <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
-                </li>
-                <li class="active">
-                    <i class="{{$icon}}"></i>
-                    <strong>Collections</strong>
-                </li>
-            </ol>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="panel-title">List of all collections</h2>
-            <div class="panel-options">
-                <a href="#">
-                    <i class="fa fa-gear"></i>
-                </a>
-                <a href="#" data-toggle="panel">
-                    <span class="collapse-icon">&ndash;</span>
-                    <span class="expand-icon">+</span>
+            </div>
+            <span class="count badge bg-label-primary ms-4">{{ $items->total() }}</span>
+            <div class="card-header-elements ms-auto">
+                <a href="{{ cms_route('collections.create') }}" class="btn btn-primary">
+                    <i class="icon-base fa fa-plus icon-xs me-1"></i>
+                    <span>Add New Record</span>
                 </a>
             </div>
         </div>
-        <div class="panel-body">
-            <a href="{{ cms_route('collections.create') }}" class="btn btn-secondary btn-icon-standalone">
-                <i class="{{$icon}}"></i>
-                <span>{{ trans('general.create') }}</span>
-            </a>
-            <table id="items" class="table stacktable table-striped table-bordered">
-                <thead>
-                <tr class="replace-inputs">
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Description</th>
-                    <th>ID</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach ($items as $item)
-                    <tr id="item{{$item->id}}" class="item">
-                        <td>{{ $item->title }}</td>
-                        <td>{{ $item->type }}</td>
-                        <td>{{ $item->description }}</td>
-                        <td>{{ $item->id }}</td>
-                        <td>
-                            <div class="btn-action">
-                                <a href="{{ cms_route($item->type . '.index', [$item->id]) }}" class="btn btn-info" title="{{trans('general.'.$item->type)}}">
-                                    <span class="{{icon_type($item->type)}}"></span>
-                                </a>
-                                <a href="{{ cms_route('collections.edit', [$item->id]) }}" class="btn btn-orange" title="{{trans('general.edit')}}">
-                                    <span class="fa fa-edit"></span>
-                                </a>
-                                {{ html()->form('delete', cms_route('collections.destroy', $item->id))->class('form-delete')->open() }}
-                                <button type="submit" class="btn btn-danger" title="{{trans('general.delete')}}">
-                                    <span class="fa fa-trash"></span>
-                                </button>
-                                {{ html()->form()->close() }}
-                            </div>
-                        </td>
+        <div class="card-body">
+            <div id="items" class="table-responsive text-nowrap">
+                <table class="table table-hover table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>ID</th>
+                        <th>Actions</th>
                     </tr>
-                @endforeach
-                </tbody>
-            </table>
-            {!! $items->links() !!}
+                    </thead>
+                    <tbody>
+                    @foreach ($items as $item)
+                        <tr class="item">
+                            <td class="fw-bold">{{ $item->title }}</td>
+                            <td>
+                                <a href="{{ $typeUrl = cms_route($item->type . '.index', [$item->id]) }}" class="badge bg-label-dark" title="Go to {{ $item->type }}">
+                                    {{ $item->type }}
+                                </a>
+                            </td>
+                            <td>{{ $item->description }}</td>
+                            <td>{{ $item->id }}</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="icon-base fa fa-ellipsis-vertical"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a href="{{ $typeUrl }}" class="dropdown-item">
+                                            <i class="icon-base fa fa-forward-step me-1"></i>
+                                            Go to {{ $item->type }}
+                                        </a>
+                                        {{ html()->form('delete', cms_route('collections.destroy', [$item->id]))->class('form-delete')->open() }}
+                                        <a href="{{ cms_route('collections.edit', [$item->id]) }}" class="dropdown-item">
+                                            <i class="icon-base fa fa-edit me-1"></i>
+                                            Edit
+                                        </a>
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="icon-base fa fa-trash me-1"></i>
+                                            Delete
+                                        </button>
+                                        {{ html()->form()->close() }}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+    {{ $items->links() }}
 @endsection

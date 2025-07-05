@@ -1,43 +1,17 @@
 @extends('admin.app')
 @section('content')
-    <div class="page-title">
-        <div class="title-env">
-            <h1 class="title">
-                <i class="{{$icon = icon_type('products')}}"></i>
-                Products
-            </h1>
-            <p class="description">Management of the products</p>
-        </div>
-        <div class="breadcrumb-env">
-            <ol class="breadcrumb bc-1">
-                <li>
-                    <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
-                </li>
-                <li class="active">
-                    <i class="{{$icon}}"></i>
-                    <strong>Products</strong>
-                </li>
-            </ol>
-        </div>
+    <nav class="mb-6 ps-1" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ cms_route('dashboard.index') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Products</li>
+        </ol>
+    </nav>
+    <div class="mb-6">
+        <div class="fs-4 text-black">Add a new Product</div>
     </div>
-    <ul class="nav nav-tabs nav-tabs">
-        @include('admin._partials.forms.lang_active_tab')
-    </ul>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="panel-title">Create a new product</h2>
-        </div>
-        <div class="panel-body">
-            {{ html()->modelForm($current,
-                'post', cms_route('products.store', [$current->collection_id])
-            )->class('form-horizontal')->open() }}
-            @include('admin.products.form', [
-                'submit' => trans('general.create'),
-                'submitAndBack' => trans('general.create_n_close'),
-                'icon' => 'save'
-            ])
-            {{ html()->form()->close() }}
-        </div>
-    </div>
-    @include('admin._scripts.datetimepicker')
+    {{ html()->modelForm($current, 'post', cms_route('products.store'))->attribute('novalidate')->open() }}
+    @include('admin.products.form')
+    {{ html()->form()->close() }}
 @endsection

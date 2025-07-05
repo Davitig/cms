@@ -13,19 +13,12 @@ class Translation extends Model
     use QueriesTrait, HasLanguage;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string|null
-     */
-    protected $table = 'translations';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'code', 'title', 'type'
+        'code', 'type'
     ];
 
     /**

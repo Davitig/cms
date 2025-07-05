@@ -11,6 +11,8 @@ return [
     |
     */
 
+    'created' => 'The item has been successfully created.',
+    'updated' => 'The item has been successfully updated.',
     'deleted' => 'The item has been successfully deleted.',
     'no_changes' => 'No changes have been saved.',
 

@@ -46,7 +46,7 @@ trait HasLanguage
         }, function ($q) use ($currentLang) {
             return $q->leftJoin('languages', function ($q) use ($currentLang) {
                 return $q->when($this->wrapWhereLanguageQuery('languages.id', $currentLang));
-            })->when(! cms_activated(), fn ($q) => $q->where('languages.visible', 1));
+            })->when(! cms_booted(), fn ($q) => $q->where('languages.visible', 1));
         })->leftJoin($languageTable, function ($q) use ($table, $languageTable) {
             return $q->on("{$table}.id", "{$languageTable}.{$this->getForeignKey()}")
                 ->whereColumn($languageTable . '.language_id', 'languages.id');

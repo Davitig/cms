@@ -1,6 +1,6 @@
 @extends('web.app')
 @section('content')
-    @include('web._partials.breadcrumb')
+    @include('web.-partials.breadcrumb')
     <div class="container">
         <form action="{{url()->current()}}" method="GET">
             <div class="input-group">
@@ -11,7 +11,7 @@
             </div>
             <!-- .input-group -->
         </form>
-        <article id="item" class="jumbotron">
+        <article id="item">
             @if ($current->image)
                 <div class="img">
                     <img src="{{$current->image}}" class="img-responsive" alt="{{$current->title}}">

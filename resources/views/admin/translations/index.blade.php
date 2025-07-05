@@ -1,93 +1,68 @@
 @extends('admin.app')
 @section('content')
-<div class="page-title">
-    <div class="title-env">
-        <h1 class="title">
-            <i class="{{$icon = icon_type('translations')}}"></i>
-            Translations
-        </h1>
-        <p class="description">Management of the translation</p>
-    </div>
-    <div class="breadcrumb-env">
-        <ol class="breadcrumb bc-1">
-            <li>
-                <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
+    <nav class="mb-6 ps-1" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ cms_route('dashboard.index') }}">Dashboard</a>
             </li>
-            <li class="active">
-                <i class="{{$icon}}"></i>
-                <strong>Translations</strong>
-            </li>
+            <li class="breadcrumb-item active">Translations</li>
         </ol>
-    </div>
-</div>
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h2 class="panel-title">List of all translations</h2>
-        <div class="panel-options">
-            <a href="#" data-toggle="panel">
-                <span class="collapse-icon">&ndash;</span>
-                <span class="expand-icon">+</span>
-            </a>
+    </nav>
+    <div class="card">
+        <div class="card-header header-elements">
+            <div class="fs-5">
+                Translations
+            </div>
+            <span class="count badge bg-label-primary ms-4">{{ $items->total() }}</span>
+            <div class="card-header-elements ms-auto">
+                <a href="{{ cms_route('translations.create') }}" class="btn btn-primary">
+                    <i class="icon-base fa fa-plus icon-xs me-1"></i>
+                    <span>Add New Record</span>
+                </a>
+            </div>
         </div>
-    </div>
-    <div class="panel-body">
-        <a href="{{ cms_route('translations.create') }}" class="btn btn-secondary btn-icon-standalone">
-            <i class="{{$icon}}"></i>
-            <span>{{ trans('general.create') }}</span>
-        </a>
-        <table id="items" class="table stacktable table-striped table-bordered">
-            <thead>
-                <tr class="replace-inputs">
-                    <th>Code</th>
-                    <th>Title</th>
+        <div id="items" class="card-body table-responsive text-nowrap">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                <tr>
                     <th>Value</th>
+                    <th>Code</th>
                     <th>Type</th>
                     <th>ID</th>
                     <th>Actions</th>
                 </tr>
-            </thead>
-            <tbody>
-            @foreach ($items as $item)
-                <tr id="item{{$item->id}}" class="item">
-                    <td>{{ $item->code }}</td>
-                    <td>{{ $item->title }}</td>
-                    <td>{{ $item->value }}</td>
-                    <td>{{ $item->type ?: 'global' }}</td>
-                    <td>{{ $item->id }}</td>
-                    <td>
-                        <div class="btn-action">
-                            <a href="{{ cms_route('translations.edit', $item->id) }}" class="btn btn-orange" title="{{trans('general.edit')}}">
-                                <span class="fa fa-edit"></span>
-                            </a>
-                            {{ html()->form('delete', cms_route('translations.destroy', $item->id))->class('form-delete')->open() }}
-                            <button type="submit" class="btn btn-danger" title="{{trans('general.delete')}}">
-                                <span class="fa fa-trash"></span>
-                            </button>
-                            {{ html()->form()->close() }}
-                        </div>
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                @foreach ($items as $item)
+                    <tr class="item">
+                        <td>{{ $item->value }}</td>
+                        <td>{{ $item->code }}</td>
+                        <td>{{ $item->type ?: 'global' }}</td>
+                        <td>{{ $item->id }}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="icon-base fa fa-ellipsis-vertical"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a href="{{ cms_route('translations.edit', [$item->id]) }}" class="dropdown-item">
+                                        <i class="icon-base fa fa-edit me-1"></i>
+                                        Edit
+                                    </a>
+                                    {{ html()->form('delete', cms_route('translations.destroy', [$item->id]))->class('form-delete')->open() }}
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="icon-base fa fa-trash me-1"></i>
+                                        Delete
+                                    </button>
+                                    {{ html()->form()->close() }}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
-@push('body.bottom')
-<script type="text/javascript">
-$(function() {
-    $('#items').dataTable({
-        pageLength: 50,
-        // 'order': [0, 'desc']
-    }).yadcf([
-        {column_number : 0, filter_type: 'text', filter_default_label : 'Type a code'},
-        {column_number : 1, filter_type: 'text', filter_default_label : 'Type a title'},
-        {column_number : 2, filter_type: 'text', filter_default_label : 'Type a value'},
-        {column_number : 3, filter_type: 'select', filter_default_label : 'Select type'},
-        {column_number : 4, filter_type: 'text', filter_default_label : 'ID'}
-    ]);
-});
-</script>
-<!-- Imported scripts on this page -->
-<script src="{{ asset('assets/libs/js/datatables/yadcf/jquery.dataTables.yadcf.js') }}"></script>
-@endpush
+    {{ $items->links() }}
 @endsection

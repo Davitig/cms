@@ -17,8 +17,7 @@ class TranslationFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $word = fake()->unique()->word(),
-            'code' => str($word)->snake()->toString()
+            'code' => str(fake()->unique()->word())->snake()->toString()
         ];
     }
 }

@@ -1,0 +1,71 @@
+/*
+* custom.css
+* File includes only custom css
+******************************************************************************/
+
+/* Theme: ! For .layout-navbar-fixed added fix padding top to .layout-page */
+/* Theme: Default navbar */
+.layout-navbar-fixed .layout-wrapper:not(.layout-without-menu) .layout-page {
+    padding-top: 64px !important;
+}
+/* Custom Fix: Add top space before it will be added inline */
+.layout-navbar-fixed .layout-wrapper.layout-horizontal .layout-page {
+    padding-top: 56px !important;
+}
+.layout-navbar-fixed .layout-wrapper:not(.layout-horizontal):not(.layout-without-menu) .layout-page {
+    padding-top: 72px !important;
+}
+/* Theme: Navbar page z-index issue solution */
+.content-wrapper .navbar {
+    z-index: auto;
+}
+
+/* Override: Horizontal menu (Fix menu dropdown visibility when perfect scrollbar plugin is active) */
+.menu-horizontal .menu-inner.ps {
+    position: inherit;
+}
+@media (min-width: 1200px) {
+    /* Override: Horizontal Layout when menu fixed */
+    .layout-menu-fixed:not(.layout-navbar-hidden) .layout-horizontal .layout-page .menu-horizontal + [class*=container-],
+    .layout-menu-fixed-offcanvas:not(.layout-navbar-hidden) .layout-horizontal .layout-page .menu-horizontal + [class*=container-] {
+        padding-block-start: 5rem !important;
+    }
+}
+
+/* Override: Adjust template customizer */
+.base-vertical #template-customizer .template-customizer-open-btn {
+    inset-block-start: 90px !important;
+}
+.base-horizontal #template-customizer .template-customizer-open-btn {
+    inset-block-start: 125px !important;
+}
+
+/* Override: flatpickr-calendar */
+.flatpickr-calendar .flatpickr-current-month .numInputWrapper {
+    inline-size: 7ch;
+}
+
+/* forms */
+.required:after {
+    content: " *";
+    color: red;
+}
+
+/* uk-nestable */
+.uk-nestable-list {
+    padding-block-start: 0.5rem !important;
+    margin-block-start: 0.5rem !important;
+    border-top: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color)
+}
+.uk-nestable-list .list-group-item {
+    padding: var(--bs-list-group-item-padding-y) 0;
+    border: 0;
+    border-bottom: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
+}
+.list-group[class*="list-group-flush"] .uk-nestable-list .list-group-item:first-of-type {
+    padding-block-start: 0;
+}
+.list-group[class*="list-group-flush"] .uk-nestable-list .list-group-item:last-of-type {
+    padding-block-end: 0;
+    border: 0;
+}

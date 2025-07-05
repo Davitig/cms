@@ -1,41 +1,28 @@
 @extends('admin.app')
 @section('content')
-    <div class="page-title">
-        <div class="title-env">
-            <h1 class="title">
-                <i class="{{$icon = icon_type('menus')}}"></i>
+    <nav class="mb-6 ps-1" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ cms_route('dashboard.index') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Menus</li>
+        </ol>
+    </nav>
+    <div class="card">
+        <div class="card-header header-elements">
+            <div class="fs-5">
                 Menus
-            </h1>
-            <p class="description">Management of the menus</p>
-        </div>
-        <div class="breadcrumb-env">
-            <ol class="breadcrumb bc-1">
-                <li>
-                    <a href="{{ cms_url('/') }}"><i class="fa fa-dashboard"></i>Dashboard</a>
-                </li>
-                <li class="active">
-                    <i class="{{$icon}}"></i>
-                    <strong>Menus</strong>
-                </li>
-            </ol>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="panel-title">List of all menus | total {{ $menus->count() }}</h2>
-            <div class="panel-options">
-                <a href="#" data-toggle="panel">
-                    <span class="collapse-icon">&ndash;</span>
-                    <span class="expand-icon">+</span>
+            </div>
+            <span class="count badge bg-label-primary ms-4">{{ $menus->total() }}</span>
+            <div class="card-header-elements ms-auto">
+                <a href="{{ cms_route('menus.create') }}" class="btn btn-primary">
+                    <i class="icon-base fa fa-plus icon-xs me-1"></i>
+                    <span>Add New Record</span>
                 </a>
             </div>
         </div>
-        <div class="panel-body">
-            <a href="{{ cms_route('menus.create') }}" class="btn btn-secondary btn-icon-standalone">
-                <i class="{{$icon}}"></i>
-                <span>{{ trans('general.create') }}</span>
-            </a>
-            <table id="items" class="table stacktable table-bordered table-striped">
+        <div id="items" class="table-responsive text-nowrap">
+            <table class="table table-hover">
                 <thead>
                 <tr>
                     <th>Main</th>
@@ -47,26 +34,35 @@
                 </thead>
                 <tbody>
                 @foreach ($menus as $item)
-                    <tr id="item{{$item->id}}" class="item">
+                    <tr class="item">
                         <td>
-                            <input type="radio" name="main" data-id="{{$item->id}}" class="cbr cbr-success"{{$item->main ? ' checked' : ''}}>
+                            <input type="radio" name="main" class="form-check-input" data-id="{{$item->id}}"{{$item->main ? ' checked' : ''}}>
                         </td>
-                        <td>{{ $item->title }}</td>
+                        <td>
+                            <a href="{{ cms_route('pages.index', [$item->id]) }}" title="Go to Pages">
+                                <i class="icon-base fa fa-indent icon-sm text-primary me-4"></i>
+                                <span class="fw-medium">{{ $item->title }}</span>
+                            </a>
+                        </td>
                         <td>{{ $item->description }}</td>
                         <td>{{ $item->id }}</td>
                         <td>
-                            <div class="btn-action">
-                                <a href="{{ cms_route('pages.index', [$item->id]) }}" class="btn btn-info" title="{{trans('general.pages')}}">
-                                    <span class="{{icon_type('pages')}}"></span>
-                                </a>
-                                <a href="{{ cms_route('menus.edit', [$item->id]) }}" class="btn btn-orange" title="{{trans('general.edit')}}">
-                                    <span class="fa fa-edit"></span>
-                                </a>
-                                {{ html()->form('delete', cms_route('menus.destroy', [$item->id]))->class('form-delete')->open() }}
-                                <button type="submit" class="btn btn-danger" title="{{trans('general.delete')}}">
-                                    <span class="fa fa-trash"></span>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="icon-base fa fa-ellipsis-vertical"></i>
                                 </button>
-                                {{ html()->form()->close() }}
+                                <div class="dropdown-menu">
+                                    <a href="{{ cms_route('menus.edit', [$item->id]) }}" class="dropdown-item">
+                                        <i class="icon-base fa fa-edit me-1"></i>
+                                        Edit
+                                    </a>
+                                    {{ html()->form('delete', cms_route('menus.destroy', [$item->id]))->class('form-delete')->open() }}
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="icon-base fa fa-trash me-1"></i>
+                                        Delete
+                                    </button>
+                                    {{ html()->form()->close() }}
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -75,16 +71,6 @@
             </table>
         </div>
     </div>
+    {{ $menus->links() }}
 @endsection
-@push('body.bottom')
-    <script type="text/javascript">
-        $('#items').on('click', '.cbr-radio', function() {
-            let id = $(this).find('input').data('id');
-            let data = {'id':id, '_token':'{{csrf_token()}}', '_method':'put'};
-            $.post('{{cms_route('menus.updateMain')}}', data, function() {
-            }, 'json').fail(function(xhr) {
-                alert(xhr.responseText);
-            });
-        });
-    </script>
-@endpush
+@include('admin.-scripts.checkbox-xhr', ['url' => cms_route('menus.updateMain')])

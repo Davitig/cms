@@ -40,14 +40,12 @@ return [
             'search' => 'Search',
             'products' => 'Products',
             'articles' => 'Articles',
-            'events' => 'Events',
-            'faq' => 'FAQ'
+            'events' => 'Events'
         ],
         'listable' => [
             'collections' => [
                 'articles' => App\Models\Article\Article::class,
                 'events' => App\Models\Event\Event::class,
-                'faq' => App\Models\Faq::class
             ]
         ],
         'extended' => [
@@ -77,10 +75,10 @@ return [
     */
 
     'file_routes' => [
-        'pages' => App\Http\Controllers\Admin\AdminPageFilesController::class,
-        'products' => App\Http\Controllers\Admin\AdminProductFilesController::class,
-        'articles' => App\Http\Controllers\Admin\AdminArticleFilesController::class,
-        'events' => App\Http\Controllers\Admin\AdminEventFilesController::class
+        'pages' => App\Http\Controllers\Admin\AdminPageFileController::class,
+        'products' => App\Http\Controllers\Admin\AdminProductFileController::class,
+        'articles' => App\Http\Controllers\Admin\AdminArticleFileController::class,
+        'events' => App\Http\Controllers\Admin\AdminEventFileController::class
     ],
 
     /*
@@ -98,10 +96,10 @@ return [
             'model' => App\Models\Collection::class,
             'types' => [
                 'articles' => 'Articles',
-                'events' => 'Events',
-                'faq' => 'FAQ'
+                'events' => 'Events'
             ],
             'order_by' => [
+                'id' => 'Default',
                 'position' => 'Position',
                 'created_at' => 'Creation date'
             ],
@@ -176,42 +174,5 @@ return [
     */
 
     'trans_query_limit' => 80,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Type Icons
-    |--------------------------------------------------------------------------
-    |
-    | Set icons for types.
-    |
-    */
-
-    'icons' => [
-        'dashboard' => 'fa fa-dashboard',
-
-        'languages' => 'fa fa-sort-alpha-asc',
-
-        'menus' => 'fa fa-list',
-        'pages' => 'fa fa-indent',
-
-        'products' => 'fa fa-shopping-bag',
-
-        'collections' => 'fa fa-list-alt',
-        'articles' => 'fa fa-newspaper',
-        'events' => 'fa fa-globe',
-        'faq' => 'fa fa-question-circle',
-
-        'galleries' => 'fa fa-th',
-        'photos' => 'fa fa-image',
-        'videos' => 'fa fa-play-circle',
-
-        'roles' => 'fa fa-key',
-        'permissions' => 'fa fa-lock',
-        'cmsUsers' => 'fa fa-user-secret',
-        'users' => 'fa fa-user',
-
-        'translations' => 'fa fa-language',
-        'files' => 'fa fa-paperclip',
-    ],
 
 ];

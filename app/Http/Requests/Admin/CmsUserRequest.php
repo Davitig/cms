@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use App\Http\Requests\Request;
 use Illuminate\Validation\Rules\File;
+use Illuminate\Validation\Rules\Password;
 
 class CmsUserRequest extends Request
 {
@@ -17,16 +18,31 @@ class CmsUserRequest extends Request
         $id = $this->route('cms_user');
 
         return [
-            'email' => 'required|string|email|max:255|unique:cms_users,email,'.$id,
-            'first_name' => 'required|max:35',
-            'last_name' => 'required|max:35',
-            'cms_user_role_id' => 'required|integer|exists:cms_user_roles,id',
-            'photo' => ['nullable', File::image()->max(5 * 1024)],
-            'password' => array_merge(
-                $this->isMethod($this::METHOD_POST) ? ['required'] : ['nullable'],
-                ['min:8', 'confirmed']
-            )
+                'email' => 'required|string|email|max:255|unique:cms_users,email,'.$id,
+                'first_name' => 'required|max:35',
+                'last_name' => 'required|max:35',
+                'cms_user_role_id' => 'required|integer|exists:cms_user_roles,id',
+                'photo' => ['nullable', File::image()->max(2 * 1024)]
+            ] + $this->addPasswordRule(self::METHOD_POST);
+    }
+
+    /**
+     * Add password validation rule.
+     *
+     * @param  string|null  $method
+     * @return array|array[]
+     */
+    protected function addPasswordRule(?string $method): array
+    {
+        $rule = [
+            'password' => ['required', Password::min(8)->letters()->numbers(), 'confirmed']
         ];
+
+        if (is_null($method)) {
+            return $rule;
+        }
+
+        return $this->isMethod($method) ? $rule : [];
     }
 
     /**
@@ -36,13 +52,13 @@ class CmsUserRequest extends Request
      */
     protected function prepareForValidation()
     {
-        $this->boolifyInput('blocked');
+        $this->boolifyInput('suspended');
 
         $user = $this->user('cms');
 
         if ($user->id == $this->route('cms_user')) {
             $this->offsetSet('cms_user_role_id', $user->cms_user_role_id);
-            $this->offsetSet('blocked', 0);
+            $this->offsetSet('suspended', 0);
         }
     }
 

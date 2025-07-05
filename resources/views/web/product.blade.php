@@ -1,11 +1,11 @@
 @extends('web.app')
 @section('content')
-    @include('web._partials.breadcrumb')
+    @include('web.-partials.breadcrumb')
     <div class="container">
-        <article id="item" class="jumbotron clearfix">
+        <article id="item">
             @if ($current->image)
                 <div class="img">
-                    <img src="{{$current->image}}" class="img-responsive" alt="{{$current->title}}">
+                    <img src="{{$current->image}}" class="img-responsive" width="500" height="300" alt="{{$current->title}}">
                 </div>
                 <!-- .img -->
             @endif
@@ -48,7 +48,7 @@
                                     @foreach ($files['images'] as $item)
                                         <div class="col-md-3 item">
                                             <a href="{{$item->file}}" title="{{$item->title}}" target="_blank">
-                                                <img src="{{$item->file}}" width="270" height="180" alt="{{$item->title}}">
+                                                <img src="{{$item->file}}" width="140" height="100" alt="{{$item->title}}">
                                             </a>
                                         </div>
                                         <!-- .col-md-3 -->

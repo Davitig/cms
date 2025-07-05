@@ -13,20 +13,20 @@ trait PositionableTrait
      * @param  int  $parentId
      * @param  array  $params
      * @param  bool  $hasSubItems
-     * @return bool
+     * @return int
      */
-    public function updatePosition(
+    public function positions(
         array $data, int $parentId = 0, array $params = [], bool $hasSubItems = false
-    ): bool
+    ): int
     {
         if (empty($data) ||
-            ! $hasSubItems && ! is_array($data = $this->movePosition($data, $params))) {
+            ! $hasSubItems && ! is_array($data = $this->sortPositions($data, $params))) {
             return false;
         }
 
         $attributes = [];
 
-        $position = 0;
+        $position = $count = 0;
 
         foreach($data as $item) {
             if (! isset($item['id'])) {
@@ -45,14 +45,14 @@ trait PositionableTrait
 
             $attributes['position'] = $position;
 
-            $this->whereKey($item['id'])->update($attributes);
+            $count += (int) $this->whereKey($item['id'])->update($attributes);
 
             if (isset($item['children'])) {
-                $this->updatePosition($item['children'], $item['id'], $params, $hasSubItems);
+                $count += $this->positions($item['children'], $item['id'], $params, $hasSubItems);
             }
         }
 
-        return true;
+        return $count;
     }
 
     /**
@@ -62,7 +62,7 @@ trait PositionableTrait
      * @param  array  $params
      * @return array|bool
      */
-    private function movePosition(array $data, array $params = []): bool|array
+    private function sortPositions(array $data, array $params = []): bool|array
     {
         if (! isset($params['move']) || ! isset($params['orderBy'])) {
             return $data;

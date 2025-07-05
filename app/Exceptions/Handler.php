@@ -92,7 +92,7 @@ class Handler extends ExceptionHandler
      */
     protected function getHttpExceptionView(HttpExceptionInterface $e): ?string
     {
-        $dir = cms_activated() && Auth::guard('cms')->check() ? 'admin' : 'web';
+        $dir = cms_booted() && Auth::guard('cms')->check() ? 'admin' : 'web';
 
         $view = 'errors::' . $dir . '.' . $e->getStatusCode();
 

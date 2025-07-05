@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 trait Positionable
 {
     /**
-     * Update model position.
+     * Update model positions.
      *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function updatePosition()
+    public function positions()
     {
         if (! isset($this->model) || ! $this->model instanceof Model) {
             throw new ModelNotFoundException;
@@ -26,13 +26,17 @@ trait Positionable
 
         $hasSubItems = in_array('parent_id', $this->model->getFillable());
 
-        $result = $this->model->updatePosition($data, 0, $params, $hasSubItems);
+        $result = $this->model->positions($data, 0, $params, $hasSubItems);
+
+        $data = fill_data(
+            (bool) $result, trans('database.' . ($result ? 'updated' : 'no_changes')), $result
+        );
 
         if (request()->expectsJson()) {
-            return response()->json($result);
+            return response()->json($data);
         }
 
-        return back();
+        return back()->with('alert', $data);
     }
 
     /**

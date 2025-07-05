@@ -15,19 +15,12 @@ class Product extends Model
     use QueriesTrait, HasLanguage, PositionableTrait, FileableTrait;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string|null
-     */
-    protected $table = 'products';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'slug', 'position', 'visible', 'price', 'quantity', 'image'
+        'slug', 'visible', 'position', 'in_stock', 'price', 'quantity', 'image'
     ];
 
     /**
@@ -62,7 +55,7 @@ class Product extends Model
      */
     public function scopeForAdmin(Builder $query, mixed $currentLang = true): Builder
     {
-        return $query->joinLanguage($currentLang)->filesExists()->positionDesc();
+        return $query->joinLanguage($currentLang)->filesExists()->createdDesc();
     }
 
     /**
@@ -74,7 +67,7 @@ class Product extends Model
      */
     public function scopeForPublic(Builder $query, mixed $currentLang = true): Builder
     {
-        return $query->joinLanguage($currentLang)->whereVisible();
+        return $query->joinLanguage($currentLang)->whereVisible()->createdDesc();
     }
 
     /**
