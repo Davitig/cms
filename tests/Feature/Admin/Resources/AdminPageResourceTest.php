@@ -163,17 +163,28 @@ class AdminPageResourceTest extends TestAdmin
 
     public function test_admin_pages_resource_update_position()
     {
-        [$menu, $pages] = $this->createPages(3);
+        [$menu, $pages] = $this->createPages(5);
 
-        $newData = $ids = [];
+        $data = $ids = [];
+        $startItem = $pages->first();
+        $endItem = $pages->last();
 
-        foreach ($pages as $page) {
-            $newData[] = ['id' => $ids[] = $page->id, 'pos' => $page->position + 1];
+        $data[] = ['id' => $ids[] = $startItem->id, 'pos' => $endItem->position];
+        foreach ($pages as $file) {
+            if ($file->id == $startItem->id || $file->id == $endItem->id) {
+                continue;
+            }
+
+            $data[] = ['id' => $ids[] = $file->id, 'pos' => $file->position - 1];
         }
+        $data[] = ['id' => $ids[] = $endItem->id, 'pos' => $endItem->position - 1];
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('pages.positions'), ['data' => $newData]);
+        )->put(cms_route('pages.positions'), [
+            'start_id' => $startItem->id,
+            'end_id' => $endItem->id
+        ]);
 
         $updatedData = (new Page)->whereKey($ids)
             ->get(['id', 'position as pos'])
@@ -182,7 +193,7 @@ class AdminPageResourceTest extends TestAdmin
         $pages->map->delete();
         $menu->delete();
 
-        $this->assertSame($newData, $updatedData);
+        $this->assertSame($data, $updatedData);
     }
 
     public function test_admin_pages_resource_transfer()

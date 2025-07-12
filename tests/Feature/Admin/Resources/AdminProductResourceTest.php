@@ -141,15 +141,26 @@ class AdminProductResourceTest extends TestAdmin
     {
         $products = $this->createProducts(3);
 
-        $newData = $ids = [];
+        $data = $ids = [];
+        $startItem = $products->first();
+        $endItem = $products->last();
 
-        foreach ($products as $product) {
-            $newData[] = ['id' => $ids[] = $product->id, 'pos' => $product->position + 1];
+        $data[] = ['id' => $ids[] = $startItem->id, 'pos' => $endItem->position];
+        foreach ($products as $file) {
+            if ($file->id == $startItem->id || $file->id == $endItem->id) {
+                continue;
+            }
+
+            $data[] = ['id' => $ids[] = $file->id, 'pos' => $file->position - 1];
         }
+        $data[] = ['id' => $ids[] = $endItem->id, 'pos' => $endItem->position - 1];
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('products.positions'), ['data' => $newData]);
+        )->put(cms_route('products.positions'), [
+            'start_id' => $startItem->id,
+            'end_id' => $endItem->id,
+        ]);
 
         $updatedData = (new Product)->whereKey($ids)
             ->get(['id', 'position as pos'])
@@ -157,7 +168,7 @@ class AdminProductResourceTest extends TestAdmin
 
         $products->map->delete();
 
-        $this->assertSame($newData, $updatedData);
+        $this->assertSame($data, $updatedData);
     }
 
     public function test_admin_products_resource_destroy()

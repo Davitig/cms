@@ -106,6 +106,7 @@
         'routePositions' => cms_route('products.files.positions', [$foreignModel->id]),
         'sort' => 'desc',
         'currentPage' => $currentPage,
-        'lastPage' => $lastPage
+        'lastPage' => $lastPage,
+        'foreignKey' => 'product_id'
     ])
 @endpush

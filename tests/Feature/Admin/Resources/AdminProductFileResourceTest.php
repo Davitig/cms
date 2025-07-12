@@ -145,17 +145,29 @@ class AdminProductFileResourceTest extends TestAdmin
 
     public function test_admin_product_files_resource_update_position()
     {
-        [$product, $files] = $this->createProductFiles(3);
+        [$product, $files] = $this->createProductFiles(5);
 
-        $newData = $ids = [];
+        $data = $ids = [];
+        $startItem = $files->first();
+        $endItem = $files->last();
 
+        $data[] = ['id' => $ids[] = $startItem->id, 'pos' => $endItem->position];
         foreach ($files as $file) {
-            $newData[] = ['id' => $ids[] = $file->id, 'pos' => $file->position + 1];
+            if ($file->id == $startItem->id || $file->id == $endItem->id) {
+                continue;
+            }
+
+            $data[] = ['id' => $ids[] = $file->id, 'pos' => $file->position - 1];
         }
+        $data[] = ['id' => $ids[] = $endItem->id, 'pos' => $endItem->position - 1];
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('products.files.positions'), ['data' => $newData]);
+        )->put(cms_route('products.files.positions'), [
+            'start_id' => $startItem->id,
+            'end_id' => $endItem->id,
+            'foreign_key' => 'product_id'
+        ]);
 
         $updatedData = (new ProductFile)->whereKey($ids)
             ->get(['id', 'position as pos'])
@@ -163,7 +175,7 @@ class AdminProductFileResourceTest extends TestAdmin
 
         $product->delete();
 
-        $this->assertSame($newData, $updatedData);
+        $this->assertSame($data, $updatedData);
     }
 
     public function test_admin_product_files_resource_destroy()

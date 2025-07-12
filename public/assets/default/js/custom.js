@@ -323,57 +323,74 @@ function sortArray(arr, orderBy) {
     return arr;
 }
 
-function sortable(url, csrfToken, orderBy, page) {
+function duplicatedPositionResolver(url, csrfToken, foreignKey) {
+    $('.duplicated-position').on('click', function (e) {
+        e.preventDefault();
+        if (! confirm('Are you sure you want to resolve duplicated position?')) {
+            return;
+        }
+
+        let input = {
+            '_method': 'put', '_token': csrfToken,
+            'start_id': $(this).data('id'), 'resolve_duplicated': 1, 'foreign_key': foreignKey
+        };
+
+        $.post(url, input, function (res) {
+            alert(res?.message);
+            window.location.reload();
+        }, 'json').fail(function (xhr) {
+            notyf(xhr.statusText, 'error');
+        });
+    });
+}
+
+function sortable(url, csrfToken, orderBy, page, foreignKey) {
+    duplicatedPositionResolver(url, csrfToken, foreignKey);
+
     let target = document.getElementById('sortable');
     new Sortable(target, {
         animation: 200,
         handle: '.handle',
-        store: {
-            // Called onEnd (when the item is dropped).
-            set: function (sortable) {
-                let input = {data: []};
-                input['_method'] = 'put';
-                input['_token'] = csrfToken;
-                input['order_by'] = orderBy;
-
-                $.each(sortable.el.children, function (i, el) {
-                    input.data.push({id: el.dataset.id, pos: el.dataset.pos});
-                });
-
-                let sortedArray = sortArray(input.data, orderBy);
-
-                $.each(sortable.el.children, function (i, el) {
-                    $(el).attr('data-pos', sortedArray[i].pos);
-                });
-
-                $.post(url, input, function (res) {
-                    notyf(res?.message, res?.result);
-                }, 'json').fail(function (xhr) {
-                    notyf(xhr.statusText, 'error');
-                });
+        onUpdate: function (event) {
+            let input = {'_method': 'put', '_token': csrfToken};
+            input['start_id'] = event.item.dataset.id;
+            if (event.oldIndex > event.newIndex) {
+                input['end_id'] = $(event.item).next().data('id');
+            } else {
+                input['end_id'] = $(event.item).prev().data('id');
             }
+
+            if (foreignKey) {
+                input['foreign_key'] = foreignKey;
+            }
+
+            $.post(url, input, function (res) {
+                notyf(res?.message, res?.result ? res.result : 'warning');
+            }, 'json').fail(function (xhr) {
+                notyf(xhr.statusText, 'error');
+            });
         }
     });
     // move item to next/prev page
     $(target).on('click',  'a.move', function (e) {
         e.preventDefault();
+        let input = {'_method': 'put', '_token': csrfToken};
         let move = $(this).data('move');
         let item = $(this).closest('.item');
-        let input = [{'id':item.data('id'), 'pos':item.attr('data-pos')}];
-        let postHidden = {'_method': 'put', '_token': csrfToken};
-        let items;
+
+        input['start_id'] = item.data('id');
 
         if (move === 'next') {
-            items = item.nextAll();
+            input['end_id'] = item.parent().children().last().data('id');
         } else {
-            items = item.prevAll();
+            input['end_id'] = item.parent().children().first().data('id');
         }
+        input['move'] = move;
+        input['order_by'] = orderBy === 'desc' ? 'desc' : 'asc';
 
-        items.each(function (i, e) {
-            input.push({'id':$(e).data('id'), 'pos':$(e).attr('data-pos')});
-        });
-
-        input = $.extend({'data':input, 'move':move, 'order_by':orderBy}, postHidden);
+        if (foreignKey) {
+            input['foreign_key'] = foreignKey;
+        }
 
         $.post(url, input, function (res) {
             if (! res?.result) {
@@ -394,30 +411,52 @@ function sortable(url, csrfToken, orderBy, page) {
     });
 }
 
-function nestable(url, orderBy, selectors, csrfToken) {
-    let postHidden = {'_method': 'put', '_token': csrfToken};
-    let nestables = [];
+function nestable(url, csrfToken, orderBy, selectors) {
+    duplicatedPositionResolver(url, csrfToken);
+
+    let nestableList = [];
     if (Array.isArray(selectors)) {
         $.each(selectors, function (i, selector) {
-            nestables.push($(selector));
+            nestableList.push($(selector));
         })
     } else {
-        nestables.push($('.uk-nestable'));
+        nestableList.push($('.uk-nestable'));
     }
 
-    $.each(nestables, function (i, nestable) {
-        nestable.on('change.uk.nestable', function () {
-            let input = [];
-            $.each(nestables, function (i, nestable) {
-                input = input.concat(nestable.data('nestable').serialize());
-            });
+    $.each(nestableList, function (i, nestable) {
+        let start, prevParentId;
+        nestable.on('start.uk.nestable', function (event, ui) {
+            start = ui.placeEl.parent().children().index(ui.placeEl);
+            prevParentId = ui.placeEl.parent('.uk-nestable-list').closest('.item').data('id');
+        });
+        nestable.on('change.uk.nestable', function (event, ui, e) {
+            let end = e.parent().children().index(e);
 
-            input = {'data': input, 'order_by': orderBy};
-            input = $.extend(input, postHidden);
+            let input = {'_method': 'put', '_token': csrfToken};
+
+            input['start_id'] = e.data('id');
+
+            let parentId = e.parent().closest('.item').data('id');
+
+            if (prevParentId !== e.parent().closest('.item').data('id')) {
+                input['parent_id'] = parentId ? parentId : 0;
+            }
+
+            if (input['parent_id'] === undefined && start === end) {
+                return;
+            }
+
+            if (input['parent_id'] !== undefined) {
+                input['end_id'] = orderBy === 'desc' ? e.prev().data('id') : e.next().data('id');
+            } else {
+                input['end_id'] = start > end ? e.next().data('id') : e.prev().data('id');
+            }
+
+            input['order_by'] = orderBy === 'desc' ? 'desc' : 'asc';
 
             $.post(url, input, function (res) {
                 nestable.trigger('positionUpdated');
-                notyf(res?.message, res?.result);
+                notyf(res?.message, res?.result ? res.result : 'warning');
             }, 'json').fail(function (xhr) {
                 notyf(xhr.statusText, 'error');
             });

@@ -2,7 +2,7 @@
 <script src="{{ asset('assets/vendor/libs/sortablejs/sortable.js') }}"></script>
 <script type="text/javascript">
     $(function () {
-        sortable('{{ $routePositions }}', '{{ $csrfToken = csrf_token() }}', '{{ $sort }}', {{ $currentPage }});
+        sortable('{{ $routePositions }}', '{{ $csrfToken = csrf_token() }}', '{{ $sort }}', '{{ $currentPage }}', '{{ $foreignKey }}');
 
         let filesBlock = $('#files-block');
         let multiselect = [];

@@ -104,40 +104,41 @@
     <script src="{{ asset('assets/vendor/libs/sortablejs/sortable.js') }}"></script>
     <script type="text/javascript">
         $(function () {
-            let langSelected = {{(int) language()->mainIsActive()}};
+            let langSelected = {{(int) (language()->getMain('main') && language()->mainIsActive())}};
             let activeLangSelector = $('.language-switcher > a img');
             let langMenuSelector = $('.dropdown-languages');
             new Sortable(document.getElementById('sortable'), {
                 animation: 150,
-                store: {
-                    // Called onEnd (when the item is dropped).
-                    set: function (sortable) {
-                        let ids = [];
-                        let input = {data: []};
-                        $.each(sortable.toArray(), function (i, id) {
-                            ids[i] = id;
-                            input.data.push({id: id});
-                        });
-                        input['_method'] = 'put';
-                        input['_token'] = '{{csrf_token()}}';
-                        $.post('{{cms_route('languages.positions')}}', input, function () {
-                            notyf('Positions has been updated successfully');
-                            // set the first language in navbar if there is no main language selected
-                            if (! langSelected) {
-                                activeLangSelector.attr('src', $(sortable.el.children[0]).find('.flag-img').attr('src'));
-                            }
-                            // sort languages in navbar
-                            let langItems = langMenuSelector.children('li').sort(function (a, b) {
-                                return ids.indexOf(a.dataset.id) - ids.indexOf(b.dataset.id);
-                            });
-                            langMenuSelector.html('');
-                            langItems.each(function (i, e) {
-                                langMenuSelector.append(e);
-                            });
-                        }, 'json').fail(function (xhr) {
-                            notyf(xhr.statusText, 'error');
-                        });
+                onUpdate: function (event) {
+                    let input = {'_method': 'put', '_token': '{{ csrf_token() }}'};
+                    input['start_id'] = event.item.dataset.id;
+                    if (event.oldIndex > event.newIndex) {
+                        input['end_id'] = $(event.item).next().data('id');
+                    } else {
+                        input['end_id'] = $(event.item).prev().data('id');
                     }
+
+                    $.post('{{cms_route('languages.positions')}}', input, function (res) {
+                        notyf(res?.message, res?.result);
+                        // set the first language in navbar if there is no main language selected
+                        if (! langSelected) {
+                            activeLangSelector.attr('src', $(event.target.children[0]).find('.flag-img').attr('src'));
+                        }
+                        let ids = [];
+                        $.each(event.target.children, function (i, e) {
+                            ids[i] = e.dataset.id;
+                        });
+                        // sort languages in navbar
+                        let langItems = langMenuSelector.children('li').sort(function (a, b) {
+                            return ids.indexOf(a.dataset.id) - ids.indexOf(b.dataset.id);
+                        });
+                        langMenuSelector.html('');
+                        langItems.each(function (i, e) {
+                            langMenuSelector.append(e);
+                        });
+                    }, 'json').fail(function (xhr) {
+                        notyf(xhr.statusText, 'error');
+                    });
                 }
             });
             // toggle message when there is no visible language

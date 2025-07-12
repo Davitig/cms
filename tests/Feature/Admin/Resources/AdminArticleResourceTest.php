@@ -159,17 +159,29 @@ class AdminArticleResourceTest extends TestAdmin
 
     public function test_admin_articles_resource_update_position()
     {
-        [$collection, $articles] = $this->createArticles(3);
+        [$collection, $articles] = $this->createArticles(5);
 
-        $newData = $ids = [];
+        $data = $ids = [];
+        $startItem = $articles->first();
+        $endItem = $articles->last();
 
-        foreach ($articles as $article) {
-            $newData[] = ['id' => $ids[] = $article->id, 'pos' => $article->position + 1];
+        $data[] = ['id' => $ids[] = $startItem->id, 'pos' => $endItem->position];
+        foreach ($articles as $file) {
+            if ($file->id == $startItem->id || $file->id == $endItem->id) {
+                continue;
+            }
+
+            $data[] = ['id' => $ids[] = $file->id, 'pos' => $file->position - 1];
         }
+        $data[] = ['id' => $ids[] = $endItem->id, 'pos' => $endItem->position - 1];
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('articles.positions'), ['data' => $newData]);
+        )->put(cms_route('articles.positions'), [
+            'start_id' => $startItem->id,
+            'end_id' => $endItem->id,
+            'foreign_key' => 'collection_id'
+        ]);
 
         $updatedData = (new Article)->whereKey($ids)
             ->get(['id', 'position as pos'])
@@ -178,7 +190,7 @@ class AdminArticleResourceTest extends TestAdmin
         $articles->map->delete();
         $collection->delete();
 
-        $this->assertSame($newData, $updatedData);
+        $this->assertSame($data, $updatedData);
     }
 
     public function test_admin_articles_resource_transfer()

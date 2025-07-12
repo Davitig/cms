@@ -157,17 +157,29 @@ class AdminEventResourceTest extends TestAdmin
 
     public function test_admin_events_resource_update_position()
     {
-        [$collection, $events] = $this->createEvents(3);
+        [$collection, $events] = $this->createEvents(5);
 
-        $newData = $ids = [];
+        $data = $ids = [];
+        $startItem = $events->first();
+        $endItem = $events->last();
 
-        foreach ($events as $event) {
-            $newData[] = ['id' => $ids[] = $event->id, 'pos' => $event->position + 1];
+        $data[] = ['id' => $ids[] = $startItem->id, 'pos' => $endItem->position];
+        foreach ($events as $file) {
+            if ($file->id == $startItem->id || $file->id == $endItem->id) {
+                continue;
+            }
+
+            $data[] = ['id' => $ids[] = $file->id, 'pos' => $file->position - 1];
         }
+        $data[] = ['id' => $ids[] = $endItem->id, 'pos' => $endItem->position - 1];
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('events.positions'), ['data' => $newData]);
+        )->put(cms_route('events.positions'), [
+            'start_id' => $startItem->id,
+            'end_id' => $endItem->id,
+            'foreign_key' => 'collection_id'
+        ]);
 
         $updatedData = (new Event)->whereKey($ids)
             ->get(['id', 'position as pos'])
@@ -176,7 +188,7 @@ class AdminEventResourceTest extends TestAdmin
         $events->map->delete();
         $collection->delete();
 
-        $this->assertSame($newData, $updatedData);
+        $this->assertSame($data, $updatedData);
     }
 
     public function test_admin_events_resource_transfer()

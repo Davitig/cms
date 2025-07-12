@@ -109,6 +109,7 @@
         'routePositions' => cms_route('events.files.positions', [$foreignModel->id]),
         'sort' => 'desc',
         'currentPage' => $currentPage,
-        'lastPage' => $lastPage
+        'lastPage' => $lastPage,
+        'foreignKey' => 'event_id'
     ])
 @endpush

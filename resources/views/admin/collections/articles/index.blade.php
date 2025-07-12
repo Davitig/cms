@@ -34,10 +34,11 @@
                         @php
                             $currentPage = $items->currentPage();
                             $lastPage = $items->lastPage();
+                            $prevPos = 0;
                         @endphp
                         @foreach($items as $item)
                             <li id="item{{ $item->id }}" class="item list-group-item ps-0 d-flex justify-content-between align-items-center"
-                                data-id="{{ $item->id }}" data-pos="{{ $item->position }}">
+                                data-id="{{ $item->id }}">
                                 <div>
                                     @if ($parent->admin_order_by == 'position')
                                         <i class="handle cursor-move icon-base fa fa-bars icon-sm align-text-bottom me-1"></i>
@@ -45,6 +46,10 @@
                                     <a href="{{ $editUrl = cms_route('articles.edit', [$item->collection_id, $item->id]) }}" class="text-black">
                                         {{ $item->title }}
                                     </a>
+                                    @if ($prevPos == $item->position)
+                                        <i class="icon-base fa fa-question-circle icon-xs ms-2 text-warning duplicated-position cursor-pointer"
+                                           data-id="{{ $item->id }}" title="Duplicated position detected"></i>
+                                    @endif
                                 </div>
                                 <div class="actions d-flex align-items-center gap-4">
                                     <div class="item-id badge bg-label-gray text-black">{{ $item->id }}</div>
@@ -91,6 +96,7 @@
                                     @endif
                                 </div>
                             </li>
+                            @php($prevPos = $item->position)
                         @endforeach
                     </ul>
                     {{ $items->links() }}
@@ -108,7 +114,7 @@
         <script src="{{ asset('assets/vendor/libs/sortablejs/sortable.js') }}"></script>
         <script type="text/javascript">
             $(function () {
-                sortable('{{cms_route('articles.positions')}}', '{{csrf_token()}}', '{{ $parent->admin_sort }}', {{ $currentPage }});
+                sortable('{{cms_route('articles.positions')}}', '{{csrf_token()}}', '{{ $parent->admin_sort }}', {{ $currentPage }}, 'collection_id');
             });
         </script>
     @endif

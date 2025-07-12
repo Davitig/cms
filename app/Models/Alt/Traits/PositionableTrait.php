@@ -7,136 +7,160 @@ use Illuminate\Database\Eloquent\Builder;
 trait PositionableTrait
 {
     /**
+     * Find a duplicated model position.
+     *
+     * @param  int|null  $startPosition
+     * @param  int|null  $parentId
+     * @param  string|null  $foreignKey
+     * @param  int|null  $foreignValue
+     * @return int|null
+     */
+    public function findDuplicatedPosition(
+        ?int    $startPosition = null,
+        ?int    $parentId = null,
+        ?string $foreignKey = null,
+        ?int    $foreignValue = null
+    ): ?int
+    {
+        $hasParentId = in_array('parent_id', $this->getFillable());
+
+        $table = $this->getTable();
+        $altTable = str($table)->substr(0, 1);
+
+        return $this->when(
+            $foreignKey && ! is_null($foreignValue),
+            fn ($q) => $q->where($foreignKey, $foreignValue)
+        )->when($hasParentId && ! is_null($parentId), fn ($q) => $q->parentId($parentId))
+        ->when(! is_null($startPosition), fn ($q) => $q->wherePosition('>', $startPosition))
+            ->whereNotExists(function ($q) use (
+                $table, $altTable, $foreignKey, $foreignValue, $hasParentId, $parentId) {
+                return $q->from($table, $altTable)
+                    ->when(
+                        $foreignKey && ! is_null($foreignValue),
+                        fn ($q) => $q->where($foreignKey, $foreignValue)
+                    )->when(
+                        $hasParentId && ! is_null($parentId),
+                        fn ($q) => $q->where('parent_id', $parentId)
+                    )->whereRaw($altTable . '.position = ' . $table . '.position + 1');
+            })->selectRaw('position + 1 as position')
+            ->value('position');
+    }
+
+    /**
      * Update the position of the Eloquent models.
      *
-     * @param  array  $data
-     * @param  string  $orderBy
+     * @param  int  $startId
+     * @param  int|null  $endId
      * @param  int|null  $parentId
-     * @param  string|null  $move
+     * @param  string|null  $foreignKey
      * @return int
      */
     public function positions(
-        array $data, string $orderBy = 'asc', ?int $parentId = null, ?string $move = null
+        int $startId, ?int $endId = null, ?int $parentId = null, ?string $foreignKey = null
     ): int
     {
-        $isMoveAction = false;
-
-        if ($move == 'prev' || $move == 'next') {
-            $data = array_values($this->moveTargetPosition($data, $orderBy, $move));
-
-            $isMoveAction = true;
+        if ((! $endId && is_null($parentId)) ||
+            ($parentId && ! $this->whereKey($parentId)->exists())) {
+            return 0;
         }
 
-        $attributes = $positions = [];
+        $hasParentId = in_array('parent_id', $this->getFillable());
 
-        $count = $position = 0;
+        $startItem = $this->findOrFail($startId, array_filter([
+            'id', 'position', $foreignKey, $hasParentId ? 'parent_id' : null
+        ]));
 
-        foreach($data as $item) {
-            if (isset($item['pos'])) {
-                $positions[] = $item['pos'];
-            } else {
-                $positions[] = $position++;
+        if ($foreignKey && is_null($startItem->$foreignKey)) {
+            return 0;
+        }
+
+        if (is_null($parentId)) {
+            $startItemPosition = $startItem->position;
+        } else {
+            $startItemPosition = $this->when($hasParentId, fn ($q) => $q->parentId($parentId))
+                    ->max('position') + 1;
+
+            $items = $this->when($foreignKey, function ($q, $value) use ($startItem) {
+                return $q->where($value, $startItem->$value);
+            })->wherePosition('>', $startItem->position)
+                ->when($hasParentId, fn ($q) => $q->parentId($startItem->parent_id))
+                ->get(['id', 'position']);
+
+            foreach ($items as $item) {
+                $item->update(['position' => $item->position - 1]);
             }
         }
 
-        if (! $isMoveAction) {
-            if ($orderBy === 'desc') {
-                rsort($positions);
-            } else {
-                sort($positions);
+        if (! $endId && ! is_null($parentId)) {
+            return (int) $startItem->update([
+                'position' => $startItemPosition, 'parent_id' => $parentId
+            ]);
+        }
+
+        $endItem = $this->findOrFail($endId, array_filter([
+            'id', 'position', $hasParentId ? 'parent_id' : null
+        ]));
+
+        if (is_null($parentId) && $startItem->position == $endItem->position) {
+            return 0;
+        }
+
+        $count = 0;
+
+        $ascending = $startItemPosition > $endItem->position;
+
+        if (is_null($parentId)) {
+            $positions = [$startItemPosition, $endItem->position];
+            sort($positions);
+
+            $items = $this->when($foreignKey, function ($q, $value) use ($startItem) {
+                return $q->where($value, $startItem->$value);
+            })->wherePosition('>', $positions[0])
+                ->wherePosition('<', $positions[1])
+                ->when(
+                    $hasParentId && ! is_null($startItem->parent_id),
+                    fn ($q) => $q->parentId($startItem->parent_id)
+                )->get(['id', 'position']);
+
+            foreach ($items as $item) {
+                $count += (int) $item->update([
+                    'position' => $ascending ? $item->position + 1 : $item->position - 1
+                ]);
+            }
+        } else {
+            $items = $this->when($foreignKey, function ($q, $value) use ($startItem) {
+                return $q->where($value, $startItem->$value);
+            })->wherePosition('>', $endItem->position)
+                ->when($hasParentId, fn ($q) => $q->parentId($endItem->parent_id))
+                ->get(['id', 'position']);
+
+            foreach ($items as $item) {
+                $item->update(['position' => $item->position + 1]);
             }
         }
 
-        foreach($positions as $key => $position) {
-            if (! is_null($parentId)) {
-                $attributes['parent_id'] = $parentId;
-            }
+        $parentData = ! is_null($parentId) ? ['parent_id' => $parentId] : [];
 
-            $attributes['position'] = $position;
+        $count += (int) $startItem->update(['position' => $endItem->position] + $parentData);
 
-            $id = $data[$key]['id'];
-
-            $count += (int) $this->whereKey($id)->update($attributes);
-
-            if (isset($data[$key]['children'])) {
-                $count += $this->positions($data[$key]['children'], $orderBy, $id, $move);
-            }
-        }
+        $count += (int) $endItem->update([
+            'position' => $ascending ? $endItem->position + 1 : $endItem->position - 1
+        ]);
 
         return $count;
     }
 
     /**
-     * Move the position of the Eloquent model by specified order and direction.
+     * Add a where "position" clause to the query.
      *
-     * @param  array  $data
-     * @param  string  $orderBy
-     * @param  string  $move
-     * @return array
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  mixed|null  $operator
+     * @param  int|null  $value
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    private function moveTargetPosition(array $data, string $orderBy, string $move): array
+    public function scopeWherePosition(Builder $query, mixed $operator = null, ?int $value = null): Builder
     {
-        if (empty($data = array_filter(
-            $data, fn ($value) => ! empty($value['id']) && ! empty($value['pos'])))) {
-            return $data;
-        }
-
-        $target = array_shift($data);
-
-        if (! empty($data)) {
-            $startPos = last($data)['pos'];
-
-            if ($move == 'next') {
-                if ($orderBy == 'desc') {
-                    $target['pos'] = $startPos - 1; $queryOperator = '<';
-                    $queryOrderBy = 'desc'; $posFunc = fn (&$value) => $value['pos']++;
-                } else {
-                    $target['pos'] = $startPos + 1; $queryOperator = '>';
-                    $queryOrderBy = 'asc'; $posFunc = fn (&$value) => $value['pos']--;
-                }
-            } else {
-                if ($orderBy == 'desc') {
-                    $target['pos'] = $startPos + 1; $queryOperator = '>';
-                    $queryOrderBy = 'asc'; $posFunc = fn (&$value) => $value['pos']--;
-                } else {
-                    $target['pos'] = $startPos - 1; $queryOperator = '<';
-                    $queryOrderBy = 'desc'; $posFunc = fn (&$value) => $value['pos']++;
-                }
-            }
-
-            array_walk($data, $posFunc);
-        } else {
-            $startPos = $target['pos'];
-
-            if ($move == 'next') {
-                if ($orderBy == 'desc') {
-                    $target['pos'] = $startPos - 1; $queryOperator = '<'; $queryOrderBy = 'desc';
-                } else {
-                    $target['pos'] = $startPos + 1; $queryOperator = '>'; $queryOrderBy = 'asc';
-                }
-            } else {
-                if ($orderBy == 'desc') {
-                    $target['pos'] = $startPos + 1; $queryOperator = '>'; $queryOrderBy = 'asc';
-                } else {
-                    $target['pos'] = $startPos - 1; $queryOperator = '<'; $queryOrderBy = 'desc';
-                }
-            }
-        }
-
-        if (is_null($newData = $this->where('position', $queryOperator, $startPos)
-            ->orderBy('position', $queryOrderBy)
-            ->first(['id']))) {
-            return $data;
-        }
-
-        $dataCount = count($data);
-
-        $data[$dataCount]['id'] = $newData['id'];
-        $data[$dataCount]['pos'] = $startPos;
-        $data['target']['id'] = $target['id'];
-        $data['target']['pos'] = $target['pos'];
-
-        return $data;
+        return $query->where($this->qualifyColumn('position'), $operator, $value);
     }
 
     /**

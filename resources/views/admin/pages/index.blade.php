@@ -29,15 +29,19 @@
         </div>
         <div id="items" class="card-body" data-parent-slug="">
             <ul class="uk-nestable list-group list-group-flush" data-uk-nestable="{handleClass:'uk-nestable-handle'}">
-                @foreach($items as $item)
-                    <li id="item{{ $item->id }}" class="item uk-nestable-item list-group-item ps-0 m-0"
-                        data-id="{{ $item->id }}" data-pos="{{ $item->position }}" data-parent="0">
+                @php($prevPos = 0)
+                @foreach(make_sub_items($items) as $item)
+                    <li id="item{{ $item->id }}" class="item uk-nestable-item list-group-item ps-0 m-0" data-id="{{ $item->id }}">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <i class="uk-nestable-handle cursor-move icon-base fa fa-bars icon-sm align-text-bottom me-1"></i>
                                 <a href="{{ $editUrl = cms_route('pages.edit', [$item->menu_id, $item->id]) }}" class="text-black">
                                     {{ $item->title }}
                                 </a>
+                                @if ($prevPos == $item->position)
+                                    <i class="icon-base fa fa-question-circle icon-xs ms-2 text-warning duplicated-position cursor-pointer"
+                                       data-id="{{ $item->id }}" title="Duplicated position detected"></i>
+                                @endif
                             </div>
                             <div class="actions d-flex align-items-center gap-4">
                                 <div class="item-id badge bg-label-gray text-black">{{ $item->id }}</div>
@@ -90,6 +94,7 @@
                         </div>
                         @include('admin.pages.sub_items')
                     </li>
+                    @php($prevPos = $item->position)
                 @endforeach
             </ul>
         </div>
@@ -102,7 +107,7 @@
     @include('admin.-scripts.transfer', ['route' => cms_route('pages.transfer', [$menu->id]), 'column' => 'menu_id', 'list' => $menus, 'id' => $menu->id, 'recursive' => true])
     <script type="text/javascript">
         $(function () {
-            nestable('{{ cms_route('pages.positions') }}', 'asc', null, '{{ csrf_token() }}');
+            nestable('{{ cms_route('pages.positions') }}', '{{ csrf_token() }}', 'asc');
 
             $('.uk-nestable').on('positionUpdated', function () {
                 updateSubItems($(this).find('> li'));
