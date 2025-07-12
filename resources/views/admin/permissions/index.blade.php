@@ -13,8 +13,9 @@
     <nav class="navbar navbar-expand-lg bg-gradient-light rounded mb-6">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold" href="javascript:void(0)">
+                <span>Role:</span>
                 {{ $activeRole }}
-                <span class="total-allowed badge badge-center rounded-pill bg-{{ ($activeRoutesCount = count($activeRoutes)) ? 'success' : 'danger' }} ms-2">
+                <span class="total-allowed badge rounded-pill p-1 bg-{{ ($activeRoutesCount = count($activeRoutes)) ? 'success' : 'danger' }} ms-2">
                     {{ $activeRoutesCount }}
                 </span>
             </a>

@@ -66,8 +66,8 @@
                             <i class="icon-base fa-regular fa-circle-check icon-lg text-success"></i>
                         @else
                             <span class="badge rounded-pill badge-outline-{{ $item->permissions_count ? 'warning' : 'danger' }} p-1">
-                                        {{ $item->permissions_count }}
-                                </span>
+                                {{ $item->permissions_count }}
+                            </span>
                         @endif
                     </td>
                     <td>{{ $item->id }}</td>

@@ -25,8 +25,8 @@
             <table class="table table-bordered table-hover">
                 <thead class="table-light">
                 <tr>
-                    <th>Value</th>
                     <th>Code</th>
+                    <th>Value</th>
                     <th>Type</th>
                     <th>ID</th>
                     <th>Actions</th>
@@ -35,8 +35,8 @@
                 <tbody>
                 @foreach ($items as $item)
                     <tr class="item">
-                        <td>{{ $item->value }}</td>
                         <td>{{ $item->code }}</td>
+                        <td>{{ $item->value }}</td>
                         <td>{{ $item->type ?: 'global' }}</td>
                         <td>{{ $item->id }}</td>
                         <td>
