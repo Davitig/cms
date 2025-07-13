@@ -3,13 +3,15 @@
 namespace Tests\Feature\Web;
 
 use Database\Factories\MenuFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Request;
-use Tests\Feature\DynamicRoutesTrait;
+use Tests\Feature\CreatesLanguageService;
+use Tests\Feature\InteractsWithDynamicPage;
 use Tests\TestCase;
 
 class WebPageTest extends TestCase
 {
-    use DynamicRoutesTrait;
+    use RefreshDatabase, CreatesLanguageService, InteractsWithDynamicPage;
 
     public function test_page()
     {
@@ -19,12 +21,9 @@ class WebPageTest extends TestCase
 
         $response = $this->get($page->slug);
 
-        $page->delete();
-        $menu->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebPageController', 'method' => 'index'
-        ]);
+        ], $this->getActionsFromRoute($route));
 
         $response->assertOk();
     }
@@ -39,12 +38,9 @@ class WebPageTest extends TestCase
 
         $response = $this->get($page->slug);
 
-        $page->delete();
-        $menu->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebSearchController', 'method' => 'index'
-        ]);
+        ], $this->getActionsFromRoute($route));
 
         $response->assertOk();
     }
@@ -61,12 +57,9 @@ class WebPageTest extends TestCase
 
         $route = $this->getDynamicPageRouteActions($page->slug, Request::METHOD_POST);
 
-        $page->delete();
-        $menu->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebPageController', 'method' => 'testPostMethod'
-        ]);
+        ], $this->getActionsFromRoute($route));
     }
 
     public function test_page_tabs()
@@ -81,12 +74,9 @@ class WebPageTest extends TestCase
 
         $route = $this->getDynamicPageRouteActions($page->slug . '/test-uri');
 
-        $page->delete();
-        $menu->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebPageController', 'method' => 'testTabMethod'
-        ]);
+        ], $this->getActionsFromRoute($route));
     }
 
     public function test_page_tabs_with_parameter()
@@ -103,13 +93,10 @@ class WebPageTest extends TestCase
             $page->slug . '/test-uri/' . rand(5, 10), Request::METHOD_POST
         );
 
-        $page->delete();
-        $menu->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebPageController',
             'method' => 'testTabPostMethodWithParameter'
-        ]);
+        ], $this->getActionsFromRoute($route));
     }
 
     public function test_sub_pages()
@@ -119,11 +106,6 @@ class WebPageTest extends TestCase
 
         $path = implode('/', array_map(fn ($page) => $page->slug, $pages));
 
-        $response = $this->get($path);
-
-        array_map(fn ($page) => $page->delete(), $pages);
-        $menu->delete();
-
-        $response->assertOk();
+        $this->get($path)->assertOk();
     }
 }

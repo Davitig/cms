@@ -6,10 +6,14 @@ use App\Models\Product\Product;
 use Database\Factories\Product\ProductFactory;
 use Database\Factories\Product\ProductLanguageFactory;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
+use Tests\Feature\CreatesLanguageService;
 
 class AdminProductResourceTest extends TestAdmin
 {
+    use RefreshDatabase, CreatesLanguageService;
+
     /**
      * Create new products.
      *

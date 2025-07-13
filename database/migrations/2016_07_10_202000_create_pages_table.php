@@ -29,7 +29,7 @@ return new class extends Migration
         Schema::create('page_languages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('page_id');
-            $table->unsignedTinyInteger('language_id');
+            $table->unsignedSmallInteger('language_id');
             $table->string('title');
             $table->string('short_title');
             $table->text('description')->nullable();

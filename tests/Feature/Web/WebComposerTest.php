@@ -8,13 +8,16 @@ use App\View\Composers\Web\WebPageComposer;
 use App\View\Composers\Web\WebSettingComposer;
 use App\View\Composers\Web\WebTranslationComposer;
 use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use stdClass;
 use Tests\TestCase;
 
 class WebComposerTest extends TestCase
 {
-    protected function testComposer(string $composerClass, ...$someOfArgs)
+    use RefreshDatabase;
+
+    protected function testComposer(string $composerClass, ...$someOfArgs): void
     {
         $composer = $this->app->make($composerClass);
 

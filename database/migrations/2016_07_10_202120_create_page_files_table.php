@@ -26,7 +26,7 @@ return new class extends Migration
         Schema::create('page_file_languages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('page_file_id');
-            $table->unsignedTinyInteger('language_id');
+            $table->unsignedSmallInteger('language_id');
             $table->string('title');
             $table->string('file');
             $table->timestamps();

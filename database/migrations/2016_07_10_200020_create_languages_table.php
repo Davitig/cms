@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('languages', function (Blueprint $table) {
-            $table->tinyIncrements('id');
+            $table->smallIncrements('id');
             $table->char('language', 2)->unique();
             $table->unsignedTinyInteger('visible')->default(0);
             $table->unsignedTinyInteger('position')->default(1);

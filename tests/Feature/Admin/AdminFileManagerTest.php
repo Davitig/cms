@@ -2,9 +2,13 @@
 
 namespace Tests\Feature\Admin;
 
-class AdminFilemanagerTest extends TestAdmin
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+class AdminFileManagerTest extends TestAdmin
 {
-    public function test_admin_filemanager()
+    use RefreshDatabase;
+
+    public function test_admin_file_manager()
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -13,7 +17,7 @@ class AdminFilemanagerTest extends TestAdmin
         $response->assertOk();
     }
 
-    public function test_admin_filemanager_index()
+    public function test_admin_file_manager_index()
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -22,7 +26,7 @@ class AdminFilemanagerTest extends TestAdmin
         $response->assertOk();
     }
 
-    public function test_admin_filemanager_popup()
+    public function test_admin_file_manager_popup()
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -31,7 +35,7 @@ class AdminFilemanagerTest extends TestAdmin
         $response->assertOk();
     }
 
-    public function test_admin_filemanager_tinymce4()
+    public function test_admin_file_manager_tinymce4()
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'

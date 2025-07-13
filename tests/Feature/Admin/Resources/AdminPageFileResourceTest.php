@@ -7,10 +7,14 @@ use Database\Factories\MenuFactory;
 use Database\Factories\Page\PageFactory;
 use Database\Factories\Page\PageFileFactory;
 use Database\Factories\Page\PageFileLanguageFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
+use Tests\Feature\CreatesLanguageService;
 
 class AdminPageFileResourceTest extends TestAdmin
 {
+    use RefreshDatabase, CreatesLanguageService;
+
     /**
      * Create a new page files.
      *

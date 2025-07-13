@@ -6,10 +6,14 @@ use App\Models\Product\ProductFile;
 use Database\Factories\Product\ProductFactory;
 use Database\Factories\Product\ProductFileFactory;
 use Database\Factories\Product\ProductFileLanguageFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
+use Tests\Feature\CreatesLanguageService;
 
 class AdminProductFileResourceTest extends TestAdmin
 {
+    use RefreshDatabase, CreatesLanguageService;
+
     /**
      * Create new product files.
      *

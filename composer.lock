@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dc09adad0b4c65a6de36711c44cd929a",
+    "content-hash": "3b0299aea5e775a4c585dc1295d3661d",
     "packages": [
         {
             "name": "barryvdh/elfinder-flysystem-driver",
@@ -9168,7 +9168,8 @@
     "platform": {
         "php": "^8.2",
         "ext-dom": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-pdo": "*"
     },
     "platform-dev": {},
     "plugin-api-version": "2.6.0"

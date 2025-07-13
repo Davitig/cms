@@ -21,7 +21,7 @@ return new class extends Migration
         Schema::create('translation_languages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('translation_id');
-            $table->unsignedTinyInteger('language_id');
+            $table->unsignedSmallInteger('language_id');
             $table->string('value');
             $table->timestamps();
 

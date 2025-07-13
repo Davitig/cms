@@ -6,10 +6,14 @@ use App\Models\Article\Article;
 use Database\Factories\Article\ArticleFactory;
 use Database\Factories\Article\ArticleLanguageFactory;
 use Database\Factories\CollectionFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
+use Tests\Feature\CreatesLanguageService;
 
 class AdminArticleResourceTest extends TestAdmin
 {
+    use RefreshDatabase, CreatesLanguageService;
+
     /**
      * Create a new articles.
      *

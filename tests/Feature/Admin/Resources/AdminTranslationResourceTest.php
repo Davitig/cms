@@ -6,10 +6,14 @@ use App\Models\Translation;
 use Database\Factories\TranslationFactory;
 use Database\Factories\TranslationLanguageFactory;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
+use Tests\Feature\CreatesLanguageService;
 
 class AdminTranslationResourceTest extends TestAdmin
 {
+    use RefreshDatabase, CreatesLanguageService;
+
     /**
      * Create a new translation.
      *

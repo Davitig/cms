@@ -4,13 +4,16 @@ namespace Tests\Feature\Admin\Resources;
 
 use App\Models\Language;
 use Database\Factories\LanguageFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminLanguageResourceTest extends TestAdmin
 {
+    use RefreshDatabase;
+
     public function test_admin_languages_resource_index()
     {
-        $languages = LanguageFactory::new()->count(5)->create();
+        $languages = LanguageFactory::new()->count(3)->create();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'

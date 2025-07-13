@@ -6,12 +6,15 @@ use App\Models\CmsUser\CmsUser;
 use Database\Factories\CmsUserFactory;
 use Database\Factories\CmsUserRoleFactory;
 use Exception;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminCmsUserResourceTest extends TestAdmin
 {
+    use RefreshDatabase;
+
     public function test_admin_cms_users_resource_index()
     {
         $cmsUserRole = CmsUserRoleFactory::new()->create();

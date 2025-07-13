@@ -7,10 +7,14 @@ use Database\Factories\Article\ArticleFactory;
 use Database\Factories\Article\ArticleFileFactory;
 use Database\Factories\Article\ArticleFileLanguageFactory;
 use Database\Factories\CollectionFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
+use Tests\Feature\CreatesLanguageService;
 
 class AdminArticleFileResourceTest extends TestAdmin
 {
+    use RefreshDatabase, CreatesLanguageService;
+
     /**
      * Create a new article files.
      *

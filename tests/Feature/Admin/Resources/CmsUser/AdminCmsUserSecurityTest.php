@@ -4,10 +4,13 @@ namespace Tests\Feature\Admin\Resources\CmsUser;
 
 use Database\Factories\CmsUserFactory;
 use Database\Factories\CmsUserRoleFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminCmsUserSecurityTest extends TestAdmin
 {
+    use RefreshDatabase;
+
     public function test_admin_cms_user_security_index()
     {
         $response = $this->actingAs(

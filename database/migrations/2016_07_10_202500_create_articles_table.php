@@ -26,7 +26,7 @@ return new class extends Migration
         Schema::create('article_languages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('article_id');
-            $table->unsignedTinyInteger('language_id');
+            $table->unsignedSmallInteger('language_id');
             $table->string('title');
             $table->text('description')->nullable();
             $table->mediumText('content')->nullable();

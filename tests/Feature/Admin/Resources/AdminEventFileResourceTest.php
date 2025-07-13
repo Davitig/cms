@@ -7,10 +7,14 @@ use Database\Factories\CollectionFactory;
 use Database\Factories\Event\EventFactory;
 use Database\Factories\Event\EventFileFactory;
 use Database\Factories\Event\EventFileLanguageFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
+use Tests\Feature\CreatesLanguageService;
 
 class AdminEventFileResourceTest extends TestAdmin
 {
+    use RefreshDatabase, CreatesLanguageService;
+
     /**
      * Create a new event files.
      *

@@ -3,10 +3,13 @@
 namespace Tests\Feature\Admin\Resources\CmsUser;
 
 use Database\Factories\CmsUserRoleFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminCmsUserRoleResourceTest extends TestAdmin
 {
+    use RefreshDatabase;
+
     public function test_admin_cms_user_roles_resource_index()
     {
         CmsUserRoleFactory::new()->times(5)->create();

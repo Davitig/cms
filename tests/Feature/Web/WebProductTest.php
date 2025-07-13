@@ -6,13 +6,15 @@ use App\Models\Product\Product;
 use Database\Factories\MenuFactory;
 use Database\Factories\Product\ProductFactory;
 use Database\Factories\Product\ProductLanguageFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Request;
-use Tests\Feature\DynamicRoutesTrait;
+use Tests\Feature\CreatesLanguageService;
+use Tests\Feature\InteractsWithDynamicPage;
 use Tests\TestCase;
 
 class WebProductTest extends TestCase
 {
-    use DynamicRoutesTrait;
+    use RefreshDatabase, CreatesLanguageService, InteractsWithDynamicPage;
 
     /**
      * Create a new product.
@@ -38,12 +40,9 @@ class WebProductTest extends TestCase
 
         $response = $this->get($page->slug);
 
-        $page->delete();
-        $menu->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebProductController', 'method' => 'index'
-        ]);
+        ], $this->getActionsFromRoute($route));
 
         $response->assertOk();
     }
@@ -62,12 +61,9 @@ class WebProductTest extends TestCase
 
         $response = $this->get($page->slug);
 
-        $page->delete();
-        $menu->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebProductController', 'method' => 'testPostMethod'
-        ]);
+        ], $this->getActionsFromRoute($route));
 
         $response->assertOk();
     }
@@ -84,12 +80,9 @@ class WebProductTest extends TestCase
 
         $route = $this->getDynamicPageRouteActions($page->slug . '/test-uri');
 
-        $page->delete();
-        $menu->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebProductController', 'method' => 'testTabMethod'
-        ]);
+        ], $this->getActionsFromRoute($route));
     }
 
     public function test_product_index_tabs_with_parameter()
@@ -106,13 +99,10 @@ class WebProductTest extends TestCase
             $page->slug . '/test-uri/' . rand(5, 10), Request::METHOD_POST
         );
 
-        $page->delete();
-        $menu->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebProductController',
             'method' => 'testTabPostMethodWithParameter'
-        ]);
+        ], $this->getActionsFromRoute($route));
     }
 
     public function test_product_index_sub_pages()
@@ -129,12 +119,9 @@ class WebProductTest extends TestCase
 
         $response = $this->get($path);
 
-        array_map(fn ($page) => $page->delete(), $pages);
-        $menu->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebProductController', 'method' => 'index'
-        ]);
+        ], $this->getActionsFromRoute($route));
 
         $response->assertOk();
     }
@@ -151,13 +138,9 @@ class WebProductTest extends TestCase
 
         $response = $this->get($path);
 
-        $page->delete();
-        $menu->delete();
-        $product->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebProductController', 'method' => 'show'
-        ]);
+        ], $this->getActionsFromRoute($route));
 
         $response->assertOk();
     }
@@ -180,13 +163,9 @@ class WebProductTest extends TestCase
 
         $response = $this->get($path);
 
-        $page->delete();
-        $menu->delete();
-        $product->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebProductController', 'method' => 'testPutMethod'
-        ]);
+        ], $this->getActionsFromRoute($route));
 
         $response->assertOk();
     }
@@ -207,13 +186,9 @@ class WebProductTest extends TestCase
             $page->slug . '/' . $product->slug . '/test-uri', Request::METHOD_PUT
         );
 
-        $page->delete();
-        $menu->delete();
-        $product->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebProductController', 'method' => 'testTabPutMethod'
-        ]);
+        ], $this->getActionsFromRoute($route));
     }
 
     public function test_product_show_tabs_with_parameter()
@@ -233,14 +208,10 @@ class WebProductTest extends TestCase
             Request::METHOD_DELETE
         );
 
-        $page->delete();
-        $menu->delete();
-        $product->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebProductController',
             'method' => 'testTabDeleteMethodWithParameter'
-        ]);
+        ], $this->getActionsFromRoute($route));
     }
 
     public function test_product_show_sub_pages()
@@ -260,13 +231,9 @@ class WebProductTest extends TestCase
 
         $response = $this->get($path);
 
-        array_map(fn ($page) => $page->delete(), $pages);
-        $menu->delete();
-        $product->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebProductController', 'method' => 'show'
-        ]);
+        ], $this->getActionsFromRoute($route));
 
         $response->assertOk();
     }

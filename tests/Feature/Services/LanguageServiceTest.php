@@ -2,29 +2,30 @@
 
 namespace Tests\Feature\Services;
 
-use App\Models\Language;
 use App\Services\LanguageService;
 use Closure;
 use Database\Factories\LanguageFactory;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Testing\TestCase;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class LanguageServiceTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * The active language.
      *
      * @var string
      */
-    protected string $activeLanguage = 'es';
+    protected string $activeLanguage = 'en';
 
     /**
      * The active language.
      *
      * @var array
      */
-    protected array $languages = ['en', 'es', 'fr'];
+    protected array $languages = ['en', 'es', 'cn'];
 
     /**
      * This method is called before each test.
@@ -33,23 +34,9 @@ class LanguageServiceTest extends TestCase
     {
         parent::setUp();
 
-        (new Language)->newQuery()->delete();
-
-        DB::update('ALTER TABLE languages AUTO_INCREMENT = 1');
-
         if (! empty($envActiveLanguage = (string) getenv('lang_active'))) {
             $this->activeLanguage = $envActiveLanguage;
         }
-    }
-
-    /**
-     * This method is called after each test.
-     */
-    protected function tearDown(): void
-    {
-        (new Language)->newQuery()->delete();
-
-        parent::tearDown();
     }
 
     /**
@@ -103,9 +90,9 @@ class LanguageServiceTest extends TestCase
 
     public function test_specified_language_exists_and_visible(): void
     {
-        $service = $this->getLanguageService(fn ($factory) => $factory->visible('fr'));
+        $service = $this->getLanguageService(fn ($factory) => $factory->visible('cn'));
 
-        $this->assertTrue($service->visibleExists('fr'));
+        $this->assertTrue($service->visibleExists('cn'));
     }
 
     public function test_main_language_is_active(): void
@@ -149,7 +136,7 @@ class LanguageServiceTest extends TestCase
     {
         $service = $this->getLanguageService();
 
-        $this->assertSame($service->get('fr'), $service->getBy('fr'));
+        $this->assertSame($service->get('cn'), $service->getBy('cn'));
     }
 
     public function test_get_language_by_key(): void
@@ -203,7 +190,7 @@ class LanguageServiceTest extends TestCase
 
     public function test_language_service_visible_is_not_empty(): void
     {
-        $service = $this->getLanguageService(fn ($factory) => $factory->visible('fr'));
+        $service = $this->getLanguageService(fn ($factory) => $factory->visible('cn'));
 
         $this->assertFalse($service->visibleIsEmpty());
     }

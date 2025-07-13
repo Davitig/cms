@@ -4,9 +4,12 @@ namespace Tests\Feature\Admin;
 
 use Database\Factories\CmsUserFactory;
 use Database\Factories\CmsUserRoleFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AdminLoginTest extends TestAdmin
 {
+    use RefreshDatabase;
+
     public function test_admin_access_needs_authentication(): void
     {
         $response = $this->get(cms_route('dashboard.index'));
@@ -37,12 +40,12 @@ class AdminLoginTest extends TestAdmin
 
         $cmsUser = CmsUserFactory::new()
             ->role($cmsUserRole->id)
-            ->loginParams($email = fake()->email(), 'password1')
+            ->loginParams($email = fake()->email(), 'password')
             ->create();
 
         $response = $this->post(cms_route('login.post'), [
             'email' => $email,
-            'password' => 'password1'
+            'password' => 'password'
         ]);
 
         $cmsUser->delete();

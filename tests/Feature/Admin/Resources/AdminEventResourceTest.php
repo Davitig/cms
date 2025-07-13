@@ -6,10 +6,14 @@ use App\Models\Event\Event;
 use Database\Factories\CollectionFactory;
 use Database\Factories\Event\EventFactory;
 use Database\Factories\Event\EventLanguageFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
+use Tests\Feature\CreatesLanguageService;
 
 class AdminEventResourceTest extends TestAdmin
 {
+    use RefreshDatabase, CreatesLanguageService;
+
     /**
      * Create a new events.
      *

@@ -8,10 +8,13 @@ use App\View\Composers\Admin\AdminRouteMatchesComposer;
 use App\View\Composers\Admin\AdminSitemapXmlComposer;
 use App\View\Composers\Admin\AdminUserRouteAccessComposer;
 use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Routing\Route;
 
 class AdminComposerTest extends TestAdmin
 {
+    use RefreshDatabase;
+
     protected function testComposer(string|object $composer, ...$someOfArgs): void
     {
         if (is_string($composer)) {

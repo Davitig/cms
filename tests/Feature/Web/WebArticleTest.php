@@ -6,13 +6,15 @@ use Database\Factories\Article\ArticleFactory;
 use Database\Factories\Article\ArticleLanguageFactory;
 use Database\Factories\CollectionFactory;
 use Database\Factories\MenuFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Request;
-use Tests\Feature\DynamicRoutesTrait;
+use Tests\Feature\CreatesLanguageService;
+use Tests\Feature\InteractsWithDynamicPage;
 use Tests\TestCase;
 
 class WebArticleTest extends TestCase
 {
-    use DynamicRoutesTrait;
+    use RefreshDatabase, CreatesLanguageService, InteractsWithDynamicPage;
 
     /**
      * Create a new article.
@@ -43,13 +45,9 @@ class WebArticleTest extends TestCase
 
         $response = $this->get($page->slug);
 
-        $page->delete();
-        $menu->delete();
-        $collection->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebArticleController', 'method' => 'index'
-        ]);
+        ], $this->getActionsFromRoute($route));
 
         $response->assertOk();
     }
@@ -70,13 +68,9 @@ class WebArticleTest extends TestCase
 
         $response = $this->get($page->slug);
 
-        $page->delete();
-        $menu->delete();
-        $collection->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebArticleController', 'method' => 'testPostMethod'
-        ]);
+        ], $this->getActionsFromRoute($route));
 
         $response->assertOk();
     }
@@ -95,13 +89,9 @@ class WebArticleTest extends TestCase
 
         $route = $this->getDynamicPageRouteActions($page->slug . '/test-uri');
 
-        $page->delete();
-        $menu->delete();
-        $collection->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebArticleController', 'method' => 'testTabMethod'
-        ]);
+        ], $this->getActionsFromRoute($route));
     }
 
     public function test_article_index_tabs_with_parameter()
@@ -120,14 +110,10 @@ class WebArticleTest extends TestCase
             $page->slug . '/test-uri/' . rand(5, 10), Request::METHOD_POST
         );
 
-        $page->delete();
-        $menu->delete();
-        $collection->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebArticleController',
             'method' => 'testTabPostMethodWithParameter'
-        ]);
+        ], $this->getActionsFromRoute($route));
     }
 
     public function test_article_index_sub_pages()
@@ -146,13 +132,9 @@ class WebArticleTest extends TestCase
 
         $response = $this->get($path);
 
-        array_map(fn ($page) => $page->delete(), $pages);
-        $menu->delete();
-        $collection->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebArticleController', 'method' => 'index'
-        ]);
+        ], $this->getActionsFromRoute($route));
 
         $response->assertOk();
     }
@@ -169,14 +151,9 @@ class WebArticleTest extends TestCase
 
         $response = $this->get($path);
 
-        $page->delete();
-        $menu->delete();
-        $article->delete();
-        $collection->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebArticleController', 'method' => 'show'
-        ]);
+        ], $this->getActionsFromRoute($route));
 
         $response->assertOk();
     }
@@ -199,14 +176,9 @@ class WebArticleTest extends TestCase
 
         $response = $this->get($path);
 
-        $page->delete();
-        $menu->delete();
-        $article->delete();
-        $collection->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebArticleController', 'method' => 'testPutMethod'
-        ]);
+        ], $this->getActionsFromRoute($route));
 
         $response->assertOk();
     }
@@ -227,14 +199,9 @@ class WebArticleTest extends TestCase
             $page->slug . '/' . $article->slug . '/test-uri', Request::METHOD_PUT
         );
 
-        $page->delete();
-        $menu->delete();
-        $article->delete();
-        $collection->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebArticleController', 'method' => 'testTabPutMethod'
-        ]);
+        ], $this->getActionsFromRoute($route));
     }
 
     public function test_article_show_tabs_with_parameter()
@@ -254,15 +221,10 @@ class WebArticleTest extends TestCase
             Request::METHOD_DELETE
         );
 
-        $page->delete();
-        $menu->delete();
-        $article->delete();
-        $collection->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebArticleController',
             'method' => 'testTabDeleteMethodWithParameter'
-        ]);
+        ], $this->getActionsFromRoute($route));
     }
 
     public function test_article_show_sub_pages()
@@ -282,14 +244,9 @@ class WebArticleTest extends TestCase
 
         $response = $this->get($path);
 
-        array_map(fn ($page) => $page->delete(), $pages);
-        $menu->delete();
-        $article->delete();
-        $collection->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebArticleController', 'method' => 'show'
-        ]);
+        ], $this->getActionsFromRoute($route));
 
         $response->assertOk();
     }

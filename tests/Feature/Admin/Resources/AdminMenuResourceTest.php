@@ -4,10 +4,13 @@ namespace Tests\Feature\Admin\Resources;
 
 use App\Models\Menu;
 use Database\Factories\MenuFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminMenuResourceTest extends TestAdmin
 {
+    use RefreshDatabase;
+
     public function test_admin_menus_resource_index()
     {
         $menus = MenuFactory::new()->times(5)->create();

@@ -2,8 +2,12 @@
 
 namespace Tests\Feature\Admin;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
 class AdminWebSettingTest extends TestAdmin
 {
+    use RefreshDatabase;
+
     public function test_admin_web_settings_index()
     {
         $response = $this->actingAs(

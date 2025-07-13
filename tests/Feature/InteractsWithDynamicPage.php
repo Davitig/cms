@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
-trait DynamicRoutesTrait
+trait InteractsWithDynamicPage
 {
     /**
      * Create a new pages.

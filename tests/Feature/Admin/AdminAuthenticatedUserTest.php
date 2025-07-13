@@ -4,12 +4,13 @@ namespace Tests\Feature\Admin;
 
 use App\Models\CmsUser\CmsUserRole;
 use App\Models\Permission;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
-use Tests\Feature\RoutesTrait;
+use Tests\Feature\InteractsWithRouter;
 
 class AdminAuthenticatedUserTest extends TestAdmin
 {
-    use RoutesTrait;
+    use RefreshDatabase, InteractsWithRouter;
 
     public function test_admin_user_authenticated()
     {

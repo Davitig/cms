@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Permission;
 
-trait RoutesTrait
+trait InteractsWithRouter
 {
     protected function getAllCMSRouteNames(): array
     {

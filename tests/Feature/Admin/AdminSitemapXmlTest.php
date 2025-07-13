@@ -2,8 +2,12 @@
 
 namespace Tests\Feature\Admin;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
 class AdminSitemapXmlTest extends TestAdmin
 {
+    use RefreshDatabase;
+
     public function test_admin_sitemap_xml_store()
     {
         $response = $this->actingAs(

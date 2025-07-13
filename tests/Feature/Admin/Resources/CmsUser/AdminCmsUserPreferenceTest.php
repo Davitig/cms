@@ -2,10 +2,13 @@
 
 namespace Tests\Feature\Admin\Resources\CmsUser;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminCmsUserPreferenceTest extends TestAdmin
 {
+    use RefreshDatabase;
+
     public function test_admin_cms_user_preferences_index()
     {
         $response = $this->actingAs(

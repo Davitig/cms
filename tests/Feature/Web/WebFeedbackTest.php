@@ -3,14 +3,16 @@
 namespace Tests\Feature\Web;
 
 use App\Mail\FeedbackSubmitted;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Request;
-use Tests\Feature\DynamicRoutesTrait;
+use Tests\Feature\CreatesLanguageService;
+use Tests\Feature\InteractsWithDynamicPage;
 use Tests\TestCase;
 
 class WebFeedbackTest extends TestCase
 {
-    use DynamicRoutesTrait;
+    use RefreshDatabase, CreatesLanguageService, InteractsWithDynamicPage;
 
     public function test_feedback_page()
     {
@@ -22,12 +24,9 @@ class WebFeedbackTest extends TestCase
 
         $response = $this->get($page->slug);
 
-        $page->delete();
-        $menu->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebFeedbackController', 'method' => 'index'
-        ]);
+        ], $this->getActionsFromRoute($route));
 
         $response->assertOk();
     }
@@ -40,12 +39,9 @@ class WebFeedbackTest extends TestCase
 
         $route = $this->getDynamicPageRouteActions($page->slug, Request::METHOD_POST);
 
-        $page->delete();
-        $menu->delete();
-
-        $this->assertSame($this->getActionsFromRoute($route), [
+        $this->assertSame([
             'controller' => 'WebFeedbackController', 'method' => 'send'
-        ]);
+        ], $this->getActionsFromRoute($route));
 
         Mail::fake();
 

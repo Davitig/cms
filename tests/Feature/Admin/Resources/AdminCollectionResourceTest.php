@@ -4,10 +4,13 @@ namespace Tests\Feature\Admin\Resources;
 
 use App\Models\Collection;
 use Database\Factories\CollectionFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
 
 class AdminCollectionResourceTest extends TestAdmin
 {
+    use RefreshDatabase;
+
     public function test_admin_collections_resource_index()
     {
         $collections = CollectionFactory::new()->times(5)->create();

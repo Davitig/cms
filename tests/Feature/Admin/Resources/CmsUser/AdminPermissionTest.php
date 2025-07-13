@@ -2,13 +2,14 @@
 
 namespace Tests\Feature\Admin\Resources\CmsUser;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
 use Tests\Feature\Admin\TestAdmin;
-use Tests\Feature\RoutesTrait;
+use Tests\Feature\InteractsWithRouter;
 
 class AdminPermissionTest extends TestAdmin
 {
-    use RoutesTrait;
+    use RefreshDatabase, InteractsWithRouter;
 
     public function test_admin_permissions_index()
     {

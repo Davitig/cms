@@ -7,7 +7,6 @@ use App\Models\CmsUser\CmsUserRole;
 use Database\Factories\CmsUserFactory;
 use Database\Factories\CmsUserRoleFactory;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 abstract class TestAdmin extends TestCase
@@ -16,22 +15,11 @@ abstract class TestAdmin extends TestCase
     {
         parent::setUp();
 
-        DB::update('ALTER TABLE cms_user_roles AUTO_INCREMENT = 1');
-        DB::update('ALTER TABLE cms_users AUTO_INCREMENT = 1');
-
         $this->app['config']['_cms.booted'] = true;
 
         $this->createCmsUser();
 
         $this->createCmsUser(false);
-    }
-
-    protected function tearDown(): void
-    {
-        (new CmsUser)->newQuery()->delete();
-        (new CmsUserRole)->newQuery()->delete();
-
-        parent::tearDown();
     }
 
     protected function getFullAccessCmsUser(): CmsUser

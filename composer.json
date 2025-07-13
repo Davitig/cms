@@ -19,7 +19,8 @@
         "sabre/xml": "4.0.*",
         "spatie/laravel-html": "3.12.*",
         "ext-dom": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-pdo": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -45,7 +46,6 @@
             "Tests\\": "tests/"
         }
     },
-
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
