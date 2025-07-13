@@ -29,7 +29,7 @@ class ArticleRequest extends Request
      *
      * @return void
      */
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         if ($this->isNotFilled('created_at')) {
             $this->offsetUnset('created_at');

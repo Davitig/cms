@@ -411,7 +411,7 @@ function sortable(url, csrfToken, orderBy, page, foreignKey) {
     });
 }
 
-function nestable(url, csrfToken, orderBy, selectors) {
+function nestable(url, csrfToken, orderBy, foreignKey, selectors) {
     duplicatedPositionResolver(url, csrfToken);
 
     let nestableList = [];
@@ -453,6 +453,10 @@ function nestable(url, csrfToken, orderBy, selectors) {
             }
 
             input['order_by'] = orderBy === 'desc' ? 'desc' : 'asc';
+
+            if (foreignKey) {
+                input['foreign_key'] = foreignKey;
+            }
 
             $.post(url, input, function (res) {
                 nestable.trigger('positionUpdated');

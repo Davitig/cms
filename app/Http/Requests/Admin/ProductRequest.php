@@ -30,7 +30,7 @@ class ProductRequest extends Request
      *
      * @return void
      */
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         if (! language()->mainIsActive()) {
             return;

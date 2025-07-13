@@ -107,7 +107,7 @@
     @include('admin.-scripts.transfer', ['route' => cms_route('pages.transfer', [$menu->id]), 'column' => 'menu_id', 'list' => $menus, 'id' => $menu->id, 'recursive' => true])
     <script type="text/javascript">
         $(function () {
-            nestable('{{ cms_route('pages.positions') }}', '{{ csrf_token() }}', 'asc');
+            nestable('{{ cms_route('pages.positions') }}', '{{ csrf_token() }}', 'asc', 'menu_id');
 
             $('.uk-nestable').on('positionUpdated', function () {
                 updateSubItems($(this).find('> li'));

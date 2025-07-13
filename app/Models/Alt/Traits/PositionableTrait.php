@@ -3,6 +3,7 @@
 namespace App\Models\Alt\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
+use InvalidArgumentException;
 
 trait PositionableTrait
 {
@@ -22,6 +23,10 @@ trait PositionableTrait
         ?int    $foreignValue = null
     ): ?int
     {
+        if ($foreignKey && ! in_array($foreignKey, $this->getFillable())) {
+            throw new InvalidArgumentException('Invalid foreign key provided.');
+        }
+
         $hasParentId = in_array('parent_id', $this->getFillable());
 
         $table = $this->getTable();
@@ -62,6 +67,10 @@ trait PositionableTrait
         if ((! $endId && is_null($parentId)) ||
             ($parentId && ! $this->whereKey($parentId)->exists())) {
             return 0;
+        }
+
+        if ($foreignKey && ! in_array($foreignKey, $this->getFillable())) {
+            throw new InvalidArgumentException('Invalid foreign key provided.');
         }
 
         $hasParentId = in_array('parent_id', $this->getFillable());

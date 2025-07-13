@@ -42,7 +42,7 @@ class CollectionRequest extends Request
      *
      * @return void
      */
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         if (! $this->isMethod(self::METHOD_POST)) {
             $this->offsetUnset('type');

@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use App\Http\Requests\Request;
-use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\Rules\RequiredIf;
 
 class PageRequest extends Request
 {
@@ -23,25 +23,12 @@ class PageRequest extends Request
             'title' => 'required',
             'short_title' => 'required',
             'type' => $required,
-            'type_id' => 'nullable|integer'
+            'type_id' => new RequiredIf(fn () =>
+                array_key_exists(
+                    $this->get('type'), cms_pages('listable.collections')
+                )
+            )
         ];
-    }
-
-    /**
-     * Handle a before validation attempt.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return void
-     */
-    protected function beforeValidation(Validator $validator): void
-    {
-        if (! language()->mainIsActive()) {
-            return;
-        }
-
-        $validator->sometimes('type_id', 'required', function ($input) {
-            return array_key_exists($input->type, cms_pages('listable.collections'));
-        });
     }
 
     /**
@@ -49,7 +36,7 @@ class PageRequest extends Request
      *
      * @return void
      */
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         if (! $this->filled('short_title')) {
             $this->offsetSet('short_title', $this->get('title'));
@@ -62,5 +49,17 @@ class PageRequest extends Request
         $this->slugifyInput('slug', ['short_title']);
 
         $this->boolifyInput('visible');
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'type_id' => $this->get('type')
+        ];
     }
 }

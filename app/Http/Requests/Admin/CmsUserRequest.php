@@ -47,7 +47,7 @@ class CmsUserRequest extends Request
      *
      * @return void
      */
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         $this->boolifyInput('suspended');
 

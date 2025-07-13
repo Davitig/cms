@@ -27,7 +27,7 @@ class LanguageRequest extends Request
      *
      * @return void
      */
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         $this->offsetSet('language', strtolower($this->get('language')));
 

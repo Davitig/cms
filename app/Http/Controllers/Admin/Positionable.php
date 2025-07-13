@@ -6,6 +6,7 @@ use App\Models\Alt\Traits\PositionableTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use InvalidArgumentException;
 use RuntimeException;
 
 trait Positionable
@@ -88,6 +89,10 @@ trait Positionable
         int $id, string $move, string $direction, ?string $foreignKey = null
     ): ?int
     {
+        if ($foreignKey && ! in_array($foreignKey, $this->model->getFillable())) {
+            throw new InvalidArgumentException('Invalid foreign key provided.');
+        }
+
         $item = $this->model->find($id, array_filter(['id', 'position', $foreignKey]));
 
         if (is_null($item) || $foreignKey && is_null($item->$foreignKey)) {

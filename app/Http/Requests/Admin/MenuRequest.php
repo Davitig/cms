@@ -23,7 +23,7 @@ class MenuRequest extends Request
      *
      * @return void
      */
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         $this->boolifyInput('main');
     }

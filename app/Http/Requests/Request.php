@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Cocur\Slugify\Slugify;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 abstract class Request extends FormRequest
@@ -16,20 +15,6 @@ abstract class Request extends FormRequest
     public function authorize(): bool
     {
         return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function getValidatorInstance(): Validator
-    {
-        $validator = parent::getValidatorInstance();
-
-        if (method_exists($this, 'beforeValidation')) {
-            $this->beforeValidation($validator);
-        }
-
-        return $validator;
     }
 
     /**

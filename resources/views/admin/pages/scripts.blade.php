@@ -10,6 +10,7 @@
                 + ' class="text-info" target="_blank">Collections</a></div>';
 
             $('[name="type"]', form).on('change', function () {
+                $('.type-id .text-danger', form).remove();
                 getListableTypes(this.value);
             });
 
