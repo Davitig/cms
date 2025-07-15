@@ -9,12 +9,12 @@
         </ol>
     </nav>
     <div class="card">
-        <div class="card-header header-elements">
-            <div class="fs-5">
-                Collections
+        <div class="card-header header-elements flex-column flex-md-row align-items-md-center align-items-start gap-4">
+            <div class="d-flex gap-4">
+                <div class="fs-5">Collections</div>
+                <span class="count badge bg-label-primary">{{ number_format($items->total()) }}</span>
             </div>
-            <span class="count badge bg-label-primary ms-4">{{ $items->total() }}</span>
-            <div class="card-header-elements ms-auto">
+            <div class="card-header-elements ms-md-auto flex-md-row flex-column align-items-md-center align-items-start gap-4">
                 <a href="{{ cms_route('collections.create') }}" class="btn btn-primary">
                     <i class="icon-base fa fa-plus icon-xs me-1"></i>
                     <span>Add New Record</span>
@@ -36,11 +36,15 @@
                     <tbody>
                     @foreach ($items as $item)
                         <tr class="item">
-                            <td class="fw-bold">{{ $item->title }}</td>
-                            <td>
-                                <a href="{{ $typeUrl = cms_route($item->type . '.index', [$item->id]) }}" class="badge bg-label-dark" title="Go to {{ $item->type }}">
-                                    {{ $item->type }}
+                            <td class="fw-bold">
+                                <a href="{{ $typeUrl = cms_route($item->type . '.index', [$item->id]) }}" title="Go to {{ $item->title }}">
+                                    {{ $item->title }}
                                 </a>
+                            </td>
+                            <td>
+                                <span class="badge bg-label-dark">
+                                    {{ $item->type }}
+                                </span>
                             </td>
                             <td>{{ $item->description }}</td>
                             <td>{{ $item->id }}</td>

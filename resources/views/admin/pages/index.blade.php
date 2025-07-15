@@ -15,7 +15,7 @@
         <div class="card-header header-elements flex-column flex-md-row align-items-md-center align-items-start gap-4">
             <div class="d-flex">
                 <div class="fs-5">{{ $menu->title }}</div>
-                <span class="count badge bg-label-primary ms-4">{{ $itemsCount = $items->count() }}</span>
+                <span class="count badge bg-label-primary ms-4">{{ number_format($itemsCount = $items->count()) }}</span>
             </div>
             <div class="card-header-elements ms-md-auto flex-row-reverse flex-md-row">
                 <a href="{{ cms_route('menus.edit', [$menu->id]) }}" class="btn" title="Edit Menu">
@@ -104,7 +104,9 @@
     <link rel="stylesheet" href="{{ asset('assets/default/libs/uikit-2.27.5/css/components/nestable.min.css') }}">
 @endpush
 @push('body.bottom')
-    @include('admin.-scripts.transfer', ['route' => cms_route('pages.transfer', [$menu->id]), 'column' => 'menu_id', 'list' => $menus, 'id' => $menu->id, 'recursive' => true])
+    @include('admin.-scripts.transfer', [
+    'route' => cms_route('pages.transfer', [$menu->id]), 'column' => 'menu_id', 'id' => $menu->id, 'recursive' => true
+    ])
     <script type="text/javascript">
         $(function () {
             nestable('{{ cms_route('pages.positions') }}', '{{ csrf_token() }}', 'asc', 'menu_id');

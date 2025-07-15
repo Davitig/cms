@@ -17,7 +17,7 @@
                 <div class="card-header header-elements flex-column flex-md-row align-items-md-center align-items-start gap-4">
                     <div class="d-flex">
                         <div class="fs-5">Articles</div>
-                        <span class="count badge bg-label-primary ms-4">{{ $items->total() }}</span>
+                        <span class="count badge bg-label-primary ms-4">{{ number_format($items->total()) }}</span>
                     </div>
                     <div class="card-header-elements ms-md-auto flex-row-reverse flex-md-row">
                         <a href="{{ cms_route('collections.edit', [$parent->id]) }}" class="btn" title="Edit Collection">
@@ -104,12 +104,12 @@
             </div>
         </div>
         <div class="col-lg-3">
-            @include('admin.collections.similar_type_menu')
+            @include('admin.collections.sidebar')
         </div>
     </div>
 @endsection
 @push('body.bottom')
-    @include('admin.-scripts.transfer', ['route' => cms_route('articles.transfer', [$parent->id]), 'column' => 'collection_id', 'list' => $parentTypes, 'parentId' => $parent->id])
+    @include('admin.-scripts.transfer', ['route' => cms_route('articles.transfer', [$parent->id]), 'column' => 'collection_id', 'parentId' => $parent->id])
     @if ($parent->admin_order_by == 'position')
         <script src="{{ asset('assets/vendor/libs/sortablejs/sortable.js') }}"></script>
         <script type="text/javascript">

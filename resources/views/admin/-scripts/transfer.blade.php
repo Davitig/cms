@@ -16,8 +16,7 @@
                     @endif
                     <div class="row">
                         <div class="mb-6">
-                            {{ html()->select('column_value', $list->pluck('title', 'id')->toArray())
-                            ->id('column_value')->class('form-control') }}
+                            {{ html()->text('column_value')->id('column_value')->class('form-control')->placeholder('Enter ' . str($column)->replace('_', ' ')) }}
                         </div>
                         <div class="d-flex gap-4">
                             <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">{{trans('general.close')}}</button>
@@ -59,7 +58,7 @@
                         $(this).remove();
                     });
                 }
-                textDecrement(1, '.total, .count-items-{{ $parentId }}');
+                textDecrement(1, '.count, .count-items-{{ $parentId }}');
                 textIncrement(1, '.count-items-' + targetId);
             }
         });

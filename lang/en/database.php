@@ -15,6 +15,7 @@ return [
     'updated' => 'The item has been successfully updated.',
     'deleted' => 'The item has been successfully deleted.',
     'no_changes' => 'No changes have been saved.',
+    'invalid_parameters' => 'Invalid parameters.',
 
     'error' => [
         '1054' => 'Unknown column.',

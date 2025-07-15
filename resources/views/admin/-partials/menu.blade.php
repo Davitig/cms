@@ -36,7 +36,7 @@
                                 <li class="menu-item{{ $routeMatches(['menus']) ? ' active' : '' }}">
                                     <a href="{{ cms_route('menus.index') }}" class="menu-link">
                                         <i class="menu-icon icon-base fa fa-list icon-18px"></i>
-                                        <div>Menu Management</div>
+                                        <div>Menus</div>
                                     </a>
                                 </li>
                             @endif

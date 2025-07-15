@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -40,7 +41,18 @@ trait Transferable
             $attributes['parent_id'] = 0;
         }
 
-        $model->update($attributes);
+        try {
+            $model->update($attributes);
+        } catch (QueryException $e) {
+            $errorCode = (string) ($e->errorInfo[1] ?? null);
+
+            return $this->getTransferResponse(
+                $request,
+                (int) ! $errorCode,
+                trans('database.' . ($errorCode ? 'error.' . $errorCode : 'deleted')),
+                422
+            );
+        }
 
         if ($recursive) {
             $this->transferRecursively($model, $input['column'], $input['column_value']);

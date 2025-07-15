@@ -16,7 +16,7 @@
                 <span>Role:</span>
                 {{ $activeRole }}
                 <span class="total-allowed badge rounded-pill p-1 bg-{{ ($activeRoutesCount = count($activeRoutes)) ? 'success' : 'danger' }} ms-2">
-                    {{ $activeRoutesCount }}
+                    {{ number_format($activeRoutesCount) }}
                 </span>
             </a>
             <button

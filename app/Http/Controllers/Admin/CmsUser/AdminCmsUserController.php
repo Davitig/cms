@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CmsUserRequest;
 use App\Models\CmsUser\CmsUser;
 use App\Models\CmsUser\CmsUserRole;
-use App\Scopes\CmsUserFilter;
+use App\Scopes\Models\CmsUserFilter;
 use Closure;
 use Illuminate\Container\Attributes\Storage as StorageAttr;
 use Illuminate\Filesystem\Filesystem;

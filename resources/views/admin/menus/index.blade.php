@@ -10,10 +10,8 @@
     </nav>
     <div class="card">
         <div class="card-header header-elements">
-            <div class="fs-5">
-                Menus
-            </div>
-            <span class="count badge bg-label-primary ms-4">{{ $menus->total() }}</span>
+            <div class="fs-5">Menus</div>
+            <span class="count badge bg-label-primary ms-4">{{ number_format($items->total()) }}</span>
             <div class="card-header-elements ms-auto">
                 <a href="{{ cms_route('menus.create') }}" class="btn btn-primary">
                     <i class="icon-base fa fa-plus icon-xs me-1"></i>
@@ -33,7 +31,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($menus as $item)
+                @foreach ($items as $item)
                     <tr class="item">
                         <td>
                             <input type="radio" name="main" class="form-check-input" data-id="{{$item->id}}"{{$item->main ? ' checked' : ''}}>
@@ -71,6 +69,6 @@
             </table>
         </div>
     </div>
-    {{ $menus->links() }}
+    {{ $items->links() }}
 @endsection
 @include('admin.-scripts.checkbox-xhr', ['url' => cms_route('menus.updateMain')])

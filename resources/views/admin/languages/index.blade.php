@@ -11,8 +11,8 @@
     <div class="card">
         <div class="card-header header-elements flex-column flex-md-row align-items-md-center align-items-start gap-4">
             <div class="d-flex">
-                <div class="fs-5 me-2">Languages</div>
-                <span class="badge bg-label-primary ms-2">{{ $items->total() }}</span>
+                <div class="fs-5">Languages</div>
+                <span class="badge bg-label-primary ms-4">{{ number_format($items->total()) }}</span>
             </div>
             <div class="card-header-elements ms-md-auto flex-md-row flex-column align-items-md-center align-items-start gap-4">
                 <span class="badge badge-outline-secondary rounded-pill">Drag and Drop to sort the language order</span>

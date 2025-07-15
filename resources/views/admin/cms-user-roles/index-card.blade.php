@@ -1,9 +1,7 @@
 <div class="card mb-6">
     <div class="card-header header-elements">
-        <div class="fs-5">
-            CMS User Roles
-        </div>
-        <span class="count badge bg-label-primary ms-4">{{ $items->total() }}</span>
+        <div class="fs-5">CMS User Roles</div>
+        <span class="count badge bg-label-primary ms-4">{{ number_format($items->total()) }}</span>
         <div class="card-header-elements ms-auto">
             <a href="{{ cms_route('cmsUserRoles.create') }}" class="btn btn-primary">
                 <i class="icon-base fa fa-plus icon-xs me-1"></i>

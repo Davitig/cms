@@ -27,12 +27,13 @@ class AdminEventController extends Controller
         $data['parent'] = (new Collection)->byType($this->model::TYPE)
             ->findOrFail($collectionId);
 
-        $data['items'] = $this->model->filesExists()->getAdminCollection($data['parent']);
-
-        $data['parentTypes'] = (new Collection)->byType($this->model::TYPE)->get()
+        $data['similarCollections'] = (new Collection)->byType($this->model::TYPE)
+            ->limit(50)->get()
             ->each(function ($item) {
                 $item->count = $this->model->collectionId($item->id)->count();
             });
+
+        $data['items'] = $this->model->filesExists()->getAdminCollection($data['parent']);
 
         return view('admin.collections.events.index', $data);
     }

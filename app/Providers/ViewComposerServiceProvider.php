@@ -71,9 +71,6 @@ class ViewComposerServiceProvider extends ServiceProvider
         View::composer([
             'admin.-partials.menu',
             'admin.-partials.navbar',
-            'admin.menus.index',
-            'admin.pages.index',
-            'errors.admin.layout'
         ], AdminMenuComposer::class);
 
         // compose route matcher

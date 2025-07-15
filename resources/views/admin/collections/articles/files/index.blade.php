@@ -23,7 +23,7 @@
             </a>
             <div class="badge bg-label-primary fs-6">
                 Total:
-                <span class="count">{{ $items->total() }}</span>
+                <span class="count">{{ number_format($items->total()) }}</span>
             </div>
             <div class="d-flex btn-group" role="group">
                 <button type="button" class="btn btn-outline-secondary text-dark item-add">

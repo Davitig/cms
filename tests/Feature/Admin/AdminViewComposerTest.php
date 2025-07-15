@@ -11,7 +11,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Routing\Route;
 
-class AdminComposerTest extends TestAdmin
+class AdminViewComposerTest extends TestAdmin
 {
     use RefreshDatabase;
 

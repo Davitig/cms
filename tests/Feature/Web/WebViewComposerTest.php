@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
 use stdClass;
 use Tests\TestCase;
 
-class WebComposerTest extends TestCase
+class WebViewComposerTest extends TestCase
 {
     use RefreshDatabase;
 

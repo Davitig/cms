@@ -4,7 +4,7 @@
     </div>
     <div class="card-body">
         <ul class="list-unstyled mb-0">
-            @foreach($parentTypes as $item)
+            @foreach($similarCollections as $item)
                 <li class="d-flex align-items-center mb-4">
                     <div class="badge bg-label-secondary text-body p-2 me-4 rounded">
                         <i class="icon-base fa-regular fa-list-alt icon-md"></i>
@@ -19,7 +19,7 @@
                         </div>
                         <div class="d-flex align-items-center">
                             <div class="{{ $item->id == $parent->id ? 'count' : 'count-items-' . $item->id }} badge bg-label-{{ $item->id == $parent->id ? 'primary' : 'gray' }}">
-                                {{ $item->count }}
+                                {{ number_format($item->count) }}
                             </div>
                         </div>
                     </div>

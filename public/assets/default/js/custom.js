@@ -150,7 +150,7 @@ $(function () {
             },
             error: function (xhr) {
                 notyf(
-                    xhr?.responseJSON?.message ? xhr?.responseJSON?.message : xhr.statusText,
+                    xhr?.responseJSON?.message ? xhr.responseJSON.message : xhr.statusText,
                     'error'
                 );
             },
@@ -203,9 +203,13 @@ $(function () {
                 });
             },
             error: function (xhr) {
+                form.trigger('ajaxFormError', [xhr]);
                 form.find('.text-danger').remove();
                 if (! xhr?.responseJSON?.errors) {
-                    notyf(xhr.statusText, 'error');
+                    notyf(
+                        xhr?.responseJSON?.message ? xhr.responseJSON.message : xhr.statusText,
+                        'error'
+                    );
 
                     return;
                 }

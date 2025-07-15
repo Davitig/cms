@@ -3,35 +3,41 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Cache;
+use App\Models\Article\Article;
+use App\Models\CmsUser\CmsUser;
+use App\Models\Collection;
+use App\Models\Event\Event;
+use App\Models\Menu;
+use App\Models\Page\Page;
+use App\Models\Product\Product;
+use App\Models\Translation;
+use Illuminate\Contracts\Cache\Repository;
 
 class AdminDashboardController extends Controller
 {
     /**
      * Display a Dashboard.
      *
+     * @param  \Illuminate\Contracts\Cache\Repository  $cache
      * @return \Illuminate\Contracts\View\View
      */
-    public function index()
+    public function index(Repository $cache)
     {
-        $db = app('db');
-
-        $data['menuId'] = $db->table('menus')
-            ->where('main', 1)
-            ->union($db->table('menus')->where('main', 0)->select('id'))
+        $data['menuId'] = (new Menu)->whereMain(1)
+            ->union((new Menu)->whereMain(0)->select('id'))
             ->limit(1)
             ->value('id');
 
-        $data += Cache::remember('dashboard', 60, function () use ($db) {
+        $data += $cache->remember('dashboard', 60, function () {
             return [
-                'menusTotal' => $db->table('menus')->count(),
-                'pagesTotal' => $db->table('pages')->count(),
-                'cmsUsersTotal' => $db->table('cms_users')->count(),
-                'productsTotal' => $db->table('products')->count(),
-                'collectionsTotal' => $db->table('collections')->count(),
-                'articlesTotal' => $db->table('articles')->count(),
-                'eventsTotal' => $db->table('events')->count(),
-                'translationsTotal' => $db->table('translations')->count()
+                'menuCount' => (new Menu)->count(),
+                'pageCount' => (new Page)->count(),
+                'cmsUserCount' => (new CmsUser)->count(),
+                'productCount' => (new Product)->count(),
+                'collectionCount' => (new Collection)->count(),
+                'articleCount' => (new Article)->count(),
+                'eventCount' => (new Event)->count(),
+                'translationCount' => (new Translation)->count()
             ];
         });
 

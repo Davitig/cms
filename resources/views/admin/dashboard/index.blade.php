@@ -10,7 +10,7 @@
                                 <i class="icon-base fa fa-user-tie icon-28px"></i>
                             </span>
                         </a>
-                        <h4 class="mb-0">{{ $cmsUsersTotal }}</h4>
+                        <h4 class="mb-0">{{ $cmsUserCount }}</h4>
                     </div>
                     <p class="mb-0">
                         <span class="fw-medium fs-5">Total CMS Users</span>
@@ -28,7 +28,7 @@
                                 <i class="icon-base fa fa-list icon-28px"></i>
                             </span>
                             </a>
-                            <h4 class="mb-0">{{ $menusTotal }}</h4>
+                            <h4 class="mb-0">{{ number_format($menuCount) }}</h4>
                         </div>
                         <p class="mb-0">
                             <span class="fw-medium fs-5">Total Menus</span>
@@ -47,7 +47,7 @@
                                 <i class="icon-base fa fa-indent icon-28px"></i>
                             </span>
                             </a>
-                            <h4 class="mb-0">{{ $pagesTotal }}</h4>
+                            <h4 class="mb-0">{{ number_format($pageCount) }}</h4>
                         </div>
                         <p class="mb-0">
                             <span class="fw-medium fs-5">Total Pages</span>
@@ -66,7 +66,7 @@
                                 <i class="icon-base fa fa-list-alt icon-28px"></i>
                             </span>
                             </a>
-                            <h4 class="mb-0">{{ $productsTotal }}</h4>
+                            <h4 class="mb-0">{{ number_format($productCount) }}</h4>
                         </div>
                         <p class="mb-0">
                             <span class="fw-medium fs-5">Total Products</span>
@@ -85,7 +85,7 @@
                                 <i class="icon-base fa fa-list-alt icon-28px"></i>
                             </span>
                             </a>
-                            <h4 class="mb-0">{{ $collectionsTotal }}</h4>
+                            <h4 class="mb-0">{{ number_format($collectionCount) }}</h4>
                         </div>
                         <p class="mb-0">
                             <span class="fw-medium fs-5">Total Collections</span>
@@ -104,7 +104,7 @@
                                     <i class="icon-base fa fa-newspaper icon-28px"></i>
                                 </span>
                             </div>
-                            <h4 class="mb-0">{{ $articlesTotal }}</h4>
+                            <h4 class="mb-0">{{ number_format($articleCount) }}</h4>
                         </div>
                         <p class="mb-0">
                             <span class="fw-medium fs-5">Total Articles</span>
@@ -123,7 +123,7 @@
                                     <i class="icon-base fa fa-book-atlas icon-28px"></i>
                                 </span>
                             </div>
-                            <h4 class="mb-0">{{ $eventsTotal }}</h4>
+                            <h4 class="mb-0">{{ number_format($eventCount) }}</h4>
                         </div>
                         <p class="mb-0">
                             <span class="fw-medium fs-5">Total Events</span>
@@ -142,7 +142,7 @@
                                     <i class="icon-base fa fa-sort-alpha-asc icon-28px"></i>
                                 </span>
                             </div>
-                            <h4 class="mb-0">{{ $translationsTotal }}</h4>
+                            <h4 class="mb-0">{{ number_format($translationCount) }}</h4>
                         </div>
                         <p class="mb-0">
                             <span class="fw-medium fs-5">Total Translations</span>

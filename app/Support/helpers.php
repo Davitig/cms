@@ -1,6 +1,7 @@
 <?php
 
 use App\Services\LanguageService;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Uri;
 
@@ -187,37 +188,10 @@ function web_url(
 
     $url = url(language_to_url($path, $language), [], $secure);
 
-    return trim($url, '?') . query_string(
-            $parameters, parse_url($url, PHP_URL_QUERY) ? '&' : '?'
-        );
+    $query = Arr::query($parameters);
+
+    return trim($url, '?') . ($query ? '?' . $query : '');
 }
-
-/**
- * Build a query string from an array of key value pairs.
- *
- * @param  array  $parameters
- * @param  string  $basePrefix
- * @return string
- */
-function query_string(array $parameters, string $basePrefix = '?'): string
-{
-    if (count($parameters) == 0) {
-        return '';
-    }
-
-    $query = http_build_query(
-        $keyed = array_filter($parameters, 'is_string', ARRAY_FILTER_USE_KEY)
-    );
-
-    if (count($keyed) < count($parameters)) {
-        $query .= '&'.implode(
-                '&', array_filter($parameters, 'is_numeric', ARRAY_FILTER_USE_KEY)
-            );
-    }
-
-    return $basePrefix.trim($query, '&');
-}
-
 /**
  * Prefix a language to the path.
  *
@@ -288,6 +262,38 @@ function language_to_url(string $url, mixed $language = null): string
     $path = language_prefix($path, $language);
 
     return $schemeAndHost . $baseUrl . $path . $query;
+}
+
+/**
+ * Get the CMS config.
+ *
+ * @param  string|null  $key
+ * @param  mixed  $default
+ * @return mixed
+ */
+function cms_config(?string $key = null, mixed $default = []): mixed
+{
+    if (! is_null($key)) {
+        return config('cms.' . $key, $default);
+    }
+
+    return config('cms', $default);
+}
+
+/**
+ * Get the CMS pages config.
+ *
+ * @param  string|null  $key
+ * @param  mixed  $default
+ * @return mixed
+ */
+function cms_pages(?string $key = null, mixed $default = []): mixed
+{
+    if (! is_null($key)) {
+        return cms_config('pages.' . $key, $default);
+    }
+
+    return cms_config('pages', $default);
 }
 
 /**
@@ -382,38 +388,6 @@ function fill_data(mixed $result, ?string $message = null, mixed $data = null): 
         'message' => $message,
         'data' => $data
     ];
-}
-
-/**
- * Get the CMS config.
- *
- * @param  string|null  $key
- * @param  mixed  $default
- * @return mixed
- */
-function cms_config(?string $key = null, mixed $default = []): mixed
-{
-    if (! is_null($key)) {
-        return config('cms.' . $key, $default);
-    }
-
-    return config('cms', $default);
-}
-
-/**
- * Get the CMS pages config.
- *
- * @param  string|null  $key
- * @param  mixed  $default
- * @return mixed
- */
-function cms_pages(?string $key = null, mixed $default = []): mixed
-{
-    if (! is_null($key)) {
-        return cms_config('pages.' . $key, $default);
-    }
-
-    return cms_config('pages', $default);
 }
 
 /**

@@ -21,9 +21,9 @@ class AdminMenuController extends Controller
      */
     public function index()
     {
-        // menus' data is loaded from middleware
+        $data['items'] = $this->model->paginate(50);
 
-        return view('admin.menus.index');
+        return view('admin.menus.index', $data);
     }
 
     /**
