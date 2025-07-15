@@ -1,4 +1,4 @@
-@if (language()->containsManyVisible())
+@if (language()->countVisible() > 1)
     <ul class="navbar-nav navbar-end text-uppercase">
         @php($currentLang = language()->active())
         @foreach (language()->allVisible() as $key => $value)

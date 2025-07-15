@@ -9,7 +9,7 @@ use App\Models\Event\Event;
 
 class AdminEventController extends Controller
 {
-    use Positionable, VisibilityTrait, Transferable;
+    use InteractsWithPosition, InteractsWithVisibility, Transferable;
 
     /**
      * Create a new controller instance.

@@ -9,18 +9,18 @@ use Illuminate\Support\Collection;
 class WebSettingComposer
 {
     /**
-     * The instance of the settings.
+     * The Collection instance of the settings.
      *
      * @var \Illuminate\Support\Collection
      */
-    protected Collection $settings;
+    protected Collection $items;
 
     /**
      * Create a new view composer instance.
      */
     public function __construct()
     {
-        $this->settings = $this->getSettings();
+        $this->items = $this->getSettings();
     }
 
     /**
@@ -31,7 +31,7 @@ class WebSettingComposer
      */
     public function compose(View $view): void
     {
-        $view->with('settings', $this->settings);
+        $view->with('settings', $this->items);
     }
 
     /**
@@ -41,6 +41,6 @@ class WebSettingComposer
      */
     protected function getSettings(): Collection
     {
-        return new Collection((new WebSetting)->getSettings());
+        return (new WebSetting)->getSettings();
     }
 }

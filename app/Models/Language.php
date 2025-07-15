@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Traits\PositionableTrait;
+use App\Concerns\Models\Positionable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Language extends Model
 {
-    use PositionableTrait;
+    use Positionable;
 
     /**
      * The attributes that are mass assignable.

@@ -2,13 +2,13 @@
 
 namespace App\Models\CmsUser;
 
-use App\Models\Alt\Traits\QueriesTrait;
+use App\Concerns\Models\ExtendsQueries;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class CmsUserRole extends Model
 {
-    use QueriesTrait;
+    use ExtendsQueries;
 
     /**
      * The attributes that are mass assignable.

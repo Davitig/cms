@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Services\LanguageService;
+use App\Support\LanguageProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 
@@ -13,8 +13,8 @@ class LanguageServiceProvider extends ServiceProvider implements DeferrableProvi
      */
     public function register(): void
     {
-        $this->app->singleton(LanguageService::class, static function ($app) {
-            return LanguageService::make(
+        $this->app->singleton(LanguageProvider::class, static function ($app) {
+            return LanguageProvider::make(
                 $app['request']->path(), (string) $app['request']->query(
                     $app['config']->get('language.query_string_key'),
                 )
@@ -37,6 +37,6 @@ class LanguageServiceProvider extends ServiceProvider implements DeferrableProvi
      */
     public function provides(): array
     {
-        return [LanguageService::class];
+        return [LanguageProvider::class];
     }
 }

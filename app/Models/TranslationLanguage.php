@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Traits\LanguageTrait;
+use App\Concerns\Models\QueriesWithLanguage;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class TranslationLanguage extends Model
 {
-    use LanguageTrait;
+    use QueriesWithLanguage;
 
     /**
      * The attributes that are mass assignable.

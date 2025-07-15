@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Traits\HasLanguage;
-use App\Models\Alt\Traits\QueriesTrait;
+use App\Concerns\Models\ExtendsQueries;
+use App\Concerns\Models\QueriesLanguageRelationship;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Translation extends Model
 {
-    use QueriesTrait, HasLanguage;
+    use ExtendsQueries, QueriesLanguageRelationship;
 
     /**
      * The attributes that are mass assignable.

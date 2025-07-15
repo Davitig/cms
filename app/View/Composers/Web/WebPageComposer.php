@@ -14,14 +14,14 @@ class WebPageComposer
      *
      * @var \Illuminate\Support\Collection
      */
-    protected Collection $pages;
+    protected Collection $items;
 
     /**
      * Create a new view composer instance.
      */
     public function __construct()
     {
-        $this->pages = $this->getPages();
+        $this->items = $this->getPages();
     }
 
     /**
@@ -32,7 +32,7 @@ class WebPageComposer
      */
     public function compose(View $view): void
     {
-        $view->with('pageItems', $this->pages);
+        $view->with('pageItems', $this->items);
     }
 
     /**

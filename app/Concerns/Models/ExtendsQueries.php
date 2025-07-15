@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Alt\Traits;
+namespace App\Concerns\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Support\Arr;
 
-trait QueriesTrait
+trait ExtendsQueries
 {
     /**
      * Add a new qualified select column to the query.

@@ -21,10 +21,13 @@
         </div>
         <div class="card-body">
             <div class="tab-content p-0">
-                @php($activeLang = language()->queryStringOrActive())
+                @php
+                    $activeLang = language()->queryStringOrActive();
+                    $hasManyLanguage = language()->count() > 1;
+                @endphp
                 @foreach($items as $current)
                     <div id="item-{{ $current->language }}" class="tab-pane{{ $current->language == $activeLang || ! $activeLang ? ' show active' : '' }}">
-                        {{ html()->modelForm($current, 'put', cms_route('translations.update', [$current->id], $current->language))
+                        {{ html()->modelForm($current, 'put', cms_route('translations.update', [$current->id], $hasManyLanguage ? $current->language : null))
                         ->data('ajax-form', $preferences->get('ajax_form'))->data('lang', $current->language)->attribute('novalidate')->open() }}
                         @include('admin.translations.form')
                         {{ html()->form()->close() }}

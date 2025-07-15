@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\Alt\Traits;
+namespace App\Concerns\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
-trait NameValueSettingTrait
+trait HasNameValueSetting
 {
     /**
      * Indicates whether unchecked boolean values should be ignored from saving.

@@ -8,13 +8,13 @@ use Database\Factories\Event\EventLanguageFactory;
 use Database\Factories\MenuFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Request;
-use Tests\Feature\CreatesLanguageService;
+use Tests\Feature\CreatesLanguageProvider;
 use Tests\Feature\InteractsWithDynamicPage;
 use Tests\TestCase;
 
 class WebEventTest extends TestCase
 {
-    use RefreshDatabase, CreatesLanguageService, InteractsWithDynamicPage;
+    use RefreshDatabase, CreatesLanguageProvider, InteractsWithDynamicPage;
 
     /**
      * Create a new event.

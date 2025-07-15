@@ -3,17 +3,17 @@
 namespace App\View\Composers\Web;
 
 use App\Models\Translation;
-use App\Support\TranslationCollection;
+use App\Support\TranslationProvider;
 use Illuminate\Contracts\View\View;
 
 class WebTranslationComposer
 {
     /**
-     * The Collection instance of the translations.
+     * The instance of the translation provider.
      *
-     * @var \App\Support\TranslationCollection
+     * @var \App\Support\TranslationProvider
      */
-    protected TranslationCollection $trans;
+    protected TranslationProvider $trans;
 
     /**
      * Create a new view composer instance.
@@ -37,20 +37,18 @@ class WebTranslationComposer
     /**
      * Get the translations.
      *
-     * @return \App\Support\TranslationCollection
+     * @return \App\Support\TranslationProvider
      */
-    protected function getTranslations(): TranslationCollection
+    protected function getTranslations(): TranslationProvider
     {
-        $model = new Translation;
+        $limit = cms_config('trans_query_limit');
 
-        $trans = new TranslationCollection;
-
-        if ($model->count() <= (int) cms_config('trans_query_limit')) {
-            $trans->setCollection(
-                $model->joinLanguage()->pluck('value', 'code')
-            );
-        }
-
-        return $trans;
+        return new TranslationProvider(
+            ! is_null($limit) ? (new Translation)->joinLanguage()
+                ->when($limit, fn ($q) => $q->limit($limit))
+                ->pluck('value', 'code')
+                : null,
+            (new Translation)->count()
+        );
     }
 }

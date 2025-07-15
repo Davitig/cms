@@ -2,12 +2,12 @@
 
 namespace App\Models\Setting;
 
-use App\Models\Alt\Traits\NameValueSettingTrait;
+use App\Concerns\Models\HasNameValueSetting;
 use Illuminate\Database\Eloquent\Model;
 
 class WebSetting extends Model
 {
-    use NameValueSettingTrait;
+    use HasNameValueSetting;
 
     /**
      * The options that are mass assignable.

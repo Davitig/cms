@@ -18,7 +18,7 @@
         <div class="row">
             <div class="col-md-6">
                 <label for="slug_inp" class="form-label required">Slug</label>
-                {{ html()->text('slug')->id('slug_inp' . $current->language)->class('form-control') }}
+                {{ html()->text('slug')->id('slug_inp' . $current->language . $current->language)->class('form-control') }}
                 @error('slug')
                 <div class="text-danger">{{ $message }}</div>
                 @enderror

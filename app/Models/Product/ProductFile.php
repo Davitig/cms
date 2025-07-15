@@ -2,17 +2,17 @@
 
 namespace App\Models\Product;
 
-use App\Models\Alt\Contracts\Fileable;
-use App\Models\Alt\Traits\FileTrait;
-use App\Models\Alt\Traits\HasLanguage;
-use App\Models\Alt\Traits\QueriesTrait;
+use App\Concerns\Models\ExtendsQueries;
+use App\Concerns\Models\HasFile;
+use App\Concerns\Models\QueriesLanguageRelationship;
+use App\Contracts\Models\Fileable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductFile extends Model implements Fileable
 {
-    use QueriesTrait, HasLanguage, FileTrait;
+    use ExtendsQueries, QueriesLanguageRelationship, HasFile;
 
     /**
      * The attributes that are mass assignable.

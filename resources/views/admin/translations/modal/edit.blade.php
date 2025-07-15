@@ -5,7 +5,7 @@
             <button type="button" class="trans-close-btn" data-dismiss="trans-modal">
                 <span>&times;</span>
             </button>
-            @if ($langContainsMany = language()->containsMany())
+            @if ($langContainsMany = language()->count() > 1)
                 <div class="trans-nav clearfix">
                     @foreach ($items as $current)
                         <div class="trans-nav-item{{language()->active() == $current->language ? ' active' : ''}}">

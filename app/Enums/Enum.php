@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-trait EnumTrait
+trait Enum
 {
     /**
      * Determine if the given value exists.

@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Alt\Traits\QueriesTrait;
+use App\Concerns\Models\ExtendsQueries;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Collection extends Model
 {
-    use QueriesTrait;
+    use ExtendsQueries;
 
     /**
      * The attributes that are mass assignable.

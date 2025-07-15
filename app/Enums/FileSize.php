@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum FileSize: string
 {
-    use EnumTrait;
+    use Enum;
 
     case BYTE = 'B';
     case KILOBYTE = 'kB';

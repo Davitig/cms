@@ -2,9 +2,9 @@
 
 namespace App\View\Composers\Web;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Support\TranslationCollection;
+use App\Support\TranslationProvider;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
 
 class WebCurrentDataComposer
 {
@@ -29,45 +29,32 @@ class WebCurrentDataComposer
     {
         $current = &$view->current;
 
-        if (! $current instanceof Model) {
+        if (! $current instanceof Model || ! is_object($current)) {
             $trans = &$view->trans;
-            $trans ??= new TranslationCollection;
-
-            if (is_object($current) && isset($current->title)) {
-                $title = $current->title;
-            } else {
-                $title = ($trans->get('title') ?: request()->getHost());
-            }
+            $trans ??= new TranslationProvider;
 
             $current = (object) [
-                'title' => $title,
-                'slug' => $this->getPath(),
-                'image' => null,
-                'description' => null,
-                'content' => null,
+                'title' => $title = ($trans->get('title') ?: request()->getHost()),
+                'url_path' => $this->getPath(),
                 'meta_title' => $title,
-                'meta_desc' => $trans->get('meta_desc') ?: $title,
+                'meta_desc' => $trans->get('meta_desc') ?: $title
             ];
         } else {
-            $current->slug ??= $this->getPath();
+            $current->url_path ??= $this->getPath();
+
+            $current->title ??= request()->getHost();
 
             $current->meta_title ??= $current->title;
         }
     }
 
     /**
-     * Get the current path without language prefix.
+     * Get the current request path.
      *
      * @return string
      */
     protected function getPath(): string
     {
-        $path = trim(request()->getPathInfo(), '/');
-
-        if (str_starts_with($path, $language = language()->active())) {
-            $path = substr($path, strlen($language) + 1);
-        }
-
-        return $path;
+        return trim(request()->getPathInfo(), '/');
     }
 }

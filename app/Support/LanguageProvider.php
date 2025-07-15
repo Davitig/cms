@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Services;
+namespace App\Support;
 
 use App\Models\Language;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 
-class LanguageService
+class LanguageProvider
 {
     /**
      * The list of languages.
@@ -44,7 +44,7 @@ class LanguageService
     protected ?string $queryString;
 
     /**
-     * Create a new language service instance.
+     * Create a new language provider instance.
      *
      * @param  \Illuminate\Database\Eloquent\Collection  $languages
      * @param  string  $path
@@ -498,26 +498,6 @@ class LanguageService
     public function allVisible(): Collection
     {
         return $this->all()->filter(fn ($language) => $language['visible']);
-    }
-
-    /**
-     * Determine if the languages contain a more than one item.
-     *
-     * @return bool
-     */
-    public function containsMany(): bool
-    {
-        return $this->all()->count() > 1;
-    }
-
-    /**
-     * Determine if the languages contain a more than one visible item.
-     *
-     * @return bool
-     */
-    public function containsManyVisible(): bool
-    {
-        return $this->allVisible()->count() > 1;
     }
 
     /**

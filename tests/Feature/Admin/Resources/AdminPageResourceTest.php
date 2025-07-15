@@ -9,11 +9,11 @@ use Database\Factories\Page\PageFactory;
 use Database\Factories\Page\PageLanguageFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
-use Tests\Feature\CreatesLanguageService;
+use Tests\Feature\CreatesLanguageProvider;
 
 class AdminPageResourceTest extends TestAdmin
 {
-    use RefreshDatabase, CreatesLanguageService;
+    use RefreshDatabase, CreatesLanguageProvider;
 
     /**
      * Create a new pages.

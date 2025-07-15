@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class AdminLanguageController extends Controller
 {
-    use Positionable, VisibilityTrait;
+    use InteractsWithPosition, InteractsWithVisibility;
 
     /**
      * Create a new controller instance.

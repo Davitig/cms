@@ -2,9 +2,9 @@
 
 namespace App\Models\User;
 
-use App\Models\Alt\User\User as Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
+class User extends Authenticatable
 {
     /**
      * The attributes that are mass assignable.

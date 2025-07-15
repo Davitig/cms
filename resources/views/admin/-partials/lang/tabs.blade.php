@@ -1,4 +1,4 @@
-@if (language()->containsMany())
+@if (language()->count() > 1)
     @php($langParam = language()->queryStringOrActive())
     <div class="nav-align-top mb-4">
         <ul class="nav nav-tabs flex-wrap" role="tablist">

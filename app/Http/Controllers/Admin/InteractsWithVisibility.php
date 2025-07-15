@@ -6,7 +6,7 @@ use ErrorException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-trait VisibilityTrait
+trait InteractsWithVisibility
 {
     /**
      * Update visibility of the specified resource.

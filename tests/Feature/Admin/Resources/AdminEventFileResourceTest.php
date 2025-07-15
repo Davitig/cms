@@ -9,11 +9,11 @@ use Database\Factories\Event\EventFileFactory;
 use Database\Factories\Event\EventFileLanguageFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
-use Tests\Feature\CreatesLanguageService;
+use Tests\Feature\CreatesLanguageProvider;
 
 class AdminEventFileResourceTest extends TestAdmin
 {
-    use RefreshDatabase, CreatesLanguageService;
+    use RefreshDatabase, CreatesLanguageProvider;
 
     /**
      * Create a new event files.

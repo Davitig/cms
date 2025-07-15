@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models\Alt\Traits;
+namespace App\Concerns\Models;
 
-trait CompositeKeyTrait
+trait HasCompositeKey
 {
     /**
      * {@inheritDoc}

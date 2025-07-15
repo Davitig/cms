@@ -6,13 +6,13 @@ use App\Mail\FeedbackSubmitted;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Request;
-use Tests\Feature\CreatesLanguageService;
+use Tests\Feature\CreatesLanguageProvider;
 use Tests\Feature\InteractsWithDynamicPage;
 use Tests\TestCase;
 
 class WebFeedbackTest extends TestCase
 {
-    use RefreshDatabase, CreatesLanguageService, InteractsWithDynamicPage;
+    use RefreshDatabase, CreatesLanguageProvider, InteractsWithDynamicPage;
 
     public function test_feedback_page()
     {

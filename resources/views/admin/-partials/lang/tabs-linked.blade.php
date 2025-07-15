@@ -1,4 +1,4 @@
-@if (language()->containsMany())
+@if (language()->count() > 1)
     @php
         $langParam = language()->queryStringOrActive();
         $langParamKey = language()->queryStringKey();

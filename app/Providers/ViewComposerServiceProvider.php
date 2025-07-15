@@ -101,7 +101,7 @@ class ViewComposerServiceProvider extends ServiceProvider
         View::composer('web.*', WebTranslationComposer::class);
 
         // compose current data
-        View::composer('web.*', WebCurrentDataComposer::class);
+        View::composer('web.-partials.head', WebCurrentDataComposer::class);
 
         // compose pages
         View::composer('web.-partials.pages', WebPageComposer::class);

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models\Alt\Traits;
+namespace App\Concerns\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 
-trait LanguageTrait
+trait QueriesWithLanguage
 {
     /**
      * Add a where language foreign key clause to the query.

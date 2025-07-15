@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Models\Alt\Traits;
+namespace App\Concerns\Models;
 
 use App\Models\Collection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 
-trait HasCollection
+trait QueriesWithCollection
 {
-    use PageableTrait, PositionableTrait;
+    use Positionable;
 
     /**
      * Get the data based on the admin collection.
@@ -109,7 +109,7 @@ trait HasCollection
     {
         return $query->when(! is_null($collectionId), function ($q) use ($collectionId) {
             return $q->collectionId($collectionId);
-        })->joinLanguage($currentLang, $columns)->whereVisible();
+        })->joinLanguage($currentLang, $columns, 'right')->whereVisible();
     }
 
     /**

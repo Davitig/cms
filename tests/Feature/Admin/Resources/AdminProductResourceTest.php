@@ -8,11 +8,11 @@ use Database\Factories\Product\ProductLanguageFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
-use Tests\Feature\CreatesLanguageService;
+use Tests\Feature\CreatesLanguageProvider;
 
 class AdminProductResourceTest extends TestAdmin
 {
-    use RefreshDatabase, CreatesLanguageService;
+    use RefreshDatabase, CreatesLanguageProvider;
 
     /**
      * Create new products.

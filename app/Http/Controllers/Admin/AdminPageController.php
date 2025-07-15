@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class AdminPageController extends Controller
 {
-    use Positionable, VisibilityTrait, Transferable;
+    use InteractsWithPosition, InteractsWithVisibility, Transferable;
 
     /**
      * Create a new controller instance.

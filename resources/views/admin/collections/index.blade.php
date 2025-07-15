@@ -42,9 +42,7 @@
                                 </a>
                             </td>
                             <td>
-                                <span class="badge bg-label-dark">
-                                    {{ $item->type }}
-                                </span>
+                                <span class="badge badge-outline-dark">{{ $item->type }}</span>
                             </td>
                             <td>{{ $item->description }}</td>
                             <td>{{ $item->id }}</td>

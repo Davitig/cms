@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models\Alt\Traits;
+namespace App\Concerns\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 
-trait FileableTrait
+trait Fileable
 {
     /**
      * Add a files count to the query.

@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Services\LanguageService;
+use App\Support\LanguageProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
@@ -19,11 +19,11 @@ class BladeServiceProvider extends ServiceProvider
     /**
      * Bootstrap services.
      */
-    public function boot(LanguageService $languageService): void
+    public function boot(LanguageProvider $languageProvider): void
     {
         Blade::if('ifMainLanguage', function (?string $value, bool $force = false)
-        use ($languageService) {
-            if (! $force && ! $value || $value == $languageService->main()) {
+        use ($languageProvider) {
+            if (! $force && ! $value || $value == $languageProvider->main()) {
                 return true;
             }
 

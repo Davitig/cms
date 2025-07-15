@@ -8,13 +8,13 @@ use Database\Factories\Product\ProductFactory;
 use Database\Factories\Product\ProductLanguageFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Request;
-use Tests\Feature\CreatesLanguageService;
+use Tests\Feature\CreatesLanguageProvider;
 use Tests\Feature\InteractsWithDynamicPage;
 use Tests\TestCase;
 
 class WebProductTest extends TestCase
 {
-    use RefreshDatabase, CreatesLanguageService, InteractsWithDynamicPage;
+    use RefreshDatabase, CreatesLanguageProvider, InteractsWithDynamicPage;
 
     /**
      * Create a new product.

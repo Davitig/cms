@@ -3,7 +3,7 @@
 namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-use Tests\Feature\CreatesLanguageService;
+use Tests\Feature\CreatesLanguageProvider;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -14,9 +14,9 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        if (in_array(CreatesLanguageService::class, class_uses_recursive($this)) &&
-            method_exists($this, 'createLanguageService')) {
-            $this->createLanguageService();
+        if (in_array(CreatesLanguageProvider::class, class_uses_recursive($this)) &&
+            method_exists($this, 'createLanguageProvider')) {
+            $this->createLanguageProvider();
         }
     }
 }

@@ -2,17 +2,17 @@
 
 namespace App\Models\Product;
 
-use App\Models\Alt\Traits\FileableTrait;
-use App\Models\Alt\Traits\HasLanguage;
-use App\Models\Alt\Traits\PositionableTrait;
-use App\Models\Alt\Traits\QueriesTrait;
+use App\Concerns\Models\ExtendsQueries;
+use App\Concerns\Models\Fileable;
+use App\Concerns\Models\Positionable;
+use App\Concerns\Models\QueriesLanguageRelationship;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
-    use QueriesTrait, HasLanguage, PositionableTrait, FileableTrait;
+    use ExtendsQueries, QueriesLanguageRelationship, Positionable, Fileable;
 
     /**
      * The attributes that are mass assignable.
@@ -67,7 +67,7 @@ class Product extends Model
      */
     public function scopeForPublic(Builder $query, mixed $currentLang = true): Builder
     {
-        return $query->joinLanguage($currentLang)->whereVisible()->createdDesc();
+        return $query->joinLanguage($currentLang, [], 'right')->whereVisible()->createdDesc();
     }
 
     /**

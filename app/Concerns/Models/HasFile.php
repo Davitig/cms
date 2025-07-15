@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Models\Alt\Traits;
+namespace App\Concerns\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
-trait FileTrait
+trait HasFile
 {
-    use PositionableTrait;
+    use Positionable;
 
     /**
      * Add a where foreign key clause to the query.
@@ -79,7 +79,7 @@ trait FileTrait
      */
     public function scopeForPublic(Builder $query, int $foreignId, mixed $currentLang = true): Builder
     {
-        return $query->joinLanguage($currentLang)
+        return $query->joinLanguage($currentLang, [], 'right')
             ->foreignKey($foreignId)
             ->whereVisible()
             ->positionDesc();

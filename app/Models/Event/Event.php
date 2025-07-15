@@ -2,17 +2,17 @@
 
 namespace App\Models\Event;
 
-use App\Models\Alt\Contracts\Collection;
-use App\Models\Alt\Traits\FileableTrait;
-use App\Models\Alt\Traits\HasCollection;
-use App\Models\Alt\Traits\HasLanguage;
-use App\Models\Alt\Traits\QueriesTrait;
+use App\Concerns\Models\ExtendsQueries;
+use App\Concerns\Models\Fileable;
+use App\Concerns\Models\QueriesLanguageRelationship;
+use App\Concerns\Models\QueriesWithCollection;
+use App\Contracts\Models\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Event extends Model implements Collection
 {
-    use QueriesTrait, HasCollection, HasLanguage, FileableTrait;
+    use ExtendsQueries, QueriesWithCollection, QueriesLanguageRelationship, Fileable;
 
     /**
      * The attributes that are mass assignable.

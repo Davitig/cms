@@ -8,11 +8,11 @@ use Database\Factories\Product\ProductFileFactory;
 use Database\Factories\Product\ProductFileLanguageFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
-use Tests\Feature\CreatesLanguageService;
+use Tests\Feature\CreatesLanguageProvider;
 
 class AdminProductFileResourceTest extends TestAdmin
 {
-    use RefreshDatabase, CreatesLanguageService;
+    use RefreshDatabase, CreatesLanguageProvider;
 
     /**
      * Create new product files.

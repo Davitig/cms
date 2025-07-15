@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Admin\Positionable;
-use App\Http\Controllers\Admin\VisibilityTrait;
-use App\Models\Alt\Contracts\Fileable;
+use App\Contracts\Models\Fileable;
+use App\Http\Controllers\Admin\InteractsWithPosition;
+use App\Http\Controllers\Admin\InteractsWithVisibility;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 
 class AdminFileController extends Controller
 {
-    use Positionable, VisibilityTrait;
+    use InteractsWithPosition, InteractsWithVisibility;
 
     /**
      * Foreign key name.

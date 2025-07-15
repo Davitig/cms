@@ -8,11 +8,11 @@ use Database\Factories\Event\EventFactory;
 use Database\Factories\Event\EventLanguageFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
-use Tests\Feature\CreatesLanguageService;
+use Tests\Feature\CreatesLanguageProvider;
 
 class AdminEventResourceTest extends TestAdmin
 {
-    use RefreshDatabase, CreatesLanguageService;
+    use RefreshDatabase, CreatesLanguageProvider;
 
     /**
      * Create a new events.

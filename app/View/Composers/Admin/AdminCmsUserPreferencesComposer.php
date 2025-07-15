@@ -17,11 +17,11 @@ class AdminCmsUserPreferencesComposer
     protected string|int|null $cmsUserId = null;
 
     /**
-     * The instance of the preferences.
+     * The Collection instance of the preferences.
      *
      * @var \Illuminate\Support\Collection
      */
-    protected Collection $preferences;
+    protected Collection $items;
 
     /**
      * Create a new view composer instance.
@@ -32,7 +32,7 @@ class AdminCmsUserPreferencesComposer
     {
         $this->cmsUserId = $auth->guard('cms')->id();
 
-        $this->preferences = $this->getPreferences();
+        $this->items = $this->getPreferences();
     }
 
     /**
@@ -43,7 +43,7 @@ class AdminCmsUserPreferencesComposer
      */
     public function compose(View $view): void
     {
-        $view->with('preferences', $this->preferences);
+        $view->with('preferences', $this->items);
     }
 
     /**
@@ -58,7 +58,7 @@ class AdminCmsUserPreferencesComposer
         }
 
         return new Collection(
-            (new CmsUserPreference)->cmsUserId($this->cmsUserId)->first()?->toArray()
+            (array) (new CmsUserPreference)->cmsUserId($this->cmsUserId)->first()?->toArray()
         );
     }
 }

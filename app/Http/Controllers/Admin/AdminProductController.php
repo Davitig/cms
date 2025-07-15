@@ -8,7 +8,7 @@ use App\Models\Product\Product;
 
 class AdminProductController extends Controller
 {
-    use Positionable, VisibilityTrait;
+    use InteractsWithPosition, InteractsWithVisibility;
 
     /**
      * Create a new controller instance.

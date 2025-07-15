@@ -49,7 +49,7 @@ class ElfinderServiceProvider extends ServiceProvider
 
         $this->defineRoutes($router, $config);
 
-        if (language()->containsMany()) {
+        if (language()->count() > 1) {
             $config['middleware'][] = 'cms.lang';
             $config['prefix'] = '{lang}/' . $config['prefix'];
             $config['as'] = 'lang.' . $config['prefix'];

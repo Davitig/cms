@@ -30,7 +30,7 @@ $(function () {
                     }
                 }
                 if (! lang) {
-                @if (language()->containsMany())
+                @if (language()->count() > 1)
                     transModalSelector.removeClass('fade');
                     let ev = jQuery.Event('click');
                     ev.f2 = true;

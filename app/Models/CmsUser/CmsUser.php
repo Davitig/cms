@@ -2,13 +2,17 @@
 
 namespace App\Models\CmsUser;
 
-use App\Models\Alt\Traits\QueriesTrait;
-use App\Models\Alt\User\User as Model;
+use App\Concerns\Models\ExtendsQueries;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
-class CmsUser extends Model
+class CmsUser extends Model implements AuthenticatableContract
 {
-    use QueriesTrait;
+    use ExtendsQueries, Authenticatable {
+        getAuthIdentifierName as baseAuthIdentifierName;
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -37,6 +41,22 @@ class CmsUser extends Model
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAuthIdentifierName()
+    {
+        return $this->qualifyColumn($this->baseAuthIdentifierName());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAuthIdentifier()
+    {
+        return $this->{$this->baseAuthIdentifierName()};
+    }
 
     /**
      * Determine if the user has full access.

@@ -1,6 +1,6 @@
 <?php
 
-use App\Services\LanguageService;
+use App\Support\LanguageProvider;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Uri;
@@ -8,11 +8,11 @@ use Illuminate\Support\Uri;
 /**
  * Get the language service.
  *
- * @return \App\Services\LanguageService
+ * @return \App\Support\LanguageProvider
  */
-function language(): LanguageService
+function language(): LanguageProvider
 {
-    return app(LanguageService::class);
+    return app(LanguageProvider::class);
 }
 
 /**

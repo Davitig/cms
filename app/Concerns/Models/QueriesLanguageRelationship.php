@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models\Alt\Traits;
+namespace App\Concerns\Models;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-trait HasLanguage
+trait QueriesLanguageRelationship
 {
     /**
      * Languages' one-to-many relationship.
@@ -32,14 +32,16 @@ trait HasLanguage
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  mixed  $currentLang
      * @param  array|string  $columns
+     * @param  string  $type
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeJoinLanguage(
-        Builder $query, mixed $currentLang = true, array|string $columns = []
+        Builder $query, mixed $currentLang = true, array|string $columns = [], string $type = 'left'
     ): Builder
     {
         $table = $this->getTable();
         $languageTable = $this->languages()->getRelated()->getTable();
+        $join = $type . 'Join';
 
         return $query->when($currentLang === false, function ($q) {
             return $q->crossMainLanguages()->orderBy('languages.position');
@@ -47,12 +49,11 @@ trait HasLanguage
             return $q->leftJoin('languages', function ($q) use ($currentLang) {
                 return $q->when($this->wrapWhereLanguageQuery('languages.id', $currentLang));
             })->when(! cms_booted(), fn ($q) => $q->where('languages.visible', 1));
-        })->leftJoin($languageTable, function ($q) use ($table, $languageTable) {
+        })->$join($languageTable, function ($q) use ($table, $languageTable) {
             return $q->on("{$table}.id", "{$languageTable}.{$this->getForeignKey()}")
                 ->whereColumn($languageTable . '.language_id', 'languages.id');
-        })->addSelect(array_merge(((array) $columns) ?: ["{$languageTable}.*"], [
-            "{$table}.*"
-        ]))->addSelect(['languages.language', 'languages.id as language_id']);
+        })->addSelect(((array) $columns) ?: ["{$languageTable}.*", "{$table}.*"])
+        ->addSelect(['languages.language', 'languages.id as language_id']);
     }
 
     /**

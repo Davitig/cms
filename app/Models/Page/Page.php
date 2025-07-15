@@ -2,18 +2,18 @@
 
 namespace App\Models\Page;
 
-use App\Models\Alt\Traits\FileableTrait;
-use App\Models\Alt\Traits\HasLanguage;
-use App\Models\Alt\Traits\HasSubModels;
-use App\Models\Alt\Traits\PositionableTrait;
-use App\Models\Alt\Traits\QueriesTrait;
+use App\Concerns\Models\ExtendsQueries;
+use App\Concerns\Models\Fileable;
+use App\Concerns\Models\HasSubModels;
+use App\Concerns\Models\Positionable;
+use App\Concerns\Models\QueriesLanguageRelationship;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Page extends Model
 {
-    use QueriesTrait, HasLanguage, PositionableTrait, FileableTrait, HasSubModels;
+    use ExtendsQueries, QueriesLanguageRelationship, Positionable, Fileable, HasSubModels;
 
     /**
      * The attributes that are mass assignable.
@@ -73,7 +73,7 @@ class Page extends Model
      */
     public function scopeForPublic(Builder $query, mixed $currentLang = true): Builder
     {
-        return $query->joinLanguage($currentLang)->whereVisible();
+        return $query->joinLanguage($currentLang, [], 'right')->whereVisible();
     }
 
     /**

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\Alt\Traits;
+namespace App\Concerns\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use InvalidArgumentException;
 
-trait PositionableTrait
+trait Positionable
 {
     /**
      * Find a duplicated model position.

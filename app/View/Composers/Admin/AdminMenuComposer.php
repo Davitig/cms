@@ -13,7 +13,7 @@ class AdminMenuComposer
      *
      * @var \Illuminate\Database\Eloquent\Collection
      */
-    protected Collection $menus;
+    protected Collection $items;
 
     /**
      * Create a new view composer instance.
@@ -21,7 +21,7 @@ class AdminMenuComposer
      */
     public function __construct()
     {
-        $this->menus = $this->getMenus();
+        $this->items = $this->getMenus();
     }
 
     /**
@@ -32,7 +32,7 @@ class AdminMenuComposer
      */
     public function compose(View $view): void
     {
-        $view->with('menus', $this->menus);
+        $view->with('menus', $this->items);
     }
 
     /**

@@ -59,7 +59,7 @@ class RouteServiceProvider extends ServiceProvider
         $router->middleware('web.lang')
             ->group(base_path('routes/web.php'));
 
-        if (language()->containsMany()) {
+        if (language()->count() > 1) {
             $router->middleware('web.lang')
                 ->prefix('{lang}')
                 ->name('lang.')
@@ -79,7 +79,7 @@ class RouteServiceProvider extends ServiceProvider
         $router->prefix(cms_slug())->name(cms_route_name())
             ->group(base_path('routes/cms.php'));
 
-        if (language()->containsMany()) {
+        if (language()->count() > 1) {
             $router->middleware('cms.lang')
                 ->prefix('{lang}/' . cms_slug())
                 ->name('lang.' . cms_route_name())

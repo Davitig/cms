@@ -13,7 +13,7 @@
                 @ifMainLanguage($current->language)
                 <div>
                     <label for="slug_inp" class="form-label required">Slug</label>
-                    {{ html()->text('slug')->id('slug_inp')->class('form-control') }}
+                    {{ html()->text('slug')->id('slug_inp' . $current->language)->class('form-control') }}
                     @error('slug')
                     <span class="text-danger">{{ $message }}</span>
                     @enderror

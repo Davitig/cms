@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Services\LanguageService;
+use App\Support\LanguageProvider;
 use Database\Factories\LanguageFactory;
 
-trait CreatesLanguageService
+trait CreatesLanguageProvider
 {
     /**
      * Create a language service.
@@ -13,13 +13,13 @@ trait CreatesLanguageService
      * @param  int  $times
      * @return void
      */
-    public function createLanguageService(int $times = 3): void
+    public function createLanguageProvider(int $times = 3): void
     {
         $envLanguages = $this->getEnvLanguageList();
 
         $envActiveLanguage = $this->getEnvActiveLanguage();
 
-        $this->app->instance(LanguageService::class, new LanguageService(
+        $this->app->instance(LanguageProvider::class, new LanguageProvider(
             LanguageFactory::new()->when($envLanguages,
                 fn ($factory) => $factory->languages($envLanguages, $envActiveLanguage),
                 fn ($factory) => $factory->times($times)

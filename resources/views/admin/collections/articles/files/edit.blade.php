@@ -7,10 +7,13 @@
             </div>
             @include('admin.-partials.lang.tabs')
             <div class="tab-content pt-2">
-                @php($activeLang = language()->active())
+                @php
+                    $activeLang = language()->queryStringOrActive();
+                    $hasManyLanguage = language()->count() > 1;
+                @endphp
                 @foreach($items as $current)
                     <div id="item-{{ $current->language }}" class="tab-pane{{ $current->language == $activeLang ? ' show active' : '' }}">
-                        {{ html()->modelForm($current, 'put', cms_route('articles.files.update', [$current->article_id, $current->id], $current->language))
+                        {{ html()->modelForm($current, 'put', cms_route('articles.files.update', [$current->article_id, $current->id], $hasManyLanguage ? $current->language : null))
                         ->data('ajax-form', $preferences->get('ajax_form'))->data('lang', $current->language)->attribute('novalidate')->open() }}
                         @include('admin.collections.articles.files.form')
                         {{ html()->form()->close() }}

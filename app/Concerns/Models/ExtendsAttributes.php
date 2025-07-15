@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models\Alt\Traits;
+namespace App\Concerns\Models;
 
-trait ModelTrait
+trait ExtendsAttributes
 {
     /**
      * Merge the array of model attributes without checking.

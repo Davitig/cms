@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Alt\Traits\PositionableTrait;
+use App\Concerns\Models\Positionable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use InvalidArgumentException;
 use RuntimeException;
 
-trait Positionable
+trait InteractsWithPosition
 {
     /**
      * Update a model positions.
@@ -21,7 +21,7 @@ trait Positionable
     {
         if (! isset($this->model) || ! $this->model instanceof Model) {
             throw new ModelNotFoundException;
-        } elseif (! in_array(PositionableTrait::class, trait_uses_recursive($this->model))) {
+        } elseif (! in_array(Positionable::class, trait_uses_recursive($this->model))) {
             throw new RuntimeException('Position trait not found');
         }
 
