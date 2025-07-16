@@ -15,7 +15,7 @@ class EventRequest extends Request
     {
         $id = $this->route('event');
 
-        $required = language()->mainIsActive() ? 'required' : '';
+        $required = $this->isLanguageRelated() ? '' : 'required';
 
         return [
             'slug' => [$required, 'unique:events,slug,'.$id],
@@ -30,7 +30,7 @@ class EventRequest extends Request
      */
     protected function prepareForValidation(): void
     {
-        if (! language()->mainIsActive()) {
+        if ($this->isLanguageRelated()) {
             return;
         }
 

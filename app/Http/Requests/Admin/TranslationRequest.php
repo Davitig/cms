@@ -15,7 +15,7 @@ class TranslationRequest extends Request
     {
         $id = $this->route('translation') ?: $this->get('id');
 
-        $required = language()->mainIsActive() ? 'required' : '';
+        $required = $this->isLanguageRelated() ? '' : 'required';
 
         return [
             'code' => [$required, 'max:18', 'regex:/^[a-z_]+$/', 'unique:translations,code,' . $id],
@@ -30,7 +30,7 @@ class TranslationRequest extends Request
      */
     protected function prepareForValidation(): void
     {
-        if (! language()->mainIsActive()) {
+        if ($this->isLanguageRelated()) {
             return;
         }
 

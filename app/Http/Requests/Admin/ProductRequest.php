@@ -15,7 +15,7 @@ class ProductRequest extends Request
     {
         $id = $this->route('product');
 
-        $required = language()->mainIsActive() ? 'required' : '';
+        $required = $this->isLanguageRelated() ? '' : 'required';
 
         return [
             'slug' => [$required, 'unique:products,slug,'.$id],
@@ -32,7 +32,7 @@ class ProductRequest extends Request
      */
     protected function prepareForValidation(): void
     {
-        if (! language()->mainIsActive()) {
+        if ($this->isLanguageRelated()) {
             return;
         }
 

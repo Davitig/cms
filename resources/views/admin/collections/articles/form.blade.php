@@ -1,7 +1,7 @@
 <div class="row g-6 mb-6">
     <div>
         <label for="title_inp" class="form-label required">Title</label>
-        {{ html()->text('title')->id('title_inp')->class('form-control') }}
+        {{ html()->text('title')->id('title_inp' . $current->language)->class('form-control') }}
         @error('title')
         <span class="text-danger">{{ $message }}</span>
         @enderror
@@ -18,7 +18,8 @@
         <label for="image_inp" class="form-label">Image</label>
         <div class="input-group">
             {{ html()->text('image')->id('image_inp' . $current->language)->class('form-control') }}
-            <button type="button" class="file-manager-popup btn btn-outline-primary" data-browse="image_inp{{$current->language}}">Browse</button>
+            <button type="button" class="file-manager-popup btn btn-outline-primary"
+                    data-browse="image_inp{{$current->language}}">Browse</button>
         </div>
     </div>
     <div class="col-md-6">
@@ -36,24 +37,26 @@
     @endifMainLanguage
     <div>
         <label for="description_inp" class="form-label">Description</label>
-        {{ html()->textarea('description')->id('description_inp')->class('form-control text-editor')->rows(8) }}
+        {{ html()->textarea('description')->id('description_inp' . $current->language)
+        ->class('form-control text-editor')->rows(8) }}
     </div>
     <div>
         <label for="content_inp" class="form-label">Content</label>
-        {{ html()->textarea('content')->id('content_inp')->class('form-control text-editor')->rows(12) }}
+        {{ html()->textarea('content')->id('content_inp' . $current->language)
+        ->class('form-control text-editor')->rows(12) }}
     </div>
     <div>
         <label for="meta_title_inp" class="form-label">Meta Title</label>
-        {{ html()->text('meta_title')->id('meta_title_inp')->class('form-control') }}
+        {{ html()->text('meta_title')->id('meta_title_inp' . $current->language)->class('form-control') }}
     </div>
     <div>
         <label for="meta_desc_inp" class="form-label">Meta Description</label>
-        {{ html()->text('meta_desc')->id('meta_desc_inp')->class('form-control') }}
+        {{ html()->text('meta_desc')->id('meta_desc_inp' . $current->language)->class('form-control') }}
     </div>
     @ifMainLanguage($current->language)
     <div>
         <label class="switch switch-primary">
-            {{ html()->checkbox('visible')->id('visible_inp')->class('switch-input') }}
+            {{ html()->checkbox('visible')->id('visible_inp' . $current->language)->class('switch-input') }}
             <span class="switch-toggle-slider"></span>
             <span class="switch-label">Visible</span>
         </label>

@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\CmsUser\CmsUser;
 use App\Models\CmsUser\CmsUserRole;
 use Database\Factories\CmsUserFactory;
 use Exception;
@@ -17,8 +16,6 @@ class CmsUsersTableSeeder extends DatabaseSeeder
     public function run(): void
     {
         $currentDate = date('Y-m-d H:i:s');
-
-        (new CmsUser)->truncate();
 
         $roleId = (new CmsUserRole)->fullAccess()->value('id');
 

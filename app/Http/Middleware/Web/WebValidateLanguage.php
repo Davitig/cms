@@ -31,7 +31,7 @@ class WebValidateLanguage
         }
 
         // remove lang parameter from being passed to controller
-        $this->route->forgetParameter('lang');
+        $this->route->forgetParameter(config('language.route_name'));
 
         return $next($request);
     }

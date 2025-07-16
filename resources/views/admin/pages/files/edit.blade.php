@@ -2,18 +2,15 @@
     <div class="modal-dialog modal-customs" role="document">
         <div class="modal-content">
             <div class="modal-header mb-4">
-                <div class="modal-title fs-5 fw-medium text-black">Edit file</div>
+                <div class="modal-title fs-5 fw-medium text-dark">Edit file</div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             @include('admin.-partials.lang.tabs')
             <div class="tab-content pt-2">
-                @php
-                    $activeLang = language()->queryStringOrActive();
-                    $hasManyLanguage = language()->count() > 1;
-                @endphp
+                @php($activeLang = language()->queryStringOrActive())
                 @foreach($items as $current)
                     <div id="item-{{ $current->language }}" class="tab-pane{{ $current->language == $activeLang ? ' show active' : '' }}">
-                        {{ html()->modelForm($current, 'put', cms_route('pages.files.update', [$current->page_id, $current->id], $hasManyLanguage ? $current->language : null))
+                        {{ html()->modelForm($current, 'put', cms_route('pages.files.update', [$current->page_id, $current->id], $current->language))
                         ->data('ajax-form', $preferences->get('ajax_form'))->data('lang', $current->language)->attribute('novalidate')->open() }}
                         @include('admin.pages.files.form')
                         {{ html()->form()->close() }}

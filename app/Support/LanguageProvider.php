@@ -64,7 +64,7 @@ class LanguageProvider
      * @param  string|null  $queryString
      * @return static
      */
-    public static function make(string $path, ?string $queryString): static
+    public static function make(string $path, ?string $queryString = null): static
     {
         try {
             return new static((new Language)->positionAsc()->get(), $path, $queryString);

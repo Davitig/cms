@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\CmsUser\CmsUserRole;
 use Database\Factories\CmsUserRoleFactory;
 use Illuminate\Database\Seeder;
 
@@ -13,8 +12,6 @@ class CmsUserRolesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        (new CmsUserRole)->truncate();
-
         CmsUserRoleFactory::new()->role('Administrator')->fullAccess()->create();
 
         CmsUserRoleFactory::new()->role('Member')->customAccess()->create();
