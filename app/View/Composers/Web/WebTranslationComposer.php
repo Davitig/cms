@@ -47,8 +47,8 @@ class WebTranslationComposer
             ! is_null($limit) ? (new Translation)->joinLanguage()
                 ->when($limit, fn ($q) => $q->limit($limit))
                 ->pluck('value', 'code')
-                : null,
-            (new Translation)->count()
+                ->toArray()
+                : []
         );
     }
 }

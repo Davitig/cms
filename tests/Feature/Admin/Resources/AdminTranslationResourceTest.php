@@ -24,19 +24,18 @@ class AdminTranslationResourceTest extends TestAdmin
     {
         return TranslationFactory::new()->count($times)->has(
             TranslationLanguageFactory::times(language()->count())
-                ->sequence(...apply_languages([])), 'languages'
+                ->sequence(...apply_languages([])),
+            'languages'
         )->create();
     }
 
     public function test_admin_translations_resource_index()
     {
-        $translations = $this->createTranslation(5);
+        $this->createTranslation(5);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('translations.index'));
-
-        $translations->map->delete();
 
         $response->assertOk();
     }
@@ -62,8 +61,6 @@ class AdminTranslationResourceTest extends TestAdmin
             'value' => $word
         ]);
 
-        (new Translation)->newQuery()->delete();
-
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
@@ -74,8 +71,6 @@ class AdminTranslationResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->getJson(cms_route('translations.edit', [$translation->id]));
-
-        $translation->delete();
 
         $response->assertOk();
     }
@@ -93,8 +88,6 @@ class AdminTranslationResourceTest extends TestAdmin
             'code' => str($word = fake()->word())->snake()->toString(),
             'value' => $word
         ]);
-
-        $translation->delete();
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
@@ -120,8 +113,6 @@ class AdminTranslationResourceTest extends TestAdmin
             'code' => $translation->code
         ]));
 
-        $translation->delete();
-
         $response->assertOk();
     }
 
@@ -137,8 +128,6 @@ class AdminTranslationResourceTest extends TestAdmin
             'value' => $word
         ]);
 
-        $translation->delete();
-
         $response->assertOk()->assertJson([]);
     }
 
@@ -149,8 +138,6 @@ class AdminTranslationResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('translations.destroy', [$translation->id]));
-
-        $translation->delete();
 
         $response->assertFound();
     }

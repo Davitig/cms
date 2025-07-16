@@ -20,4 +20,14 @@ class TranslationLanguageFactory extends Factory
             'value' => fake()->word()
         ];
     }
+
+    /**
+     * Indicates the value.
+     */
+    public function value(string $value): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'value' => $value
+        ]);
+    }
 }

@@ -3,33 +3,16 @@
 namespace App\Support;
 
 use App\Models\Translation;
-use Illuminate\Support\Collection;
 
 class TranslationProvider
 {
     /**
-     * Indicates the count number of items in the collection.
-     *
-     * @var int
-     */
-    protected int $count = 0;
-
-    /**
-     * The list of blacklisted keys.
-     *
-     * @var array
-     */
-    protected array $blacklistKeys = [];
-
-    /**
-     * Create a new TranslationCollection instance.
+     * Create a new translation provider instance.
      */
     public function __construct(
-        protected ?Collection $items = null, protected int $baseCount = 0
-    ) {
-        $this->items ??= new Collection;
-
-        $this->count = $this->items?->count() ?: 0;
+        protected array $items = [], protected array $blacklistKeys = []
+    )
+    {
     }
 
     /**
@@ -41,24 +24,40 @@ class TranslationProvider
      */
     public function get(string $key, ?string $default = null): ?string
     {
-        if (! is_null($value = $this->items->get($key))) {
+        if (! is_null($value = $this->items[$key] ?? null)) {
             return $value;
         }
 
-        if ($this->baseCount > $this->count && ! in_array($key, $this->blacklistKeys)) {
+        if (! in_array($key, $this->blacklistKeys)) {
             $value = (new Translation)->byCode($key)->value('value');
 
             if (! is_null($value)) {
-                $this->items->put($key, $value);
-
-                $this->count++;
-
-                return $value;
+                return $this->items[$key] = $value;
             } else {
                 $this->blacklistKeys[] = $key;
             }
         }
 
         return $default;
+    }
+
+    /**
+     * Get all the items.
+     *
+     * @return array
+     */
+    public function all(): array
+    {
+        return $this->items;
+    }
+
+    /**
+     * Get the blacklist keys.
+     *
+     * @return array
+     */
+    public function getBlacklistKeys(): array
+    {
+        return $this->blacklistKeys;
     }
 }

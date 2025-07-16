@@ -172,7 +172,6 @@ return [
     | Here you may specify the limit for the translation query, which
     | will be used in views to collect all the data in the limit range.
     | If there is more data, then queries will be executed separately.
-    | "0" for no limit, "null" for no collect.
     |
     */
 
