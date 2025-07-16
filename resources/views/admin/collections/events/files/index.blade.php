@@ -16,7 +16,7 @@
     </nav>
     <div id="files-block">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center row-gap-4 gap-4 mb-6">
-            <div class="fs-4 text-black">{{ $foreignModel->title }}</div>
+            <div class="fs-4 text-dark">{{ $foreignModel->title }}</div>
             <a href="{{ cms_route('events.edit', [$foreignModel->collection_id, $foreignModel->id]) }}" class="ms-md-auto text-dark">
                 <i class="icon-base fa fa-caret-left icon-xs"></i>
                 Go back
@@ -30,7 +30,7 @@
                     <i class="icon-base fa fa-plus icon-xs me-1"></i>
                     <span>Add New Record</span>
                 </button>
-                <label class="btn btn-outline-secondary text-dark form-check-dark" for="items-multi-select">
+                <label class="btn btn-outline-secondary text-dark form-check-primary" for="items-multi-select">
                     <input type="checkbox" id="items-multi-select" class="form-check-input me-1">
                     <span>Select All</span>
                 </label>
@@ -54,7 +54,7 @@
                 <div id="item{{ $item->id }}" class="item col-6 col-md-4 col-lg-2" data-id="{{ $item->id }}" data-pos="{{$item->position}}">
                     <div class="card handle">
                         <div class="py-3 px-5 d-flex justify-content-between align-items-center">
-                            <div class="item-title fs-5 fw-medium text-black">{{ $item->title }}</div>
+                            <div class="item-title fs-5 fw-medium text-dark">{{ $item->title }}</div>
                             @if ($lastPage > 1)
                                 <div class="btn-pos-actions d-flex justify-content-{{ $currentPage > 1 ? 'between' : 'end' }}">
                                     @if ($currentPage > 1)
@@ -92,7 +92,7 @@
                                 <i class="icon-base fa fa-trash icon-xs text-primary"></i>
                             </button>
                             {{ html()->form()->close() }}
-                            <span class="form-check-dark">
+                            <span class="form-check-primary">
                                 <input class="form-check-input align-bottom item-select" type="checkbox" data-id="{{ $item->id }}">
                             </span>
                         </div>

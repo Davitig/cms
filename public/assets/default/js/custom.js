@@ -27,38 +27,42 @@ function getDateTimeString(date) {
 
     return y+'-'+m+'-'+d+' '+h+':'+i+':'+s;
 }
+
+const notyfObj = new Notyf({
+    duration: 2000,
+    position: {
+        x: 'right',
+        y: 'top',
+    },
+    dismissible: true,
+    types: [
+        {
+            type: 'warning',
+            background: 'orange',
+            icon: {
+                className: 'icon-base fa fa-circle-question',
+                tagName: 'i',
+                color: 'white'
+            }
+        },
+        {
+            type: 'info',
+            background: '#00bad1',
+            icon: {
+                className: 'icon-base fa fa-circle-info',
+                tagName: 'i',
+                color: 'white'
+            }
+        }
+    ]
+});
+
 function notyf(message, type) {
     if (typeof type !== 'string' || ! type instanceof String) {
         type = type !== false ? 'success' : 'error';
     }
-    new Notyf({
-        duration: 2000,
-        position: {
-            x: 'right',
-            y: 'top',
-        },
-        dismissible: true,
-        types: [
-            {
-                type: 'warning',
-                background: 'orange',
-                icon: {
-                    className: 'icon-base fa fa-circle-question',
-                    tagName: 'i',
-                    color: 'white'
-                }
-            },
-            {
-                type: 'info',
-                background: '#00bad1',
-                icon: {
-                    className: 'icon-base fa fa-circle-info',
-                    tagName: 'i',
-                    color: 'white'
-                }
-            }
-        ]
-    }).open({type: type, message: message});
+
+    notyfObj.open({type: type, message: message});
 }
 
 function textIncrement(times, selector) {

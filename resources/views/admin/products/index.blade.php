@@ -40,7 +40,7 @@
                             @else
                                 <i class="icon-base fa fa-image icon-40px me-4"></i>
                             @endif
-                                <a href="{{ $editUrl = cms_route('products.edit', [$item->id]) }}" class="text-black">
+                                <a href="{{ $editUrl = cms_route('products.edit', [$item->id]) }}" class="text-dark">
                                     {{ $item->title }}
                                 </a>
                         </td>

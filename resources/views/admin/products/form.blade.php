@@ -5,7 +5,7 @@
             <div class="card-body row g-6">
                 <div>
                     <label for="title_inp" class="form-label required">Title</label>
-                    {{ html()->text('title')->id('title_inp')->class('form-control') }}
+                    {{ html()->text('title')->id('title_inp' . $current->language)->class('form-control') }}
                     @error('title')
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -27,7 +27,7 @@
                 </div>
                 <div>
                     <label class="switch switch-primary">
-                        {{ html()->checkbox('visible')->id('visible_inp')->class('switch-input') }}
+                        {{ html()->checkbox('visible')->id('visible_inp' . $current->language)->class('switch-input') }}
                         <span class="switch-toggle-slider"></span>
                         <span class="switch-label">Visible</span>
                     </label>
@@ -40,19 +40,19 @@
             <div class="card-body row g-6">
                 <div>
                     <label for="description_inp" class="form-label">Description</label>
-                    {{ html()->textarea('description')->id('description_inp')->class('form-control text-editor')->rows(8) }}
+                    {{ html()->textarea('description')->id('description_inp' . $current->language)->class('form-control text-editor')->rows(8) }}
                 </div>
                 <div>
                     <label for="content_inp" class="form-label">Content</label>
-                    {{ html()->textarea('content')->id('content_inp')->class('form-control text-editor')->rows(12) }}
+                    {{ html()->textarea('content')->id('content_inp' . $current->language)->class('form-control text-editor')->rows(12) }}
                 </div>
                 <div>
                     <label for="meta_title_inp" class="form-label">Meta Title</label>
-                    {{ html()->text('meta_title')->id('meta_title_inp')->class('form-control') }}
+                    {{ html()->text('meta_title')->id('meta_title_inp' . $current->language)->class('form-control') }}
                 </div>
                 <div>
                     <label for="meta_desc_inp" class="form-label">Meta Description</label>
-                    {{ html()->text('meta_desc')->id('meta_desc_inp')->class('form-control') }}
+                    {{ html()->text('meta_desc')->id('meta_desc_inp' . $current->language)->class('form-control') }}
                 </div>
             </div>
         </div>
@@ -64,14 +64,14 @@
             <div class="card-body row g-6">
                 <div>
                     <label for="price_inp" class="form-label required">Price</label>
-                    {{ html()->number('price')->id('price_inp')->class('form-control') }}
+                    {{ html()->number('price')->id('price_inp' . $current->language)->class('form-control') }}
                     @error('price')
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
                 <div>
                     <label for="quantity_inp" class="form-label required">Quantity</label>
-                    {{ html()->number('quantity')->id('quantity_inp')->class('form-control') }}
+                    {{ html()->number('quantity')->id('quantity_inp' . $current->language)->class('form-control') }}
                     @error('quantity')
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -79,7 +79,7 @@
                 <div>
                     <div class="border-top pt-4">
                         <label class="switch switch-primary">
-                            {{ html()->checkbox('in_stock')->id('in_stock_inp')->class('switch-input') }}
+                            {{ html()->checkbox('in_stock')->id('in_stock_inp' . $current->language)->class('switch-input') }}
                             <div class="switch-toggle-slider"></div>
                             <div class="switch-label">In Stock</div>
                         </label>

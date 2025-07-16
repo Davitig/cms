@@ -42,21 +42,23 @@ class ElfinderServiceProvider extends ServiceProvider
 
         $config = $this->app['config']->get('elfinder.route', []);
 
-        $config['prefix'] = isset($config['prefix']) ? cms_slug($config['prefix']) : cms_slug();
+        $config['prefix'] = isset($config['prefix']) ? cms_path($config['prefix']) : cms_path();
 
         $config['middleware'][] = 'cms.auth';
         $config['as'] = cms_route_name();
 
-        $this->defineRoutes($router, $config);
+        if (language()->isEmpty()) {
+            $this->defineRoutes($router, $config);
+        } else {
+            $langRouteName = $this->app['config']->get('language.route_name');
 
-        if (language()->count() > 1) {
             $config['middleware'][] = 'cms.lang';
-            $config['prefix'] = '{lang}/' . $config['prefix'];
-            $config['as'] = 'lang.' . $config['as'];
+            $config['prefix'] = "{{$langRouteName}}/" . $config['prefix'];
+            $config['as'] = $langRouteName . '.' . $config['as'];
             $languages = language()->all()->keys()->toArray();
 
-            $this->defineRoutes($router, $config, function (Route $route) use ($languages) {
-                $route->whereIn('lang', $languages);
+            $this->defineRoutes($router, $config, function (Route $route) use ($languages, $langRouteName) {
+                $route->whereIn($langRouteName, $languages);
             });
         }
     }

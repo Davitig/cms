@@ -3,7 +3,6 @@
 use App\Support\LanguageProvider;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Uri;
 
 /**
  * Get the language service.
@@ -49,15 +48,15 @@ function cms_booted(): bool
 }
 
 /**
- * Get the CMS slug.
+ * Get the CMS path.
  *
  * @param  string|null  $path
  * @param  bool|string  $language
  * @return string
  */
-function cms_slug(?string $path = null, bool $language = false): string
+function cms_path(?string $path = null, bool $language = false): string
 {
-    $slug = cms_config('slug');
+    $slug = trim(cms_config('slug'), '/');
 
     if ($language) {
         $language = is_string($language)
@@ -79,7 +78,7 @@ function cms_slug(?string $path = null, bool $language = false): string
  */
 function cms_route_name(?string $name = null, string $separator = '.'): string
 {
-    return cms_slug() . $separator . $name;
+    return cms_path() . $separator . $name;
 }
 
 /**
@@ -117,7 +116,7 @@ function cms_route(
     bool   $absolute = true
 ): string
 {
-    return language_to_url(route(cms_route_name($name), $parameters, $absolute), $language);
+    return web_route(cms_route_name($name), $parameters, $language, $absolute);
 }
 
 /**
@@ -138,11 +137,9 @@ function cms_url(
 {
     if (is_array($path)) {
         $path = implode('/', array_filter($path));
-    } elseif (! is_string($path)) {
-        $path = '';
     }
 
-    return web_url(cms_slug($path), $parameters, $language, $secure);
+    return web_url(cms_path($path), $parameters, $language, $secure);
 }
 
 /**
@@ -161,7 +158,18 @@ function web_route(
     bool   $absolute = true
 ): string
 {
-    return language_to_url(route($name, $parameters, $absolute), $language);
+    $activeLanguage = language()->active();
+
+    if ($language !== false &&
+        (is_string($language) || $activeLanguage)) {
+        $langRouteName = config('language.route_name');
+        $parameters[$langRouteName] = $language ?: $activeLanguage;
+        $langRouteName .= '.';
+    } else {
+        $langRouteName = '';
+    }
+
+    return route($langRouteName . $name, $parameters, $absolute);
 }
 
 /**
@@ -182,11 +190,9 @@ function web_url(
 {
     if (is_array($path)) {
         $path = implode('/', array_filter($path));
-    } elseif (! is_string($path)) {
-        $path = '';
     }
 
-    $url = url(language_to_url($path, $language), [], $secure);
+    $url = url(language_prefix($path, $language), [], $secure);
 
     $query = Arr::query($parameters);
 
@@ -211,57 +217,6 @@ function language_prefix(?string $path = null, mixed $language = null): string
     }
 
     return trim($path, '/');
-}
-
-/**
- * Add language to the url.
- *
- * @param  string  $url
- * @param  mixed|null  $language
- * @return string
- */
-function language_to_url(string $url, mixed $language = null): string
-{
-    $uri = Uri::of($url);
-
-    $path = $uri->path();
-
-    if (! empty($query = $uri->query()->value())) {
-        $query = '?' . $query;
-    }
-
-    if (is_null($host = $uri->host())) {
-        return language_prefix($path . $query, $language);
-    }
-
-    $schemeAndHost = $baseUrl = '';
-
-    if (! is_null($scheme = $uri->scheme())) {
-        $schemeAndHost = $scheme . '://' . $host;
-    }
-
-    if (! empty(trim($path, '/'))) {
-        if ($schemeAndHost == request()->getSchemeAndHttpHost() &&
-            str($path)->startsWith($baseUrl = trim(request()->getBaseUrl(), '/'))) {
-            $path = mb_substr($path, mb_strlen($baseUrl));
-        } else {
-            $baseUrl = '';
-        }
-
-        $path = array_filter(explode('/', $path));
-
-        if (language()->exists((string) current($path))) {
-            array_shift($path);
-        }
-
-        $path = implode('/', $path);
-    }
-
-    $baseUrl = $baseUrl ? '/' . trim($baseUrl, '/') . '/' : '/';
-
-    $path = language_prefix($path, $language);
-
-    return $schemeAndHost . $baseUrl . $path . $query;
 }
 
 /**

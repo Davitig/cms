@@ -55,7 +55,9 @@ class AdminRouteMatchesComposer
         $currentFullRouteName = $this->route->getName();
 
         $currentRouteName = str_replace(
-            'lang.' . cms_route_name(), '', $currentFullRouteName
+            config('language.route_name') . '.' . cms_route_name(),
+            '',
+            $currentFullRouteName
         );
 
         if ($currentRouteName == $currentFullRouteName) {

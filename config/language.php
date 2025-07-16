@@ -4,11 +4,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Route Name Prefix
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify route name prefix, which will be applied to the
+    | routes with the stored language codes as a route parameters.
+    |
+    */
+
+    'route_name' => 'lang',
+
+    /*
+    |--------------------------------------------------------------------------
     | Query String Key
     |--------------------------------------------------------------------------
     |
-    | The key is used to retrieve a query string language from the request.
-    | Avoid matching the key to possible values.
+    | This key is used to retrieve a query string parameter from the request.
     |
     */
 

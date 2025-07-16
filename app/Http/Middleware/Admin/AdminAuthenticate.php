@@ -67,7 +67,7 @@ class AdminAuthenticate
         }
 
         $routeName = str($fullRouteName = $route->getName())->replaceFirst(
-            language()->active() . '.' . cms_route_name(), ''
+            config('language.route_name') . '.' . cms_route_name(), ''
         )->toString();
 
         if ($routeName == $fullRouteName) {

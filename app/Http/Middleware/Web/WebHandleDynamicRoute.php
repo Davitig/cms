@@ -134,17 +134,19 @@ class WebHandleDynamicRoute
      */
     protected function build(array $segments, string $requestMethod): bool
     {
-        if (! $this->segmentsCount = count($this->segments = $segments)) {
+        if (! $segmentsCount = count($segments)) {
             return false;
         }
 
-        $language = language()->active();
+        if (reset($segments) == language()->active()) {
+            array_shift($segments);
 
-        if (current($this->segments) == $language) {
-            array_shift($this->segments);
-
-            $this->segmentsCount--;
+            $segmentsCount--;
         }
+
+        $this->segments = $segments;
+
+        $this->segmentsCount = $segmentsCount;
 
         $this->requestMethod = $requestMethod;
 

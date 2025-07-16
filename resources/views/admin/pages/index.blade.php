@@ -35,7 +35,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <i class="uk-nestable-handle cursor-move icon-base fa fa-bars icon-sm align-text-bottom me-1"></i>
-                                <a href="{{ $editUrl = cms_route('pages.edit', [$item->menu_id, $item->id]) }}" class="text-black">
+                                <a href="{{ $editUrl = cms_route('pages.edit', [$item->menu_id, $item->id]) }}" class="text-dark">
                                     {{ $item->title }}
                                 </a>
                                 @if ($prevPos == $item->position)
@@ -44,7 +44,7 @@
                                 @endif
                             </div>
                             <div class="actions d-flex align-items-center gap-4">
-                                <div class="item-id badge bg-label-gray text-black">{{ $item->id }}</div>
+                                <div class="item-id badge bg-label-gray text-dark">{{ $item->id }}</div>
                                 <a href="{{ web_url($item->url_path) }}" class="link" data-slug="{{ $item->slug }}" target="_blank" title="View Website Page">
                                     <i class="icon-base fa fa-link icon-sm"></i>
                                 </a>

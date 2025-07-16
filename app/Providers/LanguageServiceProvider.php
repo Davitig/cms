@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Support\LanguageProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;
+use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 
 class LanguageServiceProvider extends ServiceProvider implements DeferrableProvider
@@ -25,9 +26,26 @@ class LanguageServiceProvider extends ServiceProvider implements DeferrableProvi
     /**
      * Bootstrap services.
      */
-    public function boot(): void
+    public function boot(Request $request): void
     {
-        //
+        $this->setCmsRouteBooted($request);
+    }
+
+    /**
+     * Set CMS route is booted when the CMS slug has matched in the current request path.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     */
+    protected function setCmsRouteBooted(Request $request): void
+    {
+        $segments = $request->segments();
+
+        if (language()->isSelected()) {
+            next($segments);
+        }
+
+        $this->app['config']->set('_cms.booted', current($segments) == cms_path());
     }
 
     /**

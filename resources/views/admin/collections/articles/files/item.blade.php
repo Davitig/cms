@@ -2,7 +2,7 @@
     <div id="item{{ $item->id }}" class="item col-6 col-md-4 col-lg-2" data-id="{{ $item->id }}" data-pos="{{$item->position}}">
         <div class="card handle">
             <div class="py-3 px-5">
-                <div class="item-title fs-5 fw-medium text-black">{{ $itemInput['title'] }}</div>
+                <div class="item-title fs-5 fw-medium text-dark">{{ $itemInput['title'] }}</div>
                 @if ($lastPage > 1)
                     <div class="btn-pos-actions d-flex justify-content-{{ $currentPage > 1 ? 'between' : 'end' }} pt-2">
                         @if ($currentPage > 1)
@@ -40,7 +40,7 @@
                     <i class="icon-base fa fa-trash icon-xs text-primary"></i>
                 </button>
                 {{ html()->form()->close() }}
-                <span class="form-check-dark">
+                <span class="form-check-primary">
                     <input class="form-check-input align-bottom item-select" type="checkbox" data-id="{{ $item->id }}">
                 </span>
             </div>

@@ -24,14 +24,14 @@ class AdminValidateLanguage
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $language = $this->route->parameter('lang');
+        $language = $this->route->parameter($langRouteName = config('language.route_name'));
 
-        if (language()->isEmpty() || ! language()->exists($language)) {
+        if ($language && ! language()->exists($language)) {
             throw new NotFoundHttpException;
         }
 
         // remove lang parameter from being passed to controller
-        $this->route->forgetParameter('lang');
+        $this->route->forgetParameter($langRouteName);
 
         return $next($request);
     }

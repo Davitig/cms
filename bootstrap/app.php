@@ -22,7 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'cms.lang' => \App\Http\Middleware\Admin\AdminValidateLanguage::class,
             'cms.auth' => \App\Http\Middleware\Admin\AdminAuthenticate::class,
             'cms.guest' => \App\Http\Middleware\Admin\AdminRedirectIfAuthenticated::class,
-            'cms.withFullAccess' => \App\Http\Middleware\Admin\AdminCmsUserWithFullAccess::class,
+            'cms.fullAccess' => \App\Http\Middleware\Admin\AdminCmsUserWithFullAccess::class,
             // web
             'web.lang' => \App\Http\Middleware\Web\WebValidateLanguage::class,
             'web.dynamicRoute' => \App\Http\Middleware\Web\WebHandleDynamicRoute::class,

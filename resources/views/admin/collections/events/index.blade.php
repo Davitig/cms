@@ -43,7 +43,7 @@
                                     @if ($parent->admin_order_by == 'position')
                                         <i class="handle cursor-move icon-base fa fa-bars icon-sm align-text-bottom me-1"></i>
                                     @endif
-                                    <a href="{{ $editUrl = cms_route('events.edit', [$item->collection_id, $item->id]) }}" class="text-black">
+                                    <a href="{{ $editUrl = cms_route('events.edit', [$item->collection_id, $item->id]) }}" class="text-dark">
                                         {{ $item->title }}
                                     </a>
                                     @if ($prevPos == $item->position)
@@ -52,7 +52,7 @@
                                     @endif
                                 </div>
                                 <div class="actions d-flex align-items-center gap-4">
-                                    <div class="item-id badge bg-label-gray text-black">{{ $item->id }}</div>
+                                    <div class="item-id badge bg-label-gray text-dark">{{ $item->id }}</div>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                             <i class="icon-base fa fa-ellipsis-vertical"></i>

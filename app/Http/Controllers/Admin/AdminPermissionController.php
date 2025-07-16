@@ -20,7 +20,7 @@ class AdminPermissionController extends Controller implements HasMiddleware
      */
     public static function middleware(): array
     {
-        return ['cms.withFullAccess'];
+        return ['cms.fullAccess'];
     }
 
     /**
@@ -110,14 +110,14 @@ class AdminPermissionController extends Controller implements HasMiddleware
     {
         $routeNames = [];
 
-        $cmsSlug = cms_route_name();
+        $prefix = config('language.route_name') . '.' . cms_route_name();
 
         foreach (app('router')->getRoutes()->getRoutesByName() as $name => $route) {
-            if (! str_starts_with($name, $cmsSlug)) {
+            if (! str_starts_with($name, $prefix)) {
                 continue;
             }
 
-            $routeNames[] = str($name)->chopStart($cmsSlug)->toString();
+            $routeNames[] = str($name)->chopStart($prefix)->toString();
         }
 
         return $this->groupRouteNames($routeNames);

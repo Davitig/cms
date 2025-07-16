@@ -15,7 +15,7 @@ class ArticleRequest extends Request
     {
         $id = $this->route('article');
 
-        $required = language()->mainIsActive() ? 'required' : '';
+        $required = $this->isLanguageRelated() ? '' : 'required';
 
         return [
             'slug' => [$required, 'unique:articles,slug,'.$id],
@@ -35,7 +35,7 @@ class ArticleRequest extends Request
             $this->offsetUnset('created_at');
         }
 
-        if (! language()->mainIsActive()) {
+        if ($this->isLanguageRelated()) {
             return;
         }
 

@@ -4,7 +4,7 @@
             <input type="hidden" name="current_page" value="{{ request('currentPage', 1) }}">
             <input type="hidden" name="last_page" value="{{ request('lastPage', 1) }}">
             <div class="modal-header">
-                <div class="modal-title fs-5 fw-medium text-black">Create a new file</div>
+                <div class="modal-title fs-5 fw-medium text-dark">Create a new file</div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

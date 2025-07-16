@@ -22,48 +22,32 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(Request $request, Router $router): void
     {
-        $this->setCmsRouteActivated($request);
+        $langRouteName = $this->app['config']->get('language.route_name');
 
-        $this->loadWebRoutes($router);
+        $this->loadWebRoutes($router, $langRouteName);
 
-        Route::middleware('web')->group(function (Router $router) {
-            $this->loadCMSRoutes($router);
+        Route::middleware('web')->group(function (Router $router) use ($request, $langRouteName) {
+            $this->loadCMSRoutes($router, $request, $langRouteName);
         });
-    }
-
-    /**
-     * Set CMS route is activated if the slug has matched in a request path.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return void
-     */
-    protected function setCmsRouteActivated(Request $request): void
-    {
-        $segments = $request->segments();
-
-        if (language()->isSelected()) {
-            next($segments);
-        }
-
-        $this->app['config']->set('_cms.booted', current($segments) == cms_slug());
     }
 
     /**
      * Load web routes.
      *
      * @param  \Illuminate\Routing\Router  $router
+     * @param  string  $langRouteName
      * @return void
      */
-    protected function loadWebRoutes(Router $router): void
+    protected function loadWebRoutes(Router $router, string $langRouteName): void
     {
         $router->middleware('web.lang')
             ->group(base_path('routes/web.php'));
 
         if (language()->count() > 1) {
             $router->middleware('web.lang')
-                ->prefix('{lang}')
-                ->name('lang.')
-                ->whereIn('lang', language()->all()->keys()->toArray())
+                ->prefix("{{$langRouteName}}")
+                ->name($langRouteName . '.')
+                ->whereIn($langRouteName, language()->all()->keys()->toArray())
                 ->group(base_path('routes/web.php'));
         }
     }
@@ -72,18 +56,27 @@ class RouteServiceProvider extends ServiceProvider
      * Load CMS routes.
      *
      * @param  \Illuminate\Routing\Router  $router
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $langRouteName
      * @return void
      */
-    protected function loadCMSRoutes(Router $router): void
+    protected function loadCMSRoutes(Router $router, Request $request, string $langRouteName): void
     {
-        $router->prefix(cms_slug())->name(cms_route_name())
-            ->group(base_path('routes/cms.php'));
+        if (language()->isEmpty()) {
+            // routes without language prefix
+            $router->prefix(cms_path())->name(cms_route_name())
+                ->group(base_path('routes/cms.php'));
+        } else {
+            // redirector to language prefixed route
+            $router->get(cms_path() . '/{any?}', function () use ($request) {
+                return redirect(language()->active() . '/' . $request->path());
+            })->where('any', '.*');
 
-        if (language()->count() > 1) {
+            // routes with language prefix
             $router->middleware('cms.lang')
-                ->prefix('{lang}/' . cms_slug())
-                ->name('lang.' . cms_route_name())
-                ->whereIn('lang', language()->all()->keys()->toArray())
+                ->prefix("{{$langRouteName}}/" . cms_path())
+                ->name($langRouteName . '.' . cms_route_name())
+                ->whereIn($langRouteName, language()->all()->keys()->toArray())
                 ->group(base_path('routes/cms.php'));
         }
     }

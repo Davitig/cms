@@ -23,7 +23,7 @@ class AdminCmsUserRoleController extends Controller implements HasMiddleware
      */
     public static function middleware(): array
     {
-        return ['cms.withFullAccess'];
+        return ['cms.fullAccess'];
     }
 
     /**
