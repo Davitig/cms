@@ -46,8 +46,6 @@ class AdminProductFileResourceTest extends TestAdmin
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('products.files.index', [$product->id]));
 
-        $product->delete();
-
         $response->assertOk();
     }
 
@@ -58,8 +56,6 @@ class AdminProductFileResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->getJson(cms_route('products.files.create', [$product->id]));
-
-        $product->delete();
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -78,8 +74,6 @@ class AdminProductFileResourceTest extends TestAdmin
             'file' => fake()->imageUrl()
         ]);
 
-        $product->delete();
-
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
@@ -90,8 +84,6 @@ class AdminProductFileResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->getJson(cms_route('products.files.edit', [$product->id, $file->id]));
-
-        $product->delete();
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -105,14 +97,10 @@ class AdminProductFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('products.files.update', [
-            $product->id, $file->id
-        ]), [
+        )->put(cms_route('products.files.update', [$product->id, $file->id]), [
             'title' => fake()->sentence(2),
             'file' => fake()->imageUrl()
         ]);
-
-        $product->delete();
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
@@ -123,13 +111,9 @@ class AdminProductFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('products.files.store', [
-            $product->id
-        ]), [
+        )->post(cms_route('products.files.store', [$product->id]), [
             'file' => fake()->imageUrl()
         ]);
-
-        $product->delete();
 
         $response->assertFound()->assertSessionHasErrors(['title']);
     }
@@ -141,8 +125,6 @@ class AdminProductFileResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('products.files.visibility', [$file->id]));
-
-        $product->delete();
 
         $response->assertFound();
     }
@@ -177,8 +159,6 @@ class AdminProductFileResourceTest extends TestAdmin
             ->get(['id', 'position as pos'])
             ->toArray();
 
-        $product->delete();
-
         $this->assertSame($data, $updatedData);
     }
 
@@ -191,8 +171,6 @@ class AdminProductFileResourceTest extends TestAdmin
         )->delete(cms_route('products.files.destroy', [
             $product->id, $file->id
         ]));
-
-        $product->delete();
 
         $response->assertFound();
     }

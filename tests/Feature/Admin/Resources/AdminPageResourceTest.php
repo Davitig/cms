@@ -41,14 +41,11 @@ class AdminPageResourceTest extends TestAdmin
 
     public function test_admin_pages_resource_index()
     {
-        [$menu, $pages] = $this->createPages(5);
+        [$menu] = $this->createPages(5);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('pages.index', [$menu->id]));
-
-        $pages->map->delete();
-        $menu->delete();
 
         $response->assertOk();
     }
@@ -60,8 +57,6 @@ class AdminPageResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('pages.create', [$menu->id]));
-
-        $menu->delete();
 
         $response->assertOk();
     }
@@ -80,9 +75,6 @@ class AdminPageResourceTest extends TestAdmin
             'type' => 'page'
         ]);
 
-        (new Page)->menuId($menu->id)->firstOrFail()->delete();
-        $menu->delete();
-
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
@@ -93,9 +85,6 @@ class AdminPageResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('pages.edit', [$menu->id, $page->id]));
-
-        $page->delete();
-        $menu->delete();
 
         $response->assertOk();
     }
@@ -114,9 +103,6 @@ class AdminPageResourceTest extends TestAdmin
             'type' => 'page'
         ]);
 
-        $page->delete();
-        $menu->delete();
-
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
@@ -129,8 +115,6 @@ class AdminPageResourceTest extends TestAdmin
         )->post(cms_route('pages.store', [$menu->id]), [
             'slug' => fake()->slug(2)
         ]);
-
-        $menu->delete();
 
         $response->assertFound()->assertSessionHasErrors(['title']);
     }
@@ -145,9 +129,6 @@ class AdminPageResourceTest extends TestAdmin
             'slug' => $page->slug
         ]);
 
-        $page->delete();
-        $menu->delete();
-
         $response->assertFound()->assertSessionHasErrors(['slug']);
     }
 
@@ -158,9 +139,6 @@ class AdminPageResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('pages.visibility', [$page->id]));
-
-        $page->delete();
-        $menu->delete();
 
         $response->assertFound();
     }
@@ -194,9 +172,6 @@ class AdminPageResourceTest extends TestAdmin
             ->get(['id', 'position as pos'])
             ->toArray();
 
-        $pages->map->delete();
-        $menu->delete();
-
         $this->assertSame($data, $updatedData);
     }
 
@@ -216,10 +191,6 @@ class AdminPageResourceTest extends TestAdmin
 
         $updatedPageMenuId = (new Page)->whereKey($page->id)->value('menu_id');
 
-        $page->delete();
-        $menu->delete();
-        $newMenu->delete();
-
         $this->assertSame($newMenu->id, $updatedPageMenuId);
     }
 
@@ -231,8 +202,6 @@ class AdminPageResourceTest extends TestAdmin
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('pages.getListableTypes', ['type' => 'articles']));
 
-        $collection->delete();
-
         $this->assertArrayHasKey($collection->id, $response->json());
     }
 
@@ -243,9 +212,6 @@ class AdminPageResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('pages.destroy', [$menu->id, $page->id]));
-
-        $page->delete();
-        $menu->delete();
 
         $response->assertFound();
     }

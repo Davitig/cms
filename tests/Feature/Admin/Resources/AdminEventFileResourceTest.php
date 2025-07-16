@@ -38,33 +38,27 @@ class AdminEventFileResourceTest extends TestAdmin
             $files = null;
         }
 
-        return array_merge([$collection, $event], ($files ? [$files] : []));
+        return array_merge([$event], ($files ? [$files] : []));
     }
 
     public function test_admin_event_files_resource_index()
     {
-        [$collection, $event] = $this->createEventFiles(5);
+        [$event] = $this->createEventFiles(5);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('events.files.index', [$event->id]));
-
-        $event->delete();
-        $collection->delete();
 
         $response->assertOk();
     }
 
     public function test_admin_event_files_resource_create()
     {
-        [$collection, $event] = $this->createEventFiles(null, false);
+        [$event] = $this->createEventFiles(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->getJson(cms_route('events.files.create', [$event->id]));
-
-        $event->delete();
-        $collection->delete();
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -74,7 +68,7 @@ class AdminEventFileResourceTest extends TestAdmin
      */
     public function test_admin_event_files_resource_store()
     {
-        [$collection, $event] = $this->createEventFiles(null, false);
+        [$event] = $this->createEventFiles(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -83,22 +77,16 @@ class AdminEventFileResourceTest extends TestAdmin
             'file' => fake()->imageUrl()
         ]);
 
-        $event->delete();
-        $collection->delete();
-
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
     public function test_admin_event_files_resource_edit()
     {
-        [$collection, $event, $file] = $this->createEventFiles();
+        [$event, $file] = $this->createEventFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->getJson(cms_route('events.files.edit', [$event->id, $file->id]));
-
-        $event->delete();
-        $collection->delete();
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -108,58 +96,45 @@ class AdminEventFileResourceTest extends TestAdmin
      */
     public function test_admin_event_files_resource_update()
     {
-        [$collection, $event, $file] = $this->createEventFiles();
+        [$event, $file] = $this->createEventFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('events.files.update', [
-            $event->id, $file->id
-        ]), [
+        )->put(cms_route('events.files.update', [$event->id, $file->id]), [
             'title' => fake()->sentence(2),
             'file' => fake()->imageUrl()
         ]);
-
-        $event->delete();
-        $collection->delete();
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
     public function test_admin_event_files_resource_validate_required()
     {
-        [$collection, $event] = $this->createEventFiles(null, false);
+        [$event] = $this->createEventFiles(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('events.files.store', [
-            $event->id
-        ]), [
+        )->post(cms_route('events.files.store', [$event->id]), [
             'file' => fake()->imageUrl()
         ]);
-
-        $event->delete();
-        $collection->delete();
 
         $response->assertFound()->assertSessionHasErrors(['title']);
     }
 
     public function test_admin_event_files_resource_visibility()
     {
-        [$collection, $event, $file] = $this->createEventFiles();
+        [$event, $file] = $this->createEventFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('events.files.visibility', [$file->id]));
-
-        $event->delete();
-        $collection->delete();
 
         $response->assertFound();
     }
 
     public function test_admin_event_files_resource_update_position()
     {
-        [$collection, $event, $files] = $this->createEventFiles(5);
+        [$event, $files] = $this->createEventFiles(5);
 
         $data = $ids = [];
         $startItem = $files->first();
@@ -187,24 +162,18 @@ class AdminEventFileResourceTest extends TestAdmin
             ->get(['id', 'position as pos'])
             ->toArray();
 
-        $event->delete();
-        $collection->delete();
-
         $this->assertSame($data, $updatedData);
     }
 
     public function test_admin_event_files_resource_destroy()
     {
-        [$collection, $event, $file] = $this->createEventFiles();
+        [$event, $file] = $this->createEventFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('events.files.destroy', [
             $event->id, $file->id
         ]));
-
-        $event->delete();
-        $collection->delete();
 
         $response->assertFound();
     }

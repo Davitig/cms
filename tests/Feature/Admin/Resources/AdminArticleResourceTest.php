@@ -41,9 +41,6 @@ class AdminArticleResourceTest extends TestAdmin
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('articles.index', [$collection->id]));
 
-        $articles->map->delete();
-        $collection->delete();
-
         $response->assertOk();
     }
 
@@ -54,8 +51,6 @@ class AdminArticleResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('articles.create', [$collection->id]));
-
-        $collection->delete();
 
         $response->assertOk();
     }
@@ -75,9 +70,6 @@ class AdminArticleResourceTest extends TestAdmin
             'created_at' => now()->toDateTimeString()
         ]);
 
-        (new Article)->collectionId($collection->id)->firstOrFail()->delete();
-        $collection->delete();
-
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
@@ -88,9 +80,6 @@ class AdminArticleResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('articles.edit', [$collection->id, $article->id]));
-
-        $article->delete();
-        $collection->delete();
 
         $response->assertOk();
     }
@@ -110,9 +99,6 @@ class AdminArticleResourceTest extends TestAdmin
             'created_at' => now()->toDateTimeString()
         ]);
 
-        $article->delete();
-        $collection->delete();
-
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
@@ -125,8 +111,6 @@ class AdminArticleResourceTest extends TestAdmin
         )->post(cms_route('articles.store', [$collection->id]), [
             'slug' => fake()->slug(2)
         ]);
-
-        $collection->delete();
 
         $response->assertFound()->assertSessionHasErrors(['title']);
     }
@@ -141,9 +125,6 @@ class AdminArticleResourceTest extends TestAdmin
             'slug' => $article->slug
         ]);
 
-        $article->delete();
-        $collection->delete();
-
         $response->assertFound()->assertSessionHasErrors(['slug']);
     }
 
@@ -154,9 +135,6 @@ class AdminArticleResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('articles.visibility', [$article->id]));
-
-        $article->delete();
-        $collection->delete();
 
         $response->assertFound();
     }
@@ -191,9 +169,6 @@ class AdminArticleResourceTest extends TestAdmin
             ->get(['id', 'position as pos'])
             ->toArray();
 
-        $articles->map->delete();
-        $collection->delete();
-
         $this->assertSame($data, $updatedData);
     }
 
@@ -214,10 +189,6 @@ class AdminArticleResourceTest extends TestAdmin
         $updatedArticleCollectionId = (new Article)->whereKey($article->id)
             ->value('collection_id');
 
-        $article->delete();
-        $collection->delete();
-        $newCollection->delete();
-
         $this->assertSame($newCollection->id, $updatedArticleCollectionId);
     }
 
@@ -228,9 +199,6 @@ class AdminArticleResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('articles.destroy', [$collection->id, $article->id]));
-
-        $article->delete();
-        $collection->delete();
 
         $response->assertFound();
     }

@@ -38,33 +38,27 @@ class AdminArticleFileResourceTest extends TestAdmin
             $files = null;
         }
 
-        return array_merge([$collection, $article], ($files ? [$files] : []));
+        return array_merge([$article], ($files ? [$files] : []));
     }
 
     public function test_admin_article_files_resource_index()
     {
-        [$collection, $article] = $this->createArticleFiles(5);
+        [$article] = $this->createArticleFiles(5);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('articles.files.index', [$article->id]));
-
-        $article->delete();
-        $collection->delete();
 
         $response->assertOk();
     }
 
     public function test_admin_article_files_resource_create()
     {
-        [$collection, $article] = $this->createArticleFiles(null, false);
+        [$article] = $this->createArticleFiles(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->getJson(cms_route('articles.files.create', [$article->id]));
-
-        $article->delete();
-        $collection->delete();
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -74,7 +68,7 @@ class AdminArticleFileResourceTest extends TestAdmin
      */
     public function test_admin_article_files_resource_store()
     {
-        [$collection, $article] = $this->createArticleFiles(null, false);
+        [$article] = $this->createArticleFiles(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -83,22 +77,16 @@ class AdminArticleFileResourceTest extends TestAdmin
             'file' => fake()->imageUrl()
         ]);
 
-        $article->delete();
-        $collection->delete();
-
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
     public function test_admin_article_files_resource_edit()
     {
-        [$collection, $article, $file] = $this->createArticleFiles();
+        [$article, $file] = $this->createArticleFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->getJson(cms_route('articles.files.edit', [$article->id, $file->id]));
-
-        $article->delete();
-        $collection->delete();
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -108,7 +96,7 @@ class AdminArticleFileResourceTest extends TestAdmin
      */
     public function test_admin_article_files_resource_update()
     {
-        [$collection, $article, $file] = $this->createArticleFiles();
+        [$article, $file] = $this->createArticleFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -117,15 +105,12 @@ class AdminArticleFileResourceTest extends TestAdmin
             'file' => fake()->imageUrl()
         ]);
 
-        $article->delete();
-        $collection->delete();
-
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
     public function test_admin_article_files_resource_validate_required()
     {
-        [$collection, $article] = $this->createArticleFiles(null, false);
+        [$article] = $this->createArticleFiles(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -133,29 +118,23 @@ class AdminArticleFileResourceTest extends TestAdmin
             'file' => fake()->imageUrl()
         ]);
 
-        $article->delete();
-        $collection->delete();
-
         $response->assertFound()->assertSessionHasErrors(['title']);
     }
 
     public function test_admin_article_files_resource_visibility()
     {
-        [$collection, $article, $file] = $this->createArticleFiles();
+        [$article, $file] = $this->createArticleFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('articles.files.visibility', [$file->id]));
-
-        $article->delete();
-        $collection->delete();
 
         $response->assertFound();
     }
 
     public function test_admin_article_files_resource_update_position()
     {
-        [$collection, $article, $files] = $this->createArticleFiles(5);
+        [$article, $files] = $this->createArticleFiles(5);
 
         $data = $ids = [];
         $startItem = $files->first();
@@ -183,22 +162,16 @@ class AdminArticleFileResourceTest extends TestAdmin
             ->get(['id', 'position as pos'])
             ->toArray();
 
-        $article->delete();
-        $collection->delete();
-
         $this->assertSame($data, $updatedData);
     }
 
     public function test_admin_article_files_resource_destroy()
     {
-        [$collection, $article, $file] = $this->createArticleFiles();
+        [$article, $file] = $this->createArticleFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('articles.files.destroy', [$article->id, $file->id]));
-
-        $article->delete();
-        $collection->delete();
 
         $response->assertFound();
     }

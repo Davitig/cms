@@ -13,13 +13,11 @@ class AdminMenuResourceTest extends TestAdmin
 
     public function test_admin_menus_resource_index()
     {
-        $menus = MenuFactory::new()->times(5)->create();
+        MenuFactory::new()->times(5)->create();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('menus.index'));
-
-        $menus->map->delete();
 
         $response->assertOk();
     }
@@ -44,8 +42,6 @@ class AdminMenuResourceTest extends TestAdmin
             'title' => fake()->sentence(2)
         ]);
 
-        (new Menu)->orderByDesc((new Menu)->getKeyName())->firstOrFail()->delete();
-
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
@@ -56,8 +52,6 @@ class AdminMenuResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('menus.edit', [$menu->id]));
-
-        $menu->delete();
 
         $response->assertOk();
     }
@@ -75,8 +69,6 @@ class AdminMenuResourceTest extends TestAdmin
             'title' => 'List of Pages',
             'main' => 1
         ]);
-
-        $menu->delete();
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
@@ -100,8 +92,6 @@ class AdminMenuResourceTest extends TestAdmin
             $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('menus.destroy', [$menu->id]));
 
-        $menu->delete();
-
         $response->assertFound();
     }
 
@@ -116,8 +106,6 @@ class AdminMenuResourceTest extends TestAdmin
             $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('menus.updateMain'), ['id' => $menu->id]);
 
-        $menu->delete();
-
         $response->assertOk()->assertSessionHasNoErrors();
     }
 
@@ -130,8 +118,6 @@ class AdminMenuResourceTest extends TestAdmin
         )->put(cms_route('menus.updateMain'), ['id' => $menus->first()->id]);
 
         $mainCount = (new Menu)->whereMain(1)->count();
-
-        $menus->map->delete();
 
         $this->assertEquals(1, $mainCount);
     }

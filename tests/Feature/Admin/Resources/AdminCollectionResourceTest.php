@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Admin\Resources;
 
-use App\Models\Collection;
 use Database\Factories\CollectionFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
@@ -13,13 +12,11 @@ class AdminCollectionResourceTest extends TestAdmin
 
     public function test_admin_collections_resource_index()
     {
-        $collections = CollectionFactory::new()->times(5)->create();
+        CollectionFactory::new()->times(5)->create();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('collections.index'));
-
-        $collections->map->delete();
 
         $response->assertOk();
     }
@@ -51,8 +48,6 @@ class AdminCollectionResourceTest extends TestAdmin
             'web_per_page' => 20
         ]);
 
-        (new Collection)->orderDesc()->firstOrFail()->delete();
-
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
@@ -63,8 +58,6 @@ class AdminCollectionResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('collections.edit', [$collection->id]));
-
-        $collection->delete();
 
         $response->assertOk();
     }
@@ -88,8 +81,6 @@ class AdminCollectionResourceTest extends TestAdmin
             'web_per_page' => 30
         ]);
 
-        $collection->delete();
-
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
@@ -112,8 +103,6 @@ class AdminCollectionResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('collections.destroy', [$collection->id]));
-
-        $collection->delete();
 
         $response->assertFound();
     }

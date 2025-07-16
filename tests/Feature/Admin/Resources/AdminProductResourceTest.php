@@ -31,13 +31,11 @@ class AdminProductResourceTest extends TestAdmin
 
     public function test_admin_products_resource_index()
     {
-        $products = $this->createProducts(5);
+        $this->createProducts(5);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('products.index'));
-
-        $products->map->delete();
 
         $response->assertOk();
     }
@@ -64,8 +62,6 @@ class AdminProductResourceTest extends TestAdmin
             'quantity' => fake()->numberBetween(1, 1000)
         ]);
 
-        (new Product)->orderDesc()->firstOrFail()->delete();
-
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
@@ -76,8 +72,6 @@ class AdminProductResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('products.edit', [$product->id]));
-
-        $product->delete();
 
         $response->assertOk();
     }
@@ -96,8 +90,6 @@ class AdminProductResourceTest extends TestAdmin
             'price' => fake()->randomFloat(2, 1, 1000),
             'quantity' => fake()->numberBetween(1, 1000)
         ]);
-
-        $product->delete();
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
@@ -123,8 +115,6 @@ class AdminProductResourceTest extends TestAdmin
             'slug' => $product->slug
         ]);
 
-        $product->delete();
-
         $response->assertFound()->assertSessionHasErrors(['slug']);
     }
 
@@ -135,8 +125,6 @@ class AdminProductResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('products.visibility', [$product->id]));
-
-        $product->delete();
 
         $response->assertFound();
     }
@@ -170,8 +158,6 @@ class AdminProductResourceTest extends TestAdmin
             ->get(['id', 'position as pos'])
             ->toArray();
 
-        $products->map->delete();
-
         $this->assertSame($data, $updatedData);
     }
 
@@ -182,8 +168,6 @@ class AdminProductResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('products.destroy', [$product->id]));
-
-        $product->delete();
 
         $response->assertFound();
     }

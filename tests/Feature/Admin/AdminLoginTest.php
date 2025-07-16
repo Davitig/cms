@@ -38,7 +38,7 @@ class AdminLoginTest extends TestAdmin
     {
         $cmsUserRole = CmsUserRoleFactory::new()->create();
 
-        $cmsUser = CmsUserFactory::new()
+        CmsUserFactory::new()
             ->role($cmsUserRole->id)
             ->loginParams($email = fake()->email(), 'password')
             ->create();
@@ -47,9 +47,6 @@ class AdminLoginTest extends TestAdmin
             'email' => $email,
             'password' => 'password'
         ]);
-
-        $cmsUser->delete();
-        $cmsUserRole->delete();
 
         $response->assertRedirect(cms_route('dashboard.index'));
     }

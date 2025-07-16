@@ -38,33 +38,27 @@ class AdminPageFileResourceTest extends TestAdmin
             $files = null;
         }
 
-        return array_merge([$menu, $page], ($files ? [$files] : []));
+        return array_merge([$page], ($files ? [$files] : []));
     }
 
     public function test_admin_page_files_resource_index()
     {
-        [$menu, $page] = $this->createPageFiles(5);
+        [$page] = $this->createPageFiles(5);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('pages.files.index', [$page->id]));
-
-        $page->delete();
-        $menu->delete();
 
         $response->assertOk();
     }
 
     public function test_admin_page_files_resource_create()
     {
-        [$menu, $page] = $this->createPageFiles(null, false);
+        [$page] = $this->createPageFiles(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->getJson(cms_route('pages.files.create', [$page->id]));
-
-        $page->delete();
-        $menu->delete();
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -74,7 +68,7 @@ class AdminPageFileResourceTest extends TestAdmin
      */
     public function test_admin_page_files_resource_store()
     {
-        [$menu, $page] = $this->createPageFiles(null, false);
+        [$page] = $this->createPageFiles(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -83,22 +77,16 @@ class AdminPageFileResourceTest extends TestAdmin
             'file' => fake()->imageUrl()
         ]);
 
-        $page->delete();
-        $menu->delete();
-
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
     public function test_admin_page_files_resource_edit()
     {
-        [$menu, $page, $file] = $this->createPageFiles();
+        [$page, $file] = $this->createPageFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->getJson(cms_route('pages.files.edit', [$page->id, $file->id]));
-
-        $page->delete();
-        $menu->delete();
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -108,58 +96,45 @@ class AdminPageFileResourceTest extends TestAdmin
      */
     public function test_admin_page_files_resource_update()
     {
-        [$menu, $page, $file] = $this->createPageFiles();
+        [$page, $file] = $this->createPageFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('pages.files.update', [
-            $page->id, $file->id
-        ]), [
+        )->put(cms_route('pages.files.update', [$page->id, $file->id]), [
             'title' => fake()->sentence(2),
             'file' => fake()->imageUrl()
         ]);
-
-        $page->delete();
-        $menu->delete();
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
     public function test_admin_page_files_resource_validate_required()
     {
-        [$menu, $page] = $this->createPageFiles(null, false);
+        [$page] = $this->createPageFiles(null, false);
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('pages.files.store', [
-            $page->id
-        ]), [
+        )->post(cms_route('pages.files.store', [$page->id]), [
             'file' => fake()->imageUrl()
         ]);
-
-        $page->delete();
-        $menu->delete();
 
         $response->assertFound()->assertSessionHasErrors(['title']);
     }
 
     public function test_admin_page_files_resource_visibility()
     {
-        [$menu, $page, $file] = $this->createPageFiles();
+        [$page, $file] = $this->createPageFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('pages.files.visibility', [$file->id]));
-
-        $page->delete();
-        $menu->delete();
 
         $response->assertFound();
     }
 
     public function test_admin_page_files_resource_update_position()
     {
-        [$menu, $page, $files] = $this->createPageFiles(5);
+        [$page, $files] = $this->createPageFiles(5);
 
         $data = $ids = [];
         $startItem = $files->first();
@@ -187,24 +162,18 @@ class AdminPageFileResourceTest extends TestAdmin
             ->get(['id', 'position as pos'])
             ->toArray();
 
-        $page->delete();
-        $menu->delete();
-
         $this->assertSame($data, $updatedData);
     }
 
     public function test_admin_page_files_resource_destroy()
     {
-        [$menu, $page, $file] = $this->createPageFiles();
+        [$page, $file] = $this->createPageFiles();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('pages.files.destroy', [
             $page->id, $file->id
         ]));
-
-        $page->delete();
-        $menu->delete();
 
         $response->assertFound();
     }

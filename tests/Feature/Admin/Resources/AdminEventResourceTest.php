@@ -41,9 +41,6 @@ class AdminEventResourceTest extends TestAdmin
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('events.index', [$collection->id]));
 
-        $events->map->delete();
-        $collection->delete();
-
         $response->assertOk();
     }
 
@@ -54,8 +51,6 @@ class AdminEventResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('events.create', [$collection->id]));
-
-        $collection->delete();
 
         $response->assertOk();
     }
@@ -74,9 +69,6 @@ class AdminEventResourceTest extends TestAdmin
             'slug' => fake()->slug(2)
         ]);
 
-        (new Event)->collectionId($collection->id)->firstOrFail()->delete();
-        $collection->delete();
-
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
@@ -87,9 +79,6 @@ class AdminEventResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->get(cms_route('events.edit', [$collection->id, $event->id]));
-
-        $event->delete();
-        $collection->delete();
 
         $response->assertOk();
     }
@@ -108,9 +97,6 @@ class AdminEventResourceTest extends TestAdmin
             'slug' => fake()->slug(2)
         ]);
 
-        $event->delete();
-        $collection->delete();
-
         $response->assertFound()->assertSessionHasNoErrors();
     }
 
@@ -123,8 +109,6 @@ class AdminEventResourceTest extends TestAdmin
         )->post(cms_route('events.store', [$collection->id]), [
             'slug' => fake()->slug(2)
         ]);
-
-        $collection->delete();
 
         $response->assertFound()->assertSessionHasErrors(['title']);
     }
@@ -139,9 +123,6 @@ class AdminEventResourceTest extends TestAdmin
             'slug' => $event->slug
         ]);
 
-        $event->delete();
-        $collection->delete();
-
         $response->assertFound()->assertSessionHasErrors(['slug']);
     }
 
@@ -152,9 +133,6 @@ class AdminEventResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->put(cms_route('events.visibility', [$event->id]));
-
-        $event->delete();
-        $collection->delete();
 
         $response->assertFound();
     }
@@ -189,9 +167,6 @@ class AdminEventResourceTest extends TestAdmin
             ->get(['id', 'position as pos'])
             ->toArray();
 
-        $events->map->delete();
-        $collection->delete();
-
         $this->assertSame($data, $updatedData);
     }
 
@@ -212,10 +187,6 @@ class AdminEventResourceTest extends TestAdmin
         $updatedEventCollectionId = (new Event)->whereKey($event->id)
             ->value('collection_id');
 
-        $event->delete();
-        $collection->delete();
-        $newCollection->delete();
-
         $this->assertSame($newCollection->id, $updatedEventCollectionId);
     }
 
@@ -226,9 +197,6 @@ class AdminEventResourceTest extends TestAdmin
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
         )->delete(cms_route('events.destroy', [$collection->id, $event->id]));
-
-        $event->delete();
-        $collection->delete();
 
         $response->assertFound();
     }
