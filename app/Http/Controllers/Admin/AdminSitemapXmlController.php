@@ -87,7 +87,8 @@ class AdminSitemapXmlController extends Controller
      */
     public function store(Request $request)
     {
-        $pages = (new Page)->whereVisible()->orderBy('menu_id')
+        $pages = (new Page)->whereVisible()
+            ->orderBy('menu_id')
             ->positionAsc()
             ->get();
 

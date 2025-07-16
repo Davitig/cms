@@ -15,7 +15,7 @@ class AdminRedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! is_null($request->user('cms'))) {
+        if (! is_null($user = $request->user('cms')) && ! $user->suspended) {
             return redirect(cms_route('dashboard.index'));
         }
 

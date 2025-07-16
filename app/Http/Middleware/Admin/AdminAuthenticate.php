@@ -31,9 +31,15 @@ class AdminAuthenticate
             return redirect()->guest(cms_route('login'));
         }
 
-        // check if user is suspended
+        // check if user suspended
         if ($user->suspended) {
-            throw new AccessDeniedHttpException('Forbidden');
+            if ($request->expectsJson()) {
+                return response()->json('Account has been suspended.', 403);
+            }
+
+            return redirect(cms_route('login'))->with('alert', fill_data(
+                false, 'Account has been suspended.'
+            ));
         }
 
         // check user route permissions

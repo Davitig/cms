@@ -31,11 +31,13 @@
                         </a>
                     </div>
                     <!-- /Logo -->
+                    @session('alert.message')
+                    <div class="alert alert-{{ session('alert.result') ? 'warning' : 'danger' }}" role="alert">
+                        {{ session('alert.message') }}
+                    </div>
+                    @endsession
                     <form id="formAuthentication" class="mb-4" action="{{ cms_route('login.post') }}" method="POST">
                         @csrf
-                        @if ($error = $errors->first('email'))
-                            <span class="text-danger">{{$error}}</span>
-                        @endif
                         <div class="mb-6 form-control-validation">
                             <label for="email" class="form-label">Email</label>
                             <input
@@ -45,10 +47,10 @@
                                 name="email"
                                 placeholder="Enter your email"
                                 autofocus />
+                            @if ($error = $errors->first('email'))
+                                <span class="text-danger">{{$error}}</span>
+                            @endif
                         </div>
-                        @if ($error = $errors->first('password'))
-                            <span class="text-danger">{{$error}}</span>
-                        @endif
                         <div class="mb-6 form-password-toggle form-control-validation">
                             <label class="form-label" for="password">Password</label>
                             <input
@@ -58,6 +60,9 @@
                                 name="password"
                                 placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                 aria-describedby="password" />
+                            @if ($error = $errors->first('password'))
+                                <span class="text-danger">{{$error}}</span>
+                            @endif
                         </div>
                         <div class="my-8">
                             <div class="d-flex justify-content-between">

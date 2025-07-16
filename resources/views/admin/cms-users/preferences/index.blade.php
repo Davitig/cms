@@ -23,12 +23,14 @@
                     <span class="switch-toggle-slider"></span>
                     <span class="switch-label">No reload on form submit</span>
                 </label>
-                <div>
-                    <label for="roles_list_view_inp" class="form-label">Roles List View</label>
-                    {{ html()->select('roles_list_view', [
-                        'table' => 'Table', 'card' => 'Card'
-                    ], $preferences->get('roles_list_view'))->id('roles_list_view_inp')->class('form-select') }}
-                </div>
+                @if ($userRouteAccess('cmsUserRoles.index'))
+                    <div>
+                        <label for="roles_list_view_inp" class="form-label">Roles List View</label>
+                        {{ html()->select('roles_list_view', [
+                            'table' => 'Table', 'card' => 'Card'
+                        ], $preferences->get('roles_list_view'))->id('roles_list_view_inp')->class('form-select') }}
+                    </div>
+                @endif
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
             {{ html()->form()->close() }}

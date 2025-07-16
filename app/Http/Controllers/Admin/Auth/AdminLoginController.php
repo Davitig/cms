@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Auth\LoginController as Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,6 +15,28 @@ class AdminLoginController extends Controller
     public function showLoginForm()
     {
         return view('admin.auth.login');
+    }
+
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|void
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        if (! $user->suspended) {
+            return;
+        }
+
+        $data = fill_data(false, 'Account has been suspended.');
+
+        if (($response = $this->logout($request)) instanceof JsonResponse) {
+            return $response->setData($data)->setStatusCode(403);
+        }
+
+        return $response->with('alert', $data);
     }
 
     /**

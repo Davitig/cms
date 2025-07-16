@@ -67,14 +67,14 @@
                     <p class="card-text text-uppercase text-body-secondary small mb-0">Contacts</p>
                     <ul class="list-unstyled my-3 py-1">
                         <li class="d-flex align-items-center mb-4">
-                            <i class="icon-base fa fa-phone icon-sm"></i>
-                            <span class="fw-medium mx-2">Contact:</span>
-                            <span>{{ $current->phone }}</span>
-                        </li>
-                        <li class="d-flex align-items-center mb-4">
                             <i class="icon-base fa-regular fa-envelope icon-sm"></i>
                             <span class="fw-medium mx-2">Email:</span>
                             <span>{{ $current->email }}</span>
+                        </li>
+                        <li class="d-flex align-items-center mb-4">
+                            <i class="icon-base fa fa-phone icon-sm"></i>
+                            <span class="fw-medium mx-2">Phone:</span>
+                            <span>{{ $current->phone }}</span>
                         </li>
                     </ul>
                 </div>

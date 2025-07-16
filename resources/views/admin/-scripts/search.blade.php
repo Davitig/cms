@@ -11,12 +11,16 @@
                             "url": "{{ cms_route('dashboard.index') }}"
                         }
                     ],
+                    @if ($userRouteAccess('menus.index', 'pages.index'))
                     "Site Map": [
+                        @if ($userRouteAccess('menus.index'))
                         {
                             "name": "Menus",
                             "icon": "fa fa-list",
                             "url": "{{ cms_route('menus.index') }}"
                         },
+                        @endif
+                        @if ($menus->isNotEmpty() && $userRouteAccess('pages.index'))
                         @foreach($menus as $item)
                         {
                             "name": "{{ $item->title }}",
@@ -24,7 +28,9 @@
                             "url": "{{ cms_route('pages.index', [$item->id]) }}"
                         },
                         @endforeach
+                        @endif
                     ],
+                    @endif
                     "Users": [
                         {
                             "name": "CMS Users",
@@ -46,6 +52,7 @@
                             "icon": "fa fa-sliders",
                             "url": "{{ cms_route('cmsUsers.preferences.index', [$userId]) }}"
                         },
+                        @if (auth('cms')->user()->hasFullAccess())
                         {
                             "name": "Roles",
                             "icon": "fa fa-user-tag",
@@ -56,7 +63,9 @@
                             "icon": "fa fa-lock",
                             "url": "{{ cms_route('permissions.index') }}"
                         }
+                        @endif
                     ],
+                    @if ($userRouteAccess('products.index'))
                     "Products": [
                         {
                             "name": "Products",
@@ -64,6 +73,8 @@
                             "url": "{{ cms_route('products.index') }}"
                         }
                     ],
+                    @endif
+                    @if ($userRouteAccess('collections.index'))
                     "Collections": [
                         {
                             "name": "Collections",
@@ -71,25 +82,30 @@
                             "url": "{{ cms_route('collections.index') }}"
                         }
                     ],
+                    @endif
+                    @if ($userRouteAccess('languages.index'))
                     "Languages": [
                         {
                             "name": "Languages",
                             "icon": "fa fa-language",
                             "url": "{{ cms_route('languages.index') }}"
-                        },
+                        }
+                    ],
+                    @endif
+                    @if (auth('cms')->user()->hasFullAccess())
+                    "Settings": [
                         {
                             "name": "Translations",
                             "icon": "fa fa-sort-alpha-asc",
                             "url": "{{ cms_route('translations.index') }}"
-                        }
-                    ],
-                    "Settings": [
+                        },
                         {
                             "name": "Web Settings",
                             "icon": "fa fa-layer-group",
                             "url": "{{ cms_route('webSettings.index') }}"
                         }
                     ]
+                    @endif
                 },
                 "suggestions": {
                     "Popular": [
@@ -98,21 +114,27 @@
                             "icon": "fa fa-dashboard",
                             "url": "{{ cms_route('dashboard.index') }}"
                         },
+                        @if ($userRouteAccess('menus.index'))
                         {
                             "name": "Menus",
                             "icon": "fa fa-list",
                             "url": "{{ cms_route('menus.index') }}"
                         },
+                        @endif
+                        @if ($userRouteAccess('products.index'))
                         {
                             "name": "Products",
                             "icon": "fa fa-store",
                             "url": "{{ cms_route('products.index') }}"
                         },
+                        @endif
+                        @if ($userRouteAccess('collections.index'))
                         {
                             "name": "Collections",
                             "icon": "fa fa-list-alt",
                             "url": "{{ cms_route('collections.index') }}"
                         }
+                        @endif
                     ],
                     "Users": [
                         {
@@ -125,6 +147,7 @@
                             "icon": "fa fa-user-check",
                             "url": "{{ cms_route('cmsUsers.show', [$userId = auth('cms')->id()]) }}"
                         },
+                        @if (auth('cms')->user()->hasFullAccess())
                         {
                             "name": "Roles",
                             "icon": "fa fa-user-tag",
@@ -135,24 +158,33 @@
                             "icon": "fa fa-lock",
                             "url": "{{ cms_route('permissions.index') }}"
                         }
+                        @endif
                     ],
+                    @if ($userRouteAccess('collections.index', 'fileManager'))
                     "Other": [
+                        @if ($userRouteAccess('collections.index'))
                         {
                             "name": "Languages",
                             "icon": "fa fa-language",
                             "url": "{{ cms_route('languages.index') }}"
                         },
+                        @endif
+                        @if ($userRouteAccess('fileManager'))
                         {
                             "name": "File Manager",
                             "icon": "fa fa-file-import",
                             "url": "{{ cms_route('fileManager') }}"
                         },
+                        @endif
+                        @if (auth('cms')->user()->hasFullAccess())
                         {
                             "name": "Translations",
                             "icon": "fa fa-sort-alpha-asc",
                             "url": "{{ cms_route('translations.index') }}"
                         }
+                        @endif
                     ],
+                    @endif
                     "Settings": [
                         {
                             "name": "Security",
@@ -164,11 +196,13 @@
                             "icon": "fa fa-sliders",
                             "url": "{{ cms_route('cmsUsers.preferences.index', [$userId]) }}"
                         },
+                        @if (auth('cms')->user()->hasFullAccess())
                         {
                             "name": "Web Settings",
                             "icon": "fa fa-layer-group",
                             "url": "{{ cms_route('webSettings.index') }}"
                         }
+                        @endif
                     ]
                 }
             };

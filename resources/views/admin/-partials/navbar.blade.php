@@ -91,7 +91,7 @@
                     </li>
                     <!--/ Style Switcher-->
                     <!-- Sitemap XML -->
-                    <li class="nav-item navbar-dropdown dropdown me-3 me-xl-2">
+                    <li class="nav-item navbar-dropdown dropdown">
                         <a
                             href="javascript:void(0);"
                             class="nav-link dropdown-toggle hide-arrow btn btn-icon btn-text-secondary rounded-pill"
@@ -118,7 +118,10 @@
                                     <div class="flex-grow-1">
                                         <strong class="fs-6 mb-1 d-block">sitemap.xml</strong>
                                         <small class="d-block">
-                                            Last Update: <span class="sitemap-xml-ctime">{{$sitemapXmlTime ? date('d F Y H:i', $sitemapXmlTime) : 'N/A'}}</span>
+                                            Last Update:
+                                                <span class="sitemap-xml-ctime">
+                                                    {{$sitemapXmlTime ? date('d F Y' . ($userRouteAccess('sitemap.xml.store') ? ' H:i' : ''), $sitemapXmlTime) : 'N/A'}}
+                                                </span>
                                         </small>
                                     </div>
                                 </div>
@@ -132,29 +135,31 @@
                                     </div>
                                 </li>
                             @endif
-                            <li class="border-top">
-                                <form action="{{cms_route('sitemap.xml.store')}}" method="POST" id="sitemap-xml-form" data-ajax-form="1">
-                                    @csrf
-                                    <div class="d-flex flex-column p-4">
-                                        <button type="submit" class="btn btn-primary btn-sm">
-                                            <small class="align-middle">Generate sitemap.xml</small>
-                                        </button>
-                                    </div>
-                                </form>
-                            </li>
+                            @if ($userRouteAccess('sitemap.xml.store'))
+                                <li class="border-top">
+                                    <form action="{{cms_route('sitemap.xml.store')}}" method="POST" id="sitemap-xml-form" data-ajax-form="1">
+                                        @csrf
+                                        <div class="d-flex flex-column p-4">
+                                            <button type="submit" class="btn btn-primary btn-sm">
+                                                <small class="align-middle">Generate sitemap.xml</small>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </li>
+                                @push('body.bottom')
+                                    <script type="text/javascript">
+                                        $(function () {
+                                            $('#sitemap-xml-form').on('ajaxFormSuccess', function (e, res) {
+                                                if (res.result) {
+                                                    $('.sitemap-xml-ctime').text(res.data);
+                                                }
+                                                notyf(res.message, res.result);
+                                            });
+                                        });
+                                    </script>
+                                @endpush
+                            @endif
                         </ul>
-                        @push('body.bottom')
-                            <script type="text/javascript">
-                                $(function () {
-                                    $('#sitemap-xml-form').on('ajaxFormSuccess', function (e, res) {
-                                        if (res.result) {
-                                            $('.sitemap-xml-ctime').text(res.data);
-                                        }
-                                        notyf(res.message, res.result);
-                                    });
-                                });
-                            </script>
-                        @endpush
                     </li>
                     <!--/ Sitemap XML -->
                     @include('admin.-partials.user')

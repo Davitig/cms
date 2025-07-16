@@ -1,3 +1,4 @@
+@if ($userRouteAccess('languages.index'))
 <!-- Language -->
 <li class="language-switcher nav-item dropdown">
     <a href="javascript:void(0);"
@@ -22,3 +23,4 @@
     </ul>
 </li>
 <!--/ Language -->
+@endif
