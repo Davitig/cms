@@ -108,7 +108,7 @@ class AdminCmsUserController extends Controller implements HasMiddleware
 
         $this->storePhoto($model, $request->file('photo'));
 
-        return redirect(cms_route('cmsUsers.edit', [$model->id]))
+        return redirect(cms_route('cms_users.edit', [$model->id]))
             ->with('alert', fill_data(true, trans('general.created')));
     }
 

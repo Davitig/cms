@@ -30,6 +30,7 @@ class AdminValidateLanguage
             throw new NotFoundHttpException;
         }
 
+        // remove lang parameter from being passed to controller
         $this->route->forgetParameter('lang');
 
         return $next($request);

@@ -5,7 +5,7 @@
             <div class="card card-border-shadow-primary h-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-2">
-                        <a href="{{ cms_route('cmsUsers.index') }}" class="avatar me-4">
+                        <a href="{{ cms_route('cms_users.index') }}" class="avatar me-4">
                             <span class="avatar-initial rounded bg-label-primary">
                                 <i class="icon-base fa fa-user-tie icon-28px"></i>
                             </span>

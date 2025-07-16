@@ -11,7 +11,7 @@
     <div class="card mb-4">
         <div class="card-header fs-5">Filter</div>
         <div class="card-body">
-            <form action="{{cms_route('cmsUsers.index')}}" method="GET">
+            <form action="{{cms_route('cms_users.index')}}" method="GET">
                 <div class="row">
                     <div class="col-md-2 pe-0 mb-2">
                         <input type="text" name="name" class="form-control" placeholder="First name / Last Name" value="{{request('name')}}">
@@ -33,7 +33,7 @@
                     </div>
                     <div class="col-md-auto">
                         <button type="submit" class="btn btn-primary me-2">Search</button>
-                        <a href="{{cms_route('cmsUsers.index', request()->only(['role']))}}" class="btn btn-label-secondary">Reset</a>
+                        <a href="{{cms_route('cms_users.index', request()->only(['role']))}}" class="btn btn-label-secondary">Reset</a>
                     </div>
                 </div>
             </form>
@@ -44,7 +44,7 @@
             <div class="fs-5">CMS Users</div>
             <span class="count badge bg-label-primary">{{ number_format($items->total()) }}</span>
             <div class="card-header-elements ms-auto">
-                <a href="{{ cms_route('cmsUsers.create') }}" class="btn btn-primary">
+                <a href="{{ cms_route('cms_users.create') }}" class="btn btn-primary">
                     <i class="icon-base fa fa-plus icon-xs me-1"></i>
                     <span>Add New Record</span>
                 </a>
@@ -66,8 +66,8 @@
                 @foreach($items as $item)
                     <tr class="item">
                         <td>
-                            <img src="{{ cms_route('cmsUsers.photo', [$item->id]) }}" width="40" height="40" alt="Photo" class="rounded-circle me-4" />
-                            <a href="{{cms_route('cmsUsers.show', [$item->id])}}" class="text-black{{auth('cms')->id() == $item->id ? ' active' : ''}}">
+                            <img src="{{ cms_route('cms_users.photo', [$item->id]) }}" width="40" height="40" alt="Photo" class="rounded-circle me-4" />
+                            <a href="{{cms_route('cms_users.show', [$item->id])}}" class="text-black{{auth('cms')->id() == $item->id ? ' active' : ''}}">
                                 {{$item->first_name}} {{$item->last_name}}
                             </a>
                         </td>
@@ -84,13 +84,13 @@
                                 </button>
                                 <div class="dropdown-menu">
                                     @if (auth('cms')->user()->hasFullAccess() || auth('cms')->id() == $item->id)
-                                        <a href="{{ cms_route('cmsUsers.edit', [$item]) }}" class="dropdown-item">
+                                        <a href="{{ cms_route('cms_users.edit', [$item]) }}" class="dropdown-item">
                                             <i class="icon-base fa fa-edit icon-sm me-1"></i>
                                             Edit
                                         </a>
                                     @endif
                                     @if (auth('cms')->user()->hasFullAccess() && auth('cms')->id() != $item->id)
-                                        {{ html()->form('delete', cms_route('cmsUsers.destroy', [$item->id]))->class('form-delete')->open() }}
+                                        {{ html()->form('delete', cms_route('cms_users.destroy', [$item->id]))->class('form-delete')->open() }}
                                         <button type="submit" class="dropdown-item">
                                             <i class="icon-base fa fa-trash icon-sm me-1"></i>
                                             Delete

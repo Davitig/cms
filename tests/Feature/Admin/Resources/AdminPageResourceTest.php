@@ -200,7 +200,7 @@ class AdminPageResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('pages.getListableTypes', ['type' => 'articles']));
+        )->get(cms_route('pages.get_listable_types', ['type' => 'articles']));
 
         $this->assertArrayHasKey($collection->id, $response->json());
     }

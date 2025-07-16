@@ -11,7 +11,7 @@
     <div class="card">
         <div class="card-header fs-5">CMS User Roles</div>
         <div class="card-body">
-            {{ html()->modelForm($current, 'post', cms_route('cmsUserRoles.store'))->attribute('novalidate')->open() }}
+            {{ html()->modelForm($current, 'post', cms_route('cms_user_roles.store'))->attribute('novalidate')->open() }}
             @include('admin.cms-user-roles.form')
             {{ html()->form()->close() }}
         </div>

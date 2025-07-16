@@ -22,5 +22,5 @@
         <i class="icon-base fa fa-user-lock icon-sm me-4"></i>
         <span>Permissions</span>
     </a>
-    <a href="{{ cms_route('cmsUserRoles.index') }}" class="btn btn-label-secondary">Cancel</a>
+    <a href="{{ cms_route('cms_user_roles.index') }}" class="btn btn-label-secondary">Cancel</a>
 </div>

@@ -1,7 +1,7 @@
 @extends('admin.app')
 @section('content')
-    @if ($userRouteAccess('fileManager.index'))
-        <iframe src="{{ cms_route('fileManager.index') }}" width="100%" height="650" tabindex="-1"></iframe>
+    @if ($userRouteAccess('file_manager.index'))
+        <iframe src="{{ cms_route('file_manager.index') }}" width="100%" height="650" tabindex="-1"></iframe>
     @else
         <div class="d-flex flex-column align-items-center pt-10">
             <div class="alert alert-danger" role="alert">

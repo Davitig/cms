@@ -22,7 +22,7 @@ class Permission extends Model
      * @var array
      */
     public static array $routeGroupsHidden = [
-        'cmsUserRoles', 'permissions', 'webSettings', 'translations'
+        'cms_user_roles', 'permissions', 'web_settings', 'translations'
     ];
 
     /**
@@ -38,7 +38,7 @@ class Permission extends Model
      * @var array
      */
     public static array $routeGroupsAllowed = [
-        'login', 'logout', 'dashboard', 'cmsUsers', 'cmsSettings'
+        'login', 'logout', 'dashboard', 'cms_users', 'cmsSettings'
     ];
 
     /**

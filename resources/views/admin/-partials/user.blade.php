@@ -5,12 +5,12 @@
         class="nav-link dropdown-toggle hide-arrow p-0"
         data-bs-toggle="dropdown">
         <div class="avatar avatar-online">
-            <img src="{{ $photoUrl = cms_route('cmsUsers.photo', [$userId = auth('cms')->id()]) }}" alt class="rounded-circle">
+            <img src="{{ $photoUrl = cms_route('cms_users.photo', [$userId = auth('cms')->id()]) }}" alt class="rounded-circle">
         </div>
     </a>
     <ul class="dropdown-menu dropdown-menu-end">
         <li>
-            <a class="dropdown-item mt-0" href="{{ $userUrl = cms_route('cmsUsers.show', [$userId]) }}">
+            <a class="dropdown-item mt-0" href="{{ $userUrl = cms_route('cms_users.show', [$userId]) }}">
                 <div class="d-flex align-items-center">
                     <div class="flex-shrink-0 me-2">
                         <div class="avatar avatar-online">
@@ -34,13 +34,13 @@
             </a>
         </li>
         <li>
-            <a href="{{ cms_route('cmsUsers.edit', [$userId]) }}" class="dropdown-item">
+            <a href="{{ cms_route('cms_users.edit', [$userId]) }}" class="dropdown-item">
                 <i class="icon-base fa fa-user-pen me-3 icon-md"></i>
                 <span class="align-middle">Account</span>
             </a>
         </li>
         <li>
-            <a href="{{ cms_route('cmsUsers.preferences.index', [$userId]) }}" class="dropdown-item">
+            <a href="{{ cms_route('cms_users.preferences.index', [$userId]) }}" class="dropdown-item">
                 <i class="icon-base fa fa-sliders me-3 icon-md"></i>
                 <span class="align-middle">Preferences</span>
             </a>

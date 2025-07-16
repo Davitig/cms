@@ -61,7 +61,7 @@ Route::middleware('cms.auth')->group(function (Router $router) {
     // pages
     $router->controller(AdminPageController::class)->group(function (Router $router) {
         $router->get('pages/listable-types', 'getListableTypes')
-            ->name('pages.getListableTypes');
+            ->name('pages.get_listable_types');
         $router->put('pages/{id}/visibility', 'visibility')->name('pages.visibility');
         $router->put('pages/positions', 'positions')->name('pages.positions');
         $router->put('pages/transfer/{menu}', 'transfer')->name('pages.transfer');
@@ -111,7 +111,7 @@ Route::middleware('cms.auth')->group(function (Router $router) {
         $router->put($route . '/files/positions', [$controller, 'positions'])
             ->name($route . '.files.positions');
         $router->delete($route . '/{'.$route.'}/files', [$controller, 'destroyMany'])
-            ->name($route . '.files.destroyMany');
+            ->name($route . '.files.destroy_many');
         $router->resource($route . '.files', $controller)
             ->names(resource_names($route . '.files'))
             ->except(['show']);
@@ -119,7 +119,7 @@ Route::middleware('cms.auth')->group(function (Router $router) {
 
     // CMS user roles
     $router->resource('cms-user-roles', AdminCmsUserRoleController::class)
-        ->names(resource_names('cmsUserRoles'))
+        ->names(resource_names('cms_user_roles'))
         ->except(['show']);
 
     // role permissions
@@ -130,22 +130,22 @@ Route::middleware('cms.auth')->group(function (Router $router) {
 
     // CMS users
     $router->get('cms-users/{cms_user}/security', [AdminCmsUserSecurityController::class, 'index'])
-        ->name('cmsUsers.security');
+        ->name('cms_users.security');
     $router->put('cms-users/{cms_user}/security/password', [
         AdminCmsUserSecurityController::class, 'updatePassword'
-    ])->name('cmsUsers.password');
+    ])->name('cms_users.password');
     $router->get('cms-users/{cms_user}/preferences', [AdminCmsUserPreferenceController::class, 'index'])
-        ->name('cmsUsers.preferences.index');
+        ->name('cms_users.preferences.index');
     $router->put('cms-users/{cms_user}/preferences', [AdminCmsUserPreferenceController::class, 'update'])
-        ->name('cmsUsers.preferences.update');
+        ->name('cms_users.preferences.update');
     $router->get('cms-users/{cms_user}/photo', [AdminCmsUserController::class, 'getPhoto'])
-        ->name('cmsUsers.photo');
+        ->name('cms_users.photo');
     $router->resource('cms-users', AdminCmsUserController::class)
-        ->names(resource_names('cmsUsers'));
+        ->names(resource_names('cms_users'));
 
     // file manager
     $router->get('file-manager', [AdminFileManagerController::class, 'index'])
-        ->name('fileManager');
+        ->name('file_manager');
 
     // translations
     $router->controller(AdminTranslationController::class)->group(function (Router $router) {
@@ -158,9 +158,9 @@ Route::middleware('cms.auth')->group(function (Router $router) {
 
     // web settings
     $router->get('web-settings', [AdminWebSettingController::class, 'index'])
-        ->name('webSettings.index');
+        ->name('web_settings.index');
     $router->put('web-settings', [AdminWebSettingController::class, 'update'])
-        ->name('webSettings.update');
+        ->name('web_settings.update');
 
     // sitemap XML
     $router->post('sitemap/xml/store', [AdminSitemapXmlController::class, 'store'])

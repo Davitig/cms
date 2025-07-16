@@ -52,7 +52,7 @@ class ElfinderServiceProvider extends ServiceProvider
         if (language()->count() > 1) {
             $config['middleware'][] = 'cms.lang';
             $config['prefix'] = '{lang}/' . $config['prefix'];
-            $config['as'] = 'lang.' . $config['prefix'];
+            $config['as'] = 'lang.' . $config['as'];
             $languages = language()->all()->keys()->toArray();
 
             $this->defineRoutes($router, $config, function (Route $route) use ($languages) {
@@ -73,13 +73,13 @@ class ElfinderServiceProvider extends ServiceProvider
     {
         $router->group($config, function(Router $router) use ($values) {
             $router->get('index', [AdminElfinderController::class, 'showIndex'])
-                ->name('fileManager.index')->when($values);
+                ->name('file_manager.index')->when($values);
             $router->any('connector', [AdminElfinderController::class, 'showConnector'])
-                ->name('fileManager.connector')->when($values);;
+                ->name('file_manager.connector')->when($values);;
             $router->get('popup/{input_id}', [AdminElfinderController::class, 'showPopup'])
-                ->name('fileManager.popup')->when($values);;
+                ->name('file_manager.popup')->when($values);;
             $router->get('tinymce5', [AdminElfinderController::class, 'showTinyMCE5'])
-                ->name('fileManager.tinymce5')->when($values);;
+                ->name('file_manager.tinymce5')->when($values);;
         });
     }
 }

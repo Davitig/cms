@@ -39,7 +39,7 @@
                     <span>Edit</span>
                 </button>
                 <button type="button" class="btn btn-outline-secondary text-dark" data-delete-selected
-                        data-url="{{cms_route('pages.files.destroyMany', [$foreignModel->id])}}">
+                        data-url="{{cms_route('pages.files.destroy_many', [$foreignModel->id])}}">
                     <i class="icon-base fa fa-trash icon-xs me-1"></i>
                     <span>Delete</span>
                 </button>

@@ -1,5 +1,5 @@
 <div class="card-body d-flex align-items-start align-items-sm-center gap-6">
-    <img src="{{ $current->id ? cms_route('cmsUsers.photo', [$current->id]) : asset('assets/default/img/avatar.png') }}"
+    <img src="{{ $current->id ? cms_route('cms_users.photo', [$current->id]) : asset('assets/default/img/avatar.png') }}"
          alt="Photo" class="d-block w-px-100 h-px-100 rounded bg-white user-photo">
     <div class="button-wrapper">
         <label for="photo_inp" class="btn btn-primary me-3 mb-4" tabindex="0">

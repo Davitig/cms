@@ -13,7 +13,7 @@ class AdminCmsUserPreferenceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $user = $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('cmsUsers.preferences.index', [$user->id]));
+        )->get(cms_route('cms_users.preferences.index', [$user->id]));
 
         $response->assertOk();
     }
@@ -22,7 +22,7 @@ class AdminCmsUserPreferenceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $user = $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('cmsUsers.preferences.update', [$user->id]), [
+        )->put(cms_route('cms_users.preferences.update', [$user->id]), [
             'horizontal_menu' => 1
         ]);
 

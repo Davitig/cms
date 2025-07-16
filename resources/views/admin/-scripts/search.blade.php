@@ -35,28 +35,28 @@
                         {
                             "name": "CMS Users",
                             "icon": "fa fa-user-tie",
-                            "url": "{{ cms_route('cmsUsers.index') }}"
+                            "url": "{{ cms_route('cms_users.index') }}"
                         },
                         {
                             "name": "Profile",
                             "icon": "fa fa-user-check",
-                            "url": "{{ cms_route('cmsUsers.show', [$userId = auth('cms')->id()]) }}"
+                            "url": "{{ cms_route('cms_users.show', [$userId = auth('cms')->id()]) }}"
                         },
                         {
                             "name": "Security",
                             "icon": "fa fa-user-shield",
-                            "url": "{{ cms_route('cmsUsers.security', [$userId]) }}"
+                            "url": "{{ cms_route('cms_users.security', [$userId]) }}"
                         },
                         {
                             "name": "Preferences",
                             "icon": "fa fa-sliders",
-                            "url": "{{ cms_route('cmsUsers.preferences.index', [$userId]) }}"
+                            "url": "{{ cms_route('cms_users.preferences.index', [$userId]) }}"
                         },
                         @if (auth('cms')->user()->hasFullAccess())
                         {
                             "name": "Roles",
                             "icon": "fa fa-user-tag",
-                            "url": "{{ cms_route('cmsUserRoles.index') }}"
+                            "url": "{{ cms_route('cms_user_roles.index') }}"
                         },
                         {
                             "name": "Permissions",
@@ -102,7 +102,7 @@
                         {
                             "name": "Web Settings",
                             "icon": "fa fa-layer-group",
-                            "url": "{{ cms_route('webSettings.index') }}"
+                            "url": "{{ cms_route('web_settings.index') }}"
                         }
                     ]
                     @endif
@@ -140,18 +140,18 @@
                         {
                             "name": "CMS Users",
                             "icon": "fa fa-user-tie",
-                            "url": "{{ cms_route('cmsUsers.index') }}"
+                            "url": "{{ cms_route('cms_users.index') }}"
                         },
                         {
                             "name": "Profile",
                             "icon": "fa fa-user-check",
-                            "url": "{{ cms_route('cmsUsers.show', [$userId = auth('cms')->id()]) }}"
+                            "url": "{{ cms_route('cms_users.show', [$userId = auth('cms')->id()]) }}"
                         },
                         @if (auth('cms')->user()->hasFullAccess())
                         {
                             "name": "Roles",
                             "icon": "fa fa-user-tag",
-                            "url": "{{ cms_route('cmsUserRoles.index') }}"
+                            "url": "{{ cms_route('cms_user_roles.index') }}"
                         },
                         {
                             "name": "Permissions",
@@ -160,7 +160,7 @@
                         }
                         @endif
                     ],
-                    @if ($userRouteAccess('collections.index', 'fileManager'))
+                    @if ($userRouteAccess('collections.index', 'file_manager'))
                     "Other": [
                         @if ($userRouteAccess('collections.index'))
                         {
@@ -169,11 +169,11 @@
                             "url": "{{ cms_route('languages.index') }}"
                         },
                         @endif
-                        @if ($userRouteAccess('fileManager'))
+                        @if ($userRouteAccess('file_manager'))
                         {
                             "name": "File Manager",
                             "icon": "fa fa-file-import",
-                            "url": "{{ cms_route('fileManager') }}"
+                            "url": "{{ cms_route('file_manager') }}"
                         },
                         @endif
                         @if (auth('cms')->user()->hasFullAccess())
@@ -189,18 +189,18 @@
                         {
                             "name": "Security",
                             "icon": "fa fa-user-shield",
-                            "url": "{{ cms_route('cmsUsers.security', [$userId]) }}"
+                            "url": "{{ cms_route('cms_users.security', [$userId]) }}"
                         },
                         {
                             "name": "Preferences",
                             "icon": "fa fa-sliders",
-                            "url": "{{ cms_route('cmsUsers.preferences.index', [$userId]) }}"
+                            "url": "{{ cms_route('cms_users.preferences.index', [$userId]) }}"
                         },
                         @if (auth('cms')->user()->hasFullAccess())
                         {
                             "name": "Web Settings",
                             "icon": "fa fa-layer-group",
-                            "url": "{{ cms_route('webSettings.index') }}"
+                            "url": "{{ cms_route('web_settings.index') }}"
                         }
                         @endif
                     ]

@@ -15,7 +15,7 @@ class AdminCmsUserSecurityTest extends TestAdmin
     {
         $response = $this->actingAs(
             $user = $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('cmsUsers.security', [$user->id]));
+        )->get(cms_route('cms_users.security', [$user->id]));
 
         $response->assertOk();
     }
@@ -28,7 +28,7 @@ class AdminCmsUserSecurityTest extends TestAdmin
 
         $response = $this->actingAs(
             $user, 'cms'
-        )->put(cms_route('cmsUsers.password', [$user->id]), [
+        )->put(cms_route('cms_users.password', [$user->id]), [
             'current_password' => 'password1',
             'password' => 'password0',
             'password_confirmation' => 'password0'

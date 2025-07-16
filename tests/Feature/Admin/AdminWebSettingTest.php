@@ -12,7 +12,7 @@ class AdminWebSettingTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('webSettings.index'));
+        )->get(cms_route('web_settings.index'));
 
         $response->assertOk();
     }
@@ -21,7 +21,7 @@ class AdminWebSettingTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('webSettings.update'), [
+        )->put(cms_route('web_settings.update'), [
             'email' => fake()->safeEmail()
         ]);
 

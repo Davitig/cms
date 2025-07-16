@@ -94,5 +94,5 @@
     @endif
 </div>
 <button type="submit" class="btn btn-primary me-3">Save changes</button>
-<a href="{{ cms_route('cmsUsers.' . ($current->id ? 'show' : 'index'), [$current->id]) }}" class="btn btn-label-secondary">Cancel</a>
+<a href="{{ cms_route('cms_users.' . ($current->id ? 'show' : 'index'), [$current->id]) }}" class="btn btn-label-secondary">Cancel</a>
 

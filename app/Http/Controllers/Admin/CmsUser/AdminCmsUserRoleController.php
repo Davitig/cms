@@ -71,7 +71,7 @@ class AdminCmsUserRoleController extends Controller implements HasMiddleware
     {
         $model = $this->model->create($request->all());
 
-        return redirect(cms_route('cmsUserRoles.edit', [$model->id]))
+        return redirect(cms_route('cms_user_roles.edit', [$model->id]))
             ->with('alert', fill_data(true, trans('general.created')));
     }
 

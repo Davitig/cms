@@ -53,7 +53,7 @@
                     <a href="#" class="check-action" data-group="*" data-action="toggle">Toggle</a>
                 </div>
                 <button type="submit" class="btn btn-primary me-4">Submit</button>
-                <a href="{{ cms_route('cmsUserRoles.index') }}" class="btn btn-label-secondary">Cancel</a>
+                <a href="{{ cms_route('cms_user_roles.index') }}" class="btn btn-label-secondary">Cancel</a>
             </div>
         </div>
     </nav>
@@ -141,7 +141,7 @@
         <div class="card-body">
             <div class="d-grid gap-2 col-lg-6 mx-auto">
                 <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-                <a href="{{ cms_route('cmsUserRoles.index') }}" class="btn btn-label-secondary btn-lg">Cancel</a>
+                <a href="{{ cms_route('cms_user_roles.index') }}" class="btn btn-label-secondary btn-lg">Cancel</a>
             </div>
         </div>
     </div>

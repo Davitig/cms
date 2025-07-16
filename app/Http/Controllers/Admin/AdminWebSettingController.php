@@ -24,7 +24,7 @@ class AdminWebSettingController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        $data['webSettings'] = (new WebSetting)->getSettings();
+        $data['web_settings'] = (new WebSetting)->getSettings();
 
         return view('admin.web-settings.index', $data);
     }

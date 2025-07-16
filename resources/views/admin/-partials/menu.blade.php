@@ -61,9 +61,9 @@
                         </a>
                     </li>
                 @endif
-                @if ($userRouteAccess('fileManager'))
-                    <li class="menu-item{{ $routeMatches(['fileManager']) ? ' active' : '' }}">
-                        <a href="{{ cms_route('fileManager') }}" class="menu-link">
+                @if ($userRouteAccess('file_manager'))
+                    <li class="menu-item{{ $routeMatches(['file_manager']) ? ' active' : '' }}">
+                        <a href="{{ cms_route('file_manager') }}" class="menu-link">
                             <i class="menu-icon icon-base fa fa-file-import icon-20px"></i>
                             <div>File Manager</div>
                         </a>
@@ -78,22 +78,22 @@
                     </li>
                 @endif
                 <li class="menu-item{{ $routeMatches([
-                'cmsUsers', 'cmsUsers.security', 'cmsUsers.settings', 'cmsUserRoles', 'permissions'
+                'cms_users', 'cms_users.security', 'cms_users.settings', 'cms_user_roles', 'permissions'
                 ]) ? ' active' . ($isHorizontalMenu ? '' : ' open') : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon icon-base fa fa-users icon-18px me-3"></i>
                         <div>Users</div>
                     </a>
                     <ul class="menu-sub">
-                        <li class="menu-item{{ $routeMatches(['cmsUsers', 'cmsUsers.security']) ? ' active' : '' }}">
-                            <a href="{{ cms_route('cmsUsers.index') }}" class="menu-link">
+                        <li class="menu-item{{ $routeMatches(['cms_users', 'cms_users.security']) ? ' active' : '' }}">
+                            <a href="{{ cms_route('cms_users.index') }}" class="menu-link">
                                 <i class="menu-icon icon-base fa fa-user-tie icon-18px me-2"></i>
                                 <div>CMS Users</div>
                             </a>
                         </li>
                         @if (auth('cms')->user()->hasFullAccess())
-                            <li class="menu-item{{ $routeMatches(['cmsUserRoles']) ? ' active' : '' }}">
-                                <a href="{{ cms_route('cmsUserRoles.index') }}" class="menu-link">
+                            <li class="menu-item{{ $routeMatches(['cms_user_roles']) ? ' active' : '' }}">
+                                <a href="{{ cms_route('cms_user_roles.index') }}" class="menu-link">
                                     <i class="menu-icon icon-base fa fa-user-tag icon-16px me-3"></i>
                                     <div>Roles</div>
                                 </a>
@@ -107,7 +107,7 @@
                         @endif
                     </ul>
                 </li>
-                <li class="menu-item{{ $routeMatches(['translations', 'webSettings.index']) ? ' active' . ($isHorizontalMenu ? '' : ' open') : '' }}">
+                <li class="menu-item{{ $routeMatches(['translations', 'web_settings.index']) ? ' active' . ($isHorizontalMenu ? '' : ' open') : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon icon-base fa fa-gear icon-20px"></i>
                         <div>Settings</div>
@@ -120,15 +120,15 @@
                                     <div>Translations</div>
                                 </a>
                             </li>
-                            <li class="menu-item{{ $routeMatches(['webSettings']) ? ' active' : '' }}">
-                                <a href="{{ cms_route('webSettings.index') }}" class="menu-link">
+                            <li class="menu-item{{ $routeMatches(['web_settings']) ? ' active' : '' }}">
+                                <a href="{{ cms_route('web_settings.index') }}" class="menu-link">
                                     <i class="menu-icon icon-base fa fa-layer-group icon-18px"></i>
                                     <div>Web Settings</div>
                                 </a>
                             </li>
                         @endif
-                        <li class="menu-item{{ $routeMatches(['cmsUsers.preferences.index']) ? ' active' : '' }}">
-                            <a href="{{ cms_route('cmsUsers.preferences.index', [auth('cms')->id()]) }}" class="menu-link">
+                        <li class="menu-item{{ $routeMatches(['cms_users.preferences.index']) ? ' active' : '' }}">
+                            <a href="{{ cms_route('cms_users.preferences.index', [auth('cms')->id()]) }}" class="menu-link">
                                 <i class="menu-icon icon-base fa fa-sliders icon-18px"></i>
                                 <div>Preferences</div>
                             </a>

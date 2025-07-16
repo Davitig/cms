@@ -30,6 +30,7 @@ class WebValidateLanguage
             throw new ServiceUnavailableHttpException;
         }
 
+        // remove lang parameter from being passed to controller
         $this->route->forgetParameter('lang');
 
         return $next($request);

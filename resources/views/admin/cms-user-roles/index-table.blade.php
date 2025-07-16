@@ -3,7 +3,7 @@
         <div class="fs-5">CMS User Roles</div>
         <span class="count badge bg-label-primary ms-4">{{ number_format($items->total()) }}</span>
         <div class="card-header-elements ms-auto">
-            <a href="{{ cms_route('cmsUserRoles.create') }}" class="btn btn-primary">
+            <a href="{{ cms_route('cms_user_roles.create') }}" class="btn btn-primary">
                 <i class="icon-base fa fa-plus icon-xs me-1"></i>
                 <span>Add New Record</span>
             </a>
@@ -36,7 +36,7 @@
                         <ul class="list-unstyled d-flex align-items-center avatar-group mb-0">
                             @foreach($item->cms_users as $user)
                                 <li title="{{ $user->first_name }} {{ $user->last_name }}" class="avatar pull-up">
-                                    <img class="rounded-circle bg-white" src="{{ cms_route('cmsUsers.photo', [$user->id]) }}" width="40" height="40" alt="Photo">
+                                    <img class="rounded-circle bg-white" src="{{ cms_route('cms_users.photo', [$user->id]) }}" width="40" height="40" alt="Photo">
                                 </li>
                             @endforeach
                             @if ($item->cms_users_count - $item->cms_users->count())
@@ -75,11 +75,11 @@
                                 <i class="icon-base fa fa-ellipsis-vertical"></i>
                             </button>
                             <div class="dropdown-menu">
-                                <a href="{{ cms_route('cmsUserRoles.edit', [$item->id]) }}" class="dropdown-item">
+                                <a href="{{ cms_route('cms_user_roles.edit', [$item->id]) }}" class="dropdown-item">
                                     <i class="icon-base fa fa-edit me-1"></i>
                                     Edit
                                 </a>
-                                {{ html()->form('delete', cms_route('cmsUserRoles.destroy', [$item->id]))->class('form-delete')->open() }}
+                                {{ html()->form('delete', cms_route('cms_user_roles.destroy', [$item->id]))->class('form-delete')->open() }}
                                 <button type="submit" class="dropdown-item">
                                     <i class="icon-base fa fa-trash me-1"></i>
                                     Delete

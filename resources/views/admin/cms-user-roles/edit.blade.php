@@ -12,7 +12,7 @@
         <div class="card-header header-elements">
             <div class="fs-5">CMS User Roles</div>
             <div class="card-header-elements ms-auto">
-                <a href="{{ cms_route('cmsUserRoles.create') }}">
+                <a href="{{ cms_route('cms_user_roles.create') }}">
                     <i class="icon-base fa fa-plus icon-xs"></i>
                     <span>Add New Record</span>
                 </a>
@@ -20,7 +20,7 @@
         </div>
         <div class="card-body">
             <div class="panel-body">
-                {{ html()->modelForm($current, 'put', cms_route('cmsUserRoles.update', [$current->id]))
+                {{ html()->modelForm($current, 'put', cms_route('cms_user_roles.update', [$current->id]))
                 ->data('ajax-form', $preferences->get('ajax_form'))->attribute('novalidate')->open() }}
                 @include('admin.cms-user-roles.form')
                 {{ html()->form()->close() }}

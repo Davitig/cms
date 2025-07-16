@@ -9,7 +9,7 @@
     <div class="card">
         <div class="card-header fs-5">Change Password</div>
         <div class="card-body">
-            {{ html()->modelForm($current, 'put', cms_route('cmsUsers.password', [$current->id]))
+            {{ html()->modelForm($current, 'put', cms_route('cms_users.password', [$current->id]))
             ->data('ajax-form', $preferences->get('ajax_form'))->attribute('novalidate')->open() }}
             <div class="row g-6 mb-6">
                 <div>
@@ -42,7 +42,7 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-primary me-3">Save changes</button>
-            <a href="{{ cms_route('cmsUsers.show', [$current->id]) }}" class="btn btn-label-secondary">Cancel</a>
+            <a href="{{ cms_route('cms_users.show', [$current->id]) }}" class="btn btn-label-secondary">Cancel</a>
             {{ html()->form()->close() }}
         </div>
     </div>

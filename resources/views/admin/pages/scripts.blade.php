@@ -23,7 +23,7 @@
                 if (["{!! implode('","', $listableTypes) !!}"].indexOf(value) >= 0) {
                     $('label', typeId).text(String(value).charAt(0).toUpperCase() + String(value).slice(1));
 
-                    $.get('{{cms_route('pages.getListableTypes')}}', {"type": value}, function (data) {
+                    $.get('{{cms_route('pages.get_listable_types')}}', {"type": value}, function (data) {
                         typeIdSelectEl.html('<option value=""></option>');
                         typeId.removeClass('d-none');
 

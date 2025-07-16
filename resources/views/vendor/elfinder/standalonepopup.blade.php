@@ -23,7 +23,7 @@
                 customData: {
                     _token: '{{ csrf_token() }}'
                 },
-                url: '{{ cms_route('fileManager.connector', ['hide_disks' => 1]) }}',  // connector URL
+                url: '{{ cms_route('file_manager.connector', ['hide_disks' => 1]) }}',  // connector URL
                 commandsOptions: {
                     getfile: {
                         oncomplete: 'destroy'

@@ -2,7 +2,7 @@
 @section('content')
     <div class="card">
         <!-- Account -->
-        {{ html()->modelForm($current, 'post', cms_route('cmsUsers.store'))->acceptsFiles()->open() }}
+        {{ html()->modelForm($current, 'post', cms_route('cms_users.store'))->acceptsFiles()->open() }}
         @include('admin.cms-users.photo')
         <div class="card-body pt-4">
             @include('admin.cms-users.form')
