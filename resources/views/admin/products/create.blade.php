@@ -9,7 +9,7 @@
         </ol>
     </nav>
     <div class="mb-6">
-        <div class="fs-4 text-black">Add a new Product</div>
+        <div class="fs-4 text-dark">Add a new Product</div>
     </div>
     {{ html()->modelForm($current, 'post', cms_route('products.store'))->attribute('novalidate')->open() }}
     @include('admin.products.form')

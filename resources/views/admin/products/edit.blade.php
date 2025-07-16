@@ -9,7 +9,7 @@
         </ol>
     </nav>
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center row-gap-4 gap-4 mb-6">
-        <div class="fs-4 flex-grow-1 text-black">Edit Product</div>
+        <div class="fs-4 flex-grow-1 text-dark">Edit Product</div>
         <a href="{{ cms_route('products.create') }}">
             <i class="icon-base fa fa-plus icon-xs"></i>
             <span>Add New Record</span>
@@ -25,13 +25,10 @@
     </div>
     @include('admin.-partials.lang.tabs')
     <div class="tab-content p-0">
-        @php
-            $activeLang = language()->queryStringOrActive();
-            $hasManyLanguage = language()->count() > 1;
-        @endphp
+        @php($activeLang = language()->queryStringOrActive())
         @foreach($items as $current)
             <div id="item-{{ $current->language }}" class="tab-pane{{ $current->language == $activeLang || ! $activeLang ? ' show active' : '' }}">
-                {{ html()->modelForm($current, 'put', cms_route('products.update', [$current->id], $hasManyLanguage ? $current->language : null))
+                {{ html()->modelForm($current, 'put', cms_route('products.update', [$current->id], $current->language))
                 ->data('ajax-form', $preferences->get('ajax_form'))->data('lang', $current->language)->attribute('novalidate')->open() }}
                 @include('admin.products.form')
                 {{ html()->form()->close() }}

@@ -26,8 +26,8 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->loadWebRoutes($router);
 
-        Route::middleware('web')->group(function (Router $router) {
-            $this->loadCMSRoutes($router);
+        Route::middleware('web')->group(function (Router $router) use ($request) {
+            $this->loadCMSRoutes($router, $request);
         });
     }
 
@@ -45,7 +45,7 @@ class RouteServiceProvider extends ServiceProvider
             next($segments);
         }
 
-        $this->app['config']->set('_cms.booted', current($segments) == cms_slug());
+        $this->app['config']->set('_cms.booted', current($segments) == cms_path());
     }
 
     /**
@@ -72,16 +72,24 @@ class RouteServiceProvider extends ServiceProvider
      * Load CMS routes.
      *
      * @param  \Illuminate\Routing\Router  $router
+     * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    protected function loadCMSRoutes(Router $router): void
+    protected function loadCMSRoutes(Router $router, Request $request): void
     {
-        $router->prefix(cms_slug())->name(cms_route_name())
-            ->group(base_path('routes/cms.php'));
+        if (language()->isEmpty()) {
+            // routes without language prefix
+            $router->prefix(cms_path())->name(cms_route_name())
+                ->group(base_path('routes/cms.php'));
+        } else {
+            // redirector to language prefixed route
+            $router->get(cms_path() . '/{any?}', function () use ($request) {
+                return redirect(language()->active() . '/' . $request->path());
+            })->where('any', '.*');
 
-        if (language()->count() > 1) {
+            // routes with language prefix
             $router->middleware('cms.lang')
-                ->prefix('{lang}/' . cms_slug())
+                ->prefix('{lang}/' . cms_path())
                 ->name('lang.' . cms_route_name())
                 ->whereIn('lang', language()->all()->keys()->toArray())
                 ->group(base_path('routes/cms.php'));

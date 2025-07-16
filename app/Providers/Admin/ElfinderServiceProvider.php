@@ -42,14 +42,14 @@ class ElfinderServiceProvider extends ServiceProvider
 
         $config = $this->app['config']->get('elfinder.route', []);
 
-        $config['prefix'] = isset($config['prefix']) ? cms_slug($config['prefix']) : cms_slug();
+        $config['prefix'] = isset($config['prefix']) ? cms_path($config['prefix']) : cms_path();
 
         $config['middleware'][] = 'cms.auth';
         $config['as'] = cms_route_name();
 
-        $this->defineRoutes($router, $config);
-
-        if (language()->count() > 1) {
+        if (language()->isEmpty()) {
+            $this->defineRoutes($router, $config);
+        } else {
             $config['middleware'][] = 'cms.lang';
             $config['prefix'] = '{lang}/' . $config['prefix'];
             $config['as'] = 'lang.' . $config['as'];

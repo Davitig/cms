@@ -53,4 +53,25 @@ abstract class Request extends FormRequest
             $this->offsetSet($key, $this->boolean($key));
         }
     }
+
+    /**
+     * Determine if the form request is only for language related data.
+     *
+     * @param  string  ...$relatedMethods
+     * @return bool
+     */
+    protected function isLanguageRelated(string ...$relatedMethods): bool
+    {
+        $mainLangIsActive = language()->mainIsActive();
+
+        $currentMethod = $this->method();
+
+        foreach ($relatedMethods ?: [self::METHOD_PUT] as $method) {
+            if ($currentMethod == $method && ! $mainLangIsActive) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

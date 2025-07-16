@@ -21,9 +21,8 @@ class BladeServiceProvider extends ServiceProvider
      */
     public function boot(LanguageProvider $languageProvider): void
     {
-        Blade::if('ifMainLanguage', function (?string $value, bool $force = false)
-        use ($languageProvider) {
-            if (! $force && ! $value || $value == $languageProvider->main()) {
+        Blade::if('ifMainLanguage', static function (?string $value) use ($languageProvider) {
+            if (! $value || $value == $languageProvider->main()) {
                 return true;
             }
 

@@ -67,6 +67,7 @@ class LanguageProvider
     public static function make(string $path, ?string $queryString): static
     {
         try {
+            return new static(new Collection, $path, $queryString);
             return new static((new Language)->positionAsc()->get(), $path, $queryString);
         } catch (Exception) {
             return new static(new Collection, $path, $queryString);

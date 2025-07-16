@@ -1,4 +1,4 @@
-@if ($userRouteAccess('languages.index'))
+@if (! language()->isEmpty() && $userRouteAccess('languages.index'))
 <!-- Language -->
 <li class="language-switcher nav-item dropdown">
     <a href="javascript:void(0);"
