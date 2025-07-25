@@ -100,10 +100,11 @@ class AdminEventController extends Controller
      */
     public function update(EventRequest $request, string $collectionId, string $id)
     {
-        tap($this->model->findOrFail($id))
-            ->update($input = $request->all())
-            ->languages()
-            ->updateOrCreate(apply_languages(), $input);
+        $model = tap($this->model->findOrFail($id))->update($input = $request->all());
+
+        if (! language()->isEmpty()) {
+            $model->languages()->updateOrCreate(apply_languages(), $input);
+        }
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(true, trans('general.updated'), $input));

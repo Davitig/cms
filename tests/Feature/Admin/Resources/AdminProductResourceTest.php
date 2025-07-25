@@ -8,11 +8,10 @@ use Database\Factories\Product\ProductLanguageFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
-use Tests\Feature\CreatesLanguageProvider;
 
 class AdminProductResourceTest extends TestAdmin
 {
-    use RefreshDatabase, CreatesLanguageProvider;
+    use RefreshDatabase;
 
     /**
      * Create new products.
@@ -35,7 +34,7 @@ class AdminProductResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('products.index'));
+        )->get($this->cmsRoute('products.index'));
 
         $response->assertOk();
     }
@@ -44,7 +43,7 @@ class AdminProductResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('products.create'));
+        )->get($this->cmsRoute('products.create'));
 
         $response->assertOk();
     }
@@ -56,8 +55,9 @@ class AdminProductResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('products.store'), [
+        )->post($this->cmsRoute('products.store'), [
             'title' => fake()->sentence(2),
+            'slug' => fake()->slug(2),
             'price' => fake()->randomFloat(2, 1, 1000),
             'quantity' => fake()->numberBetween(1, 1000)
         ]);
@@ -71,7 +71,7 @@ class AdminProductResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('products.edit', [$product->id]));
+        )->get($this->cmsRoute('products.edit', [$product->id]));
 
         $response->assertOk();
     }
@@ -85,7 +85,7 @@ class AdminProductResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('products.update', [$product->id]), [
+        )->put($this->cmsRoute('products.update', [$product->id]), [
             'title' => fake()->sentence(2),
             'price' => fake()->randomFloat(2, 1, 1000),
             'quantity' => fake()->numberBetween(1, 1000)
@@ -98,7 +98,7 @@ class AdminProductResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('products.store'), [
+        )->post($this->cmsRoute('products.store'), [
             // empty data
         ]);
 
@@ -111,7 +111,7 @@ class AdminProductResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('products.store'), [
+        )->post($this->cmsRoute('products.store'), [
             'slug' => $product->slug
         ]);
 
@@ -124,7 +124,7 @@ class AdminProductResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('products.visibility', [$product->id]));
+        )->put($this->cmsRoute('products.visibility', [$product->id]));
 
         $response->assertFound();
     }
@@ -149,7 +149,7 @@ class AdminProductResourceTest extends TestAdmin
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('products.positions'), [
+        )->put($this->cmsRoute('products.positions'), [
             'start_id' => $startItem->id,
             'end_id' => $endItem->id,
         ]);
@@ -167,7 +167,7 @@ class AdminProductResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->delete(cms_route('products.destroy', [$product->id]));
+        )->delete($this->cmsRoute('products.destroy', [$product->id]));
 
         $response->assertFound();
     }

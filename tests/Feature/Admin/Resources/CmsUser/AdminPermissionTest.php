@@ -15,7 +15,7 @@ class AdminPermissionTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('permissions.index'));
+        )->get($this->cmsRoute('permissions.index'));
 
         $response->assertOk();
     }
@@ -26,7 +26,7 @@ class AdminPermissionTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('permissions.index', [
+        )->post($this->cmsRoute('permissions.index', [
             'role_id' => $model->cms_user_role_id,
             'permissions' => [current(Arr::flatten($this->getAllCMSRouteNames()))]
         ]));

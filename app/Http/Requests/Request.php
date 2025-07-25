@@ -55,21 +55,17 @@ abstract class Request extends FormRequest
     }
 
     /**
-     * Determine if the form request is only for language related data.
+     * Determine if the form request has main language.
      *
-     * @param  string  ...$relatedMethods
+     * @param  string  ...$allowedMethods
      * @return bool
      */
-    protected function isLanguageRelated(string ...$relatedMethods): bool
+    protected function hasMainLanguage(string ...$allowedMethods): bool
     {
-        $mainLangIsActive = language()->mainIsActive();
-
-        $currentMethod = $this->method();
-
-        foreach ($relatedMethods ?: [self::METHOD_PUT] as $method) {
-            if ($currentMethod == $method && ! $mainLangIsActive) {
-                return true;
-            }
+        if (in_array($this->method(), $allowedMethods ?: [self::METHOD_POST]) ||
+            language()->isEmpty() ||
+            language()->mainIsActive()) {
+            return true;
         }
 
         return false;

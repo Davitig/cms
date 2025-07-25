@@ -22,7 +22,7 @@ class AdminCmsUserResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('cms_users.index'));
+        )->get($this->cmsRoute('cms_users.index'));
 
         $response->assertOk();
     }
@@ -31,7 +31,7 @@ class AdminCmsUserResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('cms_users.create'));
+        )->get($this->cmsRoute('cms_users.create'));
 
         $response->assertOk();
     }
@@ -45,7 +45,7 @@ class AdminCmsUserResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('cms_users.store'), [
+        )->post($this->cmsRoute('cms_users.store'), [
             'email' => fake()->safeEmail(),
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
@@ -64,7 +64,7 @@ class AdminCmsUserResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('cms_users.edit', [$cmsUser->id]));
+        )->get($this->cmsRoute('cms_users.edit', [$cmsUser->id]));
 
         $response->assertOk();
     }
@@ -79,7 +79,7 @@ class AdminCmsUserResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('cms_users.update', [$cmsUser->id]), [
+        )->put($this->cmsRoute('cms_users.update', [$cmsUser->id]), [
             'email' => fake()->safeEmail(),
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
@@ -98,7 +98,7 @@ class AdminCmsUserResourceTest extends TestAdmin
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('cms_users.update', [$cmsUser->id]), [
+        )->put($this->cmsRoute('cms_users.update', [$cmsUser->id]), [
             'email' => fake()->safeEmail(),
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
@@ -122,7 +122,7 @@ class AdminCmsUserResourceTest extends TestAdmin
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('cms_users.store'), [
+        )->post($this->cmsRoute('cms_users.store'), [
             'email' => fake()->safeEmail(),
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
@@ -147,7 +147,7 @@ class AdminCmsUserResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('cms_users.store'), [
+        )->post($this->cmsRoute('cms_users.store'), [
             // empty data
         ]);
 
@@ -163,7 +163,7 @@ class AdminCmsUserResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->delete(cms_route('cms_users.destroy', [$cmsUser->id]));
+        )->delete($this->cmsRoute('cms_users.destroy', [$cmsUser->id]));
 
         $response->assertFound();
     }

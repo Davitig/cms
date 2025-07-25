@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\LanguageRequest;
 use App\Models\Language;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Uri;
 
 class AdminLanguageController extends Controller
 {
@@ -126,13 +127,17 @@ class AdminLanguageController extends Controller
         $url = null;
 
         if (! is_null($language = language()->getActive())) {
-            $languages = language()->all();
+            $languages = language()->all()->toArray();
 
-            unset($languages[$language['language']]);
+            unset($languages[$deletedLang = $language['language']]);
 
             if (language()->isSelected()) {
-                if (count($languages) <= 1) {
-                    $url = cms_route('languages.index', [], false);
+                if (! count($languages)) {
+                    $url = str_replace(
+                        $deletedLang . '/' . cms_path(),
+                        cms_path(),
+                        cms_route('languages.index')
+                    );
                 } elseif ($language['id'] == $id) {
                     $url = cms_route('languages.index', [], key($languages));
                 }
@@ -140,6 +145,8 @@ class AdminLanguageController extends Controller
         }
 
         if (request()->expectsJson()) {
+            $data['redirect'] = $url;
+
             return response()->json($data, $errorCode ? 403 : 200);
         }
 

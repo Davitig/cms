@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class TranslationProviderTest extends TestCase
 {
-    use RefreshDatabase, CreatesLanguageProvider;
+    use RefreshDatabase;
 
     public function getFakeData(int $times = 3): array
     {

@@ -32,6 +32,8 @@ class LanguageProviderTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->globalLanguageProvider = false;
+
         parent::setUp();
 
         if (! empty($envActiveLanguage = (string) getenv('lang_active'))) {

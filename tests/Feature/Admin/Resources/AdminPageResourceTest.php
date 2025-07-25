@@ -9,11 +9,10 @@ use Database\Factories\Page\PageFactory;
 use Database\Factories\Page\PageLanguageFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
-use Tests\Feature\CreatesLanguageProvider;
 
 class AdminPageResourceTest extends TestAdmin
 {
-    use RefreshDatabase, CreatesLanguageProvider;
+    use RefreshDatabase;
 
     /**
      * Create a new pages.
@@ -45,7 +44,7 @@ class AdminPageResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('pages.index', [$menu->id]));
+        )->get($this->cmsRoute('pages.index', [$menu->id]));
 
         $response->assertOk();
     }
@@ -56,7 +55,7 @@ class AdminPageResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('pages.create', [$menu->id]));
+        )->get($this->cmsRoute('pages.create', [$menu->id]));
 
         $response->assertOk();
     }
@@ -70,8 +69,9 @@ class AdminPageResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('pages.store', [$menu->id]), [
+        )->post($this->cmsRoute('pages.store', [$menu->id]), [
             'title' => fake()->sentence(2),
+            'slug' => fake()->slug(2),
             'type' => 'page'
         ]);
 
@@ -84,7 +84,7 @@ class AdminPageResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('pages.edit', [$menu->id, $page->id]));
+        )->get($this->cmsRoute('pages.edit', [$menu->id, $page->id]));
 
         $response->assertOk();
     }
@@ -98,7 +98,7 @@ class AdminPageResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('pages.update', [$menu->id, $page->id]), [
+        )->put($this->cmsRoute('pages.update', [$menu->id, $page->id]), [
             'title' => fake()->sentence(2),
             'type' => 'page'
         ]);
@@ -112,7 +112,7 @@ class AdminPageResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('pages.store', [$menu->id]), [
+        )->post($this->cmsRoute('pages.store', [$menu->id]), [
             'slug' => fake()->slug(2)
         ]);
 
@@ -125,7 +125,7 @@ class AdminPageResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('pages.store', [$menu->id, $page->id]), [
+        )->post($this->cmsRoute('pages.store', [$menu->id, $page->id]), [
             'slug' => $page->slug
         ]);
 
@@ -138,7 +138,7 @@ class AdminPageResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('pages.visibility', [$page->id]));
+        )->put($this->cmsRoute('pages.visibility', [$page->id]));
 
         $response->assertFound();
     }
@@ -163,7 +163,7 @@ class AdminPageResourceTest extends TestAdmin
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('pages.positions'), [
+        )->put($this->cmsRoute('pages.positions'), [
             'start_id' => $startItem->id,
             'end_id' => $endItem->id
         ]);
@@ -183,7 +183,7 @@ class AdminPageResourceTest extends TestAdmin
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('pages.transfer', [$menu->id]), [
+        )->put($this->cmsRoute('pages.transfer', [$menu->id]), [
             'id' => $page->id,
             'column' => 'menu_id',
             'column_value' => $newMenu->id
@@ -200,7 +200,7 @@ class AdminPageResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('pages.get_listable_types', ['type' => 'articles']));
+        )->get($this->cmsRoute('pages.get_listable_types', ['type' => 'articles']));
 
         $this->assertArrayHasKey($collection->id, $response->json());
     }
@@ -211,7 +211,7 @@ class AdminPageResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->delete(cms_route('pages.destroy', [$menu->id, $page->id]));
+        )->delete($this->cmsRoute('pages.destroy', [$menu->id, $page->id]));
 
         $response->assertFound();
     }

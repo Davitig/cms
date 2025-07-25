@@ -40,13 +40,13 @@
                             @else
                                 <i class="icon-base fa fa-image icon-40px me-4"></i>
                             @endif
-                                <a href="{{ $editUrl = cms_route('products.edit', [$item->id]) }}" class="text-dark">
-                                    {{ $item->title }}
-                                </a>
+                            <a href="{{ $editUrl = cms_route('products.edit', [$item->id]) }}" class="text-dark">
+                                {{ $item->title ?: $item->slug }}
+                            </a>
                         </td>
                         <td>
                             <i class="icon-base fa-regular fa-circle-{{ $item->in_stock ? 'check' : 'xmark' }} text-{{ $item->in_stock ? 'success' : 'danger' }}"
-                            title="{{ $item->in_stock ? 'In stock' : 'Out of stock' }}"></i>
+                               title="{{ $item->in_stock ? 'In stock' : 'Out of stock' }}"></i>
                         </td>
                         <td>{{ $item->price }}</td>
                         <td>{{ $item->quantity }}</td>

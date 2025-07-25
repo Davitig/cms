@@ -9,11 +9,10 @@ use Database\Factories\Page\PageFileFactory;
 use Database\Factories\Page\PageFileLanguageFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
-use Tests\Feature\CreatesLanguageProvider;
 
 class AdminPageFileResourceTest extends TestAdmin
 {
-    use RefreshDatabase, CreatesLanguageProvider;
+    use RefreshDatabase;
 
     /**
      * Create a new page files.
@@ -47,7 +46,7 @@ class AdminPageFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('pages.files.index', [$page->id]));
+        )->get($this->cmsRoute('pages.files.index', [$page->id]));
 
         $response->assertOk();
     }
@@ -58,7 +57,7 @@ class AdminPageFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->getJson(cms_route('pages.files.create', [$page->id]));
+        )->getJson($this->cmsRoute('pages.files.create', [$page->id]));
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -72,7 +71,7 @@ class AdminPageFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('pages.files.store', [$page->id]), [
+        )->post($this->cmsRoute('pages.files.store', [$page->id]), [
             'title' => fake()->sentence(2),
             'file' => fake()->imageUrl()
         ]);
@@ -86,7 +85,7 @@ class AdminPageFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->getJson(cms_route('pages.files.edit', [$page->id, $file->id]));
+        )->getJson($this->cmsRoute('pages.files.edit', [$page->id, $file->id]));
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -100,7 +99,7 @@ class AdminPageFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('pages.files.update', [$page->id, $file->id]), [
+        )->put($this->cmsRoute('pages.files.update', [$page->id, $file->id]), [
             'title' => fake()->sentence(2),
             'file' => fake()->imageUrl()
         ]);
@@ -114,7 +113,7 @@ class AdminPageFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('pages.files.store', [$page->id]), [
+        )->post($this->cmsRoute('pages.files.store', [$page->id]), [
             'file' => fake()->imageUrl()
         ]);
 
@@ -127,7 +126,7 @@ class AdminPageFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('pages.files.visibility', [$file->id]));
+        )->put($this->cmsRoute('pages.files.visibility', [$file->id]));
 
         $response->assertFound();
     }
@@ -152,7 +151,7 @@ class AdminPageFileResourceTest extends TestAdmin
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('pages.files.positions'), [
+        )->put($this->cmsRoute('pages.files.positions'), [
             'start_id' => $startItem->id,
             'end_id' => $endItem->id,
             'foreign_key' => 'page_id'
@@ -171,7 +170,7 @@ class AdminPageFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->delete(cms_route('pages.files.destroy', [
+        )->delete($this->cmsRoute('pages.files.destroy', [
             $page->id, $file->id
         ]));
 

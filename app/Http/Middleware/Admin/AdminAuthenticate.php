@@ -22,7 +22,7 @@ class AdminAuthenticate
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // check if the specified guard is authenticated
+        // check if the specified guard is authenticated.
         if (is_null($user = $request->user('cms'))) {
             if ($request->expectsJson()) {
                 return response()->json('Unauthorized.', 401);

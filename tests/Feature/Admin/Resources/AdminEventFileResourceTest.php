@@ -9,11 +9,10 @@ use Database\Factories\Event\EventFileFactory;
 use Database\Factories\Event\EventFileLanguageFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
-use Tests\Feature\CreatesLanguageProvider;
 
 class AdminEventFileResourceTest extends TestAdmin
 {
-    use RefreshDatabase, CreatesLanguageProvider;
+    use RefreshDatabase;
 
     /**
      * Create a new event files.
@@ -47,7 +46,7 @@ class AdminEventFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('events.files.index', [$event->id]));
+        )->get($this->cmsRoute('events.files.index', [$event->id]));
 
         $response->assertOk();
     }
@@ -58,7 +57,7 @@ class AdminEventFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->getJson(cms_route('events.files.create', [$event->id]));
+        )->getJson($this->cmsRoute('events.files.create', [$event->id]));
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -72,7 +71,7 @@ class AdminEventFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('events.files.store', [$event->id]), [
+        )->post($this->cmsRoute('events.files.store', [$event->id]), [
             'title' => fake()->sentence(2),
             'file' => fake()->imageUrl()
         ]);
@@ -86,7 +85,7 @@ class AdminEventFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->getJson(cms_route('events.files.edit', [$event->id, $file->id]));
+        )->getJson($this->cmsRoute('events.files.edit', [$event->id, $file->id]));
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -100,7 +99,7 @@ class AdminEventFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('events.files.update', [$event->id, $file->id]), [
+        )->put($this->cmsRoute('events.files.update', [$event->id, $file->id]), [
             'title' => fake()->sentence(2),
             'file' => fake()->imageUrl()
         ]);
@@ -114,7 +113,7 @@ class AdminEventFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('events.files.store', [$event->id]), [
+        )->post($this->cmsRoute('events.files.store', [$event->id]), [
             'file' => fake()->imageUrl()
         ]);
 
@@ -127,7 +126,7 @@ class AdminEventFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('events.files.visibility', [$file->id]));
+        )->put($this->cmsRoute('events.files.visibility', [$file->id]));
 
         $response->assertFound();
     }
@@ -152,7 +151,7 @@ class AdminEventFileResourceTest extends TestAdmin
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('events.files.positions'), [
+        )->put($this->cmsRoute('events.files.positions'), [
             'start_id' => $startItem->id,
             'end_id' => $endItem->id,
             'foreign_key' => 'event_id'
@@ -171,7 +170,7 @@ class AdminEventFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->delete(cms_route('events.files.destroy', [
+        )->delete($this->cmsRoute('events.files.destroy', [
             $event->id, $file->id
         ]));
 

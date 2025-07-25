@@ -47,20 +47,24 @@ class ElfinderServiceProvider extends ServiceProvider
         $config['middleware'][] = 'cms.auth';
         $config['as'] = cms_route_name();
 
-        if (language()->isEmpty()) {
-            $this->defineRoutes($router, $config);
-        } else {
+        $forcedLanguages = ((array) $this->app['config']->get('language.force_routes'))
+            ?: language()->all()->keys()->toArray();
+
+        if ($forcedLanguages) {
             $langRouteName = $this->app['config']->get('language.route_name');
 
             $config['middleware'][] = 'cms.lang';
             $config['prefix'] = "{{$langRouteName}}/" . $config['prefix'];
             $config['as'] = $langRouteName . '.' . $config['as'];
-            $languages = language()->all()->keys()->toArray();
 
-            $this->defineRoutes($router, $config, function (Route $route) use ($languages, $langRouteName) {
-                $route->whereIn($langRouteName, $languages);
-            });
+            $callback = function (Route $route) use ($langRouteName, $forcedLanguages) {
+                $route->whereIn($langRouteName, $forcedLanguages);
+            };
+        } else {
+            $callback = null;
         }
+
+        $this->defineRoutes($router, $config, $callback);
     }
 
     /**
@@ -68,20 +72,20 @@ class ElfinderServiceProvider extends ServiceProvider
      *
      * @param  \Illuminate\Routing\Router  $router
      * @param  array  $config
-     * @param  \Closure|null  $values
+     * @param  \Closure|null  $callback
      * @return void
      */
-    protected function defineRoutes(Router $router, array $config, Closure $values = null): void
+    protected function defineRoutes(Router $router, array $config, Closure $callback = null): void
     {
-        $router->group($config, function(Router $router) use ($values) {
+        $router->group($config, function(Router $router) use ($callback) {
             $router->get('index', [AdminElfinderController::class, 'showIndex'])
-                ->name('file_manager.index')->when($values);
+                ->name('file_manager.index')->when($callback);
             $router->any('connector', [AdminElfinderController::class, 'showConnector'])
-                ->name('file_manager.connector')->when($values);;
+                ->name('file_manager.connector')->when($callback);;
             $router->get('popup/{input_id}', [AdminElfinderController::class, 'showPopup'])
-                ->name('file_manager.popup')->when($values);;
+                ->name('file_manager.popup')->when($callback);;
             $router->get('tinymce5', [AdminElfinderController::class, 'showTinyMCE5'])
-                ->name('file_manager.tinymce5')->when($values);;
+                ->name('file_manager.tinymce5')->when($callback);;
         });
     }
 }

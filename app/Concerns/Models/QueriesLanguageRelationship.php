@@ -39,21 +39,29 @@ trait QueriesLanguageRelationship
         Builder $query, mixed $currentLang = true, array|string $columns = [], string $type = 'left'
     ): Builder
     {
+        $langIsEmpty = language()->isEmpty();
+
         $table = $this->getTable();
         $languageTable = $this->languages()->getRelated()->getTable();
-        $join = $type . 'Join';
+        $join = ($langIsEmpty ? 'left' : $type) . 'Join';
 
-        return $query->when($currentLang === false, function ($q) {
+        return $query->when($currentLang === false && ! $langIsEmpty, function ($q) {
             return $q->crossMainLanguages()->orderBy('languages.position');
-        }, function ($q) use ($currentLang) {
-            return $q->leftJoin('languages', function ($q) use ($currentLang) {
-                return $q->when($this->wrapWhereLanguageQuery('languages.id', $currentLang));
-            })->when(! cms_booted(), fn ($q) => $q->where('languages.visible', 1));
-        })->$join($languageTable, function ($q) use ($table, $languageTable) {
+        }, function ($q) use ($currentLang, $langIsEmpty) {
+            return $q->when(! $langIsEmpty, function ($q) use ($currentLang) {
+                return $q->leftJoin('languages', function ($q) use ($currentLang) {
+                    return $q->when($this->wrapWhereLanguageQuery('languages.id', $currentLang));
+                })->when(! cms_booted(), fn ($q) => $q->where('languages.visible', 1));
+            });
+        })->$join($languageTable, function ($q) use ($table, $languageTable, $langIsEmpty) {
             return $q->on("{$table}.id", "{$languageTable}.{$this->getForeignKey()}")
-                ->whereColumn($languageTable . '.language_id', 'languages.id');
+                ->when(! $langIsEmpty, function ($q) use ($languageTable) {
+                    return $q->whereColumn($languageTable . '.language_id', 'languages.id');
+                });
         })->addSelect(((array) $columns) ?: ["{$languageTable}.*", "{$table}.*"])
-        ->addSelect(['languages.language', 'languages.id as language_id']);
+            ->when(! $langIsEmpty, function ($q) {
+                return $q->addSelect(['languages.language', 'languages.id as language_id']);
+            });
     }
 
     /**
@@ -68,8 +76,8 @@ trait QueriesLanguageRelationship
         return function ($q) use ($column, $currentLang) {
             return $q->where(
                 $column, is_numeric($currentLang)
-                    ? $currentLang
-                    : language()->getBy($currentLang, 'id')
+                ? $currentLang
+                : language()->getBy($currentLang, 'id')
             );
         };
     }

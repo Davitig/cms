@@ -105,10 +105,11 @@ class AdminPageController extends Controller
      */
     public function update(PageRequest $request, string $menuId, string $id)
     {
-        tap($this->model->findOrFail($id))
-            ->update($input = $request->all())
-            ->languages()
-            ->updateOrCreate(apply_languages(), $input);
+        $model = tap($this->model->findOrFail($id))->update($input = $request->all());
+
+        if (! language()->isEmpty()) {
+            $model->languages()->updateOrCreate(apply_languages(), $input);
+        }
 
         if ($request->expectsJson()) {
             $type = $request->get('type');

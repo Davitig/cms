@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\Models\Fileable;
 use App\Http\Controllers\Admin\InteractsWithPosition;
 use App\Http\Controllers\Admin\InteractsWithVisibility;
 use Illuminate\Database\Eloquent\Model;
@@ -23,7 +22,7 @@ class AdminFileController extends Controller
     /**
      * Create a new controller instance.
      */
-    public function __construct(protected Fileable $model, protected Request $request)
+    public function __construct(protected Model $model, protected Request $request)
     {
         $this->foreignKey = str($this->model->getTable())->beforeLast('_')->singular()
             . '_' . $this->model->getKeyName();
@@ -147,10 +146,11 @@ class AdminFileController extends Controller
      */
     public function updateData(FormRequest $request, string $foreignId, string $id)
     {
-        tap($this->model->findOrFail($id))
-            ->update($input = $request->all())
-            ->languages()
-            ->updateOrCreate(apply_languages(), $input);
+        $model = tap($this->model->findOrFail($id))->update($input = $request->all());
+
+        if (! language()->isEmpty()) {
+            $model->languages()->updateOrCreate(apply_languages(), $input);
+        }
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(true, trans('general.updated'), $input));

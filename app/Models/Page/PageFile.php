@@ -5,12 +5,11 @@ namespace App\Models\Page;
 use App\Concerns\Models\ExtendsQueries;
 use App\Concerns\Models\HasFile;
 use App\Concerns\Models\QueriesLanguageRelationship;
-use App\Contracts\Models\Fileable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class PageFile extends Model implements Fileable
+class PageFile extends Model
 {
     use ExtendsQueries, QueriesLanguageRelationship, HasFile;
 

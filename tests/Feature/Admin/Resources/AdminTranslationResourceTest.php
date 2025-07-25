@@ -8,11 +8,10 @@ use Database\Factories\TranslationLanguageFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
-use Tests\Feature\CreatesLanguageProvider;
 
 class AdminTranslationResourceTest extends TestAdmin
 {
-    use RefreshDatabase, CreatesLanguageProvider;
+    use RefreshDatabase;
 
     /**
      * Create a new translation.
@@ -35,7 +34,7 @@ class AdminTranslationResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('translations.index'));
+        )->get($this->cmsRoute('translations.index'));
 
         $response->assertOk();
     }
@@ -44,7 +43,7 @@ class AdminTranslationResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->getJson(cms_route('translations.create'));
+        )->getJson($this->cmsRoute('translations.create'));
 
         $response->assertOk();
     }
@@ -56,7 +55,7 @@ class AdminTranslationResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('translations.store'), [
+        )->post($this->cmsRoute('translations.store'), [
             'code' => str($word = fake()->unique()->word())->snake()->toString(),
             'value' => $word
         ]);
@@ -70,7 +69,7 @@ class AdminTranslationResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->getJson(cms_route('translations.edit', [$translation->id]));
+        )->getJson($this->cmsRoute('translations.edit', [$translation->id]));
 
         $response->assertOk();
     }
@@ -84,7 +83,7 @@ class AdminTranslationResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('translations.update', [$translation->id]), [
+        )->put($this->cmsRoute('translations.update', [$translation->id]), [
             'code' => str($word = fake()->word())->snake()->toString(),
             'value' => $word
         ]);
@@ -96,7 +95,7 @@ class AdminTranslationResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('translations.store'), [
+        )->post($this->cmsRoute('translations.store'), [
             'code' => str(fake()->word())->snake()->toString()
         ]);
 
@@ -109,7 +108,7 @@ class AdminTranslationResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('translations.form', [
+        )->get($this->cmsRoute('translations.form', [
             'code' => $translation->code
         ]));
 
@@ -122,7 +121,7 @@ class AdminTranslationResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('translations.form.post'), [
+        )->post($this->cmsRoute('translations.form.post'), [
             'id' => $translation->id,
             'code' => str($word = fake()->word())->snake()->toString(),
             'value' => $word
@@ -137,7 +136,7 @@ class AdminTranslationResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->delete(cms_route('translations.destroy', [$translation->id]));
+        )->delete($this->cmsRoute('translations.destroy', [$translation->id]));
 
         $response->assertFound();
     }

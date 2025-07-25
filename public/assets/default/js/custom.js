@@ -109,8 +109,8 @@ $(function () {
             dataType: 'json',
             data: form.serialize(),
             success: function (res) {
-                if (res?.data?.redirect) {
-                    window.location.href = res.data.redirect;
+                if (res?.redirect) {
+                    window.location.href = res.redirect;
                 }
                 // alert message
                 if (res?.result) {

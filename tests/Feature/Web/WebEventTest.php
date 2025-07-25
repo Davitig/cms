@@ -8,13 +8,12 @@ use Database\Factories\Event\EventLanguageFactory;
 use Database\Factories\MenuFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Request;
-use Tests\Feature\CreatesLanguageProvider;
 use Tests\Feature\InteractsWithDynamicPage;
 use Tests\TestCase;
 
 class WebEventTest extends TestCase
 {
-    use RefreshDatabase, CreatesLanguageProvider, InteractsWithDynamicPage;
+    use RefreshDatabase, InteractsWithDynamicPage;
 
     /**
      * Create a new event.
@@ -43,7 +42,7 @@ class WebEventTest extends TestCase
 
         $route = $this->getDynamicPageRouteActions($page->slug);
 
-        $response = $this->get($page->slug);
+        $response = $this->get($this->webUrl($page->slug));
 
         $this->assertSame([
             'controller' => 'WebEventController', 'method' => 'index'
@@ -66,7 +65,7 @@ class WebEventTest extends TestCase
 
         $route = $this->getDynamicPageRouteActions($page->slug, Request::METHOD_POST);
 
-        $response = $this->get($page->slug);
+        $response = $this->get($this->webUrl($page->slug));
 
         $this->assertSame([
             'controller' => 'WebEventController', 'method' => 'testPostMethod'
@@ -130,7 +129,7 @@ class WebEventTest extends TestCase
             $path = implode('/', array_map(fn ($page) => $page->slug, $pages))
         );
 
-        $response = $this->get($path);
+        $response = $this->get($this->webUrl($path));
 
         $this->assertSame([
             'controller' => 'WebEventController', 'method' => 'index'
@@ -149,7 +148,7 @@ class WebEventTest extends TestCase
 
         $route = $this->getDynamicPageRouteActions($path = $page->slug . '/' . $event->slug);
 
-        $response = $this->get($path);
+        $response = $this->get($this->webUrl($path));
 
         $this->assertSame([
             'controller' => 'WebEventController', 'method' => 'show'
@@ -174,7 +173,7 @@ class WebEventTest extends TestCase
             $path = $page->slug . '/' . $event->slug, Request::METHOD_PUT
         );
 
-        $response = $this->get($path);
+        $response = $this->get($this->webUrl($path));
 
         $this->assertSame([
             'controller' => 'WebEventController', 'method' => 'testPutMethod'
@@ -242,7 +241,7 @@ class WebEventTest extends TestCase
                 . '/' . $event->slug
         );
 
-        $response = $this->get($path);
+        $response = $this->get($this->webUrl($path));
 
         $this->assertSame([
             'controller' => 'WebEventController', 'method' => 'show'

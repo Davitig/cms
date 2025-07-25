@@ -16,7 +16,7 @@ class PageRequest extends Request
     {
         $id = $this->route('page');
 
-        $required = $this->isLanguageRelated() ? '' : 'required';
+        $required = $this->hasMainLanguage() ? 'required' : '';
 
         return [
             'slug' => [$required, 'unique:pages,slug,'.$id],
@@ -42,7 +42,7 @@ class PageRequest extends Request
             $this->offsetSet('short_title', $this->get('title'));
         }
 
-        if ($this->isLanguageRelated()) {
+        if (! $this->hasMainLanguage()) {
             return;
         }
 

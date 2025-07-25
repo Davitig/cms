@@ -6,13 +6,12 @@ use App\Mail\FeedbackSubmitted;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Request;
-use Tests\Feature\CreatesLanguageProvider;
 use Tests\Feature\InteractsWithDynamicPage;
 use Tests\TestCase;
 
 class WebFeedbackTest extends TestCase
 {
-    use RefreshDatabase, CreatesLanguageProvider, InteractsWithDynamicPage;
+    use RefreshDatabase, InteractsWithDynamicPage;
 
     public function test_feedback_page()
     {
@@ -22,7 +21,7 @@ class WebFeedbackTest extends TestCase
 
         $route = $this->getDynamicPageRouteActions($page->slug);
 
-        $response = $this->get($page->slug);
+        $response = $this->get($this->webUrl($page->slug));
 
         $this->assertSame([
             'controller' => 'WebFeedbackController', 'method' => 'index'

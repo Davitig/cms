@@ -12,21 +12,21 @@ class AdminLoginTest extends TestAdmin
 
     public function test_admin_access_needs_authentication(): void
     {
-        $response = $this->get(cms_route('dashboard.index'));
+        $response = $this->get($this->cmsRoute('dashboard.index'));
 
-        $response->assertRedirect(cms_route('login'));
+        $response->assertRedirect($this->cmsRoute('login'));
     }
 
     public function test_admin_login_view(): void
     {
-        $response = $this->get(cms_route('login'));
+        $response = $this->get($this->cmsRoute('login'));
 
         $response->assertOk();
     }
 
     public function test_admin_login_invalid_credentials(): void
     {
-        $response = $this->post(cms_route('login.post'), [
+        $response = $this->post($this->cmsRoute('login.post'), [
             'email' => fake()->email(),
             'password' => fake()->password(8, 8),
         ]);
@@ -34,29 +34,46 @@ class AdminLoginTest extends TestAdmin
         $response->assertFound()->assertSessionHasErrors(['email']);
     }
 
-    public function test_admin_login_success(): void
+    public function test_admin_login_fail_on_suspended_user(): void
     {
-        $cmsUserRole = CmsUserRoleFactory::new()->create();
+        $email = fake()->email();
 
-        CmsUserFactory::new()
-            ->role($cmsUserRole->id)
-            ->loginParams($email = fake()->email(), 'password')
-            ->create();
+        $this->createCmsUser(false, function ($factory) use ($email) {
+            return $factory->loginParams($email, 'password')
+                ->suspended(true);
+        });
 
-        $response = $this->post(cms_route('login.post'), [
+        $response = $this->post($this->cmsRoute('login.post'), [
             'email' => $email,
             'password' => 'password'
         ]);
 
-        $response->assertRedirect(cms_route('dashboard.index'));
+        $response->assertRedirect($this->cmsRoute('login'))
+            ->assertSessionHas('alert.result', false);
+    }
+
+    public function test_admin_login_success(): void
+    {
+        $email = fake()->email();
+
+        $this->createCmsUser(false, function ($factory) use ($email) {
+            return $factory->loginParams($email, 'password');
+        });
+
+        $response = $this->post($this->cmsRoute('login.post'), [
+            'email' => $email,
+            'password' => 'password'
+        ]);
+
+        $response->assertRedirect($this->cmsRoute('dashboard.index'));
     }
 
     public function test_admin_logout(): void
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('logout'));
+        )->post($this->cmsRoute('logout'));
 
-        $response->assertRedirect(cms_route('login'));
+        $response->assertRedirect($this->cmsRoute('login'));
     }
 }

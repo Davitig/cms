@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class WebValidateLanguage
@@ -26,12 +27,18 @@ class WebValidateLanguage
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $language = $this->route->parameter($langRouteName = config('language.route_name'));
+
+        if ($language && ! language()->exists($language)) {
+            throw new NotFoundHttpException;
+        }
+
         if (! language()->activeIsVisible()) {
             throw new ServiceUnavailableHttpException;
         }
 
         // remove lang parameter from being passed to controller
-        $this->route->forgetParameter(config('language.route_name'));
+        $this->route->forgetParameter($langRouteName);
 
         return $next($request);
     }

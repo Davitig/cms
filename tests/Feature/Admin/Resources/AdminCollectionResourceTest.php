@@ -16,7 +16,7 @@ class AdminCollectionResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('collections.index'));
+        )->get($this->cmsRoute('collections.index'));
 
         $response->assertOk();
     }
@@ -25,7 +25,7 @@ class AdminCollectionResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('collections.create'));
+        )->get($this->cmsRoute('collections.create'));
 
         $response->assertOk();
     }
@@ -37,7 +37,7 @@ class AdminCollectionResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('collections.store'), [
+        )->post($this->cmsRoute('collections.store'), [
             'title' => 'List of articles',
             'type' => 'articles',
             'admin_order_by' => 'position',
@@ -57,7 +57,7 @@ class AdminCollectionResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('collections.edit', [$collection->id]));
+        )->get($this->cmsRoute('collections.edit', [$collection->id]));
 
         $response->assertOk();
     }
@@ -71,7 +71,7 @@ class AdminCollectionResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('collections.update', [$collection->id]), [
+        )->put($this->cmsRoute('collections.update', [$collection->id]), [
             'title' => 'List of news',
             'admin_order_by' => 'position',
             'admin_sort' => 'desc',
@@ -88,7 +88,7 @@ class AdminCollectionResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('collections.store'), [
+        )->post($this->cmsRoute('collections.store'), [
             'admin_order_by' => 'type',
             'web_order_by' => 'title'
         ]);
@@ -102,7 +102,7 @@ class AdminCollectionResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->delete(cms_route('collections.destroy', [$collection->id]));
+        )->delete($this->cmsRoute('collections.destroy', [$collection->id]));
 
         $response->assertFound();
     }

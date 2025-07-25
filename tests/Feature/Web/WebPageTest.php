@@ -5,13 +5,12 @@ namespace Tests\Feature\Web;
 use Database\Factories\MenuFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Request;
-use Tests\Feature\CreatesLanguageProvider;
 use Tests\Feature\InteractsWithDynamicPage;
 use Tests\TestCase;
 
 class WebPageTest extends TestCase
 {
-    use RefreshDatabase, CreatesLanguageProvider, InteractsWithDynamicPage;
+    use RefreshDatabase, InteractsWithDynamicPage;
 
     public function test_page()
     {
@@ -19,7 +18,7 @@ class WebPageTest extends TestCase
 
         $route = $this->getDynamicPageRouteActions($page->slug);
 
-        $response = $this->get($page->slug);
+        $response = $this->get($this->webUrl($page->slug));
 
         $this->assertSame([
             'controller' => 'WebPageController', 'method' => 'index'
@@ -36,7 +35,7 @@ class WebPageTest extends TestCase
 
         $route = $this->getDynamicPageRouteActions($page->slug);
 
-        $response = $this->get($page->slug);
+        $response = $this->get($this->webUrl($page->slug));
 
         $this->assertSame([
             'controller' => 'WebSearchController', 'method' => 'index'
@@ -106,6 +105,6 @@ class WebPageTest extends TestCase
 
         $path = implode('/', array_map(fn ($page) => $page->slug, $pages));
 
-        $this->get($path)->assertOk();
+        $this->get($this->webUrl($path))->assertOk();
     }
 }

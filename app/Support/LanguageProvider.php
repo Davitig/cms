@@ -86,9 +86,9 @@ class LanguageProvider
             return [$language['language'] => $language];
         });
 
-        $this->main = (current($languages->filter(
+        $this->main = current($languages->filter(
             fn ($item) => $item['main']
-        )->keys()->toArray()) ?: null);
+        )->keys()->toArray() ?: $languages->keys()->toArray());
 
         $segments = explode('/', $path);
 
@@ -238,7 +238,7 @@ class LanguageProvider
     }
 
     /**
-     * Get the query string language key.
+     * Get the language query string key.
      *
      * @return string|null
      */
@@ -248,7 +248,7 @@ class LanguageProvider
     }
 
     /**
-     * Get the query string language.
+     * Get the language query string.
      *
      * @return string|null
      */

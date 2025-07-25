@@ -85,7 +85,7 @@ class AdminRouteMatchesComposer
             if (is_array($routeParam)) {
                 $currentRouteParam = $params[key($routeParam)] ?? 0;
 
-                $routeParam = current($routeParam);
+                $routeParam = reset($routeParam);
             } else {
                 $currentRouteParam = end($params);
             }

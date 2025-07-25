@@ -5,12 +5,11 @@ namespace App\Models\Event;
 use App\Concerns\Models\ExtendsQueries;
 use App\Concerns\Models\HasFile;
 use App\Concerns\Models\QueriesLanguageRelationship;
-use App\Contracts\Models\Fileable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class EventFile extends Model implements Fileable
+class EventFile extends Model
 {
     use ExtendsQueries, HasFile, QueriesLanguageRelationship;
 

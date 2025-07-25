@@ -116,11 +116,14 @@ function cms_route(
     bool   $absolute = true
 ): string
 {
-    return web_route(cms_route_name($name), $parameters, $language, $absolute);
+    return route(...language_route_parameters(
+        cms_route_name($name), $parameters, $language, $absolute,
+        fn () => ! language()->isEmpty()
+    ));
 }
 
 /**
- * Generate a CMS URL.
+ * Generate a CMS URL for the application.
  *
  * @param  mixed|null  $path
  * @param  array  $parameters
@@ -139,11 +142,15 @@ function cms_url(
         $path = implode('/', array_filter($path));
     }
 
+    if (! language()->isEmpty()) {
+        $language = language()->active();
+    }
+
     return web_url(cms_path($path), $parameters, $language, $secure);
 }
 
 /**
- * Generate a web URL to a named route.
+ * Generate a URL to a named route.
  *
  * @param  string  $name
  * @param  mixed  $parameters
@@ -158,21 +165,13 @@ function web_route(
     bool   $absolute = true
 ): string
 {
-    $activeLanguage = language()->active();
-
-    if ($language !== false && (is_string($language) || $activeLanguage)) {
-        $langRouteName = config('language.route_name');
-        $parameters[$langRouteName] = $language ?: $activeLanguage;
-        $langRouteName .= '.';
-    } else {
-        $langRouteName = '';
-    }
-
-    return route($langRouteName . $name, $parameters, $absolute);
+    return route(...language_route_parameters(
+        $name, $parameters, $language, $absolute, fn () => language()->countVisible() > 1
+    ));
 }
 
 /**
- * Generate a web URL.
+ * Generate a URL for the application.
  *
  * @param  mixed|null  $path
  * @param  array  $parameters
@@ -191,31 +190,71 @@ function web_url(
         $path = implode('/', array_filter($path));
     }
 
-    $url = url(language_prefix($path, $language), [], $secure);
+    $url = url(language_path_prefix($path, $language), [], $secure);
 
     $query = Arr::query($parameters);
 
     return trim($url, '?') . ($query ? '?' . $query : '');
 }
+
 /**
- * Prefix a language to the path.
+ * Add language to the route parameters.
+ *
+ * @param  string  $name
+ * @param  mixed  $parameters
+ * @param  mixed|null  $language
+ * @param  bool  $absolute
+ * @param  \Closure|null  $onDefaultLanguage
+ * @return array
+ */
+function language_route_parameters(
+    string   $name,
+    mixed    $parameters = [],
+    mixed    $language = null,
+    bool     $absolute = true,
+    ?Closure $onDefaultLanguage = null
+): array
+{
+    if ($language === false) {
+        return [$name, $parameters, $absolute];
+    }
+
+    $langRouteName = config('language.route_name');
+
+    if (! is_string($language) &&
+        ! $language = ($onDefaultLanguage() ? language()->active() : null)) {
+        return [$name, $parameters, $absolute];
+    }
+
+    $parameters[$langRouteName] = $language;
+
+    $langRouteName .= '.';
+
+    return [$langRouteName . $name, $parameters, $absolute];
+}
+
+/**
+ * Prefix the given path with the language.
  *
  * @param  string|null  $path
  * @param  mixed|null  $language
  * @return string
  */
-function language_prefix(?string $path = null, mixed $language = null): string
+function language_path_prefix(?string $path = null, mixed $language = null): string
 {
+    if ($language === false) {
+        return $path;
+    }
+
     $path = trim($path, '/');
 
     if (is_string($language)) {
         $path = $language . '/' . $path;
-    } elseif (($language === true || language()->isSelected()) &&
-        count(language()->all()) > 1) {
+    } elseif (($language === true || language()->isSelected()) && language()->count() > 1) {
         $path = language()->active() . '/' . $path;
     }
 
-    return trim($path, '/');
+    return $path;
 }
 
 /**
@@ -354,7 +393,7 @@ function fill_data(mixed $result, ?string $message = null, mixed $data = null): 
 function glide(string $path, string $type): string
 {
     $files = (array) config('elfinder.dir');
-    $files = current($files) . '/';
+    $files = reset($files) . '/';
 
     if (($pos = strpos($path, $files)) !== false) {
         $baseUrl = config('web.glide_base_url') . '/';

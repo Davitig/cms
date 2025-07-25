@@ -8,13 +8,12 @@ use Database\Factories\Product\ProductFactory;
 use Database\Factories\Product\ProductLanguageFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Request;
-use Tests\Feature\CreatesLanguageProvider;
 use Tests\Feature\InteractsWithDynamicPage;
 use Tests\TestCase;
 
 class WebProductTest extends TestCase
 {
-    use RefreshDatabase, CreatesLanguageProvider, InteractsWithDynamicPage;
+    use RefreshDatabase, InteractsWithDynamicPage;
 
     /**
      * Create a new product.
@@ -38,7 +37,7 @@ class WebProductTest extends TestCase
 
         $route = $this->getDynamicPageRouteActions($page->slug);
 
-        $response = $this->get($page->slug);
+        $response = $this->get($this->webUrl($page->slug));
 
         $this->assertSame([
             'controller' => 'WebProductController', 'method' => 'index'
@@ -59,7 +58,7 @@ class WebProductTest extends TestCase
 
         $route = $this->getDynamicPageRouteActions($page->slug, Request::METHOD_POST);
 
-        $response = $this->get($page->slug);
+        $response = $this->get($this->webUrl($page->slug));
 
         $this->assertSame([
             'controller' => 'WebProductController', 'method' => 'testPostMethod'
@@ -117,7 +116,7 @@ class WebProductTest extends TestCase
             $path = implode('/', array_map(fn ($page) => $page->slug, $pages))
         );
 
-        $response = $this->get($path);
+        $response = $this->get($this->webUrl($path));
 
         $this->assertSame([
             'controller' => 'WebProductController', 'method' => 'index'
@@ -136,7 +135,7 @@ class WebProductTest extends TestCase
 
         $route = $this->getDynamicPageRouteActions($path = $page->slug . '/' . $product->slug);
 
-        $response = $this->get($path);
+        $response = $this->get($this->webUrl($path));
 
         $this->assertSame([
             'controller' => 'WebProductController', 'method' => 'show'
@@ -161,7 +160,7 @@ class WebProductTest extends TestCase
             $path = $page->slug . '/' . $product->slug, Request::METHOD_PUT
         );
 
-        $response = $this->get($path);
+        $response = $this->get($this->webUrl($path));
 
         $this->assertSame([
             'controller' => 'WebProductController', 'method' => 'testPutMethod'
@@ -229,7 +228,7 @@ class WebProductTest extends TestCase
                 . '/' . $product->slug
         );
 
-        $response = $this->get($path);
+        $response = $this->get($this->webUrl($path));
 
         $this->assertSame([
             'controller' => 'WebProductController', 'method' => 'show'

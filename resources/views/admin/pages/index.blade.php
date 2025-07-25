@@ -36,7 +36,7 @@
                             <div>
                                 <i class="uk-nestable-handle cursor-move icon-base fa fa-bars icon-sm align-text-bottom me-1"></i>
                                 <a href="{{ $editUrl = cms_route('pages.edit', [$item->menu_id, $item->id]) }}" class="text-dark">
-                                    {{ $item->title }}
+                                    {{ $item->title ?: $item->slug }}
                                 </a>
                                 @if ($prevPos == $item->position)
                                     <i class="icon-base fa fa-question-circle icon-xs ms-2 text-warning duplicated-position cursor-pointer"

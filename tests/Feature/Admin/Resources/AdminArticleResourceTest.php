@@ -8,11 +8,10 @@ use Database\Factories\Article\ArticleLanguageFactory;
 use Database\Factories\CollectionFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
-use Tests\Feature\CreatesLanguageProvider;
 
 class AdminArticleResourceTest extends TestAdmin
 {
-    use RefreshDatabase, CreatesLanguageProvider;
+    use RefreshDatabase;
 
     /**
      * Create a new articles.
@@ -39,7 +38,7 @@ class AdminArticleResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('articles.index', [$collection->id]));
+        )->get($this->cmsRoute('articles.index', [$collection->id]));
 
         $response->assertOk();
     }
@@ -50,7 +49,7 @@ class AdminArticleResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('articles.create', [$collection->id]));
+        )->get($this->cmsRoute('articles.create', [$collection->id]));
 
         $response->assertOk();
     }
@@ -64,7 +63,7 @@ class AdminArticleResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('articles.store', [$collection->id]), [
+        )->post($this->cmsRoute('articles.store', [$collection->id]), [
             'title' => fake()->sentence(2),
             'slug' => fake()->slug(2),
             'created_at' => now()->toDateTimeString()
@@ -79,7 +78,7 @@ class AdminArticleResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('articles.edit', [$collection->id, $article->id]));
+        )->get($this->cmsRoute('articles.edit', [$collection->id, $article->id]));
 
         $response->assertOk();
     }
@@ -93,7 +92,7 @@ class AdminArticleResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('articles.update', [$collection->id, $article->id]), [
+        )->put($this->cmsRoute('articles.update', [$collection->id, $article->id]), [
             'title' => fake()->sentence(2),
             'slug' => fake()->slug(2),
             'created_at' => now()->toDateTimeString()
@@ -108,7 +107,7 @@ class AdminArticleResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('articles.store', [$collection->id]), [
+        )->post($this->cmsRoute('articles.store', [$collection->id]), [
             'slug' => fake()->slug(2)
         ]);
 
@@ -121,7 +120,7 @@ class AdminArticleResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('articles.store', [$collection->id]), [
+        )->post($this->cmsRoute('articles.store', [$collection->id]), [
             'slug' => $article->slug
         ]);
 
@@ -134,7 +133,7 @@ class AdminArticleResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('articles.visibility', [$article->id]));
+        )->put($this->cmsRoute('articles.visibility', [$article->id]));
 
         $response->assertFound();
     }
@@ -159,7 +158,7 @@ class AdminArticleResourceTest extends TestAdmin
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('articles.positions'), [
+        )->put($this->cmsRoute('articles.positions'), [
             'start_id' => $startItem->id,
             'end_id' => $endItem->id,
             'foreign_key' => 'collection_id'
@@ -180,7 +179,7 @@ class AdminArticleResourceTest extends TestAdmin
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('articles.transfer', [$collection->id]), [
+        )->put($this->cmsRoute('articles.transfer', [$collection->id]), [
             'id' => $article->id,
             'column' => 'collection_id',
             'column_value' => $newCollection->id
@@ -198,7 +197,7 @@ class AdminArticleResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->delete(cms_route('articles.destroy', [$collection->id, $article->id]));
+        )->delete($this->cmsRoute('articles.destroy', [$collection->id, $article->id]));
 
         $response->assertFound();
     }

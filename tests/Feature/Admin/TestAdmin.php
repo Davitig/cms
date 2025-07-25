@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin;
 
 use App\Models\CmsUser\CmsUser;
 use App\Models\CmsUser\CmsUserRole;
+use Closure;
 use Database\Factories\CmsUserFactory;
 use Database\Factories\CmsUserRoleFactory;
 use Illuminate\Database\Eloquent\Collection;
@@ -36,7 +37,7 @@ abstract class TestAdmin extends TestCase
             ->firstOrFail();
     }
 
-    protected function createCmsUser(bool $fullAccess = true, ?int $times = null): CmsUser|Collection
+    protected function createCmsUser(bool $fullAccess = true, ?Closure $callback = null): CmsUser|Collection
     {
         if (! $roleId = (new CmsUserRole)->when(
             $fullAccess, fn ($q) => $q->fullAccess(), fn ($q) => $q->customAccess()
@@ -44,6 +45,9 @@ abstract class TestAdmin extends TestCase
             $roleId = CmsUserRoleFactory::new()->fullAccess($fullAccess)->create()->id;
         }
 
-        return CmsUserFactory::new()->count($times)->role($roleId)->create();
+        return CmsUserFactory::new()
+            ->role($roleId)
+            ->when(! is_null($callback), $callback)
+            ->create();
     }
 }

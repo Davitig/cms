@@ -17,7 +17,7 @@ class AdminLanguageResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('languages.index'));
+        )->get($this->cmsRoute('languages.index'));
 
         $response->assertOk();
     }
@@ -26,7 +26,7 @@ class AdminLanguageResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('languages.create'));
+        )->get($this->cmsRoute('languages.create'));
 
         $response->assertOk();
     }
@@ -38,7 +38,7 @@ class AdminLanguageResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('languages.store'), [
+        )->post($this->cmsRoute('languages.store'), [
             'language' => 'ab',
             'short_name' => 'ab',
             'full_name' => 'Test language',
@@ -53,7 +53,7 @@ class AdminLanguageResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('languages.edit', [$language->id]));
+        )->get($this->cmsRoute('languages.edit', [$language->id]));
 
         $response->assertOk();
     }
@@ -67,7 +67,7 @@ class AdminLanguageResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('languages.update', [$language->id]), [
+        )->put($this->cmsRoute('languages.update', [$language->id]), [
             'language' => 'ab',
             'short_name' => 'ab',
             'full_name' => 'Test language',
@@ -82,7 +82,7 @@ class AdminLanguageResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->delete(cms_route('languages.destroy', [$language->id]));
+        )->delete($this->cmsRoute('languages.destroy', [$language->id]));
 
         $response->assertFound()->assertSessionHasNoErrors();
     }
@@ -93,7 +93,7 @@ class AdminLanguageResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('languages.store'), [
+        )->post($this->cmsRoute('languages.store'), [
             'language' => $language->language
         ]);
 
@@ -104,7 +104,7 @@ class AdminLanguageResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('languages.store'), [
+        )->post($this->cmsRoute('languages.store'), [
             'language' => 'e',
             'short_name' => 'e',
             'full_name' => 'English',
@@ -122,18 +122,18 @@ class AdminLanguageResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('languages.updateMain'), ['id' => $language->id]);
+        )->put($this->cmsRoute('languages.updateMain'), ['id' => $language->id]);
 
         $response->assertOk()->assertSessionHasNoErrors();
     }
 
     public function test_admin_languages_main_is_unique()
     {
-        $languages = LanguageFactory::new()->times(2)->main(1)->create();
+        $languages = LanguageFactory::new()->times(2)->main()->create();
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('languages.updateMain'), ['id' => $languages->first()->id]);
+        )->put($this->cmsRoute('languages.updateMain'), ['id' => $languages->first()->id]);
 
         $count = (new Language)->whereMain(1)->count();
 
@@ -144,7 +144,7 @@ class AdminLanguageResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('languages.updateMain'), [
+        )->put($this->cmsRoute('languages.updateMain'), [
             // empty data
         ]);
 

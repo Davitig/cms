@@ -12,7 +12,7 @@ class AdminDashboardTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('dashboard.index'));
+        )->get($this->cmsRoute('dashboard.index'));
 
         $response->assertOk();
     }

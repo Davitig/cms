@@ -8,11 +8,10 @@ use Database\Factories\Product\ProductFileFactory;
 use Database\Factories\Product\ProductFileLanguageFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
-use Tests\Feature\CreatesLanguageProvider;
 
 class AdminProductFileResourceTest extends TestAdmin
 {
-    use RefreshDatabase, CreatesLanguageProvider;
+    use RefreshDatabase;
 
     /**
      * Create new product files.
@@ -44,7 +43,7 @@ class AdminProductFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('products.files.index', [$product->id]));
+        )->get($this->cmsRoute('products.files.index', [$product->id]));
 
         $response->assertOk();
     }
@@ -55,7 +54,7 @@ class AdminProductFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->getJson(cms_route('products.files.create', [$product->id]));
+        )->getJson($this->cmsRoute('products.files.create', [$product->id]));
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -69,7 +68,7 @@ class AdminProductFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('products.files.store', [$product->id]), [
+        )->post($this->cmsRoute('products.files.store', [$product->id]), [
             'title' => fake()->sentence(2),
             'file' => fake()->imageUrl()
         ]);
@@ -83,7 +82,7 @@ class AdminProductFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->getJson(cms_route('products.files.edit', [$product->id, $file->id]));
+        )->getJson($this->cmsRoute('products.files.edit', [$product->id, $file->id]));
 
         $response->assertOk()->assertJsonStructure(['result', 'view']);
     }
@@ -97,7 +96,7 @@ class AdminProductFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('products.files.update', [$product->id, $file->id]), [
+        )->put($this->cmsRoute('products.files.update', [$product->id, $file->id]), [
             'title' => fake()->sentence(2),
             'file' => fake()->imageUrl()
         ]);
@@ -111,7 +110,7 @@ class AdminProductFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('products.files.store', [$product->id]), [
+        )->post($this->cmsRoute('products.files.store', [$product->id]), [
             'file' => fake()->imageUrl()
         ]);
 
@@ -124,7 +123,7 @@ class AdminProductFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('products.files.visibility', [$file->id]));
+        )->put($this->cmsRoute('products.files.visibility', [$file->id]));
 
         $response->assertFound();
     }
@@ -149,7 +148,7 @@ class AdminProductFileResourceTest extends TestAdmin
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('products.files.positions'), [
+        )->put($this->cmsRoute('products.files.positions'), [
             'start_id' => $startItem->id,
             'end_id' => $endItem->id,
             'foreign_key' => 'product_id'
@@ -168,7 +167,7 @@ class AdminProductFileResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->delete(cms_route('products.files.destroy', [
+        )->delete($this->cmsRoute('products.files.destroy', [
             $product->id, $file->id
         ]));
 

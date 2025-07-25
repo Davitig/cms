@@ -71,6 +71,16 @@ class CmsUserFactory extends Factory
     }
 
     /**
+     * Indicates the suspended.
+     */
+    public function suspended(bool|int $value): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'suspended' => (bool) $value
+        ]);
+    }
+
+    /**
      * Indicate that the model's email address should be unverified.
      */
     public function unverified(): static

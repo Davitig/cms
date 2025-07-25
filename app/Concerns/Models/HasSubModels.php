@@ -68,7 +68,7 @@ trait HasSubModels
     {
         $columns = (array) $columns;
 
-        $columns = current($columns) == '*'
+        $columns = reset($columns) == '*'
             ? $columns : array_merge($columns, [$this->getKeyName()]);
 
         $models = $this->forPublic()->where(

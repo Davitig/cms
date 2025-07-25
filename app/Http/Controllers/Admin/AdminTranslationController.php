@@ -91,10 +91,11 @@ class AdminTranslationController extends Controller implements HasMiddleware
      */
     public function update(TranslationRequest $request, string $id)
     {
-        tap($this->model->findOrFail($id))
-            ->update($input = $request->all())
-            ->languages()
-            ->updateOrCreate(apply_languages(), $input);
+        $model = tap($this->model->findOrFail($id))->update($input = $request->all());
+
+        if (! language()->isEmpty()) {
+            $model->languages()->updateOrCreate(apply_languages(), $input);
+        }
 
         if ($request->expectsJson()) {
             return response()->json(fill_data(true, trans('general.updated'), $input));
@@ -163,10 +164,11 @@ class AdminTranslationController extends Controller implements HasMiddleware
         } else {
             unset($input['code']);
 
-            tap($this->model->findOrFail($input['id']))
-                ->update($input)
-                ->languages()
-                ->updateOrCreate(apply_languages(), $input);
+            $model = tap($this->model->findOrFail($input['id']))->update($input);
+
+            if (! language()->isEmpty()) {
+                $model->languages()->updateOrCreate(apply_languages(), $input);
+            }
         }
 
         return response()->json($input);

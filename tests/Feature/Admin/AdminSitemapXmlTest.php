@@ -12,7 +12,7 @@ class AdminSitemapXmlTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('sitemap.xml.store'));
+        )->post($this->cmsRoute('sitemap.xml.store'));
 
         $response->assertFound();
     }
@@ -21,7 +21,7 @@ class AdminSitemapXmlTest extends TestAdmin
     {
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('sitemap.xml.store'));
+        )->post($this->cmsRoute('sitemap.xml.store'));
 
         $this->assertFileExists(public_path('sitemap.xml'));
     }

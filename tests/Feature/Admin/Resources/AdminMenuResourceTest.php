@@ -17,7 +17,7 @@ class AdminMenuResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('menus.index'));
+        )->get($this->cmsRoute('menus.index'));
 
         $response->assertOk();
     }
@@ -26,7 +26,7 @@ class AdminMenuResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('menus.create'));
+        )->get($this->cmsRoute('menus.create'));
 
         $response->assertOk();
     }
@@ -38,7 +38,7 @@ class AdminMenuResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('menus.store'), [
+        )->post($this->cmsRoute('menus.store'), [
             'title' => fake()->sentence(2)
         ]);
 
@@ -51,7 +51,7 @@ class AdminMenuResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('menus.edit', [$menu->id]));
+        )->get($this->cmsRoute('menus.edit', [$menu->id]));
 
         $response->assertOk();
     }
@@ -65,7 +65,7 @@ class AdminMenuResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('menus.update', [$menu->id]), [
+        )->put($this->cmsRoute('menus.update', [$menu->id]), [
             'title' => 'List of Pages',
             'main' => 1
         ]);
@@ -77,7 +77,7 @@ class AdminMenuResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('menus.store'), [
+        )->post($this->cmsRoute('menus.store'), [
             // empty data
         ]);
 
@@ -90,7 +90,7 @@ class AdminMenuResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->delete(cms_route('menus.destroy', [$menu->id]));
+        )->delete($this->cmsRoute('menus.destroy', [$menu->id]));
 
         $response->assertFound();
     }
@@ -104,7 +104,7 @@ class AdminMenuResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('menus.updateMain'), ['id' => $menu->id]);
+        )->put($this->cmsRoute('menus.updateMain'), ['id' => $menu->id]);
 
         $response->assertOk()->assertSessionHasNoErrors();
     }
@@ -115,7 +115,7 @@ class AdminMenuResourceTest extends TestAdmin
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('menus.updateMain'), ['id' => $menus->first()->id]);
+        )->put($this->cmsRoute('menus.updateMain'), ['id' => $menus->first()->id]);
 
         $mainCount = (new Menu)->whereMain(1)->count();
 
@@ -126,7 +126,7 @@ class AdminMenuResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('menus.updateMain'), [
+        )->put($this->cmsRoute('menus.updateMain'), [
             // empty data
         ]);
 

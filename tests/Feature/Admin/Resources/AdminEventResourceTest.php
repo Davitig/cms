@@ -8,11 +8,10 @@ use Database\Factories\Event\EventFactory;
 use Database\Factories\Event\EventLanguageFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
-use Tests\Feature\CreatesLanguageProvider;
 
 class AdminEventResourceTest extends TestAdmin
 {
-    use RefreshDatabase, CreatesLanguageProvider;
+    use RefreshDatabase;
 
     /**
      * Create a new events.
@@ -39,7 +38,7 @@ class AdminEventResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('events.index', [$collection->id]));
+        )->get($this->cmsRoute('events.index', [$collection->id]));
 
         $response->assertOk();
     }
@@ -50,7 +49,7 @@ class AdminEventResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('events.create', [$collection->id]));
+        )->get($this->cmsRoute('events.create', [$collection->id]));
 
         $response->assertOk();
     }
@@ -64,7 +63,7 @@ class AdminEventResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('events.store', [$collection->id]), [
+        )->post($this->cmsRoute('events.store', [$collection->id]), [
             'title' => fake()->sentence(2),
             'slug' => fake()->slug(2)
         ]);
@@ -78,7 +77,7 @@ class AdminEventResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->get(cms_route('events.edit', [$collection->id, $event->id]));
+        )->get($this->cmsRoute('events.edit', [$collection->id, $event->id]));
 
         $response->assertOk();
     }
@@ -92,7 +91,7 @@ class AdminEventResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('events.update', [$collection->id, $event->id]), [
+        )->put($this->cmsRoute('events.update', [$collection->id, $event->id]), [
             'title' => fake()->sentence(2),
             'slug' => fake()->slug(2)
         ]);
@@ -106,7 +105,7 @@ class AdminEventResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('events.store', [$collection->id]), [
+        )->post($this->cmsRoute('events.store', [$collection->id]), [
             'slug' => fake()->slug(2)
         ]);
 
@@ -119,7 +118,7 @@ class AdminEventResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->post(cms_route('events.store', [$collection->id]), [
+        )->post($this->cmsRoute('events.store', [$collection->id]), [
             'slug' => $event->slug
         ]);
 
@@ -132,7 +131,7 @@ class AdminEventResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('events.visibility', [$event->id]));
+        )->put($this->cmsRoute('events.visibility', [$event->id]));
 
         $response->assertFound();
     }
@@ -157,7 +156,7 @@ class AdminEventResourceTest extends TestAdmin
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('events.positions'), [
+        )->put($this->cmsRoute('events.positions'), [
             'start_id' => $startItem->id,
             'end_id' => $endItem->id,
             'foreign_key' => 'collection_id'
@@ -178,7 +177,7 @@ class AdminEventResourceTest extends TestAdmin
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put(cms_route('events.transfer', [$collection->id]), [
+        )->put($this->cmsRoute('events.transfer', [$collection->id]), [
             'id' => $event->id,
             'column' => 'collection_id',
             'column_value' => $newCollection->id
@@ -196,7 +195,7 @@ class AdminEventResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->delete(cms_route('events.destroy', [$collection->id, $event->id]));
+        )->delete($this->cmsRoute('events.destroy', [$collection->id, $event->id]));
 
         $response->assertFound();
     }

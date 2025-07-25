@@ -144,10 +144,10 @@ class AdminPermissionController extends Controller implements HasMiddleware
                 $groupedRouteName = $this->getGroupedRouteName($routeName);
 
                 if (is_int(key($groupedRouteName))) {
-                    $routeNameList[$baseRouteName][] = current($groupedRouteName);
+                    $routeNameList[$baseRouteName][] = reset($groupedRouteName);
                 } else {
                     $routeNameList[$baseRouteName]
-                    [key($groupedRouteName)][] = current($groupedRouteName);
+                    [key($groupedRouteName)][] = reset($groupedRouteName);
                 }
             } else {
                 $routeNameList[$routeName] ??= [];
