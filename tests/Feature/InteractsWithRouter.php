@@ -10,16 +10,20 @@ trait InteractsWithRouter
     {
         $routeNames = [];
 
-        $cmsSlug = cms_route_name();
+        $prefix = cms_route_name();
+
+        if (! language()->isEmpty()) {
+            $prefix = $this->app['config']->get('language.route_name') . '.' . $prefix;
+        }
 
         foreach ($this->app['router']->getRoutes()->getRoutesByName() as $name => $route) {
-            if (! str_starts_with($name, $cmsSlug)
+            if (! str_starts_with($name, $prefix)
                 || ! empty($route->parameterNames())
                 || ! in_array('GET', $route->methods())) {
                 continue;
             }
 
-            $name = str($name)->chopStart($cmsSlug)->toString();
+            $name = str($name)->chopStart($prefix)->toString();
 
             $baseRouteName = str($name)->before('.')->toString();
 

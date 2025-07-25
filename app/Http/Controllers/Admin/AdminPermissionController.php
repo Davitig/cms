@@ -110,7 +110,11 @@ class AdminPermissionController extends Controller implements HasMiddleware
     {
         $routeNames = [];
 
-        $prefix = config('language.route_name') . '.' . cms_route_name();
+        $prefix = cms_route_name();
+
+        if (! language()->isEmpty()) {
+            $prefix = config('language.route_name') . '.' . $prefix;
+        }
 
         foreach (app('router')->getRoutes()->getRoutesByName() as $name => $route) {
             if (! str_starts_with($name, $prefix)) {

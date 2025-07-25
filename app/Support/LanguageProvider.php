@@ -4,14 +4,14 @@ namespace App\Support;
 
 use App\Models\Language;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 class LanguageProvider
 {
     /**
      * The list of languages.
      *
-     * @var \Illuminate\Database\Eloquent\Collection
+     * @var \Illuminate\Support\Collection
      */
     protected Collection $languages;
 
@@ -46,7 +46,7 @@ class LanguageProvider
     /**
      * Create a new language provider instance.
      *
-     * @param  \Illuminate\Database\Eloquent\Collection  $languages
+     * @param  \Illuminate\Support\Collection  $languages
      * @param  string  $path
      * @param  string|null  $queryString
      */
@@ -76,7 +76,7 @@ class LanguageProvider
     /**
      * Configure the language service.
      *
-     * @param  \Illuminate\Database\Eloquent\Collection  $languages
+     * @param  \Illuminate\Support\Collection  $languages
      * @param  string  $path
      * @return void
      */
@@ -90,7 +90,9 @@ class LanguageProvider
             fn ($item) => $item['main']
         )->keys()->toArray()) ?: null);
 
-        $activeLanguage = current($segments = explode('/', $path));
+        $segments = explode('/', $path);
+
+        $activeLanguage = reset($segments);
 
         $this->isSelected = $activeLanguage && $languages->offsetExists($activeLanguage);
 
@@ -104,9 +106,11 @@ class LanguageProvider
 
         $this->main ??= $this->active;
 
-        $path = implode('/', $segments);
+        $path = trim(implode('/', $segments), '/');
 
-        $languages->map(fn ($item, $language) => $item['path'] = $language . '/' . $path);
+        $languages->map(function ($item, $language) use ($path) {
+            $item['path'] = $language . ($path ? '/' . $path : '');
+        });
 
         $this->languages = $languages;
     }
@@ -483,7 +487,7 @@ class LanguageProvider
     /**
      * Get the list of all languages.
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Support\Collection
      */
     public function all(): Collection
     {
@@ -493,7 +497,7 @@ class LanguageProvider
     /**
      * Get the list of all visible languages.
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Support\Collection
      */
     public function allVisible(): Collection
     {

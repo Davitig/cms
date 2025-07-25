@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Page\Page;
 use DOMDocument;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Sabre\Xml\Service;
 
 class AdminSitemapXmlController extends Controller
@@ -36,7 +36,7 @@ class AdminSitemapXmlController extends Controller
     /**
      * The collection of the application languages.
      *
-     * @var \Illuminate\Database\Eloquent\Collection
+     * @var \Illuminate\Support\Collection
      */
     protected Collection $languages;
 

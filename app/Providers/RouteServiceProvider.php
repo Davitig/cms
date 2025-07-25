@@ -68,7 +68,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/cms.php'));
         } else {
             // redirector to language prefixed route
-            $router->get(cms_path() . '/{any?}', function () use ($request) {
+            $router->get(cms_path('{any?}'), function () use ($request) {
                 return redirect(language()->active() . '/' . $request->path());
             })->where('any', '.*');
 

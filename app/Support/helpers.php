@@ -160,8 +160,7 @@ function web_route(
 {
     $activeLanguage = language()->active();
 
-    if ($language !== false &&
-        (is_string($language) || $activeLanguage)) {
+    if ($language !== false && (is_string($language) || $activeLanguage)) {
         $langRouteName = config('language.route_name');
         $parameters[$langRouteName] = $language ?: $activeLanguage;
         $langRouteName .= '.';
