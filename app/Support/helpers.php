@@ -226,6 +226,8 @@ function language_route_parameters(
         return [$name, $parameters, $absolute];
     }
 
+    $parameters = Arr::wrap($parameters);
+
     $parameters[$langRouteName] = $language;
 
     $langRouteName .= '.';
