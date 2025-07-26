@@ -136,8 +136,8 @@ Route::middleware('cms.auth')->group(function (Router $router) {
     ])->name('cms_users.password');
     $router->get('cms-users/{cms_user}/preferences', [AdminCmsUserPreferenceController::class, 'index'])
         ->name('cms_users.preferences.index');
-    $router->put('cms-users/{cms_user}/preferences', [AdminCmsUserPreferenceController::class, 'update'])
-        ->name('cms_users.preferences.update');
+    $router->put('cms-users/{cms_user}/preferences', [AdminCmsUserPreferenceController::class, 'save'])
+        ->name('cms_users.preferences.save');
     $router->get('cms-users/{cms_user}/photo', [AdminCmsUserController::class, 'getPhoto'])
         ->name('cms_users.photo');
     $router->resource('cms-users', AdminCmsUserController::class)

@@ -16,7 +16,7 @@ class AdminCmsUserPreferenceController extends Controller implements HasMiddlewa
     /**
      * Create a new controller instance.
      */
-    public function __construct(protected CmsUser $model) {}
+    public function __construct(protected CmsUserPreference $model) {}
 
     /**
      * Get the middleware that should be assigned to the controller.
@@ -38,37 +38,41 @@ class AdminCmsUserPreferenceController extends Controller implements HasMiddlewa
     /**
      * Display a listing of the resource.
      *
-     * @param  string  $id
+     * @param  string  $cmsUserId
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(string $id)
+    public function index(string $cmsUserId)
     {
-        $data['current'] = $this->model->findOrFail($id);
+        $data['current'] = $this->model->cmsUserId($cmsUserId)->firstOr(
+            fn () => $this->model
+        );
+
+        $data['cmsUser'] = (new CmsUser)->findOrFail($cmsUserId);
 
         return view('admin.cms-users.preferences.index', $data);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Save the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  string  $id
+     * @param  string  $cmsUserId
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, string $id)
+    public function save(Request $request, string $cmsUserId)
     {
-        $data = $request->merge([
-            'cms_user_id' => $cmsUserId = $request->user('cms')->id
-        ])->all();
+        $input = $request->except('cms_user_id');
 
         foreach (['horizontal_menu', 'ajax_form'] as $key) {
-            data_fill($data, $key, 0);
+            data_fill($input, $key, 0);
         }
 
-        if ((new CmsUserPreference)->cmsUserId($cmsUserId)->exists()) {
-            (new CmsUserPreference)->cmsUserId($cmsUserId)->firstOrFail()->update($data);
+        if (! is_null($model = $this->model->cmsUserId($cmsUserId)->first())) {
+            $model->update($input);
         } else {
-            (new CmsUserPreference)->create($data);
+            $input['cms_user_id'] = $cmsUserId;
+
+            $this->model->create($input);
         }
 
         if ($request->expectsJson()) {
