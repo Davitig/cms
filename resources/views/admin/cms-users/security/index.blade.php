@@ -1,11 +1,7 @@
 @extends('admin.app')
 @section('content')
-    <!-- Navbar pills -->
-    <div class="row">
-        <div class="col-md-12">
-            @include('admin.cms-users.navbar')
-        </div>
-    </div>
+    @include('admin.cms-users.-partials.header')
+    @include('admin.cms-users.-partials.navbar')
     <div class="card">
         <div class="card-header fs-5">Change Password</div>
         <div class="card-body">

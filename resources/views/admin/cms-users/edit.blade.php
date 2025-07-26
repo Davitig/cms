@@ -1,7 +1,8 @@
 @extends('admin.app')
 @section('content')
+    @include('admin.cms-users.-partials.header', ['hideUserProfile' => true])
     <div class="d-md-flex justify-content-md-between align-items-center">
-        @include('admin.cms-users.navbar')
+        @include('admin.cms-users.-partials.navbar')
         <div class="text-md-end text-center mb-6">
             <a href="{{ cms_route('cms_users.create') }}">
                 <i class="icon-base fa fa-plus icon-xs"></i>
@@ -13,7 +14,7 @@
         <!-- Account -->
         {{ html()->modelForm($current, 'put', cms_route('cms_users.update', [$current->id]))->acceptsFiles()
         ->data('ajax-form', $preferences->get('ajax_form'))->attribute('novalidate')->open() }}
-        @include('admin.cms-users.photo')
+        @include('admin.cms-users.-photo')
         <div class="card-body pt-4">
             @include('admin.cms-users.form')
         </div>

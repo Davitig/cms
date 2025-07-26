@@ -1,3 +1,4 @@
+<!-- Navbar pills -->
 <div class="nav-align-top">
     <ul class="nav nav-pills flex-column flex-md-row gap-md-0 gap-2 mb-6">
         <li class="nav-item">
@@ -30,4 +31,4 @@
         </li>
     </ul>
 </div>
-
+<!--/ Navbar pills -->

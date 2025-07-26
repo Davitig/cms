@@ -1,11 +1,7 @@
 @extends('admin.app')
 @section('content')
-    <!-- Navbar pills -->
-    <div class="row">
-        <div class="col-md-12">
-            @include('admin.cms-users.navbar', ['current' => $cmsUser])
-        </div>
-    </div>
+    @include('admin.cms-users.-partials.header', ['current' => $cmsUser])
+    @include('admin.cms-users.-partials.navbar', ['current' => $cmsUser])
     <div class="card">
         <div class="card-header fs-5">Preferences</div>
         <div class="card-body">
