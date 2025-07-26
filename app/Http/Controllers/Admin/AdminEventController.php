@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Models\CollectionType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\EventRequest;
 use App\Models\Collection;
@@ -24,14 +25,13 @@ class AdminEventController extends Controller
      */
     public function index(string $collectionId)
     {
-        $data['parent'] = (new Collection)->byType($this->model::TYPE)
+        $data['parent'] = (new Collection)->byType(CollectionType::EVENT)
             ->findOrFail($collectionId);
 
-        $data['similarCollections'] = (new Collection)->byType($this->model::TYPE)
-            ->limit(50)->get()
-            ->each(function ($item) {
-                $item->count = $this->model->collectionId($item->id)->count();
-            });
+        $data['similarCollections'] = (new Collection)->byType(CollectionType::EVENT)
+            ->withCount('events')
+            ->limit(50)
+            ->get();
 
         $data['items'] = $this->model->filesExists()->getAdminCollection($data['parent']);
 

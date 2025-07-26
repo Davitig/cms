@@ -19,7 +19,7 @@
                         </div>
                         <div class="d-flex align-items-center">
                             <div class="{{ $item->id == $parent->id ? 'count' : 'count-items-' . $item->id }} badge bg-label-{{ $item->id == $parent->id ? 'primary' : 'gray' }}">
-                                {{ number_format($item->count) }}
+                                {{ number_format($item->{$item->type . '_count'}) }}
                             </div>
                         </div>
                     </div>

@@ -24,14 +24,7 @@ class Event extends Model implements Collection
     ];
 
     /**
-     * Type of the collection.
-     *
-     * @var string
-     */
-    const TYPE = 'events';
-
-    /**
-     * Languages' one-to-many relationship.
+     * Language one-to-many relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

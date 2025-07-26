@@ -34,7 +34,7 @@ class EventFile extends Model
     }
 
     /**
-     * Languages' one-to-many relationship.
+     * Language one-to-many relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

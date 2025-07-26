@@ -22,7 +22,7 @@ class AdminCmsUserSecurityTest extends TestAdmin
 
     public function test_admin_cms_user_password_update()
     {
-        $user = CmsUserFactory::new()->role(
+        $user = CmsUserFactory::new()->roleId(
             CmsUserRoleFactory::new()->create()->id
         )->loginParams(fake()->email(), 'password1')->create();
 

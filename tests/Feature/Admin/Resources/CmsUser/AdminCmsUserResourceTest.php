@@ -18,7 +18,7 @@ class AdminCmsUserResourceTest extends TestAdmin
     public function test_admin_cms_users_resource_index()
     {
         $cmsUserRole = CmsUserRoleFactory::new()->create();
-        CmsUserFactory::new()->times(5)->role($cmsUserRole->id)->create();
+        CmsUserFactory::new()->times(5)->roleId($cmsUserRole->id)->create();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -60,7 +60,7 @@ class AdminCmsUserResourceTest extends TestAdmin
     public function test_admin_cms_users_resource_edit()
     {
         $cmsUserRole = CmsUserRoleFactory::new()->create();
-        $cmsUser = CmsUserFactory::new()->role($cmsUserRole->id)->create();
+        $cmsUser = CmsUserFactory::new()->roleId($cmsUserRole->id)->create();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -75,7 +75,7 @@ class AdminCmsUserResourceTest extends TestAdmin
     public function test_admin_cms_users_resource_update()
     {
         $cmsUserRole = CmsUserRoleFactory::new()->create();
-        $cmsUser = CmsUserFactory::new()->role($cmsUserRole->id)->create();
+        $cmsUser = CmsUserFactory::new()->roleId($cmsUserRole->id)->create();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -92,7 +92,7 @@ class AdminCmsUserResourceTest extends TestAdmin
     public function test_admin_cms_users_resource_photo_upload()
     {
         $cmsUserRole = CmsUserRoleFactory::new()->create();
-        $cmsUser = CmsUserFactory::new()->role($cmsUserRole->id)->create();
+        $cmsUser = CmsUserFactory::new()->roleId($cmsUserRole->id)->create();
 
         $filesystem = Storage::fake('cms_users');
 
@@ -159,7 +159,7 @@ class AdminCmsUserResourceTest extends TestAdmin
     public function test_admin_cms_users_resource_destroy()
     {
         $cmsUserRole = CmsUserRoleFactory::new()->create();
-        $cmsUser = CmsUserFactory::new()->role($cmsUserRole->id)->create();
+        $cmsUser = CmsUserFactory::new()->roleId($cmsUserRole->id)->create();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'

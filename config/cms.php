@@ -94,10 +94,7 @@ return [
     'listable' => [
         'collections' => [
             'model' => App\Models\Collection::class,
-            'types' => [
-                'articles' => 'Articles',
-                'events' => 'Events'
-            ],
+            'types' => App\Enums\Models\CollectionType::keyedValues(),
             'order_by' => [
                 'id' => 'Default',
                 'position' => 'Position',

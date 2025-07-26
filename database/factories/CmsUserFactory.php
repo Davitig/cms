@@ -41,7 +41,7 @@ class CmsUserFactory extends Factory
     /**
      * Indicates the role ID.
      */
-    public function role(int $roleId): static
+    public function roleId(int $roleId): static
     {
         return $this->state(fn (array $attributes) => [
             'cms_user_role_id' => $roleId,

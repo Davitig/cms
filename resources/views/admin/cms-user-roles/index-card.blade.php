@@ -19,17 +19,17 @@
                         <div>Total {{ $item->cms_users_count }} CMS Users</div>
                         @if ($item->cms_users_count)
                             <ul class="list-unstyled d-flex align-items-center avatar-group mb-0">
-                                @foreach($item->cms_users as $user)
+                                @foreach($item->cmsUsers as $user)
                                     <li title="{{ $user->first_name }} {{ $user->last_name }}" class="avatar pull-up">
                                         <img class="rounded-circle bg-white" src="{{ cms_route('cms_users.photo', [$user->id]) }}" alt="Photo" />
                                     </li>
                                 @endforeach
-                                @if ($item->cms_users_count - $item->cms_users->count())
+                                @if ($item->cms_users_count - $cmsUserItemsCount = $item->cmsUsers->count())
                                     <li class="avatar">
                                         <span
                                             class="avatar-initial rounded-circle pull-up"
-                                            title="{{ $item->cms_users_count - $item->cms_users->count() }} more">
-                                            +{{ $item->cms_users_count - $item->cms_users->count() }}
+                                            title="{{ $item->cms_users_count - $cmsUserItemsCount }} more">
+                                            +{{ $item->cms_users_count - $cmsUserItemsCount }}
                                         </span>
                                     </li>
                                 @endif
@@ -55,8 +55,8 @@
                                 <span class="badge bg-label-success">Full Access</span>
                             @else
                                 <span class="badge rounded-pill badge-outline-{{ $item->permissions_count ? 'warning' : 'danger' }} p-1">
-                                        {{ $item->permissions_count }}
-                                    </span>
+                                    {{ $item->permissions_count }}
+                                </span>
                                 <a href="{{ cms_route('permissions.index', ['role' => $item->id]) }}" class="badge bg-label-{{ $item->permissions_count ? 'warning' : 'danger' }}">
                                     Permissions
                                 </a>

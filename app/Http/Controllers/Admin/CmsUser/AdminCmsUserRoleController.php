@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin\CmsUser;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CmsUserRoleRequest;
-use App\Models\CmsUser\CmsUser;
 use App\Models\CmsUser\CmsUserRole;
 use App\Models\Permission;
 use Illuminate\Contracts\Auth\Guard;
@@ -33,18 +32,9 @@ class AdminCmsUserRoleController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        $data['items'] = $this->model->paginate(50);
-
-        $data['items']->each(function ($item) {
-            $item->permissions_count = (new Permission)->roleId($item->id)->count();
-
-            $item->cms_users_count = (new CmsUser)->roleId($item->id)->count();
-
-            $item->cms_users = (new CmsUser)->roleId($item->id)
-                ->inRandomOrder()
-                ->limit($item->cms_users_count > 3 ? 3 : 4)
-                ->get();
-        });
+        $data['items'] = $this->model->withCount('permissions', 'cmsUsers')
+            ->with(['cmsUsers' => fn ($r) => $r->inRandomOrder()->limit(4)])
+            ->paginate(50);
 
         return view('admin.cms-user-roles.index', $data);
     }

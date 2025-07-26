@@ -34,18 +34,18 @@
                     </td>
                     <td>
                         <ul class="list-unstyled d-flex align-items-center avatar-group mb-0">
-                            @foreach($item->cms_users as $user)
+                            @foreach($item->cmsUsers as $user)
                                 <li title="{{ $user->first_name }} {{ $user->last_name }}" class="avatar pull-up">
                                     <img class="rounded-circle bg-white" src="{{ cms_route('cms_users.photo', [$user->id]) }}" width="40" height="40" alt="Photo">
                                 </li>
                             @endforeach
-                            @if ($item->cms_users_count - $item->cms_users->count())
+                            @if ($item->cms_users_count - $cmsUserItemsCount = $item->cmsUsers->count())
                                 <li class="avatar">
                                     <span
                                         class="avatar-initial rounded-circle pull-up"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="bottom"
-                                        title="{{ $item->cms_users_count - $item->cms_users->count() }} more">+{{ $item->cms_users_count - $item->cms_users->count() }}</span>
+                                        title="{{ $item->cms_users_count - $cmsUserItemsCount }} more">+{{ $item->cms_users_count - $cmsUserItemsCount }}</span>
                                 </li>
                             @endif
                         </ul>

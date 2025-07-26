@@ -23,7 +23,7 @@
         </div>
     </div>
     <div class="col-md-6">
-        <label for="created_at_inp" class="form-label required">Creation Date</label>
+        <label for="created_at_inp" class="form-label">Creation Date</label>
         <div class="input-group input-group-merge">
             {{ html()->text('created_at')->id('created_at_inp' . $current->language)->class('form-control datepicker') }}
             <span class="input-group-text">

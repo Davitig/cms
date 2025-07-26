@@ -24,14 +24,7 @@ class Article extends Model implements Collection
     ];
 
     /**
-     * Type of the collection.
-     *
-     * @var string
-     */
-    const TYPE = 'articles';
-
-    /**
-     * Languages' one-to-many relationship.
+     * Language one-to-many relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

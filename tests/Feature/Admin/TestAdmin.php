@@ -46,7 +46,7 @@ abstract class TestAdmin extends TestCase
         }
 
         return CmsUserFactory::new()
-            ->role($roleId)
+            ->roleId($roleId)
             ->when(! is_null($callback), $callback)
             ->create();
     }

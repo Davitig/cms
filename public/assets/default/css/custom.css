@@ -69,3 +69,8 @@
     padding-block-end: 0;
     border: 0;
 }
+
+/* badge */
+.badge.p-1 {
+    min-width: 25px;
+}
