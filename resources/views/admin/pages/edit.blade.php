@@ -55,7 +55,7 @@
 @endsection
 @push('body.bottom')
     <script type="text/javascript">
-        $('form#pages-form').on('ajaxFormSuccess', function (e, res) {
+        $('form#pages-form').on('ajaxFormDone', function (e, res) {
             let menuList = $('.menu-list');
             $('.extended', menuList).remove();
 

@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    $('#file-modal form').on('ajaxFormSuccess', function (e, res) {
+    $('#file-modal form').on('ajaxFormDone', function (e, res) {
         let sort = '{{ request('sort', 'desc') }}';
         let currentPage = {{(int) request('currentPage', 1)}};
         let creationPage = sort === 'desc' ? 1 : {{ (int) request('lastPage', 1) }};

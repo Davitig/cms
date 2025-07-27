@@ -1,6 +1,6 @@
 @extends('admin.app')
 @section('content')
-    @include('admin.cms-users.-partials.header', ['hideUserProfile' => true])
+    @include('admin.cms-users.-partials.header', ['allowUserProfile' => false, 'allowCoverUpload' => true])
     <div class="d-md-flex justify-content-md-between align-items-center">
         @include('admin.cms-users.-partials.navbar')
         <div class="text-md-end text-center mb-6">
@@ -12,9 +12,9 @@
     </div>
     <div class="card">
         <!-- Account -->
+        @include('admin.cms-users.-photo')
         {{ html()->modelForm($current, 'put', cms_route('cms_users.update', [$current->id]))->acceptsFiles()
         ->data('ajax-form', $preferences->get('ajax_form'))->attribute('novalidate')->open() }}
-        @include('admin.cms-users.-photo')
         <div class="card-body pt-4">
             @include('admin.cms-users.form')
         </div>
@@ -22,3 +22,4 @@
         <!--/ Account -->
     </div>
 @endsection
+@include('admin.cms-users.-scripts.image-upload', ['type' => 'photo'])

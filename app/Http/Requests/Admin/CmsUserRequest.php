@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Admin;
 
 use App\Http\Requests\Request;
-use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\Rules\Password;
 
 class CmsUserRequest extends Request
@@ -22,7 +21,6 @@ class CmsUserRequest extends Request
                 'first_name' => 'required|max:35',
                 'last_name' => 'required|max:35',
                 'cms_user_role_id' => 'required|integer|exists:cms_user_roles,id',
-                'photo' => ['nullable', File::image()->max(1024)],
             ] + $this->addPasswordRule();
     }
 

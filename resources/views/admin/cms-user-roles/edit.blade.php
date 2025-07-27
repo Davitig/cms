@@ -30,7 +30,7 @@
 @endsection
 @push('body.bottom')
     <script type="text/javascript">
-        $('form[data-ajax-form="1"]').on('ajaxFormSuccess', function (e, res) {
+        $('form[data-ajax-form="1"]').on('ajaxFormDone', function (e, res) {
             if (parseInt(res?.data?.full_access)) {
                 $('#permissions-btn').addClass('d-none');
             } else {

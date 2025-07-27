@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\AdminTranslationController;
 use App\Http\Controllers\Admin\AdminWebSettingController;
 use App\Http\Controllers\Admin\Auth\AdminLoginController;
 use App\Http\Controllers\Admin\CmsUser\AdminCmsUserController;
+use App\Http\Controllers\Admin\CmsUser\AdminCmsUserImageController;
 use App\Http\Controllers\Admin\CmsUser\AdminCmsUserPreferenceController;
 use App\Http\Controllers\Admin\CmsUser\AdminCmsUserRoleController;
 use App\Http\Controllers\Admin\CmsUser\AdminCmsUserSecurityController;
@@ -140,8 +141,17 @@ Route::middleware('cms.auth')->group(function (Router $router) {
     $router->put('cms-users/{cms_user}/preferences', [AdminCmsUserPreferenceController::class, 'save'])
         ->name('cms_users.preferences.save');
     // CMS user photo
-    $router->get('cms-users/{cms_user}/photo', [AdminCmsUserController::class, 'getPhoto'])
+    $router->get('cms-users/{cms_user}/photo', [AdminCmsUserImageController::class, 'getPhoto'])
         ->name('cms_users.photo');
+    // CMS user cover
+    $router->get('cms-users/{cms_user}/cover', [AdminCmsUserImageController::class, 'getCover'])
+        ->name('cms_users.cover');
+    // CMS user image store
+    $router->post('cms-users/{cms_user}/image', [AdminCmsUserImageController::class, 'store'])
+        ->name('cms_users.image.store');
+    // CMS user image delete
+    $router->delete('cms-users/{cms_user}/image', [AdminCmsUserImageController::class, 'destroy'])
+        ->name('cms_users.image.destroy');
     // CMS users
     $router->resource('cms-users', AdminCmsUserController::class)
         ->names(resource_names('cms_users'));

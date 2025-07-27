@@ -33,11 +33,20 @@
                             <span class="fw-medium mx-2">Email:</span>
                             <span>{{ $current->email }}</span>
                         </li>
+                        @if ($current->phone)
                         <li class="d-flex align-items-center mb-4">
-                            <i class="icon-base fa fa-phone icon-sm"></i>
+                            <i class="icon-base fa fa-mobile-screen icon-sm"></i>
                             <span class="fw-medium mx-2">Phone:</span>
                             <span>{{ $current->phone }}</span>
                         </li>
+                        @endif
+                        @if ($current->address)
+                        <li class="d-flex align-items-center mb-4">
+                            <i class="icon-base fa-regular fa-address-book icon-sm"></i>
+                            <span class="fw-medium mx-2">Address:</span>
+                            <span>{{ $current->address }}</span>
+                        </li>
+                        @endif
                     </ul>
                 </div>
             </div>

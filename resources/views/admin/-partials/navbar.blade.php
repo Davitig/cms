@@ -149,7 +149,7 @@
                                 @push('body.bottom')
                                     <script type="text/javascript">
                                         $(function () {
-                                            $('#sitemap-xml-form').on('ajaxFormSuccess', function (e, res) {
+                                            $('#sitemap-xml-form').on('ajaxFormDone', function (e, res) {
                                                 if (res.result) {
                                                     $('.sitemap-xml-ctime').text(res.data);
                                                 }

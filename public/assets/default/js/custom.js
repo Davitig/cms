@@ -107,61 +107,58 @@ $(function () {
             type: 'POST',
             url: form.attr('action'),
             dataType: 'json',
-            data: form.serialize(),
-            success: function (res) {
-                if (res?.redirect) {
-                    window.location.href = res.redirect;
-                }
-                // alert message
-                if (res?.result) {
-                    notyf(res?.message, res?.result ? res?.result : 'warning');
-                } else {
-                    return;
-                }
-                textDecrement();
-                form.trigger('deleteFormSuccess', [res]);
-                // delete action
-                let item = form.closest('.item');
-                let subItems = item.find('.uk-nestable-list').first()
-                    .find('.item[data-parent="'+item.data('id')+'"]');
-                if (subItems.length) {
-                    let baseItem = item.closest('.item[data-id="'+item.data('parent')+'"]')
-                        .find('.uk-nestable-list').first();
-                    if (baseItem.length) {
-                        let parentId = item.data('parent');
-                        let pos = parseInt(
-                            $('.item[data-parent="'+parentId+'"]', baseItem).last().data('pos')
-                        );
-                        subItems.each(function (i) {
-                            $(this).attr('data-pos', pos + i + 1).attr('data-parent', parentId);
-                            baseItem.append(this);
-                        });
-                    } else {
-                        let list = $('#nestable-list');
-                        let pos = parseInt(
-                            $('.item[data-parent="0"]', list).last().data('pos')
-                        );
-                        subItems.each(function (i) {
-                            $(this).attr('data-pos', pos + i + 1).attr('data-parent', 0);
-                            list.append(this);
-                        });
-                    }
-                }
-                // remove
-                item.fadeOut(500, function () {
-                    $(this).remove();
-                });
-            },
-            error: function (xhr) {
-                notyf(
-                    xhr?.responseJSON?.message ? xhr.responseJSON.message : xhr.statusText,
-                    'error'
-                );
-            },
-            complete: function () {
-                btn.prop('disabled', false);
+            data: form.serialize()
+        }).done(function (res) {
+            if (res?.redirect) {
+                window.location.href = res.redirect;
             }
-        });
+            // alert message
+            if (res?.result) {
+                notyf(res?.message, res?.result ? res?.result : 'warning');
+            } else {
+                return;
+            }
+            textDecrement();
+            form.trigger('deleteFormDone', [res]);
+            // delete action
+            let item = form.closest('.item');
+            let subItems = item.find('.uk-nestable-list').first()
+                .find('.item[data-parent="'+item.data('id')+'"]');
+            if (subItems.length) {
+                let baseItem = item.closest('.item[data-id="'+item.data('parent')+'"]')
+                    .find('.uk-nestable-list').first();
+                if (baseItem.length) {
+                    let parentId = item.data('parent');
+                    let pos = parseInt(
+                        $('.item[data-parent="'+parentId+'"]', baseItem).last().data('pos')
+                    );
+                    subItems.each(function (i) {
+                        $(this).attr('data-pos', pos + i + 1).attr('data-parent', parentId);
+                        baseItem.append(this);
+                    });
+                } else {
+                    let list = $('#nestable-list');
+                    let pos = parseInt(
+                        $('.item[data-parent="0"]', list).last().data('pos')
+                    );
+                    subItems.each(function (i) {
+                        $(this).attr('data-pos', pos + i + 1).attr('data-parent', 0);
+                        list.append(this);
+                    });
+                }
+            }
+            // remove
+            item.fadeOut(500, function () {
+                $(this).remove();
+            });
+        }).fail(function (xhr) {
+            notyf(
+                xhr?.responseJSON?.message ? xhr.responseJSON.message : xhr.statusText,
+                'error'
+            );
+        }).always(function () {
+            btn.prop('disabled', false);
+        })
     });
 
     // Ajax form
@@ -171,97 +168,102 @@ $(function () {
         let lang = form.data('lang');
         lang = lang ? lang : '';
 
+        let errorIdentifier = $(this).closest('[data-error]');
+
         $.ajax({
             type: 'POST',
             url: form.attr('action'),
             dataType: 'json',
             data: new FormData(this),
             processData: false,
-            contentType: false,
-            success: function (res) {
+            contentType: false
+        }).done(function (res) {
+            if (errorIdentifier.length) {
+                errorIdentifier.find('.text-danger').remove();
+            } else {
                 form.find('.text-danger').remove();
-                // alert message
-                notyf(res?.message, res?.result ? res?.result : 'warning');
-
-                form.trigger('ajaxFormSuccess', [res]);
-
-                if (! res?.data || typeof res.data !== 'object') {
-                    return;
-                }
-
-                $.each(res.data, function (index, element) {
-                    let item = $('#' + index + '_inp' + lang, form);
-
-                    if (item.val() !== element) {
-                        if (item.is(':checkbox')) {
-                            item.prop('checked', Boolean(element));
-                        } else {
-                            if (item.is(':text')) {
-                                item.val(element);
-                            }
-                            if (item.is('select')) {
-                                item.trigger('change');
-                            }
-                        }
-                    }
-                });
-            },
-            error: function (xhr) {
-                form.trigger('ajaxFormError', [xhr]);
-                form.find('.text-danger').remove();
-                if (! xhr?.responseJSON?.errors) {
-                    notyf(
-                        xhr?.responseJSON?.message ? xhr.responseJSON.message : xhr.statusText,
-                        'error'
-                    );
-
-                    return;
-                }
-                $.each(xhr.responseJSON.errors, function (index, element) {
-                    let field;
-                    let arrayField = index.substring(0, index.indexOf('.'));
-                    if (arrayField) {
-                        field = $('.' + arrayField + lang, form).first();
-                    } else {
-                        field = $('#' + index + '_inp' + lang, form);
-                    }
-
-                    if (Array.isArray(element)) {
-                        element = element.find(Boolean);
-                    }
-
-                    let errorIdentifier = field.closest('[data-error]');
-
-                    if (errorIdentifier.length) {
-                        let errorElement = '<div class="text-danger">'+element+'</div>';
-                        if (errorIdentifier.data('error') === 'prepend') {
-                            errorIdentifier.prepend(errorElement);
-                        } else {
-                            errorIdentifier.append(errorElement);
-                        }
-                    } else if (field.parent('.input-group').length) {
-                        field.parent().after('<div class="text-danger">'+element+'</div>');
-                    } else {
-                        field.after('<div class="text-danger">'+element+'</div>');
-                    }
-                });
-
-                let errorField = form.find('.text-danger').first();
-                if (errorField) {
-                    let errorOffset = errorField.offset();
-                    if (errorOffset &&
-                        (window.scrollY + 100 > errorOffset.top
-                            || (window.scrollY + window.innerHeight) < errorOffset.top)) {
-                        $('html, body').animate({
-                            scrollTop: errorOffset.top - window.innerHeight / 2
-                        }, 400);
-                    }
-                }
-            },
-            complete: function () {
-                form.trigger('ajaxFormComplete');
             }
-        });
+            // alert message
+            notyf(res?.message, res?.result ? res?.result : 'warning');
+
+            form.trigger('ajaxFormDone', [res]);
+
+            if (! res?.data || typeof res.data !== 'object') {
+                return;
+            }
+
+            $.each(res.data, function (index, element) {
+                let item = $('#' + index + '_inp' + lang, form);
+
+                if (item.val() !== element) {
+                    if (item.is(':checkbox')) {
+                        item.prop('checked', Boolean(element));
+                    } else {
+                        if (item.is(':text')) {
+                            item.val(element);
+                        }
+                        if (item.is('select')) {
+                            item.trigger('change');
+                        }
+                    }
+                }
+            });
+        }).fail(function (xhr) {
+            form.trigger('ajaxFormError', [xhr]);
+            if (errorIdentifier.length) {
+                errorIdentifier.find('.text-danger').remove();
+            } else {
+                form.find('.text-danger').remove();
+            }
+            if (! xhr?.responseJSON?.errors) {
+                notyf(
+                    xhr?.responseJSON?.message ? xhr.responseJSON.message : xhr.statusText,
+                    'error'
+                );
+
+                return;
+            }
+            $.each(xhr.responseJSON.errors, function (index, element) {
+                let field;
+                let arrayField = index.substring(0, index.indexOf('.'));
+                if (arrayField) {
+                    field = $('.' + arrayField + lang, form).first();
+                } else {
+                    field = $('#' + index + '_inp' + lang, form);
+                }
+
+                if (Array.isArray(element)) {
+                    element = element.find(Boolean);
+                }
+
+                if (errorIdentifier.length) {
+                    let errorElement = '<div class="text-danger">'+element+'</div>';
+                    if (errorIdentifier.data('error') === 'prepend') {
+                        errorIdentifier.prepend(errorElement);
+                    } else {
+                        errorIdentifier.append(errorElement);
+                    }
+                } else if (field.parent('.input-group').length) {
+                    field.parent().after('<div class="text-danger">'+element+'</div>');
+                } else {
+                    field.after('<div class="text-danger">'+element+'</div>');
+                }
+            });
+
+            let errorField = form.find('.text-danger').first();
+            if (errorField) {
+                let errorOffset = errorField.offset();
+                if (errorOffset &&
+                    (window.scrollY + 100 > errorOffset.top
+                        || (window.scrollY + window.innerHeight) < errorOffset.top)) {
+                    $('html, body').animate({
+                        scrollTop: errorOffset.top - window.innerHeight / 2
+                    }, 400);
+                }
+            }
+        }).always(function () {
+            form.trigger('ajaxFormAlways');
+        })
     });
 
     // Visibility request

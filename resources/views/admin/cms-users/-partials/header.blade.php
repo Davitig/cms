@@ -1,9 +1,10 @@
 <!-- Header -->
 <div class="card mb-6">
     <div class="user-profile-header-banner">
-        <img src="{{ asset('assets/img/pages/profile-banner.png') }}" alt="Banner image" class="rounded-top" />
+        <img src="{{ cms_route('cms_users.cover', [$current->id]) }}" alt="Banner image" class="rounded-top user-cover"
+        data-default="{{ asset('assets/img/pages/profile-banner.png') }}">
     </div>
-    @if (! ($hideUserProfile ?? false))
+    @if ($allowUserProfile ?? true)
         <div class="user-profile-header d-flex flex-column flex-lg-row text-sm-start text-center mb-5">
             <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto">
                 <img src="{{ cms_route('cms_users.photo', [$current->id]) }}" alt="user image"
@@ -24,6 +25,36 @@
                         </ul>
                     </div>
                 </div>
+            </div>
+        </div>
+    @endif
+    @if ($allowCoverUpload ?? false)
+        <div class="card-body">
+            <div class="button-wrapper d-flex justify-content-end align-items-center gap-3">
+                {{ html()->modelForm($current, 'post', cms_route('cms_users.image.store', [$current->id]))
+                ->id('upload-cover')->class('d-flex align-items-center gap-3')
+                ->data('ajax-form', 1)->data('error', 'prepend')->acceptsFiles()->open() }}
+                {{ html()->hidden('image_type', 'cover') }}
+                @error('cover')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+                <span>Max size of 2MB</span>
+                <label for="cover_inp" class="btn btn-primary" tabindex="0">
+                    <div class="loading-cover spinner-border spinner-border-sm text-white me-1 d-none"></div>
+                    <span class="d-none d-sm-block">Upload new cover</span>
+                    <i class="icon-base fa fa-upload d-block d-sm-none"></i>
+                    <input type="file" name="cover" id="cover_inp" class="account-file-input image_inp_type"
+                           data-type="cover" hidden>
+                </label>
+                {{ html()->form()->close() }}
+                {{ html()->modelForm($current, 'delete', cms_route('cms_users.image.destroy', [$current->id]))
+                ->class('delete-image')->data('type', 'cover')->open() }}
+                {{ html()->hidden('image_type', 'cover') }}
+                <button type="submit" class="btn btn-label-secondary account-image-reset">
+                    <i class="icon-base fa fa-trash-arrow-up d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Remove</span>
+                </button>
+                {{ html()->form()->close() }}
             </div>
         </div>
     @endif

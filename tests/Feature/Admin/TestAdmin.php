@@ -7,7 +7,6 @@ use App\Models\CmsUser\CmsUserRole;
 use Closure;
 use Database\Factories\CmsUserFactory;
 use Database\Factories\CmsUserRoleFactory;
-use Illuminate\Database\Eloquent\Collection;
 use Tests\TestCase;
 
 abstract class TestAdmin extends TestCase
@@ -37,7 +36,7 @@ abstract class TestAdmin extends TestCase
             ->firstOrFail();
     }
 
-    protected function createCmsUser(bool $fullAccess = true, ?Closure $callback = null): CmsUser|Collection
+    protected function createCmsUser(bool $fullAccess = true, ?Closure $callback = null): CmsUser
     {
         if (! $roleId = (new CmsUserRole)->when(
             $fullAccess, fn ($q) => $q->fullAccess(), fn ($q) => $q->customAccess()

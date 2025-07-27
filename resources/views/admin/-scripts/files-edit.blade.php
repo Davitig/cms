@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    $('#file-modal form').on('ajaxFormSuccess', function () {
+    $('#file-modal form').on('ajaxFormDone', function () {
         if ($(this).data('lang') !== '{{language()->active()}}') {
             return;
         }

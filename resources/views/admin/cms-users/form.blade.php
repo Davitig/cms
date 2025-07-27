@@ -53,7 +53,7 @@
         <label for="phone_inp" class="form-label">Phone Number</label>
         <div class="input-group input-group-merge">
             <span class="input-group-text">
-                <i class="icon-base fa fa-phone"></i>
+                <i class="icon-base fa fa-mobile-screen"></i>
             </span>
             {{ html()->text('phone')->id('phone_inp')->class('form-control') }}
         </div>

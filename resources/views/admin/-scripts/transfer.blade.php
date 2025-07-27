@@ -42,7 +42,7 @@
         });
 
         // Remove transferred item
-        $('#transfer-form').on('ajaxFormSuccess', function () {
+        $('#transfer-form').on('ajaxFormDone', function () {
             let targetId = $(this).find('#column_value').val();
 
             transferModal.modal('hide');
