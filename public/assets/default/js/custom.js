@@ -230,7 +230,16 @@ $(function () {
                         element = element.find(Boolean);
                     }
 
-                    if (field.parent('.input-group').length) {
+                    let errorIdentifier = field.closest('[data-error]');
+
+                    if (errorIdentifier.length) {
+                        let errorElement = '<div class="text-danger">'+element+'</div>';
+                        if (errorIdentifier.data('error') === 'prepend') {
+                            errorIdentifier.prepend(errorElement);
+                        } else {
+                            errorIdentifier.append(errorElement);
+                        }
+                    } else if (field.parent('.input-group').length) {
                         field.parent().after('<div class="text-danger">'+element+'</div>');
                     } else {
                         field.after('<div class="text-danger">'+element+'</div>');
@@ -312,6 +321,7 @@ function updateSubItems(items, url, parentId = 0) {
     });
 }
 
+// Sort array
 function sortArray(arr, orderBy) {
     let posList = [];
     $(arr).each(function (i, e) {
@@ -331,6 +341,7 @@ function sortArray(arr, orderBy) {
     return arr;
 }
 
+// Resolve duplicated position
 function duplicatedPositionResolver(url, csrfToken, foreignKey) {
     $('.duplicated-position').on('click', function (e) {
         e.preventDefault();
@@ -352,6 +363,7 @@ function duplicatedPositionResolver(url, csrfToken, foreignKey) {
     });
 }
 
+// Sortable
 function sortable(url, csrfToken, orderBy, page, foreignKey) {
     duplicatedPositionResolver(url, csrfToken, foreignKey);
 
@@ -419,6 +431,7 @@ function sortable(url, csrfToken, orderBy, page, foreignKey) {
     });
 }
 
+// Nestable
 function nestable(url, csrfToken, orderBy, foreignKey, selectors) {
     duplicatedPositionResolver(url, csrfToken);
 

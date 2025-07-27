@@ -128,18 +128,21 @@ Route::middleware('cms.auth')->group(function (Router $router) {
     $router->post('permissions', [AdminPermissionController::class, 'store'])
         ->name('permissions.store');
 
-    // CMS users
+    // CMS user security
     $router->get('cms-users/{cms_user}/security', [AdminCmsUserSecurityController::class, 'index'])
         ->name('cms_users.security');
     $router->put('cms-users/{cms_user}/security/password', [
         AdminCmsUserSecurityController::class, 'updatePassword'
     ])->name('cms_users.password');
+    // CMS user preferences
     $router->get('cms-users/{cms_user}/preferences', [AdminCmsUserPreferenceController::class, 'index'])
         ->name('cms_users.preferences.index');
     $router->put('cms-users/{cms_user}/preferences', [AdminCmsUserPreferenceController::class, 'save'])
         ->name('cms_users.preferences.save');
+    // CMS user photo
     $router->get('cms-users/{cms_user}/photo', [AdminCmsUserController::class, 'getPhoto'])
         ->name('cms_users.photo');
+    // CMS users
     $router->resource('cms-users', AdminCmsUserController::class)
         ->names(resource_names('cms_users'));
 

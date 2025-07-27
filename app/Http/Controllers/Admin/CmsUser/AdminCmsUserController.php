@@ -106,7 +106,7 @@ class AdminCmsUserController extends Controller implements HasMiddleware
 
         $model = $this->model->create($input);
 
-        $this->storePhoto($model, $request->file('photo'));
+        $this->storePhoto($model, $request->file('photo'), 'photo.png', null, 150);
 
         return redirect(cms_route('cms_users.edit', [$model->id]))
             ->with('alert', fill_data(true, trans('general.created')));
@@ -137,8 +137,6 @@ class AdminCmsUserController extends Controller implements HasMiddleware
 
         $data['roles'] = (new CmsUserRole)->pluck('role', 'id');
 
-        $data['photoExists'] = $this->photoExists($id);
-
         return view('admin.cms-users.edit', $data);
     }
 
@@ -160,9 +158,9 @@ class AdminCmsUserController extends Controller implements HasMiddleware
         $model = tap($this->model->findOrFail($id))->update($input);
 
         if ($request->boolean('remove_photo')) {
-            $this->deletePhoto($model);
+            $this->deletePhoto($model, 'photo.png');
         } else {
-            $input['photo_updated'] = $this->storePhoto($model, $request->file('photo'));
+            $this->storePhoto($model, $request->file('photo'), 'photo.png', null, 150);
         }
 
         unset($input['password'], $input['password_confirmation']);
@@ -234,9 +232,18 @@ class AdminCmsUserController extends Controller implements HasMiddleware
      *
      * @param  \App\Models\CmsUser\CmsUser  $model
      * @param  \Illuminate\Http\UploadedFile|null  $file
+     * @param  string  $name
+     * @param  int|null  $scaleWidth
+     * @param  int|null  $scaleHeight
      * @return bool
      */
-    protected function storePhoto(CmsUser $model, ?UploadedFile $file): bool
+    protected function storePhoto(
+        CmsUser       $model,
+        ?UploadedFile $file,
+        string        $name,
+        ?int          $scaleWidth = null,
+        ?int          $scaleHeight = null
+    ): bool
     {
         if (is_null($file) || is_null($model->id)) {
             return false;
@@ -248,9 +255,11 @@ class AdminCmsUserController extends Controller implements HasMiddleware
             $path = $filesystem->getPathUsingId($model->id, 'photos')
         );
 
-        Image::read($file)->scale(null, 150)->save(
-            $filesystem->path($path) . '/photo.png'
-        );
+        if ($scaleWidth || $scaleHeight) {
+            Image::read($file)->scaleDown($scaleWidth, $scaleHeight)->save(
+                $filesystem->path($path) . '/' . $name
+            );
+        }
 
         return true;
     }
@@ -259,14 +268,15 @@ class AdminCmsUserController extends Controller implements HasMiddleware
      * Remove the specified resource photo from filesystem.
      *
      * @param  \App\Models\CmsUser\CmsUser  $model
+     * @param  string  $name
      * @return bool
      */
-    protected function deletePhoto(CmsUser $model): bool
+    protected function deletePhoto(CmsUser $model, string $name): bool
     {
         $filesystem = Storage::disk('cms_users');
 
         return $filesystem->delete(
-            $filesystem->getPathUsingId($model->id, 'photos/photo.png')
+            $filesystem->getPathUsingId($model->id, 'photos/' . $name)
         );
     }
 
@@ -281,18 +291,5 @@ class AdminCmsUserController extends Controller implements HasMiddleware
         $filesystem = Storage::disk('cms_users');
 
         return $filesystem->deleteDirectory($filesystem->getPathUsingId($id));
-    }
-
-    /**
-     * Determine if the specified resource photo exists.
-     *
-     * @param  string  $id
-     * @return bool
-     */
-    protected function photoExists(string $id): bool
-    {
-        $filesystem = Storage::disk('cms_users');
-
-        return $filesystem->exists($filesystem->getPathUsingId($id, 'photos/photo.png'));
     }
 }
