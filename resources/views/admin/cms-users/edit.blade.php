@@ -22,4 +22,3 @@
         <!--/ Account -->
     </div>
 @endsection
-@include('admin.cms-users.scripts')
