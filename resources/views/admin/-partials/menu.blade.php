@@ -107,7 +107,9 @@
                         @endif
                     </ul>
                 </li>
-                <li class="menu-item{{ $routeMatches(['translations', 'web_settings.index']) ? ' active' . ($isHorizontalMenu ? '' : ' open') : '' }}">
+                <li class="menu-item{{ $routeMatches([
+                'translations', 'web_settings.index', 'cms_users.preferences'
+                ]) ? ' active' . ($isHorizontalMenu ? '' : ' open') : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon icon-base fa fa-gear icon-20px"></i>
                         <div>Settings</div>
@@ -127,7 +129,7 @@
                                 </a>
                             </li>
                         @endif
-                        <li class="menu-item{{ $routeMatches(['cms_users.preferences.index']) ? ' active' : '' }}">
+                        <li class="menu-item{{ $routeMatches(['cms_users.preferences']) ? ' active' : '' }}">
                             <a href="{{ cms_route('cms_users.preferences.index', [auth('cms')->id()]) }}" class="menu-link">
                                 <i class="menu-icon icon-base fa fa-sliders icon-18px"></i>
                                 <div>Preferences</div>
