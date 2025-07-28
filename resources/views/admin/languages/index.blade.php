@@ -28,7 +28,7 @@
                     Routes are cached. Any language changes will not take effect until the route cache is cleared or refreshed
                 </div>
             @endif
-            <div class="visibility-alert alert alert-outline-danger{{ $visibleLangCount ? ' d-none' : '' }}" role="alert">
+            <div @class(['visibility-alert alert alert-outline-danger', 'd-none' => $visibleLangCount]) role="alert">
                 Website is in maintenance mode when there is no visible language
             </div>
             <div id="items" class="table-responsive text-nowrap">
@@ -48,7 +48,7 @@
                     @forelse ($items as $item)
                         <tr id="item{{$item->id}}" class="item" data-id="{{$item->id}}">
                             <td>
-                                <input type="radio" name="main" class="form-check-input" data-id="{{$item->id}}"{{$item->main ? ' checked' : ''}}>
+                                <input type="radio" name="main" class="form-check-input" data-id="{{$item->id}}"@checked($item->main)>
                             </td>
                             <td>
                                 <img src="{{ asset('assets/default/img/flags/' . $item->language . '.png') }}" width="25" height="18" class="flag-img me-2" alt="{{$item->language}}">

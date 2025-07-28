@@ -152,6 +152,11 @@ $(function () {
                 $(this).remove();
             });
         }).fail(function (xhr) {
+            if (! xhr?.responseJSON) {
+                alert(xhr.responseText);
+
+                return;
+            }
             notyf(
                 xhr?.responseJSON?.message ? xhr.responseJSON.message : xhr.statusText,
                 'error'
@@ -210,18 +215,23 @@ $(function () {
             });
         }).fail(function (xhr) {
             form.trigger('ajaxFormError', [xhr]);
-            if (errorIdentifier.length) {
-                errorIdentifier.find('.text-danger').remove();
-            } else {
-                form.find('.text-danger').remove();
+            if (! xhr?.responseJSON) {
+                alert(xhr.responseText);
+
+                return;
             }
-            if (! xhr?.responseJSON?.errors) {
+            if (! xhr.responseJSON?.errors) {
                 notyf(
-                    xhr?.responseJSON?.message ? xhr.responseJSON.message : xhr.statusText,
+                    xhr.responseJSON?.message ? xhr.responseJSON.message : xhr.statusText,
                     'error'
                 );
 
                 return;
+            }
+            if (errorIdentifier.length) {
+                errorIdentifier.find('.text-danger').remove();
+            } else {
+                form.find('.text-danger').remove();
             }
             $.each(xhr.responseJSON.errors, function (index, element) {
                 let field;

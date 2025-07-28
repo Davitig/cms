@@ -6,15 +6,17 @@
                 @include('admin.-partials.brand')
                 <div class="menu-inner-shadow"></div>
             @endif
-            <ul class="menu-inner{{ $isHorizontalMenu ? '' : ' py-1' }}">
-                <li class="menu-item{{ $routeMatches(['dashboard']) ? ' active' : '' }}">
+            <ul @class(['menu-inner', 'py-1' => ! $isHorizontalMenu])>
+                <li @class(['menu-item', 'active' => $routeMatches(['dashboard'])])>
                     <a href="{{ cms_route('dashboard.index') }}" class="menu-link">
                         <i class="menu-icon icon-base fa fa-dashboard icon-20px"></i>
                         <div>Dashboards</div>
                     </a>
                 </li>
                 @if ($userRouteAccess('menus.index', 'pages.index'))
-                    <li class="menu-item{{ $routeMatches(['menus', 'pages', 'pages.files']) ? ' active' . ($isHorizontalMenu ? '' : ' open') : '' }}">
+                    <li @class(['menu-item', 'active' => $matches = $routeMatches([
+                    'menus', 'pages', 'pages.files'
+                    ]), 'open' => ! $isHorizontalMenu && $matches])>
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon icon-base fa fa-sitemap icon-20px"></i>
                             <div>Site Map</div>
@@ -22,9 +24,9 @@
                         <ul class="menu-sub">
                             @if ($menus->isNotEmpty() && $userRouteAccess('pages.index'))
                                 @foreach ($menus as $item)
-                                    <li class="menu-item{{ $routeMatches([
+                                    <li @class(['menu-item', 'active' => $routeMatches([
                                         'pages', 'pages.files' => $activeMenuId ?? null
-                                    ], ['menu' => $item->id]) ? ' active' : '' }}">
+                                    ], ['menu' => $item->id])])>
                                         <a href="{{ cms_route('pages.index', [$item->id]) }}" class="menu-link">
                                             <i class="menu-icon icon-base fa fa-indent icon-18px"></i>
                                             <div>{{ $item->title }}</div>
@@ -33,7 +35,7 @@
                                 @endforeach
                             @endif
                             @if ($userRouteAccess('menus.index'))
-                                <li class="menu-item{{ $routeMatches(['menus']) ? ' active' : '' }}">
+                                <li @class(['menu-item', 'active' => $routeMatches(['menus'])])>
                                     <a href="{{ cms_route('menus.index') }}" class="menu-link">
                                         <i class="menu-icon icon-base fa fa-list icon-18px"></i>
                                         <div>Menus</div>
@@ -44,7 +46,7 @@
                     </li>
                 @endif
                 @if ($userRouteAccess('products.index'))
-                    <li class="menu-item{{ $routeMatches(['products', 'products.files']) ? ' active' : '' }}">
+                    <li @class(['menu-item', 'active' => $routeMatches(['products', 'products.files'])])>
                         <a href="{{ cms_route('products.index') }}" class="menu-link">
                             <i class="menu-icon icon-base fa fa-store icon-20px"></i>
                             <div>Products</div>
@@ -52,9 +54,9 @@
                     </li>
                 @endif
                 @if ($userRouteAccess('collections.index'))
-                    <li class="menu-item{{ $routeMatches([
+                    <li @class(['menu-item', 'active' => $routeMatches([
                     'collections', 'articles', 'events', 'articles.files', 'events.files'
-                    ]) ? ' active' : '' }}">
+                    ])])>
                         <a href="{{ cms_route('collections.index') }}" class="menu-link">
                             <i class="menu-icon icon-base fa fa-list-alt icon-20px"></i>
                             <div>Collections</div>
@@ -62,7 +64,7 @@
                     </li>
                 @endif
                 @if ($userRouteAccess('file_manager'))
-                    <li class="menu-item{{ $routeMatches(['file_manager']) ? ' active' : '' }}">
+                    <li @class(['menu-item', 'active' => $routeMatches(['file_manager'])])>
                         <a href="{{ cms_route('file_manager') }}" class="menu-link">
                             <i class="menu-icon icon-base fa fa-file-import icon-20px"></i>
                             <div>File Manager</div>
@@ -70,35 +72,35 @@
                     </li>
                 @endif
                 @if ($userRouteAccess('languages.index'))
-                    <li class="menu-item{{ $routeMatches(['languages']) ? ' active' : '' }}">
+                    <li @class(['menu-item', 'active' => $routeMatches(['languages'])])>
                         <a href="{{ cms_route('languages.index') }}" class="menu-link">
                             <i class="menu-icon icon-base fa fa-language icon-18px me-3"></i>
                             <div>Languages</div>
                         </a>
                     </li>
                 @endif
-                <li class="menu-item{{ $routeMatches([
+                <li @class(['menu-item', 'active' => $matches = $routeMatches([
                 'cms_users', 'cms_users.security', 'cms_users.settings', 'cms_user_roles', 'permissions'
-                ]) ? ' active' . ($isHorizontalMenu ? '' : ' open') : '' }}">
+                ]), 'open' => ! $isHorizontalMenu && $matches])>
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon icon-base fa fa-users icon-18px me-3"></i>
                         <div>Users</div>
                     </a>
                     <ul class="menu-sub">
-                        <li class="menu-item{{ $routeMatches(['cms_users', 'cms_users.security']) ? ' active' : '' }}">
+                        <li @class(['menu-item', 'active' => $routeMatches(['cms_users', 'cms_users.security'])])>
                             <a href="{{ cms_route('cms_users.index') }}" class="menu-link">
                                 <i class="menu-icon icon-base fa fa-user-tie icon-18px me-2"></i>
                                 <div>CMS Users</div>
                             </a>
                         </li>
                         @if (auth('cms')->user()->hasFullAccess())
-                            <li class="menu-item{{ $routeMatches(['cms_user_roles']) ? ' active' : '' }}">
+                            <li @class(['menu-item', 'active' => $routeMatches(['cms_user_roles'])])>
                                 <a href="{{ cms_route('cms_user_roles.index') }}" class="menu-link">
                                     <i class="menu-icon icon-base fa fa-user-tag icon-16px me-3"></i>
                                     <div>Roles</div>
                                 </a>
                             </li>
-                            <li class="menu-item{{ $routeMatches(['permissions']) ? ' active' : '' }}">
+                            <li @class(['menu-item', 'active' => $routeMatches(['permissions'])])>
                                 <a href="{{ cms_route('permissions.index') }}" class="menu-link">
                                     <i class="menu-icon icon-base fa fa-lock icon-16px me-3"></i>
                                     <div>Permissions</div>
@@ -107,29 +109,29 @@
                         @endif
                     </ul>
                 </li>
-                <li class="menu-item{{ $routeMatches([
-                'translations', 'web_settings.index', 'cms_users.preferences'
-                ]) ? ' active' . ($isHorizontalMenu ? '' : ' open') : '' }}">
+                <li @class(['menu-item', 'active' => $matches = $routeMatches([
+                'translations', 'web_settings', 'cms_users.preferences'
+                ]), 'open' => ! $isHorizontalMenu && $matches])>
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon icon-base fa fa-gear icon-20px"></i>
                         <div>Settings</div>
                     </a>
                     <ul class="menu-sub">
                         @if (auth('cms')->user()->hasFullAccess())
-                            <li class="menu-item{{ $routeMatches(['translations']) ? ' active' : '' }}">
+                            <li @class(['menu-item', 'active' => $routeMatches(['translations'])])>
                                 <a href="{{ cms_route('translations.index') }}" class="menu-link">
                                     <i class="menu-icon icon-base fa fa-sort-alpha-asc icon-18px"></i>
                                     <div>Translations</div>
                                 </a>
                             </li>
-                            <li class="menu-item{{ $routeMatches(['web_settings']) ? ' active' : '' }}">
+                            <li @class(['menu-item', 'active' => $routeMatches(['web_settings'])])>
                                 <a href="{{ cms_route('web_settings.index') }}" class="menu-link">
                                     <i class="menu-icon icon-base fa fa-layer-group icon-18px"></i>
                                     <div>Web Settings</div>
                                 </a>
                             </li>
                         @endif
-                        <li class="menu-item{{ $routeMatches(['cms_users.preferences']) ? ' active' : '' }}">
+                        <li @class(['menu-item', 'active' => $routeMatches(['cms_users.preferences'])])>
                             <a href="{{ cms_route('cms_users.preferences.index', [auth('cms')->id()]) }}" class="menu-link">
                                 <i class="menu-icon icon-base fa fa-sliders icon-18px"></i>
                                 <div>Preferences</div>

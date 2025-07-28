@@ -34,7 +34,7 @@
                 @foreach ($items as $item)
                     <tr class="item">
                         <td>
-                            <input type="radio" name="main" class="form-check-input" data-id="{{$item->id}}"{{$item->main ? ' checked' : ''}}>
+                            <input type="radio" name="main" class="form-check-input" data-id="{{$item->id}}"@checked($item->main)>
                         </td>
                         <td>
                             <a href="{{ cms_route('pages.index', [$item->id]) }}" title="Go to Pages">

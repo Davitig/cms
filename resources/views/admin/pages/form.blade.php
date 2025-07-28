@@ -32,7 +32,7 @@
         <div class="text-danger">{{ $message }}</div>
         @enderror
     </div>
-    <div class="col-md-6 type-id{{ $current->type_id || $errors->first('type_id') ? '' : ' d-none' }}">
+    <div @class(['col-md-6 type-id', 'd-none' => ! old('type_id', $current->type_id) && ! $errors->first('type_id')])>
         <label for="type_id_inp" class="form-label required">{{$current->type_id ? ucfirst($current->type) : ucfirst(old('type', 'Type ID'))}}</label>
         {{ html()->select('type_id', $listableTypes)->id('type_id_inp' . $current->language)->class('form-select') }}
         @error('type_id')

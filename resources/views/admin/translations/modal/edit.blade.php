@@ -8,7 +8,7 @@
             @if ($langContainsMany = language()->count() > 1)
                 <div class="trans-nav clearfix">
                     @foreach ($items as $current)
-                        <div class="trans-nav-item{{language()->active() == $current->language ? ' active' : ''}}">
+                        <div @class(['trans-nav-item', 'active' => language()->active() == $current->language])>
                             <a href="#item-{{$current->language}}">{{language()->get($current->language, 'full_name')}}</a>
                         </div>
                     @endforeach
@@ -19,7 +19,7 @@
         </div>
         <div class="trans-tab-content">
             @foreach ($items as $current)
-                <div class="trans-tab-pane{{language()->active() == $current->language ? ' active' : ''}}" id="item-{{$current->language}}">
+                <div @class(['trans-tab-pane', 'active' => language()->active() == $current->language]) id="item-{{$current->language}}">
                     {{ html()->modelForm($current,
                         'post', cms_route('translations.form.post', [], $langContainsMany ? $current->language : null)
                     )->class('form-horizontal')->data('lang', $current->language)->attribute('novalidate')->open() }}

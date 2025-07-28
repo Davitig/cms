@@ -6,7 +6,7 @@
                 @if ($breadcrumb = app('breadcrumb'))
                     @php($prevSlug = null)
                     @foreach ($breadcrumb as $item)
-                        <li class="breadcrumb-item{{ $loop->last ? ' active' : '' }}">
+                        <li @class(['breadcrumb-item', 'active' => $loop->last])>
                             @if (! $loop->last)
                                 <a href="{{web_url([$prevSlug, $item->slug])}}">
                                     @endif

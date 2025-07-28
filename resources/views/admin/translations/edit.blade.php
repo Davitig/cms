@@ -23,7 +23,7 @@
             <div class="tab-content p-0">
                 @php($activeLang = language()->queryStringOrActive())
                 @foreach($items as $current)
-                    <div id="item-{{ $current->language }}" class="tab-pane{{ $current->language == $activeLang || ! $activeLang ? ' show active' : '' }}">
+                    <div id="item-{{ $current->language }}" @class(['tab-pane', 'show active' => $current->language == $activeLang || ! $activeLang])>
                         {{ html()->modelForm($current, 'put', cms_route('translations.update', [$current->id], $current->language))
                         ->data('ajax-form', $preferences->get('ajax_form'))->data('lang', $current->language)->attribute('novalidate')->open() }}
                         @include('admin.translations.form')

@@ -6,7 +6,7 @@
         @endphp
         @foreach (language()->allVisible() as $key => $value)
             <li class="nav-item">
-                <a href="{{url($notFound ? $key : $value['path'])}}" class="nav-link{{ $key == $currentLang ? ' active' : '' }}">{{$value['short_name']}}</a>
+                <a href="{{url($notFound ? $key : $value['path'])}}" @class(['nav-link', 'active' => $key == $currentLang])>{{$value['short_name']}}</a>
             </li>
         @endforeach
     </ul>

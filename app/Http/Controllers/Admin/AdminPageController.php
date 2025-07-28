@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Models\CollectionType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PageRequest;
 use App\Models\Menu;
@@ -46,7 +47,11 @@ class AdminPageController extends Controller
 
         $data['types'] = cms_pages('types');
 
-        $data['listableTypes'] = [];
+        if (in_array($type = $this->request->old('type'), CollectionType::keyedValues())) {
+            $data['listableTypes'] = $this->getListableTypes($type);
+        } else {
+            $data['listableTypes'] = [];
+        }
 
         return view('admin.pages.create', $data);
     }
@@ -88,7 +93,9 @@ class AdminPageController extends Controller
 
         $data['types'] = cms_pages('types');
 
-        $data['listableTypes'] = $this->getListableTypes($data['items']->first()->type);
+        $type = $this->request->old('type', $data['items']->first()->type);
+
+        $data['listableTypes'] = $this->getListableTypes($type);
 
         return view('admin.pages.edit', $data);
     }

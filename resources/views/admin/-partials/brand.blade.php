@@ -1,4 +1,4 @@
-<div class="app-brand navbar-brand py-5{{ $preferences->get('horizontal_menu') ? ' d-none d-xl-flex' : '' }}">
+<div @class(['app-brand navbar-brand py-5', 'd-none d-xl-flex' => $preferences->get('horizontal_menu')])>
     <a href="{{ cms_route('dashboard.index') }}" class="app-brand-link">
         <span class="app-brand-logo">
             <span class="text-primary">
@@ -7,9 +7,9 @@
                 </svg>
             </span>
         </span>
-        <span class="app-brand-text menu-text fw-bold fs-4{{ $preferences->get('horizontal_menu') ? ' text-heading' : '' }}">CMS</span>
+        <span @class(['app-brand-text menu-text fw-bold fs-4', 'text-heading' => $preferences->get('horizontal_menu')])>CMS</span>
     </a>
-    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto{{ $preferences->get('horizontal_menu') ? ' d-xl-none' : '' }}">
+    <a href="javascript:void(0);" @class(['layout-menu-toggle menu-link text-large ms-auto', 'd-xl-none' => $preferences->get('horizontal_menu')])>
         @if ($preferences->get('horizontal_menu'))
             <i class="icon-base fa fa-xmark icon-sm d-flex align-items-center justify-content-center"></i>
         @else

@@ -110,7 +110,7 @@
                                             <div class="d-flex justify-content-between w-100 flex-wrap">
                                                 <h6 class="mb-0 ms-4">{{str(implode(' ', explode('.', $subName)))->headline()}}</h6>
                                                 <div class="d-flex form-check-success">
-                                                    <input type="checkbox" name="permissions[{{$groupName}}][]" value="{{$subName}}"{{$hasAccess ? ' checked' : ''}} class="inp-{{$groupName}} inp-{{$subGroupName}} form-check-input" data-inp-group="{{ $subGroupName }}">
+                                                    <input type="checkbox" name="permissions[{{$groupName}}][]" value="{{$subName}}"@checked($hasAccess) class="inp-{{$groupName}} inp-{{$subGroupName}} form-check-input" data-inp-group="{{ $subGroupName }}">
                                                 </div>
                                             </div>
                                         </li>
@@ -125,7 +125,7 @@
                                         <div class="d-flex justify-content-between w-100 flex-wrap">
                                             <h6 class="mb-0 ms-4">{{str(implode(' ', explode('.', $name)))->headline()}}</h6>
                                             <div class="d-flex form-check-success">
-                                                <input type="checkbox" name="permissions[{{$groupName}}][]" value="{{$name}}"{{$hasAccess ? ' checked' : ''}} class="inp-{{$groupName}} form-check-input" data-inp-group="{{ $groupName }}">
+                                                <input type="checkbox" name="permissions[{{$groupName}}][]" value="{{$name}}"@checked($hasAccess) class="inp-{{$groupName}} form-check-input" data-inp-group="{{ $groupName }}">
                                             </div>
                                         </div>
                                     </li>

@@ -67,7 +67,7 @@
                     <tr class="item">
                         <td>
                             <img src="{{ cms_route('cms_users.photo', [$item->id]) }}" width="40" height="40" alt="Photo" class="rounded-circle me-4" />
-                            <a href="{{cms_route('cms_users.show', [$item->id])}}" class="text-dark{{auth('cms')->id() == $item->id ? ' active' : ''}}">
+                            <a href="{{cms_route('cms_users.show', [$item->id])}}" @class(['text-dark', 'active' => auth('cms')->id() == $item->id])>
                                 {{$item->first_name}} {{$item->last_name}}
                             </a>
                         </td>

@@ -8,7 +8,7 @@
             @foreach (language()->all() as $language)
                 <li class="nav-item">
                     <a href="{{ cms_route($routeName, $routeParams + [$langParamKey => $language->language]) }}"
-                       class="nav-link{{ $language->language == $langParam ? ' active' : '' }}"
+                       @class(['nav-link', 'active' => $language->language == $langParam])
                        role="tab"{!! $language->language == $langParam ? ' aria-selected="true"' : '' !!}>
                     <span class="d-none d-sm-inline-flex align-items-center">
                         <img src="{{ asset('assets/default/img/flags/' . $language->language . '.png') }}" width="20" height="13" class="me-2" alt="{{ $language->full_name }}">

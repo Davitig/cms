@@ -1,6 +1,7 @@
 <!-- Navbar -->
-<nav class="layout-navbar navbar navbar-expand-xl align-items-center{{ $preferences->get('horizontal_menu') ? '' : ' container-xxl navbar-detached bg-navbar-theme' }}"
-     id="layout-navbar">
+<nav id="layout-navbar" @class(['layout-navbar navbar navbar-expand-xl align-items-center',
+'container-xxl navbar-detached bg-navbar-theme' => ! $preferences->get('horizontal_menu')
+])>
     @if ($preferences->get('horizontal_menu'))
         <div class="container-xxl">
             @include('admin.-partials.brand')
