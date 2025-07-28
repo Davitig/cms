@@ -2,7 +2,7 @@
     <ul class="navbar-nav navbar-end text-uppercase">
         @php
             $currentLang = language()->active();
-            $notFound = strtolower(request()->route()->getActionName()) == 'closure';
+            $notFound = strtolower(request()->route()?->getActionName()) == 'closure';
         @endphp
         @foreach (language()->allVisible() as $key => $value)
             <li class="nav-item">

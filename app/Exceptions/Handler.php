@@ -4,11 +4,13 @@ namespace App\Exceptions;
 
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\PostTooLargeException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
@@ -73,6 +75,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e): SymfonyResponse
     {
+        if ($e instanceof PostTooLargeException){
+            throw new AccessDeniedHttpException('The POST data is too large.');
+        }
+
         return parent::render($request, $e);
     }
 

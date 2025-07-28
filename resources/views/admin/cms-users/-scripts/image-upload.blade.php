@@ -23,7 +23,7 @@
                     $('.user-' + type).attr('src', e.target.result);
                 }
 
-                let uploadFormSelector = $('form#upload-' + type + '[data-ajax-form="1"]');
+                let uploadFormSelector = $('form#upload-' + type);
                 let imageFile;
 
                 $('#' + type + '_inp').on('change', function () {
