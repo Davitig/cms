@@ -154,7 +154,6 @@
                                                 if (res.result) {
                                                     $('.sitemap-xml-ctime').text(res.data);
                                                 }
-                                                notyf(res.message, res.result);
                                             });
                                         });
                                     </script>

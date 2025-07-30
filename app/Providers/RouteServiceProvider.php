@@ -48,9 +48,10 @@ class RouteServiceProvider extends ServiceProvider
         Router $router, string $langRouteName, array $forcedLanguages
     ): void
     {
+        $routes = $this->getWebRoutesFileList();
+
         // routes without language prefix.
-        $router->middleware('web.lang')
-            ->group(base_path('routes/web.php'));
+        $router->middleware('web.lang')->group($routes);
 
         if (count($forcedLanguages) > 1) {
             // routes with language prefix.
@@ -58,8 +59,20 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix("{{$langRouteName}}")
                 ->name($langRouteName . '.')
                 ->whereIn($langRouteName, $forcedLanguages)
-                ->group(base_path('routes/web.php'));
+                ->group($routes);
         }
+    }
+
+    /**
+     * Get the required web routes file list.
+     *
+     * @return array
+     */
+    protected function getWebRoutesFileList(): array
+    {
+        return [
+            base_path('routes/web.php'),
+        ];
     }
 
     /**
@@ -75,10 +88,11 @@ class RouteServiceProvider extends ServiceProvider
         Router $router, Request $request, string $langRouteName, array $forcedLanguages
     ): void
     {
+        $routes = $this->getCMSRoutesFileList();
+
         if (! count($forcedLanguages)) {
             // routes without language prefix.
-            $router->prefix(cms_path())->name(cms_route_name())
-                ->group(base_path('routes/cms.php'));
+            $router->prefix(cms_path())->name(cms_route_name())->group($routes);
         } else {
             // force redirect to language prefixed route.
             $router->get(cms_path('{any?}'), function () use ($request) {
@@ -89,7 +103,20 @@ class RouteServiceProvider extends ServiceProvider
             $router->middleware('cms.lang')
                 ->prefix("{{$langRouteName}}/" . cms_path())
                 ->name($langRouteName . '.' . cms_route_name())
-                ->group(base_path('routes/cms.php'));
+                ->group($routes);
         }
+    }
+
+    /**
+     * Get the required CMS routes file list.
+     *
+     * @return array
+     */
+    protected function getCMSRoutesFileList(): array
+    {
+        return [
+            base_path('routes/cms.php'),
+            base_path('routes/cms_settings.php')
+        ];
     }
 }

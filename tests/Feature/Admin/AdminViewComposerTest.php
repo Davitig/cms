@@ -35,7 +35,7 @@ class AdminViewComposerTest extends TestAdmin
 
     public function test_admin_menus_composer()
     {
-        $this->testComposer(AdminMenuComposer::class, 'menus');
+        $this->testComposer(AdminMenuComposer::class, 'menu');
     }
 
     public function test_admin_route_matcher_composer()

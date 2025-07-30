@@ -20,14 +20,12 @@
                             "url": "{{ cms_route('menus.index') }}"
                         },
                         @endif
-                        @if ($menus->isNotEmpty() && $userRouteAccess('pages.index'))
-                        @foreach($menus as $item)
+                        @if (! is_null($menu) && $userRouteAccess('pages.index'))
                         {
-                            "name": "{{ $item->title }}",
+                            "name": "{{ $menu->title }}",
                             "icon": "fa fa-indent",
-                            "url": "{{ cms_route('pages.index', [$item->id]) }}"
+                            "url": "{{ cms_route('pages.index', [$menu->id]) }}"
                         },
-                        @endforeach
                         @endif
                     ],
                     @endif
@@ -92,20 +90,30 @@
                         }
                     ],
                     @endif
-                    @if (auth('cms')->user()->hasFullAccess())
                     "Settings": [
+                        {
+                            "name": "Settings",
+                            "icon": "fa fa-gears",
+                            "url": "{{ cms_route('settings.index') }}"
+                        },
+                        {
+                            "name": "Cache Settings",
+                            "icon": "fa fa-layer-group",
+                            "url": "{{ cms_route('settings.cache.index') }}"
+                        },
+                        @if (auth('cms')->user()->hasFullAccess())
+                        {
+                            "name": "Web Settings",
+                            "icon": "fa fa-bars-staggered",
+                            "url": "{{ cms_route('web_settings.index') }}"
+                        },
                         {
                             "name": "Translations",
                             "icon": "fa fa-sort-alpha-asc",
                             "url": "{{ cms_route('translations.index') }}"
-                        },
-                        {
-                            "name": "Web Settings",
-                            "icon": "fa fa-layer-group",
-                            "url": "{{ cms_route('web_settings.index') }}"
                         }
+                        @endif
                     ]
-                    @endif
                 },
                 "suggestions": {
                     "Popular": [
@@ -119,6 +127,13 @@
                             "name": "Menus",
                             "icon": "fa fa-list",
                             "url": "{{ cms_route('menus.index') }}"
+                        },
+                        @endif
+                        @if (! is_null($menu) && $userRouteAccess('pages.index'))
+                        {
+                            "name": "{{ $menu->title }}",
+                            "icon": "fa fa-indent",
+                            "url": "{{ cms_route('pages.index', [$menu->id]) }}"
                         },
                         @endif
                         @if ($userRouteAccess('products.index'))
@@ -160,9 +175,9 @@
                         }
                         @endif
                     ],
-                    @if ($userRouteAccess('collections.index', 'file_manager'))
+                    @if ($userRouteAccess('languages.index', 'file_manager'))
                     "Other": [
-                        @if ($userRouteAccess('collections.index'))
+                        @if ($userRouteAccess('languages.index'))
                         {
                             "name": "Languages",
                             "icon": "fa fa-language",
@@ -186,23 +201,25 @@
                     ],
                     @endif
                     "Settings": [
+                        @if ($userRouteAccess('settings.index'))
                         {
-                            "name": "Security",
-                            "icon": "fa fa-user-shield",
-                            "url": "{{ cms_route('cms_users.security', [$userId]) }}"
+                            "name": "Settings",
+                            "icon": "fa fa-gears",
+                            "url": "{{ cms_route('settings.index') }}"
                         },
+                        @endif
+                        @if (auth('cms')->user()->hasFullAccess())
+                        {
+                            "name": "Web Settings",
+                            "icon": "fa fa-bars-staggered",
+                            "url": "{{ cms_route('web_settings.index') }}"
+                        },
+                        @endif
                         {
                             "name": "Preferences",
                             "icon": "fa fa-sliders",
                             "url": "{{ cms_route('cms_users.preferences.index', [$userId]) }}"
-                        },
-                        @if (auth('cms')->user()->hasFullAccess())
-                        {
-                            "name": "Web Settings",
-                            "icon": "fa fa-layer-group",
-                            "url": "{{ cms_route('web_settings.index') }}"
                         }
-                        @endif
                     ]
                 }
             };
@@ -271,22 +288,22 @@
                                 <div class="p-5 p-lg-12">
                                     <div class="row g-4">
                                         ${Object.entries(data.suggestions || {}).map(
-                                            ([section, items]) => html`
+                                ([section, items]) => html`
                                                 <div class="col-md-6 suggestion-section">
                                                     <p class="search-headings mb-2">${section}</p>
                                                     <div class="suggestion-items">
                                                         ${items.map(
-                                                            item => html`
+                                    item => html`
                                                                 <a href="${item.url}" class="suggestion-item d-flex align-items-center">
                                                                     <i class="icon-base ${item.icon} icon-sm"></i>
                                                                     <span>${item.name}</span>
                                                                 </a>
                                                             `
-                                                        )}
+                                )}
                                                     </div>
                                                 </div>
                                             `
-                                        )}
+                            )}
                                     </div>
                                 </div>
                             `;
@@ -400,12 +417,12 @@
                                                         <small class="text-body-secondary">${item.subtitle}</small>
                                                     </div>
                                                     ${item.meta
-                                                        ? html`
+                                                ? html`
                                                             <div class="position-absolute end-0 me-4">
                                                                 <span class="text-body-secondary small">${item.meta}</span>
                                                             </div>
                                                         `
-                                                        : ''}
+                                                : ''}
                                                 </a>
                                             `;
                                         }

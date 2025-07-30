@@ -22,17 +22,15 @@
                             <div>Site Map</div>
                         </a>
                         <ul class="menu-sub">
-                            @if ($menus->isNotEmpty() && $userRouteAccess('pages.index'))
-                                @foreach ($menus as $item)
-                                    <li @class(['menu-item', 'active' => $routeMatches([
-                                    'pages', 'pages.files' => $activeMenuId ?? null], true, ['menu' => $item->id])
-                                    ])>
-                                        <a href="{{ cms_route('pages.index', [$item->id]) }}" class="menu-link">
-                                            <i class="menu-icon icon-base fa fa-indent icon-18px"></i>
-                                            <div>{{ $item->title }}</div>
-                                        </a>
-                                    </li>
-                                @endforeach
+                            @if (! is_null($menu) && $userRouteAccess('pages.index'))
+                                <li @class(['menu-item', 'active' => $routeMatches([
+                                'pages', 'pages.files' => $activeMenuId ?? null], true, ['menu' => $menu->id])
+                                ])>
+                                    <a href="{{ cms_route('pages.index', [$menu->id]) }}" class="menu-link">
+                                        <i class="menu-icon icon-base fa fa-indent icon-18px"></i>
+                                        <div>{{ $menu->title }}</div>
+                                    </a>
+                                </li>
                             @endif
                             @if ($userRouteAccess('menus.index'))
                                 <li @class(['menu-item', 'active' => $routeMatches(['menus'])])>
@@ -109,27 +107,35 @@
                         @endif
                     </ul>
                 </li>
-                @if (auth('cms')->user()->hasFullAccess())
+                @if ($userRouteAccess('settings.index'))
                     <li @class(['menu-item', 'active' => $matches = $routeMatches([
-                    'web_settings', 'translations'
+                    'settings', 'web_settings', 'translations'
                     ]), 'open' => ! $isHorizontalMenu && $matches])>
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon icon-base fa fa-gear icon-20px"></i>
                             <div>Settings</div>
                         </a>
                         <ul class="menu-sub">
-                            <li @class(['menu-item', 'active' => $routeMatches(['web_settings'])])>
-                                <a href="{{ cms_route('web_settings.index') }}" class="menu-link">
-                                    <i class="menu-icon icon-base fa fa-bars-staggered icon-18px"></i>
-                                    <div>Web Settings</div>
+                            <li @class(['menu-item', 'active' => $routeMatches(['settings'])])>
+                                <a href="{{ cms_route('settings.index') }}" class="menu-link">
+                                    <i class="menu-icon icon-base fa fa-gears icon-18px"></i>
+                                    <div>Settings</div>
                                 </a>
                             </li>
-                            <li @class(['menu-item', 'active' => $routeMatches(['translations'])])>
-                                <a href="{{ cms_route('translations.index') }}" class="menu-link">
-                                    <i class="menu-icon icon-base fa fa-sort-alpha-asc icon-18px"></i>
-                                    <div>Translations</div>
-                                </a>
-                            </li>
+                            @if (auth('cms')->user()->hasFullAccess())
+                                <li @class(['menu-item', 'active' => $routeMatches(['web_settings'])])>
+                                    <a href="{{ cms_route('web_settings.index') }}" class="menu-link">
+                                        <i class="menu-icon icon-base fa fa-bars-staggered icon-18px"></i>
+                                        <div>Web Settings</div>
+                                    </a>
+                                </li>
+                                <li @class(['menu-item', 'active' => $routeMatches(['translations'])])>
+                                    <a href="{{ cms_route('translations.index') }}" class="menu-link">
+                                        <i class="menu-icon icon-base fa fa-sort-alpha-asc icon-18px"></i>
+                                        <div>Translations</div>
+                                    </a>
+                                </li>
+                            @endif
                         </ul>
                     </li>
                 @endif

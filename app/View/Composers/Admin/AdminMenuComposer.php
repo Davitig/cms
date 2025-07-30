@@ -4,24 +4,22 @@ namespace App\View\Composers\Admin;
 
 use App\Models\Menu;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Collection;
 
 class AdminMenuComposer
 {
     /**
-     * The Collection instance of the menus.
+     * The Menu instance.
      *
-     * @var \Illuminate\Database\Eloquent\Collection
+     * @var \App\Models\Menu|null
      */
-    protected Collection $items;
+    protected ?Menu $menu;
 
     /**
      * Create a new view composer instance.
-     *
      */
     public function __construct()
     {
-        $this->items = $this->getMenus();
+        $this->menu = $this->getMenu();
     }
 
     /**
@@ -32,19 +30,16 @@ class AdminMenuComposer
      */
     public function compose(View $view): void
     {
-        $view->with('menus', $this->items);
+        $view->with('menu', $this->menu);
     }
 
     /**
-     * Get the menus.
+     * Get the main menu.
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return \App\Models\Menu|null
      */
-    protected function getMenus(): Collection
+    protected function getMenu(): ?Menu
     {
-        return (new Menu)->whereMain(1)
-            ->union((new Menu)->whereMain(0))
-            ->limit(1)
-            ->get();
+        return (new Menu)->whereMain(1)->union((new Menu)->whereMain(0))->first();
     }
 }

@@ -3,6 +3,17 @@
 * File includes only custom css
 ******************************************************************************/
 
+.stick-top {
+    position: sticky;
+    inset-block: 10px 0;
+}
+.stick-top.fixed {
+    inset-block-start: 90px;
+}
+.base-horizontal .stick-top.fixed {
+    inset-block-start: 125px;
+}
+
 /* Theme: ! For .layout-navbar-fixed added fix padding top to .layout-page */
 /* Theme: Default navbar */
 .layout-navbar-fixed .layout-wrapper:not(.layout-without-menu) .layout-page {
