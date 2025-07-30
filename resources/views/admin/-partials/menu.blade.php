@@ -15,7 +15,7 @@
                 </li>
                 @if ($userRouteAccess('menus.index', 'pages.index'))
                     <li @class(['menu-item', 'active' => $matches = $routeMatches([
-                    'menus', 'pages', 'pages.files'
+                    'menus', 'pages'
                     ]), 'open' => ! $isHorizontalMenu && $matches])>
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon icon-base fa fa-sitemap icon-20px"></i>
@@ -25,8 +25,8 @@
                             @if ($menus->isNotEmpty() && $userRouteAccess('pages.index'))
                                 @foreach ($menus as $item)
                                     <li @class(['menu-item', 'active' => $routeMatches([
-                                        'pages', 'pages.files' => $activeMenuId ?? null
-                                    ], ['menu' => $item->id])])>
+                                    'pages', 'pages.files' => $activeMenuId ?? null], true, ['menu' => $item->id])
+                                    ])>
                                         <a href="{{ cms_route('pages.index', [$item->id]) }}" class="menu-link">
                                             <i class="menu-icon icon-base fa fa-indent icon-18px"></i>
                                             <div>{{ $item->title }}</div>
@@ -55,7 +55,7 @@
                 @endif
                 @if ($userRouteAccess('collections.index'))
                     <li @class(['menu-item', 'active' => $routeMatches([
-                    'collections', 'articles', 'events', 'articles.files', 'events.files'
+                    'collections', 'articles', 'events'
                     ])])>
                         <a href="{{ cms_route('collections.index') }}" class="menu-link">
                             <i class="menu-icon icon-base fa fa-list-alt icon-20px"></i>
@@ -80,14 +80,14 @@
                     </li>
                 @endif
                 <li @class(['menu-item', 'active' => $matches = $routeMatches([
-                'cms_users', 'cms_users.security', 'cms_users.settings', 'cms_user_roles', 'permissions'
+                'cms_users', 'cms_user_roles', 'permissions'
                 ]), 'open' => ! $isHorizontalMenu && $matches])>
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon icon-base fa fa-users icon-18px me-3"></i>
                         <div>Users</div>
                     </a>
                     <ul class="menu-sub">
-                        <li @class(['menu-item', 'active' => $routeMatches(['cms_users', 'cms_users.security'])])>
+                        <li @class(['menu-item', 'active' => $routeMatches(['cms_users'])])>
                             <a href="{{ cms_route('cms_users.index') }}" class="menu-link">
                                 <i class="menu-icon icon-base fa fa-user-tie icon-18px me-2"></i>
                                 <div>CMS Users</div>
@@ -109,36 +109,30 @@
                         @endif
                     </ul>
                 </li>
-                <li @class(['menu-item', 'active' => $matches = $routeMatches([
-                'translations', 'web_settings', 'cms_users.preferences'
-                ]), 'open' => ! $isHorizontalMenu && $matches])>
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon icon-base fa fa-gear icon-20px"></i>
-                        <div>Settings</div>
-                    </a>
-                    <ul class="menu-sub">
-                        @if (auth('cms')->user()->hasFullAccess())
+                @if (auth('cms')->user()->hasFullAccess())
+                    <li @class(['menu-item', 'active' => $matches = $routeMatches([
+                    'web_settings', 'translations'
+                    ]), 'open' => ! $isHorizontalMenu && $matches])>
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon icon-base fa fa-gear icon-20px"></i>
+                            <div>Settings</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li @class(['menu-item', 'active' => $routeMatches(['web_settings'])])>
+                                <a href="{{ cms_route('web_settings.index') }}" class="menu-link">
+                                    <i class="menu-icon icon-base fa fa-bars-staggered icon-18px"></i>
+                                    <div>Web Settings</div>
+                                </a>
+                            </li>
                             <li @class(['menu-item', 'active' => $routeMatches(['translations'])])>
                                 <a href="{{ cms_route('translations.index') }}" class="menu-link">
                                     <i class="menu-icon icon-base fa fa-sort-alpha-asc icon-18px"></i>
                                     <div>Translations</div>
                                 </a>
                             </li>
-                            <li @class(['menu-item', 'active' => $routeMatches(['web_settings'])])>
-                                <a href="{{ cms_route('web_settings.index') }}" class="menu-link">
-                                    <i class="menu-icon icon-base fa fa-layer-group icon-18px"></i>
-                                    <div>Web Settings</div>
-                                </a>
-                            </li>
-                        @endif
-                        <li @class(['menu-item', 'active' => $routeMatches(['cms_users.preferences'])])>
-                            <a href="{{ cms_route('cms_users.preferences.index', [auth('cms')->id()]) }}" class="menu-link">
-                                <i class="menu-icon icon-base fa fa-sliders icon-18px"></i>
-                                <div>Preferences</div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
+                @endif
             </ul>
             @if ($preferences->get('horizontal_menu'))
         </div>

@@ -39,55 +39,40 @@ class AdminRouteMatchesComposer
     /**
      * Matches route names to the current route.
      *
-     * Resource-Routes: (['users', 'orders', ...], [routeParam => paramValue]|null, true)
+     * Base-Routes: (['users', 'orders', ...], [routeParam => paramValue]|null, true)
      * Single-Routes: (['users.index', 'orders.store', ...], [routeParam => paramValue]|null, false)
      * Param-Routes: (['users' => {param}, 'orders', ...], [routeParam => paramValue]|null, true|false)
      *
-     * NOTE: The second parameter is compared to the last route parameter if `routeParam` key is not present.
-     * NOTE: The second parameter will be replaced by the current route parameter if
-     *       "Param-Routes" {param} is present.
-     * NOTE: Third parameter is true by default, which indicates resource routes.
+     * NOTE: The second parameter indicates whether the routeNames should match to the currentRouteName by segments.
+     * NOTE: The third parameter is compared to the last route parameter if `routeParam` key is not present.
+     * NOTE: The third parameter will be replaced by the current route parameter if "Param-Routes" {param} is present.
      *
      * @return \Closure
      */
     protected function getRouteMatcher(): Closure
     {
-        $currentFullRouteName = $this->route->getName();
+        if (is_null($currentRouteName = $this->route->getName())) {
+            return fn () => false;
+        }
 
-        $currentRouteName = str_replace(
-            config('language.route_name') . '.' . cms_route_name(),
-            '',
-            $currentFullRouteName
+        $routeParams = $this->route->parameters();
+
+        $currentRouteName = str($currentRouteName)->replaceFirst(
+            config('language.route_name') . '.', ''
         );
 
-        if ($currentRouteName == $currentFullRouteName) {
-            $currentRouteName = str_replace(cms_route_name(), '', $currentRouteName);
-        }
+        $currentRouteName = str($currentRouteName)->replaceFirst(cms_route_name(), '');
 
-        $params = $this->route->parameters();
+        $currentRouteNameSegments = explode('.', $currentRouteName);
 
-        $resourceMethod = null;
-
-        foreach (resource_names('') as $value) {
-            if (str_contains($currentRouteName, $value)) {
-                $currentRouteName = str_replace($value, '', $currentRouteName);
-
-                $resourceMethod = $value;
-            }
-        }
-
-        return function ($routeNames, $routeParam = null, $byResource = true)
-        use ($currentRouteName, $params, $resourceMethod) {
-            if (! $byResource) {
-                $currentRouteName .= $resourceMethod;
-            }
-
+        return static function ($routeNames, $matchBase = true, $routeParam = null)
+        use ($currentRouteName, $routeParams, $currentRouteNameSegments) {
             if (is_array($routeParam)) {
-                $currentRouteParam = $params[key($routeParam)] ?? 0;
+                $currentRouteParam = $routeParams[key($routeParam)] ?? 0;
 
                 $routeParam = reset($routeParam);
             } else {
-                $currentRouteParam = end($params);
+                $currentRouteParam = end($routeParams);
             }
 
             foreach ((array) $routeNames as $key => $routeName) {
@@ -95,6 +80,14 @@ class AdminRouteMatchesComposer
                     $currentRouteParam = $routeName;
 
                     $routeName = $key;
+                }
+
+                if ($matchBase) {
+                    $routeNameSegmentsCount = max(1, substr_count($routeName, '.') + 1);
+
+                    $currentRouteName = implode('.', array_slice(
+                        $currentRouteNameSegments, 0, $routeNameSegmentsCount
+                    ));
                 }
 
                 if ($routeName == $currentRouteName &&
