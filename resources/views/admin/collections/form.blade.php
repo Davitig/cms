@@ -63,6 +63,13 @@
         <div class="text-danger">{{ $message }}</div>
         @enderror
     </div>
+    <div class="col-md-6">
+        <label for="admin_max_similar_type_inp" class="form-label required">Admin Max Similar Type</label>
+        {{ html()->number('admin_max_similar_type')->id('admin_max_similar_type_inp')->class('form-control') }}
+        @error('admin_max_similar_type')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
+    </div>
     <div>
         <label for="description_inp" class="form-label">Description</label>
         {{ html()->textarea('description')->id('description_inp')->class('form-control')->rows(3) }}

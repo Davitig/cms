@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ArticleRequest;
 use App\Models\Article\Article;
 use App\Models\Collection;
+use Illuminate\Support\Number;
 
 class AdminArticleController extends Controller
 {
@@ -30,7 +31,7 @@ class AdminArticleController extends Controller
 
         $data['similarCollections'] = (new Collection)->byType(CollectionType::ARTICLE)
             ->withCount('articles')
-            ->limit(50)
+            ->limit($data['parent']->admin_max_similar_type)
             ->get();
 
         $data['items'] = $this->model->filesExists()->getAdminCollection($data['parent']);

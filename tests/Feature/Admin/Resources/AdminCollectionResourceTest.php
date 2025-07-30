@@ -43,6 +43,7 @@ class AdminCollectionResourceTest extends TestAdmin
             'admin_order_by' => 'position',
             'admin_sort' => 'asc',
             'admin_per_page' => 20,
+            'admin_max_similar_type' => 20,
             'web_order_by' => 'created_at',
             'web_sort' => 'asc',
             'web_per_page' => 20
@@ -76,6 +77,7 @@ class AdminCollectionResourceTest extends TestAdmin
             'admin_order_by' => 'position',
             'admin_sort' => 'desc',
             'admin_per_page' => 30,
+            'admin_max_similar_type' => 30,
             'web_order_by' => 'created_at',
             'web_sort' => 'desc',
             'web_per_page' => 30

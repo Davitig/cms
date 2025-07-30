@@ -30,7 +30,7 @@ class AdminEventController extends Controller
 
         $data['similarCollections'] = (new Collection)->byType(CollectionType::EVENT)
             ->withCount('events')
-            ->limit(50)
+            ->limit($data['parent']->admin_max_similar_type)
             ->get();
 
         $data['items'] = $this->model->filesExists()->getAdminCollection($data['parent']);

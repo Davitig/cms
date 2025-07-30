@@ -17,10 +17,11 @@ return new class extends Migration
             $table->string('type', 32);
             $table->string('admin_order_by', 32)->default('id');
             $table->string('admin_sort', 16)->default('desc');
-            $table->tinyInteger('admin_per_page')->default(20);
+            $table->unsignedTinyInteger('admin_per_page')->default(20);
+            $table->unsignedTinyInteger('admin_max_similar_type')->default(20);
             $table->string('web_order_by', 32)->default('id');
             $table->string('web_sort', 16)->default('desc');
-            $table->tinyInteger('web_per_page')->default(10);
+            $table->unsignedTinyInteger('web_per_page')->default(10);
             $table->string('description')->nullable();
             $table->timestamps();
         });

@@ -31,6 +31,7 @@ class CollectionRequest extends Request
                 'admin_order_by' => ['required', Rule::in($orderList)],
                 'admin_sort' => ['required', Rule::in($sortList)],
                 'admin_per_page' => 'required|numeric|max:200',
+                'admin_max_similar_type' => 'required|numeric|max:200',
                 'web_order_by' => ['required', Rule::in($orderList)],
                 'web_sort' => ['required', Rule::in($sortList)],
                 'web_per_page' => 'required|numeric|max:200'

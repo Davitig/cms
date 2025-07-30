@@ -19,7 +19,7 @@ class Collection extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'type', 'admin_order_by', 'admin_sort', 'admin_per_page',
+        'title', 'type', 'admin_order_by', 'admin_sort', 'admin_per_page', 'admin_max_similar_type',
         'web_order_by', 'web_sort', 'web_per_page', 'description'
     ];
 
