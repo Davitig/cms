@@ -10,7 +10,7 @@
                         <i class="icon-base fa-regular fa-list-alt icon-md"></i>
                     </div>
                     <div class="d-flex justify-content-between w-100 gap-2">
-                        <div class="">
+                        <div>
                             <a href="{{ cms_route($item->type . '.index', [$item->id]) }}"
                                class="fs-6 d-block text-{{ $item->id == $parent->id ? 'primary' : 'black' }}">
                                 {{ $item->title }}

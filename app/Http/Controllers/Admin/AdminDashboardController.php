@@ -25,7 +25,6 @@ class AdminDashboardController extends Controller
     {
         $data['menuId'] = (new Menu)->whereMain(1)
             ->union((new Menu)->whereMain(0)->select('id'))
-            ->limit(1)
             ->value('id');
 
         $data += $cache->remember('dashboard', 60, function () {

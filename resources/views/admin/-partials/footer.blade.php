@@ -4,7 +4,7 @@
         <div
             class="footer-container d-flex align-items-center justify-content-between py-4">
             <div class="text-body">
-                {{date('Y')}} &copy; {{config('app.name')}} - Version: {{cms_config('version')}}
+                {{date('Y')}} &copy; {{config('app.name')}} Version: {{cms_config('version')}}
             </div>
             <div class="d-flex gap-4">
                 <div class="social-icon my-4">

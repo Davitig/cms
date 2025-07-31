@@ -101,6 +101,11 @@
                             "icon": "fa fa-layer-group",
                             "url": "{{ cms_route('settings.cache.index') }}"
                         },
+                        {
+                            "name": "System Settings",
+                            "icon": "fa fa-server",
+                            "url": "{{ cms_route('settings.system.index') }}"
+                        },
                         @if (auth('cms')->user()->hasFullAccess())
                         {
                             "name": "Web Settings",

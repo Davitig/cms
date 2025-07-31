@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Setting\AdminSettingCacheController;
 use App\Http\Controllers\Admin\Setting\AdminSettingController;
+use App\Http\Controllers\Admin\Setting\AdminSettingSystemInformationController;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 
@@ -20,4 +21,7 @@ Route::middleware('cms.auth')->group(function (Router $router) {
         $router->post('settings/cache/routes', 'updateRoutes')
             ->name('settings.cache.routes');
     });
+    // system
+    $router->get('settings/system', [AdminSettingSystemInformationController::class, 'index'])
+        ->name('settings.system.index');
 });
