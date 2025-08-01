@@ -5,7 +5,7 @@ namespace Tests\Feature\Web;
 use App\View\Composers\Web\WebBreadcrumbComposer;
 use App\View\Composers\Web\WebCurrentDataComposer;
 use App\View\Composers\Web\WebPageComposer;
-use App\View\Composers\Web\WebSettingComposer;
+use App\View\Composers\Web\ContactSettingComposer;
 use App\View\Composers\Web\WebTranslationComposer;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -30,7 +30,7 @@ class WebViewComposerTest extends TestCase
 
     public function test_web_settings_composer()
     {
-        $this->testComposer(WebSettingComposer::class, 'settings');
+        $this->testComposer(ContactSettingComposer::class, 'contactSettings');
     }
 
     public function test_web_translations_composer()

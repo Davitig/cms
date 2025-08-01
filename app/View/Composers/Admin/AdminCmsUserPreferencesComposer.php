@@ -17,7 +17,7 @@ class AdminCmsUserPreferencesComposer
     protected string|int|null $cmsUserId = null;
 
     /**
-     * The Collection instance of the preferences.
+     * The collection instance of the preferences.
      *
      * @var \Illuminate\Support\Collection
      */

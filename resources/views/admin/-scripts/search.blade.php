@@ -108,9 +108,9 @@
                         },
                         @if (auth('cms')->user()->hasFullAccess())
                         {
-                            "name": "Web Settings",
+                            "name": "Contact Settings",
                             "icon": "fa fa-bars-staggered",
-                            "url": "{{ cms_route('web_settings.index') }}"
+                            "url": "{{ cms_route('settings.contact.index') }}"
                         },
                         {
                             "name": "Translations",
@@ -215,9 +215,9 @@
                         @endif
                         @if (auth('cms')->user()->hasFullAccess())
                         {
-                            "name": "Web Settings",
+                            "name": "Contact Settings",
                             "icon": "fa fa-bars-staggered",
-                            "url": "{{ cms_route('web_settings.index') }}"
+                            "url": "{{ cms_route('settings.contact.index') }}"
                         },
                         @endif
                         {

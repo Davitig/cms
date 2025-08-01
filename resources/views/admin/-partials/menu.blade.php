@@ -109,7 +109,7 @@
                 </li>
                 @if ($userRouteAccess('settings.index'))
                     <li @class(['menu-item', 'active' => $matches = $routeMatches([
-                    'settings', 'web_settings', 'translations'
+                    'settings', 'translations'
                     ]), 'open' => ! $isHorizontalMenu && $matches])>
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon icon-base fa fa-gear icon-20px"></i>
@@ -123,12 +123,6 @@
                                 </a>
                             </li>
                             @if (auth('cms')->user()->hasFullAccess())
-                                <li @class(['menu-item', 'active' => $routeMatches(['web_settings'])])>
-                                    <a href="{{ cms_route('web_settings.index') }}" class="menu-link">
-                                        <i class="menu-icon icon-base fa fa-bars-staggered icon-18px"></i>
-                                        <div>Web Settings</div>
-                                    </a>
-                                </li>
                                 <li @class(['menu-item', 'active' => $routeMatches(['translations'])])>
                                     <a href="{{ cms_route('translations.index') }}" class="menu-link">
                                         <i class="menu-icon icon-base fa fa-sort-alpha-asc icon-18px"></i>

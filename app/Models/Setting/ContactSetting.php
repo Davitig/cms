@@ -5,7 +5,7 @@ namespace App\Models\Setting;
 use App\Concerns\Models\HasNameValueSetting;
 use Illuminate\Database\Eloquent\Model;
 
-class WebSetting extends Model
+class ContactSetting extends Model
 {
     use HasNameValueSetting;
 
@@ -36,9 +36,9 @@ class WebSetting extends Model
     public function defaultNameValues(): array
     {
         return [
-            'email' => '',
-            'phone' => '',
-            'address' => ''
+            'email' => null,
+            'phone' => null,
+            'address' => null
         ];
     }
 }

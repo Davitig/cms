@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('web_settings', function (Blueprint $table) {
+        Schema::create('contact_settings', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->string('name')->unique();
             $table->string('value')->nullable();
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('web_settings');
+        Schema::dropIfExists('contact_settings');
     }
 };

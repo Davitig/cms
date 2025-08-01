@@ -7,10 +7,10 @@ use App\View\Composers\Admin\AdminMenuComposer;
 use App\View\Composers\Admin\AdminRouteMatchesComposer;
 use App\View\Composers\Admin\AdminSitemapXmlComposer;
 use App\View\Composers\Admin\AdminUserRouteAccessComposer;
+use App\View\Composers\Web\ContactSettingComposer;
 use App\View\Composers\Web\WebBreadcrumbComposer;
 use App\View\Composers\Web\WebCurrentDataComposer;
 use App\View\Composers\Web\WebPageComposer;
-use App\View\Composers\Web\WebSettingComposer;
 use App\View\Composers\Web\WebTranslationComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -30,7 +30,7 @@ class ViewComposerServiceProvider extends ServiceProvider
         AdminUserRouteAccessComposer::class,
         AdminSitemapXmlComposer::class,
         // web
-        WebSettingComposer::class,
+        ContactSettingComposer::class,
         WebTranslationComposer::class,
         WebCurrentDataComposer::class,
         WebPageComposer::class,
@@ -95,7 +95,7 @@ class ViewComposerServiceProvider extends ServiceProvider
     protected function registerWebViewComposers(): void
     {
         // compose settings
-        View::composer('web.*', WebSettingComposer::class);
+        View::composer('web.*', ContactSettingComposer::class);
 
         // compose translations
         View::composer('web.*', WebTranslationComposer::class);

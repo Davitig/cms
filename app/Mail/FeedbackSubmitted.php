@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Setting\WebSetting;
+use App\Models\Setting\ContactSetting;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Mail\Attachment;
 use Illuminate\Mail\Mailable;
@@ -70,6 +70,6 @@ class FeedbackSubmitted extends Mailable
      */
     public function getRecipient(): ?string
     {
-        return (new WebSetting)->whereName('email')->value('value');
+        return (new ContactSetting)->whereName('email')->value('value');
     }
 }

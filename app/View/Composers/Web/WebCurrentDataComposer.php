@@ -2,9 +2,10 @@
 
 namespace App\View\Composers\Web;
 
-use App\Support\TranslationProvider;
+use App\Models\Setting\MetaSetting;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class WebCurrentDataComposer
 {
@@ -30,22 +31,41 @@ class WebCurrentDataComposer
         $current = &$view->current;
 
         if (! $current instanceof Model || ! is_object($current)) {
-            $trans = &$view->trans;
-            $trans ??= new TranslationProvider;
+            $metaSettings = $this->getMetaSetting();
 
             $current = (object) [
-                'title' => $title = ($trans->get('title') ?: request()->getHost()),
-                'url_path' => $this->getPath(),
+                'site_name' => $metaSettings->get('site_name'),
+                'title' => $title = ($metaSettings->get('title') ?: request()->getHost()),
                 'meta_title' => $title,
-                'meta_desc' => $trans->get('meta_desc') ?: $title
+                'meta_desc' => $metaSettings->get('description'),
+                'url_path' => $this->getPath(),
+                'image' => $metaSettings->get('image')
             ];
         } else {
+            $metaSettings = null;
+
+            if (! isset($current->site_name, $current->title, $current->meta_desc)) {
+                $metaSettings = $this->getMetaSetting();
+            }
+
+            $current->site_name ??= $metaSettings?->get('site_name');
+
+            $current->title ??= $metaSettings?->get('title') ?: request()->getHost();
+
+            $current->meta_desc ??= $metaSettings?->get('description');
+
             $current->url_path ??= $this->getPath();
-
-            $current->title ??= request()->getHost();
-
-            $current->meta_title ??= $current->title;
         }
+    }
+
+    /**
+     * Get the meta settings.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    protected function getMetaSetting(): Collection
+    {
+        return (new MetaSetting)->getSettings();
     }
 
     /**
