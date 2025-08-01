@@ -2,14 +2,14 @@
 
 namespace App\View\Composers\Web;
 
-use App\Models\Setting\WebSetting;
+use App\Models\Setting\ContactSetting;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 
-class WebSettingComposer
+class ContactSettingComposer
 {
     /**
-     * The Collection instance of the settings.
+     * The collection instance of the settings.
      *
      * @var \Illuminate\Support\Collection
      */
@@ -20,7 +20,7 @@ class WebSettingComposer
      */
     public function __construct()
     {
-        $this->items = $this->getSettings();
+        $this->items = $this->getContactSettings();
     }
 
     /**
@@ -31,16 +31,16 @@ class WebSettingComposer
      */
     public function compose(View $view): void
     {
-        $view->with('settings', $this->items);
+        $view->with('contactSettings', $this->items);
     }
 
     /**
-     * Get the settings.
+     * Get the contact settings.
      *
      * @return \Illuminate\Support\Collection
      */
-    protected function getSettings(): Collection
+    protected function getContactSettings(): Collection
     {
-        return (new WebSetting)->getSettings();
+        return (new ContactSetting)->getSettings();
     }
 }

@@ -11,9 +11,7 @@ class TranslationProvider
      */
     public function __construct(
         protected array $items = [], protected array $blacklistKeys = []
-    )
-    {
-    }
+    ) {}
 
     /**
      * Get the value from the collection.

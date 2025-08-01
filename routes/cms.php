@@ -12,7 +12,6 @@ use App\Http\Controllers\Admin\AdminPermissionController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminSitemapXmlController;
 use App\Http\Controllers\Admin\AdminTranslationController;
-use App\Http\Controllers\Admin\AdminWebSettingController;
 use App\Http\Controllers\Admin\Auth\AdminLoginController;
 use App\Http\Controllers\Admin\CmsUser\AdminCmsUserController;
 use App\Http\Controllers\Admin\CmsUser\AdminCmsUserImageController;
@@ -168,12 +167,6 @@ Route::middleware('cms.auth')->group(function (Router $router) {
             ->names(resource_names('translations'))
             ->except(['show']);
     });
-
-    // web settings
-    $router->get('web-settings', [AdminWebSettingController::class, 'index'])
-        ->name('web_settings.index');
-    $router->put('web-settings', [AdminWebSettingController::class, 'update'])
-        ->name('web_settings.update');
 
     // sitemap XML
     $router->post('sitemap/xml/store', [AdminSitemapXmlController::class, 'store'])

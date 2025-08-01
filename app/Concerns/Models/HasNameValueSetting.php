@@ -74,16 +74,16 @@ trait HasNameValueSetting
                     ? $currentLang
                     : language()->getBy($currentLang, 'id'));
             }
-        )->when($this->hasLanguages(), function ($q) {
+        )->when($this->hasLanguages() && ! $currentLang, function ($q) {
             return $q->get()->groupBy('language_id')->map->pluck('value', 'name');
         }, function ($q) {
             return $q->pluck('value', 'name');
         })->toArray();
 
         foreach ($data as $key => $value) {
-            if ($this->hasLanguages()) {
-                foreach ($value as $langKey => $langValue) {
-                    $data[$key][$langKey] = $this->filterAttribute($langValue);
+            if ($this->hasLanguages() && ! $currentLang) {
+                foreach ($value as $dataKey => $dataValue) {
+                    $data[$key][$dataKey] = $this->filterAttribute($dataValue);
                 }
 
                 $data[$key] = new Collection(array_merge($this->defaultNameValues(), $data[$key]));
@@ -92,11 +92,13 @@ trait HasNameValueSetting
             }
         }
 
-        if (! $this->hasLanguages()) {
-            $data = array_merge($this->defaultNameValues(), $data);
-        } elseif (empty($data)) {
-            foreach (language()->all() as $language) {
-                $data[$language['id']] = $this->defaultNameValues();
+        if (empty($data)) {
+            if (! $this->hasLanguages() || $currentLang) {
+                $data = $this->defaultNameValues();
+            } else {
+                foreach (language()->all() as $language) {
+                    $data[$language['id']] = new Collection($this->defaultNameValues());
+                }
             }
         }
 

@@ -5,7 +5,7 @@
     <meta name="robots" content="index, follow">
     <meta property="og:url" content="{{$url = web_url($current->url_path, [], true)}}">
     <meta property="og:type" content="Website">
-    <meta property="og:site_name" content="{{$current->title}}">
+    <meta property="og:site_name" content="{{$current->site_name}}">
     <meta property="og:title" content="{{$current->meta_title ?: $current->title}}">
     <meta property="og:description" content="{{$current->meta_desc}}">
     <meta property="og:image" content="{{$current->image ?? null}}">

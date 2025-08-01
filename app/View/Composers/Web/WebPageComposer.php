@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 class WebPageComposer
 {
     /**
-     * The Collection instance of the pages.
+     * The collection instance of the pages.
      *
      * @var \Illuminate\Support\Collection
      */
