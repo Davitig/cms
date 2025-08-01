@@ -14,8 +14,8 @@ class FileRequest extends Request
     public function rules(): array
     {
         return [
-            'title' => 'required|max:250',
-            'file' => 'required'
+            'title' => 'required|max:255',
+            'file' => 'required|max:255'
         ];
     }
 

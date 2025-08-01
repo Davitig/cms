@@ -18,10 +18,15 @@ class ProductRequest extends Request
         $required = $this->hasMainLanguage() ? 'required' : '';
 
         return [
-            'slug' => [$required, 'unique:products,slug,'.$id],
-            'title' => 'required',
+            'slug' => [$required, 'max:255', 'unique:products,slug,'.$id],
+            'title' => 'required|max:255',
             'price' => [$required, 'numeric', 'between:0,999999.99'],
-            'quantity' => [$required, 'integer']
+            'quantity' => [$required, 'integer'],
+            'image' => 'nullable|max:255',
+            'description' => 'nullable|max:65000',
+            'content' => 'nullable|max:16000000',
+            'meta_title' => 'nullable|max:255',
+            'meta_desc' => 'nullable|max:255'
         ];
     }
 

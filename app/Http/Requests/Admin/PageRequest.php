@@ -19,15 +19,20 @@ class PageRequest extends Request
         $required = $this->hasMainLanguage() ? 'required' : '';
 
         return [
-            'slug' => [$required, 'unique:pages,slug,'.$id],
-            'title' => 'required',
-            'short_title' => 'required',
-            'type' => $required,
+            'slug' => [$required, 'max:255', 'unique:pages,slug,'.$id],
+            'title' => 'required|max:255',
+            'short_title' => 'required|max:255',
+            'type' => [$required, 'max:64'],
             'type_id' => new RequiredIf(fn () =>
                 array_key_exists(
                     $this->get('type'), cms_pages('listable.collections')
                 )
-            )
+            ),
+            'image' => 'nullable|max:255',
+            'description' => 'nullable|max:65000',
+            'content' => 'nullable|max:16000000',
+            'meta_title' => 'nullable|max:255',
+            'meta_desc' => 'nullable|max:255'
         ];
     }
 

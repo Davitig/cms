@@ -8,7 +8,10 @@
     </div>
     <div>
         <label for="description_inp" class="form-label">Description</label>
-        {{ html()->textarea('description')->class('form-control')->rows(3) }}
+        {{ html()->textarea('description')->class('form-control')->rows(2) }}
+        @error('description')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
     </div>
     <div>
         <label class="switch switch-primary">

@@ -20,25 +20,40 @@
             {{ html()->text('image')->id('image_inp' . $current->language)->class('form-control') }}
             <button type="button" class="file-manager-popup btn btn-outline-primary" data-browse="image_inp{{$current->language}}">Browse</button>
         </div>
+        @error('image')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
     </div>
     @endifMainLanguage
     <div>
         <label for="description_inp" class="form-label">Description</label>
         {{ html()->textarea('description')->id('description_inp' . $current->language)
         ->class('form-control text-editor')->rows(8) }}
+        @error('description')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
     </div>
     <div>
         <label for="content_inp" class="form-label">Content</label>
         {{ html()->textarea('content')->id('content_inp' . $current->language)
         ->class('form-control text-editor')->rows(12) }}
+        @error('content')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
     </div>
     <div>
         <label for="meta_title_inp" class="form-label">Meta Title</label>
         {{ html()->text('meta_title')->id('meta_title_inp' . $current->language)->class('form-control') }}
+        @error('meta_title')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
     </div>
     <div>
         <label for="meta_desc_inp" class="form-label">Meta Description</label>
         {{ html()->text('meta_desc')->id('meta_desc_inp' . $current->language)->class('form-control') }}
+        @error('meta_desc')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
     </div>
     @ifMainLanguage($current->language)
     <div>

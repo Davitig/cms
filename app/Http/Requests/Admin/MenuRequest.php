@@ -14,7 +14,8 @@ class MenuRequest extends Request
     public function rules(): array
     {
         return [
-            'title' => 'required|max:250'
+            'title' => 'required|max:250',
+            'description' => 'nullable|max:255'
         ];
     }
 

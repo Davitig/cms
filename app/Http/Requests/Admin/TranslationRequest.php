@@ -19,7 +19,7 @@ class TranslationRequest extends Request
 
         return [
             'code' => [$required, 'max:18', 'regex:/^[a-z_]+$/', 'unique:translations,code,' . $id],
-            'value' => 'required'
+            'value' => 'required|max:255'
         ];
     }
 

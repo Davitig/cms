@@ -57,6 +57,9 @@
             </span>
             {{ html()->text('phone')->id('phone_inp')->class('form-control') }}
         </div>
+        @error('phone')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
     </div>
     <div class="col-md-6">
         <label for="address_inp" class="form-label">Address</label>
@@ -66,6 +69,9 @@
             </span>
             {{ html()->text('address')->id('address_inp')->class('form-control') }}
         </div>
+        @error('address')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
     </div>
     <div>
         <label class="switch switch-warning">

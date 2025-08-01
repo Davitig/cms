@@ -27,14 +27,15 @@ class CollectionRequest extends Request
         }
 
         return $typeRule + [
-                'title' => 'required',
+                'title' => 'required|max:255',
                 'admin_order_by' => ['required', Rule::in($orderList)],
                 'admin_sort' => ['required', Rule::in($sortList)],
-                'admin_per_page' => 'required|numeric|max:200',
-                'admin_max_similar_type' => 'required|numeric|max:200',
+                'admin_per_page' => 'required|numeric|max:10000',
+                'admin_max_similar_type' => 'required|numeric|max:10000',
                 'web_order_by' => ['required', Rule::in($orderList)],
                 'web_sort' => ['required', Rule::in($sortList)],
-                'web_per_page' => 'required|numeric|max:200'
+                'web_per_page' => 'required|numeric|max:10000',
+                'description' => 'nullable|max:255'
             ];
     }
 

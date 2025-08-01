@@ -74,7 +74,7 @@
                         <div class="col-md-6">
                             <div class="pt-2">
                                 {{ html()->textarea('text')->class('form-control')
-                                    ->placeholder($trans->get('text', 'Text'))
+                                    ->placeholder($trans->get('text', 'Enter a text'))
                                     ->data('trans', 'text')
                                     ->rows(8) }}
                                 @if ($error = $errors->first('text'))

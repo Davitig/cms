@@ -20,6 +20,9 @@
         <label for="type_inp" class="form-label">Type</label>
         {{ html()->select('type', ['' => 'Global'] + $transTypes)
         ->id('type_inp' . $current->language)->class('form-select') }}
+        @error('type')
+        <span class="text-danger">{{ $message }}</span>
+        @enderror
     </div>
     @endifMainLanguage
 </div>

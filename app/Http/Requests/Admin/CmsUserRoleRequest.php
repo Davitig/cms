@@ -14,7 +14,7 @@ class CmsUserRoleRequest extends Request
     public function rules(): array
     {
         return [
-            'role' => 'required',
+            'role' => 'required|max:255',
             'full_access' => 'integer|in:0,1'
         ];
     }
