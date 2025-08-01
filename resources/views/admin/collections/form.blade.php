@@ -72,7 +72,10 @@
     </div>
     <div>
         <label for="description_inp" class="form-label">Description</label>
-        {{ html()->textarea('description')->id('description_inp')->class('form-control')->rows(3) }}
+        {{ html()->textarea('description')->id('description_inp')->class('form-control')->rows(2) }}
+        @error('description')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
     </div>
 </div>
 <div class="d-flex gap-4">

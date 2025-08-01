@@ -18,9 +18,14 @@ class ArticleRequest extends Request
         $required = $this->hasMainLanguage() ? 'required' : '';
 
         return [
-            'slug' => [$required, 'unique:articles,slug,'.$id],
-            'title' => 'required',
-            'created_at' => ['date']
+            'slug' => [$required, 'max:255', 'unique:articles,slug,'.$id],
+            'title' => 'required|max:255',
+            'image' => 'nullable|max:255',
+            'description' => 'nullable|max:65000',
+            'content' => 'nullable|max:16000000',
+            'meta_title' => 'nullable|max:255',
+            'meta_desc' => 'nullable|max:255',
+            'created_at' => 'nullable|date'
         ];
     }
 
@@ -31,10 +36,6 @@ class ArticleRequest extends Request
      */
     protected function prepareForValidation(): void
     {
-        if ($this->isNotFilled('created_at')) {
-            $this->offsetUnset('created_at');
-        }
-
         if (! $this->hasMainLanguage()) {
             return;
         }

@@ -2,6 +2,9 @@
     <div class="mb-6">
         <label for="title_inp" class="form-label required">Title</label>
         {{ html()->text('title')->id('title_inp' . $current->language)->class('form-control')->autofocus() }}
+        @error('title')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
     </div>
     <div class="mb-6">
         <label for="file_inp" class="form-label required">File</label>
@@ -9,6 +12,9 @@
             {{ html()->text('file')->id('file_inp' . $current->language)->class('form-control') }}
             <button type="button" class="file-manager-popup btn btn-outline-primary" data-browse="file_inp{{$current->language}}">Browse</button>
         </div>
+        @error('file')
+        <div class="text-danger">{{ $message }}</div>
+        @enderror
     </div>
     @ifMainLanguage($current->language)
     <div class="mb-6">

@@ -26,14 +26,23 @@
                             <div>
                                 <label for="site_name_inp" class="form-label">Site Name</label>
                                 {{ html()->text('site_name')->id('site_name_inp' . $currentLang)->class('form-control') }}
+                                @error('site_name')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div>
                                 <label for="title_inp" class="form-label">Title</label>
                                 {{ html()->text('title')->id('title_inp' . $currentLang)->class('form-control') }}
+                                @error('title')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div>
                                 <label for="description_inp" class="form-label">Description</label>
                                 {{ html()->text('description')->id('description_inp' . $currentLang)->class('form-control') }}
+                                @error('description')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-8">
                                 <label for="description_inp" class="form-label">Image</label>
@@ -41,6 +50,9 @@
                                     {{ html()->text('image')->id('image_inp' . $currentLang)->class('form-control') }}
                                     <button type="button" class="file-manager-popup btn btn-outline-primary" data-browse="image_inp{{ $currentLang }}">Browse</button>
                                 </div>
+                                @error('image')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>

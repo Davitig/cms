@@ -4,17 +4,20 @@
         <label class="trans-control-label required">Value:</label>
         <div>
             {{ html()->text('value')->id('value_inp' . $current->language)->class('trans-form-control') }}
-            @if ($error = $errors->first('value'))
-                <div class="text-danger">{{$error}}</div>
-            @endif
+            @error('value')
+            <div class="text-danger">{{ $message }}</div>
+            @enderror
             <div class="form-text">The value field will be displayed to public</div>
         </div>
     </div>
     <div class="trans-form-group">
         <label class="trans-control-label">Type:</label>
-        <div class="">
+        <div>
             {{ html()->select('type', ['' => 'Global'] + $transTypes)
             ->id('type_inp' . $current->language)->class('trans-form-control')->data('lang', 1) }}
+            @error('type')
+            <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
     </div>
 </div>

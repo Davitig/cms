@@ -14,10 +14,10 @@ class FeedbackRequest extends Request
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'email' => 'required|string|email',
-            'text' => 'required',
-            'captcha' => 'required|captcha'
+            'name' => 'required|max:50',
+            'email' => 'required|string|email|max:255',
+            'text' => 'required|max:5000',
+            'captcha' => 'required|captcha|max:9'
         ];
     }
 }

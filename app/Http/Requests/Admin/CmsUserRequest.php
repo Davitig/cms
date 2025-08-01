@@ -20,7 +20,9 @@ class CmsUserRequest extends Request
                 'email' => 'required|string|email|max:255|unique:cms_users,email,'.$id,
                 'first_name' => 'required|max:35',
                 'last_name' => 'required|max:35',
-                'cms_user_role_id' => 'required|integer|exists:cms_user_roles,id'
+                'cms_user_role_id' => 'required|integer|exists:cms_user_roles,id',
+                'phone' => 'nullable|max:255',
+                'address' => 'nullable|max:255'
             ] + $this->addPasswordRule();
     }
 
