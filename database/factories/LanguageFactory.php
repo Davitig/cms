@@ -66,6 +66,32 @@ class LanguageFactory extends Factory
     }
 
     /**
+     * Exclude the specified language codes.
+     */
+    public function exclude(array $languages, int $count = 1): static
+    {
+        if ($count > 1) {
+            $sequence = [];
+
+            for ($i = 1; $i <= $count; $i++) {
+                if (in_array($language = fake()->unique()->languageCode(), $languages)) {
+                    return $this->exclude($languages, $count - count($sequence));
+                }
+
+                $sequence[]['language'] = $language;
+            }
+
+            return $this->sequence(...$sequence);
+        }
+
+        if (! in_array($language = fake()->unique()->languageCode(), $languages)) {
+            return $this->language($language);
+        }
+
+        return $this->exclude($languages);
+    }
+
+    /**
      * Indicates the main.
      */
     public function main(int $value = 1, ?string $language = null): static

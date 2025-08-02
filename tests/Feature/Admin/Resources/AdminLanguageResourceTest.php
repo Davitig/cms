@@ -13,7 +13,7 @@ class AdminLanguageResourceTest extends TestAdmin
 
     public function test_admin_languages_resource_index()
     {
-        LanguageFactory::new()->count(3)->create();
+        LanguageFactory::new()->count(3)->exclude($this->envLanguages, 3)->create();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -49,7 +49,7 @@ class AdminLanguageResourceTest extends TestAdmin
 
     public function test_admin_languages_resource_edit()
     {
-        $language = LanguageFactory::new()->create();
+        $language = LanguageFactory::new()->exclude($this->envLanguages)->create();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -63,7 +63,7 @@ class AdminLanguageResourceTest extends TestAdmin
      */
     public function test_admin_languages_resource_update()
     {
-        $language = LanguageFactory::new()->create();
+        $language = LanguageFactory::new()->exclude($this->envLanguages)->create();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -78,7 +78,7 @@ class AdminLanguageResourceTest extends TestAdmin
 
     public function test_admin_languages_resource_destroy()
     {
-        $language = LanguageFactory::new()->create();
+        $language = LanguageFactory::new()->exclude($this->envLanguages)->create();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -89,7 +89,7 @@ class AdminLanguageResourceTest extends TestAdmin
 
     public function test_admin_languages_resource_validate_unique()
     {
-        $language = LanguageFactory::new()->create();
+        $language = LanguageFactory::new()->exclude($this->envLanguages)->create();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -118,7 +118,7 @@ class AdminLanguageResourceTest extends TestAdmin
      */
     public function test_admin_languages_update_main()
     {
-        $language = LanguageFactory::new()->create();
+        $language = LanguageFactory::new()->exclude($this->envLanguages)->create();
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
@@ -129,7 +129,11 @@ class AdminLanguageResourceTest extends TestAdmin
 
     public function test_admin_languages_main_is_unique()
     {
-        $languages = LanguageFactory::new()->times(2)->main()->create();
+        $languages = LanguageFactory::new()
+            ->times(2)
+            ->main()
+            ->exclude($this->envLanguages, 2)
+            ->create();
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'

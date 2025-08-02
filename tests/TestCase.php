@@ -12,11 +12,18 @@ use Illuminate\Support\Collection;
 abstract class TestCase extends BaseTestCase
 {
     /**
-     * Indicates whether the language provider should be created.
+     * Indicates whether the language provider should be enabled.
      *
      * @var bool
      */
-    protected bool $globalLanguageProvider = true;
+    protected bool $languageProviderEnabled = true;
+
+    /**
+     * Indicates whether the language provider should be created with default data.
+     *
+     * @var bool
+     */
+    protected bool $insertDefaultLanguageData = true;
 
     /**
      * The languages of an environment variable.
@@ -39,12 +46,16 @@ abstract class TestCase extends BaseTestCase
      */
     public function createApplication()
     {
-        $this->envLanguages = $this->getEnvLanguages();
+        if ($this->languageProviderEnabled) {
+            $this->envLanguages = $this->getEnvLanguages();
+        }
+
+        $envLanguages = $this->envLanguages;
 
         $app = require Application::inferBasePath().'/bootstrap/app.php';
 
-        $app->booting(function () use ($app) {
-            $app['config']->set('language.force_routes', $this->envLanguages);
+        $app->booting(static function () use ($app, $envLanguages) {
+            $app['config']->set('language.force_routes', $envLanguages);
         });
 
         $app->make(Kernel::class)->bootstrap();
@@ -59,7 +70,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        if ($this->globalLanguageProvider) {
+        if ($this->languageProviderEnabled && $this->insertDefaultLanguageData) {
             $this->envActiveLanguage = getenv('lang_active')
                 ?: reset($this->envLanguages);
 
@@ -129,7 +140,9 @@ abstract class TestCase extends BaseTestCase
         ?bool $secure = null
     ): string
     {
-        if (is_null($language) && $this->envActiveLanguage) {
+        if (is_null($language) &&
+            $this->envActiveLanguage &&
+            count($this->envLanguages) > 1) {
             $language = $this->envActiveLanguage;
         }
 

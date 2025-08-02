@@ -32,7 +32,7 @@ class LanguageProviderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->globalLanguageProvider = false;
+        $this->languageProviderEnabled = false;
 
         parent::setUp();
 
