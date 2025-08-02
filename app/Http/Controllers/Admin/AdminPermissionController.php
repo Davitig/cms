@@ -46,16 +46,10 @@ class AdminPermissionController extends Controller implements HasMiddleware
             ->pluck('route_name')
             ->toArray();
 
-        $data['routeGroups'] = array_filter(array_diff_key(
+        $data['routeGroups'] = $this->filterGroupedRouteNames(
             $this->getAllCMSRouteNames(),
-            array_flip(Permission::$routeGroupsHidden),
-            array_flip(Permission::$routeGroupsAllowed)
-        ), function ($routes) {
-            return array_filter($routes, function ($route) {
-                return ! in_array($route, Permission::$routeNamesHidden) &&
-                    ! in_array($route, Permission::$routeNamesAllowed);
-            });
-        });
+            array_merge(Permission::$routeGroupsHidden, Permission::$routeGroupsAllowed)
+        );
 
         return view('admin.permissions.index', $data);
     }
@@ -192,5 +186,37 @@ class AdminPermissionController extends Controller implements HasMiddleware
         }
 
         return [str($subRouteName)->before('.')->toString() => $routeName];
+    }
+
+    /**
+     * Remove hidden route names from the grouped route name list.
+     *
+     * @param  array  $routeGroups
+     * @param  array  $routeGroupsHidden
+     * @return array
+     */
+    protected function filterGroupedRouteNames(array $routeGroups, array $routeGroupsHidden): array
+    {
+        $routeNameList = [];
+
+        foreach ($routeGroups as $key => $routeNames) {
+            if (is_array($routeNames)) {
+                foreach ($routeNames as $routeKey => $routeName) {
+                    if (is_array($routeName)) {
+                        foreach ($routeName as $subRouteKey => $subRouteName) {
+                            if (! str($subRouteName)->startsWith($routeGroupsHidden)) {
+                                $routeNameList[$key][$routeKey][$subRouteKey] = $subRouteName;
+                            }
+                        }
+                    } elseif (! str($routeName)->startsWith($routeGroupsHidden)) {
+                        $routeNameList[$key][$routeKey] = $routeName;
+                    }
+                }
+            } elseif (! str($routeNames)->startsWith($routeGroupsHidden)) {
+                $routeNameList[$key] = $routeNames;
+            }
+        }
+
+        return $routeNameList;
     }
 }
