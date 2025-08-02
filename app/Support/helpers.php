@@ -58,12 +58,12 @@ function cms_path(?string $path = null, bool $language = false): string
 {
     $slug = trim(cms_config('slug'), '/');
 
-    if ($language) {
-        $language = is_string($language)
-            ? $language
-            : (language()->isSelected() ? language()->active() : '');
+    if ($language === true) {
+        $slug = language()->active() . '/' . $slug;
+    }
 
-        $slug = trim($language . '/' . $slug, '/');
+    if (is_string($language)) {
+        $slug = trim($language, '/') . '/' . $slug;
     }
 
     return is_null($path) ? $slug : $slug . '/' . trim($path, '/');
