@@ -76,9 +76,9 @@ class AdminCmsUserPreferenceController extends Controller implements HasMiddlewa
         }
 
         if ($request->expectsJson()) {
-            return response()->json(fill_data(true, trans('general.updated')));
+            return response()->json(fill_data(true, trans('general.updated'), $input));
         }
 
-        return back()->with('alert', fill_data(true, trans('general.updated')));
+        return back()->with('alert', fill_data(true, trans('general.updated'), $input));
     }
 }

@@ -14,7 +14,7 @@
     <div class="card">
         <div class="card-header fs-5">Web Settings</div>
         <div class="card-body">
-            {{ html()->form('post', cms_route('settings.contact.save'))->data('ajax-form', 1)
+            {{ html()->form('post', cms_route('settings.contact.save'))->data('ajax-form', $preferences->get('ajax_form'))
             ->attribute('novalidate')->open() }}
             <div class="row g-6 mb-6">
                 <div>

@@ -5,7 +5,8 @@
     <div class="card">
         <div class="card-header fs-5">Preferences</div>
         <div class="card-body">
-            {{ html()->modelForm($current, 'put', cms_route('cms_users.preferences.save', [$cmsUser->id]))->attribute('novalidate')->open() }}
+            {{ html()->modelForm($current, 'put', cms_route('cms_users.preferences.save', [$cmsUser->id]))->id('pref-form')
+            ->data('ajax-form', $preferences->get('ajax_form'))->attribute('novalidate')->open() }}
             <div class="row g-6 mb-6">
                 <label class="switch switch-primary">
                     {{ html()->checkbox('horizontal_menu')
@@ -33,3 +34,12 @@
         </div>
     </div>
 @endsection
+@push('body.bottom')
+    <script type="text/javascript">
+        $(function () {
+            $('form#pref-form [name="ajax_form"]').on('change', function () {
+                $(this).closest('form').attr('data-ajax-form', this.checked ? 1 : 0);
+            });
+        });
+    </script>
+@endpush
