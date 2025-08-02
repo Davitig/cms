@@ -86,7 +86,7 @@ class LanguageProvider
             return [$language['language'] => $language];
         });
 
-        $this->main = current($languages->filter(
+        $this->main = head($languages->filter(
             fn ($item) => $item['main']
         )->keys()->toArray() ?: $languages->keys()->toArray());
 

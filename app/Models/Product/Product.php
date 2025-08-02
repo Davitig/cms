@@ -67,7 +67,7 @@ class Product extends Model
      */
     public function scopeForPublic(Builder $query, mixed $currentLang = true): Builder
     {
-        return $query->joinLanguage($currentLang, [], 'right')->whereVisible()->createdDesc();
+        return $query->joinLanguage($currentLang, [])->whereVisible()->createdDesc();
     }
 
     /**

@@ -7,7 +7,6 @@ use App\Http\Requests\Admin\LanguageRequest;
 use App\Models\Language;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Uri;
 
 class AdminLanguageController extends Controller
 {
@@ -28,8 +27,6 @@ class AdminLanguageController extends Controller
     public function index()
     {
         $data['items'] = $this->model->positionAsc()->paginate(100);
-
-        $data['visibleLangCount'] = $this->model->whereVisible()->count();
 
         $data['routesAreCached'] = app()->routesAreCached();
 

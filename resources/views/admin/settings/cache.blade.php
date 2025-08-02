@@ -20,7 +20,7 @@
             </div>
             @if ($userRouteAccess('settings.cache.view_clear', 'settings.cache.config', 'settings.cache.routes'))
                 @if ($userRouteAccess('settings.cache.view_clear'))
-                    <div class="card shadow-none border">
+                    <div id="clear-compiled-views" class="card shadow-none border">
                         <div class="card-body">
                             <h5>Clear compiled views</h5>
                             <p>
@@ -38,7 +38,7 @@
                     </div>
                 @endif
                 @if ($userRouteAccess('settings.cache.config'))
-                    <div class="card shadow-none border">
+                    <div id="cache-config" class="card shadow-none border">
                         <div class="card-body">
                             <h5 class="title">
                                 Cache config
@@ -58,7 +58,7 @@
                     </div>
                 @endif
                 @if ($userRouteAccess('settings.cache.routes'))
-                    <div class="card shadow-none border">
+                    <div id="cache-routes" class="card shadow-none border">
                         <div class="card-body">
                             <h5 class="title">
                                 Cache routes
@@ -68,7 +68,7 @@
                                 When deploying your application to production, you should take advantage of Laravel's route cache.
                                 Using the route cache will drastically decrease the amount of time it takes to register all of your application's routes.
                                 To generate a route cache, execute the cache command.
-                                <span class="text-danger">Remember, if you add or change any <a href="{{ cms_route('languages.index') }}" class="text-danger text-decoration-underline" target="_blank"><strong>language</strong></a> data you will need to generate a fresh route cache.</span>
+                                <span class="text-danger">Remember, if you add or change any <a href="{{ cms_route('languages.index') }}" class="text-danger text-decoration-underline" target="_blank">language</a> data you will need to generate a fresh route cache.</span>
                             </p>
                             {{ html()->form('post', cms_route('settings.cache.routes'))->class('cache-form')
                             ->data('cached', (int) $routesCached)->data('ajax-form', $preferences->get('ajax_form'))->open() }}

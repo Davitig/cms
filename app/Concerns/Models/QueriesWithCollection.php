@@ -109,7 +109,7 @@ trait QueriesWithCollection
     {
         return $query->when(! is_null($collectionId), function ($q) use ($collectionId) {
             return $q->collectionId($collectionId);
-        })->joinLanguage($currentLang, $columns, 'right')->whereVisible();
+        })->joinLanguage($currentLang, $columns)->whereVisible();
     }
 
     /**

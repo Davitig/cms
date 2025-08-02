@@ -20,7 +20,7 @@
         </div>
         <div class="card-body">
             <div class="panel-body">
-                {{ html()->modelForm($current, 'put', cms_route('cms_user_roles.update', [$current->id]))
+                {{ html()->modelForm($current, 'put', cms_route('cms_user_roles.update', [$current->id]))->id('roles-form')
                 ->data('ajax-form', $preferences->get('ajax_form'))->attribute('novalidate')->open() }}
                 @include('admin.cms-user-roles.form')
                 {{ html()->form()->close() }}
@@ -30,7 +30,7 @@
 @endsection
 @push('body.bottom')
     <script type="text/javascript">
-        $('form[data-ajax-form="1"]').on('ajaxFormDone', function (e, res) {
+        $('form#roles-form[data-ajax-form="1"]').on('ajaxFormDone', function (e, res) {
             if (parseInt(res?.data?.full_access)) {
                 $('#permissions-btn').addClass('d-none');
             } else {

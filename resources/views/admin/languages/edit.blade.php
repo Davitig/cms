@@ -20,7 +20,7 @@
         </div>
         <div class="card-body">
             <div class="panel-body">
-                {{ html()->modelForm($current, 'put', cms_route('languages.update', [$current->id]))
+                {{ html()->modelForm($current, 'put', cms_route('languages.update', [$current->id]))->id('lang-form')
                 ->data('ajax-form', $preferences->get('ajax_form'))->attribute('novalidate')->open() }}
                 @include('admin.languages.form')
                 {{ html()->form()->close() }}

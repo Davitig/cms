@@ -60,7 +60,7 @@ trait QueriesLanguageRelationship
                 });
         })->addSelect(((array) $columns) ?: ["{$languageTable}.*", "{$table}.*"])
             ->when(! $langIsEmpty, function ($q) {
-                return $q->addSelect(['languages.language', 'languages.id as language_id']);
+                return $q->addSelect(['languages.language']);
             });
     }
 

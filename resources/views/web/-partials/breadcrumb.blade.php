@@ -10,7 +10,7 @@
                             @if (! $loop->last)
                                 <a href="{{web_url([$prevSlug, $item->slug])}}">
                                     @endif
-                                    {{$item->short_title ?? $item->title}}
+                                    {{$item->short_title ?? $item->title ?? $item->slug}}
                                     @if (! $loop->last)
                                 </a>
                             @endif

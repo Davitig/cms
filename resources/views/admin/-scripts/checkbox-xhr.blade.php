@@ -6,7 +6,7 @@
             let id = target.data('id');
             let data = {'id':id, '_token':'{{csrf_token()}}', '_method':'{{ $method ?? 'put' }}'};
             $.post('{{ $url }}', data, function (res) {
-                selector.trigger('xhrCheckSuccess', [target]);
+                selector.trigger('xhrCheckDone', [target]);
                 if (res?.message) {
                     notyf(res.message);
                 }

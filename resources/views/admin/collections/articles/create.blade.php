@@ -14,6 +14,7 @@
     <div class="card">
         <div class="card-header fs-5">Articles</div>
         <div class="card-body">
+            @includeWhen(! language()->queryStringOrActive(), 'admin.-alerts.resource-requires-lang')
             {{ html()->modelForm($current, 'post', cms_route('articles.store', [$current->collection_id]))->open() }}
             @include('admin.collections.articles.form')
             {{ html()->form()->close() }}

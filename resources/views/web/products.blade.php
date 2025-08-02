@@ -21,7 +21,7 @@
                     <div class="content clearfix">
                         <header class="title">
                             <h2>
-                                <a href="{{web_url([$current->url_path, $item->slug])}}">{{$item->title}}</a>
+                                <a href="{{web_url([$current->url_path, $item->slug])}}">{{$item->title ?: $item->slug}}</a>
                             </h2>
                         </header>
                         <!-- .title -->

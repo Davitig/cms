@@ -11,6 +11,7 @@
     <div class="card">
         <div class="card-header fs-5">Translations</div>
         <div class="card-body">
+            @includeWhen(! language()->queryStringOrActive(), 'admin.-alerts.resource-requires-lang')
             {{ html()->modelForm($current, 'post', cms_route('translations.store'))->attribute('novalidate')->open() }}
             @include('admin.translations.form')
             {{ html()->form()->close() }}
