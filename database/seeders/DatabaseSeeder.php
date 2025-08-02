@@ -11,8 +11,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(LanguageSeeder::class);
-
         $this->call(CmsUserRoleSeeder::class);
 
         $this->call(CmsUserSeeder::class);

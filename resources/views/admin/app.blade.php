@@ -29,6 +29,8 @@
                 @endif
                 <!-- Content -->
                 <div class="container-xxl flex-grow-1 container-p-y">
+                    @php($showMaintenanceAlert = ! language()->countVisible() || $routeMatches(['languages']))
+                    @includeWhen($showMaintenanceAlert, 'admin.-alerts.maintenance-without-lang')
                     @yield('content')
                 </div>
                 <!--/ Content -->

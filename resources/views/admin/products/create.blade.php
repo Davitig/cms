@@ -11,6 +11,7 @@
     <div class="mb-6">
         <div class="fs-4 text-dark">Add a new Product</div>
     </div>
+    @includeWhen(! language()->queryStringOrActive(), 'admin.-alerts.resource-requires-lang')
     {{ html()->modelForm($current, 'post', cms_route('products.store'))->attribute('novalidate')->open() }}
     @include('admin.products.form')
     {{ html()->form()->close() }}

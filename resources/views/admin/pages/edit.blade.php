@@ -41,8 +41,10 @@
         <div class="card-body">
             <div class="tab-content p-0">
                 @php($activeLang = language()->queryStringOrActive())
+                @includeWhen(! $activeLang, 'admin.-alerts.resource-requires-lang')
                 @foreach($items as $current)
                     <div id="item-{{ $current->language }}" @class(['tab-pane', 'show active' => $current->language == $activeLang || ! $activeLang])>
+                        @includeWhen(! $current->language_id, 'admin.-alerts.resource-without-lang')
                         {{ html()->modelForm($current, 'put', cms_route('pages.update', [$current->menu_id, $current->id], $current->language))
                         ->id('pages-form')->data('ajax-form', $preferences->get('ajax_form'))->data('lang', $current->language)->attribute('novalidate')->open() }}
                         @include('admin.pages.form')

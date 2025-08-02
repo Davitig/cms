@@ -14,6 +14,7 @@
     <div class="card">
         <div class="card-header fs-5">Pages</div>
         <div class="card-body">
+            @includeWhen(! language()->queryStringOrActive(), 'admin.-alerts.resource-requires-lang')
             {{ html()->modelForm($current, 'post', cms_route('pages.store', [$current->menu_id]))->id('pages-form')->open() }}
             {{ html()->hidden('parent_id') }}
             @include('admin.pages.form')

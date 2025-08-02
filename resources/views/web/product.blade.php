@@ -11,7 +11,7 @@
             @endif
             <div class="content">
                 <header class="heading">
-                    <h1>{{$current->title}}</h1>
+                    <h1>{{$current->title ?: $current->slug}}</h1>
                 </header>
                 <!-- .heading -->
                 <div class="price">

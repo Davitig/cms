@@ -25,12 +25,9 @@
         <div class="card-body">
             @if ($routesAreCached)
                 <div class="alert alert-outline-info" role="alert">
-                    Routes are cached. Any language changes will not take effect until the route cache is cleared or refreshed
+                    Routes are cached. Any language changes will not take effect until the route <a href="{{ cms_route('settings.cache.index') }}#cache-routes" class="text-info text-decoration-underline" target="_blank">cache</a> is cleared or refreshed
                 </div>
             @endif
-            <div @class(['visibility-alert alert alert-outline-danger', 'd-none' => $visibleLangCount]) role="alert">
-                Website is in maintenance mode when there is no visible language
-            </div>
             <div id="items" class="table-responsive text-nowrap">
                 <table class="table table-hover">
                     <thead>
@@ -142,8 +139,8 @@
                 }
             });
             // toggle message when there is no visible language
-            let visibleLangCount = {{ $visibleLangCount }};
-            let langVisibleSelector = $('.visibility-alert');
+            let langVisibleSelector = $('.lang-visibility-alert');
+            let visibleLangCount = langVisibleSelector.data('count');
             $('form.visibility').on('visibilityResponse', function (e, res) {
                 visibleLangCount += res?.data ? res.data : -1;
                 if (visibleLangCount > 0) {
@@ -153,7 +150,7 @@
                 }
             })
             // update the main language in navbar
-            $('#items').on('xhrCheckSuccess', function (res, target) {
+            $('#items').on('xhrCheckDone', function (res, target) {
                 activeLangSelector.attr('src', target.closest('.item').find('.flag-img').attr('src'));
                 langSelected = 1;
             });
