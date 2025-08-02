@@ -71,7 +71,7 @@
                                 <i class="icon-base fa fa-user-{{ $allowedRouteGroupCount ? 'check' : 'lock' }} icon-sm"></i>
                             </div>
                             <div class="fs-5">
-                                {{ucfirst($groupName ?: config('app.name'))}}
+                                {{str($groupName ?: config('app.name'))->headline()}}
                             </div>
                         </div>
                         <div>
@@ -90,7 +90,7 @@
                                     <li class="mb-4">
                                         <div class="p{{ $hasMainList ? 'y' : 'b' }}-4 d-flex justify-content-between border{{ $hasMainList ? ' border-start-0 border-end-0' : '-bottom' }}">
                                             <div class="fs-5">
-                                                {{ucfirst($subGroupName ?: config('app.name'))}}
+                                                {{str($subGroupName ?: config('app.name'))->headline()}}
                                             </div>
                                             <div>
                                                 <div class="form-text">
