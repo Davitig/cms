@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Language;
 
 use App\Concerns\Models\Positionable;
 use Illuminate\Database\Eloquent\Builder;

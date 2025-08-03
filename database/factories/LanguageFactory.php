@@ -2,13 +2,21 @@
 
 namespace Database\Factories;
 
+use App\Models\Language\Language;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Language>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Language\Language>
  */
 class LanguageFactory extends Factory
 {
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var class-string<\Illuminate\Database\Eloquent\Model>
+     */
+    protected $model = Language::class;
+
     /**
      * The position attribute increment value.
      *

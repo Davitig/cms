@@ -2,7 +2,7 @@
 
 namespace App\Support;
 
-use App\Models\Language;
+use App\Models\Language\Language;
 use Exception;
 use Illuminate\Support\Collection;
 

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Admin\Resources;
 
-use App\Models\Language;
+use App\Models\Language\Language;
 use Database\Factories\LanguageFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;

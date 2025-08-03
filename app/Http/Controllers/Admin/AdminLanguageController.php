@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\LanguageRequest;
-use App\Models\Language;
+use App\Models\Language\Language;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,7 @@ class AdminLanguageController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  \App\Models\Language  $model
+     * @param  \App\Models\Language\Language  $model
      */
     public function __construct(protected Language $model) {}
 
