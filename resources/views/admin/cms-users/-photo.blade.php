@@ -6,7 +6,7 @@
     <div class="button-wrapper" data-error="append">
         <div class="d-flex">
             {{ html()->modelForm($current, 'post', cms_route('cms_users.image.store', [$current->id]))
-            ->id('upload-photo')->data('ajax-form', 1)->acceptsFiles()->open() }}
+            ->id('upload-photo')->data('ajax-form', $preferences->get('ajax_form'))->acceptsFiles()->open() }}
             {{ html()->hidden('image_type', 'photo') }}
             <label for="photo_inp" class="btn btn-primary me-3 mb-4" tabindex="0">
                 <div class="loading-photo spinner-border spinner-border-sm text-white me-1 d-none"></div>

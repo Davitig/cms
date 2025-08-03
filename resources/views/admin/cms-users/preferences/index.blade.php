@@ -5,7 +5,8 @@
     <div class="card">
         <div class="card-header fs-5">Preferences</div>
         <div class="card-body">
-            {{ html()->modelForm($current, 'put', cms_route('cms_users.preferences.save', [$cmsUser->id]))->attribute('novalidate')->open() }}
+            {{ html()->modelForm($current, 'put', cms_route('cms_users.preferences.save', [$cmsUser->id]))
+            ->attribute('novalidate')->open() }}
             <div class="row g-6 mb-6">
                 <label class="switch switch-primary">
                     {{ html()->checkbox('horizontal_menu')

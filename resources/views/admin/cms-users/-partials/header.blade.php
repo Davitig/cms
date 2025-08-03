@@ -33,7 +33,7 @@
             <div class="button-wrapper d-flex justify-content-end align-items-center gap-3">
                 {{ html()->modelForm($current, 'post', cms_route('cms_users.image.store', [$current->id]))
                 ->id('upload-cover')->class('d-flex align-items-center gap-3')
-                ->data('ajax-form', 1)->data('error', 'prepend')->acceptsFiles()->open() }}
+                ->data('ajax-form', $preferences->get('ajax_form'))->data('error', 'prepend')->acceptsFiles()->open() }}
                 {{ html()->hidden('image_type', 'cover') }}
                 @error('cover')
                 <div class="text-danger">{{ $message }}</div>

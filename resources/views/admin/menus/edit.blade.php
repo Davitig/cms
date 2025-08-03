@@ -20,7 +20,8 @@
         </div>
         <div class="card-body">
             <div class="panel-body">
-                {{ html()->modelForm($current, 'put', cms_route('menus.update', [$current->id]))->data('ajax-form', 1)->open() }}
+                {{ html()->modelForm($current, 'put', cms_route('menus.update', [$current->id]))
+                ->data('ajax-form', $preferences->get('ajax_form'))->open() }}
                 @include('admin.menus.form')
                 {{ html()->form()->close() }}
             </div>

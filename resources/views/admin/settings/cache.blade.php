@@ -29,7 +29,8 @@
                                 Laravel will then determine if the uncompiled view has been modified more recently than the compiled view.
                                 If the compiled view either does not exist, or the uncompiled view has been modified, Laravel will recompile the view.
                             </p>
-                            {{ html()->form('post', cms_route('settings.cache.view_clear'))->data('ajax-form', 1)->open() }}
+                            {{ html()->form('post', cms_route('settings.cache.view_clear'))
+                            ->data('ajax-form', $preferences->get('ajax_form'))->open() }}
                             <button type="submit" class="btn btn-outline-success">Clear</button>
                             {{ html()->form()->close() }}
 
@@ -48,7 +49,7 @@
                                 This will combine all the configuration options for your application into a single file which can be quickly loaded by the framework.
                             </p>
                             {{ html()->form('post', cms_route('settings.cache.config'))->class('cache-form')
-                            ->data('cached', (int) $configCached)->data('ajax-form', 1)->open() }}
+                            ->data('cached', (int) $configCached)->data('ajax-form', $preferences->get('ajax_form'))->open() }}
                             <button type="submit" class="btn btn-{{ $configCached ? 'warning' : 'success' }}">
                                 {{ $configCached ? 'Clear' : 'Cache' }}
                             </button>
@@ -70,7 +71,7 @@
                                 <span class="text-danger">Remember, if you add or change any <a href="{{ cms_route('languages.index') }}" class="text-danger text-decoration-underline" target="_blank"><strong>language</strong></a> data you will need to generate a fresh route cache.</span>
                             </p>
                             {{ html()->form('post', cms_route('settings.cache.routes'))->class('cache-form')
-                            ->data('cached', (int) $routesCached)->data('ajax-form', 1)->open() }}
+                            ->data('cached', (int) $routesCached)->data('ajax-form', $preferences->get('ajax_form'))->open() }}
                             <button type="submit" class="btn btn-{{ $routesCached ? 'warning' : 'success' }}">
                                 {{ $routesCached ? 'Clear' : 'Cache' }}
                             </button>

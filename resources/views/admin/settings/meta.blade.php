@@ -21,7 +21,7 @@
                     @php($currentLang = language()->getByKey($langId, 'language'))
                     <div id="item-{{ $currentLang }}" @class(['tab-pane', 'show active' => $currentLang == $activeLang || ! $activeLang])>
                         {{ html()->modelForm($current, 'post', cms_route('settings.meta.save', [], $currentLang))->data('lang', $currentLang)
-                        ->data('ajax-form', 1)->attribute('novalidate')->open() }}
+                        ->data('ajax-form', $preferences->get('ajax_form'))->attribute('novalidate')->open() }}
                         <div class="row g-6 mb-6">
                             <div>
                                 <label for="site_name_inp" class="form-label">Site Name</label>
