@@ -1,8 +1,7 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\CmsUser;
 
-use App\Models\CmsUser\CmsUserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -10,13 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CmsUserRoleFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var class-string<\Illuminate\Database\Eloquent\Model>
-     */
-    protected $model = CmsUserRole::class;
-
     /**
      * Define the model's default state.
      *

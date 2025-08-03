@@ -5,8 +5,8 @@ namespace Tests\Feature\Admin;
 use App\Models\CmsUser\CmsUser;
 use App\Models\CmsUser\CmsUserRole;
 use Closure;
-use Database\Factories\CmsUserFactory;
-use Database\Factories\CmsUserRoleFactory;
+use Database\Factories\CmsUser\CmsUserFactory;
+use Database\Factories\CmsUser\CmsUserRoleFactory;
 use Tests\TestCase;
 
 abstract class TestAdmin extends TestCase

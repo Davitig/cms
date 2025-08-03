@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Database\Factories\CmsUserRoleFactory;
+use Database\Factories\CmsUser\CmsUserRoleFactory;
 use Illuminate\Database\Seeder;
 
 class CmsUserRoleSeeder extends Seeder

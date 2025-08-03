@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Admin;
 
-use Database\Factories\CmsUserFactory;
-use Database\Factories\CmsUserRoleFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AdminLoginTest extends TestAdmin

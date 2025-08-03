@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\CmsUser\CmsUserRole;
-use Database\Factories\CmsUserFactory;
+use Database\Factories\CmsUser\CmsUserFactory;
 use Exception;
 
 class CmsUserSeeder extends DatabaseSeeder

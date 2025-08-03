@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Admin\Resources\CmsUser;
 
-use Database\Factories\CmsUserFactory;
-use Database\Factories\CmsUserRoleFactory;
+use Database\Factories\CmsUser\CmsUserFactory;
+use Database\Factories\CmsUser\CmsUserRoleFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
 
