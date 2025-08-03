@@ -10,7 +10,7 @@ use App\Models\Event\Event;
 use App\Models\Menu;
 use App\Models\Page\Page;
 use App\Models\Product\Product;
-use App\Models\Translation;
+use App\Models\Translation\Translation;
 use Illuminate\Contracts\Cache\Repository;
 
 class AdminDashboardController extends Controller

@@ -1,11 +1,11 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Translation;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Translation>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Translation\Translation>
  */
 class TranslationFactory extends Factory
 {

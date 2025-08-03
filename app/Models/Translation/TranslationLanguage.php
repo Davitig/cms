@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Translation;
 
 use App\Concerns\Models\QueriesWithLanguage;
 use Illuminate\Database\Eloquent\Builder;

@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Admin\Resources;
 
-use App\Models\Translation;
-use Database\Factories\TranslationFactory;
-use Database\Factories\TranslationLanguageFactory;
+use App\Models\Translation\Translation;
+use Database\Factories\Translation\TranslationFactory;
+use Database\Factories\Translation\TranslationLanguageFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Feature\Admin\TestAdmin;
@@ -17,7 +17,7 @@ class AdminTranslationResourceTest extends TestAdmin
      * Create a new translation.
      *
      * @param  int|null  $times
-     * @return \App\Models\Translation|\Illuminate\Database\Eloquent\Collection
+     * @return \App\Models\Translation\Translation|\Illuminate\Database\Eloquent\Collection
      */
     protected function createTranslation(?int $times = null): Translation|Collection
     {

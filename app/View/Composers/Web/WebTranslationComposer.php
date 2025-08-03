@@ -2,7 +2,7 @@
 
 namespace App\View\Composers\Web;
 
-use App\Models\Translation;
+use App\Models\Translation\Translation;
 use App\Support\TranslationProvider;
 use Illuminate\Contracts\View\View;
 

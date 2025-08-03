@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use App\Support\TranslationProvider;
-use Database\Factories\TranslationFactory;
-use Database\Factories\TranslationLanguageFactory;
+use Database\Factories\Translation\TranslationFactory;
+use Database\Factories\Translation\TranslationLanguageFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

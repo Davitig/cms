@@ -2,7 +2,7 @@
 
 namespace App\Support;
 
-use App\Models\Translation;
+use App\Models\Translation\Translation;
 
 class TranslationProvider
 {
