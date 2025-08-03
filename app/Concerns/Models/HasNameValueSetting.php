@@ -50,10 +50,10 @@ trait HasNameValueSetting
     protected function filterAttribute(mixed $attribute): mixed
     {
         if (is_numeric($attribute)) {
-            if ($attribute = filter_var($attribute, FILTER_VALIDATE_INT)) {
-                return $attribute;
-            } elseif ($attribute = filter_var($attribute, FILTER_VALIDATE_FLOAT)) {
-                return $attribute;
+            if (($value = filter_var($attribute, FILTER_VALIDATE_INT)) !== false) {
+                return $value;
+            } elseif (($value = filter_var($attribute, FILTER_VALIDATE_FLOAT)) !== false) {
+                return $value;
             }
         }
 
