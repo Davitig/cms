@@ -25,14 +25,14 @@ class RouteServiceProvider extends ServiceProvider
         $langRouteName = $this->app['config']->get('language.route_name');
 
         // force language routes when testing.
-        $forcedLanguages = ((array) $this->app['config']->get('language.force_routes'))
+        $languageList = ((array) $this->app['config']->get('_language.force_routes'))
             ?: language()->all()->keys()->toArray();
 
-        $this->loadWebRoutes($router, $langRouteName, $forcedLanguages);
+        $this->loadWebRoutes($router, $langRouteName, $languageList);
 
         Route::middleware('web')->group(function (Router $router)
-        use ($request, $langRouteName, $forcedLanguages) {
-            $this->loadCMSRoutes($router, $request, $langRouteName, $forcedLanguages);
+        use ($request, $langRouteName, $languageList) {
+            $this->loadCMSRoutes($router, $request, $langRouteName, $languageList);
         });
     }
 
@@ -41,11 +41,11 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @param  \Illuminate\Routing\Router  $router
      * @param  string  $langRouteName
-     * @param  array  $forcedLanguages
+     * @param  array  $languageList
      * @return void
      */
     protected function loadWebRoutes(
-        Router $router, string $langRouteName, array $forcedLanguages
+        Router $router, string $langRouteName, array $languageList
     ): void
     {
         $routes = $this->getWebRoutesFileList();
@@ -53,12 +53,16 @@ class RouteServiceProvider extends ServiceProvider
         // routes without language prefix.
         $router->middleware('web.lang')->group($routes);
 
-        if (count($forcedLanguages) > 1) {
+        $languagesCount = count($languageList);
+
+        if ($languagesCount > 1 ||
+            $languagesCount === 1 &&
+            language()->getSettings('allow_single_language_in_url')) {
             // routes with language prefix.
             $router->middleware('web.lang')
                 ->prefix("{{$langRouteName}}")
                 ->name($langRouteName . '.')
-                ->whereIn($langRouteName, $forcedLanguages)
+                ->whereIn($langRouteName, $languageList)
                 ->group($routes);
         }
     }
@@ -81,21 +85,26 @@ class RouteServiceProvider extends ServiceProvider
      * @param  \Illuminate\Routing\Router  $router
      * @param  \Illuminate\Http\Request  $request
      * @param  string  $langRouteName
-     * @param  array  $forcedLanguages
+     * @param  array  $languageList
      * @return void
      */
     protected function loadCMSRoutes(
-        Router $router, Request $request, string $langRouteName, array $forcedLanguages
+        Router $router, Request $request, string $langRouteName, array $languageList
     ): void
     {
         $routes = $this->getCMSRoutesFileList();
 
-        if (! count($forcedLanguages)) {
+        if (! count($languageList)) {
+            // force redirect to non language prefixed route.
+            $router->get('{lang}/' . cms_path('{any}'), static function ($lang, $any) use ($request) {
+                return redirect(cms_url($any));
+            })->where('any', '.*');
+
             // routes without language prefix.
             $router->prefix(cms_path())->name(cms_route_name())->group($routes);
         } else {
             // force redirect to language prefixed route.
-            $router->get(cms_path('{any?}'), function () use ($request) {
+            $router->get(cms_path('{any?}'), static function () use ($request) {
                 return redirect(language()->active() . '/' . $request->path());
             })->where('any', '.*');
 

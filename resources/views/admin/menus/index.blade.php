@@ -71,4 +71,4 @@
     </div>
     {{ $items->links() }}
 @endsection
-@include('admin.-scripts.checkbox-xhr', ['url' => cms_route('menus.updateMain')])
+@include('admin.-scripts.checkbox-xhr', ['url' => cms_route('menus.update_main')])

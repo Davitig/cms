@@ -122,7 +122,7 @@ class AdminLanguageResourceTest extends TestAdmin
 
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put($this->cmsRoute('languages.updateMain'), ['id' => $language->id]);
+        )->put($this->cmsRoute('languages.update_main'), ['id' => $language->id]);
 
         $response->assertOk()->assertSessionHasNoErrors();
     }
@@ -137,7 +137,7 @@ class AdminLanguageResourceTest extends TestAdmin
 
         $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put($this->cmsRoute('languages.updateMain'), ['id' => $languages->first()->id]);
+        )->put($this->cmsRoute('languages.update_main'), ['id' => $languages->first()->id]);
 
         $count = (new Language)->whereMain(1)->count();
 
@@ -148,7 +148,7 @@ class AdminLanguageResourceTest extends TestAdmin
     {
         $response = $this->actingAs(
             $this->getFullAccessCmsUser(), 'cms'
-        )->put($this->cmsRoute('languages.updateMain'), [
+        )->put($this->cmsRoute('languages.update_main'), [
             // empty data
         ]);
 

@@ -10,6 +10,7 @@
                     sampleLangSelector.text(value);
                 }
             });
+            @if (language()->getSettings('down_without_language'))
             let langVisibleSelector = $('.lang-visibility-alert');
             if (langVisibleSelector.data('count') <= 1) {
                 $('form#lang-form[data-ajax-form="1"]').on('ajaxFormDone', function (e, res) {
@@ -20,6 +21,7 @@
                     }
                 });
             }
+            @endif
         });
     </script>
 @endpush

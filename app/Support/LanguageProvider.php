@@ -16,6 +16,13 @@ class LanguageProvider
     protected Collection $languages;
 
     /**
+     * The list of language settings.
+     *
+     * @var \Illuminate\Support\Collection
+     */
+    protected Collection $settings;
+
+    /**
      * The main language.
      *
      * @var string|null
@@ -47,12 +54,14 @@ class LanguageProvider
      * Create a new language provider instance.
      *
      * @param  \Illuminate\Support\Collection  $languages
-     * @param  string  $path
+     * @param  string|null  $language
      * @param  string|null  $queryString
      */
-    public function __construct(Collection $languages, string $path, ?string $queryString = null)
+    public function __construct(
+        Collection $languages, ?string $language = null, ?string $queryString = null
+    )
     {
-        $this->configure($languages, $path);
+        $this->configure($languages, $language);
 
         $this->queryString = $queryString;
     }
@@ -60,16 +69,16 @@ class LanguageProvider
     /**
      * Create a new language service instance.
      *
-     * @param  string  $path
+     * @param  string|null  $language
      * @param  string|null  $queryString
      * @return static
      */
-    public static function make(string $path, ?string $queryString = null): static
+    public static function make(?string $language = null, ?string $queryString = null): static
     {
         try {
-            return new static((new Language)->positionAsc()->get(), $path, $queryString);
+            return new static((new Language)->positionAsc()->get(), $language, $queryString);
         } catch (Exception) {
-            return new static(new Collection, $path, $queryString);
+            return new static(new Collection, $language, $queryString);
         }
     }
 
@@ -77,10 +86,10 @@ class LanguageProvider
      * Configure the language service.
      *
      * @param  \Illuminate\Support\Collection  $languages
-     * @param  string  $path
+     * @param  string|null  $language
      * @return void
      */
-    protected function configure(Collection $languages, string $path): void
+    protected function configure(Collection $languages, ?string $language = null): void
     {
         $languages = $languages->mapWithKeys(function ($language) {
             return [$language['language'] => $language];
@@ -88,31 +97,44 @@ class LanguageProvider
 
         $this->main = head($languages->filter(
             fn ($item) => $item['main']
-        )->keys()->toArray() ?: $languages->keys()->toArray());
+        )->keys()->toArray() ?: $languages->keys()->toArray()) ?: null;
 
-        $segments = explode('/', $path);
+        $this->isSelected = $language && $languages->offsetExists($language);
 
-        $activeLanguage = reset($segments);
-
-        $this->isSelected = $activeLanguage && $languages->offsetExists($activeLanguage);
-
-        if ($this->isSelected) {
-            $this->active = $activeLanguage;
-
-            array_shift($segments);
-        } else {
-            $this->active = $this->main ?: $languages->first()['language'] ?? null;
-        }
-
-        $this->main ??= $this->active;
-
-        $path = trim(implode('/', $segments), '/');
-
-        $languages->map(function ($item, $language) use ($path) {
-            $item['path'] = $language . ($path ? '/' . $path : '');
-        });
+        $this->active = $this->isSelected ? $language : ($this->main ?: null);
 
         $this->languages = $languages;
+    }
+
+    /**
+     * Get the settings.
+     *
+     * @param  string|null  $attribute
+     * @return mixed
+     */
+    public function getSettings(?string $attribute = null): mixed
+    {
+        if (isset($this->settings)) {
+            if (! is_null($attribute)) {
+                return $this->settings->get($attribute);
+            }
+
+            return $this->settings;
+        }
+
+        $settings = config('language.settings');
+
+        if (is_string($settings)) {
+            $this->settings = (new $settings)->getSettings();
+        } else {
+            $this->settings = new Collection((array) $settings);
+        }
+
+        if (! is_null($attribute)) {
+            return $this->settings->get($attribute);
+        }
+
+        return $this->settings;
     }
 
     /**
@@ -138,6 +160,17 @@ class LanguageProvider
         }
 
         return $this->get($this->main(), $attribute);
+    }
+
+    /**
+     * Determine if the given language is main.
+     *
+     * @param  string  $language
+     * @return bool
+     */
+    public function isMain(string $language): bool
+    {
+        return $this->main() == $language;
     }
 
     /**

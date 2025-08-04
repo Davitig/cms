@@ -1,12 +1,11 @@
 @extends('admin.app')
 @section('content')
     <div class="card">
-        <!-- Account -->
-        {{ html()->modelForm($current, 'post', cms_route('cms_users.store'))->acceptsFiles()->open() }}
-        <div class="card-body pt-4">
+        <div class="card-header fs-5">CMS Users</div>
+        <div class="card-body">
+            {{ html()->modelForm($current, 'post', cms_route('cms_users.store'))->acceptsFiles()->open() }}
             @include('admin.cms-users.form')
+            {{ html()->form()->close() }}
         </div>
-        {{ html()->form()->close() }}
-        <!-- /Account -->
     </div>
 @endsection

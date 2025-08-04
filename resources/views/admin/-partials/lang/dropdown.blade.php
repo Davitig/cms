@@ -9,12 +9,14 @@
     </a>
     <ul class="dropdown-languages dropdown-menu dropdown-menu-end">
         @php
-            $queryString = request()->getQueryString();
-            $queryString = $queryString ? '?' . $queryString : '';
+            $hasLanguage = ! language()->isEmpty();
+            $routeName = request()->route()?->getName();
+            $routeParams = request()->route()?->parameters();
+            $parameters = request()->query();
         @endphp
         @foreach (language()->all() as $key => $value)
             <li data-id="{{$value['id']}}">
-                <a href="{{url($value['path']) . $queryString}}" class="dropdown-item">
+                <a href="{{route($routeName, $routeParams + ($hasLanguage ? ['lang' => $key] : []) + $parameters)}}" class="dropdown-item">
                     <img src="{{ asset('assets/default/img/flags/'.$key.'.png') }}" width="25" height="18" class="me-2" alt="{{$value['full_name']}}">
                     <span>{{ $value['full_name'] }}</span>
                 </a>

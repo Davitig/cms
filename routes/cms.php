@@ -41,7 +41,7 @@ Route::middleware('cms.auth')->group(function (Router $router) {
     // languages
     $router->controller(AdminLanguageController::class)->group(function (Router $router) {
         $router->put('languages/update-main', 'updateMain')
-            ->name('languages.updateMain');
+            ->name('languages.update_main');
         $router->put('languages/{id}/visibility', 'visibility')
             ->name('languages.visibility');
         $router->put('languages/positions',  'positions')
@@ -53,7 +53,7 @@ Route::middleware('cms.auth')->group(function (Router $router) {
 
     // menus
     $router->put('menus/update-main', [AdminMenuController::class, 'updateMain'])
-        ->name('menus.updateMain');
+        ->name('menus.update_main');
     $router->resource('menus', AdminMenuController::class)
         ->names(resource_names('menus'))
         ->except(['show']);

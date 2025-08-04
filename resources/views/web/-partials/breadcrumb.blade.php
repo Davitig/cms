@@ -2,7 +2,7 @@
     <div class="container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{$url = web_url('/')}}">{{trans('general.home')}}</a></li>
+                <li class="breadcrumb-item"><a href="{{$url = web_route('home')}}">{{trans('general.home')}}</a></li>
                 @if ($breadcrumb = app('breadcrumb'))
                     @php($prevSlug = null)
                     @foreach ($breadcrumb as $item)

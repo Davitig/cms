@@ -1,3 +1,7 @@
+@php
+    $mainLang = language()->main();
+    $disableMainLang = language()->getSettings('disable_main_language_from_url');
+@endphp
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,7 +18,7 @@
     <link rel="canonical" href="{{$url}}">
     @if (language()->countVisible() > 1)
         @foreach (language()->allVisible() as $key => $value)
-            <link rel="alternate" hreflang="{{$key}}" href="{{web_url($current->url_path, [], $key)}}">
+            <link rel="alternate" hreflang="{{$key}}" href="{{web_url($current->url_path, [], $disableMainLang && $mainLang == $key ? false : $key)}}">
         @endforeach
     @endif
     <link rel="stylesheet" href="{{ asset('assets/default/libs/bootstrap-5.3.7/css/bootstrap.min.css') }}">

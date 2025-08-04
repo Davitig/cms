@@ -29,7 +29,12 @@
         </div>
         <div id="items" class="card-body" data-parent-slug="">
             <ul class="uk-nestable list-group list-group-flush" data-uk-nestable="{handleClass:'uk-nestable-handle'}">
-                @php($prevPos = 0)
+                @php
+                    $prevPos = 0;
+                    $mainLang = language()->main();
+                    $disableMainLang = language()->getSettings('disable_main_language_from_url') ||
+                                       language()->getSettings('redirect_from_main');
+                @endphp
                 @foreach(make_sub_items($items) as $item)
                     <li id="item{{ $item->id }}" class="item uk-nestable-item list-group-item ps-0 m-0" data-id="{{ $item->id }}">
                         <div class="d-flex justify-content-between align-items-center">
@@ -45,7 +50,7 @@
                             </div>
                             <div class="actions d-flex align-items-center gap-4">
                                 <div class="item-id badge bg-label-gray text-dark">{{ $item->id }}</div>
-                                <a href="{{ web_url($item->url_path) }}" class="link" data-slug="{{ $item->slug }}" target="_blank" title="View Website Page">
+                                <a href="{{ web_url($item->url_path, [], ! $disableMainLang || $item->language != $mainLang ? null : false) }}" class="link" data-slug="{{ $item->slug }}" target="_blank" title="View Website Page">
                                     <i class="icon-base fa fa-link icon-sm"></i>
                                 </a>
                                 <div class="dropdown">
@@ -92,7 +97,7 @@
                                 </div>
                             </div>
                         </div>
-                        @include('admin.pages.sub_items')
+                        @include('admin.pages.sub_items', compact('mainLang', 'disableMainLang'))
                     </li>
                     @php($prevPos = $item->position)
                 @endforeach

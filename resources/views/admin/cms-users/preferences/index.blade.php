@@ -18,7 +18,7 @@
                     {{ html()->checkbox('ajax_form')
                     ->id('ajax_form_inp')->class('switch-input') }}
                     <span class="switch-toggle-slider"></span>
-                    <span class="switch-label">No reload on form submit</span>
+                    <span class="switch-label">No reload on form update</span>
                 </label>
                 @if ($userRouteAccess('cms_user_roles.index'))
                     <div>

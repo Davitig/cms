@@ -15,7 +15,9 @@
                 <span class="badge bg-label-primary ms-4">{{ number_format($items->total()) }}</span>
             </div>
             <div class="card-header-elements ms-md-auto flex-md-row flex-column align-items-md-center align-items-start gap-4">
-                <span class="badge badge-outline-secondary rounded-pill">Drag and Drop to sort the language order</span>
+                @if ($items->count() > 1)
+                    <span class="badge badge-outline-secondary rounded-pill">Drag and Drop to sort the language order</span>
+                @endif
                 <a href="{{ cms_route('languages.create') }}" class="btn btn-primary">
                     <i class="icon-base fa fa-plus icon-xs me-1"></i>
                     <span>Add New Record</span>
@@ -25,7 +27,8 @@
         <div class="card-body">
             @if ($routesAreCached)
                 <div class="alert alert-outline-info" role="alert">
-                    Routes are cached. Any language changes will not take effect until the route <a href="{{ cms_route('settings.cache.index') }}#cache-routes" class="text-info text-decoration-underline" target="_blank">cache</a> is cleared or refreshed
+                    Routes are cached.
+                    Language changes will not take effect until the route <a href="{{ cms_route('settings.cache.index') }}#cache-routes" class="text-info text-decoration-underline" target="_blank">cache</a> is cleared or refreshed
                 </div>
             @endif
             <div id="items" class="table-responsive text-nowrap">
@@ -138,6 +141,7 @@
                     });
                 }
             });
+            @if (language()->getSettings('down_without_language'))
             // toggle message when there is no visible language
             let langVisibleSelector = $('.lang-visibility-alert');
             let visibleLangCount = langVisibleSelector.data('count');
@@ -149,6 +153,7 @@
                     langVisibleSelector.removeClass('d-none');
                 }
             })
+            @endif
             // update the main language in navbar
             $('#items').on('xhrCheckDone', function (res, target) {
                 activeLangSelector.attr('src', target.closest('.item').find('.flag-img').attr('src'));
@@ -157,4 +162,4 @@
         });
     </script>
 @endpush
-@include('admin.-scripts.checkbox-xhr', ['url' => cms_route('languages.updateMain')])
+@include('admin.-scripts.checkbox-xhr', ['url' => cms_route('languages.update_main')])

@@ -47,7 +47,7 @@ class ElfinderServiceProvider extends ServiceProvider
         $config['middleware'][] = 'cms.auth';
         $config['as'] = cms_route_name();
 
-        $forcedLanguages = ((array) $this->app['config']->get('language.force_routes'))
+        $forcedLanguages = ((array) $this->app['config']->get('_language.force_routes'))
             ?: language()->all()->keys()->toArray();
 
         if ($forcedLanguages) {

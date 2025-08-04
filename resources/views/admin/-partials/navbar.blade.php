@@ -38,7 +38,7 @@
                     @include('admin.-partials.lang.dropdown')
                     <!-- Website -->
                     <li class="nav-item">
-                        <a href="{{ web_url('/') }}" id="website-url" class="nav-link btn btn-icon rounded-pill" title="View Website" target="_blank">
+                        <a href="{{ web_route('home') }}" id="website-url" class="nav-link btn btn-icon rounded-pill" title="View Website" target="_blank">
                             <i class="icon-base fa fa-globe icon-22px"></i>
                         </a>
                     </li>

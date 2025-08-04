@@ -11,7 +11,7 @@ class RouteWithoutLanguageProviderTest extends TestAdmin
 {
     use RefreshDatabase, InteractsWithDynamicPage;
 
-    protected bool $languageProviderEnabled = false;
+    protected bool $globalLanguageProviderEnabled = false;
 
     public function test_admin_route_without_language_provider()
     {
@@ -36,6 +36,6 @@ class RouteWithoutLanguageProviderTest extends TestAdmin
 
         $response = $this->get($this->webUrl($page->slug));
 
-        $response->assertServiceUnavailable();
+        $response->assertOk();
     }
 }

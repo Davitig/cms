@@ -25,6 +25,13 @@ class WebHandleDynamicRoute
     protected string $namespace = 'App\Http\Controllers\Web';
 
     /**
+     * The current active language.
+     *
+     * @var string|null
+     */
+    protected ?string $activeLanguage = null;
+
+    /**
      * The array of request path segments.
      *
      * @var array
@@ -84,6 +91,7 @@ class WebHandleDynamicRoute
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // remove any parameter from being passed to controller
         $this->route->forgetParameter('any');
 
         $originalControllerClass = $this->route->getControllerClass();
@@ -138,7 +146,9 @@ class WebHandleDynamicRoute
             return false;
         }
 
-        if (reset($segments) == language()->active()) {
+        if (reset($segments) == $activeLanguage = language()->active()) {
+            $this->activeLanguage = $activeLanguage;
+
             array_shift($segments);
 
             $segmentsCount--;
@@ -479,7 +489,9 @@ class WebHandleDynamicRoute
             $actionMethod = $this->tabActionMethod;
         }
 
-        $this->route->setAction($this->getControllerAction($type, $actionMethod));
+        $this->route->setAction($this->getControllerAction($type, $actionMethod) + [
+                'as' => ($this->activeLanguage ? 'lang.' : '' ) . 'dynamic'
+            ]);
 
         foreach ($parameters as $key => $value) {
             $this->route->setParameter($key, $value);
