@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
-class WebValidateLanguage
+class WebLanguageValidate
 {
     /**
      * Create a new middleware instance.
@@ -29,7 +29,7 @@ class WebValidateLanguage
     {
         $language = $this->route->parameter($langRouteName = config('language.route_name'));
 
-        if ($language && ! language()->exists($language)) {
+        if ($language && ! language()->visibleExists($language)) {
             throw new NotFoundHttpException;
         }
 

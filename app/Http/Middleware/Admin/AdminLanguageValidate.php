@@ -8,7 +8,7 @@ use Illuminate\Routing\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class AdminValidateLanguage
+class AdminLanguageValidate
 {
     /**
      * Create a new middleware instance.

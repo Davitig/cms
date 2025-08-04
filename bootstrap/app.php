@@ -19,12 +19,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             // cms
-            'cms.lang' => \App\Http\Middleware\Admin\AdminValidateLanguage::class,
+            'cms.lang' => \App\Http\Middleware\Admin\AdminLanguageValidate::class,
             'cms.auth' => \App\Http\Middleware\Admin\AdminAuthenticate::class,
             'cms.guest' => \App\Http\Middleware\Admin\AdminRedirectIfAuthenticated::class,
             'cms.fullAccess' => \App\Http\Middleware\Admin\AdminCmsUserWithFullAccess::class,
             // web
-            'web.lang' => \App\Http\Middleware\Web\WebValidateLanguage::class,
+            'web.lang' => \App\Http\Middleware\Web\WebLanguageValidate::class,
             'web.dynamicRoute' => \App\Http\Middleware\Web\WebHandleDynamicRoute::class,
         ]);
     })
