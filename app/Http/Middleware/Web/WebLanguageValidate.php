@@ -33,7 +33,7 @@ class WebLanguageValidate
             throw new NotFoundHttpException;
         }
 
-        if (! language()->activeIsVisible()) {
+        if (language()->getSettings('down_without_language')) {
             throw new ServiceUnavailableHttpException;
         }
 

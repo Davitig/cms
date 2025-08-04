@@ -25,4 +25,15 @@ return [
 
     'query_string_key' => 'lang',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Setting Model
+    |--------------------------------------------------------------------------
+    |
+    | This option defines the default language setting model.
+    |
+    */
+
+    'setting_model' => App\Models\Language\LanguageSetting::class,
+
 ];

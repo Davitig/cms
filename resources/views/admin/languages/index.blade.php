@@ -138,6 +138,7 @@
                     });
                 }
             });
+            @if (language()->getSettings('down_without_language'))
             // toggle message when there is no visible language
             let langVisibleSelector = $('.lang-visibility-alert');
             let visibleLangCount = langVisibleSelector.data('count');
@@ -149,6 +150,7 @@
                     langVisibleSelector.removeClass('d-none');
                 }
             })
+            @endif
             // update the main language in navbar
             $('#items').on('xhrCheckDone', function (res, target) {
                 activeLangSelector.attr('src', target.closest('.item').find('.flag-img').attr('src'));

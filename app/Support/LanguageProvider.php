@@ -16,6 +16,13 @@ class LanguageProvider
     protected Collection $languages;
 
     /**
+     * The list of language settings.
+     *
+     * @var \Illuminate\Support\Collection
+     */
+    protected Collection $settings;
+
+    /**
      * The main language.
      *
      * @var string|null
@@ -113,6 +120,33 @@ class LanguageProvider
         });
 
         $this->languages = $languages;
+    }
+
+    /**
+     * Get the settings.
+     *
+     * @param  string|null  $attribute
+     * @return mixed
+     */
+    public function getSettings(?string $attribute = null): mixed
+    {
+        if (isset($this->settings)) {
+            if (! is_null($attribute)) {
+                return $this->settings->get($attribute);
+            }
+
+            return $this->settings;
+        }
+
+        $model = config('language.setting_model');
+
+        $this->settings = (new $model)->getSettings();
+
+        if (! is_null($attribute)) {
+            return $this->settings->get($attribute);
+        }
+
+        return $this->settings;
     }
 
     /**

@@ -84,6 +84,7 @@ class WebHandleDynamicRoute
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // remove any parameter from being passed to controller
         $this->route->forgetParameter('any');
 
         $originalControllerClass = $this->route->getControllerClass();
