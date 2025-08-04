@@ -37,13 +37,13 @@ class AdminLoginTest extends TestAdmin
         $email = fake()->email();
 
         $this->createCmsUser(false, function ($factory) use ($email) {
-            return $factory->loginParams($email, 'password')
+            return $factory->loginParams($email, 'password1')
                 ->suspended(true);
         });
 
         $response = $this->post($this->cmsRoute('login.post'), [
             'email' => $email,
-            'password' => 'password'
+            'password' => 'password1'
         ]);
 
         $response->assertRedirect($this->cmsRoute('login'))
@@ -55,12 +55,12 @@ class AdminLoginTest extends TestAdmin
         $email = fake()->email();
 
         $this->createCmsUser(false, function ($factory) use ($email) {
-            return $factory->loginParams($email, 'password');
+            return $factory->loginParams($email, 'password1');
         });
 
         $response = $this->post($this->cmsRoute('login.post'), [
             'email' => $email,
-            'password' => 'password'
+            'password' => 'password1'
         ]);
 
         $response->assertRedirect($this->cmsRoute('dashboard.index'));

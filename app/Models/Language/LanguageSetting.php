@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models\Setting;
+namespace App\Models\Language;
 
 use App\Concerns\Models\HasNameValueSetting;
 use App\Contracts\Models\Setting;
 use Illuminate\Database\Eloquent\Model;
 
-class ContactSetting extends Model implements Setting
+class LanguageSetting extends Model implements Setting
 {
     use HasNameValueSetting;
 
@@ -37,9 +37,11 @@ class ContactSetting extends Model implements Setting
     public function defaultNameValues(): array
     {
         return [
-            'email' => null,
-            'phone' => null,
-            'address' => null
+            'down_without_language' => 0,
+            'disable_main_language_from_url' => 0,
+            'allow_single_language_in_url' => 0,
+            'redirect_from_main' => 0,
+            'redirect_to_main' => 0
         ];
     }
 }

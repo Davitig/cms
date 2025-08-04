@@ -25,7 +25,8 @@
         <div class="card-body">
             @if ($routesAreCached)
                 <div class="alert alert-outline-info" role="alert">
-                    Routes are cached. Any language changes will not take effect until the route <a href="{{ cms_route('settings.cache.index') }}#cache-routes" class="text-info text-decoration-underline" target="_blank">cache</a> is cleared or refreshed
+                    Routes are cached.
+                    Language changes will not take effect until the route <a href="{{ cms_route('settings.cache.index') }}#cache-routes" class="text-info text-decoration-underline" target="_blank">cache</a> is cleared or refreshed
                 </div>
             @endif
             <div id="items" class="table-responsive text-nowrap">
@@ -138,6 +139,7 @@
                     });
                 }
             });
+            @if (language()->getSettings('down_without_language'))
             // toggle message when there is no visible language
             let langVisibleSelector = $('.lang-visibility-alert');
             let visibleLangCount = langVisibleSelector.data('count');
@@ -149,6 +151,7 @@
                     langVisibleSelector.removeClass('d-none');
                 }
             })
+            @endif
             // update the main language in navbar
             $('#items').on('xhrCheckDone', function (res, target) {
                 activeLangSelector.attr('src', target.closest('.item').find('.flag-img').attr('src'));

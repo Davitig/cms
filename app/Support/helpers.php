@@ -219,16 +219,14 @@ function language_route_parameters(
         return [$name, $parameters, $absolute];
     }
 
-    $langRouteName = config('language.route_name');
-
     if (! is_string($language) &&
-        ! $language = ($onDefaultLanguage() ? language()->active() : null)) {
+        ! is_string($language = ($onDefaultLanguage() ? language()->active() : null))) {
         return [$name, $parameters, $absolute];
     }
 
     $parameters = Arr::wrap($parameters);
 
-    $parameters[$langRouteName] = $language;
+    $parameters[$langRouteName = config('language.route_name')] = $language;
 
     $langRouteName .= '.';
 
@@ -244,6 +242,8 @@ function language_route_parameters(
  */
 function language_path_prefix(?string $path = null, mixed $language = null): string
 {
+    $path = str($path)->replaceStart($language, '');
+
     if ($language === false) {
         return $path;
     }
@@ -252,7 +252,7 @@ function language_path_prefix(?string $path = null, mixed $language = null): str
 
     if (is_string($language)) {
         $path = $language . '/' . $path;
-    } elseif (($language === true || language()->isSelected()) && language()->count() > 1) {
+    } elseif (($language === true || language()->isSelected()) && ! language()->isEmpty()) {
         $path = language()->active() . '/' . $path;
     }
 

@@ -25,4 +25,16 @@ return [
 
     'query_string_key' => 'lang',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Settings
+    |--------------------------------------------------------------------------
+    |
+    | This option defines the default language setting.
+    | You can specify the eloquent model or an array.
+    |
+    */
+
+    'settings' => App\Models\Language\LanguageSetting::class,
+
 ];

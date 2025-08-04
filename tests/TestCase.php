@@ -12,18 +12,18 @@ use Illuminate\Support\Collection;
 abstract class TestCase extends BaseTestCase
 {
     /**
-     * Indicates whether the language provider should be enabled.
+     * Indicates whether the language provider should be enabled globally.
      *
      * @var bool
      */
-    protected bool $languageProviderEnabled = true;
+    protected bool $globalLanguageProviderEnabled = true;
 
     /**
-     * Indicates whether the language provider should be created with default data.
+     * Indicates whether the global language provider should be created with default data.
      *
      * @var bool
      */
-    protected bool $insertDefaultLanguageData = true;
+    protected bool $insertDefaultGlobalLanguageProviderData = true;
 
     /**
      * The languages of an environment variable.
@@ -40,22 +40,32 @@ abstract class TestCase extends BaseTestCase
     protected ?string $envActiveLanguage = null;
 
     /**
+     * The list of language settings.
+     *
+     * @var array
+     */
+    protected array $languageSettings = [];
+
+    /**
      * Creates the application.
      *
      * @return \Illuminate\Foundation\Application
      */
     public function createApplication()
     {
-        if ($this->languageProviderEnabled) {
+        if ($this->globalLanguageProviderEnabled) {
             $this->envLanguages = $this->getEnvLanguages();
         }
 
         $envLanguages = $this->envLanguages;
 
+        $langSettings = $this->languageSettings;
+
         $app = require Application::inferBasePath().'/bootstrap/app.php';
 
-        $app->booting(static function () use ($app, $envLanguages) {
-            $app['config']->set('language.force_routes', $envLanguages);
+        $app->booting(static function () use ($app, $envLanguages, $langSettings) {
+            $app['config']->set('_language.force_routes', $envLanguages);
+            $app['config']->set('language.settings', $langSettings);
         });
 
         $app->make(Kernel::class)->bootstrap();
@@ -70,7 +80,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        if ($this->languageProviderEnabled && $this->insertDefaultLanguageData) {
+        if ($this->globalLanguageProviderEnabled && $this->insertDefaultGlobalLanguageProviderData) {
             $this->envActiveLanguage = getenv('lang_active')
                 ?: reset($this->envLanguages);
 
@@ -161,7 +171,7 @@ abstract class TestCase extends BaseTestCase
                 fn ($factory) => $factory->languages(
                     $this->envLanguages, $this->envActiveLanguage
                 ),
-            )->create() : new Collection, $this->app['request']->path()
+            )->create() : new Collection
         ));
     }
 

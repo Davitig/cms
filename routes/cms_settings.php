@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminContactSettingController;
+use App\Http\Controllers\Admin\AdminLanguageSettingController;
+use App\Http\Controllers\Admin\Setting\AdminMetaSettingController;
 use App\Http\Controllers\Admin\Setting\AdminSettingCacheController;
 use App\Http\Controllers\Admin\Setting\AdminSettingController;
-use App\Http\Controllers\Admin\Setting\AdminMetaSettingController;
 use App\Http\Controllers\Admin\Setting\AdminSettingSystemInformationController;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
@@ -15,17 +16,23 @@ Route::middleware('cms.auth')->group(function (Router $router) {
     $router->get('settings', [AdminSettingController::class, 'index'])
         ->name('settings.index');
 
-    // contact
-    $router->get('settings/contact', [AdminContactSettingController::class, 'index'])
-        ->name('settings.contact.index');
-    $router->post('settings/contact', [AdminContactSettingController::class, 'save'])
-        ->name('settings.contact.save');
+    // language
+    $router->get('settings/language', [AdminLanguageSettingController::class, 'index'])
+        ->name('settings.language.index');
+    $router->post('settings/language', [AdminLanguageSettingController::class, 'save'])
+        ->name('settings.language.save');
 
     // meta
     $router->get('settings/meta', [AdminMetaSettingController::class, 'index'])
         ->name('settings.meta.index');
     $router->post('settings/meta', [AdminMetaSettingController::class, 'save'])
         ->name('settings.meta.save');
+
+    // contact
+    $router->get('settings/contact', [AdminContactSettingController::class, 'index'])
+        ->name('settings.contact.index');
+    $router->post('settings/contact', [AdminContactSettingController::class, 'save'])
+        ->name('settings.contact.save');
 
     // cache
     $router->controller(AdminSettingCacheController::class)->group(function ($router) {

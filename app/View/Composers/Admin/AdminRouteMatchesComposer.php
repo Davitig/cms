@@ -57,11 +57,11 @@ class AdminRouteMatchesComposer
 
         $routeParams = $this->route->parameters();
 
-        $currentRouteName = str($currentRouteName)->replaceFirst(
+        $currentRouteName = str($currentRouteName)->replaceStart(
             config('language.route_name') . '.', ''
         );
 
-        $currentRouteName = str($currentRouteName)->replaceFirst(cms_route_name(), '');
+        $currentRouteName = str($currentRouteName)->replaceStart(cms_route_name(), '');
 
         $currentRouteNameSegments = explode('.', $currentRouteName);
 

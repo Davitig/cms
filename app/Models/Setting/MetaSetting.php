@@ -3,9 +3,10 @@
 namespace App\Models\Setting;
 
 use App\Concerns\Models\HasNameValueSetting;
+use App\Contracts\Models\Setting;
 use Illuminate\Database\Eloquent\Model;
 
-class MetaSetting extends Model
+class MetaSetting extends Model implements Setting
 {
     use HasNameValueSetting;
 

@@ -66,12 +66,12 @@ class AdminAuthenticate
             throw new RouteNotFoundException;
         }
 
-        $routeName = str($fullRouteName = $route->getName())->replaceFirst(
+        $routeName = str($fullRouteName = $route->getName())->replaceStart(
             config('language.route_name') . '.' . cms_route_name(), ''
         )->toString();
 
         if ($routeName == $fullRouteName) {
-            $routeName = str($fullRouteName)->replaceFirst(cms_route_name(), '')->toString();
+            $routeName = str($fullRouteName)->replaceStart(cms_route_name(), '')->toString();
         }
 
         $routeGroup = substr($routeName, 0, strpos($routeName, '.'));

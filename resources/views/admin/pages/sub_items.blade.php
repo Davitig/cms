@@ -16,7 +16,7 @@
                     </div>
                     <div class="actions d-flex align-items-center gap-4">
                         <div class="item-id badge bg-label-gray text-dark">{{ $item->id }}</div>
-                        <a href="{{ web_url($item->url_path) }}" class="link" data-slug="{{ $item->slug }}" target="_blank" title="View Website Page">
+                        <a href="{{ web_url($item->url_path, [], ! $disableMainLang || $item->language != $mainLang ? null : false) }}" class="link" data-slug="{{ $item->slug }}" target="_blank" title="View Website Page">
                             <i class="icon-base fa fa-link icon-sm"></i>
                         </a>
                         <div class="dropdown">

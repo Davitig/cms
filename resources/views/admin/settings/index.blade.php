@@ -28,6 +28,17 @@
                             </a>
                         </div>
                         <div class="col-12 col-md-6 col-lg-auto">
+                            <a href="{{ cms_route('settings.language.index') }}" class="d-inline-flex align-items-center">
+                            <span class="badge bg-label-primary text-body p-2 me-4 rounded">
+                                <i class="icon-base fa fa-language icon-md"></i>
+                            </span>
+                                <span>
+                                <span class="fs-6 d-block text-primary">Language</span>
+                                <small class="text-body">Language configuration</small>
+                            </span>
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-auto">
                             <a href="{{ cms_route('settings.contact.index') }}" class="d-inline-flex align-items-center">
                             <span class="badge bg-label-primary text-body p-2 me-4 rounded">
                                 <i class="icon-base fa fa-bars-staggered icon-md"></i>

@@ -21,10 +21,24 @@ class WebDynamicRouteServiceProvider extends ServiceProvider
      */
     public function boot(Router $router): void
     {
-        $router->middleware('web')->group(function (Router $router) {
-            $router->any('{any}', fn () => throw new NotFoundHttpException)
-                ->where('any', '.*')
-                ->middleware('web.lang', 'web.dynamicRoute');
-        });
+        $langRouteName = $this->app['config']->get('language.route_name');
+
+        // force language routes when testing.
+        $languageList = ((array) $this->app['config']->get('_language.force_routes'))
+            ?: language()->all()->keys()->toArray();
+
+        $router->middleware('web', 'web.lang', 'web.dynamicRoute')
+            ->group(static function (Router $router) use ($langRouteName, $languageList) {
+                if (count($languageList) > 1) {
+                    $router->any('{lang}/{any}', fn () => throw new NotFoundHttpException)
+                        ->name($langRouteName . '.dynamic')
+                        ->where('any', '.*')
+                        ->whereIn($langRouteName, $languageList);
+                }
+
+                $router->any('{any}', fn () => throw new NotFoundHttpException)
+                    ->name('dynamic')
+                    ->where('any', '.*');
+            });
     }
 }

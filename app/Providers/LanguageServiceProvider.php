@@ -5,7 +5,9 @@ namespace App\Providers;
 use App\Support\LanguageProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Events\Routing;
 use Illuminate\Support\ServiceProvider;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class LanguageServiceProvider extends ServiceProvider implements DeferrableProvider
 {
@@ -16,7 +18,8 @@ class LanguageServiceProvider extends ServiceProvider implements DeferrableProvi
     {
         $this->app->singleton(LanguageProvider::class, static function ($app) {
             return LanguageProvider::make(
-                $app['request']->path(), (string) $app['request']->query(
+                $app['request']->segment(1),
+                (string) $app['request']->query(
                     $app['config']->get('language.query_string_key')
                 )
             );
@@ -26,9 +29,23 @@ class LanguageServiceProvider extends ServiceProvider implements DeferrableProvi
     /**
      * Bootstrap services.
      */
-    public function boot(Request $request): void
+    public function boot(LanguageProvider $languageProvider, Request $request): void
     {
         $this->setCmsRouteBooted($request);
+
+        // force language routes when testing.
+        if (! cms_booted()) {
+            // forced language routes when testing.
+            $forcedRoutes = count((array) $this->app['config']->get('_language.force_routes'));
+
+            $this->app['events']->listen(Routing::class, static function()
+            use ($languageProvider, $forcedRoutes) {
+                if (! ($languageProvider->countVisible() || $forcedRoutes) &&
+                    $languageProvider->getSettings('down_without_language')) {
+                    throw new ServiceUnavailableHttpException;
+                }
+            });
+        }
     }
 
     /**

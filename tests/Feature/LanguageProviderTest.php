@@ -16,9 +16,9 @@ class LanguageProviderTest extends TestCase
     /**
      * The active language.
      *
-     * @var string
+     * @var string|null
      */
-    protected string $activeLanguage = 'en';
+    protected ?string $activeLanguage = 'en';
 
     /**
      * The active language.
@@ -32,7 +32,7 @@ class LanguageProviderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->languageProviderEnabled = false;
+        $this->globalLanguageProviderEnabled = false;
 
         parent::setUp();
 
@@ -49,158 +49,160 @@ class LanguageProviderTest extends TestCase
      */
     protected function getLanguageProvider(?Closure $callback = null): LanguageProvider
     {
-        $this->languages = array_unique(array_merge($this->languages, [$this->activeLanguage]));
+        $this->languages = array_unique(array_filter(array_merge(
+            $this->languages, [$this->activeLanguage]
+        )));
 
         return new LanguageProvider(
             LanguageFactory::new()->languages($this->languages)
                 ->main(1, 'en')
                 ->when(! is_null($callback), $callback)
                 ->create(),
-            $this->activeLanguage . '/foo/bar'
+            $this->activeLanguage
         );
     }
 
     public function test_specified_language_is_active(): void
     {
-        $service = $this->getLanguageProvider();
+        $languageProvider = $this->getLanguageProvider();
 
-        $this->assertTrue($service->isActive($this->activeLanguage));
+        $this->assertTrue($languageProvider->isActive($this->activeLanguage));
     }
 
     public function test_language_is_selected_in_path(): void
     {
-        $service = $this->getLanguageProvider();
+        $languageProvider = $this->getLanguageProvider();
 
-        $this->assertTrue($service->isSelected());
+        $this->assertTrue($languageProvider->isSelected());
     }
 
     public function test_language_is_not_selected_in_path(): void
     {
-        $this->activeLanguage = '';
+        $this->activeLanguage = null;
 
-        $service = $this->getLanguageProvider();
+        $languageProvider = $this->getLanguageProvider();
 
-        $this->assertFalse($service->isSelected());
+        $this->assertFalse($languageProvider->isSelected());
     }
 
     public function test_specified_language_exists(): void
     {
-        $service = $this->getLanguageProvider();
+        $languageProvider = $this->getLanguageProvider();
 
-        $this->assertTrue($service->exists('en'));
+        $this->assertTrue($languageProvider->exists('en'));
     }
 
     public function test_specified_language_exists_and_visible(): void
     {
-        $service = $this->getLanguageProvider(fn ($factory) => $factory->visible('cn'));
+        $languageProvider = $this->getLanguageProvider(fn ($factory) => $factory->visible('cn'));
 
-        $this->assertTrue($service->visibleExists('cn'));
+        $this->assertTrue($languageProvider->visibleExists('cn'));
     }
 
     public function test_main_language_is_active(): void
     {
         $this->activeLanguage = 'en';
 
-        $service = $this->getLanguageProvider();
+        $languageProvider = $this->getLanguageProvider();
 
-        $this->assertTrue($service->mainIsActive());
+        $this->assertTrue($languageProvider->mainIsActive());
     }
 
     public function test_get_active_language(): void
     {
-        $service = $this->getLanguageProvider();
+        $languageProvider = $this->getLanguageProvider();
 
-        $this->assertSame($this->activeLanguage, $service->active());
+        $this->assertSame($this->activeLanguage, $languageProvider->active());
     }
 
     public function test_get_main_language(): void
     {
-        $service = $this->getLanguageProvider(fn ($factory) => $factory->main(1, 'es'));
+        $languageProvider = $this->getLanguageProvider(fn ($factory) => $factory->main(1, 'es'));
 
-        $this->assertSame('es', $service->main());
+        $this->assertSame('es', $languageProvider->main());
     }
 
     public function test_get_active_language_by_key_type(): void
     {
-        $service = $this->getLanguageProvider();
+        $languageProvider = $this->getLanguageProvider();
 
-        $this->assertSame($service->getActive(), $service->getBy(true));
+        $this->assertSame($languageProvider->getActive(), $languageProvider->getBy(true));
     }
 
     public function test_get_main_language_by_key_type(): void
     {
-        $service = $this->getLanguageProvider();
+        $languageProvider = $this->getLanguageProvider();
 
-        $this->assertSame($service->getMain(), $service->getBy(false));
+        $this->assertSame($languageProvider->getMain(), $languageProvider->getBy(false));
     }
 
     public function test_get_language_by_key_type(): void
     {
-        $service = $this->getLanguageProvider();
+        $languageProvider = $this->getLanguageProvider();
 
-        $this->assertSame($service->get('cn'), $service->getBy('cn'));
+        $this->assertSame($languageProvider->get('cn'), $languageProvider->getBy('cn'));
     }
 
     public function test_get_language_by_key(): void
     {
-        $service = $this->getLanguageProvider();
+        $languageProvider = $this->getLanguageProvider();
 
-        $this->assertNotNull($service->get('es'));
+        $this->assertNotNull($languageProvider->get('es'));
     }
 
     public function test_get_all_languages(): void
     {
-        $service = $this->getLanguageProvider();
+        $languageProvider = $this->getLanguageProvider();
 
-        $this->assertSame($this->languages, $service->all()->keys()->toArray());
+        $this->assertSame($this->languages, $languageProvider->all()->keys()->toArray());
     }
 
     public function test_get_only_visible_languages(): void
     {
-        $service = $this->getLanguageProvider(fn ($factory) => $factory->visible('en', 'es'));
+        $languageProvider = $this->getLanguageProvider(fn ($factory) => $factory->visible('en', 'es'));
 
-        $this->assertEquals(['en', 'es'], $service->allVisible()->keys()->toArray());
+        $this->assertEquals(['en', 'es'], $languageProvider->allVisible()->keys()->toArray());
     }
 
     public function test_count_languages(): void
     {
-        $service = $this->getLanguageProvider();
+        $languageProvider = $this->getLanguageProvider();
 
-        $this->assertSame(count($this->languages), $service->count());
+        $this->assertSame(count($this->languages), $languageProvider->count());
     }
 
     public function test_count_visible_languages(): void
     {
-        $service = $this->getLanguageProvider(fn ($factory) => $factory->visible('en'));
+        $languageProvider = $this->getLanguageProvider(fn ($factory) => $factory->visible('en'));
 
-        $this->assertSame(1, $service->countVisible());
+        $this->assertSame(1, $languageProvider->countVisible());
     }
 
-    public function test_language_service_is_not_empty(): void
+    public function test_language_provider_is_not_empty(): void
     {
-        $service = $this->getLanguageProvider();
+        $languageProvider = $this->getLanguageProvider();
 
-        $this->assertFalse($service->isEmpty());
+        $this->assertFalse($languageProvider->isEmpty());
     }
 
-    public function test_language_service_is_empty(): void
+    public function test_language_provider_is_empty(): void
     {
-        $service = new LanguageProvider(new Collection, '/');
+        $languageProvider = new LanguageProvider(new Collection);
 
-        $this->assertTrue($service->isEmpty());
+        $this->assertTrue($languageProvider->isEmpty());
     }
 
-    public function test_language_service_visible_is_not_empty(): void
+    public function test_language_provider_visible_is_not_empty(): void
     {
-        $service = $this->getLanguageProvider(fn ($factory) => $factory->visible('cn'));
+        $languageProvider = $this->getLanguageProvider(fn ($factory) => $factory->visible('cn'));
 
-        $this->assertFalse($service->visibleIsEmpty());
+        $this->assertFalse($languageProvider->visibleIsEmpty());
     }
 
-    public function test_language_service_visible_is_empty(): void
+    public function test_language_provider_visible_is_empty(): void
     {
-        $service = $this->getLanguageProvider(fn ($factory) => $factory->notVisible());
+        $languageProvider = $this->getLanguageProvider(fn ($factory) => $factory->notVisible());
 
-        $this->assertTrue($service->visibleIsEmpty());
+        $this->assertTrue($languageProvider->visibleIsEmpty());
     }
 }
